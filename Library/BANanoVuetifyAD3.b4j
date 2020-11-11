@@ -57,8 +57,8 @@ Sub AppStart (Form1 As Form, Args() As String)
 	BANano.Header.AddCSSFile("https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css")
 	BANano.Header.AddJavascriptFile("https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.min.js")
 	BANano.Header.AddJavascriptFile("https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.js")
-	BANano.Header.AddJavascriptFile("https://cdn.jsdelivr.net/npm/vue-router@3.4.7/dist/vue-router.min.js")
-	BANano.Header.AddJavascriptFile("https://cdn.jsdelivr.net/npm/dayjs@1.9.4/dayjs.min.js")
+	BANano.Header.AddJavascriptFile("https://cdn.jsdelivr.net/npm/vue-router@3.x/dist/vue-router.min.js")
+	BANano.Header.AddJavascriptFile("https://cdn.jsdelivr.net/npm/dayjs@1.x/dist/dayjs.min.js")
 	BANano.Header.AddJavascriptFile("https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js")
 	
 	' start the build

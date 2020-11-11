@@ -22,31 +22,63 @@ Version=7
 #DesignerProperty: Key: Ref, DisplayName: Ref, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: TagName, DisplayName: TagName, FieldType: String, DefaultValue: div, Description: tag of the element
 #DesignerProperty: Key: Caption, DisplayName: Caption, FieldType: String, DefaultValue: , Description: Text on the element
+#DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue:  , Description: , List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: LoremIpsum, DisplayName: LoremIpsum, FieldType: Boolean, DefaultValue: False, Description: Lorem ipsum.
+#DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: False, Description: Dark
+#DesignerProperty: Key: HiddenMDAndUp, DisplayName: HiddenMDAndUp, FieldType: Boolean, DefaultValue: False, Description: HiddenMDAndUp
+#DesignerProperty: Key: HiddenSMAndDown, DisplayName: HiddenSMAndDown, FieldType: Boolean, DefaultValue: False, Description: HiddenSMAndDown
+#DesignerProperty: Key: FillHeight, DisplayName: FillHeight, FieldType: Boolean, DefaultValue: False, Description: FillHeight
+#DesignerProperty: Key: JustifyCenter, DisplayName: JustifyCenter, FieldType: Boolean, DefaultValue: False, Description: JustifyCenter
+#DesignerProperty: Key: AlignCenter, DisplayName: AlignCenter, FieldType: Boolean, DefaultValue: False, Description: AlignCenter
 #DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: , Description: Value on the element
 #DesignerProperty: Key: Label, DisplayName: Label, FieldType: String, DefaultValue: , Description: Label of the element
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String.
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Style, DisplayName: Style, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String.
+#DesignerProperty: Key: CoverImage, DisplayName: CoverImage, FieldType: String, DefaultValue:  , Description: CoverImage
+#DesignerProperty: Key: FitScreen, DisplayName: FitScreen, FieldType: Boolean, DefaultValue: False, Description: FitScreen
 #DesignerProperty: Key: VFor, DisplayName: VFor, FieldType: String, DefaultValue:  , Description: 
-#DesignerProperty: Key: Key, DisplayName: Key, FieldType: String, DefaultValue:  , Description: 
+#DesignerProperty: Key: Key, DisplayName: Key, FieldType: String, DefaultValue:  , Description:
+#DesignerProperty: Key: To, DisplayName: To, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VText, DisplayName: VText, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VHtml, DisplayName: VHtml, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue:  , Description: 
+#DesignerProperty: Key: VElse, DisplayName: VElse, FieldType: String, DefaultValue:  , Description: 
+#DesignerProperty: Key: VElseIf, DisplayName: VElseIf, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue:  , Description: 
+#DesignerProperty: Key: Rules, DisplayName: Rules, FieldType: String, DefaultValue:  , Description: Rules
 #DesignerProperty: Key: States, DisplayName: States, FieldType: String, DefaultValue: , Description: Initial Binding States. Must be a json String.
 #DesignerProperty: Key: Height, DisplayName: Height, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue:  , Description: 
-#DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue:  , Description: , List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: SlotActivator, DisplayName: SlotActivator, FieldType: String, DefaultValue: , Description: Slot activator
 #DesignerProperty: Key: Href, DisplayName: Href, FieldType: String, DefaultValue: , Description: Href
 #DesignerProperty: Key: InputType, DisplayName: InputType, FieldType: String, DefaultValue: , Description: Input type
+
+#DesignerProperty: Key: PrependIcon, DisplayName: PrependIcon, FieldType: String, DefaultValue:  , Description: 
+#DesignerProperty: Key: AppendIcon, DisplayName: AppendIcon, FieldType: String, DefaultValue:  , Description: 
+#DesignerProperty: Key: Placeholder, DisplayName: Placeholder, FieldType: String, DefaultValue:  , Description: 
+#DesignerProperty: Key: Autofocus, DisplayName: Autofocus, FieldType: Boolean, DefaultValue: False , Description: 
+#DesignerProperty: Key: Clearable, DisplayName: Clearable, FieldType: Boolean, DefaultValue: False , Description: 
+#DesignerProperty: Key: Counter, DisplayName: Counter, FieldType: String, DefaultValue:  , Description: 
+#DesignerProperty: Key: Dense, DisplayName: Dense, FieldType: Boolean, DefaultValue: False , Description: 
+#DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: String, DefaultValue:  , Description: 
+#DesignerProperty: Key: Filled, DisplayName: Filled, FieldType: Boolean, DefaultValue: False , Description: 
+#DesignerProperty: Key: Flat, DisplayName: Flat, FieldType: Boolean, DefaultValue: False , Description: 
+#DesignerProperty: Key: HideDetails, DisplayName: HideDetails, FieldType: Boolean, DefaultValue: False , Description: 
+#DesignerProperty: Key: Outlined, DisplayName: Outlined, FieldType: Boolean, DefaultValue: False , Description: 
+#DesignerProperty: Key: Hint, DisplayName: Hint, FieldType: String, DefaultValue:  , Description: 
+#DesignerProperty: Key: PersistentHint, DisplayName: PersistentHint, FieldType: Boolean, DefaultValue: False , Description: 
+#DesignerProperty: Key: Readonly, DisplayName: Readonly, FieldType: String, DefaultValue:  , Description: 
+#DesignerProperty: Key: Rounded, DisplayName: Rounded, FieldType: Boolean, DefaultValue: False , Description: 
+#DesignerProperty: Key: Shaped, DisplayName: Shaped, FieldType: Boolean, DefaultValue: False , Description: 
+#DesignerProperty: Key: SingleLine, DisplayName: SingleLine, FieldType: Boolean, DefaultValue: False , Description: 
+#DesignerProperty: Key: Solo, DisplayName: Solo, FieldType: Boolean, DefaultValue: False , Description: 
+
+
 #DesignerProperty: Key: VBindClass, DisplayName: VBindClass, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VBindStyle, DisplayName: VBindStyle, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Slot, DisplayName: Slot, FieldType: String, DefaultValue:  , Description: 
-#DesignerProperty: Key: VElse, DisplayName: VElse, FieldType: String, DefaultValue:  , Description: 
-#DesignerProperty: Key: VElseIf, DisplayName: VElseIf, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: BackgroundColor, DisplayName: BackgroundColor, FieldType: String, DefaultValue:  , Description: , List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: BackgroundImage, DisplayName: BackgroundImage, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: BackgroundRepeat, DisplayName: BackgroundRepeat, FieldType: String, DefaultValue:  , Description: , List: repeat|repeat-x|repeat-y|no-repeat|initial|inherit
@@ -156,9 +188,38 @@ Private stTextDecoration As String = ""
 Private stLabel As String = ""
 Private stWidth As String = ""
 Private bLoremIpsum As Boolean = False
+	Private bDark As Boolean = False
 	Private stInputType As String = ""
 	Private stHref As String = ""
 	Private stSlotActivator As String = ""
+	Private bHiddenMDAndUp As Boolean = False
+	Private stTo As String = ""
+	Private bHiddenSMAndDown As Boolean = False
+	Private bJustifyCenter As Boolean = False
+	Private bFitScreen As Boolean = False
+	Private bAlignCenter As Boolean = False
+	Private bFillHeight As Boolean = False
+	Private stRules As String = ""
+	Private stCoverImage As String = ""
+	Private stAppendIcon As String = ""
+	Private boAutofocus As Boolean = False
+	Private boClearable As Boolean = False
+	Private stCounter As String = ""
+	Private boDense As Boolean = False
+	Private stDisabled As String = ""
+	Private boFilled As Boolean = False
+	Private boFlat As Boolean = False
+	Private boHideDetails As Boolean = False
+	Private stHint As String = ""
+	Private boOutlined As Boolean = False
+	Private boPersistentHint As Boolean = False
+	Private stPlaceholder As String = ""
+	Private stPrependIcon As String = ""
+	Private stReadonly As String = ""
+	Private boRounded As Boolean = False
+	Private boShaped As Boolean = False
+	Private boSingleLine As Boolean = False
+	Private boSolo As Boolean = False
 End Sub
 
 'initialize the custom view
@@ -179,6 +240,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 mTarget = Target
 If Props <> Null Then
 bLoremIpsum = Props.Get("LoremIpsum")
+		bDark = Props.Get("Dark")
 mClasses = Props.Get("Classes")
 mAttributes = Props.Get("Attributes")
 mStyle = Props.Get("Style")
@@ -241,10 +303,41 @@ stWidth = Props.Get("Width")
 stInputType = Props.Get("InputType")
 stHref = Props.Get("Href")
 stSlotActivator = Props.get("SlotActivator")
+		bHiddenMDAndUp = Props.Get("HiddenMDAndUp")
+		stTo = Props.get("To")
+		bHiddenSMAndDown = Props.Get("HiddenSMAndDown")
+		bJustifyCenter = Props.Get("JustifyCenter")
+		bFitScreen = Props.Get("FitScreen")
+		bAlignCenter = Props.Get("AlignCenter")
+		bFillHeight = Props.Get("FillHeight")
+		stRules = Props.Get("Rules")
+		stCoverImage = Props.Get("CoverImage")
+		stAppendIcon = Props.Get("AppendIcon")
+		boAutofocus = Props.Get("Autofocus")
+		boClearable = Props.Get("Clearable")
+		stCounter = Props.Get("Counter")
+		boDense = Props.Get("Dense")
+		stDisabled = Props.Get("Disabled")
+		boFilled = Props.Get("Filled")
+		boFlat = Props.Get("Flat")
+		boHideDetails = Props.Get("HideDetails")
+		stHint = Props.Get("Hint")
+		boOutlined = Props.Get("Outlined")
+		boPersistentHint = Props.Get("PersistentHint")
+		stPlaceholder = Props.Get("Placeholder")
+		stPrependIcon = Props.Get("PrependIcon")
+		stReadonly = Props.Get("Readonly")
+		boRounded = Props.Get("Rounded")
+		boShaped = Props.Get("Shaped")
+		boSingleLine = Props.Get("SingleLine")
+		boSolo = Props.Get("Solo")
 End If
 
-	AddAttr("v-slot:activator", stSlotActivator)
-	AddAttr("href", stHref)
+	AddAttr("rules", stRules)
+AddAttr("to", stTo)
+AddAttr("dark", bDark)
+AddAttr("v-slot:activator", stSlotActivator)
+AddAttr("href", stHref)
 AddAttr("key", stKey)
 AddAttr("ref", stRef)
 AddAttr("slot", stSlot)
@@ -288,10 +381,40 @@ AddStyle("text-align", stTextAlign)
 AddStyle("text-decoration", stTextDecoration)
 	AddAttr("width", stWidth)
 	AddAttr("type", stInputType)
-AddClass(mClasses)
-setAttributes(mAttributes)
-setStyles(mStyle)
-setStates(mStates)
+
+	AddClassOnCondition("hidden-md-and-up", bHiddenMDAndUp, True)
+	AddClassOnCondition("hidden-sm-and-down", bHiddenSMAndDown, True)
+	AddAttrOnCondition("justify-center", bJustifyCenter, True)
+	AddAttrOnCondition("align-center", bAlignCenter, True)
+	AddClassOnCondition("fill-height", bFillHeight, True)
+	
+	setCoverImage(stCoverImage)
+	setFitScreen(bFitScreen)
+	'
+	AddAttr("append-icon", stAppendIcon)
+	AddAttrOnCondition("autofocus", boAutofocus, True)
+	AddAttrOnCondition("clearable", boClearable, True)
+	AddAttr("counter", stCounter)
+	AddAttrOnCondition("dense", boDense, True)
+	AddAttr("disabled", stDisabled)
+	AddAttrOnCondition("filled", boFilled, True)
+	AddAttrOnCondition("flat", boFlat, True)
+	AddAttrOnCondition("hide-details", boHideDetails, True)
+	AddAttr("hint", stHint)
+	AddAttrOnCondition("outlined", boOutlined, True)
+	AddAttrOnCondition("persistent-hint", boPersistentHint, True)
+	AddAttr("placeholder", stPlaceholder)
+	AddAttr("prepend-icon", stPrependIcon)
+	AddAttr("readonly", stReadonly)
+	AddAttrOnCondition("rounded", boRounded, True)
+	AddAttrOnCondition("shaped", boShaped, True)
+	AddAttrOnCondition("single-line", boSingleLine, True)
+	AddAttrOnCondition("solo", boSolo, True)
+	'
+	AddClass(mClasses)
+	setAttributes(mAttributes)
+	setStyles(mStyle)
+	setStates(mStates)
 
 'link the events, if any
 'This activates Click the event exists on the module
@@ -315,6 +438,7 @@ End Sub
 'add anything from the appendholder
 Sub AppendHolder
 	Dim stemplate As String = BANanoGetHTMLAsIs("appendholder")
+	mElement = BANano.GetElement($"#${mName}"$)
 	If mElement <> Null Then
 		mElement.Append(stemplate)
 	Else
@@ -392,7 +516,9 @@ AddAttr("style", styleName)
 'build element internal structure
 Dim iStructure As String = BANanoShared.BuildAttributes(attributeList)
 iStructure = iStructure.trim
-Dim rslt As String = $"<${mTagName} id="${mName}" ${iStructure}>${mCaption}${sbText.ToString}</${mTagName}>"$
+Dim stext As String = sbText.ToString
+stext = stext.Replace("v-template", "template")
+Dim rslt As String = $"<${mTagName} id="${mName}" ${iStructure}>${mCaption}${stext}</${mTagName}>"$
 Return rslt
 End Sub
 
@@ -414,6 +540,12 @@ Sub SetData(prop As String, val As Object)
 	End If
 End Sub
 
+Sub NewList As List
+	Dim elx As List
+	elx.Initialize
+	Return elx
+End Sub
+
 'sets the state bindings
 public Sub setStates(varBindings As String)
 	If varBindings = "" Then Return
@@ -428,6 +560,21 @@ public Sub setStates(varBindings As String)
 		else if v.EqualsIgnoreCase("true") Then
 			If k <> "" Then 
 				bindings.Put(k, True)
+			End If
+		else if v.EqualsIgnoreCase("array") Then
+			If k <> "" Then
+				Dim nl As List = NewList
+				bindings.Put(k, nl)
+			End If			
+		else if v.EqualsIgnoreCase("object") Then
+			If k <> "" Then
+				Dim nm As Map = CreateMap()
+				bindings.Put(k, nm)
+			End If
+		else if v.EqualsIgnoreCase("map") Then
+			If k <> "" Then
+				Dim nm As Map = CreateMap()
+				bindings.Put(k, nm)
 			End If
 		Else
 			If k <> "" Then 
@@ -496,7 +643,7 @@ Return mName
 End Sub
 
 'change the id of the element
-public Sub setID(varID As String) As String
+public Sub setID(varID As String)
 	varID = varID.tolowercase
 	mName = varID
 	mElement.SetAttr("id", mName)
@@ -552,7 +699,18 @@ If mElement <> Null Then mElement.AddClass(varClass)
 Dim mxItems As List = BANanoShared.StrParse(" ", varClass)
 For Each mt As String In mxItems
 classList.put(mt, mt)
-Next
+	Next
+End Sub
+
+'add an attr on condition
+public Sub AddAttrOnCondition(varClass As String, varCondition As Boolean, varShouldBe As Boolean)
+If BANano.IsUndefined(varCondition) Or BANano.IsNull(varCondition) Then Return
+If varShouldBe <> varCondition Then Return
+If BANano.IsUndefined(varClass) Or BANano.IsNull(varClass) Then Return
+If BANano.IsNumber(varClass) Then varClass = BANanoShared.CStr(varClass)
+varClass = varClass.trim
+If varClass = "" Then Return
+AddAttr(varClass, varShouldBe)
 End Sub
 
 'add a style
@@ -601,7 +759,9 @@ End Sub
 'add an attribute
 Public Sub AddAttr(varProp As String, varValue As String) 
 	If BANano.IsUndefined(varValue) Or BANano.IsNull(varValue) Then Return 
-	If BANano.IsNumber(varValue) Then varValue = BANanoShared.CStr(varValue) 
+	If BANano.IsNumber(varValue) Then varValue = BANanoShared.CStr(varValue)
+	If varValue = "none" Then varValue = ""
+	If varValue = "" Then Return 
 	'we are adding a boolean 
 	If BANano.IsBoolean(varValue) Then 
 		If varValue = True Then  
@@ -614,7 +774,7 @@ Public Sub AddAttr(varProp As String, varValue As String)
 			Dim rname As String = BANanoShared.MidString2(varValue, 2)
 			If rname.Contains(".") = False Then 
 				If rname <> "" Then 
-					bindings.Put(rname, Null)
+					If rname <> "key" Then bindings.Put(rname, Null)
 				End If
 			End If
 			attributeList.put($":${varProp}"$, rname)
@@ -659,14 +819,7 @@ End Sub
 
 'set the style use a valid JSON string with {}
 public Sub setStyle(varStyle As String)
-If mElement <> Null Then
-mElement.SetStyle(varStyle)
-End If
-Dim mres As Map = BANano.FromJSON(varStyle)
-For Each k As String In mres.Keys
-Dim v As String = mres.Get(k)
-styleList.put(k, v)
-Next
+	setStyles(varStyle)
 End Sub
 
 'returns the style as JSON
@@ -1109,6 +1262,61 @@ public Sub getTextAlign() As String
 Return stTextAlign
 End Sub
 
+public Sub setDark(varDark As Boolean)
+AddAttr("dark", varDark)
+bDark = varDark
+End Sub
+
+public Sub getDark() As Boolean
+Return bDark
+End Sub
+
+public Sub setHiddenMDAndUp(varHiddenMDAndUp As Boolean)
+	AddClassOnCondition("hidden-md-and-up", varHiddenMDAndUp, True)
+	bHiddenMDAndUp = varHiddenMDAndUp
+End Sub
+
+public Sub getHiddenMDAndUp() As Boolean
+	Return bHiddenMDAndUp
+End Sub
+
+public Sub setHiddenSMAndDown(varHiddenSMAndDown As Boolean)
+	AddClassOnCondition("hidden-sm-and-down", varHiddenSMAndDown, True)
+	bHiddenSMAndDown = varHiddenSMAndDown
+End Sub
+
+public Sub getHiddenSMAndDown() As Boolean
+	Return bHiddenSMAndDown
+End Sub
+
+public Sub setJustifyCenter(varJustifyCenter As Boolean)
+	AddAttrOnCondition("justify-center", varJustifyCenter, True)
+	bJustifyCenter = varJustifyCenter
+End Sub
+
+public Sub getJustifyCenter() As Boolean
+	Return bJustifyCenter
+End Sub
+
+public Sub setAlignCenter(varAlignCenter As Boolean)
+	AddAttrOnCondition("align-center", varAlignCenter, True)
+	bAlignCenter = varAlignCenter
+End Sub
+
+public Sub getAlignCenter() As Boolean
+	Return bAlignCenter
+End Sub
+
+public Sub setFillHeight(varFillHeight As Boolean)
+	AddClassOnCondition("fill-height", varFillHeight, True)
+	bFillHeight = varFillHeight
+End Sub
+
+public Sub getFillHeight() As Boolean
+	Return bFillHeight
+End Sub
+
+
 public Sub setTextDecoration(varTextDecoration As String)
 AddStyle("text-decoration", varTextDecoration)
 stTextDecoration = varTextDecoration
@@ -1125,6 +1333,25 @@ End Sub
 
 public Sub getWidth() As String
 Return stWidth
+End Sub
+'
+public Sub setRules(varRules As String)
+AddAttr("rules", varRules)
+stWidth = varRules
+End Sub
+
+public Sub getRules() As String
+Return stRules
+End Sub
+
+'
+public Sub setTo(varTo As String)
+AddAttr("to", varTo)
+stTo = varTo
+End Sub
+
+public Sub getTo() As String
+Return stTo
 End Sub
 
 'add a child component
@@ -1187,3 +1414,239 @@ Sub On(eventName As String, args As String)    'ignoredeadcode
 	methods.Put(sName, cb)
 End Sub
 
+'set the conver image for the container
+Sub setCoverImage(url As String)
+	If BANano.IsUndefined(url) Or BANano.IsNull(url) Then Return
+	url = url.trim
+	If url = "" Then Return 
+	Dim sm As String = $"background-image=url('${url}');background-size=cover;width=100%;height=100%"$
+	setStyles(sm)
+	stCoverImage = url
+End Sub
+
+public Sub getCoverImage() As String
+	Return stCoverImage
+End Sub
+
+'set the conver image for the container
+Sub setFitScreen(varFitScreen As Boolean)
+	If BANano.IsUndefined(varFitScreen) Or BANano.IsNull(varFitScreen) Then Return
+	bFitScreen = varFitScreen
+	If varFitScreen = False Then Return
+	Dim sm As String = $"height=100vh !important;max-height=100vh !important"$
+	setStyles(sm)
+End Sub
+
+public Sub getFitScreen() As Boolean
+	Return bFitScreen
+End Sub
+
+'set append-icon
+public Sub setAppendIcon(varAppendIcon As String)
+AddAttr("append-icon", varAppendIcon)
+stAppendIcon = varAppendIcon
+End Sub
+
+'get append-icon
+public Sub getAppendIcon() As String
+Return stAppendIcon
+End Sub
+
+'set autofocus
+public Sub setAutofocus(varAutofocus As Boolean)
+AddAttrOnCondition("autofocus", varAutofocus, True)
+boAutofocus = varAutofocus
+End Sub
+
+'get autofocus
+public Sub getAutofocus() As Boolean
+Return boAutofocus
+End Sub
+
+'set clearable
+public Sub setClearable(varClearable As Boolean)
+AddAttrOnCondition("clearable", varClearable, True)
+boClearable = varClearable
+End Sub
+
+'get clearable
+public Sub getClearable() As Boolean
+Return boClearable
+End Sub
+
+'set counter
+public Sub setCounter(varCounter As String)
+AddAttr("counter", varCounter)
+stCounter = varCounter
+End Sub
+
+'get counter
+public Sub getCounter() As String
+Return stCounter
+End Sub
+
+'set dense
+public Sub setDense(varDense As Boolean)
+AddAttrOnCondition("dense", varDense, True)
+boDense = varDense
+End Sub
+
+'get dense
+public Sub getDense() As Boolean
+Return boDense
+End Sub
+
+'set disabled
+public Sub setDisabled(varDisabled As String)
+AddAttr("disabled", varDisabled)
+stDisabled = varDisabled
+End Sub
+
+'get disabled
+public Sub getDisabled() As String
+Return stDisabled
+End Sub
+
+'set filled
+public Sub setFilled(varFilled As Boolean)
+AddAttrOnCondition("filled", varFilled, True)
+boFilled = varFilled
+End Sub
+
+'get filled
+public Sub getFilled() As Boolean
+Return boFilled
+End Sub
+
+'set flat
+public Sub setFlat(varFlat As Boolean)
+AddAttrOnCondition("flat", varFlat, True)
+boFlat = varFlat
+End Sub
+
+'get flat
+public Sub getFlat() As Boolean
+Return boFlat
+End Sub
+
+'set hide-details
+public Sub setHideDetails(varHideDetails As Boolean)
+AddAttrOnCondition("hide-details", varHideDetails, True)
+boHideDetails = varHideDetails
+End Sub
+
+'get hide-details
+public Sub getHideDetails() As Boolean
+Return boHideDetails
+End Sub
+
+'set hint
+public Sub setHint(varHint As String)
+AddAttr("hint", varHint)
+stHint = varHint
+End Sub
+
+'get hint
+public Sub getHint() As String
+Return stHint
+End Sub
+
+'set outlined
+public Sub setOutlined(varOutlined As Boolean)
+AddAttrOnCondition("outlined", varOutlined, True)
+boOutlined = varOutlined
+End Sub
+
+'get outlined
+public Sub getOutlined() As Boolean
+Return boOutlined
+End Sub
+
+'set persistent-hint
+public Sub setPersistentHint(varPersistentHint As Boolean)
+AddAttrOnCondition("persistent-hint", varPersistentHint, True)
+boPersistentHint = varPersistentHint
+End Sub
+
+'get persistent-hint
+public Sub getPersistentHint() As Boolean
+Return boPersistentHint
+End Sub
+
+'set placeholder
+public Sub setPlaceholder(varPlaceholder As String)
+AddAttr("placeholder", varPlaceholder)
+stPlaceholder = varPlaceholder
+End Sub
+
+'get placeholder
+public Sub getPlaceholder() As String
+Return stPlaceholder
+End Sub
+
+'set prepend-icon
+public Sub setPrependIcon(varPrependIcon As String)
+AddAttr("prepend-icon", varPrependIcon)
+stPrependIcon = varPrependIcon
+End Sub
+
+'get prepend-icon
+public Sub getPrependIcon() As String
+Return stPrependIcon
+End Sub
+
+'set readonly
+public Sub setReadonly(varReadonly As String)
+AddAttr("readonly", varReadonly)
+stReadonly = varReadonly
+End Sub
+
+'get readonly
+public Sub getReadonly() As String
+Return stReadonly
+End Sub
+
+'set rounded
+public Sub setRounded(varRounded As Boolean)
+AddAttrOnCondition("rounded", varRounded, True)
+boRounded = varRounded
+End Sub
+
+'get rounded
+public Sub getRounded() As Boolean
+Return boRounded
+End Sub
+
+'set shaped
+public Sub setShaped(varShaped As Boolean)
+AddAttrOnCondition("shaped", varShaped, True)
+boShaped = varShaped
+End Sub
+
+'get shaped
+public Sub getShaped() As Boolean
+Return boShaped
+End Sub
+
+'set single-line
+public Sub setSingleLine(varSingleLine As Boolean)
+AddAttrOnCondition("single-line", varSingleLine, True)
+boSingleLine = varSingleLine
+End Sub
+
+'get single-line
+public Sub getSingleLine() As Boolean
+Return boSingleLine
+End Sub
+
+'set solo
+public Sub setSolo(varSolo As Boolean)
+	AddAttrOnCondition("solo", varSolo, True)
+
+	boSolo = varSolo
+End Sub
+
+'get solo
+public Sub getSolo() As Boolean
+	Return boSolo
+End Sub

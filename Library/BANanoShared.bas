@@ -461,10 +461,16 @@ Sub BuildStyle(styles As Map) As String
 	sbx.Initialize
 	For Each k As String In styles.keys
 		Dim v As String = styles.get(k)
+		'
 		If BANano.IsUndefined(v) Then v = ""
 		If BANano.IsNull(v) Then v = ""
+		'
+		If BANano.IsUndefined(k) Then k = ""
+		If BANano.IsNull(k) Then k = ""
+		
 		k = k.trim
 		v = v.trim
+		'
 		If k = "" Then Continue
 		If v = "" Then Continue
 		sbx.Append($"${k}:${v};"$)
@@ -480,19 +486,27 @@ Sub BuildAttributes(properties As Map) As String
 	sbx.Initialize
 	For Each k As String In properties.keys
 		Dim v As String = properties.get(k)
+		'
 		If BANano.IsUndefined(v) Then v = ""
 		If BANano.IsNull(v) Then v = ""
+		'
+		If BANano.IsUndefined(k) Then k = ""
+		If BANano.IsNull(k) Then k = ""
+		'
+		If k = "" Then Continue
+		If v = "" Then Continue
+			
 		If BANano.IsBoolean(v) Then
-			sbx.Append($"${k}="${v}" "$)
+			sbx.Append($"${k}=${v} "$)
 		Else
 			k = k.trim
 			v = v.trim
-			If k = "" Then Continue
-			If v = "" Then Continue
 			sbx.Append($"${k}="${v}" "$)
 		End If
 	Next
-	Return sbx.tostring
+	Dim sout As String = sbx.ToString
+	sout = sout.trim
+	Return sout
 End Sub
 
 Sub JoinMapKeys(m As Map, delim As String) As String
@@ -1949,32 +1963,6 @@ End Sub
 '	body.SetStyle(BANano.ToJson(CreateMap("font-family": ff)))
 'End Sub
 '
-''set the background image style
-'Sub SetCoverImage(imgURL As String)
-'	Dim opt As Map = CreateMap()
-'	If imgURL = "none" Then
-'		opt.Put("background-image", "none")
-'	Else
-'		'opt.Put("background-image", $"url('${imgURL}')"$)
-'		'opt.Put("background-position", "center center")
-'		'opt.Put("background-repeat", "no-repeat")
-'		'opt.Put("background-attachment", "fixed")
-'		'opt.Put("background-size", "cover")
-'		
-'		opt.Put("background", $"url('${imgURL}')"$)
-'		opt.Put("position", "absolute")
-'		opt.Put("height", "100%")
-'		opt.Put("width", "100%")
-'		opt.Put("top", "0")
-'		opt.Put("bottom", "0")
-'		opt.Put("right", "0")
-'		opt.Put("left", "0")
-'		opt.Put("z-index", "0")
-'	End If
-'	Dim sjson As String = BANano.ToJson(opt)
-'	body.SetStyle(sjson)
-'End Sub
-
 
 public Sub AfterTodayRG(dVariance As Long) As String
 	If dVariance <= 0 Then
@@ -2497,16 +2485,11 @@ End Sub
 
 'set the background image style
 Sub SetCoverImage(imgURL As String)
+	If BANano.IsUndefined(imgURL) Or BANano.IsNull(imgURL) Then Return
 	Dim opt As Map = CreateMap()
 	If imgURL = "none" Then
 		opt.Put("background-image", "none")
 	Else
-		'opt.Put("background-image", $"url('${imgURL}')"$)
-		'opt.Put("background-position", "center center")
-		'opt.Put("background-repeat", "no-repeat")
-		'opt.Put("background-attachment", "fixed")
-		'opt.Put("background-size", "cover")
-		
 		opt.Put("background", $"url('${imgURL}')"$)
 		opt.Put("position", "absolute")
 		opt.Put("height", "100%")

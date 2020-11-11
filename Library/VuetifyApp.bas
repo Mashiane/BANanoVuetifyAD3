@@ -306,6 +306,15 @@ Sub Class_Globals
 	Public BasePath As String = "/"
 End Sub
 
+'import a component, the module should have the Initilize method without parameters
+Sub Import(comp As VueComponent)
+	Dim compname As String = comp.mName
+	compname = compname.tolowercase
+	If components.ContainsKey(compname) = True Then Return
+	Dim compx As Map = comp.Component
+	components.Put(compname, compx)
+End Sub
+
 'add anything from the appendholder
 Sub AppendHolderTo(target As String)
 	Dim stemplate As String = BANanoGetHTMLAsIs("appendholder")
@@ -313,6 +322,65 @@ Sub AppendHolderTo(target As String)
 	elx.Initialize($"#${target}"$)
 	elx.append(stemplate)
 End Sub
+
+'initialize the snackbar
+Sub SnackBarInitialize
+	SetData("appsnackmessage", "")
+	SetData("appsnackshow", False)
+	SetData("appsnackright", True)
+	SetData("appsnacktop",True)
+	SetData("appsnackcolor","")
+	SetData("appsnackbottom",False)
+	SetData("appsnackcentered",False)
+	SetData("appsnackoutlined",False)
+	SetData("appsnackleft",False)
+	SetData("appsnackshaped",True)
+	SetData("appsnackrounded",False)
+End Sub
+
+Sub ShowSnackBarError(Message As String)
+	If BANano.IsNull(Message) Then Return 
+	SetData("appsnackmessage", Message)
+	SetData("appsnackcolor", "error")
+	SetData("appsnackshow", True)
+End Sub
+
+Sub ShowSnackBarSuccess(Message As String)
+	If BANano.IsNull(Message) Then Return
+	SetData("appsnackmessage", Message)
+	SetData("appsnackcolor", "success")
+	SetData("appsnackshow", True)
+End Sub
+
+Sub ShowSnackBarPrimary(Message As String)
+	If BANano.IsNull(Message) Then Return
+	SetData("appsnackmessage", Message)
+	SetData("appsnackcolor", "primary")
+	SetData("appsnackshow", True)
+End Sub
+
+Sub ShowSnackBarSecondary(Message As String)
+	If BANano.IsNull(Message) Then Return
+	SetData("appsnackmessage", Message)
+	SetData("appsnackcolor", "secondary")
+	SetData("appsnackshow", True)
+End Sub
+
+
+Sub ShowSnackBarWarning(Message As String)
+	If BANano.IsNull(Message) Then Return
+	SetData("appsnackmessage", Message)
+	SetData("appsnackcolor", "warning")
+	SetData("appsnackshow", True)
+End Sub
+
+Sub ShowSnackBar(Message As String)
+	If BANano.IsNull(Message) Then Return
+	SetData("appsnackmessage", Message)
+	SetData("appsnackcolor", "")
+	SetData("appsnackshow", True)
+End Sub
+
 
 'add anything from the appendholder
 Sub AppendPlaceHolderTo(target As String)
@@ -346,11 +414,11 @@ End Sub
 
 'add html of component to app and this binds events and states
 Sub BindVueElement(elx As VueElement)
-	Dim bindings As Map = elx.bindings
-	Dim methods As Map = elx.methods
+	Dim mbindings As Map = elx.bindings
+	Dim mmethods As Map = elx.methods
 	'apply the binding for the control
-	For Each k As String In bindings.Keys
-		Dim v As String = bindings.Get(k)
+	For Each k As String In mbindings.Keys
+		Dim v As Object = mbindings.Get(k)
 		Select Case k
 		Case "key"
 		Case Else
@@ -358,12 +426,11 @@ Sub BindVueElement(elx As VueElement)
 		End Select
 	Next
 	'apply the events
-	For Each k As String In methods.Keys
-		Dim cb As BANanoObject = methods.Get(k)
+	For Each k As String In mmethods.Keys
+		Dim cb As BANanoObject = mmethods.Get(k)
 		SetCallBack(k, cb)
 	Next
 End Sub
-
 
 'get the name of the breakpoint
 Sub GetBreakPointName As String
@@ -383,10 +450,10 @@ End Sub
 Public Sub Initialize(Module As Object) 
 	'get the body of the page
 	body = BANano.GetElement("#body")
-	body.Append($"<div id="app"></div>"$)
-	body.Append($"<div id="placeholder" v-if="placeholder"></div>"$)
-	body.Append($"<div id="appendholder" v-if="appendholder"></div>"$)
-	body.Append($"<v-template id="apptemplate" v-if="apptemplate"></v-template>"$)
+	body.Append($"<div id="app"><div id="placeholder" v-if="placeholder"></div><div id="appendholder" v-if="appendholder"></div><v-template id="apptemplate" v-if="apptemplate"></v-template></div>"$)
+	'body.Append($"<div id="placeholder" v-if="placeholder"></div>"$)
+	'body.Append($"<div id="appendholder" v-if="appendholder"></div>"$)
+	'body.Append($"<v-template id="apptemplate" v-if="apptemplate"></v-template>"$)
 	'
 	SetData("placeholder", False)
 	SetData("appendholder", False)
@@ -760,19 +827,8 @@ Sub AddModule(tagName As String)
 	Modules.Put(tagName, tagName)
 End Sub
 
-'add a component we have defined internally
-Sub AddComponent(comp As VueComponent)
-	'set the tab
-	'comp.SetTag(comp.mName)
-	Dim sid As String = comp.mName
-	If components.ContainsKey(sid) = True Then 
-		Return
-	End If
-	components.Put(sid, comp.Component(False))
-End Sub
-
 'add a component from 3rd party
-Sub AddComponentBO(compName As String, comp As BANanoObject)
+Sub ImportComponentBO(compName As String, comp As BANanoObject)
 	If components.ContainsKey(compName) = True Then Return
 	components.Put(compName, comp)
 End Sub
@@ -789,12 +845,6 @@ Sub NewMap As Map
 	Return nm
 End Sub
 
-'add a component
-Sub AddPage(comp As VueComponent) 
-	AddRoute(comp)
-	
-End Sub
-
 'add a router page
 Sub AddRoute(comp As VueComponent) 
 	If comp.mname = "" Then
@@ -804,10 +854,10 @@ Sub AddRoute(comp As VueComponent)
 	Dim eachroute As Map = CreateMap()
 	eachroute.Put("path", comp.path)
 	eachroute.Put("name", comp.mname)
-	eachroute.Put("component", comp.component(True))
+	Dim compx As Map = comp.Component
+	eachroute.Put("component", compx)
 	'eachroute.Put("props", True)
 	routes.Add(eachroute)
-	
 End Sub
 
 
@@ -839,133 +889,99 @@ End Sub
 'End Sub
 
 'set mounted
-Sub SetMounted(module As Object, methodName As String) 
+Sub SetMounted(module As Object, methodName As String, args As List) 
 	methodName = methodName.ToLowerCase
 	If SubExists(module, methodName) = False Then Return
-	Dim e As BANanoEvent
-	Dim mounted As BANanoObject = BANano.CallBack(module, methodName, Array(e))
+	Dim mounted As BANanoObject = BANano.CallBack(module, methodName, args)
 	Options.Put("mounted", mounted)
-	SetMethod(module, methodName)
-	
+	SetMethod(module, methodName, args)
 End Sub
 
-'
-''set template from a placeholder
-'Sub SetTemplateFromPlaceholder()
-'	Dim stemplate As String = BANanoGetHTML("placeholder")
-'	Template.SetText(stemplate)
-'End Sub
-
-''set template from a placeholder
-'Sub AddPlaceholder()
-'	Dim stemplate As String = BANanoGetHTML("placeholder")
-'	Template.SetText(stemplate)
-'End Sub
-
-
 'set destroyed
-Sub SetDestroyed(module As Object, methodName As String) 
+Sub SetDestroyed(module As Object, methodName As String, args As List) 
 	methodName = methodName.ToLowerCase
 	If SubExists(module, methodName) = False Then Return
-	Dim e As BANanoEvent
-	Dim destroyed As BANanoObject = BANano.CallBack(module, methodName, Array(e))
+	Dim destroyed As BANanoObject = BANano.CallBack(module, methodName, args)
 	Options.Put("destroyed", destroyed)
-	SetMethod(module, methodName)
-	
+	SetMethod(module, methodName, args)
 End Sub
 
 
 'set activated
-Sub SetActivated(module As Object, methodName As String) 
+Sub SetActivated(module As Object, methodName As String, args As List) 
 	methodName = methodName.ToLowerCase
 	If SubExists(module, methodName) = False Then Return
-	Dim e As BANanoEvent
-	Dim activated As BANanoObject = BANano.CallBack(module, methodName, Array(e))
+	Dim activated As BANanoObject = BANano.CallBack(module, methodName, args)
 	Options.Put("activated", activated)
-	SetMethod(module, methodName)
-	
+	SetMethod(module, methodName, args)
 End Sub
 
 
 'set deactivated
-Sub SetDeActivated(module As Object, methodName As String) 
+Sub SetDeActivated(module As Object, methodName As String, args As List) 
 	methodName = methodName.ToLowerCase
 	If SubExists(module, methodName) = False Then Return
-	Dim e As BANanoEvent
-	Dim deactivated As BANanoObject = BANano.CallBack(module, methodName, Array(e))
+	Dim deactivated As BANanoObject = BANano.CallBack(module, methodName, args)
 	Options.Put("deactivated", deactivated)
-	SetMethod(module, methodName)
-	
+	SetMethod(module, methodName, args)
 End Sub
 
 
 'set updated
-Sub SetUpdated(module As Object, methodName As String) 
+Sub SetUpdated(module As Object, methodName As String, args As List) 
 	methodName = methodName.ToLowerCase
 	If SubExists(module, methodName) = False Then Return
-	Dim e As BANanoEvent
-	Dim updated As BANanoObject = BANano.CallBack(module, methodName, Array(e))
+	Dim updated As BANanoObject = BANano.CallBack(module, methodName, args)
 	Options.Put("updated", updated)
-	SetMethod(module, methodName)
-	
+	SetMethod(module, methodName, args)
 End Sub
 
 'set beforemount
-Sub SetBeforeMount(module As Object, methodName As String) 
+Sub SetBeforeMount(module As Object, methodName As String, args As List) 
 	methodName = methodName.ToLowerCase
 	If SubExists(module, methodName) = False Then Return
-	Dim e As BANanoEvent
-	Dim beforeMount As BANanoObject = BANano.CallBack(module, methodName, Array(e))
+	Dim beforeMount As BANanoObject = BANano.CallBack(module, methodName, args)
 	Options.Put("beforeMount", beforeMount)
-	SetMethod(module, methodName)
-	
+	SetMethod(module, methodName, args)
 End Sub
 
 'set beforeupdate
-Sub SetBeforeUpdate(module As Object, methodName As String) 
+Sub SetBeforeUpdate(module As Object, methodName As String, args As List) 
 	methodName = methodName.ToLowerCase
 	If SubExists(module, methodName) = False Then Return
-	Dim e As BANanoEvent
-	Dim beforeUpdate As Boolean = BANano.CallBack(module, methodName, Array(e))
+	Dim beforeUpdate As Boolean = BANano.CallBack(module, methodName, args)
 	Options.Put("beforeUpdate", beforeUpdate)
-	SetMethod(module, methodName)
-	
+	SetMethod(module, methodName, args)
 End Sub
 
 'set before destroy
-Sub SetBeforeDestroy(module As Object, methodName As String) 
+Sub SetBeforeDestroy(module As Object, methodName As String, args As List) 
 	methodName = methodName.ToLowerCase
 	If SubExists(module, methodName) = False Then Return
-	Dim e As BANanoEvent
-	Dim beforeDestroy As Boolean = BANano.CallBack(module, methodName, Array(e))
+	Dim beforeDestroy As Boolean = BANano.CallBack(module, methodName, args)
 	Options.Put("beforeDestroy", beforeDestroy)
-	SetMethod(module, methodName)
-	
+	SetMethod(module, methodName, args)
 End Sub
 
 
 'set before created
-Sub SetBeforeCreate(module As Object, methodName As String) 
+Sub SetBeforeCreate(module As Object, methodName As String, args As List) 
 	methodName = methodName.ToLowerCase
 	If SubExists(module, methodName) = False Then Return
-	Dim e As BANanoEvent
-	Dim beforeCreate As BANanoObject = BANano.CallBack(module, methodName, Array(e))
+	Dim beforeCreate As BANanoObject = BANano.CallBack(module, methodName, args)
 	Options.Put("beforeCreate", beforeCreate)
-	SetMethod(module, methodName)
-	
+	SetMethod(module, methodName, args)
 End Sub
 
 
 'set created
-Sub SetCreated(module As Object, methodName As String) 
+Sub SetCreated(module As Object, methodName As String, args As List) 
 	methodName = methodName.ToLowerCase
 	If SubExists(module, methodName) = False Then Return
-	Dim e As BANanoEvent
-	Dim created As BANanoObject = BANano.CallBack(module, methodName, Array(e))
+	Dim created As BANanoObject = BANano.CallBack(module, methodName, args)
 	Options.Put("created", created)
-	SetMethod(module, methodName)
+	SetMethod(module, methodName, args)
 End Sub
-
 
 'copy a state from one to another
 Sub State2Another(source As String, target As String, defaultValue As Object) 
@@ -974,12 +990,10 @@ Sub State2Another(source As String, target As String, defaultValue As Object)
 	SetStateSingle(target, readObj)
 End Sub
 
-
 'focus on a ref
 Sub SetFocus(refID As String) 
 	refID = refID.tolowercase
 	refs.GetField(refID).RunMethod("focus", Null)
-	
 End Sub
 
 'nullify the file select
@@ -1010,8 +1024,13 @@ Sub RefreshKey(keyName As String)
 	SetData(keyName, DateTime.now)
 End Sub
 
+'set data to the global store
+Sub SetStore(prop As String, value As Object)
+	SetDataGlobal(prop, value)
+End Sub
+
 'set global state data
-Sub SetDataGlobal(prop As String, value As Object) 
+private Sub SetDataGlobal(prop As String, value As Object) 
 	prop = prop.ToLowerCase
 	state.Put(prop, value)
 	'
@@ -1065,15 +1084,20 @@ Sub ListUnshiftGlobal(lstname As String, obj As Object)
 	store.GetField(lstname).RunMethod("unshift", obj)
 End Sub
 
+'get a value from the gloval store
+Sub GetStore(prop As String) As Object
+	Return GetDataGlobal(prop)
+End Sub
+
 'get global state data
-Sub GetDataGlobal(prop As String) As Object    'IgnoreDeadCode
+private Sub GetDataGlobal(prop As String) As Object    'IgnoreDeadCode
 	prop = prop.tolowercase
 	Dim rslt As Object
 	rslt = state.GetDefault(prop, Null)
 	Try
 		Dim bo As BANanoObject = store.GetField(prop)
-		If BANano.IsNull(bo) Then Return Null
-		If BANano.IsUndefined(bo) Then Return Null
+		If BANano.IsNull(bo) Then Return ""
+		If BANano.IsUndefined(bo) Then Return ""
 		rslt = store.GetField(prop).Result
 	Catch
 		
@@ -1106,16 +1130,14 @@ Sub Decrement(prop As String, addVal As Int)
 End Sub
 
 'set direct method
-Sub SetFilter(Module As Object, methodName As String) 
+Sub SetFilter(Module As Object, methodName As String, args As List) 
 	methodName = methodName.ToLowerCase
 	If SubExists(Module, methodName) Then
-		Dim avalue As Object
-		Dim cb As BANanoObject = BANano.CallBack(Module, methodName, Array(avalue))
+		Dim cb As BANanoObject = BANano.CallBack(Module, methodName, args)
 		filters.Put(methodName, cb)
 	Else
-		Log($"SetFilter.${methodName} could not be found!"$)
-	End If
-	
+		'Log($"SetFilter.${methodName} could not be found!"$)
+	End If   'ignore
 End Sub
 
 'change the locale
@@ -1129,24 +1151,21 @@ Sub SetLocale(slang As String)
 End Sub
 
 'set computed
-Sub SetComputed(k As String, module As Object, methodName As String) 
+Sub SetComputed(k As String, module As Object, methodName As String, args As List) 
 	k = k.tolowercase
 	methodName = methodName.ToLowerCase
 	If SubExists(module, methodName) Then
-		Dim e As BANanoEvent
-		Dim cb As BANanoObject = BANano.CallBack(module, methodName, Array(e))
+		Dim cb As BANanoObject = BANano.CallBack(module, methodName, args)
 		computed.Put(k, cb.Result)
 	End If
-	
 End Sub
 
 'set watches 
-Sub SetWatch(Module As Object, k As String, bImmediate As Boolean, bDeep As Boolean, methodName As String) 
+Sub SetWatch(k As String, bImmediate As Boolean, bDeep As Boolean, Module As Object, methodName As String, args As List) 
 	methodName = methodName.tolowercase
 	k = k.tolowercase
 	If SubExists(Module, methodName) Then
-		Dim newVal As Object
-		Dim cb As BANanoObject = BANano.CallBack(Module, methodName, Array(newVal))
+		Dim cb As BANanoObject = BANano.CallBack(Module, methodName, args)
 		Dim deepit As Map = CreateMap()
 		deepit.Put("handler", methodName)
 		deepit.Put("deep", bDeep)
@@ -1154,39 +1173,29 @@ Sub SetWatch(Module As Object, k As String, bImmediate As Boolean, bDeep As Bool
 		watches.Put(k, deepit)
 		methods.Put(methodName, cb)
 	End If
-	
 End Sub
 
-
-Sub RunMethod1(methodName As String, args As List) As BANanoObject
+Sub RunMethod(methodName As String, params As Object) As BANanoObject
 	methodName = methodName.tolowercase
-	Return Vue.RunMethod(methodName, args)
+	If methods.ContainsKey(methodName) Then
+		Return Vue.RunMethod(methodName, params)
+	Else
+		Log($"RunMethod;${methodName} does not exist!"$)
+	End If
 End Sub
-
 
 'set direct method
-Sub SetMethod(Module As Object, methodName As String) 
+Sub SetMethod(Module As Object, methodName As String, args As List) 
 	methodName = methodName.ToLowerCase
 	If SubExists(Module, methodName) Then
-		Dim e As BANanoEvent
-		Dim cb As BANanoObject = BANano.CallBack(Module, methodName, Array(e))
+		Dim cb As BANanoObject = BANano.CallBack(Module, methodName, args)
 		methods.Put(methodName, cb)
 	End If
-	
-End Sub
-
-'set direct method
-Sub SetMethod1(module As Object, methodName As String, args As List) 
-	methodName = methodName.ToLowerCase
-	If SubExists(module, methodName) Then
-		Dim cb As BANanoObject = BANano.CallBack(module, methodName, args)
-		methods.Put(methodName, cb)
-	End If
-	
 End Sub
 
 
 Sub SetCallBack(methodName As String, cb As BANanoObject) 
+	methodName = methodName.tolowercase
 	methods.Put(methodName, cb)
 End Sub
 
@@ -1288,22 +1297,6 @@ Sub SetStateSingle(k As String, v As Object)
 	Dim optx As Map = CreateMap()
 	optx.Put(k, v)
 	SetState(optx)
-	
-End Sub
-
-Sub CallComputed(methodName As String) As Object
-	methodName = methodName.tolowercase
-	Return Vue.GetField(methodName)
-End Sub
-
-Sub CallMethod(methodName As String)
-	methodName = methodName.tolowercase
-	Vue.RunMethod(methodName, Null)
-End Sub
-
-Sub RunMethod(methodName As String, params As Object) As BANanoObject
-	methodName = methodName.tolowercase
-	Return Vue.RunMethod(methodName, params)
 End Sub
 
 'get an element
@@ -1400,38 +1393,32 @@ End Sub
 Sub SetRequired(elID As String, b As Boolean) 
 	elID = elID.tolowercase
 	SetStateSingle($"${elID}required"$, b)
-	
 End Sub
 
 Sub Enable(elID As String) 
 	elID = elID.tolowercase
 	SetStateSingle($"${elID}disabled"$, False)
-	
 End Sub
 
 Sub Disable(elID As String) 
 	elID = elID.tolowercase
 	SetStateSingle($"${elID}disabled"$, True)
-	
 End Sub
 
 Sub SetEnabled(elID As String, b As Boolean) 
 	elID = elID.tolowercase
 	SetStateSingle($"${elID}disabled"$, b)
-	
 End Sub
 
 'hide an item using vshow
 Sub Hide(elID As String)  
 	elID = elID.tolowercase
 	SetStateSingle($"${elID}show"$, False)
-	
 End Sub
 
 'show an item using vshow
 Sub Show(elID As String) 
 	SetStateSingle($"${elID}show"$, True)
-	
 End Sub
 
 'get the html part of a bananoelement
@@ -1452,32 +1439,6 @@ Sub GetPlaceholder As String
 	Return xTemplate
 End Sub
 
-
-''append template from placeholder
-'Sub TemplateFromPlaceholder 
-'	Dim be As BANanoElement
-'	be.Initialize("#placeholder")
-'	Dim xTemplate As String = be.GetHTML
-'	be.Empty
-'	xTemplate = xTemplate.Replace("v-template", "template")
-'	AddHTML(xTemplate)
-'	
-'End Sub
-
-''inject template stuff to the template
-'Sub Placeholder2Template
-'	TemplateFromPlaceholder
-'End Sub
-
-'get html from placeholder and append it on target
-Sub BANanoGetHTML1(source As String, target As String)
-	source = source.tolowercase
-	target = target.tolowercase
-	Dim ssource As String = BANanoGetHTML(source)
-	'append the html to the target
-	BANano.GetElement(target).Append(ssource)
-End Sub
-
 'set on click method
 Sub SetOnClick(Module As Object, methodName As String)
 	methodName = methodName.tolowercase
@@ -1487,20 +1448,6 @@ Sub SetOnClick(Module As Object, methodName As String)
 	'add to methods
 	SetCallBack(methodName, cb)
 End Sub
-
-'get html from source and append it on target
-Sub BANanoMoveHTML(source As String, target As String)
-	source = source.tolowercase
-	target = target.tolowercase
-	Dim ssource As String = BANanoGetHTML(source)
-	'append the html to the target
-	BANano.GetElement($"#${target}"$).Append(ssource)
-End Sub
-
-''add an element inside the placeholder
-'Sub AddHTML(html As String)
-'	Template.AddChild(html)
-'End Sub
 
 Sub AddHTMLElement(Module As Object, parentID As String, elID As String, tag As String, props As Map, styleProps As Map, classNames As List, loose As List, Text As String)
 	parentID = parentID.ToLowerCase
@@ -1606,7 +1553,6 @@ Sub SetBadgeColor(btnID As String, badgeColor As String)
 	btnID = btnID.tolowercase
 	Dim sbadgeColor As String = $"${btnID}badgecolor"$
 	SetData(sbadgeColor, badgeColor)
-	
 End Sub
 
 'set badge content
@@ -1614,7 +1560,6 @@ Sub SetBadgeContent(btnID As String, BadgeContent As String)
 	btnID = btnID.tolowercase
 	Dim SBadgeContent As String = $"${btnID}content"$
 	SetData(SBadgeContent, BadgeContent)
-	
 End Sub
 
 'increment badge
@@ -1626,7 +1571,6 @@ Sub IncrementBadge(btnID As String)
 	ivalue = BANano.parseInt(ivalue)
 	ivalue = ivalue + 1
 	SetData(SBadgeContent, ivalue)
-	
 End Sub
 
 'decrement badge
@@ -1638,133 +1582,6 @@ Sub DecrementBadge(btnID As String)
 	ivalue = BANano.parseInt(ivalue)
 	ivalue = ivalue - 1
 	SetData(SBadgeContent, ivalue)
-	
-End Sub
-
-'show an error snackbar
-Sub ShowSnackBarError(mName As String, Message As String) 
-	Message = CStr(Message)
-	Message = Message.Replace("null", "")
-	Message = Message.Trim
-	If Message = "" Then Return
-	SetData($"${mName}message"$, Message)
-	SetData($"${mName}show"$, True)
-	SetData($"${mName}color"$, "red")
-	
-End Sub
-
-'show a success snackbar
-Sub ShowSnackBarSuccess(mName As String, Message As String) 
-	Message = CStr(Message)
-	Message = Message.Replace("null", "")
-	Message = Message.Trim
-	If Message = "" Then Return
-	SetData($"${mName}message"$, Message)
-	SetData($"${mName}show"$, True)
-	SetData($"${mName}color"$, "success")
-	
-End Sub
-
-'show a warning snack bar
-Sub ShowSnackBarWarning(mName As String, Message As String) 
-	Message = CStr(Message)
-	Message = Message.Replace("null", "")
-	Message = Message.Trim
-	If Message = "" Then Return
-	SetData($"${mName}message"$, Message)
-	SetData($"${mName}show"$, True)
-	SetData($"${mName}color"$, "orange")
-	
-End Sub
-
-'show a snack bar
-Sub ShowSnackBar(mName As String, Message As String) 
-	Message = CStr(Message)
-	Message = Message.Replace("null", "")
-	Message = Message.Trim
-	If Message = "" Then Return
-	SetData($"${mName}message"$, Message)
-	SetData($"${mName}show"$, True)
-	SetData($"${mName}color"$, "info")
-	
-End Sub
-
-'show the navbar
-Sub ShowNavBar
-	Show("navbar")
-End Sub
-
-'show nav menu
-Sub ShowNavMenu	
-	'show nav menu
-	Show("navmenu")
-End Sub
-	
-	'show the logo
-Sub ShowLogo
-	Show("logo")
-End Sub
-	
-	'show nav bar title
-Sub ShowNavBarTitle
-	Show("navbartitle")
-End Sub
-	
-'show the footer
-Sub ShowFooter
-	Show("footer")
-End Sub
-
-'hide the navbar
-Sub HideNavBar
-	Hide("navbar")
-End Sub
-
-'hide nav menu
-Sub HideNavMenu	
-	'show nav menu
-	Hide("navmenu")
-End Sub
-	
-'hide the logo
-Sub HideLogo
-	Show("logo")
-End Sub
-	
-'hide nav bar title
-Sub HideNavBarTitle
-	Hide("navbartitle")
-End Sub
-	
-'Hide the footer
-Sub HideFooter
-	Hide("footer")
-End Sub
-
-
-'show a drawer
-Sub ShowDrawer(drwName As String)
-	SetData(drwName, True)
-End Sub
-
-'hide a drawer
-Sub HideDrawer(drwName As String)
-	SetData(drwName, False)
-End Sub
-
-'hide bottom nav
-Sub HideBottomNav
-	SetData("bottomnavshow", False)
-End Sub
-
-'show bottom nav
-Sub ShowBottomNav
-	SetData("bottomnavshow", True)
-End Sub
-
-'toggle a drawer
-Sub ToggleDrawer(drwName As String)
-	ToggleState(drwName)
 End Sub
 
 'show confirm dialog
@@ -1790,7 +1607,6 @@ Sub ShowAlertDialog(Title As String, Message As String,OkText As String)
 	SetData("confirmcancelshow", False)
 End Sub
 
-
 Sub HideConfirm
 	SetData("confirmshow", False)
 End Sub
@@ -1801,28 +1617,6 @@ Sub GetConfirm As String
 	Return sproc
 End Sub
 '
-''set master template for the page
-'Sub SetTemplate(tmp As String) 
-'	Template.SetText(tmp)
-'	
-'End Sub
-'
-'Sub SetDataStore(prop As String, value As Object) 
-'	prop = prop.tolowercase
-'	store.GetField("state").SetField(prop, value)
-'	
-'End Sub
-'
-'Sub GetDataStore(prop As String) As Object
-'	prop = prop.tolowercase
-'	Dim obj As Map = store.GetField("state").Result
-'	Dim res As Object = Null
-'	If obj.ContainsKey(prop) Then
-'		res = obj.Get(prop)
-'	End If
-'	Return res
-'End Sub
-
 'set right to left
 Sub SetRTL(b As Boolean)
 	Vuetify.SetField("rtl", b)
@@ -1922,11 +1716,13 @@ Sub SetData(prop As String, value As Object)
 End Sub
 
 Sub GetData(prop As String) As Object
-	Dim obj As Object = data.GetDefault(prop, Null)
+	Dim obj As Object = data.GetDefault(prop, "")
+	If BANano.IsNull(obj) Then Return ""
+	If BANano.IsUndefined(obj) Then Return ""
 	Return obj
 End Sub
 
-Sub GetState(prop As String) As Object
-	Dim obj As Object = data.GetDefault(prop, Null)
+private Sub GetState(prop As String) As Object
+	Dim obj As Object = data.GetDefault(prop, "")
 	Return obj
 End Sub

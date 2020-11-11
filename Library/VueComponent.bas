@@ -64,18 +64,28 @@ End Sub
 
 'add html of component to app and this binds events and states
 Sub BindVueElement(el As VueElement)
-	Dim bindings As Map = el.bindings
-	Dim methods As Map = el.methods
+	Dim mbindings As Map = el.bindings
+	Dim mmethods As Map = el.methods
 	'apply the binding for the control
-	For Each k As String In bindings.Keys
-		Dim v As String = bindings.Get(k)
-		SetData(k, v)
+	For Each k As String In mbindings.Keys
+		Dim v As Object = mbindings.Get(k)
+		Select Case k
+		Case "key"
+		Case Else
+			SetData(k, v)
+		End Select
 	Next
 	'apply the events
-	For Each k As String In methods.Keys
-		Dim cb As BANanoObject = methods.Get(k)
+	For Each k As String In mmethods.Keys
+		Dim cb As BANanoObject = mmethods.Get(k)
 		SetCallBack(k, cb)
 	Next
+End Sub
+
+Sub NewList As List
+	Dim elx As List
+	elx.Initialize
+	Return elx
 End Sub
 
 'get element by data
@@ -88,10 +98,11 @@ Sub GetElementByData(dataattr As String, value As String) As BANanoElement
 End Sub
 
 'import a component, the module should have the Initilize method without parameters
-Sub Import(compname As String, comp As VueComponent)
+Sub Import(comp As VueComponent)
+	Dim compname As String = comp.mName
 	compname = compname.tolowercase
 	If components.ContainsKey(compname) = True Then Return
-	Dim compx As Map = comp.component(False)
+	Dim compx As Map = comp.Component
 	components.Put(compname, compx)
 End Sub
 
@@ -109,51 +120,15 @@ Sub ImportBO(compName As String, comp As BANanoObject)
 	components.Put(compName, comp)
 End Sub
 
-
-'add html content to template
-public Sub AddToTemplate(html As String)
-	Dim mTarget As BANanoElement = BANano.GetElement($"#${TemplateID}"$)
-	mTarget.Append(html)
-End Sub
-
-'append template from placeholder
-Sub TemplateFromPlaceholder
-	Dim be As BANanoElement
-	be.Initialize("#placeholder")
-	Dim xTemplate As String = be.GetHTML
-	be.Empty
-	xTemplate = xTemplate.Replace("v-template", "template")
-	AddHTML(xTemplate)
-End Sub
-
-'inject template stuff to the template
-Sub Placeholder2Template
-	TemplateFromPlaceholder
-End Sub
-
 'add an element inside the placeholder
 Sub AddElement(ve As VueElement)
 	Template.AddChild(ve.ToString)
+	BindVueElement(ve)
 End Sub
 
 'add an element inside the placeholder
 Sub AddHTML(html As String)
 	Template.AddChild(html)
-End Sub
-
-Sub BindElement(ve As VueElement)
-	'apply the binding for the control
-	Dim vebindings As Map = ve.bindings
-	For Each k As String In vebindings.Keys
-		Dim v As String = vebindings.Get(k)
-		SetData(k, v)
-	Next
-	'apply the events
-	Dim vemethods As Map = ve.methods
-	For Each k As String In vemethods.Keys
-		Dim cb As BANanoObject = vemethods.Get(k)
-		SetCallBack(k, cb)
-	Next
 End Sub
 
 'set mounted
@@ -293,14 +268,11 @@ Sub SetData(prop As String, value As Object) As VueComponent
 End Sub
 
 'return the component
-Sub Component(bRoute As Boolean) As Map
+Sub Component As Map
 	Dim sTemplate As String = Template.ToString
-	If bRoute = False Then
-		Dim cb As BANanoObject = BANano.CallBack(Me, "returndata", Null)
-		opt.Put("data", cb)
-	Else
-		opt.Put("data", data)
-	End If
+	sTemplate = sTemplate.Replace("v-template", "template")
+	Dim cb As BANanoObject = BANano.CallBack(Me, "returndata", Null)
+	opt.Put("data", cb.Result)
 	opt.Put("methods", methods)
 	opt.Put("computed", computed)
 	opt.Put("watch", watches)
@@ -312,7 +284,7 @@ Sub Component(bRoute As Boolean) As Map
 End Sub
 
 'use for components
-private Sub returndata As Map
+private Sub returndata As Map			'ignoredeadcode
 	Return data
 End Sub
 
@@ -323,7 +295,7 @@ Sub RemoveData(key As String)
 End Sub
 
 Sub GetData(prop As String) As Object
-	Dim obj As Object = data.GetDefault(prop, Null)
+	Dim obj As Object = data.GetDefault(prop, "")
 	Return obj
 End Sub
 
@@ -364,12 +336,11 @@ Sub SetComputed(k As String, module As Object, methodName As String, args As Lis
 End Sub
 
 'set watches 
-Sub SetWatch(Module As Object, k As String, bImmediate As Boolean, bDeep As Boolean, methodName As String)
+Sub SetWatch(k As String, bImmediate As Boolean, bDeep As Boolean, Module As Object, methodName As String, args As List)
 	methodName = methodName.tolowercase
 	k = k.tolowercase
 	If SubExists(Module, methodName) Then
-		Dim newVal As Object
-		Dim cb As BANanoObject = BANano.CallBack(Module, methodName, Array(newVal))
+		Dim cb As BANanoObject = BANano.CallBack(Module, methodName, args)
 		Dim deepit As Map = CreateMap()
 		deepit.Put("handler", methodName)
 		deepit.Put("deep", bDeep)
@@ -422,23 +393,6 @@ Sub GetState(k As String, v As Object) As Object
 	End If
 End Sub
 
-'generate another vue instance
-Sub RenderTo(elID As String)
-	elID = elID.tolowercase
-	BANano.GetElement($"#${elID}"$).empty
-	'
-	Dim boVUE As BANanoObject
-	opt.Put("el", $"#${elID}"$)
-	Component(False)
-	boVUE.Initialize2("Vue", opt)
-	'get the state
-	Dim dKey As String = "$data"
-	data = boVUE.GetField(dKey).Result
-	'get the refs
-	Dim rKey As String = "$refs"
-	refs = boVUE.GetField(rKey)
-End Sub
-
 'toggle a state
 Sub ToggleState(stateName As String)
 	Dim bcurrent As Boolean = GetState(stateName,"")
@@ -446,6 +400,11 @@ Sub ToggleState(stateName As String)
 	Dim optx As Map = CreateMap()
 	optx.Put(stateName, bcurrent)
 	SetState(optx)
+End Sub
+
+
+Sub Toggle(stateID As String)
+	ToggleState(stateID)	
 End Sub
 
 'check if we have state
@@ -603,7 +562,7 @@ Sub AddRule(ruleName As String, Module As Object,  MethodName As String)
 	If data.ContainsKey(ruleName) Then
 		rules = data.Get(ruleName)
 	Else
-		rules = BANanoShared.newlist
+		rules = NewList
 	End If
 	'
 	Dim v As Object
@@ -651,29 +610,6 @@ Sub BANanoGetHTML(id As String) As String
 	Return xTemplate
 End Sub
 
-
-'
-'Sub ToString As String
-'	Template.RemoveAttributes(Array("v-show", "v-if", ":disabled", ":required", ":class", "v-model", "tabindex", ":style"))
-'	vue.RemoveData(Template.showkey)
-'	vue.RemoveData(Template.styleKey)
-'	vue.removedata(Template.reqKey)
-'	vue.RemoveData(Template.disKey)
-'	vue.RemoveData(Template.classKey)
-'	vue.RemoveData(Template.errKey)
-'	Return Template.ToString
-'End Sub
-
-'set direct method
-Sub SetMethod1(Module As Object, methodName As String, args As List)
-	methodName = methodName.ToLowerCase
-	If SubExists(Module, methodName) Then
-		Dim cb As BANanoObject = BANano.CallBack(Module, methodName, args)
-		methods.Put(methodName, cb)
-	End If
-End Sub
-
-
 'get the html part of a bananoelement
 Sub BANanoGetHTMLAsIs(id As String) As String
 	id = id.tolowercase
@@ -683,17 +619,6 @@ Sub BANanoGetHTMLAsIs(id As String) As String
 	be.Empty
 	Return xTemplate
 End Sub
-
-
-'get html from source and append it on target
-Sub BANanoMoveHTML(source As String, target As String)
-	source = source.tolowercase
-	target = target.tolowercase
-	Dim ssource As String = BANanoGetHTML(source)
-	'append the html to the target
-	BANano.GetElement($"#${target}"$).Append(ssource)
-End Sub
-
 
 #End Region
 
