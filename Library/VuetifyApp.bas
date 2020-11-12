@@ -478,14 +478,12 @@ Public Sub Initialize(Module As Object)
 	Modules.Initialize
 	Themes.Initialize 
 	data.Initialize 
-	
 	InitColors
 	
 	RTL = False
 	Dark = False
 	lang = "en"
 	VuetifyOptions.Initialize
-	
 End Sub
 
 private Sub InitColors
@@ -1320,6 +1318,7 @@ Sub Serve
 	VuetifyOptions.Put("rtl", RTL)
 	VuetifyOptions.Put("theme", theme)
 	VuetifyOptions.Put("lang", mlang)
+	VuetifyOptions.Put("breakpoint", CreateMap("scrollBarWidth": 6))
 	
 	'add the app div
 	store = Vue.RunMethod("observable", Array(state))

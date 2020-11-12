@@ -8,6 +8,8 @@ Version=7
 'Custom BANano View class
 
 #Event: Click (e As BANanoEvent)
+#Event: RightClick (e As BANanoEvent)
+#Event: LeftClick (e As BANanoEvent)
 #Event: Change (e As BANanoEvent)
 #Event: ClickStop (e As BANanoEvent)
 #Event: DblClick (e As BANanoEvent)
@@ -30,9 +32,14 @@ Version=7
 #DesignerProperty: Key: FillHeight, DisplayName: FillHeight, FieldType: Boolean, DefaultValue: False, Description: FillHeight
 #DesignerProperty: Key: JustifyCenter, DisplayName: JustifyCenter, FieldType: Boolean, DefaultValue: False, Description: JustifyCenter
 #DesignerProperty: Key: AlignCenter, DisplayName: AlignCenter, FieldType: Boolean, DefaultValue: False, Description: AlignCenter
+#DesignerProperty: Key: TextAlign, DisplayName: TextAlign, FieldType: String, DefaultValue:  , Description: , List: left|center|right|justify
 #DesignerProperty: Key: Fluid, DisplayName: Fluid, FieldType: Boolean, DefaultValue: False, Description: Fluid
 #DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: , Description: Value on the element
 #DesignerProperty: Key: Label, DisplayName: Label, FieldType: String, DefaultValue: , Description: Label of the element
+#DesignerProperty: Key: Height, DisplayName: Height, FieldType: String, DefaultValue:  , Description: 
+#DesignerProperty: Key: MaxHeight, DisplayName: MaxHeight, FieldType: String, DefaultValue:  , Description: 
+#DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue:  , Description: 
+#DesignerProperty: Key: MaxWidth, DisplayName: MaxWidth, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String.
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Style, DisplayName: Style, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String.
@@ -41,13 +48,16 @@ Version=7
 #DesignerProperty: Key: FullScreen, DisplayName: FullScreen Mobile, FieldType: Boolean, DefaultValue: False, Description: FullScreen Mobile
 #DesignerProperty: Key: Rows, DisplayName: Rows, FieldType: String, DefaultValue: , Description: Rows
 #DesignerProperty: Key: Columns, DisplayName: Columns, FieldType: String, DefaultValue: , Description: Columns
-#DesignerProperty: Key: OffSets, DisplayName: OffSets SMLX, FieldType: String, DefaultValue: , Description: OffSets SMLX
-#DesignerProperty: Key: Sizes, DisplayName: Sizes SMLX, FieldType: String, DefaultValue: , Description: Sizes SMLX
+#DesignerProperty: Key: OffSets, DisplayName: OffSets SMLX, FieldType: String, DefaultValue: ||| , Description: OffSets SMLX
+#DesignerProperty: Key: Sizes, DisplayName: Sizes SMLX, FieldType: String, DefaultValue: |||, Description: Sizes SMLX
+#DesignerProperty: Key: PaddingAXYTBLR, DisplayName: Padding AXYTBLR, FieldType: String, DefaultValue: |||||| , Description: Padding AXYSMLX
+#DesignerProperty: Key: MarginAXYTBLR, DisplayName: Margin AXYTBLR, FieldType: String, DefaultValue: |||||| , Description: Margins AXYSMLX
 #DesignerProperty: Key: BuildGrid, DisplayName: BuildGrid, FieldType: Boolean, DefaultValue: False, Description: BuildGrid
 #DesignerProperty: Key: ShowGridDesign, DisplayName: Show Grid Design, FieldType: Boolean, DefaultValue: False, Description: ShowGridDesign
 #DesignerProperty: Key: VFor, DisplayName: VFor, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Key, DisplayName: Key, FieldType: String, DefaultValue:  , Description:
 #DesignerProperty: Key: To, DisplayName: To, FieldType: String, DefaultValue:  , Description: 
+#DesignerProperty: Key: Href, DisplayName: Href, FieldType: String, DefaultValue: , Description: Href
 #DesignerProperty: Key: VText, DisplayName: VText, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VHtml, DisplayName: VHtml, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue:  , Description: 
@@ -57,12 +67,8 @@ Version=7
 #DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Rules, DisplayName: Rules, FieldType: String, DefaultValue:  , Description: Rules
 #DesignerProperty: Key: States, DisplayName: States, FieldType: String, DefaultValue: , Description: Initial Binding States. Must be a json String.
-#DesignerProperty: Key: Height, DisplayName: Height, FieldType: String, DefaultValue:  , Description: 
-#DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: SlotActivator, DisplayName: SlotActivator, FieldType: String, DefaultValue: , Description: Slot activator
-#DesignerProperty: Key: Href, DisplayName: Href, FieldType: String, DefaultValue: , Description: Href
-#DesignerProperty: Key: InputType, DisplayName: InputType, FieldType: String, DefaultValue: , Description: Input type
-
+#DesignerProperty: Key: InputType, DisplayName: InputType, FieldType: String, DefaultValue: none, Description: Input type, List: text|email|password|file|tel|url|number|search|none
 #DesignerProperty: Key: PrependIcon, DisplayName: PrependIcon, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: AppendIcon, DisplayName: AppendIcon, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Placeholder, DisplayName: Placeholder, FieldType: String, DefaultValue:  , Description: 
@@ -99,17 +105,6 @@ Version=7
 #DesignerProperty: Key: FontSize, DisplayName: FontSize, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: FontStyle, DisplayName: FontStyle, FieldType: String, DefaultValue:  , Description: , List: normal|italic|oblique|initial|inherit
 #DesignerProperty: Key: FontWeight, DisplayName: FontWeight, FieldType: String, DefaultValue:  , Description: , List: normal|bold|bolder|lighter|initial|inherit
-#DesignerProperty: Key: Margin, DisplayName: Margin, FieldType: String, DefaultValue:  , Description: 
-#DesignerProperty: Key: MarginBottom, DisplayName: MarginBottom, FieldType: String, DefaultValue:  , Description: 
-#DesignerProperty: Key: MarginLeft, DisplayName: MarginLeft, FieldType: String, DefaultValue:  , Description: 
-#DesignerProperty: Key: MarginRight, DisplayName: MarginRight, FieldType: String, DefaultValue:  , Description: 
-#DesignerProperty: Key: MarginTop, DisplayName: MarginTop, FieldType: String, DefaultValue:  , Description: 
-#DesignerProperty: Key: Padding, DisplayName: Padding, FieldType: String, DefaultValue:  , Description: 
-#DesignerProperty: Key: PaddingBottom, DisplayName: PaddingBottom, FieldType: String, DefaultValue:  , Description: 
-#DesignerProperty: Key: PaddingLeft, DisplayName: PaddingLeft, FieldType: String, DefaultValue:  , Description: 
-#DesignerProperty: Key: PaddingRight, DisplayName: PaddingRight, FieldType: String, DefaultValue:  , Description: 
-#DesignerProperty: Key: PaddingTop, DisplayName: PaddingTop, FieldType: String, DefaultValue:  , Description: 
-#DesignerProperty: Key: TextAlign, DisplayName: TextAlign, FieldType: String, DefaultValue:  , Description: , List: left|center|right|justify
 #DesignerProperty: Key: TextDecoration, DisplayName: TextDecoration, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: OnClick, DisplayName: OnClick, FieldType: String, DefaultValue: , Description: Event arguments to be passed to the attribute.
 #DesignerProperty: Key: OnClickStop, DisplayName: OnClickStop, FieldType: String, DefaultValue: , Description: Event arguments to be passed to the attribute.
@@ -181,23 +176,15 @@ Private stFontSize As String = ""
 Private stFontStyle As String = ""
 Private stFontWeight As String = ""
 Private stHeight As String = ""
-Private stMargin As String = ""
-Private stMarginBottom As String = ""
-Private stMarginLeft As String = ""
-Private stMarginRight As String = ""
-Private stMarginTop As String = ""
-Private stPadding As String = ""
-Private stPaddingBottom As String = ""
-Private stPaddingLeft As String = ""
-Private stPaddingRight As String = ""
-Private stPaddingTop As String = ""
+	Private stMaxHeight As String = ""
+	Private stMaxWidth As String = ""
 Private stTextAlign As String = ""
 Private stTextDecoration As String = ""
 Private stLabel As String = ""
 Private stWidth As String = ""
 Private bLoremIpsum As Boolean = False
 	Private bDark As Boolean = False
-	Private stInputType As String = ""
+	Private stInputType As String = "none"
 	Private stHref As String = ""
 	Private stSlotActivator As String = ""
 	Private bHiddenMDAndUp As Boolean = False
@@ -229,8 +216,10 @@ Private bLoremIpsum As Boolean = False
 	Private boShaped As Boolean = False
 	Private boSingleLine As Boolean = False
 	Private boSolo As Boolean = False
-	Private stOffSets As String = ""
-	Private stSizes As String = ""
+	Private stOffSets As String = "|||"
+	Private stSizes As String = "|||"
+	Private stPaddingAXYTBLR As String = "||||||"
+	Private stMarginAXYTBLR As String = "||||||"
 	Private bFluid As Boolean = False
 	Private bBuildGrid As Boolean = False
 	Private bShowGridDesign As Boolean = False
@@ -322,16 +311,8 @@ stFontSize = Props.Get("FontSize")
 stFontStyle = Props.Get("FontStyle")
 stFontWeight = Props.Get("FontWeight")
 stHeight = Props.Get("Height")
-stMargin = Props.Get("Margin")
-stMarginBottom = Props.Get("MarginBottom")
-stMarginLeft = Props.Get("MarginLeft")
-stMarginRight = Props.Get("MarginRight")
-stMarginTop = Props.Get("MarginTop")
-stPadding = Props.Get("Padding")
-stPaddingBottom = Props.Get("PaddingBottom")
-stPaddingLeft = Props.Get("PaddingLeft")
-stPaddingRight = Props.Get("PaddingRight")
-stPaddingTop = Props.Get("PaddingTop")
+		stMaxHeight = Props.Get("MaxHeight")
+		stMaxWidth = Props.Get("MaxWidth")
 stTextAlign = Props.Get("TextAlign")
 stTextDecoration = Props.Get("TextDecoration")
 stLabel = Props.Get("Label")
@@ -369,6 +350,8 @@ stSlotActivator = Props.get("SlotActivator")
 		boSingleLine = Props.Get("SingleLine")
 		boSolo = Props.Get("Solo")
 		stSizes = Props.Get("Sizes")
+		stPaddingAXYTBLR = Props.Get("PaddingTBLR")
+		stMarginAXYTBLR = Props.Get("MarginAXYTBLR")
 		stOffSets = Props.Get("OffSets")
 		bFluid = Props.Get("Fluid")
 		bBuildGrid = Props.get("BuildGrid")
@@ -412,19 +395,16 @@ AddStyle("font-size", stFontSize)
 AddStyle("font-style", stFontStyle)
 AddStyle("font-weight", stFontWeight)
 	AddAttr("height", stHeight)
-AddStyle("margin", stMargin)
-AddStyle("margin-bottom", stMarginBottom)
-AddStyle("margin-left", stMarginLeft)
-AddStyle("margin-right", stMarginRight)
-AddStyle("margin-top", stMarginTop)
-AddStyle("padding", stPadding)
-AddStyle("padding-bottom", stPaddingBottom)
-AddStyle("padding-left", stPaddingLeft)
-AddStyle("padding-right", stPaddingRight)
-AddStyle("padding-top", stPaddingTop)
+	AddAttr("max-height", stMaxHeight)
+	
+	AddAttr("width", stWidth)
+	AddAttr("max-width", stMaxWidth)
+	AddStyle("height", stHeight)
+	AddStyle("max-height", stMaxHeight)
+	AddStyle("width", stWidth)
+	AddStyle("max-width", stMaxWidth)
 AddStyle("text-align", stTextAlign)
 AddStyle("text-decoration", stTextDecoration)
-	AddAttr("width", stWidth)
 	AddAttr("type", stInputType)
 
 	AddClassOnCondition("hidden-md-and-up", bHiddenMDAndUp, True)
@@ -435,6 +415,8 @@ AddStyle("text-decoration", stTextDecoration)
 	
 	setCoverImage(stCoverImage)
 	setFitScreen(bFitScreen)
+	setPaddingAXYTBLR(stPaddingAXYTBLR)
+	setMarginAXYTBLR(stMarginAXYTBLR)
 	'
 	If BANano.IsUndefined(bBuildGrid) Or BANano.IsNull(bBuildGrid) Then
 	else if bBuildGrid = False Then
@@ -467,7 +449,6 @@ AddStyle("text-decoration", stTextDecoration)
 	AddClass(mClasses)
 	setAttributes(mAttributes)
 	setStyles(mStyle)
-	setStates(mStates)
 	'
 'link the events, if any
 'This activates Click the event exists on the module
@@ -486,6 +467,8 @@ SetEvent("ClickPrevent", "Click.Prevent", eOnClickPrevent)
 'build and get the element
 Dim strHTML As String = ToString
 	mElement = mTarget.Append(strHTML).Get("#" & mName)
+	setStates(mStates)
+	'
 	If bBuildGrid Then
 		If BANano.IsUndefined(stRows) Or BANano.IsNull(stRows) Then
 			stRows = "1"
@@ -496,6 +479,8 @@ Dim strHTML As String = ToString
 		If BANano.IsUndefined(stOffSets) Or BANano.IsNull(stOffSets) Then 
 			stOffSets = "0,0,0,0"
 		End If
+		stOffSets = stOffSets.replace(",","|")
+		stOffSets = stOffSets.replace("|",",")
 		Dim sl As List = BANanoShared.StrParse(",", stOffSets)
 		If sl.Size <> 4 Then Return
 		Dim offs As String = sl.Get(0)
@@ -506,6 +491,8 @@ Dim strHTML As String = ToString
 		If BANano.IsUndefined(stSizes) Or BANano.IsNull(stSizes) Then
 			stSizes = "12,12,12,12"
 		End If
+		stSizes = stSizes.replace(",","|")
+		stSizes = stSizes.replace("|",",")
 		Dim ss As List = BANanoShared.StrParse(",", stSizes)
 		If ss.Size <> 4 Then Return
 		Dim sm As String = ss.Get(0)
@@ -632,6 +619,7 @@ End Sub
 
 'sets the state bindings
 public Sub setStates(varBindings As String)
+	If BANano.IsNull(varBindings) Or BANano.IsUndefined(varBindings) Then Return
 	If varBindings = "" Then Return
 	Dim mxItems As List = BANanoShared.StrParse(";", varBindings)
 	For Each mt As String In mxItems
@@ -1231,103 +1219,33 @@ End Sub
 
 public Sub setHeight(varHeight As String)
 	AddAttr("height", varHeight)
-stHeight = varHeight
+	AddStyle("height", varHeight)
+	stHeight = varHeight
 End Sub
 
 public Sub getHeight() As String
 Return stHeight
 End Sub
 
-public Sub setMargin(varMargin As String)
-AddStyle("margin", varMargin)
-stMargin = varMargin
+public Sub setMaxHeight(varMargin As String)
+	AddStyle("max-height", varMargin)
+	AddAttr("max-height", varMargin)
+	stMaxHeight = varMargin
 End Sub
 
-public Sub getMargin() As String
-Return stMargin
+public Sub getMaxHeight() As String
+Return stMaxHeight
 End Sub
 
-public Sub setMarginBottom(varMarginBottom As String)
-AddStyle("margin-bottom", varMarginBottom)
-stMarginBottom = varMarginBottom
+public Sub setMaxWidth(varMarginBottom As String)
+	AddStyle("max-width", varMarginBottom)
+	AddAttr("max-width", varMarginBottom)
+	stMaxWidth = varMarginBottom
 End Sub
 
-public Sub getMarginBottom() As String
-Return stMarginBottom
+public Sub getMaxWidth() As String
+Return stMaxWidth
 End Sub
-
-public Sub setMarginLeft(varMarginLeft As String)
-AddStyle("margin-left", varMarginLeft)
-stMarginLeft = varMarginLeft
-End Sub
-
-public Sub getMarginLeft() As String
-Return stMarginLeft
-End Sub
-
-public Sub setMarginRight(varMarginRight As String)
-AddStyle("margin-right", varMarginRight)
-stMarginRight = varMarginRight
-End Sub
-
-public Sub getMarginRight() As String
-Return stMarginRight
-End Sub
-
-public Sub setMarginTop(varMarginTop As String)
-AddStyle("margin-top", varMarginTop)
-stMarginTop = varMarginTop
-End Sub
-
-public Sub getMarginTop() As String
-Return stMarginTop
-End Sub
-
-public Sub setPadding(varPadding As String)
-AddStyle("padding", varPadding)
-stPadding = varPadding
-End Sub
-
-public Sub getPadding() As String
-Return stPadding
-End Sub
-
-public Sub setPaddingBottom(varPaddingBottom As String)
-AddStyle("padding-bottom", varPaddingBottom)
-stPaddingBottom = varPaddingBottom
-End Sub
-
-public Sub getPaddingBottom() As String
-Return stPaddingBottom
-End Sub
-
-public Sub setPaddingLeft(varPaddingLeft As String)
-AddStyle("padding-left", varPaddingLeft)
-stPaddingLeft = varPaddingLeft
-End Sub
-
-public Sub getPaddingLeft() As String
-Return stPaddingLeft
-End Sub
-
-public Sub setPaddingRight(varPaddingRight As String)
-AddStyle("padding-right", varPaddingRight)
-stPaddingRight = varPaddingRight
-End Sub
-
-public Sub getPaddingRight() As String
-Return stPaddingRight
-End Sub
-
-public Sub setPaddingTop(varPaddingTop As String)
-AddStyle("padding-top", varPaddingTop)
-stPaddingTop = varPaddingTop
-End Sub
-
-public Sub getPaddingTop() As String
-Return stPaddingTop
-End Sub
-
 
 public Sub setTagName(varTagName As String)
 mTagName = varTagName
@@ -1411,8 +1329,9 @@ Return stTextDecoration
 End Sub
 
 public Sub setWidth(varWidth As String)
-AddAttr("width", varWidth)
-stWidth = varWidth
+	AddAttr("width", varWidth)
+	AddStyle("width", varWidth)
+	stWidth = varWidth
 End Sub
 
 public Sub getWidth() As String
@@ -1441,6 +1360,12 @@ End Sub
 'add a child component
 Sub AddChild(child As String)
 sbText.Append(child)
+End Sub
+
+'set a call back
+Sub SetCallBack(methodName As String, cb As BANanoObject)
+	methodName = methodName.ToLowerCase
+	methods.Put(methodName, cb)
 End Sub
 
 private Sub SetEvent(eventName As String, attrName As String, eventValue As String)
@@ -1500,12 +1425,12 @@ End Sub
 
 'set the conver image for the container
 Sub setCoverImage(url As String)
+	stCoverImage = url
 	If BANano.IsUndefined(url) Or BANano.IsNull(url) Then Return
 	url = url.trim
 	If url = "" Then Return 
 	Dim sm As String = $"background-image=url('${url}');background-size=cover;width=100%;height=100%"$
 	setStyles(sm)
-	stCoverImage = url
 End Sub
 
 public Sub getCoverImage() As String
@@ -1513,8 +1438,11 @@ public Sub getCoverImage() As String
 End Sub
 
 Sub setOffsets(varOffSets As String)
+	stOffSets = varOffSets
 	If BANano.IsUndefined(varOffSets) Or BANano.IsNull(varOffSets) Then Return
 	If varOffSets = "" Then Return
+	varOffSets = varOffSets.replace(",","|")
+	varOffSets = varOffSets.replace("|",",")
 	Dim sl As List = BANanoShared.StrParse(",", varOffSets)
 	If sl.Size <> 4 Then Return
 	Dim offs As String = sl.Get(0)
@@ -1529,14 +1457,18 @@ Sub getOffSets() As String
 End Sub
 
 Sub setSizes(varSizes As String)
+	stSizes = varSizes
 	If BANano.IsUndefined(varSizes) Or BANano.IsNull(varSizes) Then Return
 	If varSizes = "" Then Return
+	varSizes = varSizes.replace(",","|")
+	varSizes = varSizes.replace("|",",")
 	Dim sl As List = BANanoShared.StrParse(",", varSizes)
 	If sl.Size <> 4 Then Return
 	Dim offs As String = sl.Get(0)
 	Dim offm As String = sl.Get(1)
 	Dim offl As String = sl.Get(2)
 	Dim offx As String = sl.Get(3)
+	'
 	AddSizes(offs, offm, offl, offx)
 End Sub
 
@@ -1544,10 +1476,86 @@ Sub getSizes() As String
 	Return stSizes
 End Sub
 
+
+Sub setPaddingAXYTBLR(varsetPaddingTBLR As String)
+	stPaddingAXYTBLR = varsetPaddingTBLR
+	If BANano.IsUndefined(varsetPaddingTBLR) Or BANano.IsNull(varsetPaddingTBLR) Then Return
+	If varsetPaddingTBLR = "" Then Return
+	varsetPaddingTBLR = varsetPaddingTBLR.replace(",","|")
+	varsetPaddingTBLR = varsetPaddingTBLR.replace("|",",")
+	Dim sl As List = BANanoShared.StrParse(",", varsetPaddingTBLR)
+	If sl.Size <> 7 Then Return
+	Dim pa As String = sl.Get(0)
+	Dim px As String = sl.Get(1)
+	Dim py As String = sl.Get(2)
+	Dim pt As String = sl.Get(3)
+	Dim pb As String = sl.Get(4)
+	Dim pl As String = sl.Get(5)
+	Dim pr As String = sl.Get(6)
+	'
+	'
+	pa = pa.Trim
+	px = px.Trim
+	py = py.Trim
+	pt = pt.Trim
+	pb = pb.Trim
+	pl = pl.Trim
+	pr = pr.Trim
+	
+	If pa <> "" Then AddClass($"pa-${pa}"$)
+	If px <> "" Then AddClass($"px-${px}"$)
+	If py <> "" Then AddClass($"py-${py}"$)
+	If pt <> "" Then AddClass($"pt-${pt}"$)
+	If pb <> "" Then AddClass($"pb-${pb}"$)
+	If pl <> "" Then AddClass($"pl-${pl}"$)
+	If pr <> "" Then AddClass($"pr-${pr}"$)
+End Sub
+
+Sub getPaddingAXYTBLR() As String
+	Return stPaddingAXYTBLR
+End Sub
+
+Sub setMarginAXYTBLR(varMarginAXYTBLR As String)
+	stMarginAXYTBLR = varMarginAXYTBLR
+	If BANano.IsUndefined(varMarginAXYTBLR) Or BANano.IsNull(varMarginAXYTBLR) Then Return
+	If varMarginAXYTBLR = "" Then Return
+	varMarginAXYTBLR = varMarginAXYTBLR.replace(",","|")
+	varMarginAXYTBLR = varMarginAXYTBLR.replace("|",",")
+	Dim sl As List = BANanoShared.StrParse(",", varMarginAXYTBLR)
+	If sl.Size <> 7 Then Return
+	Dim ma As String = sl.Get(0)
+	Dim mx As String = sl.Get(1)
+	Dim my As String = sl.Get(2)
+	Dim mt As String = sl.Get(3)
+	Dim mb As String = sl.Get(4)
+	Dim ml As String = sl.Get(5)
+	Dim mr As String = sl.Get(6)
+	'
+	ma = ma.Trim
+	mx = mx.Trim
+	my = my.Trim
+	mt = mt.Trim
+	mb = mb.Trim
+	ml = ml.Trim
+	mr = mr.Trim
+	
+	If ma <> "" Then AddClass($"ma-${ma}"$)
+	If mx <> "" Then AddClass($"mx-${mx}"$)
+	If my <> "" Then AddClass($"my-${my}"$)
+	If mt <> "" Then AddClass($"mt-${mt}"$)
+	If mb <> "" Then AddClass($"mb-${mb}"$)
+	If ml <> "" Then AddClass($"ml-${ml}"$)
+	If mr <> "" Then AddClass($"mr-${mr}"$)
+End Sub
+
+Sub getMarginAXYTBLR() As String
+	Return stMarginAXYTBLR
+End Sub
+
 'set the conver image for the container
 Sub setFitScreen(varFitScreen As Boolean)
-	If BANano.IsUndefined(varFitScreen) Or BANano.IsNull(varFitScreen) Then Return
 	bFitScreen = varFitScreen
+	If BANano.IsUndefined(varFitScreen) Or BANano.IsNull(varFitScreen) Then Return
 	If varFitScreen = False Then Return
 	Dim sm As String = $"height=100vh !important;max-height=100vh !important"$
 	setStyles(sm)
@@ -1559,8 +1567,8 @@ End Sub
 
 'set the conver image for the container
 Sub setFullScreen(varFullScreen As Boolean)
-	If BANano.IsUndefined(varFullScreen) Or BANano.IsNull(varFullScreen) Then Return
 	bFullScreen = varFullScreen
+	If BANano.IsUndefined(varFullScreen) Or BANano.IsNull(varFullScreen) Then Return
 	If varFullScreen = False Then Return
 	AddAttr(":fullscreen", "$vuetify.breakpoint.mobile")
 End Sub
@@ -1822,6 +1830,11 @@ private Sub BuildRowClass(row As GridRow) As String
 End Sub
 
 private Sub BuildMargins(mt As String, mb As String, ml As String, mr As String) As String
+	mt = mt.Trim
+	mb = mb.Trim
+	ml = ml.Trim
+	mr = mr.Trim
+	'
 	Dim sb As StringBuilder
 	sb.Initialize
 	If mt <> "" Then sb.Append($"mt-${mt} "$)
@@ -1834,6 +1847,11 @@ private Sub BuildMargins(mt As String, mb As String, ml As String, mr As String)
 End Sub
 
 private Sub BuildPadding(pt As String, pb As String, pl As String, pr As String) As String
+	pt = pt.Trim
+	pb = pb.Trim
+	pl = pl.Trim
+	pr = pr.Trim
+	'
 	Dim sb As StringBuilder
 	sb.Initialize
 	If pt <> "" Then sb.Append($"pt-${pt} "$)
@@ -2163,17 +2181,26 @@ Sub IsValidID(idName As String) As Boolean
 End Sub
 
 Sub AddSizes(sSizeSmall As String, sSizeMedium As String, sSizeLarge As String, sSizeXLarge As String) As VueElement
-	AddAttr("sm", sSizeSmall)
-	AddAttr("xl", sSizeXLarge)
-	AddAttr("md", sSizeMedium)
-	AddAttr("lg", sSizeLarge)
+	sSizeSmall = sSizeSmall.Trim
+	sSizeXLarge = sSizeXLarge.trim
+	sSizeMedium = sSizeMedium.trim
+	'
+	If sSizeSmall <> "" Then AddAttr("sm", sSizeSmall)
+	If sSizeXLarge <> "" Then AddAttr("xl", sSizeXLarge)
+	If sSizeMedium <> "" Then AddAttr("md", sSizeMedium)
+	If sSizeLarge <> "" Then AddAttr("lg", sSizeLarge)
 	Return Me
 End Sub
 
 Sub AddOffsets(sOffsetSmall As String, sOffsetMedium As String,sOffsetLarge As String,sOffsetXLarge As String) As VueElement
-	AddAttr("offset-sm", sOffsetSmall)
-	AddAttr("offset-xl", sOffsetXLarge)
-	AddAttr("offset-md", sOffsetMedium)
-	AddAttr("offset-lg", sOffsetLarge)
+	sOffsetSmall = sOffsetSmall.Trim
+	sOffsetMedium = sOffsetMedium.Trim
+	sOffsetLarge = sOffsetLarge.Trim
+	sOffsetXLarge = sOffsetXLarge.Trim
+	'
+	If sOffsetSmall <> "" Then AddAttr("offset-sm", sOffsetSmall)
+	If sOffsetMedium <> "" Then AddAttr("offset-md", sOffsetMedium)
+	If sOffsetLarge <> "" Then AddAttr("offset-lg", sOffsetLarge)
+	If sOffsetXLarge <> "" Then AddAttr("offset-xl", sOffsetXLarge)
 	Return Me
 End Sub
