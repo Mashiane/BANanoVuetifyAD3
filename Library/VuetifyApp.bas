@@ -1181,6 +1181,7 @@ Sub RunMethod(methodName As String, params As Object) As BANanoObject
 		Return Vue.RunMethod(methodName, params)
 	Else
 		Log($"RunMethod;${methodName} does not exist!"$)
+		Return Null
 	End If
 End Sub
 

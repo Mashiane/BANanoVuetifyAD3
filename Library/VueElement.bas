@@ -30,13 +30,21 @@ Version=7
 #DesignerProperty: Key: FillHeight, DisplayName: FillHeight, FieldType: Boolean, DefaultValue: False, Description: FillHeight
 #DesignerProperty: Key: JustifyCenter, DisplayName: JustifyCenter, FieldType: Boolean, DefaultValue: False, Description: JustifyCenter
 #DesignerProperty: Key: AlignCenter, DisplayName: AlignCenter, FieldType: Boolean, DefaultValue: False, Description: AlignCenter
+#DesignerProperty: Key: Fluid, DisplayName: Fluid, FieldType: Boolean, DefaultValue: False, Description: Fluid
 #DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: , Description: Value on the element
 #DesignerProperty: Key: Label, DisplayName: Label, FieldType: String, DefaultValue: , Description: Label of the element
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String.
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Style, DisplayName: Style, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String.
 #DesignerProperty: Key: CoverImage, DisplayName: CoverImage, FieldType: String, DefaultValue:  , Description: CoverImage
-#DesignerProperty: Key: FitScreen, DisplayName: FitScreen, FieldType: Boolean, DefaultValue: False, Description: FitScreen
+#DesignerProperty: Key: FitScreen, DisplayName: FitScreen VH, FieldType: Boolean, DefaultValue: False, Description: FitScreen VH
+#DesignerProperty: Key: FullScreen, DisplayName: FullScreen Mobile, FieldType: Boolean, DefaultValue: False, Description: FullScreen Mobile
+#DesignerProperty: Key: Rows, DisplayName: Rows, FieldType: String, DefaultValue: , Description: Rows
+#DesignerProperty: Key: Columns, DisplayName: Columns, FieldType: String, DefaultValue: , Description: Columns
+#DesignerProperty: Key: OffSets, DisplayName: OffSets SMLX, FieldType: String, DefaultValue: , Description: OffSets SMLX
+#DesignerProperty: Key: Sizes, DisplayName: Sizes SMLX, FieldType: String, DefaultValue: , Description: Sizes SMLX
+#DesignerProperty: Key: BuildGrid, DisplayName: BuildGrid, FieldType: Boolean, DefaultValue: False, Description: BuildGrid
+#DesignerProperty: Key: ShowGridDesign, DisplayName: Show Grid Design, FieldType: Boolean, DefaultValue: False, Description: ShowGridDesign
 #DesignerProperty: Key: VFor, DisplayName: VFor, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Key, DisplayName: Key, FieldType: String, DefaultValue:  , Description:
 #DesignerProperty: Key: To, DisplayName: To, FieldType: String, DefaultValue:  , Description: 
@@ -197,6 +205,7 @@ Private bLoremIpsum As Boolean = False
 	Private bHiddenSMAndDown As Boolean = False
 	Private bJustifyCenter As Boolean = False
 	Private bFitScreen As Boolean = False
+	Private bFullScreen As Boolean = False
 	Private bAlignCenter As Boolean = False
 	Private bFillHeight As Boolean = False
 	Private stRules As String = ""
@@ -220,6 +229,29 @@ Private bLoremIpsum As Boolean = False
 	Private boShaped As Boolean = False
 	Private boSingleLine As Boolean = False
 	Private boSolo As Boolean = False
+	Private stOffSets As String = ""
+	Private stSizes As String = ""
+	Private bFluid As Boolean = False
+	Private bBuildGrid As Boolean = False
+	Private bShowGridDesign As Boolean = False
+	Private stRows As String = ""
+	Private stColumns As String = ""
+	'
+	Type GridRow(Rows As Int, Columns As List, _
+	mt As String, mb As String, mr As String, ml As String, _
+	pt As String, pb As String, pr As String, pl As String)
+	
+	Type GridColumn(Columns As Int, sm As String, md As String, lg As String, xl As String, _
+	ofsm As String, ofmd As String, oflg As String, ofxl As String, _
+	mt As String, mb As String, mr As String, ml As String, _
+	pt As String, pb As String, pr As String, pl As String)
+	'this will hold all our rows
+	Private GridRows As Map
+	'this will hold temporal columns
+	Private GridColumns As Map
+	'this will hold each row definition
+	'hold our last row
+	Private LastRow As Int
 End Sub
 
 'initialize the custom view
@@ -232,7 +264,11 @@ styleList.Initialize
 attributeList.Initialize
 sbText.Initialize
 bindings.Initialize
-methods.Initialize
+	methods.Initialize
+	'
+	LastRow = 0
+	GridRows.Initialize
+	GridColumns.Initialize
 End Sub
 
 'Create view in the designer
@@ -308,6 +344,7 @@ stSlotActivator = Props.get("SlotActivator")
 		bHiddenSMAndDown = Props.Get("HiddenSMAndDown")
 		bJustifyCenter = Props.Get("JustifyCenter")
 		bFitScreen = Props.Get("FitScreen")
+		bFullScreen = Props.Get("FullScreen")
 		bAlignCenter = Props.Get("AlignCenter")
 		bFillHeight = Props.Get("FillHeight")
 		stRules = Props.Get("Rules")
@@ -331,8 +368,16 @@ stSlotActivator = Props.get("SlotActivator")
 		boShaped = Props.Get("Shaped")
 		boSingleLine = Props.Get("SingleLine")
 		boSolo = Props.Get("Solo")
+		stSizes = Props.Get("Sizes")
+		stOffSets = Props.Get("OffSets")
+		bFluid = Props.Get("Fluid")
+		bBuildGrid = Props.get("BuildGrid")
+		stRows = Props.Get("Rows")
+		stColumns = Props.get("Columns")
+		bShowGridDesign = Props.get("ShowGridDesign")
 End If
 
+	AddAttr("fluid", bFluid)
 	AddAttr("rules", stRules)
 AddAttr("to", stTo)
 AddAttr("dark", bDark)
@@ -391,6 +436,14 @@ AddStyle("text-decoration", stTextDecoration)
 	setCoverImage(stCoverImage)
 	setFitScreen(bFitScreen)
 	'
+	If BANano.IsUndefined(bBuildGrid) Or BANano.IsNull(bBuildGrid) Then
+	else if bBuildGrid = False Then
+		setOffsets(stOffSets)
+		setSizes(stSizes)
+	End If
+	'
+	setFullScreen(bFullScreen)
+	'
 	AddAttr("append-icon", stAppendIcon)
 	AddAttrOnCondition("autofocus", boAutofocus, True)
 	AddAttrOnCondition("clearable", boClearable, True)
@@ -415,7 +468,7 @@ AddStyle("text-decoration", stTextDecoration)
 	setAttributes(mAttributes)
 	setStyles(mStyle)
 	setStates(mStates)
-
+	'
 'link the events, if any
 'This activates Click the event exists on the module
 SetEvent("Click", "click", eOnClick)
@@ -433,6 +486,37 @@ SetEvent("ClickPrevent", "Click.Prevent", eOnClickPrevent)
 'build and get the element
 Dim strHTML As String = ToString
 	mElement = mTarget.Append(strHTML).Get("#" & mName)
+	If bBuildGrid Then
+		If BANano.IsUndefined(stRows) Or BANano.IsNull(stRows) Then
+			stRows = "1"
+		End If
+		If BANano.IsUndefined(stColumns) Or BANano.IsNull(stColumns) Then
+			stColumns = "1"
+		End If		
+		If BANano.IsUndefined(stOffSets) Or BANano.IsNull(stOffSets) Then 
+			stOffSets = "0,0,0,0"
+		End If
+		Dim sl As List = BANanoShared.StrParse(",", stOffSets)
+		If sl.Size <> 4 Then Return
+		Dim offs As String = sl.Get(0)
+		Dim offm As String = sl.Get(1)
+		Dim offl As String = sl.Get(2)
+		Dim offx As String = sl.Get(3)
+		'
+		If BANano.IsUndefined(stSizes) Or BANano.IsNull(stSizes) Then
+			stSizes = "12,12,12,12"
+		End If
+		Dim ss As List = BANanoShared.StrParse(",", stSizes)
+		If ss.Size <> 4 Then Return
+		Dim sm As String = ss.Get(0)
+		Dim md As String = ss.Get(1)
+		Dim lg As String = ss.Get(2)
+		Dim xl As String = ss.Get(3)
+		'
+		AddRows(stRows)
+		AddColumnsOS(stColumns, offs, offm, offl, offx, sm, md, lg, xl) 
+		BuildGrid
+	End If
 End Sub
 
 'add anything from the appendholder
@@ -507,19 +591,19 @@ Sub ToString As String
 	If bLoremIpsum Then
 		mCaption = BANanoShared.LoremIpsum(1)
 	End If
-'build the 'class' attribute
-Dim className As String = BANanoShared.JoinMapKeys(classList, " ")
-AddAttr("class", className)
-'build the 'style' attribute
-Dim styleName As String = BANanoShared.BuildStyle(styleList)
-AddAttr("style", styleName)
-'build element internal structure
-Dim iStructure As String = BANanoShared.BuildAttributes(attributeList)
-iStructure = iStructure.trim
-Dim stext As String = sbText.ToString
-stext = stext.Replace("v-template", "template")
-Dim rslt As String = $"<${mTagName} id="${mName}" ${iStructure}>${mCaption}${stext}</${mTagName}>"$
-Return rslt
+	'build the 'class' attribute
+	Dim className As String = BANanoShared.JoinMapKeys(classList, " ")
+	AddAttr("class", className)
+	'build the 'style' attribute
+	Dim styleName As String = BANanoShared.BuildStyle(styleList)
+	AddAttr("style", styleName)
+	'build element internal structure
+	Dim iStructure As String = BANanoShared.BuildAttributes(attributeList)
+	iStructure = iStructure.trim
+	Dim stext As String = sbText.ToString
+	stext = stext.Replace("v-template", "template")
+	Dim rslt As String = $"<${mTagName} id="${mName}" ${iStructure}>${mCaption}${stext}</${mTagName}>"$
+	Return rslt
 End Sub
 
 'bind an attribute
@@ -1428,6 +1512,38 @@ public Sub getCoverImage() As String
 	Return stCoverImage
 End Sub
 
+Sub setOffsets(varOffSets As String)
+	If BANano.IsUndefined(varOffSets) Or BANano.IsNull(varOffSets) Then Return
+	If varOffSets = "" Then Return
+	Dim sl As List = BANanoShared.StrParse(",", varOffSets)
+	If sl.Size <> 4 Then Return
+	Dim offs As String = sl.Get(0)
+	Dim offm As String = sl.Get(1)
+	Dim offl As String = sl.Get(2)
+	Dim offx As String = sl.Get(3)
+	AddOffsets(offs, offm, offl, offx)
+End Sub
+
+Sub getOffSets() As String
+	Return stOffSets
+End Sub
+
+Sub setSizes(varSizes As String)
+	If BANano.IsUndefined(varSizes) Or BANano.IsNull(varSizes) Then Return
+	If varSizes = "" Then Return
+	Dim sl As List = BANanoShared.StrParse(",", varSizes)
+	If sl.Size <> 4 Then Return
+	Dim offs As String = sl.Get(0)
+	Dim offm As String = sl.Get(1)
+	Dim offl As String = sl.Get(2)
+	Dim offx As String = sl.Get(3)
+	AddSizes(offs, offm, offl, offx)
+End Sub
+
+Sub getSizes() As String
+	Return stSizes
+End Sub
+
 'set the conver image for the container
 Sub setFitScreen(varFitScreen As Boolean)
 	If BANano.IsUndefined(varFitScreen) Or BANano.IsNull(varFitScreen) Then Return
@@ -1439,6 +1555,18 @@ End Sub
 
 public Sub getFitScreen() As Boolean
 	Return bFitScreen
+End Sub
+
+'set the conver image for the container
+Sub setFullScreen(varFullScreen As Boolean)
+	If BANano.IsUndefined(varFullScreen) Or BANano.IsNull(varFullScreen) Then Return
+	bFullScreen = varFullScreen
+	If varFullScreen = False Then Return
+	AddAttr(":fullscreen", "$vuetify.breakpoint.mobile")
+End Sub
+
+public Sub getFullScreen() As Boolean
+	Return bFullScreen
 End Sub
 
 'set append-icon
@@ -1614,8 +1742,18 @@ End Sub
 
 'get rounded
 public Sub getRounded() As Boolean
-Return boRounded
+	Return boRounded
 End Sub
+
+public Sub setShowGridDesign(varRounded As Boolean)
+	bShowGridDesign = varRounded
+End Sub
+
+'get rounded
+public Sub ShowGridDesign() As Boolean
+	Return bShowGridDesign
+End Sub
+
 
 'set shaped
 public Sub setShaped(varShaped As Boolean)
@@ -1649,4 +1787,393 @@ End Sub
 'get solo
 public Sub getSolo() As Boolean
 	Return boSolo
+End Sub
+
+'build the grid
+Sub BuildGrid
+	LastRow = 0
+	Dim sb As StringBuilder
+	sb.Initialize
+	'for each defined row, for each defined column
+	Dim rowCnt As Int = 0
+	Dim rowTot As Int = GridRows.Size - 1
+	For rowCnt = 0 To rowTot
+		'get this row
+		Dim currentRow As GridRow = GridRows.GetValueAt(rowCnt)
+		Dim strRow As String = BuildRow(currentRow)
+		sb.Append(strRow)
+	Next
+	Dim sout As String = sb.tostring
+	If mElement <> Null Then
+		mElement.Append(sout)
+	Else	
+		sbText.Append(sout)
+	End If
+End Sub
+
+private Sub BuildRowClass(row As GridRow) As String
+	Dim sb As StringBuilder
+	sb.Initialize
+	'add the margins
+	sb.Append(BuildMargins(row.mt, row.mb, row.ml, row.mr))
+	'add the padding
+	sb.Append(BuildPadding(row.pt, row.pb, row.pl, row.pr))
+	Return sb.tostring.trim
+End Sub
+
+private Sub BuildMargins(mt As String, mb As String, ml As String, mr As String) As String
+	Dim sb As StringBuilder
+	sb.Initialize
+	If mt <> "" Then sb.Append($"mt-${mt} "$)
+	If mb <> "" Then sb.Append($"mb-${mb} "$)
+	If ml <> "" Then sb.Append($"ml-${ml} "$)
+	If mr <> "" Then sb.Append($"mr-${mr} "$)
+	Dim sout As String = sb.ToString
+	sout = sout.trim
+	Return sout
+End Sub
+
+private Sub BuildPadding(pt As String, pb As String, pl As String, pr As String) As String
+	Dim sb As StringBuilder
+	sb.Initialize
+	If pt <> "" Then sb.Append($"pt-${pt} "$)
+	If pb <> "" Then sb.Append($"pb-${pb} "$)
+	If pl <> "" Then sb.Append($"pl-${pl} "$)
+	If pr <> "" Then sb.Append($"pr-${pr} "$)
+	Dim sout As String = sb.ToString
+	sout = sout.trim
+	Return sout
+End Sub
+
+private Sub BuildSpans(col As GridColumn) As String
+	Dim sb As StringBuilder
+	sb.Initialize
+	If col.sm <> "" Then sb.Append($"sm="${col.sm}" "$)
+	If col.md <> "" Then sb.Append($"md="${col.md}" "$)
+	If col.lg <> "" Then sb.Append($"lg="${col.lg}" "$)
+	If col.xl <> "" Then sb.Append($"xl="${col.xl}" "$)
+	Dim sout As String = sb.ToString
+	sout = sout.trim
+	Return sout
+End Sub
+
+private Sub BuildOffsets(col As GridColumn) As String
+	Dim sb As StringBuilder
+	sb.Initialize
+	If col.ofsm <> "" Then sb.Append($"offset-sm="${col.ofsm}" "$)
+	If col.ofmd <> "" Then sb.Append($"offset-md="${col.ofmd}" "$)
+	If col.oflg <> "" Then sb.Append($"offset-lg="${col.oflg}" "$)
+	If col.ofxl <> "" Then sb.Append($"offset-xl="${col.ofxl}" "$)
+	Dim sout As String = sb.ToString
+	sout = sout.trim
+	Return sout
+End Sub
+
+'return element at row and column position
+Sub Matrix(row As Int, column As Int) As BANanoElement
+	Dim rcKey As String = $"${mName}R${row}C${column}"$
+	Dim el As BANanoElement
+	el.Initialize($"#${rcKey}"$)
+	Return el
+End Sub
+
+'build a single row
+private Sub BuildRow(row As GridRow) As String
+	'how many rows do we have to render
+	Dim rowTot As Int = row.Rows
+	Dim rowCnt As Int
+	Dim sb As StringBuilder
+	sb.Initialize
+	'for each row
+	For rowCnt = 1 To rowTot
+		LastRow = LastRow + 1
+		Dim rowKey As String = $"${mName}R${LastRow}"$
+		sb.Append($"<v-row class="${BuildRowClass(row)}" id="${rowKey}">"$)
+		'get the columns to add
+		Dim cols As List = row.Columns
+		'how many columns to add here
+		Dim colCnt As Int = 0
+		Dim colTot As Int = cols.Size - 1
+		'this will store the column count
+		Dim LastColumn As Int = 0
+		For colCnt = 0 To colTot
+			'get this column
+			Dim column As GridColumn = cols.Get(colCnt)
+			Dim colCnt1 As Int = 0
+			Dim colTot1 As Int = column.Columns
+			For colCnt1 = 1 To colTot1
+				'increment the column to add for this row
+				LastColumn = LastColumn + 1
+				Dim cellKey As String = $"${rowKey}C${LastColumn}"$
+				'if showid
+				Dim strShow As String = ""
+				If bShowGridDesign Then
+					strShow = cellKey
+				End If
+				'define the column structure
+				Dim sbCol As StringBuilder
+				sbCol.Initialize 
+				sbCol.Append($"<v-col id="${cellKey}" "$)
+				sbCol.Append(BuildColumnClass(column))
+				sbCol.Append(" ")
+				sbCol.Append(BuildSpans(column))
+				sbCol.append(" ")
+				sbCol.Append(BuildOffsets(column))
+				sbCol.Append($">${strShow}</v-col>"$)
+				sb.Append(sbCol.tostring)
+			Next
+		Next
+		sb.Append("</v-row>")
+	Next
+	Return sb.tostring
+End Sub
+
+'build the column class for current column
+private Sub BuildColumnClass(col As GridColumn) As String
+	Dim sb As StringBuilder
+	sb.Initialize
+	'add the margins
+	sb.Append(BuildMargins(col.mt, col.mb, col.ml, col.mr))
+	'add the padding
+	sb.Append(BuildPadding(col.pt, col.pb, col.pl, col.pr))
+	Dim sout As String = sb.ToString
+	sout = sout.trim
+	Dim sbout As StringBuilder
+	sbout.Initialize 
+	If sout <> "" Then
+		sbout.Append($"class="${sout}""$)
+	End If
+	Return sbout.tostring
+End Sub
+
+
+Sub AddRows(iRows As Int) As VueElement
+	'if there is no existing row, then initialize the map
+	If GridRows.IsInitialized = False Then GridRows.Initialize
+	'lets store the last row
+	LastRow = GridRows.size
+	'create a new row
+	Dim nRow As GridRow
+	nRow.Initialize
+	nRow.Rows = iRows
+	nRow.Columns.Initialize
+	nRow.mt = ""
+	nRow.mb = ""
+	nRow.mr = ""
+	nRow.ml = ""
+	nRow.pt = ""
+	nRow.pb = ""
+	nRow.pr = ""
+	nRow.pl = ""
+		'
+	'lets store this new row in rows
+	Dim rowKey As String = $"R${LastRow}"$
+	'lets save the row on the map
+	GridRows.Put(rowKey, nRow)
+	Return Me
+End Sub
+
+Sub AddColumns(iColumns As Int, sm As Int, md As Int, lg As Int, xl As Int) As VueElement
+	AddColumnsOS(iColumns, 0,0,0,0,sm,md,lg,xl)
+	Return Me
+End Sub
+
+'add columns - offsets and sizes
+private Sub AddColumnsOS(iColumns As Int, osm As Int, omd As Int, olg As Int, oxl As Int, sm As Int, md As Int, lg As Int, xl As Int) As VueElement
+	Dim nCol As GridColumn
+	nCol.Initialize
+	nCol.Columns = iColumns
+	nCol.lg = lg
+	nCol.md = md
+	nCol.sm = sm
+	nCol.xl = xl
+	nCol.oflg = olg
+	nCol.ofmd = omd
+	nCol.ofsm = osm
+	nCol.ofxl = oxl
+	nCol.mt = ""
+	nCol.mb = ""
+	nCol.mr = ""
+	nCol.ml = ""
+	nCol.pt = ""
+	nCol.pb = ""
+	nCol.pr = ""
+	nCol.pl = ""
+'
+	'get the existing columns for this row
+	Dim rowkey As String = $"R${LastRow}"$
+	'get the row from existing rows
+	If GridRows.ContainsKey(rowkey) Then
+		'get the row from existing rows
+		Dim oldRow As GridRow = GridRows.Get(rowkey)
+		'get the existing columns from the row
+		oldRow.Columns.Add(nCol)
+		'save it back
+		GridRows.Put(rowkey,oldRow)
+	End If
+	Return Me
+End Sub
+
+Sub AddColumns3x4 As VueElement
+	AddColumns(3,"12","4","4","4")
+	Return Me
+End Sub
+
+Sub AddColumns4x3 As VueElement
+	AddColumns(4,"12","3","3","3")
+	Return Me
+End Sub
+
+Sub AddColumns2x6 As VueElement
+	AddColumns(2,"12","6","6","6")
+	Return Me
+End Sub
+
+Sub AddColumns6x2 As VueElement
+	AddColumns(6,"12","2","2","2")
+	Return Me
+End Sub
+
+Sub AddColumns12x1 As VueElement
+	AddColumns(12,"12","1","1","1")
+	Return Me
+End Sub
+
+Sub AddColumns8p4 As VueElement
+	AddColumns(1,"12","8","8","8").AddColumns(1,"12","4","4","4")
+	Return Me
+End Sub
+
+Sub AddColumns4p8 As VueElement
+	AddColumns(1,"12","4","4","4").AddColumns(1,"12","8","8","8")
+	Return Me
+End Sub
+
+Sub AddColumns1p11 As VueElement
+	AddColumns(1,"12","1","1","1").AddColumns(1,"12","11","11","11")
+	Return Me
+End Sub
+
+Sub AddColumns11p1 As VueElement
+	AddColumns(1,"12","11","11","11").AddColumns(1,"12","1","1","1")
+	Return Me
+End Sub
+
+Sub AddColumns2p10 As VueElement
+	AddColumns(1,"12","2","2","2").AddColumns(1,"12","10","10","10")
+	Return Me
+End Sub
+
+Sub AddColumns10p2 As VueElement
+	AddColumns(1,"12","10","10","10").AddColumns(1,"12","2","2","2")
+	Return Me
+End Sub
+
+Sub AddColumns3p9 As VueElement
+	AddColumns(1,"12","3","3","3").AddColumns(1,"12","9","9","9")
+	Return Me
+End Sub
+
+Sub AddColumns9p3 As VueElement
+	AddColumns(1,"12","9","9","9").AddColumns(1,"12","3","3","3")
+	Return Me
+End Sub
+
+Sub AddColumns7p5 As VueElement
+	AddColumns(1,"12","7","7","7").AddColumns(1,"12","5","5","5")
+	Return Me
+End Sub
+
+Sub AddColumns5p7 As VueElement
+	AddColumns(1,"12","5","5","5").AddColumns(1,"12","7","7","7")
+	Return Me
+End Sub
+
+Sub AddColumns12 As VueElement
+	AddColumns(1,"12","12","12","12")
+	Return Me
+End Sub
+
+Sub AddColumns6 As VueElement
+	AddColumns(1,"12","6","6","6")
+	Return Me
+End Sub
+
+Sub AddColumns2 As VueElement
+	AddColumns(1,"12","2","2","2")
+	Return Me
+End Sub
+
+Sub AddColumns1 As VueElement
+	AddColumns(1,"12","1","1","1")
+	Return Me
+End Sub
+
+Sub AddColumns3 As VueElement
+	AddColumns(1,"12","3","3","3")
+	Return Me
+End Sub
+
+Sub AddColumns4 As VueElement
+	AddColumns(1,"12","4","4","4")
+	Return Me
+End Sub
+
+Sub AddColumns5 As VueElement
+	AddColumns(1,"12","5","5","5")
+	Return Me
+End Sub
+
+Sub AddColumns7 As VueElement
+	AddColumns(1,"12","7","7","7")
+	Return Me
+End Sub
+
+Sub AddColumns8 As VueElement
+	AddColumns(1,"12","8","8","8")
+	Return Me
+End Sub
+
+Sub AddColumns9 As VueElement
+	AddColumns(1,"12","9","9","9")
+	Return Me
+End Sub
+
+Sub AddColumns10 As VueElement
+	AddColumns(1,"12","10","10","10")
+	Return Me
+End Sub
+
+Sub AddColumns11 As VueElement
+	AddColumns(1,"12","11","11","11")
+	Return Me
+End Sub
+
+Sub IsValidID(idName As String) As Boolean
+	If idName = "" Then Return True
+	Dim slen As Int = idName.Length
+	Dim i As Int = 0
+	For i = 0 To slen - 1
+		Dim mout As String = idName.CharAt(i)
+		If "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".IndexOf(mout) = -1 Then
+			Return False
+		End If
+	Next
+	Return True
+End Sub
+
+Sub AddSizes(sSizeSmall As String, sSizeMedium As String, sSizeLarge As String, sSizeXLarge As String) As VueElement
+	AddAttr("sm", sSizeSmall)
+	AddAttr("xl", sSizeXLarge)
+	AddAttr("md", sSizeMedium)
+	AddAttr("lg", sSizeLarge)
+	Return Me
+End Sub
+
+Sub AddOffsets(sOffsetSmall As String, sOffsetMedium As String,sOffsetLarge As String,sOffsetXLarge As String) As VueElement
+	AddAttr("offset-sm", sOffsetSmall)
+	AddAttr("offset-xl", sOffsetXLarge)
+	AddAttr("offset-md", sOffsetMedium)
+	AddAttr("offset-lg", sOffsetLarge)
+	Return Me
 End Sub
