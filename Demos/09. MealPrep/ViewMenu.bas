@@ -14,7 +14,7 @@ End Sub
 
 Sub Initialize
 	vuetify = pgIndex.vuetify
-	menu.Initialize(Me, name, $"/${name}"$)
+	menu.Initialize(Me, name)
 	'
 	CompHomePlans.Initialize
 	menu.Import(CompHomePlans.homeplans) 

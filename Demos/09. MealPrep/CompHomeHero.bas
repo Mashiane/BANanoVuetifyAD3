@@ -12,7 +12,7 @@ Sub Process_Globals
 End Sub
 
 Sub Initialize
-	homehero.Initialize(Me, name, $"/${name}"$)
+	homehero.Initialize(Me, name)
 	'
 	banano.LoadLayout("#placeholder", "vhomehero")
 	homehero.AppendPlaceHolder

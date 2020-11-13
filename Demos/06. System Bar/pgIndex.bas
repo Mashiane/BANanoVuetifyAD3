@@ -33,38 +33,35 @@ Sub Init
 	
 	'load v-app to app template
 	BANano.LoadLayout("#apptemplate", "wsystembar")
-	vtoolbartitle.Caption = "WireFrame: System Bar"
-	'
-	vnavigationdrawer.AddAttr("fixed", True)
-	vnavigationdrawer.AddAttr("temporary", True)
-	'
-	vmain.classes = "grey lighten-2"
-	
-	'add a v-container to v-main
 	BANano.LoadLayout("#placeholder", "vcontainer")
-	vmain.AppendPlaceHolder
-	vcol1.AddAttr(":key", "`${n}${j}`")
-'
 	vuetify.BindVueElement(vnavigationdrawer)
+	vuetify.BindVueElement(vmain)
 	vuetify.BindVueElement(vappbarnavicon)
 	vuetify.BindVueElement(vtoolbartitle)
 	vuetify.BindVueElement(vapp)
 	vuetify.BindVueElement(vappbar)
-	vuetify.BindVueElement(vmain)
 	vuetify.BindVueElement(vavatar)
 	vuetify.BindVueElement(vbtn)
 	vuetify.BindVueElement(vicon)
 	vuetify.BindVueElement(vsystembar)
 	vuetify.BindVueElement(vcol)
-	vuetify.BindVueElement(vcol1)
-	vuetify.BindVueElement(vcontainer)
 	vuetify.BindVueElement(vrow)
 	vuetify.BindVueElement(vsheet)
 	vuetify.BindVueElement(vsystembar)
 	vuetify.BindVueElement(vstrong)
 	vuetify.BindVueElement(vtemplate)
+	vuetify.BindVueElement(vcontainer)
+	vuetify.BindVueElement(vcol1)
 	'
+	
+	vtoolbartitle.Caption = "WireFrame: System Bar"
+	vnavigationdrawer.AddAttr("fixed", True)
+	vnavigationdrawer.AddAttr("temporary", True)
+	vmain.classes = "grey lighten-2"
+	vcol1.AddAttr(":key", "`${n}${j}`")
+	
 	'render the ux
+	vmain.AppendPlaceHolder
 	vuetify.Serve
 	'
 	Log(vuetify.Template)

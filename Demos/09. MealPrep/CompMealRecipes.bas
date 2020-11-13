@@ -15,7 +15,7 @@ End Sub
 
 Sub Initialize
 	vuetify = pgIndex.vuetify
-	mealrecipes.Initialize(Me, name, $"/${name}"$)
+	mealrecipes.Initialize(Me, name)
 	'
 	banano.LoadLayout("#placeholder", "vmealrecipes")
 	mealrecipes.BindVueElement(btnorderrecipe)

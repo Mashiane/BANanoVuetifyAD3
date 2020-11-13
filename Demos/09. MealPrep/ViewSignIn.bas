@@ -19,7 +19,7 @@ End Sub
 
 Sub Initialize
 	vuetify = pgIndex.vuetify
-	signin.Initialize(Me, name, $"/${name}"$)
+	signin.Initialize(Me, name)
 	'
 	BANano.LoadLayout("#placeholder", "vsignin")
 	signin.BindVueElement(signinform)

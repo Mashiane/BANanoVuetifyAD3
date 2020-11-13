@@ -4,6 +4,6 @@ ModuleBreakpoints0=
 ModuleBreakpoints1=
 ModuleClosedNodes0=
 ModuleClosedNodes1=
-NavigationStack=pgIndex,Process_Globals,20,0,pgIndex,vappbarnavicon_ClickStop,73,0,Visual Designer,vcontainer.bjl,-100,6,Visual Designer,wsystembar.bjl,-100,6,pgIndex,Init,51,6
+NavigationStack=pgIndex,vappbarnavicon_ClickStop,73,0,pgIndex,Process_Globals,12,0,Visual Designer,wsystembar.bjl,-100,6,Visual Designer,vcontainer.bjl,-100,6,pgIndex,Init,46,6
 SelectedBuild=0
 VisibleModules=1

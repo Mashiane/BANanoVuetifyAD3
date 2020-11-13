@@ -30,7 +30,7 @@ a {
 Sub Initialize
 	vuetify = pgIndex.vuetify
 	'initialize the app navigation component
-	appnavigation.Initialize(Me, name, $"/${name}"$)
+	appnavigation.Initialize(Me, name)
 	'
 	banano.LoadLayout("#placeholder", "vappnavigation")
 	'

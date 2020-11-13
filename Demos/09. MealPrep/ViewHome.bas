@@ -14,7 +14,8 @@ End Sub
 
 Sub Initialize
 	vuetify = pgIndex.vuetify
-	home.Initialize(Me, name, "/")
+	home.Initialize(Me, name)
+	home.path = "/"
 	'
 	CompHomeDetails.Initialize 
 	home.Import(CompHomeDetails.homedetails)

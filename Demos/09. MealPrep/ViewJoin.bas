@@ -19,7 +19,7 @@ End Sub
 
 Sub Initialize
 	vuetify = pgIndex.vuetify
-	signup.Initialize(Me, name, $"/${name}"$)
+	signup.Initialize(Me, name)
 	'
 	BANano.LoadLayout("#placeholder", "vjoin")
 	signup.BindVueElement(joinform)

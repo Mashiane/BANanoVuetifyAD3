@@ -16,7 +16,7 @@ End Sub
 Sub Initialize
 	vuetify = pgIndex.vuetify
 	
-	about.Initialize(Me, name, $"/${name}"$)
+	about.Initialize(Me, name)
 	'
 	BANano.LoadLayout("#placeholder", "vabout")
 	about.BindVueElement(aboutdiv)	

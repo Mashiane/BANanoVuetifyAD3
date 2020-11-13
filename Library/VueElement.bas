@@ -37,9 +37,13 @@ Version=7
 #DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: , Description: Value on the element
 #DesignerProperty: Key: Label, DisplayName: Label, FieldType: String, DefaultValue: , Description: Label of the element
 #DesignerProperty: Key: Height, DisplayName: Height, FieldType: String, DefaultValue:  , Description: 
-#DesignerProperty: Key: MaxHeight, DisplayName: MaxHeight, FieldType: String, DefaultValue:  , Description: 
+#DesignerProperty: Key: MaxHeight, DisplayName: MaxHeight, FieldType: String, DefaultValue:  , Description:
 #DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: MaxWidth, DisplayName: MaxWidth, FieldType: String, DefaultValue:  , Description: 
+#DesignerProperty: Key: StyleHeight, DisplayName: Style Height, FieldType: String, DefaultValue:  , Description:
+#DesignerProperty: Key: StyleMaxHeight, DisplayName: Style MaxHeight, FieldType: String, DefaultValue:  , Description: 
+#DesignerProperty: Key: StyleWidth, DisplayName: Style Width, FieldType: String, DefaultValue:  , Description: 
+#DesignerProperty: Key: StyleMaxWidth, DisplayName: Style MaxWidth, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String.
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Style, DisplayName: Style, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String.
@@ -89,8 +93,6 @@ Version=7
 #DesignerProperty: Key: Shaped, DisplayName: Shaped, FieldType: Boolean, DefaultValue: False , Description: 
 #DesignerProperty: Key: SingleLine, DisplayName: SingleLine, FieldType: Boolean, DefaultValue: False , Description: 
 #DesignerProperty: Key: Solo, DisplayName: Solo, FieldType: Boolean, DefaultValue: False , Description: 
-
-
 #DesignerProperty: Key: VBindClass, DisplayName: VBindClass, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VBindStyle, DisplayName: VBindStyle, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Slot, DisplayName: Slot, FieldType: String, DefaultValue:  , Description: 
@@ -227,6 +229,10 @@ Private bLoremIpsum As Boolean = False
 	Private bShowGridDesign As Boolean = False
 	Private stRows As String = ""
 	Private stColumns As String = ""
+	Private stStyleHeight As String = ""
+	Private stStyleWidth As String = ""
+	Private stStyleMaxHeight As String = ""
+	Private stStyleMaxWidth As String = ""
 	'
 	Type GridRow(Rows As Int, Columns As List, _
 	mt As String, mb As String, mr As String, ml As String, _
@@ -408,6 +414,10 @@ stSlotActivator = Props.get("SlotActivator")
 		stRows = Props.Get("Rows")
 		stColumns = Props.get("Columns")
 		bShowGridDesign = Props.get("ShowGridDesign")
+		stStyleHeight = Props.get("StyleHeight")
+		stStyleWidth = Props.get("StyleWidth")
+		stStyleMaxHeight = Props.get("StyleMaxHeight")
+		stStyleMaxWidth = Props.get("StyleMaxWidth")
 End If
 
 	AddAttr("fluid", bFluid)
@@ -444,15 +454,17 @@ AddStyle("font-family", stFontFamily)
 AddStyle("font-size", stFontSize)
 AddStyle("font-style", stFontStyle)
 AddStyle("font-weight", stFontWeight)
+	'
 	AddAttr("height", stHeight)
 	AddAttr("max-height", stMaxHeight)
-	
 	AddAttr("width", stWidth)
 	AddAttr("max-width", stMaxWidth)
-	AddStyle("height", stHeight)
-	AddStyle("max-height", stMaxHeight)
-	AddStyle("width", stWidth)
-	AddStyle("max-width", stMaxWidth)
+	'
+	AddStyle("height", stStyleHeight)
+	AddStyle("max-height", stStyleMaxHeight)
+	AddStyle("width", stStyleWidth)
+	AddStyle("max-width", stStyleMaxWidth)
+	'
 AddStyle("text-align", stTextAlign)
 AddStyle("text-decoration", stTextDecoration)
 	AddAttr("type", stInputType)
@@ -1278,7 +1290,6 @@ End Sub
 
 public Sub setHeight(varHeight As String)
 	AddAttr("height", varHeight)
-	AddStyle("height", varHeight)
 	stHeight = varHeight
 End Sub
 
@@ -1286,8 +1297,16 @@ public Sub getHeight() As String
 Return stHeight
 End Sub
 
+public Sub setStyleHeight(varHeight As String)
+	AddStyle("height", varHeight)
+	stStyleHeight = varHeight
+End Sub
+
+public Sub getStyleHeight() As String
+Return stStyleHeight
+End Sub
+
 public Sub setMaxHeight(varMargin As String)
-	AddStyle("max-height", varMargin)
 	AddAttr("max-height", varMargin)
 	stMaxHeight = varMargin
 End Sub
@@ -1296,8 +1315,16 @@ public Sub getMaxHeight() As String
 Return stMaxHeight
 End Sub
 
+public Sub setStyleMaxHeight(varMargin As String)
+	AddStyle("max-height", varMargin)
+	stStyleMaxHeight = varMargin
+End Sub
+
+public Sub getStyleMaxHeight() As String
+Return stStyleMaxHeight
+End Sub
+
 public Sub setMaxWidth(varMarginBottom As String)
-	AddStyle("max-width", varMarginBottom)
 	AddAttr("max-width", varMarginBottom)
 	stMaxWidth = varMarginBottom
 End Sub
@@ -1305,6 +1332,16 @@ End Sub
 public Sub getMaxWidth() As String
 Return stMaxWidth
 End Sub
+
+public Sub setStyleMaxWidth(varMarginBottom As String)
+	AddStyle("max-width", varMarginBottom)
+	stStyleMaxWidth = varMarginBottom
+End Sub
+
+public Sub getStyleMaxWidth() As String
+Return stStyleMaxWidth
+End Sub
+
 
 public Sub setTagName(varTagName As String)
 mTagName = varTagName
@@ -1389,12 +1426,20 @@ End Sub
 
 public Sub setWidth(varWidth As String)
 	AddAttr("width", varWidth)
-	AddStyle("width", varWidth)
 	stWidth = varWidth
 End Sub
 
 public Sub getWidth() As String
 Return stWidth
+End Sub
+'
+public Sub setStyleWidth(varWidth As String)
+	AddStyle("width", varWidth)
+	stStyleWidth = varWidth
+End Sub
+
+public Sub getStyleWidth() As String
+Return stStyleWidth
 End Sub
 '
 public Sub setRules(varRules As String)

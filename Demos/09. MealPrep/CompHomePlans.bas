@@ -19,7 +19,7 @@ End Sub
 
 Sub Initialize
 	vuetify = pgIndex.vuetify
-	homeplans.Initialize(Me, name, $"/${name}"$)
+	homeplans.Initialize(Me, name)
 	'
 	banano.LoadLayout("#placeholder", "vhomeplans")
 	banano.LoadLayout("#planlayout1", "vmealplan")
