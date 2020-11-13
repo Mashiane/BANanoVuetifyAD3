@@ -54,6 +54,7 @@ Version=7
 #DesignerProperty: Key: MarginAXYTBLR, DisplayName: Margin AXYTBLR, FieldType: String, DefaultValue: |||||| , Description: Margins AXYSMLX
 #DesignerProperty: Key: BuildGrid, DisplayName: BuildGrid, FieldType: Boolean, DefaultValue: False, Description: BuildGrid
 #DesignerProperty: Key: ShowGridDesign, DisplayName: Show Grid Design, FieldType: Boolean, DefaultValue: False, Description: ShowGridDesign
+#DesignerProperty: Key: DataSource, DisplayName: DataSource, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VFor, DisplayName: VFor, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Key, DisplayName: Key, FieldType: String, DefaultValue:  , Description:
 #DesignerProperty: Key: To, DisplayName: To, FieldType: String, DefaultValue:  , Description: 
@@ -156,6 +157,7 @@ Private stVBindStyle As String = ""
 Private stVElse As String = ""
 Private stVElseIf As String = ""
 Private stVFor As String = ""
+	Private stDataSource As String = ""
 Private stVHtml As String = ""
 Private stValue As String = ""
 Private stVIf As String = ""
@@ -241,6 +243,7 @@ Private bLoremIpsum As Boolean = False
 	'this will hold each row definition
 	'hold our last row
 	Private LastRow As Int
+	Public Items As List
 End Sub
 
 'initialize the custom view
@@ -258,6 +261,52 @@ bindings.Initialize
 	LastRow = 0
 	GridRows.Initialize
 	GridColumns.Initialize
+	Items.Initialize 
+End Sub
+
+'clear the items for this
+Sub Items_Clear As VueElement 
+	Items.Initialize 
+	Return Me
+End Sub
+
+'add a header to the lust
+Sub Items_AddHeader(txt As String) As VueElement
+	Dim rec As Map = CreateMap()
+	rec.Put("header", txt)
+	Items.Add(rec)
+	Return Me
+End Sub
+
+Sub Items_AddIconTitle(sid As String, sicon As String, siconcolor As String, stitle As String, ssubtitle As String, slinkto As String)
+	Items_Add(sid, "", "", "", sicon, siconcolor, stitle, ssubtitle, "",slinkto, "", "")
+End Sub
+
+'add an item
+Sub Items_Add(sid As String, siconleft As String, savatar As String, savataricon As String, sicon As String, siconcolor As String, stitle As String, ssubtitle As String, ssubtitle1 As String, slinkto As String, siconright As String, stextright As String)
+	Dim rec As Map = CreateMap()
+	rec.Put("id", sid)
+	If siconleft <> "" Then rec.Put("iconleft", siconleft)
+	If savatar <> "" Then rec.Put("avatar", savatar)
+	If sicon <> "" Then rec.Put("icon", sicon)
+	If siconcolor <> "" Then rec.put("iconcolor", siconcolor)
+	If stitle <> "" Then rec.Put("title", stitle)
+	If ssubtitle <> "" Then rec.Put("subtitle", ssubtitle)
+	If ssubtitle1 <> "" Then rec.Put("subtitle1", ssubtitle1)
+	If siconright <> "" Then rec.Put("iconright", siconright)
+	If stextright <> "" Then rec.Put("textright", stextright)
+	If savataricon <> "" Then rec.Put("avataricon", savataricon)
+	If slinkto <> "" Then rec.Put("to", slinkto)
+	Items.Add(rec)
+End Sub
+
+'add a divider
+Sub Items_AddDivider(binset As Boolean) As VueElement
+	Dim rec As Map = CreateMap()
+	rec.Put("divider", True)
+	If binset Then rec.Put("inset", binset)
+	Items.Add(rec)
+	Return Me
 End Sub
 
 'Create view in the designer
@@ -291,6 +340,7 @@ stVBindStyle = Props.Get("VBindStyle")
 stVElse = Props.Get("VElse")
 stVElseIf = Props.Get("VElseIf")
 stVFor = Props.Get("VFor")
+		stDataSource = Props.Get("DataSource")
 stVHtml = Props.Get("VHtml")
 stVIf = Props.Get("VIf")
 stVModel = Props.Get("VModel")
@@ -1046,6 +1096,15 @@ public Sub getVFor() As String
 Return stVFor
 End Sub
 
+public Sub setDataSource(varVFor As String)
+stDataSource = varVFor
+SetData(stDataSource, NewList)
+End Sub
+
+public Sub getDataSource() As String
+Return stDataSource
+End Sub
+
 public Sub setVHtml(varVHtml As String)
 AddAttr("v-html", varVHtml)
 stVHtml = varVHtml
@@ -1758,10 +1817,9 @@ public Sub setShowGridDesign(varRounded As Boolean)
 End Sub
 
 'get rounded
-public Sub ShowGridDesign() As Boolean
+public Sub getShowGridDesign() As Boolean
 	Return bShowGridDesign
 End Sub
-
 
 'set shaped
 public Sub setShaped(varShaped As Boolean)
@@ -1890,6 +1948,7 @@ End Sub
 'return element at row and column position
 Sub Matrix(row As Int, column As Int) As BANanoElement
 	Dim rcKey As String = $"${mName}R${row}C${column}"$
+	rcKey = rcKey.tolowercase
 	Dim el As BANanoElement
 	el.Initialize($"#${rcKey}"$)
 	Return el
@@ -1906,6 +1965,7 @@ private Sub BuildRow(row As GridRow) As String
 	For rowCnt = 1 To rowTot
 		LastRow = LastRow + 1
 		Dim rowKey As String = $"${mName}R${LastRow}"$
+		rowKey = rowKey.tolowercase
 		sb.Append($"<v-row class="${BuildRowClass(row)}" id="${rowKey}">"$)
 		'get the columns to add
 		Dim cols As List = row.Columns
@@ -1923,6 +1983,7 @@ private Sub BuildRow(row As GridRow) As String
 				'increment the column to add for this row
 				LastColumn = LastColumn + 1
 				Dim cellKey As String = $"${rowKey}C${LastColumn}"$
+				cellKey = cellKey.tolowercase
 				'if showid
 				Dim strShow As String = ""
 				If bShowGridDesign Then
@@ -1986,6 +2047,7 @@ Sub AddRows(iRows As Int) As VueElement
 		'
 	'lets store this new row in rows
 	Dim rowKey As String = $"R${LastRow}"$
+	rowKey = rowKey.tolowercase
 	'lets save the row on the map
 	GridRows.Put(rowKey, nRow)
 	Return Me
@@ -2020,6 +2082,7 @@ private Sub AddColumnsOS(iColumns As Int, osm As Int, omd As Int, olg As Int, ox
 '
 	'get the existing columns for this row
 	Dim rowkey As String = $"R${LastRow}"$
+	rowkey = rowkey.tolowercase
 	'get the row from existing rows
 	If GridRows.ContainsKey(rowkey) Then
 		'get the row from existing rows

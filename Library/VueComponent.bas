@@ -31,7 +31,7 @@ Sub Class_Globals
 	Public TemplateID As String
 End Sub
 
-Public Sub Initialize (CallBack As Object, Name As String, sPath As String) As VueComponent
+Public Sub Initialize (CallBack As Object, Name As String) As VueComponent
 	mName = Name.tolowercase
 	mCallBack = CallBack
 	opt.Initialize
@@ -43,7 +43,7 @@ Public Sub Initialize (CallBack As Object, Name As String, sPath As String) As V
 	filters.Initialize
 	query.Initialize
 	components.initialize
-	Path = sPath
+	Path = $"/${mName}"$
 	'
 	jsString.Initialize("String")
 	jsNumber.Initialize("Number")

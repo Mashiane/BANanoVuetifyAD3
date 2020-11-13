@@ -16,6 +16,8 @@ Sub Process_Globals
 	Private vnavigationdrawer As VueElement
 	Private vtoolbartitle As VueElement
 	Private vlogo As VueElement
+	Private drawerlist As VueElement
+	Private draweritem As VueElement
 End Sub
 
 Sub Init
@@ -25,6 +27,7 @@ Sub Init
 	'load v-app to app template
 	BANano.LoadLayout("#apptemplate", "vbaseline")
 	vuetify.BindVueElement(vsnackbar)
+	vuetify.SnackBarInitialize
 	vuetify.BindVueElement(routerview)
 	vuetify.BindVueElement(vappbar)
 	vuetify.BindVueElement(vappbarnavicon)
@@ -35,59 +38,58 @@ Sub Init
 	'
 	vuetify.SetData("apptitle", Main.AppTitle)
 	vnavigationdrawer.Width = 350
-	
-	' set up snack bar stuff: depends on the vsnackbar layout
-	vuetify.SnackBarInitialize
-	'add a list to the navdrawer
-	Dim vlist As VueElement = NewList("vnavigationdrawer", "navlist", Null)
-	vlist.Shaped = True
-	'add a template to the drawer list
-	Dim vlistitem As VueElement = NewListItem("navlist", "navlistitem", "page", "iconleft", "pages", 0, CreateMap("inset":True, "avatarclass":"mr-2", "iconclass":"mr-2"))
-	vuetify.BindVueElement(vlistitem)
-	
-	CompHome.Initialize
-	'
-	PageLinks
-	'
 	'show the drawer
 	vuetify.SetData("appdrawer", True)
-	
+	'
+	AddPages
+	'
+	'add a list to the nav drawer
+	drawerlist = NewList("vnavigationdrawer", "drawerlist", Null)
+	drawerlist.Dense = True
+	drawerlist.Shaped = True
+	'add a template to the drawer list
+	draweritem = NewListItem("drawerlist", "pages", "id", 0, CreateMap("iconclass":"mr-2"))
+	vuetify.BindVueElement(draweritem)
 	'render the ux
 	vuetify.Serve
+	'
+	DrawerLinks
 End Sub
 
-'this Is linkes To the list
-Sub navlist_click(item As String)
-	vuetify.ShowSnackBarSuccess(item)
+Sub AddPages
+	ViewHome.Initialize
+	ViewLists.Initialize
+	ViewGrid.Initialize
+	ViewAlert.Initialize 
 End Sub
 
+Sub DrawerLinks
+	draweritem.Items_Clear
+	draweritem.Items_AddIconTitle("home", "mdi-hexagon-multiple-outline", "", "Home", "", "/")
+	draweritem.Items_AddDivider(False)
+	'
+	draweritem.Items_AddIconTitle("alert", "mdi-hexagon-multiple-outline", "", "Alerts", "", ViewAlert.path)
+	draweritem.Items_AddDivider(False)
 	
+	
+	draweritem.Items_AddIconTitle("grid", "mdi-hexagon-multiple-outline", "", "Grid", "", ViewGrid.path)
+	draweritem.Items_AddDivider(False)
+	'
+	draweritem.Items_AddIconTitle("lists", "mdi-hexagon-multiple-outline", "", "Lists", "", ViewLists.path)
+	draweritem.Items_AddDivider(False)
+	vuetify.SetData("pages", draweritem.Items)
 
-Sub PageLinks
-	Dim pages As List = vuetify.NewList
-	pages.Add(CreateMap("icon": "mdi-inbox-arrow-down", "iconright": "mdi-inbox-arrow-down", "iconleft": "mdi-inbox-arrow-down", "title":"Inbox", "subtitle":"Incoming emails","avatar":"./assets/1.jpg"))
-	pages.Add(CreateMap("icon": "mdi-send", "iconright": "mdi-send", "iconleft": "mdi-send", "title": "Sent","subtitle":"Sent emails","avatar":"./assets/2.jpg"))
-	pages.Add(CreateMap("icon": "mdi-delete", "iconright": "mdi-delete", "iconleft": "mdi-delete", "title": "Trash","subtitle":"Deleted emails","avatar":"./assets/3.jpg"))
-	pages.Add(CreateMap("icon": "mdi-alert-octagon", "iconright": "mdi-alert-octagon", "iconleft": "mdi-alert-octagon", "title": "Spam","subtitle":"Spam emails","avatar":"./assets/4.jpg"))
-	vuetify.SetData("pages", pages)
 End Sub
 
+'
+'Sub drawerlist_click(item As String)
+'	vuetify.ShowSnackBarSuccess(item)
+'End Sub
 
 Sub vappbarnavicon_ClickStop (e As BANanoEvent)
 	vuetify.Toggle("appdrawer")
 End Sub
 
-
-Sub navlist_RightClick (item As Object)
-	vuetify.ShowSnackBarWarning(item)	
-End Sub
-
-Sub navlist_LeftClick (item As Object)
-	vuetify.ShowSnackBarPrimary(item)
-End Sub
-
-
-'***** HELPER FUNCTIONS
 
 Sub NewList(parentid As String, refID As String, props As Map) As VueElement
 	parentid = parentid.tolowercase
@@ -114,10 +116,10 @@ Sub NewList(parentid As String, refID As String, props As Map) As VueElement
 	Return vlist
 End Sub
 '
-Sub NewListItem(parentID As String, refid As String, itemName As String, itemKey As String, datasource As String, numLines As Int, props As Map) As VueElement
+Sub NewListItem(parentID As String, datasource As String, itemKey As String, numLines As Int, props As Map) As VueElement
 	parentID = parentID.tolowercase
-	refid = refid.tolowercase
-	itemName = itemName.tolowercase
+	Dim refid As String = $"${parentID}item"$
+	Dim itemName As String = "item"
 	'get the parent
 	Dim Ret As Long
 	Dim AllViews As Map
@@ -128,12 +130,14 @@ Sub NewListItem(parentID As String, refid As String, itemName As String, itemKey
 	'
 	Dim vtemplate As VueElement = AllViews.Get("vtemplate")
 	Dim vlistitem As VueElement = AllViews.Get("vlistitem")
-	'
+	Dim vlistitemheader As VueElement = AllViews.Get("vlistitemheader")
+	
 	Dim vlistitemactionleft As VueElement = AllViews.Get("vlistitemactionleft")
 	Dim vlistitemactionlefticon As VueElement = AllViews.Get("vlistitemactionlefticon")
 	'
 	Dim vlistitemavatar As VueElement = AllViews.Get("vlistitemavatar")
 	Dim vlistitemavatarimg As VueElement = AllViews.get("vlistitemavatarimg")
+	Dim vlistitemavataricon As VueElement = AllViews.Get("vlistitemavataricon")
 	'
 	Dim vlistitemcontent As VueElement = AllViews.Get("vlistitemcontent")
 	Dim vlistitemtitle As VueElement = AllViews.get("vlistitemtitle")
@@ -145,16 +149,33 @@ Sub NewListItem(parentID As String, refid As String, itemName As String, itemKey
 	
 	Dim vlistitemactionrighticon As VueElement = AllViews.Get("vlistitemactionrighticon")
 	Dim vlistitemactionright As VueElement = AllViews.Get("vlistitemactionright")
+	Dim vlistitemactionrighttext As VueElement = AllViews.Get("vlistitemactionrighttext")
 		
 	Dim vlistitemdivider As VueElement = AllViews.get("vlistitemdivider")
-		'
+	'
 	vtemplate.AddAttr("ref", refid)
 	vtemplate.AddAttr("id", refid)
 	vtemplate.AddAttr("v-for", $"(${itemName}, idx) in ${datasource}"$)
 	vtemplate.AddAttr(":key", itemKey)
+		
+	vlistitemheader.AddAttr("v-if", $"${itemName}.header"$)
+	vlistitemheader.AddAttr(":key", $"${itemName}.header"$)
+	vlistitemheader.AddAttr("v-text", $"${itemName}.header"$)
 	
-	vlistitem.AddAttr("ref", $"${refid}item"$)
-	vlistitem.AddAttr("id", $"${refid}item"$)
+	vlistitemdivider.AddAttr("v-else-if", $"${itemName}.divider"$)
+	vlistitemdivider.AddAttr(":key", "idx")
+	vlistitemdivider.AddAttr(":inset", $"${itemName}.inset"$)
+		
+	vlistitem.AddAttr("v-else", True)
+	vlistitem.AddAttr(":key", $"${itemName}.${itemKey}"$)
+	vlistitem.DataSource = datasource
+	'
+	Select Case numLines
+		Case 2
+			vlistitem.AddAttr("two-line", True)
+		Case 3
+			vlistitem.AddAttr("three-line", True)
+	End Select
 	'
 	Dim smethod As String = $"${parentID}_click"$
 	If BANano.SubExists(Me, smethod) Then
@@ -188,18 +209,10 @@ Sub NewListItem(parentID As String, refid As String, itemName As String, itemKey
 		Dim cbl As BANanoObject = BANano.CallBack(Me, sleftmethod, Array(e))
 		vlistitem.SetCallBack(sleftmethod, cbl)
 	End If
-	'
-	Select Case numLines
-	Case 2
-		vlistitem.AddAttr("two-line", True)
-	Case 3		
-		vlistitem.AddAttr("three-line", True)
-	End Select
-	'
-	vlistitemdivider.AddAttr(":key",$"`divider-${itemKey}`"$)
 	
 	'default field names
 	Dim savatar As String = "avatar"
+	Dim savataricon As String = "avataricon"
 	Dim sicon As String = "icon"
 	Dim ssubtitle As String = "subtitle"
 	Dim ssubtitle1 As String = "subtitle1"
@@ -211,15 +224,18 @@ Sub NewListItem(parentID As String, refid As String, itemName As String, itemKey
 	Dim siconclass As String = ""
 	Dim siconcolor As String = "iconcolor"
 	Dim siconrightclass As String = ""
+	Dim stextright As String = "textright"
+	Dim sto As String = "to"
 	
 	'read specified
 	If BANano.IsNull(props) Or BANano.IsUndefined(props) Then
-	Else	
+	Else
 		If props.ContainsKey("iconleft") Then siconleft = props.Get("iconleft")
 		If props.ContainsKey("iconleftclass") Then siconleftclass = props.Get("iconleftclass")
 		'
 		If props.ContainsKey("avatar") Then	savatar = props.Get("avatar")
 		If props.ContainsKey("avatarclass") Then savatarclass = props.Get("avatarclass")
+		If props.ContainsKey("avataricon") Then savataricon = props.Get("avataricon")
 		'
 		If props.ContainsKey("icon") Then sicon = props.Get("icon")
 		If props.ContainsKey("iconclass") Then siconclass = props.Get("iconclass")
@@ -231,9 +247,11 @@ Sub NewListItem(parentID As String, refid As String, itemName As String, itemKey
 		'
 		If props.ContainsKey("iconright") Then siconright = props.Get("iconright")
 		If props.ContainsKey("iconrightclass") Then siconrightclass = props.Get("iconrightclass")
-		'
-		If props.ContainsKey("inset") Then vlistitemdivider.AddAttr("inset", True)
+		If props.ContainsKey("textright") Then stextright = props.Get("textright")
+		If props.ContainsKey("to") Then sto = props.Get("to")
 	End If
+	'
+	vlistitem.AddAttr(":to", $"${itemName}.${sto}"$)
 	'	left icon
 	vlistitemactionleft.AddAttr("v-if", $"${itemName}.${siconleft}"$)
 	vlistitemactionlefticon.AddAttr("v-if", $"${itemName}.${siconleft}"$)
@@ -241,11 +259,13 @@ Sub NewListItem(parentID As String, refid As String, itemName As String, itemKey
 	vlistitemactionlefticon.AddAttr("v-text", $"${itemName}.${siconleft}"$)
 	
 	'	turn visibility based on fields
-	vlistitemavatar.AddAttr("v-if", $"${itemName}.${savatar}"$)
+	'vlistitemavatar.AddAttr("v-if", $"${itemName}.${savatar}"$)
 	vlistitemavatar.AddClass(savatarclass)
 	vlistitemavatarimg.AddAttr(":src", $"${itemName}.${savatar}"$)
 	vlistitemavatarimg.AddAttr("v-if", $"${itemName}.${savatar}"$)
-'	icon
+	vlistitemavataricon.AddAttr("v-text", $"${itemName}.${savataricon}"$)
+	vlistitemavataricon.AddAttr("v-if", $"${itemName}.${savataricon}"$)
+	'icon
 	Dim vlistitemicon As VueElement = AllViews.Get("vlistitemicon")
 	Dim vlistitemiconicon As VueElement = AllViews.Get("vlistitemiconicon")
 	
@@ -268,9 +288,13 @@ Sub NewListItem(parentID As String, refid As String, itemName As String, itemKey
 	vlistitemactionright.AddAttr("v-if", $"${itemName}.${siconright}"$)
 	vlistitemactionrighticon.AddAttr("v-text", $"${itemName}.${siconright}"$)
 	vlistitemactionrighticon.AddClass(siconrightclass)
+	vlistitemactionrighttext.AddAttr("v-if", $"${itemName}.${stextright}"$)
+	vlistitemactionrighttext.AddAttr("v-text", $"${itemName}.${stextright}"$)
 	'
 	Return vlistitem
 End Sub
+
+
 
 '
 'Sub LoadLayoutButtonIcon(EventName As String, btnID As String, iconName As String, btnprops As Map, iconprops As Map)
