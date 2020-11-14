@@ -29,6 +29,9 @@ Sub Class_Globals
 	Public Template As VueElement
 	Public Path As String = ""
 	Public TemplateID As String
+	Public AppTemplateName As String = "#apptemplate"
+	Public AppendHolderName As String = "#appendholder"
+	Public PlaceHolderName As String = "#placeholder"
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String) As VueComponent
@@ -573,6 +576,31 @@ Sub AddRule(ruleName As String, Module As Object,  MethodName As String)
 	data.put(ruleName, rules)
 End Sub
 
+
+'get the html part of a bananoelement
+Sub BANanoGetHTMLAsIs(id As String) As String
+	id = id.tolowercase
+	id = id.Replace("#","")
+	Dim be As BANanoElement
+	be.Initialize($"#${id}"$)
+	Dim xTemplate As String = be.GetHTML
+	be.Empty
+	Return xTemplate
+End Sub
+
+
+'get the html part of a bananoelement
+Sub BANanoGetHTML(id As String) As String
+	id = id.tolowercase
+	id = id.Replace("#","")
+	Dim be As BANanoElement
+	be.Initialize($"#${id}"$)
+	Dim xTemplate As String = be.GetHTML
+	be.Empty
+	xTemplate = xTemplate.Replace("v-template", "template")
+	Return xTemplate
+End Sub
+
 'add anything from the appendholder
 Sub AppendHolder 
 	Dim stemplate As String = BANanoGetHTMLAsIs("appendholder")
@@ -599,26 +627,7 @@ Sub AppendPlaceHolder
 	Template.SetText(stemplate)
 End Sub
 
-'get the html part of a bananoelement
-Sub BANanoGetHTML(id As String) As String
-	id = id.tolowercase
-	Dim be As BANanoElement
-	be.Initialize($"#${id}"$)
-	Dim xTemplate As String = be.GetHTML
-	be.Empty
-	xTemplate = xTemplate.Replace("v-template", "template")
-	Return xTemplate
-End Sub
 
-'get the html part of a bananoelement
-Sub BANanoGetHTMLAsIs(id As String) As String
-	id = id.tolowercase
-	Dim be As BANanoElement
-	be.Initialize($"#${id}"$)
-	Dim xTemplate As String = be.GetHTML
-	be.Empty
-	Return xTemplate
-End Sub
 
 #End Region
 

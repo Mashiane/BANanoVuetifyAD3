@@ -18,6 +18,7 @@ Sub Process_Globals
 	Private vlogo As VueElement
 	Private drawerlist As VueElement
 	Private draweritem As VueElement
+	Private appcontainer As VueElement
 End Sub
 
 Sub Init
@@ -35,6 +36,7 @@ Sub Init
 	vuetify.BindVueElement(vtoolbartitle)
 	vuetify.BindVueElement(vnavigationdrawer)
 	vuetify.BindVueElement(vlogo)
+	vuetify.BindVueElement(appcontainer)
 	'
 	vuetify.SetData("apptitle", Main.AppTitle)
 	vnavigationdrawer.Width = 350
@@ -61,6 +63,7 @@ Sub AddPages
 	ViewLists.Initialize
 	ViewGrid.Initialize
 	ViewAlert.Initialize 
+	ViewAvatar.Initialize
 End Sub
 
 Sub DrawerLinks
@@ -70,7 +73,10 @@ Sub DrawerLinks
 	'
 	draweritem.Items_AddIconTitle("alert", "mdi-hexagon-multiple-outline", "", "Alerts", "", ViewAlert.path)
 	draweritem.Items_AddDivider(False)
-	
+	'
+	draweritem.Items_AddIconTitle("avatar", "mdi-hexagon-multiple-outline", "", "Avatar", "", ViewAvatar.path)
+	draweritem.Items_AddDivider(False)
+	'
 	
 	draweritem.Items_AddIconTitle("grid", "mdi-hexagon-multiple-outline", "", "Grid", "", ViewGrid.path)
 	draweritem.Items_AddDivider(False)

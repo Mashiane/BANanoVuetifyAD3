@@ -304,6 +304,9 @@ Sub Class_Globals
 	Private VuetifyOptions As Map
 	Private lang As String
 	Public BasePath As String = "/"
+	Public AppTemplateName As String = "#apptemplate"
+	Public AppendHolderName As String = "#appendholder"
+	Public PlaceHolderName As String = "#placeholder"
 End Sub
 
 'import a component, the module should have the Initilize method without parameters
@@ -317,6 +320,8 @@ End Sub
 
 'add anything from the appendholder
 Sub AppendHolderTo(target As String)
+	target = target.ToLowerCase
+	target = target.Replace("#","")
 	Dim stemplate As String = BANanoGetHTMLAsIs("appendholder")
 	Dim elx As BANanoElement
 	elx.Initialize($"#${target}"$)
@@ -384,15 +389,19 @@ End Sub
 
 'add anything from the appendholder
 Sub AppendPlaceHolderTo(target As String)
+	target = target.ToLowerCase
+	target = target.Replace("#","")
 	Dim stemplate As String = BANanoGetHTMLAsIs("placeholder")
 	Dim elx As BANanoElement
 	elx.Initialize($"#${target}"$)
 	elx.append(stemplate)
 End Sub
 
+
 'get the html part of a bananoelement
 Sub BANanoGetHTMLAsIs(id As String) As String
 	id = id.tolowercase
+	id = id.Replace("#","")
 	Dim be As BANanoElement
 	be.Initialize($"#${id}"$)
 	Dim xTemplate As String = be.GetHTML
@@ -400,9 +409,11 @@ Sub BANanoGetHTMLAsIs(id As String) As String
 	Return xTemplate
 End Sub
 
+
 'get the html part of a bananoelement
 Sub BANanoGetHTML(id As String) As String
 	id = id.tolowercase
+	id = id.Replace("#","")
 	Dim be As BANanoElement
 	be.Initialize($"#${id}"$)
 	Dim xTemplate As String = be.GetHTML
@@ -439,21 +450,12 @@ Sub GetBreakPointName As String
 	Return res
 End Sub
 
-
-'add html content to template
-public Sub AddToTemplate(html As String) 
-	Dim mTarget As BANanoElement = BANano.GetElement("#apptemplate")
-	mTarget.Append(html)
-End Sub
-
 'initialize the app with where to render and where to .GetHTML
 Public Sub Initialize(Module As Object) 
 	'get the body of the page
 	body = BANano.GetElement("#body")
 	body.Append($"<div id="app"><div id="placeholder" v-if="placeholder"></div><div id="appendholder" v-if="appendholder"></div><v-template id="apptemplate" v-if="apptemplate"></v-template></div>"$)
-	'body.Append($"<div id="placeholder" v-if="placeholder"></div>"$)
-	'body.Append($"<div id="appendholder" v-if="appendholder"></div>"$)
-	'body.Append($"<v-template id="apptemplate" v-if="apptemplate"></v-template>"$)
+	
 	'
 	SetData("placeholder", False)
 	SetData("appendholder", False)
@@ -1300,6 +1302,8 @@ End Sub
 
 'get an element
 Sub GetElementByID(elID As String) As BANanoElement
+	elID = elID.ToLowerCase
+	elID = elID.Replace("#","")
 	Dim elx As BANanoElement
 	elx.Initialize($"#${elID}"$)
 	Return elx 
@@ -1449,88 +1453,6 @@ Sub SetOnClick(Module As Object, methodName As String)
 	SetCallBack(methodName, cb)
 End Sub
 
-Sub AddHTMLElement(Module As Object, parentID As String, elID As String, tag As String, props As Map, styleProps As Map, classNames As List, loose As List, Text As String)
-	parentID = parentID.ToLowerCase
-	elID = elID.tolowercase
-	parentID = parentID.Replace("#","")
-	elID = elID.Replace("#","")
-	'
-	Dim elIT As VueElement
-	elIT.Initialize(Module, elID, tag)
-	elIT.SetText(Text)
-	'
-	If loose <> Null Then
-		For Each k As String In loose
-			elIT.SetAttr(k, True)
-		Next
-	End If
-	If props <> Null Then
-		For Each k As String In props.Keys
-			Dim v As String = props.Get(k)
-			elIT.SetAttr(k, v)
-		Next
-	End If
-	If styleProps <> Null Then
-		For Each k As String In styleProps.Keys
-			Dim v As String = styleProps.get(k)
-			elIT.SetAttr(k, v)
-		Next
-	End If
-	If classNames <> Null Then
-		elIT.AddClasses(classNames)
-	End If
-	'add to the parent element
-	Dim sElement As String = elIT.tostring
-	BANano.GetElement($"#${parentID}"$).Append(sElement)
-End Sub
-
-Sub CreateH1(Module As Object, id As String) As VueElement
-	Dim elx As VueElement
-	elx.Initialize(Module, id, "h1")
-	Return elx
-End Sub
-
-Sub CreateH2(Module As Object, id As String) As VueElement
-	Dim elx As VueElement
-	elx.Initialize(Module, id, "h2")
-	Return elx
-End Sub
-
-Sub CreateH3(Module As Object, id As String) As VueElement
-	Dim elx As VueElement
-	elx.Initialize(Module, id, "h3")
-	Return elx
-End Sub
-
-Sub CreateH4(Module As Object, id As String) As VueElement
-	Dim elx As VueElement
-	elx.Initialize(Module, id, "h4")
-	Return elx
-End Sub
-
-Sub CreateH5(Module As Object, id As String) As VueElement
-	Dim elx As VueElement
-	elx.Initialize(Module, id, "h5")
-	Return elx
-End Sub
-
-Sub CreateH6(Module As Object, id As String) As VueElement
-	Dim elx As VueElement
-	elx.Initialize(Module, id, "h6")
-	Return elx
-End Sub
-
-Sub CreateSpan(Module As Object, id As String) As VueElement
-	Dim elx As VueElement
-	elx.Initialize(Module, id, "span")
-	Return elx
-End Sub
-
-Sub CreateP(Module As Object, id As String) As VueElement
-	Dim elx As VueElement
-	elx.Initialize(Module, id, "p")
-	Return elx
-End Sub
 
 'show badge
 Sub ShowBadge(btnID As String) 

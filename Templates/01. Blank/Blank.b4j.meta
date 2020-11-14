@@ -4,6 +4,6 @@ ModuleBreakpoints0=
 ModuleBreakpoints1=
 ModuleClosedNodes0=
 ModuleClosedNodes1=
-NavigationStack=pgIndex,Process_Globals,4,4,Visual Designer,vbaseline.bjl,-100,6,Main,AppStart,27,6,Main,Process_Globals,14,0,pgIndex,Init,14,6
+NavigationStack=Main,AppStart,34,0,pgIndex,Init,14,0
 SelectedBuild=0
 VisibleModules=1

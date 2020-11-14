@@ -73,7 +73,7 @@ Version=7
 #DesignerProperty: Key: Rules, DisplayName: Rules, FieldType: String, DefaultValue:  , Description: Rules
 #DesignerProperty: Key: States, DisplayName: States, FieldType: String, DefaultValue: , Description: Initial Binding States. Must be a json String.
 #DesignerProperty: Key: SlotActivator, DisplayName: SlotActivator, FieldType: String, DefaultValue: , Description: Slot activator
-#DesignerProperty: Key: InputType, DisplayName: InputType, FieldType: String, DefaultValue: none, Description: Input type, List: text|email|password|file|tel|url|number|search|none
+#DesignerProperty: Key: InputType, DisplayName: Type, FieldType: String, DefaultValue: none, Description: Input type, List: text|email|password|file|tel|url|number|search|none|success|info|warning|error
 #DesignerProperty: Key: PrependIcon, DisplayName: PrependIcon, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: AppendIcon, DisplayName: AppendIcon, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Placeholder, DisplayName: Placeholder, FieldType: String, DefaultValue:  , Description: 
@@ -250,6 +250,9 @@ Private bLoremIpsum As Boolean = False
 	'hold our last row
 	Private LastRow As Int
 	Public Items As List
+	Public AppTemplateName As String = "#apptemplate"
+	Public AppendHolderName As String = "#appendholder"
+	Public PlaceHolderName As String = "#placeholder"
 End Sub
 
 'initialize the custom view
@@ -786,7 +789,8 @@ End Sub
 'add the element to the parent
 public Sub AddToParent(targetID As String)
 	targetID = targetID.tolowercase
-mTarget = BANano.GetElement("#" & targetID.ToLowerCase)
+	targetID = targetID.Replace("#","")
+mTarget = BANano.GetElement($"#${targetID}"$)
 DesignerCreateView(mTarget, Null)
 End Sub
 
@@ -1999,6 +2003,11 @@ Sub Matrix(row As Int, column As Int) As BANanoElement
 	Return el
 End Sub
 
+'return the matrix name
+Sub MatrixID(row As Int, col As Int) As String
+	Return Matrix(row, col).name
+End Sub
+
 'build a single row
 private Sub BuildRow(row As GridRow) As String
 	'how many rows do we have to render
@@ -2311,4 +2320,36 @@ Sub AddOffsets(sOffsetSmall As String, sOffsetMedium As String,sOffsetLarge As S
 	If sOffsetLarge <> "" Then AddAttr("offset-lg", sOffsetLarge)
 	If sOffsetXLarge <> "" Then AddAttr("offset-xl", sOffsetXLarge)
 	Return Me
+End Sub
+
+Sub AppendElement(parent As String, tag As String, id As String, text As String) As BANanoElement
+	parent = parent.ToLowerCase
+	parent = parent.Replace("#","")
+	Dim item As String = $"<${tag} id="${id}"></${tag}>"$
+	Dim el As BANanoElement = BANano.GetElement($"#${parent}"$).Append(item).Get($"#${id}"$)
+	el.SetText(text)
+	Return el
+End Sub
+
+'banano helper class
+Sub AppendElement1(parentID As String, tag As String, id As String, text As String, props As Map, styles As Map, classes As String) As BANanoElement
+	parentID = parentID.ToLowerCase
+	parentID = parentID.Replace("#","")
+	id = id.tolowercase
+	Dim el As BANanoElement = BANano.GetElement($"#${parentID}"$).Append($"<${tag} id="${id}"></${tag}>"$).Get($"#${id}"$)
+	If BANano.IsNull(props) = False Then
+		For Each k As String In props.Keys
+			Dim v As String = props.Get(k)
+			el.SetAttr(k, v)
+		Next
+	End If
+	'
+	If BANano.IsNull(styles) = False Then
+		Dim strStyle As String = BANano.ToJson(styles)
+		el.SetStyle(strStyle)
+	End If
+	'
+	If classes <> "" Then el.AddClass(classes)
+	el.SetHTML(BANano.SF(text))
+	Return el
 End Sub

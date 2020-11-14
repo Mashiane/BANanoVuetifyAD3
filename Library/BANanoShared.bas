@@ -88,10 +88,12 @@ Sub GetSourceCode As String
 	Return SourceCode.tostring
 End Sub
 
-
-Sub CreateElement(parent As String, tag As String, id As String) As BANanoElement
+Sub CreateElement(parent As String, tag As String, id As String,text As String) As BANanoElement
+	parent = parent.ToLowerCase
+	parent = parent.Replace("#","")
 	Dim item As String = $"<${tag} id="${id}"></${tag}>"$
-	Dim el As BANanoElement = BANano.GetElement($"${parent}"$).Append(item).Get($"#${id}"$)
+	Dim el As BANanoElement = BANano.GetElement($"#${parent}"$).Append(item).Get($"#${id}"$)
+	el.SetText(text)
 	Return el
 End Sub
 
@@ -103,15 +105,20 @@ Sub DateTimeNowToISOString As String
 End Sub
 
 'banano helper class
-Sub AddElement(parentID As String, tag As String, id As String) As BANanoElement
-	id = id.tolowercase
-	Dim el As BANanoElement = BANano.GetElement($"#${parentID}"$).Append($"<${tag} id="${id}"></${tag}>"$).Get($"#${id}"$)
-	Return el
+Sub AddElement(parentID As String, tag As String, id As String, text As String) As BANanoElement
+	Return CreateElement(parentID, tag, id, text)
 End Sub
 
 'banano helper class
-Sub AddElement1(parentID As String, tag As String, id As String, props As Map, styles As Map, classes As String, text As String) As BANanoElement
+Sub AddElement1(parentID As String, tag As String, id As String, text As String, props As Map, styles As Map, classes As String) As BANanoElement
+	Return CreateElement1(parentID, tag, id, text, props, styles, classes)
+End Sub
+
+'banano helper class
+Sub CreateElement1(parentID As String, tag As String, id As String, text As String, props As Map, styles As Map, classes As String) As BANanoElement
 	id = id.tolowercase
+	parentID = parentID.ToLowerCase
+	parentID = parentID.Replace("#","")
 	Dim el As BANanoElement = BANano.GetElement($"#${parentID}"$).Append($"<${tag} id="${id}"></${tag}>"$).Get($"#${id}"$)
 	If BANano.IsNull(props) = False Then
 		For Each k As String In props.Keys
@@ -131,6 +138,8 @@ Sub AddElement1(parentID As String, tag As String, id As String, props As Map, s
 End Sub
 
 Sub SetAttributes(targetElement As String, props As Map)
+	targetElement = targetElement.ToLowerCase
+	targetElement = targetElement.Replace("#","")
 	Dim el As BANanoElement = BANano.GetElement($"#${targetElement}"$)
 	If BANano.IsNull(props) = False Or BANano.IsUndefined(props) = False Then
 		For Each k As String In props.Keys
@@ -141,6 +150,8 @@ Sub SetAttributes(targetElement As String, props As Map)
 End Sub
 
 Sub SetStyles(targetElement As String, styles As Map)
+	targetElement = targetElement.ToLowerCase
+	targetElement = targetElement.Replace("#","")
 	Dim el As BANanoElement = BANano.GetElement($"#${targetElement}"$)
 	If BANano.IsNull(styles) = False Or BANano.IsUndefined(styles) = False Then
 		Dim strStyle As String = BANano.ToJson(styles)
@@ -1542,7 +1553,9 @@ End Sub
 
 'update the background image for the page during runtime
 Sub SetBackgroundImage(elid As String, url As String)
-	BANano.GetElement(elid).SetStyle(BANano.ToJson(CreateMap("background-image": $"url('${url}')"$, "background-size": "100% 100%")))
+	elid = elid.ToLowerCase
+	elid = elid.Replace("#","")
+	BANano.GetElement($"#${elid}"$).SetStyle(BANano.ToJson(CreateMap("background-image": $"url('${url}')"$, "background-size": "100% 100%")))
 End Sub
 
 'set a property in a json string
@@ -1954,8 +1967,8 @@ End Sub
 
 'remove from list
 Sub RamoveFromList(listX As List, item As String)
-	Dim li As Int = listX.IndexOf(item)
-	If li >= 0 Then listX.RemoveAt(li)
+	Dim lix As Int = listX.IndexOf(item)
+	If lix >= 0 Then listX.RemoveAt(lix)
 End Sub
 '
 '''set the font family
@@ -2671,58 +2684,104 @@ private Sub NumberToWords100(N As Int) As String
 End Sub
 
 Sub CustomTag(parentID As String, elTag As String, elID As String) As BANanoElement
-	Dim el As BANanoElement  = AddElement(parentID, elTag, elID)
+	Dim el As BANanoElement  = AddElement(parentID, elTag, elID,"")
 	Return el
 End Sub
 
-Sub H1(parentID As String, elID As String) As BANanoElement
-	Dim el As BANanoElement  = AddElement(parentID, "h1", elID)
+'add an anchor
+Sub Anchor(parentID As String, elid As String, text As String, href As String, target As String) As BANanoElement
+	Dim opt As Map = CreateMap()
+	If href <> "" Then opt.put("href", href)
+	If target <> "" Then opt.put("target", target)
+	Dim el As BANanoElement = AddElement1(parentID, "a", elid, text, opt,Null,"")
 	Return el
 End Sub
 
-Sub H2(parentID As String, elID As String) As BANanoElement
-	Dim el As BANanoElement  = AddElement(parentID, "h2", elID)
+'add a mailto link
+Sub MailTo(parentID As String, elid As String, text As String, emailaddress As String) As BANanoElement
+	Dim opt As Map = CreateMap()
+	opt.put("href", $"mailto:${emailaddress}"$)
+	opt.put("target", "_target")
+	opt.Put("rel", "noopener")
+	Dim el As BANanoElement = AddElement1(parentID, "a", elid, text, opt,Null,"")
 	Return el
 End Sub
 
-Sub H3(parentID As String, elID As String) As BANanoElement
-	Dim el As BANanoElement  = AddElement(parentID, "h3", elID)
+'add a download link
+Sub Download(parentID As String, elid As String, text As String, href As String) As BANanoElement
+	Dim opt As Map = CreateMap()
+	opt.put("href", href)
+	opt.Put("download", text)
+	opt.Put("rel", "noopener")
+	Dim el As BANanoElement = AddElement1(parentID, "a", elid, text, opt,Null,"")
 	Return el
 End Sub
 
-Sub H4(parentID As String, elID As String) As BANanoElement
-	Dim el As BANanoElement  = AddElement(parentID, "h4", elID)
+
+Sub OL(parentID As String, elID As String) As BANanoElement
+	Dim el As BANanoElement  = AddElement(parentID, "ol", elID, "")
 	Return el
 End Sub
 
-Sub H5(parentID As String, elID As String) As BANanoElement
-	Dim el As BANanoElement  = AddElement(parentID, "h5", elID)
+Sub LI(parentID As String, elID As String, text As String) As BANanoElement
+	Dim el As BANanoElement  = AddElement(parentID, "li", elID, text)
 	Return el
 End Sub
 
-Sub H6(parentID As String, elID As String) As BANanoElement
-	Dim el As BANanoElement  = AddElement(parentID, "h6", elID)
+Sub UL(parentID As String, elID As String, text As String) As BANanoElement
+	Dim el As BANanoElement  = AddElement(parentID, "ul", elID, text)
 	Return el
 End Sub
 
-Sub P(parentID As String, elID As String) As BANanoElement
-	Dim el As BANanoElement  = AddElement(parentID, "p", elID)
+Sub H1(parentID As String, elID As String, text As String) As BANanoElement
+	Dim el As BANanoElement  = AddElement(parentID, "h1", elID, text)
 	Return el
 End Sub
 
-Sub SPAN(parentID As String, elID As String) As BANanoElement
-	Dim el As BANanoElement  = AddElement(parentID, "span", elID)
+Sub H2(parentID As String, elID As String, text As String) As BANanoElement
+	Dim el As BANanoElement  = AddElement(parentID, "h2", elID,text)
 	Return el
 End Sub
 
-Sub DIV(parentID As String, elID As String) As BANanoElement
-	Dim el As BANanoElement  = AddElement(parentID, "div", elID)
+Sub H3(parentID As String, elID As String,text As String) As BANanoElement
+	Dim el As BANanoElement  = AddElement(parentID, "h3", elID, text)
+	Return el
+End Sub
+
+Sub H4(parentID As String, elID As String,text As String) As BANanoElement
+	Dim el As BANanoElement  = AddElement(parentID, "h4", elID,text)
+	Return el
+End Sub
+
+Sub H5(parentID As String, elID As String,text As String) As BANanoElement
+	Dim el As BANanoElement  = AddElement(parentID, "h5", elID,text)
+	Return el
+End Sub
+
+Sub H6(parentID As String, elID As String,text As String) As BANanoElement
+	Dim el As BANanoElement  = AddElement(parentID, "h6", elID,text)
+	Return el
+End Sub
+
+Sub P(parentID As String, elID As String,text As String) As BANanoElement
+	Dim el As BANanoElement  = AddElement(parentID, "p", elID,text)
+	Return el
+End Sub
+
+Sub SPAN(parentID As String, elID As String, text As String) As BANanoElement
+	Dim el As BANanoElement  = AddElement(parentID, "span", elID,text)
+	Return el
+End Sub
+
+Sub DIV(parentID As String, elID As String,text As String) As BANanoElement
+	Dim el As BANanoElement  = AddElement(parentID, "div", elID,text)
 	Return el
 End Sub
 
 'get the html part of a bananoelement
 Sub BANanoGetHTML(id As String) As String
 	id = id.tolowercase
+	id = id.Replace("#","")
 	Dim be As BANanoElement
 	be.Initialize($"#${id}"$)
 	Dim xTemplate As String = be.GetHTML
@@ -2776,3 +2835,47 @@ Sub BuildPHPEmail(sfrom As String, sto As String, scc As String, ssubject As Str
 	Dim se As Map = CreateMap("from":sfrom, "to":sto, "cc":scc, "subject":ssubject, "msg":smsg)
 	Return se
 End Sub
+
+Sub AppendElement(parent As String, tag As String, id As String, text As String) As BANanoElement
+	parent = parent.ToLowerCase
+	parent = parent.Replace("#","")
+	Dim item As String = $"<${tag} id="${id}"></${tag}>"$
+	Dim el As BANanoElement = BANano.GetElement($"#${parent}"$).Append(item).Get($"#${id}"$)
+	el.SetText(text)
+	Return el
+End Sub
+
+'banano helper class
+Sub AppendElement1(parentID As String, tag As String, id As String, text As String, props As Map, styles As Map, classes As String) As BANanoElement
+	parentID = parentID.ToLowerCase
+	parentID = parentID.Replace("#","")
+	id = id.tolowercase
+	Dim el As BANanoElement = BANano.GetElement($"#${parentID}"$).Append($"<${tag} id="${id}"></${tag}>"$).Get($"#${id}"$)
+	If BANano.IsNull(props) = False Then
+		For Each k As String In props.Keys
+			Dim v As String = props.Get(k)
+			el.SetAttr(k, v)
+		Next
+	End If
+	'
+	If BANano.IsNull(styles) = False Then
+		Dim strStyle As String = BANano.ToJson(styles)
+		el.SetStyle(strStyle)
+	End If
+	'
+	If classes <> "" Then el.AddClass(classes)
+	el.SetHTML(BANano.SF(text))
+	Return el
+End Sub
+
+'get the html part of a bananoelement
+Sub BANanoGetHTMLAsIs(id As String) As String
+	id = id.tolowercase
+	id = id.Replace("#","")
+	Dim be As BANanoElement
+	be.Initialize($"#${id}"$)
+	Dim xTemplate As String = be.GetHTML
+	be.Empty
+	Return xTemplate
+End Sub
+

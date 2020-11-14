@@ -14,6 +14,7 @@ Sub Process_Globals
 	Private valertcontainer As VueElement
 	Private valert1 As VueElement
 	Private valert As VueElement
+	Private valert2 As VueElement
 End Sub
 
 
@@ -34,6 +35,9 @@ Sub Initialize
 '	
 	valertcontainer.Matrix(1, 2).LoadLayout("valert1")
 	alert.BindVueElement(valert1)
+	'
+	valertcontainer.Matrix(2, 1).LoadLayout("valert2")
+	alert.BindVueElement(valert2)
 	
 	alert.AppendPlaceHolder
 	vuetify.AddRoute(alert)
