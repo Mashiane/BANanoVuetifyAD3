@@ -36,7 +36,7 @@ Version=7
 #DesignerProperty: Key: Fluid, DisplayName: Fluid, FieldType: Boolean, DefaultValue: False, Description: Fluid
 #DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: , Description: Value on the element
 #DesignerProperty: Key: Label, DisplayName: Label, FieldType: String, DefaultValue: , Description: Label of the element
-#DesignerProperty: Key: Src, DisplayName: Src, FieldType: String, DefaultValue: False , Description: Src
+#DesignerProperty: Key: Src, DisplayName: Src, FieldType: String, DefaultValue: , Description: Src
 #DesignerProperty: Key: Height, DisplayName: Height, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: MaxHeight, DisplayName: MaxHeight, FieldType: String, DefaultValue:  , Description:
 #DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue:  , Description: 
@@ -80,7 +80,7 @@ Version=7
 #DesignerProperty: Key: VBindStyle, DisplayName: VBindStyle, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Rules, DisplayName: Rules, FieldType: String, DefaultValue:  , Description: Rules
 #DesignerProperty: Key: States, DisplayName: States, FieldType: String, DefaultValue: , Description: Initial Binding States. Must be a json String.
-#DesignerProperty: Key: InputType, DisplayName: Type, FieldType: String, DefaultValue: none, Description: Input type, List: text|email|password|file|tel|url|number|search|none|success|info|warning|error
+#DesignerProperty: Key: InputType, DisplayName: Type, FieldType: String, DefaultValue: , Description: Input type, List: text|email|password|file|tel|url|number|search|none|success|info|warning|error
 #DesignerProperty: Key: PrependIcon, DisplayName: PrependIcon, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: AppendIcon, DisplayName: AppendIcon, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Placeholder, DisplayName: Placeholder, FieldType: String, DefaultValue:  , Description: 
@@ -159,7 +159,7 @@ Private stKey As String = ""
 Private stRef As String = ""
 Private stSlot As String = ""
 Private stVBindClass As String = ""
-	private stVBind as string = ""
+	Private stVBind As String = ""
 Private stVBindStyle As String = ""
 Private stVElse As String = ""
 Private stVElseIf As String = ""
@@ -193,7 +193,7 @@ Private stLabel As String = ""
 Private stWidth As String = ""
 Private bLoremIpsum As Boolean = False
 	Private bDark As Boolean = False
-	Private stInputType As String = "none"
+	Private stInputType As String = ""
 	Private stHref As String = ""
 	Private stSlotActivator As String = ""
 	Private bHiddenMDAndUp As Boolean = False

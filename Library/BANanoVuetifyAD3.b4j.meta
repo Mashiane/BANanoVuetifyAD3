@@ -13,6 +13,6 @@ ModuleClosedNodes1=
 ModuleClosedNodes2=
 ModuleClosedNodes3=
 ModuleClosedNodes4=
-NavigationStack=VueElement,getSlot,1097,0,VueElement,getVBindClass,1107,0,VueElement,ToString,668,0,VueElement,SetVBindAttribute,670,0,VueElement,BindDynamicComponent,883,0,VueElement,SetVBindIs,889,0,VueElement,setVBindClass,1098,0,VueElement,setVBind,1109,0,Main,Process_Globals,9,0,VueElement,getVBind,1112,0
+NavigationStack=VueElement,ToString,668,0,VueElement,SetVBindAttribute,670,0,VueElement,BindDynamicComponent,883,0,VueElement,SetVBindIs,889,0,VueElement,setVBindClass,1098,0,VueElement,getVBind,1112,0,VueElement,setVBind,1108,0,VueElement,Class_Globals,189,0,VueElement,AddAttr,909,0,Main,Process_Globals,10,0
 SelectedBuild=0
 VisibleModules=3
