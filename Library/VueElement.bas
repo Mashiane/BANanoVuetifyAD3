@@ -32,10 +32,11 @@ Version=7
 #DesignerProperty: Key: FillHeight, DisplayName: FillHeight, FieldType: Boolean, DefaultValue: False, Description: FillHeight
 #DesignerProperty: Key: JustifyCenter, DisplayName: JustifyCenter, FieldType: Boolean, DefaultValue: False, Description: JustifyCenter
 #DesignerProperty: Key: AlignCenter, DisplayName: AlignCenter, FieldType: Boolean, DefaultValue: False, Description: AlignCenter
-#DesignerProperty: Key: TextAlign, DisplayName: TextAlign, FieldType: String, DefaultValue:  , Description: , List: left|center|right|justify
+#DesignerProperty: Key: TextAlign, DisplayName: TextAlign, FieldType: String, DefaultValue:  , Description: , List: left|center|right|justify|none
 #DesignerProperty: Key: Fluid, DisplayName: Fluid, FieldType: Boolean, DefaultValue: False, Description: Fluid
 #DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: , Description: Value on the element
 #DesignerProperty: Key: Label, DisplayName: Label, FieldType: String, DefaultValue: , Description: Label of the element
+#DesignerProperty: Key: Src, DisplayName: Src, FieldType: String, DefaultValue: False , Description: Src
 #DesignerProperty: Key: Height, DisplayName: Height, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: MaxHeight, DisplayName: MaxHeight, FieldType: String, DefaultValue:  , Description:
 #DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue:  , Description: 
@@ -46,6 +47,7 @@ Version=7
 #DesignerProperty: Key: StyleMaxWidth, DisplayName: Style MaxWidth, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String.
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
+#DesignerProperty: Key: ActiveClass, DisplayName: ActiveClass, FieldType: String, DefaultValue: , Description: ActiveClass.
 #DesignerProperty: Key: Style, DisplayName: Style, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String.
 #DesignerProperty: Key: CoverImage, DisplayName: CoverImage, FieldType: String, DefaultValue:  , Description: CoverImage
 #DesignerProperty: Key: FitScreen, DisplayName: FitScreen VH, FieldType: Boolean, DefaultValue: False, Description: FitScreen VH
@@ -65,14 +67,19 @@ Version=7
 #DesignerProperty: Key: Href, DisplayName: Href, FieldType: String, DefaultValue: , Description: Href
 #DesignerProperty: Key: VText, DisplayName: VText, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VHtml, DisplayName: VHtml, FieldType: String, DefaultValue:  , Description: 
+#DesignerProperty: Key: VOn, DisplayName: VOn, FieldType: String, DefaultValue:  , Description: 
+#DesignerProperty: Key: Slot, DisplayName: Slot, FieldType: String, DefaultValue:  , Description: 
+#DesignerProperty: Key: VSlotActivator, DisplayName: VSlotActivator, FieldType: String, DefaultValue: , Description: Slot activator
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VElse, DisplayName: VElse, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VElseIf, DisplayName: VElseIf, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue:  , Description: 
+#DesignerProperty: Key: VBind, DisplayName: VBind, FieldType: String, DefaultValue:  , Description: 
+#DesignerProperty: Key: VBindClass, DisplayName: VBindClass, FieldType: String, DefaultValue:  , Description: 
+#DesignerProperty: Key: VBindStyle, DisplayName: VBindStyle, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Rules, DisplayName: Rules, FieldType: String, DefaultValue:  , Description: Rules
 #DesignerProperty: Key: States, DisplayName: States, FieldType: String, DefaultValue: , Description: Initial Binding States. Must be a json String.
-#DesignerProperty: Key: SlotActivator, DisplayName: SlotActivator, FieldType: String, DefaultValue: , Description: Slot activator
 #DesignerProperty: Key: InputType, DisplayName: Type, FieldType: String, DefaultValue: none, Description: Input type, List: text|email|password|file|tel|url|number|search|none|success|info|warning|error
 #DesignerProperty: Key: PrependIcon, DisplayName: PrependIcon, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: AppendIcon, DisplayName: AppendIcon, FieldType: String, DefaultValue:  , Description: 
@@ -93,12 +100,8 @@ Version=7
 #DesignerProperty: Key: Shaped, DisplayName: Shaped, FieldType: Boolean, DefaultValue: False , Description: 
 #DesignerProperty: Key: SingleLine, DisplayName: SingleLine, FieldType: Boolean, DefaultValue: False , Description: 
 #DesignerProperty: Key: Solo, DisplayName: Solo, FieldType: Boolean, DefaultValue: False , Description: 
-#DesignerProperty: Key: VBindClass, DisplayName: VBindClass, FieldType: String, DefaultValue:  , Description: 
-#DesignerProperty: Key: VBindStyle, DisplayName: VBindStyle, FieldType: String, DefaultValue:  , Description: 
-#DesignerProperty: Key: Slot, DisplayName: Slot, FieldType: String, DefaultValue:  , Description: 
-#DesignerProperty: Key: BackgroundColor, DisplayName: BackgroundColor, FieldType: String, DefaultValue:  , Description: , List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: BackgroundImage, DisplayName: BackgroundImage, FieldType: String, DefaultValue:  , Description: 
-#DesignerProperty: Key: BackgroundRepeat, DisplayName: BackgroundRepeat, FieldType: String, DefaultValue:  , Description: , List: repeat|repeat-x|repeat-y|no-repeat|initial|inherit
+#DesignerProperty: Key: BackgroundRepeat, DisplayName: BackgroundRepeat, FieldType: String, DefaultValue:  , Description: , List: repeat|repeat-x|repeat-y|no-repeat|initial|inherit|none
 #DesignerProperty: Key: Border, DisplayName: Border, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: BorderColor, DisplayName: BorderColor, FieldType: String, DefaultValue:  , Description: , List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: BorderRadius, DisplayName: BorderRadius, FieldType: String, DefaultValue:  , Description: 
@@ -106,8 +109,8 @@ Version=7
 #DesignerProperty: Key: BorderWidth, DisplayName: BorderWidth, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: FontFamily, DisplayName: FontFamily, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: FontSize, DisplayName: FontSize, FieldType: String, DefaultValue:  , Description: 
-#DesignerProperty: Key: FontStyle, DisplayName: FontStyle, FieldType: String, DefaultValue:  , Description: , List: normal|italic|oblique|initial|inherit
-#DesignerProperty: Key: FontWeight, DisplayName: FontWeight, FieldType: String, DefaultValue:  , Description: , List: normal|bold|bolder|lighter|initial|inherit
+#DesignerProperty: Key: FontStyle, DisplayName: FontStyle, FieldType: String, DefaultValue:  , Description: , List: normal|italic|oblique|initial|inherit|none
+#DesignerProperty: Key: FontWeight, DisplayName: FontWeight, FieldType: String, DefaultValue:  , Description: , List: normal|bold|bolder|lighter|initial|inherit|none
 #DesignerProperty: Key: TextDecoration, DisplayName: TextDecoration, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: OnClick, DisplayName: OnClick, FieldType: String, DefaultValue: , Description: Event arguments to be passed to the attribute.
 #DesignerProperty: Key: OnClickStop, DisplayName: OnClickStop, FieldType: String, DefaultValue: , Description: Event arguments to be passed to the attribute.
@@ -129,6 +132,7 @@ Private mCallBack As Object 'ignore
 Private mTarget As BANanoElement 'ignore
 Private mElement As BANanoElement 'ignore
 Private mClasses As String = ""
+	Private stActiveClass As String = ""
 Private mStyle As String = ""
 Private mAttributes As String = ""
 Private mCaption As String = ""
@@ -155,6 +159,7 @@ Private stKey As String = ""
 Private stRef As String = ""
 Private stSlot As String = ""
 Private stVBindClass As String = ""
+	private stVBind as string = ""
 Private stVBindStyle As String = ""
 Private stVElse As String = ""
 Private stVElseIf As String = ""
@@ -233,6 +238,8 @@ Private bLoremIpsum As Boolean = False
 	Private stStyleWidth As String = ""
 	Private stStyleMaxHeight As String = ""
 	Private stStyleMaxWidth As String = ""
+	Private stSrc As String = ""
+	Private stVOn As String = ""
 	'
 	Type GridRow(Rows As Int, Columns As List, _
 	mt As String, mb As String, mr As String, ml As String, _
@@ -325,6 +332,7 @@ If Props <> Null Then
 bLoremIpsum = Props.Get("LoremIpsum")
 		bDark = Props.Get("Dark")
 mClasses = Props.Get("Classes")
+		stActiveClass = Props.Get("ActiveClass")
 mAttributes = Props.Get("Attributes")
 mStyle = Props.Get("Style")
 mTagName = Props.Get("TagName")
@@ -345,6 +353,7 @@ stKey = Props.Get("Key")
 stRef = Props.Get("Ref")
 stSlot = Props.Get("Slot")
 stVBindClass = Props.Get("VBindClass")
+		stVBind = Props.Get("VBind")
 stVBindStyle = Props.Get("VBindStyle")
 stVElse = Props.Get("VElse")
 stVElseIf = Props.Get("VElseIf")
@@ -378,7 +387,7 @@ stLabel = Props.Get("Label")
 stWidth = Props.Get("Width")
 stInputType = Props.Get("InputType")
 stHref = Props.Get("Href")
-stSlotActivator = Props.get("SlotActivator")
+stSlotActivator = Props.get("VSlotActivator")
 		bHiddenMDAndUp = Props.Get("HiddenMDAndUp")
 		stTo = Props.get("To")
 		bHiddenSMAndDown = Props.Get("HiddenSMAndDown")
@@ -421,8 +430,12 @@ stSlotActivator = Props.get("SlotActivator")
 		stStyleWidth = Props.get("StyleWidth")
 		stStyleMaxHeight = Props.get("StyleMaxHeight")
 		stStyleMaxWidth = Props.get("StyleMaxWidth")
+		stSrc = Props.get("Src")
+		stVOn = Props.Get("VOn")
 End If
-
+	
+	AddAttr("v-on", stVOn)
+	AddAttr("src", stSrc)
 	AddAttr("fluid", bFluid)
 	AddAttr("rules", stRules)
 AddAttr("to", stTo)
@@ -432,6 +445,7 @@ AddAttr("href", stHref)
 AddAttr("key", stKey)
 AddAttr("ref", stRef)
 AddAttr("slot", stSlot)
+	AddAttr("v-bind", stVBind)
 AddAttr("v-bind:class", stVBindClass)
 AddAttr("v-bind:style", stVBindStyle)
 AddAttr("value", stValue)
@@ -510,6 +524,7 @@ AddStyle("text-decoration", stTextDecoration)
 	AddAttrOnCondition("shaped", boShaped, True)
 	AddAttrOnCondition("single-line", boSingleLine, True)
 	AddAttrOnCondition("solo", boSolo, True)
+	AddAttr("active-class", stActiveClass)
 	'
 	AddClass(mClasses)
 	setAttributes(mAttributes)
@@ -659,7 +674,7 @@ Sub ToString As String
 End Sub
 
 'bind an attribute
-Sub SetVBind(prop As String, value As String)
+Sub SetVBindAttribute(prop As String, value As String)
 prop = prop.ToLowerCase
 value = value.ToLowerCase
 prop = $"v-bind:${prop}"$
@@ -1029,6 +1044,26 @@ public Sub getKey() As String
 Return stKey
 End Sub
 
+
+public Sub setSrc(varSrc As String)
+AddAttr("src", varSrc)
+stSrc = varSrc
+End Sub
+
+public Sub getSrc() As String
+Return stSrc
+End Sub
+
+public Sub setVOn(varVOn As String)
+AddAttr("v-on", varVOn)
+stVOn = varVOn
+End Sub
+
+public Sub getVOn() As String
+Return stVOn
+End Sub
+
+
 public Sub setSlotActivator(varSlotActivator As String)
 	AddAttr("v-slot:activator", varSlotActivator)
 	stSlotActivator = varSlotActivator
@@ -1075,6 +1110,16 @@ End Sub
 public Sub getVBindClass() As String
 Return stVBindClass
 End Sub
+
+public Sub setVBind(varVBind As String)
+AddAttr("v-bind", varVBind)
+stVBind = varVBind
+End Sub
+
+public Sub getVBind() As String
+Return stVBind
+End Sub
+
 
 public Sub setVBindStyle(varVBindStyle As String)
 AddAttr("v-bind:style", varVBindStyle)
@@ -1847,8 +1892,21 @@ End Sub
 
 'get readonly
 public Sub getReadonly() As String
-Return stReadonly
+	Return stReadonly
 End Sub
+
+'set active class
+public Sub setActiveClass(varActiveClass As String)
+	AddAttr("active-class", varActiveClass)
+	stActiveClass = varActiveClass
+End Sub
+
+'get active class
+public Sub getActiveClass() As String
+	Return stActiveClass
+End Sub
+
+
 
 'set rounded
 public Sub setRounded(varRounded As Boolean)

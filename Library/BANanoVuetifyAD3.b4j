@@ -44,7 +44,7 @@ Version=8.5
 
 Sub Process_Globals
 	Private BANano As BANano 'ignore
-	Public Version As String = "2.15"
+	Public Version As String = "2.17"
 	Public AppName As String = "BANanoVuetifyAD3"
 End Sub
 
@@ -53,7 +53,7 @@ Sub AppStart (Form1 As Form, Args() As String)
 	' you can change some output params here
 	BANano.Initialize("BANano", AppName,DateTime.now)
 	BANano.Header.AddCSSFile("https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900")
-	BANano.Header.AddCSSFile("https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css")
+	BANano.Header.AddCSSFile("https://cdn.jsdelivr.net/npm/@mdi/font@latest/css/materialdesignicons.min.css")
 	BANano.Header.AddCSSFile("https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css")
 	BANano.Header.AddJavascriptFile("https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.min.js")
 	BANano.Header.AddJavascriptFile("https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.js")
