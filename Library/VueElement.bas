@@ -32,6 +32,8 @@ Version=7
 #DesignerProperty: Key: FillHeight, DisplayName: FillHeight, FieldType: Boolean, DefaultValue: False, Description: FillHeight
 #DesignerProperty: Key: JustifyCenter, DisplayName: JustifyCenter, FieldType: Boolean, DefaultValue: False, Description: JustifyCenter
 #DesignerProperty: Key: AlignCenter, DisplayName: AlignCenter, FieldType: Boolean, DefaultValue: False, Description: AlignCenter
+#DesignerProperty: Key: Justify, DisplayName: Justify, FieldType: String, DefaultValue: False, Description: Justify, List: start|center|end|space-around|space-between|none
+#DesignerProperty: Key: Align, DisplayName: Align, FieldType: String, DefaultValue: False, Description: Align, List: start|center|end|baseline|stretch|none
 #DesignerProperty: Key: TextAlign, DisplayName: TextAlign, FieldType: String, DefaultValue:  , Description: , List: left|center|right|justify|none
 #DesignerProperty: Key: Fluid, DisplayName: Fluid, FieldType: Boolean, DefaultValue: False, Description: Fluid
 #DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: , Description: Value on the element
@@ -204,6 +206,8 @@ Private bLoremIpsum As Boolean = False
 	Private bFullScreen As Boolean = False
 	Private bAlignCenter As Boolean = False
 	Private bFillHeight As Boolean = False
+	Private stJustify As String = ""
+	Private stAlign As String = ""
 	Private stRules As String = ""
 	Private stCoverImage As String = ""
 	Private stAppendIcon As String = ""
@@ -394,6 +398,8 @@ stSlotActivator = Props.get("VSlotActivator")
 		bJustifyCenter = Props.Get("JustifyCenter")
 		bFitScreen = Props.Get("FitScreen")
 		bFullScreen = Props.Get("FullScreen")
+		stJustify = Props.get("Justify")
+		stAlign = Props.get("Align")
 		bAlignCenter = Props.Get("AlignCenter")
 		bFillHeight = Props.Get("FillHeight")
 		stRules = Props.Get("Rules")
@@ -491,7 +497,10 @@ AddStyle("text-decoration", stTextDecoration)
 	AddAttrOnCondition("justify-center", bJustifyCenter, True)
 	AddAttrOnCondition("align-center", bAlignCenter, True)
 	AddClassOnCondition("fill-height", bFillHeight, True)
-	
+	'
+	AddAttr("align", stAlign)
+	AddAttr("justify", stJustify)
+	'
 	setCoverImage(stCoverImage)
 	setFitScreen(bFitScreen)
 	setPaddingAXYTBLR(stPaddingAXYTBLR)
@@ -1947,7 +1956,25 @@ End Sub
 
 'get single-line
 public Sub getSingleLine() As Boolean
-Return boSingleLine
+	Return boSingleLine
+End Sub
+
+public Sub setAlign(varAlign As String)
+	AddAttr("align", varAlign)
+	stAlign = varAlign
+End Sub
+
+public Sub getAlign() As Boolean
+	Return stAlign
+End Sub
+
+public Sub setJustify(varJustify As String)
+	AddAttr("justify", varJustify)
+	stJustify = varJustify
+End Sub
+
+public Sub getJustify() As Boolean
+	Return stJustify
 End Sub
 
 'set solo
