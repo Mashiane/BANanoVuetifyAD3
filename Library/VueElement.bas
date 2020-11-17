@@ -2011,13 +2011,13 @@ Sub BuildGrid
 	End If
 End Sub
 
-private Sub BuildRowClass(row As GridRow) As String
+private Sub BuildRowClass(xrow As GridRow) As String
 	Dim sb As StringBuilder
 	sb.Initialize
 	'add the margins
-	sb.Append(BuildMargins(row.mt, row.mb, row.ml, row.mr))
+	sb.Append(BuildMargins(xrow.mt, xrow.mb, xrow.ml, xrow.mr))
 	'add the padding
-	sb.Append(BuildPadding(row.pt, row.pb, row.pl, row.pr))
+	sb.Append(BuildPadding(xrow.pt, xrow.pb, xrow.pl, xrow.pr))
 	Return sb.tostring.trim
 End Sub
 
@@ -2079,9 +2079,18 @@ private Sub BuildOffsets(col As GridColumn) As String
 	Return sout
 End Sub
 
+'get a row
+Sub Row(RowPos As Int) As BANanoElement
+	Dim rcKey As String = $"${mName}R${RowPos}"$
+	rcKey = rcKey.tolowercase
+	Dim el As BANanoElement
+	el.Initialize($"#${rcKey}"$)
+	Return el
+End Sub
+
 'return element at row and column position
-Sub Matrix(row As Int, column As Int) As BANanoElement
-	Dim rcKey As String = $"${mName}R${row}C${column}"$
+Sub Matrix(xRow As Int, column As Int) As BANanoElement
+	Dim rcKey As String = $"${mName}R${xRow}C${column}"$
 	rcKey = rcKey.tolowercase
 	Dim el As BANanoElement
 	el.Initialize($"#${rcKey}"$)
@@ -2089,14 +2098,14 @@ Sub Matrix(row As Int, column As Int) As BANanoElement
 End Sub
 
 'return the matrix name
-Sub MatrixID(row As Int, col As Int) As String
-	Return Matrix(row, col).name
+Sub MatrixID(xRow As Int, col As Int) As String
+	Return Matrix(xRow, col).name
 End Sub
 
 'build a single row
-private Sub BuildRow(row As GridRow) As String
+private Sub BuildRow(xRow As GridRow) As String
 	'how many rows do we have to render
-	Dim rowTot As Int = row.Rows
+	Dim rowTot As Int = xRow.Rows
 	Dim rowCnt As Int
 	Dim sb As StringBuilder
 	sb.Initialize
@@ -2105,9 +2114,9 @@ private Sub BuildRow(row As GridRow) As String
 		LastRow = LastRow + 1
 		Dim rowKey As String = $"${mName}R${LastRow}"$
 		rowKey = rowKey.tolowercase
-		sb.Append($"<v-row class="${BuildRowClass(row)}" id="${rowKey}">"$)
+		sb.Append($"<v-row class="${BuildRowClass(xRow)}" id="${rowKey}">"$)
 		'get the columns to add
-		Dim cols As List = row.Columns
+		Dim cols As List = xRow.Columns
 		'how many columns to add here
 		Dim colCnt As Int = 0
 		Dim colTot As Int = cols.Size - 1
