@@ -32,8 +32,8 @@ Version=7
 #DesignerProperty: Key: FillHeight, DisplayName: FillHeight, FieldType: Boolean, DefaultValue: False, Description: FillHeight
 #DesignerProperty: Key: JustifyCenter, DisplayName: JustifyCenter, FieldType: Boolean, DefaultValue: False, Description: JustifyCenter
 #DesignerProperty: Key: AlignCenter, DisplayName: AlignCenter, FieldType: Boolean, DefaultValue: False, Description: AlignCenter
-#DesignerProperty: Key: Justify, DisplayName: Justify, FieldType: String, DefaultValue: False, Description: Justify, List: start|center|end|space-around|space-between|none
-#DesignerProperty: Key: Align, DisplayName: Align, FieldType: String, DefaultValue: False, Description: Align, List: start|center|end|baseline|stretch|none
+#DesignerProperty: Key: Justify, DisplayName: Justify, FieldType: String, DefaultValue: , Description: Justify, List: start|center|end|space-around|space-between|none
+#DesignerProperty: Key: Align, DisplayName: Align, FieldType: String, DefaultValue: , Description: Align, List: start|center|end|baseline|stretch|none
 #DesignerProperty: Key: TextAlign, DisplayName: TextAlign, FieldType: String, DefaultValue:  , Description: , List: left|center|right|justify|none
 #DesignerProperty: Key: Fluid, DisplayName: Fluid, FieldType: Boolean, DefaultValue: False, Description: Fluid
 #DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: , Description: Value on the element
@@ -923,7 +923,9 @@ Public Sub AddAttr(varProp As String, varValue As String)
 	If BANano.IsUndefined(varValue) Or BANano.IsNull(varValue) Then Return 
 	If BANano.IsNumber(varValue) Then varValue = BANanoShared.CStr(varValue)
 	If varValue = "none" Then varValue = ""
-	If varValue = "" Then Return 
+	If varValue = "" Then Return
+	If varProp = "align" And varValue.EqualsIgnoreCase("false") Then Return
+	If varProp = "justify" And varValue.EqualsIgnoreCase("false") Then Return	 
 	'we are adding a boolean 
 	If BANano.IsBoolean(varValue) Then 
 		If varValue = True Then  

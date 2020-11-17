@@ -10,11 +10,11 @@ Sub Class_Globals
 	Public mName As String 'ignore
 	Private mCallBack As Object 'ignore
 	'
-	Private jsString As BANanoObject
-	Private jsNumber As BANanoObject
-	Private jsBoolean As BANanoObject
-	Private jsArray As BANanoObject
-	Private jsObject As BANanoObject
+	Public jsString As BANanoObject
+	Public jsNumber As BANanoObject
+	Public jsBoolean As BANanoObject
+	Public jsArray As BANanoObject
+	Public jsObject As BANanoObject
 	Private refs As BANanoObject
 	'
 	Private data As Map
@@ -227,12 +227,11 @@ Sub SetActivated(module As Object, methodName As String, args As List) As VueCom
 	Return Me
 End Sub
 
-
-
-Sub AddProperty1(propName As String, propType As BANanoObject, propDefault As String)
+Sub AddProperty1(propName As String, propType As BANanoObject, propDefault As Object, propRequired As Boolean)
 	Dim mprop As Map = CreateMap()
-	mprop.Put("type", propType)
-	mprop.Put("default", propDefault)
+	If BANano.IsNull(propType) = False Then mprop.Put("type", propType)
+	If BANano.IsNull(propDefault) = False Then mprop.Put("default", propDefault)
+	If BANano.IsNull(propRequired) = False Then mprop.Put("required", propRequired)
 	mprops.Put(propName, mprop)
 End Sub
 
@@ -310,7 +309,7 @@ Sub AddProperty(propName As String)
 End Sub
 
 'add a property to the component
-Sub AddProps(propsList As List)
+Sub AddProperties(propsList As List)
 	For Each k As String In propsList
 		AddProperty(k)
 	Next
