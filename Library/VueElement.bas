@@ -20,6 +20,11 @@ Version=7
 #Event: ClickAlt (e As BANanoEvent)
 #Event: ClickShift (e As BANanoEvent)
 #Event: ClickPrevent (e As BANanoEvent)
+#Event: ClickAppend (e As BANanoEvent)
+#Event: ClickAppendOuter (e As BANanoEvent)
+#Event: ClickPrepend (e As BANanoEvent)
+#Event: ClickPrependInner (e As BANanoEvent)
+#Event: ClickClear (e As BANanoEvent)
 
 #DesignerProperty: Key: AutoID, DisplayName: Auto ID/Name, FieldType: Boolean, DefaultValue: False, Description: Overrides the ID/Name with a random string.
 #DesignerProperty: Key: Ref, DisplayName: Ref, FieldType: String, DefaultValue:  , Description: 
@@ -86,9 +91,12 @@ Version=7
 #DesignerProperty: Key: States, DisplayName: States, FieldType: String, DefaultValue: , Description: Initial Binding States. Must be a json String.
 #DesignerProperty: Key: InputType, DisplayName: Type, FieldType: String, DefaultValue: , Description: Input type, List: text|email|password|file|tel|url|number|search|none|success|info|warning|error
 #DesignerProperty: Key: PrependIcon, DisplayName: PrependIcon, FieldType: String, DefaultValue:  , Description: 
+#DesignerProperty: Key: PrependInnerIcon, DisplayName: PrependInnerIcon, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: AppendIcon, DisplayName: AppendIcon, FieldType: String, DefaultValue:  , Description: 
+#DesignerProperty: Key: AppendOuterIcon, DisplayName: AppendOuterIcon, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Placeholder, DisplayName: Placeholder, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Hint, DisplayName: Hint, FieldType: String, DefaultValue:  , Description: 
+#DesignerProperty: Key: PersistentHint, DisplayName: PersistentHint, FieldType: Boolean, DefaultValue: False , Description: 
 #DesignerProperty: Key: Autofocus, DisplayName: Autofocus, FieldType: Boolean, DefaultValue: False , Description: 
 #DesignerProperty: Key: Clearable, DisplayName: Clearable, FieldType: Boolean, DefaultValue: False , Description: 
 #DesignerProperty: Key: Counter, DisplayName: Counter, FieldType: String, DefaultValue:  , Description: 
@@ -98,7 +106,6 @@ Version=7
 #DesignerProperty: Key: Flat, DisplayName: Flat, FieldType: Boolean, DefaultValue: False , Description: 
 #DesignerProperty: Key: HideDetails, DisplayName: HideDetails, FieldType: Boolean, DefaultValue: False , Description: 
 #DesignerProperty: Key: Outlined, DisplayName: Outlined, FieldType: Boolean, DefaultValue: False , Description: 
-#DesignerProperty: Key: PersistentHint, DisplayName: PersistentHint, FieldType: Boolean, DefaultValue: False , Description: 
 #DesignerProperty: Key: Readonly, DisplayName: Readonly, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Required, DisplayName: Required, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Rounded, DisplayName: Rounded, FieldType: Boolean, DefaultValue: False , Description: 
@@ -162,7 +169,7 @@ Private eOnKeyUp As String = ""
 Private eOnMouseOut As String = ""
 Private stKey As String = ""
 Private stRef As String = ""
-	private bAutoID as boolean = false
+	Private bAutoID As Boolean = False
 Private stSlot As String = ""
 Private stVBindClass As String = ""
 	Private stVBind As String = ""
@@ -215,6 +222,7 @@ Private bLoremIpsum As Boolean = False
 	Private stRules As String = ""
 	Private stCoverImage As String = ""
 	Private stAppendIcon As String = ""
+	Private stAppendOuterIcon As String = ""
 	Private boAutofocus As Boolean = False
 	Private boClearable As Boolean = False
 	Private stCounter As String = ""
@@ -228,6 +236,7 @@ Private bLoremIpsum As Boolean = False
 	Private boPersistentHint As Boolean = False
 	Private stPlaceholder As String = ""
 	Private stPrependIcon As String = ""
+	Private stPrependInnerIcon As String = ""
 	Private stReadonly As String = ""
 	Private stRequired As String = ""
 	Private boRounded As Boolean = False
@@ -412,6 +421,7 @@ stSlotActivator = Props.get("VSlotActivator")
 		stRules = Props.Get("Rules")
 		stCoverImage = Props.Get("CoverImage")
 		stAppendIcon = Props.Get("AppendIcon")
+		stAppendOuterIcon = Props.Get("AppendOuterIcon")
 		boAutofocus = Props.Get("Autofocus")
 		boClearable = Props.Get("Clearable")
 		stCounter = Props.Get("Counter")
@@ -425,6 +435,7 @@ stSlotActivator = Props.get("VSlotActivator")
 		boPersistentHint = Props.Get("PersistentHint")
 		stPlaceholder = Props.Get("Placeholder")
 		stPrependIcon = Props.Get("PrependIcon")
+		stPrependInnerIcon = Props.Get("PrependInnerIcon")
 		stReadonly = Props.Get("Readonly")
 		stRequired = Props.Get("Required")
 		boRounded = Props.Get("Rounded")
@@ -525,6 +536,7 @@ AddStyle("text-decoration", stTextDecoration)
 	setFullScreen(bFullScreen)
 	'
 	AddAttr("append-icon", stAppendIcon)
+	AddAttr("append-outer-icon", stAppendOuterIcon)
 	AddAttrOnCondition("autofocus", boAutofocus, True)
 	AddAttrOnCondition("clearable", boClearable, True)
 	AddAttr("counter", stCounter)
@@ -538,6 +550,7 @@ AddStyle("text-decoration", stTextDecoration)
 	AddAttrOnCondition("persistent-hint", boPersistentHint, True)
 	AddAttr("placeholder", stPlaceholder)
 	AddAttr("prepend-icon", stPrependIcon)
+	AddAttr("prepend-inner-icon", stPrependInnerIcon)
 	AddAttr("readonly", stReadonly)
 	AddAttr("required", stRequired)
 	AddAttrOnCondition("rounded", boRounded, True)
@@ -563,7 +576,12 @@ SetEvent("KeyPress", "KeyPress", eOnKeyPress)
 SetEvent("ClickAlt", "Click.Alt", eOnClickAlt)
 SetEvent("ClickShift", "Click.Shift", eOnClickShift)
 SetEvent("ClickPrevent", "Click.Prevent", eOnClickPrevent)
-'
+SetEvent("ClickAppend", "click:append", "")
+SetEvent("ClickAppendOuter", "click:append-outer", "")
+SetEvent("ClickPrepend", "click:prepend", "")
+SetEvent("ClickClear", "click:clear", "")
+	SetEvent("ClickPrependInner", "click:prepend-inner","")
+
 'build and get the element
 Dim strHTML As String = ToString
 	mElement = mTarget.Append(strHTML).Get("#" & mName)
@@ -691,6 +709,15 @@ Sub ToString As String
 	stext = stext.Replace("v-template", "template")
 	Dim rslt As String = $"<${mTagName} id="${mName}" ${iStructure}>${mCaption}${stext}</${mTagName}>"$
 	Return rslt
+End Sub
+
+'return html of the element
+Sub getHTML As String
+	If mElement <> Null Then
+		Return mElement.GetHTML
+	Else
+		Return ""
+	End If
 End Sub
 
 'bind an attribute
@@ -1561,7 +1588,7 @@ private Sub SetEvent(eventName As String, attrName As String, eventValue As Stri
 	Dim sCode As String = $"${sName}(${eventValue})"$
 	AddAttr($"v-on:${attrName}"$, sCode)
 	'arguments for the event
-	Dim e As Object 'ignore
+	Dim e As BANanoEvent 'ignore
 	Dim cb As BANanoObject = BANano.CallBack(mCallBack, sName, Array(e))
 	methods.Put(sName, cb)
 End Sub
@@ -1582,7 +1609,7 @@ Sub OnMulti(EventHandler As String, eventName As String, args As String)    'ign
 	Dim sCode As String = $"${sName}(${args})"$
 	AddAttr($"v-on:${eventName}"$, sCode)
 	'arguments for the event
-	Dim e As Object 'ignore
+	Dim e As BANanoEvent 'ignore
 	Dim cb As BANanoObject = BANano.CallBack(mCallBack, sName, Array(e))
 	methods.Put(sName, cb)
 End Sub
@@ -1602,7 +1629,7 @@ Sub On(eventName As String, args As String)    'ignoredeadcode
 	Dim sCode As String = $"${sName}(${args})"$
 	AddAttr($"v-on:${eventName}"$, sCode)
 	'arguments for the event
-	Dim e As Object 'ignore
+	Dim e As BANanoEvent 'ignore
 	Dim cb As BANanoObject = BANano.CallBack(mCallBack, sName, Array(e))
 	methods.Put(sName, cb)
 End Sub
@@ -1769,8 +1796,20 @@ End Sub
 
 'get append-icon
 public Sub getAppendIcon() As String
-Return stAppendIcon
+	Return stAppendIcon
 End Sub
+
+'set append-icon
+public Sub setAppendOuterIcon(varAppendIcon As String)
+AddAttr("append-outer-icon", varAppendIcon)
+stAppendOuterIcon = varAppendIcon
+End Sub
+
+'get append-icon
+public Sub getAppendOuterIcon() As String
+Return stAppendOuterIcon
+End Sub
+
 
 'set autofocus
 public Sub setAutofocus(varAutofocus As Boolean)
@@ -1912,7 +1951,18 @@ End Sub
 
 'get prepend-icon
 public Sub getPrependIcon() As String
-Return stPrependIcon
+	Return stPrependIcon
+End Sub
+
+'set prepend-icon
+public Sub setPrependInnerIcon(varPrependIcon As String)
+AddAttr("prepend-inner-icon", varPrependIcon)
+stPrependInnerIcon = varPrependIcon
+End Sub
+
+'get prepend-icon
+public Sub getPrependInnerIcon() As String
+Return stPrependInnerIcon
 End Sub
 
 'set readonly
@@ -2168,13 +2218,16 @@ private Sub BuildRow(xRow As GridRow) As String
 				cellKey = cellKey.tolowercase
 				'if showid
 				Dim strShow As String = ""
+				Dim sbStyle As StringBuilder
+				sbStyle.Initialize 
 				If bShowGridDesign Then
 					strShow = cellKey
+					sbStyle.append($"style="border-width:1px;border-style:dotted;border-color:grey;""$)
 				End If
 				'define the column structure
 				Dim sbCol As StringBuilder
 				sbCol.Initialize 
-				sbCol.Append($"<v-col id="${cellKey}" "$)
+				sbCol.Append($"<v-col id="${cellKey}" ${sbStyle.tostring}"$)
 				sbCol.Append(BuildColumnClass(column))
 				sbCol.Append(" ")
 				sbCol.Append(BuildSpans(column))
@@ -2514,7 +2567,6 @@ End Sub
 'define structure for auto complete
 Sub NewSelect(vmodel As String, sLabel As String, bRequired As Boolean, bMultiple As Boolean, sPlaceHolder As String, sHelperText As String, sourceTable As String, sourceField As String, displayField As String, returnObject As Boolean)
 	setLabel(sLabel)
-	setRef(mName)
 	SetAttr(":required", bRequired)
 	setPlaceholder(sPlaceHolder)
 	setHint(sHelperText)
@@ -2529,7 +2581,6 @@ End Sub
 'define structure for auto complete, bind it after this
 Sub NewSelectOptions(vmodel As String, sLabel As String, bRequired As Boolean, bMultiple As Boolean, sPlaceHolder As String, sHelperText As String, sourceName As String, sourceMap As Map, sourceField As String, displayField As String, returnObject As Boolean)
 	setLabel(sLabel)
-	setRef(mName)
 	SetAttr(":required", bRequired)
 	setPlaceholder(sPlaceHolder)
 	setHint(sHelperText)
@@ -2545,7 +2596,6 @@ End Sub
 
 'define structure for parallax
 Sub NewParallax(sheight As String, src As String, salt As String)
-	setRef(mName)
 	setHeight(sheight)
 	setSrc(src)
 	setAlt(salt)
@@ -2557,20 +2607,17 @@ Sub NewImage(src As String, salt As String, swidth As String, sheight As String)
 	setHeight(sheight)
 	setAlt(salt)
 	setSrc(src)
-	setRef(mName)
 End Sub
 
 'define the structure of the icon
 Sub NewIcon(sIcon As String, sSize As String, scolor As String, sintensity As String)
 	setCaption(sIcon)
-	setRef(mName)
 	AddAttr("size", sSize)
 	SetColorIntensity(scolor,sintensity)
 End Sub
 
 'define structure of the button
 Sub NewButton(sLabel As String, bRaised As Boolean, bPrimary As Boolean, bFitWidth As Boolean)
-	setRef(mName)
 	setLabel(sLabel)
 	If bRaised = False Then AddAttr("text", True)
 	If bPrimary Then setColor("primary")
@@ -2620,6 +2667,35 @@ Sub FileIcon(ext As String) As String
 	End If
 End Sub
 
+Sub SetTypeText
+	AddAttr("type", "text")
+End Sub
+
+Sub SetTypePassword
+	AddAttr("type", "password")
+End Sub
+
+Sub SetTypeNumber
+	AddAttr("type", "number")
+End Sub
+
+Sub SetTypeTelephone
+	AddAttr("type", "tel")
+End Sub
+
+Sub SetTypeEmail
+	AddAttr("type", "email")
+End Sub
+
+Sub SetTypeURL
+	AddAttr("type", "url")
+End Sub
+
+Sub SetTypeFile
+	AddAttr("type", "file")
+End Sub
+
+
 'define the text field
 Sub NewTextField(vmodel As String, slabel As String, splaceholder As String, bRequired As Boolean, sPrependIcon As String, iMaxLen As Int, shelpertext As String)
 	setLabel(slabel)
@@ -2632,38 +2708,13 @@ Sub NewTextField(vmodel As String, slabel As String, splaceholder As String, bRe
 	setHint(shelpertext)
 	setVModel(vmodel)
 	AddAttr("type", "text")
-	setRef(mName)
+	setRef(vmodel)
 End Sub
 '
-Sub NewTel(vmodel As String, slabel As String, splaceholder As String, bRequired As Boolean, sPrependIcon As String, shelpertext As String)
-	NewTextField(vmodel, slabel, splaceholder, bRequired, sPrependIcon, 0, shelpertext)
-	AddAttr("type", "tel")
-End Sub
-
-Sub NewNumber(vmodel As String, slabel As String, splaceholder As String, bRequired As Boolean, sPrependIcon As String, shelpertext As String)
-	NewTextField(vmodel, slabel, splaceholder, bRequired, sPrependIcon, 0, shelpertext)
-	AddAttr("type", "number")
-End Sub
-
 Sub NewTextArea(vmodel As String, slabel As String, splaceholder As String, bRequired As Boolean, bAutoGrow As Boolean, sPrependIcon As String, iMaxLen As Int, shelpertext As String)
-	setLabel(slabel)
-	setRequired(bRequired)
-	setPrependIcon(sPrependIcon)
-	If iMaxLen > 0 Then
-		setCounter(iMaxLen)
-	End If
-	setPlaceholder(splaceholder)
-	setHint(shelpertext)
+	NewTextField(vmodel, slabel, splaceholder, bRequired, sPrependIcon,iMaxLen, shelpertext)
 	AddAttr(":auto-grow", bAutoGrow)
-	setVModel(vmodel)
 End Sub
-
-'
-Sub NewPassword(vmodel As String, slabel As String, splaceholder As String, bRequired As Boolean, sPrependIcon As String, iMaxLen As Int, shelpertext As String)
-	NewTextField(vmodel, slabel, splaceholder, bRequired, sPrependIcon, iMaxLen, shelpertext)
-	AddAttr("type", "password")
-End Sub
-
 '
 Sub NewFile(vmodel As String, slabel As String, splaceholder As String, bRequired As Boolean, shelperText As String)
 	setHint(shelperText)

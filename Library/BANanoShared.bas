@@ -187,22 +187,22 @@ function EmailSend($from, $to, $cc, $subject, $msg) {
 #End If
 
 
-''on file change
-Sub UploadFileWait(e As BANanoEvent) As String
-	'get selected file(s)
-	Dim fileList As List = GetFileListFromTarget(e)
-	If fileList.size = 0 Then Return ""
-	
-	'get the file to upload
-	Dim fileO As Map = fileList.Get(0)
-	'start uploading the file
-	Dim fd As BANanoObject
-	fd.Initialize2("FormData", Null)
-	fd.RunMethod("append", Array("upload", fileO))
-	'
-	Dim Res As String = BANano.CallAjaxWait("./assets/upload.php", "POST", "", fd, True, Null)
-	Return Res
-End Sub
+'''on file change
+'Sub UploadFileWait(e As BANanoEvent) As String
+'	'get selected file(s)
+'	Dim fileList As List = GetFileListFromTarget(e)
+'	If fileList.size = 0 Then Return ""
+'	
+'	'get the file to upload
+'	Dim fileO As Map = fileList.Get(0)
+'	'start uploading the file
+'	Dim fd As BANanoObject
+'	fd.Initialize2("FormData", Null)
+'	fd.RunMethod("append", Array("upload", fileO))
+'	'
+'	Dim Res As String = BANano.CallAjaxWait("./assets/upload.php", "POST", "", fd, True, Null)
+'	Return Res
+'End Sub
 
 Sub SetInterval(module As Object, methodname As String, ms As Int, args As List) As Object
 	methodname = methodname.tolowercase
