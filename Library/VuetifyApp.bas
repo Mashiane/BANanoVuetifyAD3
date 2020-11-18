@@ -422,11 +422,24 @@ Sub DialogInitialize
 	SetData("dialogoktitle", "Ok")
 	SetData("dialogcanceltitle", "Cancel")
 	SetData("dialogcancelshow", False)
+	SetData("apppromptlabel", "Text")
+	SetData("apppromptplaceholder", "")
+	SetData("appprompthint", "")
+	SetData("apppromptvalue", "")
+	SetData("apppromptshow", False)
+End Sub
+
+'get prompt value
+Sub GetPromptValue As String
+	Dim sapppromptvalue As String = GetData("apppromptvalue")
+	sapppromptvalue = sapppromptvalue.trim
+	Return sapppromptvalue
 End Sub
 
 'show confirm dialog
 Sub ShowConfirm(process As String, Title As String, Message As String, ConfirmText As String, CancelText As String)
 	process = process.tolowercase
+	SetData("apppromptshow", False)
 	SetData("confirmkey", process)
 	SetData("dialogtitle", Title)
 	SetData("dialogmessage", Message)
@@ -438,21 +451,27 @@ Sub ShowConfirm(process As String, Title As String, Message As String, ConfirmTe
 End Sub
 
 'show confirm dialog
-Sub ShowPrompt(process As String, Title As String, Message As String, OkText As String, CancelText As String)
+Sub ShowPrompt(process As String, Title As String, Label As String, Placeholder As String, Hint As String, DefaultValue As String, OkText As String, CancelText As String)
 	process = process.tolowercase
 	SetData("confirmkey", process)
 	SetData("dialogtitle", Title)
-	SetData("dialogmessage", Message)
+	SetData("dialogmessage", "")
 	SetData("dialogoktitle", OkText)
 	SetData("dialogokshow", True)
 	SetData("dialogcanceltitle", CancelText)
 	SetData("dialogcancelshow", True)
 	SetData("dialogshow", True)
+	SetData("apppromptlabel", Label)
+	SetData("apppromptplaceholder", Placeholder)
+	SetData("appprompthint", Hint)
+	SetData("apppromptvalue", DefaultValue)
+	SetData("apppromptshow", True)
 End Sub
 
 
 'show alert dialog
 Sub ShowAlert(Title As String, Message As String, OkText As String)
+	SetData("apppromptshow", False)
 	SetData("confirmkey", "alert")
 	SetData("dialogtitle", Title)
 	SetData("dialogmessage", Message)
@@ -486,7 +505,7 @@ Sub ShowSnackBarSuccess(Message As String) As VuetifyApp
 End Sub
 
 Sub ShowSnackBarPrimary(Message As String) As VuetifyApp
-	If BANano.IsNull(Message) Then Return
+	If BANano.IsNull(Message) Then Return Me
 	SetData("appsnackmessage", Message)
 	SetData("appsnackcolor", "primary")
 	SetData("appsnackshow", True)

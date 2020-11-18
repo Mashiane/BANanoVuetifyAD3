@@ -21,6 +21,7 @@ Version=7
 #Event: ClickShift (e As BANanoEvent)
 #Event: ClickPrevent (e As BANanoEvent)
 
+#DesignerProperty: Key: AutoID, DisplayName: Auto ID/Name, FieldType: Boolean, DefaultValue: False, Description: Overrides the ID/Name with a random string.
 #DesignerProperty: Key: Ref, DisplayName: Ref, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: TagName, DisplayName: TagName, FieldType: String, DefaultValue: div, Description: tag of the element
 #DesignerProperty: Key: Caption, DisplayName: Caption, FieldType: String, DefaultValue: , Description: Text on the element
@@ -161,6 +162,7 @@ Private eOnKeyUp As String = ""
 Private eOnMouseOut As String = ""
 Private stKey As String = ""
 Private stRef As String = ""
+	private bAutoID as boolean = false
 Private stSlot As String = ""
 Private stVBindClass As String = ""
 	Private stVBind As String = ""
@@ -359,6 +361,7 @@ eOnKeyUp = Props.Get("OnKeyUp")
 eOnMouseOut = Props.Get("OnMouseOut")
 stKey = Props.Get("Key")
 stRef = Props.Get("Ref")
+		bAutoID = Props.get("AutoID")
 stSlot = Props.Get("Slot")
 stVBindClass = Props.Get("VBindClass")
 		stVBind = Props.Get("VBind")
