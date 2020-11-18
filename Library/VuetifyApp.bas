@@ -333,57 +333,189 @@ Sub SnackBarInitialize
 	SetData("appsnackmessage", "")
 	SetData("appsnackshow", False)
 	SetData("appsnackright", True)
-	SetData("appsnacktop",True)
+	SetData("appsnacktop", True)
 	SetData("appsnackcolor","")
-	SetData("appsnackbottom",False)
-	SetData("appsnackcentered",False)
-	SetData("appsnackoutlined",False)
-	SetData("appsnackleft",False)
-	SetData("appsnackshaped",True)
-	SetData("appsnackrounded",False)
+	SetData("appsnackbottom", False)
+	SetData("appsnackcentered", False)
+	SetData("appsnackoutlined", False)
+	SetData("appsnackleft", False)
+	SetData("appsnackshaped", True)
+	SetData("appsnackrounded", False)
 End Sub
 
-Sub ShowSnackBarError(Message As String)
-	If BANano.IsNull(Message) Then Return 
+Sub SnackBarColor(s As String) As VuetifyApp
+	SetData("appsnackcolor",s)
+	Return Me
+End Sub
+
+Sub SnackBarRounded(b As Boolean) As VuetifyApp
+	SetData("appsnackrounded",b)
+	Return Me
+End Sub
+
+Sub SnackBarShaped(b As Boolean) As VuetifyApp
+	SetData("appsnackshaped",b)
+	Return Me
+End Sub
+
+Sub SnackBarOutlined(b As Boolean) As VuetifyApp
+	SetData("appsnackoutlined",b)
+	Return Me
+End Sub
+
+Sub SnackBarTopLeft As VuetifyApp
+	SetData("appsnackright", False)
+	SetData("appsnackleft", True)
+	SetData("appsnacktop", True)
+	SetData("appsnackbottom",False)
+	SetData("appsnackcentered",False)
+	Return Me
+End Sub
+
+Sub SnackBarTopRight As VuetifyApp
+	SetData("appsnackright", True)
+	SetData("appsnackleft", False)
+	SetData("appsnacktop", True)
+	SetData("appsnackbottom",False)
+	SetData("appsnackcentered",False)
+	Return Me
+End Sub
+
+Sub SnackBarBottomLeft As VuetifyApp
+	SetData("appsnackright", False)
+	SetData("appsnackleft", True)
+	SetData("appsnacktop", False)
+	SetData("appsnackbottom",True)
+	SetData("appsnackcentered",False)
+	Return Me
+End Sub
+
+Sub SnackBarBottomRight As VuetifyApp
+	SetData("appsnackright", True)
+	SetData("appsnackleft", False)
+	SetData("appsnacktop", False)
+	SetData("appsnackbottom",True)
+	SetData("appsnackcentered",False)
+	Return Me
+End Sub
+
+Sub SnackBarCentered As VuetifyApp
+	SetData("appsnackright", False)
+	SetData("appsnackleft", False)
+	SetData("appsnacktop", False)
+	SetData("appsnackbottom",False)
+	SetData("appsnackcentered",True)
+	Return Me
+End Sub
+
+Sub ShowDialog(b As Boolean)
+	SetData("dialogshow", b)
+End Sub
+
+'initialize the dialog
+Sub DialogInitialize
+	SetData("dialogwidth", "400")
+	SetData("dialogshow", False)
+	SetData("dialogtitle", "")
+	SetData("dialogmessage", "")
+	SetData("dialogokshow", True)
+	SetData("dialogoktitle", "Ok")
+	SetData("dialogcanceltitle", "Cancel")
+	SetData("dialogcancelshow", False)
+End Sub
+
+'show confirm dialog
+Sub ShowConfirm(process As String, Title As String, Message As String, ConfirmText As String, CancelText As String)
+	process = process.tolowercase
+	SetData("confirmkey", process)
+	SetData("dialogtitle", Title)
+	SetData("dialogmessage", Message)
+	SetData("dialogoktitle", ConfirmText)
+	SetData("dialogokshow", True)
+	SetData("dialogcanceltitle", CancelText)
+	SetData("dialogcancelshow", True)
+	SetData("dialogshow", True)
+End Sub
+
+'show confirm dialog
+Sub ShowPrompt(process As String, Title As String, Message As String, OkText As String, CancelText As String)
+	process = process.tolowercase
+	SetData("confirmkey", process)
+	SetData("dialogtitle", Title)
+	SetData("dialogmessage", Message)
+	SetData("dialogoktitle", OkText)
+	SetData("dialogokshow", True)
+	SetData("dialogcanceltitle", CancelText)
+	SetData("dialogcancelshow", True)
+	SetData("dialogshow", True)
+End Sub
+
+
+'show alert dialog
+Sub ShowAlert(Title As String, Message As String, OkText As String)
+	SetData("confirmkey", "alert")
+	SetData("dialogtitle", Title)
+	SetData("dialogmessage", Message)
+	SetData("dialogoktitle", OkText)
+	SetData("dialogokshow", True)
+	SetData("dialogcanceltitle", "Cancel")
+	SetData("dialogcancelshow", False)
+	SetData("dialogshow", True)
+End Sub
+
+'get the confirm key
+Sub getConfirm As String
+	Dim s As String = GetData("confirmkey")
+	Return s
+End Sub
+
+Sub ShowSnackBarError(Message As String) As VuetifyApp
+	If BANano.IsNull(Message) Then Return Me
 	SetData("appsnackmessage", Message)
 	SetData("appsnackcolor", "error")
 	SetData("appsnackshow", True)
+	Return Me
 End Sub
 
-Sub ShowSnackBarSuccess(Message As String)
-	If BANano.IsNull(Message) Then Return
+Sub ShowSnackBarSuccess(Message As String) As VuetifyApp
+	If BANano.IsNull(Message) Then Return Me
 	SetData("appsnackmessage", Message)
 	SetData("appsnackcolor", "success")
 	SetData("appsnackshow", True)
+	Return Me
 End Sub
 
-Sub ShowSnackBarPrimary(Message As String)
+Sub ShowSnackBarPrimary(Message As String) As VuetifyApp
 	If BANano.IsNull(Message) Then Return
 	SetData("appsnackmessage", Message)
 	SetData("appsnackcolor", "primary")
 	SetData("appsnackshow", True)
+	Return Me
 End Sub
 
-Sub ShowSnackBarSecondary(Message As String)
-	If BANano.IsNull(Message) Then Return
+Sub ShowSnackBarSecondary(Message As String) As VuetifyApp
+	If BANano.IsNull(Message) Then Return Me
 	SetData("appsnackmessage", Message)
 	SetData("appsnackcolor", "secondary")
 	SetData("appsnackshow", True)
+	Return Me
 End Sub
 
 
-Sub ShowSnackBarWarning(Message As String)
-	If BANano.IsNull(Message) Then Return
+Sub ShowSnackBarWarning(Message As String) As VuetifyApp
+	If BANano.IsNull(Message) Then Return Me
 	SetData("appsnackmessage", Message)
 	SetData("appsnackcolor", "warning")
 	SetData("appsnackshow", True)
+	Return Me
 End Sub
 
-Sub ShowSnackBar(Message As String)
-	If BANano.IsNull(Message) Then Return
+Sub ShowSnackBar(Message As String) As VuetifyApp
+	If BANano.IsNull(Message) Then Return Me
 	SetData("appsnackmessage", Message)
 	SetData("appsnackcolor", "")
 	SetData("appsnackshow", True)
+	Return Me
 End Sub
 
 
@@ -1506,39 +1638,6 @@ Sub DecrementBadge(btnID As String)
 	SetData(SBadgeContent, ivalue)
 End Sub
 
-'show confirm dialog
-Sub ShowConfirmDialog(process As String, Title As String, Message As String,ConfirmText As String, CancelText As String)
-	process = process.tolowercase
-	SetData("confirmwidth", "600")
-	SetData("confirmtitle", Title)
-	SetData("confirmtext", Message)
-	SetData("confirmok", ConfirmText)
-	SetData("confirmcancel", CancelText)
-	SetData("confirmkey", process)
-	SetData("confirmshow", True)
-	SetData("confirmcancelshow", True)
-End Sub
-
-'show confirm dialog
-Sub ShowAlertDialog(Title As String, Message As String,OkText As String)
-	SetData("confirmwidth", "600")
-	SetData("confirmtitle", Title)
-	SetData("confirmtext", Message)
-	SetData("confirmok", OkText)
-	SetData("confirmshow", True)
-	SetData("confirmcancelshow", False)
-End Sub
-
-Sub HideConfirm
-	SetData("confirmshow", False)
-End Sub
-
-'get the confirm key
-Sub GetConfirm As String
-	Dim sproc As String = GetData("confirmkey")
-	Return sproc
-End Sub
-'
 'set right to left
 Sub SetRTL(b As Boolean)
 	Vuetify.SetField("rtl", b)

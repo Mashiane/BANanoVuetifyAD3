@@ -13,6 +13,6 @@ ModuleClosedNodes1=
 ModuleClosedNodes2=
 ModuleClosedNodes3=
 ModuleClosedNodes4=
-NavigationStack=VueElement,BANanoGetHTML,654,0,BANanoShared,BANanoGetHTML,2783,0,VueComponent,Component,271,0,VueComponent,BANanoGetHTML,595,0,VueComponent,BindVueElement,65,0,VueElement,ToString,675,6,VuetifyApp,BindVueElement,423,0,VuetifyApp,BANanoGetHTMLAsIs,406,0,BANanoShared,Process_Globals,0,0,Main,Process_Globals,7,0
+NavigationStack=VueElement,NewEmail,2721,6,VueElement,NewSlider,2729,6,VueElement,setAlign,1990,0,VueElement,setSingleLine,1980,0,VueElement,getAlign,1991,0,Main,AppStart,17,0,VuetifyApp,ShowPrompt,444,0,VuetifyApp,ShowAlert,458,0,VuetifyApp,ShowSnackBarSuccess,473,0,VuetifyApp,ShowSnackBarPrimary,482,0,VuetifyApp,ShowSnackBarSecondary,494,0
 SelectedBuild=0
 VisibleModules=

@@ -39,6 +39,7 @@ Version=7
 #DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: , Description: Value on the element
 #DesignerProperty: Key: Label, DisplayName: Label, FieldType: String, DefaultValue: , Description: Label of the element
 #DesignerProperty: Key: Src, DisplayName: Src, FieldType: String, DefaultValue: , Description: Src
+#DesignerProperty: Key: Alt, DisplayName: Alt, FieldType: String, DefaultValue: , Description: Alt
 #DesignerProperty: Key: Height, DisplayName: Height, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: MaxHeight, DisplayName: MaxHeight, FieldType: String, DefaultValue:  , Description:
 #DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue:  , Description: 
@@ -86,6 +87,7 @@ Version=7
 #DesignerProperty: Key: PrependIcon, DisplayName: PrependIcon, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: AppendIcon, DisplayName: AppendIcon, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Placeholder, DisplayName: Placeholder, FieldType: String, DefaultValue:  , Description: 
+#DesignerProperty: Key: Hint, DisplayName: Hint, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Autofocus, DisplayName: Autofocus, FieldType: Boolean, DefaultValue: False , Description: 
 #DesignerProperty: Key: Clearable, DisplayName: Clearable, FieldType: Boolean, DefaultValue: False , Description: 
 #DesignerProperty: Key: Counter, DisplayName: Counter, FieldType: String, DefaultValue:  , Description: 
@@ -95,9 +97,9 @@ Version=7
 #DesignerProperty: Key: Flat, DisplayName: Flat, FieldType: Boolean, DefaultValue: False , Description: 
 #DesignerProperty: Key: HideDetails, DisplayName: HideDetails, FieldType: Boolean, DefaultValue: False , Description: 
 #DesignerProperty: Key: Outlined, DisplayName: Outlined, FieldType: Boolean, DefaultValue: False , Description: 
-#DesignerProperty: Key: Hint, DisplayName: Hint, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: PersistentHint, DisplayName: PersistentHint, FieldType: Boolean, DefaultValue: False , Description: 
 #DesignerProperty: Key: Readonly, DisplayName: Readonly, FieldType: String, DefaultValue:  , Description: 
+#DesignerProperty: Key: Required, DisplayName: Required, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Rounded, DisplayName: Rounded, FieldType: Boolean, DefaultValue: False , Description: 
 #DesignerProperty: Key: Shaped, DisplayName: Shaped, FieldType: Boolean, DefaultValue: False , Description: 
 #DesignerProperty: Key: SingleLine, DisplayName: SingleLine, FieldType: Boolean, DefaultValue: False , Description: 
@@ -225,6 +227,7 @@ Private bLoremIpsum As Boolean = False
 	Private stPlaceholder As String = ""
 	Private stPrependIcon As String = ""
 	Private stReadonly As String = ""
+	Private stRequired As String = ""
 	Private boRounded As Boolean = False
 	Private boShaped As Boolean = False
 	Private boSingleLine As Boolean = False
@@ -243,6 +246,7 @@ Private bLoremIpsum As Boolean = False
 	Private stStyleMaxHeight As String = ""
 	Private stStyleMaxWidth As String = ""
 	Private stSrc As String = ""
+	Private stAlt As String = ""
 	Private stVOn As String = ""
 	'
 	Type GridRow(Rows As Int, Columns As List, _
@@ -419,6 +423,7 @@ stSlotActivator = Props.get("VSlotActivator")
 		stPlaceholder = Props.Get("Placeholder")
 		stPrependIcon = Props.Get("PrependIcon")
 		stReadonly = Props.Get("Readonly")
+		stRequired = Props.Get("Required")
 		boRounded = Props.Get("Rounded")
 		boShaped = Props.Get("Shaped")
 		boSingleLine = Props.Get("SingleLine")
@@ -437,11 +442,13 @@ stSlotActivator = Props.get("VSlotActivator")
 		stStyleMaxHeight = Props.get("StyleMaxHeight")
 		stStyleMaxWidth = Props.get("StyleMaxWidth")
 		stSrc = Props.get("Src")
+		stAlt = Props.Get("Alt")
 		stVOn = Props.Get("VOn")
 End If
 	
 	AddAttr("v-on", stVOn)
 	AddAttr("src", stSrc)
+	AddAttr("alt", stAlt)
 	AddAttr("fluid", bFluid)
 	AddAttr("rules", stRules)
 AddAttr("to", stTo)
@@ -529,6 +536,7 @@ AddStyle("text-decoration", stTextDecoration)
 	AddAttr("placeholder", stPlaceholder)
 	AddAttr("prepend-icon", stPrependIcon)
 	AddAttr("readonly", stReadonly)
+	AddAttr("required", stRequired)
 	AddAttrOnCondition("rounded", boRounded, True)
 	AddAttrOnCondition("shaped", boShaped, True)
 	AddAttrOnCondition("single-line", boSingleLine, True)
@@ -1063,6 +1071,15 @@ End Sub
 
 public Sub getSrc() As String
 Return stSrc
+End Sub
+
+public Sub setAlt(varAlt As String)
+AddAttr("alt", varAlt)
+stAlt = varAlt
+End Sub
+
+public Sub getAlt() As String
+Return stAlt
 End Sub
 
 public Sub setVOn(varVOn As String)
@@ -1906,6 +1923,18 @@ public Sub getReadonly() As String
 	Return stReadonly
 End Sub
 
+'set required
+public Sub setRequired(varRequired As String)
+AddAttr("required", varRequired)
+stRequired = varRequired
+End Sub
+
+'get required
+public Sub getRequired() As String
+	Return stRequired
+End Sub
+
+
 'set active class
 public Sub setActiveClass(varActiveClass As String)
 	AddAttr("active-class", varActiveClass)
@@ -2448,4 +2477,259 @@ Sub AppendElement1(parentID As String, tag As String, id As String, text As Stri
 	If classes <> "" Then el.AddClass(classes)
 	el.SetHTML(BANano.SF(text))
 	Return el
+End Sub
+
+'set color intensity
+Sub SetColorIntensity(varColor As String, varIntensity As String)
+	Dim scolor As String = $"${varColor} ${varIntensity}"$
+	AddClass(scolor)
+End Sub
+
+Sub CStr(o As Object) As String
+	If o = BANano.UNDEFINED Then o = ""
+	Return "" & o
+End Sub
+
+'convert a map to a list
+Sub Map2List(moptions As Map, sourcefield As String, displayfield As String) As List
+	sourcefield = sourcefield.ToLowerCase
+	displayfield = displayfield.ToLowerCase
+	Dim recs As List
+	recs.Initialize
+	For Each k As String In moptions.Keys
+		Dim v As String = moptions.Get(k)
+		k = CStr(k)
+		v = CStr(v)
+		Dim nrec As Map = CreateMap()
+		nrec.Put(sourcefield, k)
+		nrec.Put(displayfield, v)
+		recs.Add(nrec)
+	Next
+	Return recs
+End Sub
+
+'define structure for auto complete
+Sub NewSelect(vmodel As String, sLabel As String, bRequired As Boolean, bMultiple As Boolean, sPlaceHolder As String, sHelperText As String, sourceTable As String, sourceField As String, displayField As String, returnObject As Boolean)
+	setLabel(sLabel)
+	setRef(mName)
+	SetAttr(":required", bRequired)
+	setPlaceholder(sPlaceHolder)
+	setHint(sHelperText)
+	SetAttr(":multiple", bMultiple)
+	SetAttr(":items", sourceTable)
+	SetAttr("item-text", displayField)
+	SetAttr("item-value", sourceField)
+	SetAttr(":return-object", returnObject)
+	setVModel(vmodel)
+End Sub
+
+'define structure for auto complete, bind it after this
+Sub NewSelectOptions(vmodel As String, sLabel As String, bRequired As Boolean, bMultiple As Boolean, sPlaceHolder As String, sHelperText As String, sourceName As String, sourceMap As Map, sourceField As String, displayField As String, returnObject As Boolean)
+	setLabel(sLabel)
+	setRef(mName)
+	SetAttr(":required", bRequired)
+	setPlaceholder(sPlaceHolder)
+	setHint(sHelperText)
+	SetAttr(":multiple", bMultiple)
+	SetAttr(":items", sourceName)
+	SetAttr("item-text", displayField)
+	SetAttr("item-value", sourceField)
+	SetAttr(":return-object", returnObject)
+	setVModel(vmodel)
+	Dim recs As List = Map2List(sourceMap, sourceField, displayField)
+	SetData(sourceName, recs)
+End Sub
+
+'define structure for parallax
+Sub NewParallax(sheight As String, src As String, salt As String)
+	setRef(mName)
+	setHeight(sheight)
+	setSrc(src)
+	setAlt(salt)
+End Sub
+
+'define structure for image
+Sub NewImage(src As String, salt As String, swidth As String, sheight As String)
+	setWidth(swidth)
+	setHeight(sheight)
+	setAlt(salt)
+	setSrc(src)
+	setRef(mName)
+End Sub
+
+'define the structure of the icon
+Sub NewIcon(sIcon As String, sSize As String, scolor As String, sintensity As String)
+	setCaption(sIcon)
+	setRef(mName)
+	AddAttr("size", sSize)
+	SetColorIntensity(scolor,sintensity)
+End Sub
+
+'define structure of the button
+Sub NewButton(sLabel As String, bRaised As Boolean, bPrimary As Boolean, bFitWidth As Boolean)
+	setRef(mName)
+	setLabel(sLabel)
+	If bRaised = False Then AddAttr("text", True)
+	If bPrimary Then setColor("primary")
+	If bFitWidth Then AddAttr("block", True)
+End Sub
+
+'generate a treeitem for v-tree
+Sub NewTreeItem(parentID As String, key As String, text As String, mhref As String, mIcon As String, mDisabled As Boolean) As Map
+	parentID = parentID.tolowercase
+	key = key.tolowercase
+	Dim mitem As Map = CreateMap()
+	mitem.Put("id", key)
+	mitem.Put("name", text)
+	mitem.Put("href", mhref)
+	mitem.Put("icon", mIcon)
+	mitem.Put("disabled", mDisabled)
+	mitem.Put("parentid", parentID)
+	Return mitem
+End Sub
+
+'return the icon for the file
+Sub FileIcon(ext As String) As String
+	Dim extm As Map = CreateMap()
+	extm.Put("html", "mdi-language-html5")
+	extm.Put("js", "mdi-nodejs")
+	extm.Put("json", "mdi-code-json")
+	extm.Put("md", "mdi-markdown")
+	extm.Put("pdf", "mdi-file-pdf")
+	extm.Put("png", "mdi-file-image")
+	extm.Put("txt", "mdi-file-document-outline")
+	extm.Put("xls", "mdi-file-excel")
+	extm.Put("csv", "mdi-file-delimited-outline")
+	extm.Put("pre", "mdi-file-code-outline")
+	extm.Put("code", "mdi-file-code-outline")
+	extm.Put("doc", "mdi-file-word-box-outline")
+	extm.Put("mp3", "mdi-file-music-outline")
+	extm.Put("folder", "mdi-folder")
+	extm.Put("woff", "marketweb-webfont.woff")
+	extm.Put("css", "mdi-language-css3")
+	'
+	ext = ext.ToLowerCase
+	If extm.ContainsKey(ext) Then
+		Dim res As String = extm.Get(ext)
+		Return res
+	Else
+		Return "mdi-file-document-outline"
+	End If
+End Sub
+
+'define the text field
+Sub NewTextField(vmodel As String, slabel As String, splaceholder As String, bRequired As Boolean, sPrependIcon As String, iMaxLen As Int, shelpertext As String)
+	setLabel(slabel)
+	setRequired(bRequired)
+	setPrependIcon(sPrependIcon)
+	If iMaxLen > 0 Then
+		setCounter(True)
+	End If
+	setPlaceholder(splaceholder)
+	setHint(shelpertext)
+	setVModel(vmodel)
+	AddAttr("type", "text")
+	setRef(mName)
+End Sub
+'
+Sub NewTel(vmodel As String, slabel As String, splaceholder As String, bRequired As Boolean, sPrependIcon As String, shelpertext As String)
+	NewTextField(vmodel, slabel, splaceholder, bRequired, sPrependIcon, 0, shelpertext)
+	AddAttr("type", "tel")
+End Sub
+
+Sub NewNumber(vmodel As String, slabel As String, splaceholder As String, bRequired As Boolean, sPrependIcon As String, shelpertext As String)
+	NewTextField(vmodel, slabel, splaceholder, bRequired, sPrependIcon, 0, shelpertext)
+	AddAttr("type", "number")
+End Sub
+
+Sub NewTextArea(vmodel As String, slabel As String, splaceholder As String, bRequired As Boolean, bAutoGrow As Boolean, sPrependIcon As String, iMaxLen As Int, shelpertext As String)
+	setLabel(slabel)
+	setRequired(bRequired)
+	setPrependIcon(sPrependIcon)
+	If iMaxLen > 0 Then
+		setCounter(iMaxLen)
+	End If
+	setPlaceholder(splaceholder)
+	setHint(shelpertext)
+	AddAttr(":auto-grow", bAutoGrow)
+	setVModel(vmodel)
+End Sub
+
+'
+Sub NewPassword(vmodel As String, slabel As String, splaceholder As String, bRequired As Boolean, sPrependIcon As String, iMaxLen As Int, shelpertext As String)
+	NewTextField(vmodel, slabel, splaceholder, bRequired, sPrependIcon, iMaxLen, shelpertext)
+	AddAttr("type", "password")
+End Sub
+
+'
+Sub NewFile(vmodel As String, slabel As String, splaceholder As String, bRequired As Boolean, shelperText As String)
+	setHint(shelperText)
+	setPlaceholder(splaceholder)
+	setVModel(vmodel)
+	setClearable(False)
+	setLabel(slabel)
+	setRequired(bRequired)
+End Sub
+'
+
+Sub NewDatePicker(vmodel As String, slabel As String, bRequired As Boolean, sPlaceholder As String, sHint As String)
+	setLabel(slabel)
+	setRequired(bRequired)
+	setVModel(vmodel)
+	setPlaceholder(sPlaceholder)
+	setHint(sHint)
+End Sub
+'
+Sub NewTimePicker(vmodel As String, slabel As String, bRequired As Boolean, sPlaceholder As String, sHint As String)
+	setLabel(slabel)
+	setVModel(vmodel)
+	setRequired(bRequired)
+	setPlaceholder(sPlaceholder)
+	setHint(sHint)
+End Sub
+
+Sub NewCheckBox(vmodel As String, slabel As String, svalue As Object, struevalue As Object, sfalsevalue As Object)
+	setVModel(vmodel)
+	setValue(svalue)
+	setLabel(slabel)
+	AddAttr("false-value", sfalsevalue)
+	AddAttr("true-value", struevalue)
+End Sub
+
+Sub NewRadioGroup(vmodel As String, sLabel As String, svalue As String, sourceTable As String, sourceField As String, displayField As String, bShowLabel As Boolean, bLabelOnTop As Boolean)
+	setVModel(vmodel)
+	setLabel(sLabel)
+	If bShowLabel = False Then setLabel("")
+	If bLabelOnTop Then
+		AddAttr(":column", True)
+	Else
+		AddAttr(":row", True)
+	End If
+End Sub
+
+Sub NewRadioGroupOptions(vmodel As String, slabel As String, svalue As Object, optionsm As Map, bShowLabel As Boolean, bLabelOnTop As Boolean)
+	setVModel(vmodel)
+	setLabel(slabel)
+	Dim recs As List = Map2List(optionsm, "id", "text")
+	'SetOptions(optionsm)
+	setValue(svalue)
+	If bShowLabel = False Then setLabel("")
+	If bLabelOnTop Then
+		AddAttr(":column", True)
+	Else
+		AddAttr(":row", True)
+	End If
+End Sub
+
+Sub NewEmail(vmodel As String, slabel As String, splaceholder As String, bRequired As Boolean, sPrependIcon As String, shelpertext As String)
+	NewTextField(vmodel, slabel, splaceholder, bRequired, sPrependIcon, 0, shelpertext)
+	AddAttr("type", "email")
+End Sub
+
+Sub NewSlider(vmodel As String, slabel As String, iMinValue As Int, iMaxValue As Int, sHint As String)
+	setVModel(vmodel)
+	AddAttr("hint", sHint)
+	AddAttr("max", iMaxValue)
+	AddAttr("min", iMinValue)
+	AddAttr("label", slabel)
 End Sub

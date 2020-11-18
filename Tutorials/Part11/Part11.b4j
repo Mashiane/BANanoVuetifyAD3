@@ -1,0 +1,167 @@
+﻿AppType=JavaFX
+Build1=Default,b4j.example
+File1=android-chrome-192x192.png
+File10=dialogbutton1.bjl
+File11=dialogbutton2.bjl
+File12=dialogbutton3.bjl
+File13=favicon.ico
+File14=favicon-16x16.png
+File15=favicon-32x32.png
+File16=login.jpg
+File17=sponge.png
+File18=upload.php
+File19=vabout.bjl
+File2=android-chrome-512x512.png
+File20=valert.bjl
+File21=valert1.bjl
+File22=valert2.bjl
+File23=valertcontainer.bjl
+File24=vavatars.bjl
+File25=vbaseline.bjl
+File26=vbuttoniconright.bjl
+File27=vbuttonmenu.bjl
+File28=vbuttontogglealert.bjl
+File29=vdialogs.bjl
+File3=appdialog.bjl
+File30=vdrawerlisticontitle.bjl
+File31=vdrawerprofile.bjl
+File32=vhome.bjl
+File33=vquestions.bjl
+File34=vtooltipcomponent.bjl
+File35=vusers.bjl
+File4=apple-touch-icon.png
+File5=avatar1.bjl
+File6=avatar2.bjl
+File7=avatar3.bjl
+File8=background.jpg
+File9=config.php
+FileGroup1=Default Group\Images
+FileGroup10=Default Group\Views
+FileGroup11=Default Group\Views
+FileGroup12=Default Group\Views
+FileGroup13=Default Group
+FileGroup14=Default Group\Images
+FileGroup15=Default Group\Images
+FileGroup16=Default Group\Images
+FileGroup17=Default Group\Images
+FileGroup18=Default Group\PHP
+FileGroup19=Default Group\Views
+FileGroup2=Default Group\Images
+FileGroup20=Default Group\Views
+FileGroup21=Default Group\Views
+FileGroup22=Default Group\Views
+FileGroup23=Default Group\Views
+FileGroup24=Default Group\Views
+FileGroup25=Default Group\Views
+FileGroup26=Default Group\Views
+FileGroup27=Default Group\Views
+FileGroup28=Default Group\Views
+FileGroup29=Default Group\Views
+FileGroup3=Default Group\Views
+FileGroup30=Default Group\Views
+FileGroup31=Default Group\Views
+FileGroup32=Default Group\Views
+FileGroup33=Default Group\Views
+FileGroup34=Default Group\Components
+FileGroup35=Default Group\Views
+FileGroup4=Default Group\Images
+FileGroup5=Default Group\Views
+FileGroup6=Default Group\Views
+FileGroup7=Default Group\Views
+FileGroup8=Default Group\Images
+FileGroup9=Default Group\PHP
+Group=Default Group
+Library1=jcore
+Library2=jfx
+Library3=banano
+Library4=bananovuetifyad3
+Module1=pgIndex
+Module2=Tooltip
+Module3=ViewAbout
+Module4=ViewAlert
+Module5=ViewAvatars
+Module6=ViewDialog
+Module7=ViewHome
+Module8=ViewQuestions
+Module9=ViewUsers
+NumberOfFiles=35
+NumberOfLibraries=4
+NumberOfModules=9
+Version=8.5
+@EndOfDesignText@
+#Region Project Attributes 
+	#MergeLibraries: True
+	#LibraryAuthor: Anele Mashy Mbanga
+#End Region
+
+#IgnoreWarnings:12, 15
+Sub Process_Globals
+	Public BANano As BANano 'ignore
+	Public AppName As String = "bvad3part7"
+	Public AppTitle As String = "BANanoVuetify AD3"
+	Private Publish As String = "C:\laragon\www"
+	Public DebugIP As String = "localhost"
+	Public Version As String = "1.00"
+	Public Port As String = "8080"
+	Public ServerIP As String = "localhost"
+End Sub
+
+Sub AppStart (Form1 As Form, Args() As String)
+	'initialize banano for first use
+	BANano.Initialize("BANano", AppName, DateTime.now)
+	BANano.HTML_NAME = "index.html"
+	BANano.Header.Title = AppTitle
+	BANano.Header.AddFavicon("favicon.ico", "16x16")
+	BANano.Header.AddAppleTouchIcon("apple-touch-icon.png", "180x180")
+	BANano.Header.Author ="Anele Mbanga (Mashy)"
+	'BANano.Header.Charset = "iso-8859-1"
+	BANano.Header.Description = "BANanoVuetify Empty Template"
+	'BANano.header.Expires = "Mon, 22 Jul 2002 11:12:01 GMT"
+	BANano.Header.Keywords = "banano,vuetify,material design"
+	BANano.Header.Language = "en"
+	BANano.Header.AddMeta($"<meta name="copyright" content="&copy; 2020 BANanoVuetifyAD3">"$)
+	BANano.Header.AddMeta($"<meta name="robots" content="ALL">"$)
+	
+	'BANano.Header.AddMSTileIcon("mstile-150x150.png", "144x144")
+	'BANano.Header.SetMaskIcon("safari-pinned-tab.svg")
+	BANano.Header.AddManifestIcon("android-chrome-192x192.png", "192x192")
+	BANano.Header.AddManifestIcon("android-chrome-512x512.png", "512x512")
+	BANano.TranspilerOptions.UseServiceWorker = False
+	BANano.TranspilerOptions.MergeAllCSSFiles = True
+	BANano.TranspilerOptions.MergeAllJavascriptFiles = True
+	BANano.TranspilerOptions.MinifyOnline = False
+	BANano.TranspilerOptions.RemoveDeadCode = True
+	'BANano.TranspilerOptions.SetFireReadyWhenReadyStateComplete
+	'BANano.TranspilerOptions.GZipGeneratedWebsite(10)
+	#if release
+		BANano.TranspilerOptions.EnableLiveCodeSwapping = False
+	#end if
+	BANano.TranspilerOptions.RedirectOutput(File.DirApp, "log.txt")
+	'set php settings
+	BANano.PHP_NAME = $"${AppName}.php"$
+	BANano.PHPHost = $"http://${ServerIP}:${Port}/${AppName}/"$
+	BANano.PHPAddHeader("Access-Control-Allow-Origin: *")
+	
+	BANano.Build(Publish)
+	
+	Dim fx As JFX
+	Dim URL As String = File.GetUri(File.DirApp,"log.txt")
+	fx.ShowExternalDocument(URL)
+	'
+	Dim appPath As String = $"http://localhost/${AppName}/index.html"$
+	If Port <> "" Then appPath = $"http://localhost:${Port}/${AppName}/index.html"$
+	fx.ShowExternalDocument(appPath)
+	#if release
+		ExitApplication
+	#end if
+End Sub
+
+'Return true to allow the default exceptions handler to handle the uncaught exception.
+Sub Application_Error (Error As Exception, StackTrace As String) As Boolean
+	Return True
+End Sub
+
+Sub BANano_Ready
+	pgIndex.Init
+End Sub
+
