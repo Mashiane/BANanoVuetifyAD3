@@ -13,6 +13,6 @@ ModuleClosedNodes1=
 ModuleClosedNodes2=
 ModuleClosedNodes3=
 ModuleClosedNodes4=
-NavigationStack=VueElement,getID,832,0,VueElement,SetCallBack,1571,0,VueElement,SetEvent,1582,1,VueElement,OnMulti,1599,0,VueElement,getCoverImage,1639,0,VueElement,On,1615,0,VueElement,Class_Globals,206,0,VueElement,DesignerCreateView,578,6,VueElement,getValue,1252,0,VueElement,setVShow,1256,0,VueElement,setVModel,1242,0
+NavigationStack=VueElement,On,1615,0,VueElement,getValue,1252,0,VueElement,setVShow,1256,0,VueElement,setVModel,1242,0,VueElement,Class_Globals,155,0,BANanoShared,SetOnReadyChange,402,0,VueElement,DesignerCreateView,562,6,BANanoShared,DoUpload,676,0,VueElement,SetEvent,1576,1,Main,Process_Globals,8,0
 SelectedBuild=0
 VisibleModules=

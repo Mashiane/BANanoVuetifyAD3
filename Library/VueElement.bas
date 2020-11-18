@@ -10,7 +10,7 @@ Version=7
 #Event: Click (e As BANanoEvent)
 #Event: RightClick (e As BANanoEvent)
 #Event: LeftClick (e As BANanoEvent)
-#Event: Change (e As BANanoEvent)
+#Event: Change (value As Object)
 #Event: ClickStop (e As BANanoEvent)
 #Event: DblClick (e As BANanoEvent)
 #Event: MouseMove (e As BANanoEvent)
@@ -1588,7 +1588,7 @@ private Sub SetEvent(eventName As String, attrName As String, eventValue As Stri
 	Dim sCode As String = $"${sName}(${eventValue})"$
 	AddAttr($"v-on:${attrName}"$, sCode)
 	'arguments for the event
-	Dim e As BANanoEvent 'ignore
+	Dim e As Object 'ignore
 	Dim cb As BANanoObject = BANano.CallBack(mCallBack, sName, Array(e))
 	methods.Put(sName, cb)
 End Sub
