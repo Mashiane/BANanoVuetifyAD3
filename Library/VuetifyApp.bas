@@ -520,6 +520,14 @@ Sub ShowSnackBarSecondary(Message As String) As VuetifyApp
 	Return Me
 End Sub
 
+Sub ShowSnackBarInfo(Message As String) As VuetifyApp
+	If BANano.IsNull(Message) Then Return Me
+	SetData("appsnackmessage", Message)
+	SetData("appsnackcolor", "info")
+	SetData("appsnackshow", True)
+	Return Me
+End Sub
+
 
 Sub ShowSnackBarWarning(Message As String) As VuetifyApp
 	If BANano.IsNull(Message) Then Return Me

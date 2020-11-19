@@ -8,7 +8,7 @@ Version=8.5
 Sub Class_Globals
 	Private BANano As BANano 'ignore
 	Public mName As String 'ignore
-	Private mCallBack As Object 'ignore
+	Public mCallBack As Object 'ignore
 	'
 	Public jsString As BANanoObject
 	Public jsNumber As BANanoObject

@@ -137,74 +137,74 @@ Version=7
 #DesignerProperty: Key: OnClickPrevent, DisplayName: OnClickPrevent, FieldType: String, DefaultValue: , Description: Event arguments to be passed to the attribute.
 
 Sub Class_Globals
-Private BANano As BANano 'ignore
-Private mName As String 'ignore
-Private mEventName As String 'ignore
-Private mCallBack As Object 'ignore
-Private mTarget As BANanoElement 'ignore
-Private mElement As BANanoElement 'ignore
-Private mClasses As String = ""
+	Private BANano As BANano 'ignore
+	Private mName As String 'ignore
+	Private mEventName As String 'ignore
+	Private mCallBack As Object 'ignore
+	Private mTarget As BANanoElement 'ignore
+	Private mElement As BANanoElement 'ignore
+	Private mClasses As String = ""
 	Private stActiveClass As String = ""
-Private mStyle As String = ""
-Private mAttributes As String = ""
-Private mCaption As String = ""
-Private classList As Map
-Private styleList As Map
-Private attributeList As Map
-Private mTagName As String = "div"
-Private sbText As StringBuilder
-Private mStates As String
-Public bindings As Map
-Public methods As Map
-Private eOnClick As String = ""
-Private eOnClickStop As String = ""
-Private eOnDblClick As String = ""
-Private eOnChange As String = ""
-Private eOnClickAlt As String = ""
-Private eOnClickShift As String = ""
-Private eOnClickPrevent As String = ""
-Private eOnKeyPress As String = ""
-Private eOnMouseMove As String = ""
-Private eOnKeyUp As String = ""
-Private eOnMouseOut As String = ""
-Private stKey As String = ""
-Private stRef As String = ""
+	Private mStyle As String = ""
+	Private mAttributes As String = ""
+	Private mCaption As String = ""
+	Private classList As Map
+	Private styleList As Map
+	Private attributeList As Map
+	Private mTagName As String = "div"
+	Private sbText As StringBuilder
+	Private mStates As String
+	Public bindings As Map
+	Public methods As Map
+	Private eOnClick As String = ""
+	Private eOnClickStop As String = ""
+	Private eOnDblClick As String = ""
+	Private eOnChange As String = ""
+	Private eOnClickAlt As String = ""
+	Private eOnClickShift As String = ""
+	Private eOnClickPrevent As String = ""
+	Private eOnKeyPress As String = ""
+	Private eOnMouseMove As String = ""
+	Private eOnKeyUp As String = ""
+	Private eOnMouseOut As String = ""
+	Private stKey As String = ""
+	Private stRef As String = ""
 	Private bAutoID As Boolean = False
-Private stSlot As String = ""
-Private stVBindClass As String = ""
+	Private stSlot As String = ""
+	Private stVBindClass As String = ""
 	Private stVBind As String = ""
-Private stVBindStyle As String = ""
-Private stVElse As String = ""
-Private stVElseIf As String = ""
-Private stVFor As String = ""
+	Private stVBindStyle As String = ""
+	Private stVElse As String = ""
+	Private stVElseIf As String = ""
+	Private stVFor As String = ""
 	Private stDataSource As String = ""
-Private stVHtml As String = ""
-Private stValue As String = ""
-Private stVIf As String = ""
-Private stVModel As String = ""
-Private stVShow As String = ""
-Private stVText As String = ""
-Private stBackgroundColor As String = ""
-Private stBackgroundImage As String = ""
-Private stBackgroundRepeat As String = ""
-Private stBorder As String = ""
-Private stBorderColor As String = ""
-Private stBorderRadius As String = ""
-Private stBorderStyle As String = ""
-Private stBorderWidth As String = ""
-Private stColor As String = ""
-Private stFontFamily As String = ""
-Private stFontSize As String = ""
-Private stFontStyle As String = ""
-Private stFontWeight As String = ""
-Private stHeight As String = ""
+	Private stVHtml As String = ""
+	Private stValue As String = ""
+	Private stVIf As String = ""
+	Private stVModel As String = ""
+	Private stVShow As String = ""
+	Private stVText As String = ""
+	Private stBackgroundColor As String = ""
+	Private stBackgroundImage As String = ""
+	Private stBackgroundRepeat As String = ""
+	Private stBorder As String = ""
+	Private stBorderColor As String = ""
+	Private stBorderRadius As String = ""
+	Private stBorderStyle As String = ""
+	Private stBorderWidth As String = ""
+	Private stColor As String = ""
+	Private stFontFamily As String = ""
+	Private stFontSize As String = ""
+	Private stFontStyle As String = ""
+	Private stFontWeight As String = ""
+	Private stHeight As String = ""
 	Private stMaxHeight As String = ""
 	Private stMaxWidth As String = ""
-Private stTextAlign As String = ""
-Private stTextDecoration As String = ""
-Private stLabel As String = ""
-Private stWidth As String = ""
-Private bLoremIpsum As Boolean = False
+	Private stTextAlign As String = ""
+	Private stTextDecoration As String = ""
+	Private stLabel As String = ""
+	Private stWidth As String = ""
+	Private bLoremIpsum As Boolean = False
 	Private bDark As Boolean = False
 	Private stInputType As String = ""
 	Private stHref As String = ""
@@ -260,11 +260,11 @@ Private bLoremIpsum As Boolean = False
 	Private stAlt As String = ""
 	Private stVOn As String = ""
 	'
-	Type GridRow(Rows As Int, Columns As List, _
+	Type VueGridRow(Rows As Int, Columns As List, _
 	mt As String, mb As String, mr As String, ml As String, _
 	pt As String, pb As String, pr As String, pl As String)
 	
-	Type GridColumn(Columns As Int, sm As String, md As String, lg As String, xl As String, _
+	Type VueGridColumn(Columns As Int, sm As String, md As String, lg As String, xl As String, _
 	ofsm As String, ofmd As String, oflg As String, ofxl As String, _
 	mt As String, mb As String, mr As String, ml As String, _
 	pt As String, pb As String, pr As String, pl As String)
@@ -283,25 +283,25 @@ End Sub
 
 'initialize the custom view
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
-mName = Name.ToLowerCase
-mEventName = EventName.ToLowerCase
-mCallBack = CallBack
-classList.Initialize
-styleList.Initialize
-attributeList.Initialize
-sbText.Initialize
-bindings.Initialize
+	mName = Name.ToLowerCase
+	mEventName = EventName.ToLowerCase
+	mCallBack = CallBack
+	classList.Initialize
+	styleList.Initialize
+	attributeList.Initialize
+	sbText.Initialize
+	bindings.Initialize
 	methods.Initialize
 	'
 	LastRow = 0
 	GridRows.Initialize
 	GridColumns.Initialize
-	Items.Initialize 
+	Items.Initialize
 End Sub
 
 'clear the items for this
-Sub Items_Clear As VueElement 
-	Items.Initialize 
+Sub Items_Clear As VueElement
+	Items.Initialize
 	Return Me
 End Sub
 
@@ -346,68 +346,68 @@ End Sub
 
 'Create view in the designer
 Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
-mTarget = Target
-If Props <> Null Then
-bLoremIpsum = Props.Get("LoremIpsum")
+	mTarget = Target
+	If Props <> Null Then
+		bLoremIpsum = Props.Get("LoremIpsum")
 		bDark = Props.Get("Dark")
-mClasses = Props.Get("Classes")
+		mClasses = Props.Get("Classes")
 		stActiveClass = Props.Get("ActiveClass")
-mAttributes = Props.Get("Attributes")
-mStyle = Props.Get("Style")
-mTagName = Props.Get("TagName")
-mCaption = Props.Get("Caption")
-mStates = Props.Get("States")
-eOnClick = Props.Get("OnClick")
-eOnClickStop = Props.Get("OnClickStop")
-eOnChange = Props.Get("OnChange")
-eOnDblClick = Props.Get("OnDblClick")
-eOnClickAlt = Props.Get("OnClickAlt")
-eOnClickShift = Props.Get("OnClickShift")
-eOnClickPrevent = Props.Get("OnClickPrevent")
-eOnKeyPress = Props.Get("OnKeyPress")
-eOnMouseMove = Props.Get("OnMouseMove")
-eOnKeyUp = Props.Get("OnKeyUp")
-eOnMouseOut = Props.Get("OnMouseOut")
-stKey = Props.Get("Key")
-stRef = Props.Get("Ref")
+		mAttributes = Props.Get("Attributes")
+		mStyle = Props.Get("Style")
+		mTagName = Props.Get("TagName")
+		mCaption = Props.Get("Caption")
+		mStates = Props.Get("States")
+		eOnClick = Props.Get("OnClick")
+		eOnClickStop = Props.Get("OnClickStop")
+		eOnChange = Props.Get("OnChange")
+		eOnDblClick = Props.Get("OnDblClick")
+		eOnClickAlt = Props.Get("OnClickAlt")
+		eOnClickShift = Props.Get("OnClickShift")
+		eOnClickPrevent = Props.Get("OnClickPrevent")
+		eOnKeyPress = Props.Get("OnKeyPress")
+		eOnMouseMove = Props.Get("OnMouseMove")
+		eOnKeyUp = Props.Get("OnKeyUp")
+		eOnMouseOut = Props.Get("OnMouseOut")
+		stKey = Props.Get("Key")
+		stRef = Props.Get("Ref")
 		bAutoID = Props.get("AutoID")
-stSlot = Props.Get("Slot")
-stVBindClass = Props.Get("VBindClass")
+		stSlot = Props.Get("Slot")
+		stVBindClass = Props.Get("VBindClass")
 		stVBind = Props.Get("VBind")
-stVBindStyle = Props.Get("VBindStyle")
-stVElse = Props.Get("VElse")
-stVElseIf = Props.Get("VElseIf")
-stVFor = Props.Get("VFor")
+		stVBindStyle = Props.Get("VBindStyle")
+		stVElse = Props.Get("VElse")
+		stVElseIf = Props.Get("VElseIf")
+		stVFor = Props.Get("VFor")
 		stDataSource = Props.Get("DataSource")
-stVHtml = Props.Get("VHtml")
-stVIf = Props.Get("VIf")
-stVModel = Props.Get("VModel")
-stVShow = Props.Get("VShow")
-stVText = Props.Get("VText")
-stValue = Props.get("Value")
-stBackgroundColor = Props.Get("BackgroundColor")
-stBackgroundImage = Props.Get("BackgroundImage")
-stBackgroundRepeat = Props.Get("BackgroundRepeat")
-stBorder = Props.Get("Border")
-stBorderColor = Props.Get("BorderColor")
-stBorderRadius = Props.Get("BorderRadius")
-stBorderStyle = Props.Get("BorderStyle")
-stBorderWidth = Props.Get("BorderWidth")
-stColor = Props.Get("Color")
-stFontFamily = Props.Get("FontFamily")
-stFontSize = Props.Get("FontSize")
-stFontStyle = Props.Get("FontStyle")
-stFontWeight = Props.Get("FontWeight")
-stHeight = Props.Get("Height")
+		stVHtml = Props.Get("VHtml")
+		stVIf = Props.Get("VIf")
+		stVModel = Props.Get("VModel")
+		stVShow = Props.Get("VShow")
+		stVText = Props.Get("VText")
+		stValue = Props.get("Value")
+		stBackgroundColor = Props.Get("BackgroundColor")
+		stBackgroundImage = Props.Get("BackgroundImage")
+		stBackgroundRepeat = Props.Get("BackgroundRepeat")
+		stBorder = Props.Get("Border")
+		stBorderColor = Props.Get("BorderColor")
+		stBorderRadius = Props.Get("BorderRadius")
+		stBorderStyle = Props.Get("BorderStyle")
+		stBorderWidth = Props.Get("BorderWidth")
+		stColor = Props.Get("Color")
+		stFontFamily = Props.Get("FontFamily")
+		stFontSize = Props.Get("FontSize")
+		stFontStyle = Props.Get("FontStyle")
+		stFontWeight = Props.Get("FontWeight")
+		stHeight = Props.Get("Height")
 		stMaxHeight = Props.Get("MaxHeight")
 		stMaxWidth = Props.Get("MaxWidth")
-stTextAlign = Props.Get("TextAlign")
-stTextDecoration = Props.Get("TextDecoration")
-stLabel = Props.Get("Label")
-stWidth = Props.Get("Width")
-stInputType = Props.Get("InputType")
-stHref = Props.Get("Href")
-stSlotActivator = Props.get("VSlotActivator")
+		stTextAlign = Props.Get("TextAlign")
+		stTextDecoration = Props.Get("TextDecoration")
+		stLabel = Props.Get("Label")
+		stWidth = Props.Get("Width")
+		stInputType = Props.Get("InputType")
+		stHref = Props.Get("Href")
+		stSlotActivator = Props.get("VSlotActivator")
 		bHiddenMDAndUp = Props.Get("HiddenMDAndUp")
 		stTo = Props.get("To")
 		bHiddenSMAndDown = Props.Get("HiddenSMAndDown")
@@ -458,46 +458,46 @@ stSlotActivator = Props.get("VSlotActivator")
 		stSrc = Props.get("Src")
 		stAlt = Props.Get("Alt")
 		stVOn = Props.Get("VOn")
-End If
+	End If
 	
 	AddAttr("v-on", stVOn)
 	AddAttr("src", stSrc)
 	AddAttr("alt", stAlt)
 	AddAttr("fluid", bFluid)
 	AddAttr("rules", stRules)
-AddAttr("to", stTo)
-AddAttr("dark", bDark)
-AddAttr("v-slot:activator", stSlotActivator)
-AddAttr("href", stHref)
-AddAttr("key", stKey)
-AddAttr("ref", stRef)
-AddAttr("slot", stSlot)
+	AddAttr("to", stTo)
+	AddAttr("dark", bDark)
+	AddAttr("v-slot:activator", stSlotActivator)
+	AddAttr("href", stHref)
+	AddAttr("key", stKey)
+	AddAttr("ref", stRef)
+	AddAttr("slot", stSlot)
 	AddAttr("v-bind", stVBind)
-AddAttr("v-bind:class", stVBindClass)
-AddAttr("v-bind:style", stVBindStyle)
-AddAttr("value", stValue)
-AddAttr("v-else", stVElse)
-AddAttr("v-else-if", stVElseIf)
-AddAttr("v-for", stVFor)
-AddAttr("v-html", stVHtml)
-AddAttr("v-if", stVIf)
-AddAttr("label", stLabel)
-AddAttr("v-model", stVModel)
-AddAttr("v-show", stVShow)
-AddAttr("v-text", stVText)
-AddStyle("background-color", stBackgroundColor)
-AddStyle("background-image", stBackgroundImage)
-AddStyle("background-repeat", stBackgroundRepeat)
-AddStyle("border", stBorder)
-AddStyle("border-color", stBorderColor)
-AddStyle("border-radius", stBorderRadius)
-AddStyle("border-style", stBorderStyle)
-AddStyle("border-width", stBorderWidth)
-AddAttr("color", stColor)
-AddStyle("font-family", stFontFamily)
-AddStyle("font-size", stFontSize)
-AddStyle("font-style", stFontStyle)
-AddStyle("font-weight", stFontWeight)
+	AddAttr("v-bind:class", stVBindClass)
+	AddAttr("v-bind:style", stVBindStyle)
+	AddAttr("value", stValue)
+	AddAttr("v-else", stVElse)
+	AddAttr("v-else-if", stVElseIf)
+	AddAttr("v-for", stVFor)
+	AddAttr("v-html", stVHtml)
+	AddAttr("v-if", stVIf)
+	AddAttr("label", stLabel)
+	AddAttr("v-model", stVModel)
+	AddAttr("v-show", stVShow)
+	AddAttr("v-text", stVText)
+	AddStyle("background-color", stBackgroundColor)
+	AddStyle("background-image", stBackgroundImage)
+	AddStyle("background-repeat", stBackgroundRepeat)
+	AddStyle("border", stBorder)
+	AddStyle("border-color", stBorderColor)
+	AddStyle("border-radius", stBorderRadius)
+	AddStyle("border-style", stBorderStyle)
+	AddStyle("border-width", stBorderWidth)
+	AddAttr("color", stColor)
+	AddStyle("font-family", stFontFamily)
+	AddStyle("font-size", stFontSize)
+	AddStyle("font-style", stFontStyle)
+	AddStyle("font-weight", stFontWeight)
 	'
 	AddAttr("height", stHeight)
 	AddAttr("max-height", stMaxHeight)
@@ -509,8 +509,8 @@ AddStyle("font-weight", stFontWeight)
 	AddStyle("width", stStyleWidth)
 	AddStyle("max-width", stStyleMaxWidth)
 	'
-AddStyle("text-align", stTextAlign)
-AddStyle("text-decoration", stTextDecoration)
+	AddStyle("text-align", stTextAlign)
+	AddStyle("text-decoration", stTextDecoration)
 	AddAttr("type", stInputType)
 
 	AddClassOnCondition("hidden-md-and-up", bHiddenMDAndUp, True)
@@ -563,27 +563,27 @@ AddStyle("text-decoration", stTextDecoration)
 	setAttributes(mAttributes)
 	setStyles(mStyle)
 	'
-'link the events, if any
-'This activates Click the event exists on the module
-SetEvent("Click", "click", eOnClick)
-SetEvent("Change", "change", eOnChange)
-SetEvent("ClickStop", "Click.Stop", eOnClickStop)
-SetEvent("DblClick", "DblClick", eOnDblClick)
-SetEvent("MouseMove", "MouseMove", eOnMouseMove)
-SetEvent("MouseOut", "MouseOut", eOnMouseOut)
-SetEvent("KeyUp", "KeyUp", eOnKeyUp)
-SetEvent("KeyPress", "KeyPress", eOnKeyPress)
-SetEvent("ClickAlt", "Click.Alt", eOnClickAlt)
-SetEvent("ClickShift", "Click.Shift", eOnClickShift)
-SetEvent("ClickPrevent", "Click.Prevent", eOnClickPrevent)
-SetEvent("ClickAppend", "click:append", "")
-SetEvent("ClickAppendOuter", "click:append-outer", "")
-SetEvent("ClickPrepend", "click:prepend", "")
-SetEvent("ClickClear", "click:clear", "")
+	'link the events, if any
+	'This activates Click the event exists on the module
+	SetEvent("Click", "click", eOnClick)
+	SetEvent("Change", "change", eOnChange)
+	SetEvent("ClickStop", "Click.Stop", eOnClickStop)
+	SetEvent("DblClick", "DblClick", eOnDblClick)
+	SetEvent("MouseMove", "MouseMove", eOnMouseMove)
+	SetEvent("MouseOut", "MouseOut", eOnMouseOut)
+	SetEvent("KeyUp", "KeyUp", eOnKeyUp)
+	SetEvent("KeyPress", "KeyPress", eOnKeyPress)
+	SetEvent("ClickAlt", "Click.Alt", eOnClickAlt)
+	SetEvent("ClickShift", "Click.Shift", eOnClickShift)
+	SetEvent("ClickPrevent", "Click.Prevent", eOnClickPrevent)
+	SetEvent("ClickAppend", "click:append", "")
+	SetEvent("ClickAppendOuter", "click:append-outer", "")
+	SetEvent("ClickPrepend", "click:prepend", "")
+	SetEvent("ClickClear", "click:clear", "")
 	SetEvent("ClickPrependInner", "click:prepend-inner","")
 
-'build and get the element
-Dim strHTML As String = ToString
+	'build and get the element
+	Dim strHTML As String = ToString
 	mElement = mTarget.Append(strHTML).Get("#" & mName)
 	setStates(mStates)
 	'
@@ -593,8 +593,8 @@ Dim strHTML As String = ToString
 		End If
 		If BANano.IsUndefined(stColumns) Or BANano.IsNull(stColumns) Then
 			stColumns = "1"
-		End If		
-		If BANano.IsUndefined(stOffSets) Or BANano.IsNull(stOffSets) Then 
+		End If
+		If BANano.IsUndefined(stOffSets) Or BANano.IsNull(stOffSets) Then
 			stOffSets = "0,0,0,0"
 		End If
 		stOffSets = stOffSets.replace(",","|")
@@ -619,7 +619,7 @@ Dim strHTML As String = ToString
 		Dim xl As String = ss.Get(3)
 		'
 		AddRows(stRows)
-		AddColumnsOS(stColumns, offs, offm, offl, offx, sm, md, lg, xl) 
+		AddColumnsOS(stColumns, offs, offm, offl, offx, sm, md, lg, xl)
 		BuildGrid
 	End If
 End Sub
@@ -722,18 +722,18 @@ End Sub
 
 'bind an attribute
 Sub SetVBindAttribute(prop As String, value As String)
-prop = prop.ToLowerCase
-value = value.ToLowerCase
-prop = $"v-bind:${prop}"$
-AddAttr(prop,value)
-If value <> "" Then 
-	bindings.Put(value, Null)
-End If
+	prop = prop.ToLowerCase
+	value = value.ToLowerCase
+	prop = $"v-bind:${prop}"$
+	AddAttr(prop,value)
+	If value <> "" Then
+		bindings.Put(value, Null)
+	End If
 End Sub
 
 'initialize data
 Sub SetData(prop As String, val As Object)
-	If prop <> "" Then 
+	If prop <> "" Then
 		bindings.Put(prop, val)
 	End If
 End Sub
@@ -753,18 +753,18 @@ public Sub setStates(varBindings As String)
 		Dim k As String = BANanoShared.MvField(mt,1,"=")
 		Dim v As String = BANanoShared.MvField(mt,2,"=")
 		If v.EqualsIgnoreCase("false") Then
-			If k <> "" Then 
+			If k <> "" Then
 				bindings.Put(k, False)
 			End If
 		else if v.EqualsIgnoreCase("true") Then
-			If k <> "" Then 
+			If k <> "" Then
 				bindings.Put(k, True)
 			End If
 		else if v.EqualsIgnoreCase("array") Then
 			If k <> "" Then
 				Dim nl As List = NewList
 				bindings.Put(k, nl)
-			End If			
+			End If
 		else if v.EqualsIgnoreCase("object") Then
 			If k <> "" Then
 				Dim nm As Map = CreateMap()
@@ -776,7 +776,7 @@ public Sub setStates(varBindings As String)
 				bindings.Put(k, nm)
 			End If
 		Else
-			If k <> "" Then 
+			If k <> "" Then
 				bindings.put(k, v)
 			End If
 		End If
@@ -785,45 +785,45 @@ End Sub
 
 'add a break
 Sub AddBR
-sbText.Append("<br>")
+	sbText.Append("<br>")
 End Sub
 
 'add a horizontal rule
 Sub AddHR
-sbText.Append("<hr>")
+	sbText.Append("<hr>")
 End Sub
 
 
 'add an element to the text
 Sub AddElement(elID As String, tag As String, props As Map, styleProps As Map, classNames As List, loose As List, Text As String)
-elID = elID.tolowercase
-elID = elID.Replace("#","")
-Dim elIT As VueElement
-elIT.Initialize(mCallBack, elID, tag)
-elIT.SetText(Text)
-If loose <> Null Then
-For Each k As String In loose
-elIT.SetAttr(k, True)
-Next
-End If
-If props <> Null Then
-For Each k As String In props.Keys
-Dim v As String = props.Get(k)
-elIT.SetAttr(k, v)
-Next
-End If
-If styleProps <> Null Then
-For Each k As String In styleProps.Keys
-Dim v As String = styleProps.Get(k)
-elIT.SetAttr(k, v)
-Next
-End If
-If classNames <> Null Then
-elIT.AddClasses(classNames)
-End If
-'convert to string
-Dim sElement As String = elIT.tostring
-sbText.Append(sElement)
+	elID = elID.tolowercase
+	elID = elID.Replace("#","")
+	Dim elIT As VueElement
+	elIT.Initialize(mCallBack, elID, tag)
+	elIT.SetText(Text)
+	If loose <> Null Then
+		For Each k As String In loose
+			elIT.SetAttr(k, True)
+		Next
+	End If
+	If props <> Null Then
+		For Each k As String In props.Keys
+			Dim v As String = props.Get(k)
+			elIT.SetAttr(k, v)
+		Next
+	End If
+	If styleProps <> Null Then
+		For Each k As String In styleProps.Keys
+			Dim v As String = styleProps.Get(k)
+			elIT.SetAttr(k, v)
+		Next
+	End If
+	If classNames <> Null Then
+		elIT.AddClasses(classNames)
+	End If
+	'convert to string
+	Dim sElement As String = elIT.tostring
+	sbText.Append(sElement)
 End Sub
 
 'returns the BANanoElement
@@ -838,7 +838,7 @@ End Sub
 
 'returns the tag id
 public Sub getID() As String
-Return mName
+	Return mName
 End Sub
 
 'change the id of the element
@@ -852,34 +852,34 @@ End Sub
 public Sub AddToParent(targetID As String)
 	targetID = targetID.tolowercase
 	targetID = targetID.Replace("#","")
-mTarget = BANano.GetElement($"#${targetID}"$)
-DesignerCreateView(mTarget, Null)
+	mTarget = BANano.GetElement($"#${targetID}"$)
+	DesignerCreateView(mTarget, Null)
 End Sub
 
 'remove the component
 public Sub Remove()
-mElement.Remove
-BANano.SetMeToNull
+	mElement.Remove
+	BANano.SetMeToNull
 End Sub
 
 'trigger an event
 public Sub Trigger(event As String, params() As String)
-If mElement <> Null Then
-mElement.Trigger(event, params)
-End If
+	If mElement <> Null Then
+		mElement.Trigger(event, params)
+	End If
 End Sub
 
 'add a class
 public Sub AddClass(varClass As String)
-If BANano.IsUndefined(varClass) Or BANano.IsNull(varClass) Then Return
-If BANano.IsNumber(varClass) Then varClass = BANanoShared.CStr(varClass)
-varClass = varClass.trim
-If varClass = "" Then Return
-If mElement <> Null Then mElement.AddClass(varClass)
-Dim mxItems As List = BANanoShared.StrParse(" ", varClass)
-For Each mt As String In mxItems
-classList.put(mt, mt)
-Next
+	If BANano.IsUndefined(varClass) Or BANano.IsNull(varClass) Then Return
+	If BANano.IsNumber(varClass) Then varClass = BANanoShared.CStr(varClass)
+	varClass = varClass.trim
+	If varClass = "" Then Return
+	If mElement <> Null Then mElement.AddClass(varClass)
+	Dim mxItems As List = BANanoShared.StrParse(" ", varClass)
+	For Each mt As String In mxItems
+		classList.put(mt, mt)
+	Next
 End Sub
 
 Sub AddClasses(listOfClasses As List)
@@ -889,41 +889,41 @@ End Sub
 
 'add a class on condition
 public Sub AddClassOnCondition(varClass As String, varCondition As Boolean, varShouldBe As Boolean)
-If BANano.IsUndefined(varCondition) Or BANano.IsNull(varCondition) Then Return
-If varShouldBe <> varCondition Then Return
-If BANano.IsUndefined(varClass) Or BANano.IsNull(varClass) Then Return
-If BANano.IsNumber(varClass) Then varClass = BANanoShared.CStr(varClass)
-varClass = varClass.trim
-If varClass = "" Then Return
-If mElement <> Null Then mElement.AddClass(varClass)
-Dim mxItems As List = BANanoShared.StrParse(" ", varClass)
-For Each mt As String In mxItems
-classList.put(mt, mt)
+	If BANano.IsUndefined(varCondition) Or BANano.IsNull(varCondition) Then Return
+	If varShouldBe <> varCondition Then Return
+	If BANano.IsUndefined(varClass) Or BANano.IsNull(varClass) Then Return
+	If BANano.IsNumber(varClass) Then varClass = BANanoShared.CStr(varClass)
+	varClass = varClass.trim
+	If varClass = "" Then Return
+	If mElement <> Null Then mElement.AddClass(varClass)
+	Dim mxItems As List = BANanoShared.StrParse(" ", varClass)
+	For Each mt As String In mxItems
+		classList.put(mt, mt)
 	Next
 End Sub
 
 'add an attr on condition
 public Sub AddAttrOnCondition(varClass As String, varCondition As Boolean, varShouldBe As Boolean)
-If BANano.IsUndefined(varCondition) Or BANano.IsNull(varCondition) Then Return
-If varShouldBe <> varCondition Then Return
-If BANano.IsUndefined(varClass) Or BANano.IsNull(varClass) Then Return
-If BANano.IsNumber(varClass) Then varClass = BANanoShared.CStr(varClass)
-varClass = varClass.trim
-If varClass = "" Then Return
-AddAttr(varClass, varShouldBe)
+	If BANano.IsUndefined(varCondition) Or BANano.IsNull(varCondition) Then Return
+	If varShouldBe <> varCondition Then Return
+	If BANano.IsUndefined(varClass) Or BANano.IsNull(varClass) Then Return
+	If BANano.IsNumber(varClass) Then varClass = BANanoShared.CStr(varClass)
+	varClass = varClass.trim
+	If varClass = "" Then Return
+	AddAttr(varClass, varShouldBe)
 End Sub
 
 'add a style
 public Sub AddStyle(varProp As String, varStyle As String)
-If BANano.IsUndefined(varStyle) Or BANano.IsNull(varStyle) Then Return
-If BANano.IsNumber(varStyle) Then varStyle = BANanoShared.CStr(varStyle)
-If mElement <> Null Then
-Dim aStyle As Map = CreateMap()
-aStyle.put(varProp, varStyle)
-Dim sStyle As String = BANano.ToJSON(aStyle)
-mElement.SetStyle(sStyle)
-End If
-styleList.put(varProp, varStyle)
+	If BANano.IsUndefined(varStyle) Or BANano.IsNull(varStyle) Then Return
+	If BANano.IsNumber(varStyle) Then varStyle = BANanoShared.CStr(varStyle)
+	If mElement <> Null Then
+		Dim aStyle As Map = CreateMap()
+		aStyle.put(varProp, varStyle)
+		Dim sStyle As String = BANano.ToJSON(aStyle)
+		mElement.SetStyle(sStyle)
+	End If
+	styleList.put(varProp, varStyle)
 End Sub
 
 Sub SetAttr(varProp As String, varValue As String)
@@ -935,7 +935,7 @@ Sub BindDynamicComponent(viewID As String, compID As String)
 	viewID = viewID.ToLowerCase
 	compID = compID.tolowercase
 	SetVBindIs(viewID)
-	If viewID <> "" Then 
+	If viewID <> "" Then
 		bindings.Put(viewID, compID)
 	End If
 End Sub
@@ -953,47 +953,69 @@ Sub SetText(varText As String)
 End Sub
 
 Sub Bind(attr As String, value As String)
-	AddAttr($":${attr}"$, value)	
+	AddAttr($":${attr}"$, value)
+End Sub
+
+'add html of component to app and this binds events and states
+Sub BindVueElement(el As VueElement)
+	Dim mbindings As Map = el.bindings
+	Dim mmethods As Map = el.methods
+	'apply the binding for the control
+	For Each k As String In mbindings.Keys
+		Dim v As Object = mbindings.Get(k)
+		Select Case k
+			Case "key"
+			Case Else
+				SetData(k, v)
+		End Select
+	Next
+	'apply the events
+	For Each k As String In mmethods.Keys
+		Dim cb As BANanoObject = mmethods.Get(k)
+		SetCallBack(k, cb)
+	Next
 End Sub
 
 'add an attribute
-Public Sub AddAttr(varProp As String, varValue As String) 
-	If BANano.IsUndefined(varValue) Or BANano.IsNull(varValue) Then Return 
+Public Sub AddAttr(varProp As String, varValue As String)
+	If BANano.IsUndefined(varValue) Or BANano.IsNull(varValue) Then Return
 	If BANano.IsNumber(varValue) Then varValue = BANanoShared.CStr(varValue)
 	If varValue = "none" Then varValue = ""
 	If varValue = "" Then Return
 	If varProp = "align" And varValue.EqualsIgnoreCase("false") Then Return
-	If varProp = "justify" And varValue.EqualsIgnoreCase("false") Then Return	 
-	'we are adding a boolean 
-	If BANano.IsBoolean(varValue) Then 
-		If varValue = True Then  
-			attributeList.put(varProp, varValue) 
-			If mElement <> Null Then mElement.SetAttr(varProp, varValue) 
-		End If 
-	Else 
-		'we are adding a string 
-		If varValue.StartsWith(":") Then 
+	If varProp = "justify" And varValue.EqualsIgnoreCase("false") Then Return
+	'we are adding a boolean
+	If BANano.IsBoolean(varValue) Then
+		If varValue = True Then
+			attributeList.put(varProp, varValue)
+			If mElement <> Null Then mElement.SetAttr(varProp, varValue)
+		End If
+	Else
+		varValue = varValue.Replace("~","=")
+		varValue = varValue.Replace("#","$")
+		'we are adding a string
+		If varValue.StartsWith(":") Then
 			Dim rname As String = BANanoShared.MidString2(varValue, 2)
-			If rname.Contains(".") = False Then 
-				If rname <> "" Then 
+			If rname.Contains(".") = False Then
+				If rname <> "" Then
 					If rname <> "key" Then bindings.Put(rname, Null)
 				End If
 			End If
 			attributeList.put($":${varProp}"$, rname)
 			If mElement <> Null Then mElement.SetAttr($":${varProp}"$, rname)
 		Else
-			'does not start with : 
-			If mElement <> Null Then mElement.SetAttr(varProp, varValue) 
-			attributeList.put(varProp, varValue) 
-			Select Case varProp 
-			Case "v-model", "v-show", "v-if", "v-else-if", "required", "disabled", "readonly" 
-				If varValue <> "" Then 
-					bindings.Put(varValue, Null) 
-				End If
-			End Select 
-		End If 
-	End If 
-	Return 
+			'does not start with :
+			If mElement <> Null Then mElement.SetAttr(varProp, varValue)
+			attributeList.put(varProp, varValue)
+			Select Case varProp
+				Case "v-model", "v-show", "v-if", "v-else-if", "required", "disabled", "readonly"
+					If varValue <> "" Then
+						bindings.Put(varValue, Null)
+					End If
+			End Select
+		End If
+	End If
+	Return
 End Sub
 
 Sub RemoveCodeBindings(b As List)
@@ -1026,99 +1048,99 @@ End Sub
 
 'returns the style as JSON
 public Sub getStyle() As String
-Dim sbStyle As StringBuilder
-sbStyle.Initialize
-sbStyle.Append("{")
-For Each k As String In styleList.Keys
-Dim v As String = styleList.Get(k)
-sbStyle.Append(k).Append(":").Append(v).Append(",")
-Next
-sbStyle.Append("}")
-mStyle = sbStyle.ToString
-Return mStyle
+	Dim sbStyle As StringBuilder
+	sbStyle.Initialize
+	sbStyle.Append("{")
+	For Each k As String In styleList.Keys
+		Dim v As String = styleList.Get(k)
+		sbStyle.Append(k).Append(":").Append(v).Append(",")
+	Next
+	sbStyle.Append("}")
+	mStyle = sbStyle.ToString
+	Return mStyle
 End Sub
 
 'sets the attributes
 public Sub setAttributes(varAttributes As String)
-Dim mxItems As List = BANanoShared.StrParse(";", varAttributes)
-For Each mt As String In mxItems
-Dim k As String = BANanoShared.MvField(mt,1,"=")
-Dim v As String = BANanoShared.MvField(mt,2,"=")
-If mElement <> Null Then mElement.SetAttr(k, v)
-attributeList.put(k, v)
-Next
+	Dim mxItems As List = BANanoShared.StrParse(";", varAttributes)
+	For Each mt As String In mxItems
+		Dim k As String = BANanoShared.MvField(mt,1,"=")
+		Dim v As String = BANanoShared.MvField(mt,2,"=")
+		If mElement <> Null Then mElement.SetAttr(k, v)
+		attributeList.put(k, v)
+	Next
 End Sub
 
 'sets the styles from the designer
 public Sub setStyles(varStyles As String)
-Dim mxItems As List = BANanoShared.StrParse(";", varStyles)
-For Each mt As String In mxItems
-Dim k As String = BANanoShared.MvField(mt,1,"=")
-Dim v As String = BANanoShared.MvField(mt,2,"=")
-AddStyle(k, v)
-Next
+	Dim mxItems As List = BANanoShared.StrParse(";", varStyles)
+	For Each mt As String In mxItems
+		Dim k As String = BANanoShared.MvField(mt,1,"=")
+		Dim v As String = BANanoShared.MvField(mt,2,"=")
+		AddStyle(k, v)
+	Next
 End Sub
 
 'returns the attributes
 public Sub getAttributes() As String
-Dim sbAttr As StringBuilder
-sbAttr.Initialize
-For Each k As String In attributeList.Keys
-Dim v As String = attributeList.Get(k)
-sbAttr.Append(k).Append("=").Append(v).Append(";")
-Next
-mAttributes = sbAttr.ToString
-Return mAttributes
+	Dim sbAttr As StringBuilder
+	sbAttr.Initialize
+	For Each k As String In attributeList.Keys
+		Dim v As String = attributeList.Get(k)
+		sbAttr.Append(k).Append("=").Append(v).Append(";")
+	Next
+	mAttributes = sbAttr.ToString
+	Return mAttributes
 End Sub
 
 'sets the caption
 public Sub setCaption(varCaption As String)
-If mElement <> Null Then
-mElement.SetHTML(BANano.SF(varCaption))
-End If
-mCaption = varCaption
+	If mElement <> Null Then
+		mElement.SetHTML(BANano.SF(varCaption))
+	End If
+	mCaption = varCaption
 End Sub
 
 'returns the caption
 public Sub getCaption() As String
-Return mCaption
+	Return mCaption
 End Sub
 
 public Sub setKey(varKey As String)
-AddAttr("key", varKey)
-stKey = varKey
+	AddAttr("key", varKey)
+	stKey = varKey
 End Sub
 
 public Sub getKey() As String
-Return stKey
+	Return stKey
 End Sub
 
 
 public Sub setSrc(varSrc As String)
-AddAttr("src", varSrc)
-stSrc = varSrc
+	AddAttr("src", varSrc)
+	stSrc = varSrc
 End Sub
 
 public Sub getSrc() As String
-Return stSrc
+	Return stSrc
 End Sub
 
 public Sub setAlt(varAlt As String)
-AddAttr("alt", varAlt)
-stAlt = varAlt
+	AddAttr("alt", varAlt)
+	stAlt = varAlt
 End Sub
 
 public Sub getAlt() As String
-Return stAlt
+	Return stAlt
 End Sub
 
 public Sub setVOn(varVOn As String)
-AddAttr("v-on", varVOn)
-stVOn = varVOn
+	AddAttr("v-on", varVOn)
+	stVOn = varVOn
 End Sub
 
 public Sub getVOn() As String
-Return stVOn
+	Return stVOn
 End Sub
 
 
@@ -1133,122 +1155,122 @@ End Sub
 
 
 public Sub setRef(varRef As String)
-AddAttr("ref", varRef)
-stRef = varRef
+	AddAttr("ref", varRef)
+	stRef = varRef
 End Sub
 
 public Sub getRef() As String
-Return stRef
+	Return stRef
 End Sub
 
 
 public Sub setLabel(varLabel As String)
-AddAttr("label", varLabel)
-stLabel = varLabel
+	AddAttr("label", varLabel)
+	stLabel = varLabel
 End Sub
 
 public Sub getLabel() As String
-Return stLabel
+	Return stLabel
 End Sub
 
 public Sub setSlot(varSlot As String)
-AddAttr("slot", varSlot)
-stSlot = varSlot
+	AddAttr("slot", varSlot)
+	stSlot = varSlot
 End Sub
 
 public Sub getSlot() As String
-Return stSlot
+	Return stSlot
 End Sub
 
 public Sub setVBindClass(varVBindClass As String)
-AddAttr("v-bind:class", varVBindClass)
-stVBindClass = varVBindClass
+	AddAttr("v-bind:class", varVBindClass)
+	stVBindClass = varVBindClass
 End Sub
 
 public Sub getVBindClass() As String
-Return stVBindClass
+	Return stVBindClass
 End Sub
 
 public Sub setVBind(varVBind As String)
-AddAttr("v-bind", varVBind)
-stVBind = varVBind
+	AddAttr("v-bind", varVBind)
+	stVBind = varVBind
 End Sub
 
 public Sub getVBind() As String
-Return stVBind
+	Return stVBind
 End Sub
 
 
 public Sub setVBindStyle(varVBindStyle As String)
-AddAttr("v-bind:style", varVBindStyle)
-stVBindStyle = varVBindStyle
+	AddAttr("v-bind:style", varVBindStyle)
+	stVBindStyle = varVBindStyle
 End Sub
 
 public Sub getVBindStyle() As String
-Return stVBindStyle
+	Return stVBindStyle
 End Sub
 
 public Sub setVElse(varVElse As String)
-AddAttr("v-else", varVElse)
-stVElse = varVElse
+	AddAttr("v-else", varVElse)
+	stVElse = varVElse
 End Sub
 
 public Sub getVElse() As String
-Return stVElse
+	Return stVElse
 End Sub
 
 public Sub setVElseIf(varVElseIf As String)
-AddAttr("v-else-if", varVElseIf)
-stVElseIf = varVElseIf
+	AddAttr("v-else-if", varVElseIf)
+	stVElseIf = varVElseIf
 End Sub
 
 public Sub getVElseIf() As String
-Return stVElseIf
+	Return stVElseIf
 End Sub
 
 public Sub setVFor(varVFor As String)
-AddAttr("v-for", varVFor)
-stVFor = varVFor
+	AddAttr("v-for", varVFor)
+	stVFor = varVFor
 End Sub
 
 public Sub getVFor() As String
-Return stVFor
+	Return stVFor
 End Sub
 
 public Sub setDataSource(varVFor As String)
-stDataSource = varVFor
-SetData(stDataSource, NewList)
+	stDataSource = varVFor
+	SetData(stDataSource, NewList)
 End Sub
 
 public Sub getDataSource() As String
-Return stDataSource
+	Return stDataSource
 End Sub
 
 public Sub setVHtml(varVHtml As String)
-AddAttr("v-html", varVHtml)
-stVHtml = varVHtml
+	AddAttr("v-html", varVHtml)
+	stVHtml = varVHtml
 End Sub
 
 public Sub getVHtml() As String
-Return stVHtml
+	Return stVHtml
 End Sub
 
 public Sub setVIf(varVIf As String)
-AddAttr("v-if", varVIf)
-stVIf = varVIf
+	AddAttr("v-if", varVIf)
+	stVIf = varVIf
 End Sub
 
 public Sub getVIf() As String
-Return stVIf
+	Return stVIf
 End Sub
 
 public Sub setVModel(varVModel As String)
-AddAttr("v-model", varVModel)
-stVModel = varVModel
+	AddAttr("v-model", varVModel)
+	stVModel = varVModel
 End Sub
 
 public Sub getVModel() As String
-Return stVModel
+	Return stVModel
 End Sub
 
 public Sub setValue(varValue As String)
@@ -1261,138 +1283,138 @@ public Sub getValue() As String
 End Sub
 
 public Sub setVShow(varVShow As String)
-AddAttr("v-show", varVShow)
-stVShow = varVShow
+	AddAttr("v-show", varVShow)
+	stVShow = varVShow
 End Sub
 
 public Sub getVShow() As String
-Return stVShow
+	Return stVShow
 End Sub
 
 public Sub setVText(varVText As String)
-AddAttr("v-text", varVText)
-stVText = varVText
+	AddAttr("v-text", varVText)
+	stVText = varVText
 End Sub
 
 public Sub getVText() As String
-Return stVText
+	Return stVText
 End Sub
 
 public Sub setBackgroundColor(varBackgroundColor As String)
-AddStyle("background-color", varBackgroundColor)
-stBackgroundColor = varBackgroundColor
+	AddStyle("background-color", varBackgroundColor)
+	stBackgroundColor = varBackgroundColor
 End Sub
 
 public Sub getBackgroundColor() As String
-Return stBackgroundColor
+	Return stBackgroundColor
 End Sub
 
 public Sub setBackgroundImage(varBackgroundImage As String)
-AddStyle("background-image", varBackgroundImage)
-stBackgroundImage = varBackgroundImage
+	AddStyle("background-image", varBackgroundImage)
+	stBackgroundImage = varBackgroundImage
 End Sub
 
 public Sub getBackgroundImage() As String
-Return stBackgroundImage
+	Return stBackgroundImage
 End Sub
 
 public Sub setBackgroundRepeat(varBackgroundRepeat As String)
-AddStyle("background-repeat", varBackgroundRepeat)
-stBackgroundRepeat = varBackgroundRepeat
+	AddStyle("background-repeat", varBackgroundRepeat)
+	stBackgroundRepeat = varBackgroundRepeat
 End Sub
 
 public Sub getBackgroundRepeat() As String
-Return stBackgroundRepeat
+	Return stBackgroundRepeat
 End Sub
 
 public Sub setBorder(varBorder As String)
-AddStyle("border", varBorder)
-stBorder = varBorder
+	AddStyle("border", varBorder)
+	stBorder = varBorder
 End Sub
 
 public Sub getBorder() As String
-Return stBorder
+	Return stBorder
 End Sub
 
 public Sub setBorderColor(varBorderColor As String)
-AddStyle("border-color", varBorderColor)
-stBorderColor = varBorderColor
+	AddStyle("border-color", varBorderColor)
+	stBorderColor = varBorderColor
 End Sub
 
 public Sub getBorderColor() As String
-Return stBorderColor
+	Return stBorderColor
 End Sub
 
 public Sub setBorderRadius(varBorderRadius As String)
-AddStyle("border-radius", varBorderRadius)
-stBorderRadius = varBorderRadius
+	AddStyle("border-radius", varBorderRadius)
+	stBorderRadius = varBorderRadius
 End Sub
 
 public Sub getBorderRadius() As String
-Return stBorderRadius
+	Return stBorderRadius
 End Sub
 
 public Sub setBorderStyle(varBorderStyle As String)
-AddStyle("border-style", varBorderStyle)
-stBorderStyle = varBorderStyle
+	AddStyle("border-style", varBorderStyle)
+	stBorderStyle = varBorderStyle
 End Sub
 
 public Sub getBorderStyle() As String
-Return stBorderStyle
+	Return stBorderStyle
 End Sub
 
 public Sub setBorderWidth(varBorderWidth As String)
-AddStyle("border-width", varBorderWidth)
-stBorderWidth = varBorderWidth
+	AddStyle("border-width", varBorderWidth)
+	stBorderWidth = varBorderWidth
 End Sub
 
 public Sub getBorderWidth() As String
-Return stBorderWidth
+	Return stBorderWidth
 End Sub
 
 public Sub setColor(varColor As String)
-AddAttr("color", varColor)
-stColor = varColor
+	AddAttr("color", varColor)
+	stColor = varColor
 End Sub
 
 public Sub getColor() As String
-Return stColor
+	Return stColor
 End Sub
 
 public Sub setFontFamily(varFontFamily As String)
-AddStyle("font-family", varFontFamily)
-stFontFamily = varFontFamily
+	AddStyle("font-family", varFontFamily)
+	stFontFamily = varFontFamily
 End Sub
 
 public Sub getFontFamily() As String
-Return stFontFamily
+	Return stFontFamily
 End Sub
 
 public Sub setFontSize(varFontSize As String)
-AddStyle("font-size", varFontSize)
-stFontSize = varFontSize
+	AddStyle("font-size", varFontSize)
+	stFontSize = varFontSize
 End Sub
 
 public Sub getFontSize() As String
-Return stFontSize
+	Return stFontSize
 End Sub
 
 public Sub setFontStyle(varFontStyle As String)
-AddStyle("font-style", varFontStyle)
-stFontStyle = varFontStyle
+	AddStyle("font-style", varFontStyle)
+	stFontStyle = varFontStyle
 End Sub
 
 public Sub getFontStyle() As String
-Return stFontStyle
+	Return stFontStyle
 End Sub
 
 public Sub setFontWeight(varFontWeight As String)
-AddStyle("font-weight", varFontWeight)
-stFontWeight = varFontWeight
+	AddStyle("font-weight", varFontWeight)
+	stFontWeight = varFontWeight
 End Sub
 
 public Sub getFontWeight() As String
-Return stFontWeight
+	Return stFontWeight
 End Sub
 
 public Sub setHeight(varHeight As String)
@@ -1401,7 +1423,7 @@ public Sub setHeight(varHeight As String)
 End Sub
 
 public Sub getHeight() As String
-Return stHeight
+	Return stHeight
 End Sub
 
 public Sub setStyleHeight(varHeight As String)
@@ -1410,7 +1432,7 @@ public Sub setStyleHeight(varHeight As String)
 End Sub
 
 public Sub getStyleHeight() As String
-Return stStyleHeight
+	Return stStyleHeight
 End Sub
 
 public Sub setMaxHeight(varMargin As String)
@@ -1419,7 +1441,7 @@ public Sub setMaxHeight(varMargin As String)
 End Sub
 
 public Sub getMaxHeight() As String
-Return stMaxHeight
+	Return stMaxHeight
 End Sub
 
 public Sub setStyleMaxHeight(varMargin As String)
@@ -1428,7 +1450,7 @@ public Sub setStyleMaxHeight(varMargin As String)
 End Sub
 
 public Sub getStyleMaxHeight() As String
-Return stStyleMaxHeight
+	Return stStyleMaxHeight
 End Sub
 
 public Sub setMaxWidth(varMarginBottom As String)
@@ -1437,7 +1459,7 @@ public Sub setMaxWidth(varMarginBottom As String)
 End Sub
 
 public Sub getMaxWidth() As String
-Return stMaxWidth
+	Return stMaxWidth
 End Sub
 
 public Sub setStyleMaxWidth(varMarginBottom As String)
@@ -1446,34 +1468,34 @@ public Sub setStyleMaxWidth(varMarginBottom As String)
 End Sub
 
 public Sub getStyleMaxWidth() As String
-Return stStyleMaxWidth
+	Return stStyleMaxWidth
 End Sub
 
 
 public Sub setTagName(varTagName As String)
-mTagName = varTagName
+	mTagName = varTagName
 End Sub
 
 public Sub getTagName() As String
-Return mTagName
+	Return mTagName
 End Sub
 
 public Sub setTextAlign(varTextAlign As String)
-AddStyle("text-align", varTextAlign)
-stTextAlign = varTextAlign
+	AddStyle("text-align", varTextAlign)
+	stTextAlign = varTextAlign
 End Sub
 
 public Sub getTextAlign() As String
-Return stTextAlign
+	Return stTextAlign
 End Sub
 
 public Sub setDark(varDark As Boolean)
-AddAttr("dark", varDark)
-bDark = varDark
+	AddAttr("dark", varDark)
+	bDark = varDark
 End Sub
 
 public Sub getDark() As Boolean
-Return bDark
+	Return bDark
 End Sub
 
 public Sub setHiddenMDAndUp(varHiddenMDAndUp As Boolean)
@@ -1523,12 +1545,12 @@ End Sub
 
 
 public Sub setTextDecoration(varTextDecoration As String)
-AddStyle("text-decoration", varTextDecoration)
-stTextDecoration = varTextDecoration
+	AddStyle("text-decoration", varTextDecoration)
+	stTextDecoration = varTextDecoration
 End Sub
 
 public Sub getTextDecoration() As String
-Return stTextDecoration
+	Return stTextDecoration
 End Sub
 
 public Sub setWidth(varWidth As String)
@@ -1537,7 +1559,7 @@ public Sub setWidth(varWidth As String)
 End Sub
 
 public Sub getWidth() As String
-Return stWidth
+	Return stWidth
 End Sub
 '
 public Sub setStyleWidth(varWidth As String)
@@ -1546,31 +1568,31 @@ public Sub setStyleWidth(varWidth As String)
 End Sub
 
 public Sub getStyleWidth() As String
-Return stStyleWidth
+	Return stStyleWidth
 End Sub
 '
 public Sub setRules(varRules As String)
-AddAttr("rules", varRules)
-stWidth = varRules
+	AddAttr("rules", varRules)
+	stWidth = varRules
 End Sub
 
 public Sub getRules() As String
-Return stRules
+	Return stRules
 End Sub
 
 '
 public Sub setTo(varTo As String)
-AddAttr("to", varTo)
-stTo = varTo
+	AddAttr("to", varTo)
+	stTo = varTo
 End Sub
 
 public Sub getTo() As String
-Return stTo
+	Return stTo
 End Sub
 
 'add a child component
 Sub AddChild(child As String)
-sbText.Append(child)
+	sbText.Append(child)
 End Sub
 
 'set a call back
@@ -1592,6 +1614,20 @@ private Sub SetEvent(eventName As String, attrName As String, eventValue As Stri
 	Dim cb As BANanoObject = BANano.CallBack(mCallBack, sName, Array(e))
 	methods.Put(sName, cb)
 End Sub
+
+Sub SetOnEvent(eventHandler As Object, eventName As String, attrName As String, eventValue As String)
+	eventName = eventName.tolowercase
+	attrName = attrName.tolowercase
+	If SubExists(eventHandler, eventName) = False Then Return
+	If BANano.IsUndefined(eventValue) Or BANano.IsNull(eventValue) Then eventValue = ""
+	Dim sCode As String = $"${eventName}(${eventValue})"$
+	AddAttr($"v-on:${attrName}"$, sCode)
+	'arguments for the event
+	Dim e As Object 'ignore
+	Dim cb As BANanoObject = BANano.CallBack(eventHandler, eventName, Array(e))
+	methods.Put(eventName, cb)
+End Sub
+
 
 'define method
 Sub OnMulti(EventHandler As String, eventName As String, args As String)    'ignoredeadcode
@@ -1639,7 +1675,7 @@ Sub setCoverImage(url As String)
 	stCoverImage = url
 	If BANano.IsUndefined(url) Or BANano.IsNull(url) Then Return
 	url = url.trim
-	If url = "" Then Return 
+	If url = "" Then Return
 	Dim sm As String = $"background-image=url('${url}');background-size=cover;width=100%;height=100%"$
 	setStyles(sm)
 End Sub
@@ -1790,8 +1826,8 @@ End Sub
 
 'set append-icon
 public Sub setAppendIcon(varAppendIcon As String)
-AddAttr("append-icon", varAppendIcon)
-stAppendIcon = varAppendIcon
+	AddAttr("append-icon", varAppendIcon)
+	stAppendIcon = varAppendIcon
 End Sub
 
 'get append-icon
@@ -1801,152 +1837,152 @@ End Sub
 
 'set append-icon
 public Sub setAppendOuterIcon(varAppendIcon As String)
-AddAttr("append-outer-icon", varAppendIcon)
-stAppendOuterIcon = varAppendIcon
+	AddAttr("append-outer-icon", varAppendIcon)
+	stAppendOuterIcon = varAppendIcon
 End Sub
 
 'get append-icon
 public Sub getAppendOuterIcon() As String
-Return stAppendOuterIcon
+	Return stAppendOuterIcon
 End Sub
 
 
 'set autofocus
 public Sub setAutofocus(varAutofocus As Boolean)
-AddAttrOnCondition("autofocus", varAutofocus, True)
-boAutofocus = varAutofocus
+	AddAttrOnCondition("autofocus", varAutofocus, True)
+	boAutofocus = varAutofocus
 End Sub
 
 'get autofocus
 public Sub getAutofocus() As Boolean
-Return boAutofocus
+	Return boAutofocus
 End Sub
 
 'set clearable
 public Sub setClearable(varClearable As Boolean)
-AddAttrOnCondition("clearable", varClearable, True)
-boClearable = varClearable
+	AddAttrOnCondition("clearable", varClearable, True)
+	boClearable = varClearable
 End Sub
 
 'get clearable
 public Sub getClearable() As Boolean
-Return boClearable
+	Return boClearable
 End Sub
 
 'set counter
 public Sub setCounter(varCounter As String)
-AddAttr("counter", varCounter)
-stCounter = varCounter
+	AddAttr("counter", varCounter)
+	stCounter = varCounter
 End Sub
 
 'get counter
 public Sub getCounter() As String
-Return stCounter
+	Return stCounter
 End Sub
 
 'set dense
 public Sub setDense(varDense As Boolean)
-AddAttrOnCondition("dense", varDense, True)
-boDense = varDense
+	AddAttrOnCondition("dense", varDense, True)
+	boDense = varDense
 End Sub
 
 'get dense
 public Sub getDense() As Boolean
-Return boDense
+	Return boDense
 End Sub
 
 'set disabled
 public Sub setDisabled(varDisabled As String)
-AddAttr("disabled", varDisabled)
-stDisabled = varDisabled
+	AddAttr("disabled", varDisabled)
+	stDisabled = varDisabled
 End Sub
 
 'get disabled
 public Sub getDisabled() As String
-Return stDisabled
+	Return stDisabled
 End Sub
 
 'set filled
 public Sub setFilled(varFilled As Boolean)
-AddAttrOnCondition("filled", varFilled, True)
-boFilled = varFilled
+	AddAttrOnCondition("filled", varFilled, True)
+	boFilled = varFilled
 End Sub
 
 'get filled
 public Sub getFilled() As Boolean
-Return boFilled
+	Return boFilled
 End Sub
 
 'set flat
 public Sub setFlat(varFlat As Boolean)
-AddAttrOnCondition("flat", varFlat, True)
-boFlat = varFlat
+	AddAttrOnCondition("flat", varFlat, True)
+	boFlat = varFlat
 End Sub
 
 'get flat
 public Sub getFlat() As Boolean
-Return boFlat
+	Return boFlat
 End Sub
 
 'set hide-details
 public Sub setHideDetails(varHideDetails As Boolean)
-AddAttrOnCondition("hide-details", varHideDetails, True)
-boHideDetails = varHideDetails
+	AddAttrOnCondition("hide-details", varHideDetails, True)
+	boHideDetails = varHideDetails
 End Sub
 
 'get hide-details
 public Sub getHideDetails() As Boolean
-Return boHideDetails
+	Return boHideDetails
 End Sub
 
 'set hint
 public Sub setHint(varHint As String)
-AddAttr("hint", varHint)
-stHint = varHint
+	AddAttr("hint", varHint)
+	stHint = varHint
 End Sub
 
 'get hint
 public Sub getHint() As String
-Return stHint
+	Return stHint
 End Sub
 
 'set outlined
 public Sub setOutlined(varOutlined As Boolean)
-AddAttrOnCondition("outlined", varOutlined, True)
-boOutlined = varOutlined
+	AddAttrOnCondition("outlined", varOutlined, True)
+	boOutlined = varOutlined
 End Sub
 
 'get outlined
 public Sub getOutlined() As Boolean
-Return boOutlined
+	Return boOutlined
 End Sub
 
 'set persistent-hint
 public Sub setPersistentHint(varPersistentHint As Boolean)
-AddAttrOnCondition("persistent-hint", varPersistentHint, True)
-boPersistentHint = varPersistentHint
+	AddAttrOnCondition("persistent-hint", varPersistentHint, True)
+	boPersistentHint = varPersistentHint
 End Sub
 
 'get persistent-hint
 public Sub getPersistentHint() As Boolean
-Return boPersistentHint
+	Return boPersistentHint
 End Sub
 
 'set placeholder
 public Sub setPlaceholder(varPlaceholder As String)
-AddAttr("placeholder", varPlaceholder)
-stPlaceholder = varPlaceholder
+	AddAttr("placeholder", varPlaceholder)
+	stPlaceholder = varPlaceholder
 End Sub
 
 'get placeholder
 public Sub getPlaceholder() As String
-Return stPlaceholder
+	Return stPlaceholder
 End Sub
 
 'set prepend-icon
 public Sub setPrependIcon(varPrependIcon As String)
-AddAttr("prepend-icon", varPrependIcon)
-stPrependIcon = varPrependIcon
+	AddAttr("prepend-icon", varPrependIcon)
+	stPrependIcon = varPrependIcon
 End Sub
 
 'get prepend-icon
@@ -1956,19 +1992,19 @@ End Sub
 
 'set prepend-icon
 public Sub setPrependInnerIcon(varPrependIcon As String)
-AddAttr("prepend-inner-icon", varPrependIcon)
-stPrependInnerIcon = varPrependIcon
+	AddAttr("prepend-inner-icon", varPrependIcon)
+	stPrependInnerIcon = varPrependIcon
 End Sub
 
 'get prepend-icon
 public Sub getPrependInnerIcon() As String
-Return stPrependInnerIcon
+	Return stPrependInnerIcon
 End Sub
 
 'set readonly
 public Sub setReadonly(varReadonly As String)
-AddAttr("readonly", varReadonly)
-stReadonly = varReadonly
+	AddAttr("readonly", varReadonly)
+	stReadonly = varReadonly
 End Sub
 
 'get readonly
@@ -1978,8 +2014,8 @@ End Sub
 
 'set required
 public Sub setRequired(varRequired As String)
-AddAttr("required", varRequired)
-stRequired = varRequired
+	AddAttr("required", varRequired)
+	stRequired = varRequired
 End Sub
 
 'get required
@@ -2003,8 +2039,8 @@ End Sub
 
 'set rounded
 public Sub setRounded(varRounded As Boolean)
-AddAttrOnCondition("rounded", varRounded, True)
-boRounded = varRounded
+	AddAttrOnCondition("rounded", varRounded, True)
+	boRounded = varRounded
 End Sub
 
 'get rounded
@@ -2023,19 +2059,19 @@ End Sub
 
 'set shaped
 public Sub setShaped(varShaped As Boolean)
-AddAttrOnCondition("shaped", varShaped, True)
-boShaped = varShaped
+	AddAttrOnCondition("shaped", varShaped, True)
+	boShaped = varShaped
 End Sub
 
 'get shaped
 public Sub getShaped() As Boolean
-Return boShaped
+	Return boShaped
 End Sub
 
 'set single-line
 public Sub setSingleLine(varSingleLine As Boolean)
-AddAttrOnCondition("single-line", varSingleLine, True)
-boSingleLine = varSingleLine
+	AddAttrOnCondition("single-line", varSingleLine, True)
+	boSingleLine = varSingleLine
 End Sub
 
 'get single-line
@@ -2083,19 +2119,19 @@ Sub BuildGrid
 	Dim rowTot As Int = GridRows.Size - 1
 	For rowCnt = 0 To rowTot
 		'get this row
-		Dim currentRow As GridRow = GridRows.GetValueAt(rowCnt)
+		Dim currentRow As VueGridRow = GridRows.GetValueAt(rowCnt)
 		Dim strRow As String = BuildRow(currentRow)
 		sb.Append(strRow)
 	Next
 	Dim sout As String = sb.tostring
 	If mElement <> Null Then
 		mElement.Append(sout)
-	Else	
+	Else
 		sbText.Append(sout)
 	End If
 End Sub
 
-private Sub BuildRowClass(xrow As GridRow) As String
+private Sub BuildRowClass(xrow As VueGridRow) As String
 	Dim sb As StringBuilder
 	sb.Initialize
 	'add the margins
@@ -2139,7 +2175,7 @@ private Sub BuildPadding(pt As String, pb As String, pl As String, pr As String)
 	Return sout
 End Sub
 
-private Sub BuildSpans(col As GridColumn) As String
+private Sub BuildSpans(col As VueGridColumn) As String
 	Dim sb As StringBuilder
 	sb.Initialize
 	If col.sm <> "" Then sb.Append($"sm="${col.sm}" "$)
@@ -2151,7 +2187,7 @@ private Sub BuildSpans(col As GridColumn) As String
 	Return sout
 End Sub
 
-private Sub BuildOffsets(col As GridColumn) As String
+private Sub BuildOffsets(col As VueGridColumn) As String
 	Dim sb As StringBuilder
 	sb.Initialize
 	If col.ofsm <> "" Then sb.Append($"offset-sm="${col.ofsm}" "$)
@@ -2187,7 +2223,7 @@ Sub MatrixID(xRow As Int, col As Int) As String
 End Sub
 
 'build a single row
-private Sub BuildRow(xRow As GridRow) As String
+private Sub BuildRow(xRow As VueGridRow) As String
 	'how many rows do we have to render
 	Dim rowTot As Int = xRow.Rows
 	Dim rowCnt As Int
@@ -2208,7 +2244,7 @@ private Sub BuildRow(xRow As GridRow) As String
 		Dim LastColumn As Int = 0
 		For colCnt = 0 To colTot
 			'get this column
-			Dim column As GridColumn = cols.Get(colCnt)
+			Dim column As VueGridColumn = cols.Get(colCnt)
 			Dim colCnt1 As Int = 0
 			Dim colTot1 As Int = column.Columns
 			For colCnt1 = 1 To colTot1
@@ -2219,14 +2255,14 @@ private Sub BuildRow(xRow As GridRow) As String
 				'if showid
 				Dim strShow As String = ""
 				Dim sbStyle As StringBuilder
-				sbStyle.Initialize 
+				sbStyle.Initialize
 				If bShowGridDesign Then
 					strShow = cellKey
 					sbStyle.append($"style="border-width:1px;border-style:dotted;border-color:grey;""$)
 				End If
 				'define the column structure
 				Dim sbCol As StringBuilder
-				sbCol.Initialize 
+				sbCol.Initialize
 				sbCol.Append($"<v-col id="${cellKey}" ${sbStyle.tostring}"$)
 				sbCol.Append(BuildColumnClass(column))
 				sbCol.Append(" ")
@@ -2243,7 +2279,7 @@ private Sub BuildRow(xRow As GridRow) As String
 End Sub
 
 'build the column class for current column
-private Sub BuildColumnClass(col As GridColumn) As String
+private Sub BuildColumnClass(col As VueGridColumn) As String
 	Dim sb As StringBuilder
 	sb.Initialize
 	'add the margins
@@ -2253,7 +2289,7 @@ private Sub BuildColumnClass(col As GridColumn) As String
 	Dim sout As String = sb.ToString
 	sout = sout.trim
 	Dim sbout As StringBuilder
-	sbout.Initialize 
+	sbout.Initialize
 	If sout <> "" Then
 		sbout.Append($"class="${sout}""$)
 	End If
@@ -2267,7 +2303,7 @@ Sub AddRows(iRows As Int) As VueElement
 	'lets store the last row
 	LastRow = GridRows.size
 	'create a new row
-	Dim nRow As GridRow
+	Dim nRow As VueGridRow
 	nRow.Initialize
 	nRow.Rows = iRows
 	nRow.Columns.Initialize
@@ -2279,7 +2315,7 @@ Sub AddRows(iRows As Int) As VueElement
 	nRow.pb = ""
 	nRow.pr = ""
 	nRow.pl = ""
-		'
+	'
 	'lets store this new row in rows
 	Dim rowKey As String = $"R${LastRow}"$
 	rowKey = rowKey.tolowercase
@@ -2295,7 +2331,7 @@ End Sub
 
 'add columns - offsets and sizes
 private Sub AddColumnsOS(iColumns As Int, osm As Int, omd As Int, olg As Int, oxl As Int, sm As Int, md As Int, lg As Int, xl As Int) As VueElement
-	Dim nCol As GridColumn
+	Dim nCol As VueGridColumn
 	nCol.Initialize
 	nCol.Columns = iColumns
 	nCol.lg = lg
@@ -2314,14 +2350,14 @@ private Sub AddColumnsOS(iColumns As Int, osm As Int, omd As Int, olg As Int, ox
 	nCol.pb = ""
 	nCol.pr = ""
 	nCol.pl = ""
-'
+	'
 	'get the existing columns for this row
 	Dim rowkey As String = $"R${LastRow}"$
 	rowkey = rowkey.tolowercase
 	'get the row from existing rows
 	If GridRows.ContainsKey(rowkey) Then
 		'get the row from existing rows
-		Dim oldRow As GridRow = GridRows.Get(rowkey)
+		Dim oldRow As VueGridRow = GridRows.Get(rowkey)
 		'get the existing columns from the row
 		oldRow.Columns.Add(nCol)
 		'save it back
@@ -2787,3 +2823,31 @@ Sub NewSlider(vmodel As String, slabel As String, iMinValue As Int, iMaxValue As
 	AddAttr("min", iMinValue)
 	AddAttr("label", slabel)
 End Sub
+'
+'
+'private Sub computedDateFormatted As String   'IgnoreDeadCode
+'	Try
+'		'get the saved model
+'		Dim rdate As String = vue.GetData(vmodel)
+'		If rdate = "" Then Return ""
+'		Return vue.RunMethod("formatDate", Array(rdate)).Result
+'	Catch
+'		Return ""
+'	End Try
+'End Sub
+'
+''format the date
+'private Sub formatDate(date As Object) As String  'IgnoreDeadCode
+'	Try
+'		date = "" & date
+'		If date = "" Then Return Null
+'		If BANano.isnull(date) Or BANano.IsUndefined(date) Then Return Null
+'		Dim bo As BANanoObject = BANano.RunJavascriptMethod("dayjs", Array(date))
+'		Dim sdf As String = vue.DateDisplayFormat
+'		If sdf = "" Then sdf = "YYYY-MM-DD"
+'		Dim sdate As String = bo.RunMethod("format", Array(sdf)).Result
+'		Return sdate
+'	Catch
+'		Return ""
+'	End Try
+'End Sub
