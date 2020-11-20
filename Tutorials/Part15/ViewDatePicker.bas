@@ -34,7 +34,7 @@ Sub Initialize
 	Dim dp2 As BANanoElement = BVAD3.NewDatePicker(datepicker, "dp2", "dod", "Date of Death", "", True, "mdi-calendar", "Date of death")
 	vdatepickercontainer.Matrix(1, 2).Append(dp2.GetHTML)
 	'
-	Dim btngetdates As BANanoElement = BVAD3.NewButton(datepicker, "btngetdates", "Get Dates", CreateMap("block":True,"color":"success"))
+	Dim btngetdates As BANanoElement = BVAD3.NewButton(datepicker, "btngetdates", "Get Dates", "success", False, CreateMap("block":True))
 	vdatepickercontainer.Matrix(1, 3).Append(btngetdates.GetHTML)
 	'
 	Dim tp1 As BANanoElement = BVAD3.NewTimePicker(datepicker, "tp1", "tob", "Time of Birth", "", True, "mdi-clock", "Time of birth")
@@ -43,7 +43,7 @@ Sub Initialize
 	Dim tp2 As BANanoElement = BVAD3.NewTimePicker(datepicker, "tp2", "tod", "Time of Death", "", True, "mdi-clock", "Time of death")
 	vdatepickercontainer.Matrix(2, 2).Append(tp2.GetHTML)
 	'
-	Dim btngettimes As BANanoElement = BVAD3.NewButton(datepicker, "btngettimes", "Get Times", CreateMap("block":True,"color":"info"))
+	Dim btngettimes As BANanoElement = BVAD3.NewButton(datepicker, "btngettimes", "Get Times", "info", False, CreateMap("block":True))
 	vdatepickercontainer.Matrix(2, 3).Append(btngettimes.GetHTML)
 	
 	'

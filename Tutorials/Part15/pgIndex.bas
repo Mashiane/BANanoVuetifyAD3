@@ -75,6 +75,7 @@ Sub Init
 	links.Add(CreateMap("icon": "mdi-cog", "title": "Alert", "to": "/alerts"))
 	links.Add(CreateMap("icon": "mdi-cog", "title": "Avatars", "to": "/avatars"))
 	links.Add(CreateMap("icon": "mdi-cog", "title": "Badges", "to": ViewBadges.path))
+	links.Add(CreateMap("icon": "mdi-cog", "title": "Buttons", "to": ViewButtons.path))
 	links.Add(CreateMap("icon": "mdi-cog", "title": "Dialogs", "to": "/dialogs"))
 	links.Add(CreateMap("icon": "mdi-cog", "title": "Date Picker", "to": ViewDatePicker.path))
 	links.Add(CreateMap("icon": "mdi-cog", "title": "Text Fields", "to": ViewTextFields.path))
@@ -154,6 +155,7 @@ Sub AddRouters
 	ViewTextFields.Initialize 
 	ViewBadges.Initialize 
 	ViewDatePicker.Initialize 
+	ViewButtons.Initialize 
 End Sub
 
 Sub vappbarnavicon_ClickStop (e As BANanoEvent)

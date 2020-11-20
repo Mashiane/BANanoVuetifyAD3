@@ -44,23 +44,29 @@ Sub Initialize
 	badges.BindVueElement(btndecreasebadge)
 	badges.BindVueElement(vbadge)
 	
+	Dim ib1 As BANanoElement = BVAD3.NewIconBadge(badges, "ib1", "messages", "mdi-android", CreateMap("color":"purple",":large":True), CreateMap(":overlap":True))
+	vbadges.Matrix(2, 2).Append(ib1.GetHTML)
+	
+	Dim ib2 As BANanoElement = BVAD3.NewAvatarBadge(badges, "ib2", "warning", "./assets/sponge.png", 50)
+	vbadges.Matrix(2, 3).Append(ib2.GetHTML)
+	
 	'
 	badges.AppendPlaceHolder
 	vuetify.AddRoute(badges)
 End Sub
 
 
-Sub btndecreasebadge_Click (e As BANanoEvent)
+Sub btndecreasebadge_Click (e As BANanoEvent)   'ignoredeadcode
 	badges.Decrement("messages")
 	DetectColor
 End Sub
 
-Sub btnIncreaseBadge_Click (e As BANanoEvent)
+Sub btnIncreaseBadge_Click (e As BANanoEvent) 'ignoredeadcode
 	badges.Increment("messages")
 	DetectColor
 End Sub
 
-Sub DetectColor
+Sub DetectColor   'ignoredeadcode
 	Dim m As Int = badges.getdata("messages")
 	m = BANano.parseInt(m)
 	If m < 0 Then

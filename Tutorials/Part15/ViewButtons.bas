@@ -68,3 +68,7 @@ Sub Initialize
 	buttons.AppendPlaceHolder
 	vuetify.AddRoute(buttons)
 End Sub
+
+Sub btn12_click(e As BANanoEvent)
+	vuetify.ShowSnackBarSuccess("btn12 clicked")
+End Sub
