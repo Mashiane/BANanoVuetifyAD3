@@ -468,6 +468,7 @@ End Sub
 
 'build the styles
 Sub BuildStyle(styles As Map) As String
+	If styles.Size = 0 Then Return ""
 	Dim sbx As StringBuilder
 	sbx.Initialize
 	For Each k As String In styles.keys
@@ -493,6 +494,7 @@ Sub BuildAttributes(properties As Map) As String
 	If properties.ContainsKey("tagname") Then
 		properties.remove("tagname")
 	End If
+	If properties.Size = 0 Then Return ""
 	Dim sbx As StringBuilder
 	sbx.Initialize
 	For Each k As String In properties.keys
@@ -521,6 +523,7 @@ Sub BuildAttributes(properties As Map) As String
 End Sub
 
 Sub JoinMapKeys(m As Map, delim As String) As String
+	If m.Size = 0 Then Return ""
 	Dim sb As StringBuilder
 	sb.Initialize
 	Dim kTot As Int = m.Size - 1

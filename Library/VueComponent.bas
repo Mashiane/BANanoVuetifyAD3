@@ -627,6 +627,42 @@ Sub AppendPlaceHolder
 End Sub
 
 
+'change badge color
+Sub SetBadgeColor(btnID As String, badgeColor As String)
+	btnID = btnID.tolowercase
+	Dim sbadgeColor As String = $"${btnID}badgecolor"$
+	SetData(sbadgeColor, badgeColor)
+End Sub
+
+'set badge content
+Sub SetBadgeContent(btnID As String, BadgeContent As String)
+	btnID = btnID.tolowercase
+	Dim SBadgeContent As String = $"${btnID}badgecontent"$
+	SetData(SBadgeContent, BadgeContent)
+End Sub
+
+'increment badge
+Sub IncrementBadge(btnID As String)
+	btnID = btnID.tolowercase
+	Dim SBadgeContent As String = $"${btnID}badgecontent"$
+	'read current value
+	Dim ivalue As Int = GetData(SBadgeContent)
+	ivalue = BANano.parseInt(ivalue)
+	ivalue = ivalue + 1
+	SetData(SBadgeContent, ivalue)
+End Sub
+
+'decrement badge
+Sub DecrementBadge(btnID As String)
+	btnID = btnID.tolowercase
+	Dim SBadgeContent As String = $"${btnID}badgecontent"$
+	'read current value
+	Dim ivalue As Int = GetData(SBadgeContent)
+	ivalue = BANano.parseInt(ivalue)
+	ivalue = ivalue - 1
+	SetData(SBadgeContent, ivalue)
+End Sub
+
 
 #End Region
 

@@ -466,7 +466,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	AddAttr("fluid", bFluid)
 	AddAttr("rules", stRules)
 	AddAttr("to", stTo)
-	AddAttr("dark", bDark)
+	AddAttr(":dark", bDark)
 	AddAttr("v-slot:activator", stSlotActivator)
 	AddAttr("href", stHref)
 	AddAttr("key", stKey)
@@ -698,10 +698,10 @@ Sub ToString As String
 	End If
 	'build the 'class' attribute
 	Dim className As String = BANanoShared.JoinMapKeys(classList, " ")
-	AddAttr("class", className)
+	If className <> "" Then AddAttr("class", className)
 	'build the 'style' attribute
 	Dim styleName As String = BANanoShared.BuildStyle(styleList)
-	AddAttr("style", styleName)
+	If styleName <> "" Then AddAttr("style", styleName)
 	'build element internal structure
 	Dim iStructure As String = BANanoShared.BuildAttributes(attributeList)
 	iStructure = iStructure.trim
@@ -875,11 +875,14 @@ public Sub AddClass(varClass As String)
 	If BANano.IsNumber(varClass) Then varClass = BANanoShared.CStr(varClass)
 	varClass = varClass.trim
 	If varClass = "" Then Return
-	If mElement <> Null Then mElement.AddClass(varClass)
-	Dim mxItems As List = BANanoShared.StrParse(" ", varClass)
-	For Each mt As String In mxItems
-		classList.put(mt, mt)
-	Next
+	If mElement <> Null Then 
+		mElement.AddClass(varClass)
+	Else
+		Dim mxItems As List = BANanoShared.StrParse(" ", varClass)
+		For Each mt As String In mxItems
+			classList.put(mt, mt)
+		Next
+	End If
 End Sub
 
 Sub AddClasses(listOfClasses As List)
@@ -895,11 +898,14 @@ public Sub AddClassOnCondition(varClass As String, varCondition As Boolean, varS
 	If BANano.IsNumber(varClass) Then varClass = BANanoShared.CStr(varClass)
 	varClass = varClass.trim
 	If varClass = "" Then Return
-	If mElement <> Null Then mElement.AddClass(varClass)
-	Dim mxItems As List = BANanoShared.StrParse(" ", varClass)
-	For Each mt As String In mxItems
-		classList.put(mt, mt)
-	Next
+	If mElement <> Null Then 
+		mElement.AddClass(varClass)
+	Else
+		Dim mxItems As List = BANanoShared.StrParse(" ", varClass)
+		For Each mt As String In mxItems
+			classList.put(mt, mt)
+		Next
+	End If
 End Sub
 
 'add an attr on condition
@@ -922,8 +928,9 @@ public Sub AddStyle(varProp As String, varStyle As String)
 		aStyle.put(varProp, varStyle)
 		Dim sStyle As String = BANano.ToJSON(aStyle)
 		mElement.SetStyle(sStyle)
+	Else
+		styleList.put(varProp, varStyle)
 	End If
-	styleList.put(varProp, varStyle)
 End Sub
 
 Sub SetAttr(varProp As String, varValue As String)
@@ -987,8 +994,11 @@ Public Sub AddAttr(varProp As String, varValue As String)
 	'we are adding a boolean
 	If BANano.IsBoolean(varValue) Then
 		If varValue = True Then
-			attributeList.put(varProp, varValue)
-			If mElement <> Null Then mElement.SetAttr(varProp, varValue)
+			If mElement <> Null Then 
+				mElement.SetAttr(varProp, varValue)
+			Else	
+				attributeList.put(varProp, varValue)
+			End If
 		End If
 	Else
 		varValue = varValue.Replace("~","=")
@@ -1001,12 +1011,18 @@ Public Sub AddAttr(varProp As String, varValue As String)
 					If rname <> "key" Then bindings.Put(rname, Null)
 				End If
 			End If
-			attributeList.put($":${varProp}"$, rname)
-			If mElement <> Null Then mElement.SetAttr($":${varProp}"$, rname)
+			If mElement <> Null Then 
+				mElement.SetAttr($":${varProp}"$, rname)
+			Else
+				attributeList.put($":${varProp}"$, rname)
+			End If
 		Else
 			'does not start with :
-			If mElement <> Null Then mElement.SetAttr(varProp, varValue)
-			attributeList.put(varProp, varValue)
+			If mElement <> Null Then 
+				mElement.SetAttr(varProp, varValue)
+			Else
+				attributeList.put(varProp, varValue)
+			End If			
 			Select Case varProp
 				Case "v-model", "v-show", "v-if", "v-else-if", "required", "disabled", "readonly"
 					If varValue <> "" Then
@@ -1066,8 +1082,11 @@ public Sub setAttributes(varAttributes As String)
 	For Each mt As String In mxItems
 		Dim k As String = BANanoShared.MvField(mt,1,"=")
 		Dim v As String = BANanoShared.MvField(mt,2,"=")
-		If mElement <> Null Then mElement.SetAttr(k, v)
-		attributeList.put(k, v)
+		If mElement <> Null Then 
+			mElement.SetAttr(k, v)
+		Else
+			attributeList.put(k, v)
+		End If
 	Next
 End Sub
 
@@ -1490,7 +1509,7 @@ public Sub getTextAlign() As String
 End Sub
 
 public Sub setDark(varDark As Boolean)
-	AddAttr("dark", varDark)
+	AddAttr(":dark", varDark)
 	bDark = varDark
 End Sub
 
@@ -2731,27 +2750,6 @@ Sub SetTypeFile
 	AddAttr("type", "file")
 End Sub
 
-
-'define the text field
-Sub NewTextField(vmodel As String, slabel As String, splaceholder As String, bRequired As Boolean, sPrependIcon As String, iMaxLen As Int, shelpertext As String)
-	setLabel(slabel)
-	setRequired(bRequired)
-	setPrependIcon(sPrependIcon)
-	If iMaxLen > 0 Then
-		setCounter(True)
-	End If
-	setPlaceholder(splaceholder)
-	setHint(shelpertext)
-	setVModel(vmodel)
-	AddAttr("type", "text")
-	setRef(vmodel)
-End Sub
-'
-Sub NewTextArea(vmodel As String, slabel As String, splaceholder As String, bRequired As Boolean, bAutoGrow As Boolean, sPrependIcon As String, iMaxLen As Int, shelpertext As String)
-	NewTextField(vmodel, slabel, splaceholder, bRequired, sPrependIcon,iMaxLen, shelpertext)
-	AddAttr(":auto-grow", bAutoGrow)
-End Sub
-'
 Sub NewFile(vmodel As String, slabel As String, splaceholder As String, bRequired As Boolean, shelperText As String)
 	setHint(shelperText)
 	setPlaceholder(splaceholder)
@@ -2761,23 +2759,6 @@ Sub NewFile(vmodel As String, slabel As String, splaceholder As String, bRequire
 	setRequired(bRequired)
 End Sub
 '
-
-Sub NewDatePicker(vmodel As String, slabel As String, bRequired As Boolean, sPlaceholder As String, sHint As String)
-	setLabel(slabel)
-	setRequired(bRequired)
-	setVModel(vmodel)
-	setPlaceholder(sPlaceholder)
-	setHint(sHint)
-End Sub
-'
-Sub NewTimePicker(vmodel As String, slabel As String, bRequired As Boolean, sPlaceholder As String, sHint As String)
-	setLabel(slabel)
-	setVModel(vmodel)
-	setRequired(bRequired)
-	setPlaceholder(sPlaceholder)
-	setHint(sHint)
-End Sub
-
 Sub NewCheckBox(vmodel As String, slabel As String, svalue As Object, struevalue As Object, sfalsevalue As Object)
 	setVModel(vmodel)
 	setValue(svalue)
@@ -2797,6 +2778,21 @@ Sub NewRadioGroup(vmodel As String, sLabel As String, svalue As String, sourceTa
 	End If
 End Sub
 
+'define the text field
+Sub NewTextField(vmodel As String, slabel As String, splaceholder As String, bRequired As Boolean, sPrependIcon As String, iMaxLen As Int, shelpertext As String)
+	setLabel(slabel)
+	setRequired(bRequired)
+	setPrependIcon(sPrependIcon)
+	If iMaxLen > 0 Then
+		setCounter(True)
+	End If
+	setPlaceholder(splaceholder)
+	setHint(shelpertext)
+	setVModel(vmodel)
+	AddAttr("type", "text")
+	setRef(vmodel)
+End Sub
+
 Sub NewRadioGroupOptions(vmodel As String, slabel As String, svalue As Object, optionsm As Map, bShowLabel As Boolean, bLabelOnTop As Boolean)
 	setVModel(vmodel)
 	setLabel(slabel)
@@ -2809,11 +2805,6 @@ Sub NewRadioGroupOptions(vmodel As String, slabel As String, svalue As Object, o
 	Else
 		AddAttr(":row", True)
 	End If
-End Sub
-
-Sub NewEmail(vmodel As String, slabel As String, splaceholder As String, bRequired As Boolean, sPrependIcon As String, shelpertext As String)
-	NewTextField(vmodel, slabel, splaceholder, bRequired, sPrependIcon, 0, shelpertext)
-	AddAttr("type", "email")
 End Sub
 
 Sub NewSlider(vmodel As String, slabel As String, iMinValue As Int, iMaxValue As Int, sHint As String)
