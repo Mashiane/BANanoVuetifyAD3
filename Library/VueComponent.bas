@@ -479,6 +479,7 @@ End Sub
 
 Sub Increment(k As String) As VueComponent
 	Dim oldV As String = GetState(k, "0")
+	If BANano.IsNull(oldV) Or oldV = "" Then oldV = 0
 	oldV = BANano.parseInt(oldV) + 1
 	SetStateSingle(k, oldV)
 	Return Me
@@ -486,6 +487,7 @@ End Sub
 
 Sub Decrement(k As String) As VueComponent
 	Dim oldV As String = GetState(k, "0")
+	If BANano.IsNull(oldV) Or oldV = "" Then oldV = 0
 	oldV = BANano.parseInt(oldV) - 1
 	SetStateSingle(k, oldV)
 	Return Me
@@ -626,42 +628,6 @@ Sub AppendPlaceHolder
 	Template.SetText(stemplate)
 End Sub
 
-
-'change badge color
-Sub SetBadgeColor(btnID As String, badgeColor As String)
-	btnID = btnID.tolowercase
-	Dim sbadgeColor As String = $"${btnID}badgecolor"$
-	SetData(sbadgeColor, badgeColor)
-End Sub
-
-'set badge content
-Sub SetBadgeContent(btnID As String, BadgeContent As String)
-	btnID = btnID.tolowercase
-	Dim SBadgeContent As String = $"${btnID}badgecontent"$
-	SetData(SBadgeContent, BadgeContent)
-End Sub
-
-'increment badge
-Sub IncrementBadge(btnID As String)
-	btnID = btnID.tolowercase
-	Dim SBadgeContent As String = $"${btnID}badgecontent"$
-	'read current value
-	Dim ivalue As Int = GetData(SBadgeContent)
-	ivalue = BANano.parseInt(ivalue)
-	ivalue = ivalue + 1
-	SetData(SBadgeContent, ivalue)
-End Sub
-
-'decrement badge
-Sub DecrementBadge(btnID As String)
-	btnID = btnID.tolowercase
-	Dim SBadgeContent As String = $"${btnID}badgecontent"$
-	'read current value
-	Dim ivalue As Int = GetData(SBadgeContent)
-	ivalue = BANano.parseInt(ivalue)
-	ivalue = ivalue - 1
-	SetData(SBadgeContent, ivalue)
-End Sub
 
 
 #End Region

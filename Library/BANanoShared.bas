@@ -133,7 +133,7 @@ Sub CreateElement1(parentID As String, tag As String, id As String, text As Stri
 	End If
 	'
 	If classes <> "" Then el.AddClass(classes)
-	el.SetHTML(BANano.SF(text))
+	el.settext(text)
 	Return el
 End Sub
 
@@ -2867,7 +2867,7 @@ Sub AppendElement1(parentID As String, tag As String, id As String, text As Stri
 	End If
 	'
 	If classes <> "" Then el.AddClass(classes)
-	el.SetHTML(BANano.SF(text))
+	el.settext(text)
 	Return el
 End Sub
 

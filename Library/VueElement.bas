@@ -1007,9 +1007,7 @@ Public Sub AddAttr(varProp As String, varValue As String)
 		If varValue.StartsWith(":") Then
 			Dim rname As String = BANanoShared.MidString2(varValue, 2)
 			If rname.Contains(".") = False Then
-				If rname <> "" Then
-					If rname <> "key" Then bindings.Put(rname, Null)
-				End If
+				bindings.Put(rname, Null)
 			End If
 			If mElement <> Null Then 
 				mElement.SetAttr($":${varProp}"$, rname)
@@ -1017,19 +1015,26 @@ Public Sub AddAttr(varProp As String, varValue As String)
 				attributeList.put($":${varProp}"$, rname)
 			End If
 		Else
-			'does not start with :
+			'we have a binding on the property
+			If varProp.StartsWith(":") Then
+				If varValue.Contains(".") = False Then
+					bindings.Put(varValue, Null)
+				End If
+			End If
+			
 			If mElement <> Null Then 
 				mElement.SetAttr(varProp, varValue)
 			Else
 				attributeList.put(varProp, varValue)
-			End If			
-			Select Case varProp
-				Case "v-model", "v-show", "v-if", "v-else-if", "required", "disabled", "readonly"
-					If varValue <> "" Then
-						bindings.Put(varValue, Null)
-					End If
-			End Select
-		End If
+			End If
+		End If			
+		'
+		Select Case varProp
+		Case "v-model", "v-show", "v-if", "v-else-if", "required", "disabled", "readonly"
+			If varValue <> "" Then
+				bindings.Put(varValue, Null)
+			End If
+		End Select
 	End If
 	Return
 End Sub
@@ -1115,7 +1120,7 @@ End Sub
 'sets the caption
 public Sub setCaption(varCaption As String)
 	If mElement <> Null Then
-		mElement.SetHTML(BANano.SF(varCaption))
+		mElement.SetText(varCaption)
 	End If
 	mCaption = varCaption
 End Sub
@@ -2586,7 +2591,7 @@ Sub AppendElement1(parentID As String, tag As String, id As String, text As Stri
 	End If
 	'
 	If classes <> "" Then el.AddClass(classes)
-	el.SetHTML(BANano.SF(text))
+	el.settext(text)
 	Return el
 End Sub
 

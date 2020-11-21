@@ -1269,6 +1269,7 @@ Sub Increment(prop As String, addVal As Int)
 	prop = prop.tolowercase
 	'get the value of the coun
 	Dim cc As Int = GetData(prop)
+	If BANano.IsNull(cc) Or cc = "" Then cc = 0
 	cc = BANano.parseInt(cc)
 	'increment by 1
 	cc = cc + addVal
@@ -1281,6 +1282,7 @@ Sub Decrement(prop As String, addVal As Int)
 	prop = prop.tolowercase
 	'get the value of the coun
 	Dim cc As Int = GetData(prop)
+	If BANano.IsNull(cc) Or cc = "" Then cc = 0
 	cc = BANano.parseInt(cc)
 	'decrement by 1
 	cc = cc - addVal
@@ -1613,58 +1615,6 @@ Sub SetOnClick(Module As Object, methodName As String)
 End Sub
 
 
-'show badge
-Sub ShowBadge(btnID As String) 
-	btnID = btnID.tolowercase
-	Dim badgeShow As String = $"${btnID}badgeshow"$
-	SetData(badgeShow, True)
-	
-End Sub
-
-'hide badge
-Sub HideBadge(btnID As String) 
-	btnID = btnID.tolowercase
-	Dim badgeShow As String = $"${btnID}badgeshow"$
-	SetData(badgeShow, False)
-	
-End Sub
-
-'change badge color
-Sub SetBadgeColor(btnID As String, badgeColor As String) 
-	btnID = btnID.tolowercase
-	Dim sbadgeColor As String = $"${btnID}badgecolor"$
-	SetData(sbadgeColor, badgeColor)
-End Sub
-
-'set badge content
-Sub SetBadgeContent(btnID As String, BadgeContent As String) 
-	btnID = btnID.tolowercase
-	Dim SBadgeContent As String = $"${btnID}content"$
-	SetData(SBadgeContent, BadgeContent)
-End Sub
-
-'increment badge
-Sub IncrementBadge(btnID As String) 
-	btnID = btnID.tolowercase
-	Dim SBadgeContent As String = $"${btnID}content"$
-	'read current value
-	Dim ivalue As Int = GetData(SBadgeContent)
-	ivalue = BANano.parseInt(ivalue)
-	ivalue = ivalue + 1
-	SetData(SBadgeContent, ivalue)
-End Sub
-
-'decrement badge
-Sub DecrementBadge(btnID As String) 
-	btnID = btnID.tolowercase
-	Dim SBadgeContent As String = $"${btnID}content"$
-	'read current value
-	Dim ivalue As Int = GetData(SBadgeContent)
-	ivalue = BANano.parseInt(ivalue)
-	ivalue = ivalue - 1
-	SetData(SBadgeContent, ivalue)
-End Sub
-
 'set right to left
 Sub SetRTL(b As Boolean)
 	Vuetify.SetField("rtl", b)
@@ -1773,4 +1723,24 @@ End Sub
 private Sub GetState(prop As String) As Object
 	Dim obj As Object = data.GetDefault(prop, "")
 	Return obj
+End Sub
+
+'format date to meet your needs
+Sub FormatDisplayDate(item As String, sFormat As String) As String
+	item = "" & item
+	If item = "" Then Return ""
+	If BANano.isnull(item) Or BANano.IsUndefined(item) Then Return ""
+	Dim bo As BANanoObject = BANano.RunJavascriptMethod("dayjs", Array(item))
+	Dim sDate As String = bo.RunMethod("format", Array(sFormat)).Result
+	Return sDate
+End Sub
+
+'format numeric display
+Sub FormatDisplayNumber(item As String, sFormat As String) As String
+	item = "" & item
+	If item = "" Then Return ""
+	If BANano.isnull(item) Or BANano.IsUndefined(item) Then Return ""
+	Dim bo As BANanoObject = BANano.RunJavascriptMethod("numeral", Array(item))
+	Dim sDate As String = bo.RunMethod("format", Array(sFormat)).Result
+	Return sDate
 End Sub

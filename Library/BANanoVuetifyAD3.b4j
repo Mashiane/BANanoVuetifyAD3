@@ -58,7 +58,7 @@ Sub AppStart (Form1 As Form, Args() As String)
 	BANano.Header.AddJavascriptFile("https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.min.js")
 	BANano.Header.AddJavascriptFile("https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.js")
 	BANano.Header.AddJavascriptFile("https://cdn.jsdelivr.net/npm/vue-router@3.x/dist/vue-router.min.js")
-	BANano.Header.AddJavascriptFile("https://cdn.jsdelivr.net/npm/dayjs@1.x/dist/dayjs.min.js")
+	BANano.Header.AddJavascriptFile("https://cdn.jsdelivr.net/npm/dayjs@1.9.6/dayjs.min.js")
 	BANano.Header.AddJavascriptFile("https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js")
 	
 	' start the build
@@ -93,6 +93,29 @@ End Sub
         box-shadow: 0 0 0 0 rgba(88, 120, 243, 0);
     }
 }
+
+/* width */
+.md-scrollbar::-webkit-scrollbar {
+  width: 15px;
+}
+
+/* Track */
+.md-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+  border-radius: 10px;
+}
+ 
+/* Handle */
+.md-scrollbar::-webkit-scrollbar-thumb {
+  background: #888; 
+  border-radius:10px;
+}
+
+/* Handle on hover */
+.md-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+
 #End If
 
 
