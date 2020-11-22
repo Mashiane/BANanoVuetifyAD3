@@ -1744,3 +1744,48 @@ Sub FormatDisplayNumber(item As String, sFormat As String) As String
 	Dim sDate As String = bo.RunMethod("format", Array(sFormat)).Result
 	Return sDate
 End Sub
+
+
+Sub FormatFileSize(Bytes As Float) As String
+	If BANano.IsNull(Bytes) Or BANano.IsUndefined(Bytes) Then
+		Bytes = 0
+	End If
+	Bytes = BANano.parsefloat(Bytes)
+	Try
+		Private Unit() As String = Array As String(" Byte", " KB", " MB", " GB", " TB", " PB", " EB", " ZB", " YB")
+		If Bytes = 0 Then
+			Return "0 Bytes"
+		Else
+			Private Po, Si As Double
+			Private I As Int
+			Bytes = Abs(Bytes)
+			I = Floor(Logarithm(Bytes, 1024))
+			Po = Power(1024, I)
+			Si = Bytes / Po
+			Return NumberFormat(Si, 1, 3) & Unit(I)
+		End If
+	Catch
+		Return "0 Bytes"
+	End Try
+End Sub
+
+'add html of component to app and this binds events and states
+Sub BindVueTable(el As VueTable)
+	el.refresh
+	Dim mbindings As Map = el.bindings
+	Dim mmethods As Map = el.methods
+	'apply the binding for the control
+	For Each k As String In mbindings.Keys
+		Dim v As Object = mbindings.Get(k)
+		Select Case k
+			Case "key"
+			Case Else
+				SetData(k, v)
+		End Select
+	Next
+	'apply the events
+	For Each k As String In mmethods.Keys
+		Dim cb As BANanoObject = mmethods.Get(k)
+		SetCallBack(k, cb)
+	Next
+End Sub

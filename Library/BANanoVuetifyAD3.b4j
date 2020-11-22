@@ -29,10 +29,11 @@ Library3=banano
 Module1=|relative|..\..\..\Shared\BANanoShared
 Module2=VueComponent
 Module3=VueElement
-Module4=VuetifyApp
+Module4=VueTable
+Module5=VuetifyApp
 NumberOfFiles=11
 NumberOfLibraries=3
-NumberOfModules=4
+NumberOfModules=5
 Version=8.5
 @EndOfDesignText@
 #Region Project Attributes 
@@ -44,7 +45,7 @@ Version=8.5
 
 Sub Process_Globals
 	Private BANano As BANano 'ignore
-	Public Version As String = "2.30"
+	Public Version As String = "2.31"
 	Public AppName As String = "BANanoVuetifyAD3"
 End Sub
 

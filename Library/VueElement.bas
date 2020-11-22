@@ -299,6 +299,7 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	Items.Initialize
 End Sub
 
+
 'clear the items for this
 Sub Items_Clear As VueElement
 	Items.Initialize
@@ -775,6 +776,14 @@ public Sub setStates(varBindings As String)
 				Dim nm As Map = CreateMap()
 				bindings.Put(k, nm)
 			End If
+		else if v.EqualsIgnoreCase("string") Then
+			If k <> "" Then
+				bindings.Put(k, "")
+			End If
+		else if v.EqualsIgnoreCase("int") Then
+			If k <> "" Then
+				bindings.Put(k, 0)
+			End If		
 		Else
 			If k <> "" Then
 				bindings.put(k, v)
@@ -2282,7 +2291,7 @@ private Sub BuildRow(xRow As VueGridRow) As String
 				sbStyle.Initialize
 				If bShowGridDesign Then
 					strShow = cellKey
-					sbStyle.append($"style="border-width:1px;border-style:dotted;border-color:grey;""$)
+					sbStyle.append($"style="border-width:2px;border-style:dotted;border-color:grey;""$)
 				End If
 				'define the column structure
 				Dim sbCol As StringBuilder
@@ -2847,3 +2856,63 @@ End Sub
 '		Return ""
 '	End Try
 'End Sub
+
+private Sub getdateformat(item As String, sFormat As String) As String		'ignoredeadcode
+	Dim svalue As String = FormatDisplayDate(item, sFormat)
+	Return svalue
+End Sub
+
+
+private Sub getmoneyformat(item As String, sformat As String) As String		'ignoredeadcode
+	Dim svalue As String = FormatDisplayNumber(item, sformat)
+	Return svalue
+End Sub
+
+private Sub getfilesize(item As String) As String							'ignoredeadcode
+	Dim svalue As String = FormatFileSize(item)
+	Return svalue
+End Sub
+
+'format date to meet your needs
+Sub FormatDisplayDate(item As String, sFormat As String) As String			'ignoredeadcode
+	item = "" & item
+	If item = "" Then Return ""
+	If BANano.isnull(item) Or BANano.IsUndefined(item) Then Return ""
+	Dim bo As BANanoObject = BANano.RunJavascriptMethod("dayjs", Array(item))
+	Dim sDate As String = bo.RunMethod("format", Array(sFormat)).Result
+	Return sDate
+End Sub
+
+'format numeric display
+Sub FormatDisplayNumber(item As String, sFormat As String) As String			'ignoredeadcode
+	item = "" & item
+	If item = "" Then Return ""
+	If BANano.isnull(item) Or BANano.IsUndefined(item) Then Return ""
+	Dim bo As BANanoObject = BANano.RunJavascriptMethod("numeral", Array(item))
+	Dim sDate As String = bo.RunMethod("format", Array(sFormat)).Result
+	Return sDate
+End Sub
+
+
+Sub FormatFileSize(Bytes As Float) As String					'ignoredeadcode
+	If BANano.IsNull(Bytes) Or BANano.IsUndefined(Bytes) Then
+		Bytes = 0
+	End If
+	Bytes = BANano.parsefloat(Bytes)
+	Try
+		Private Unit() As String = Array As String(" Byte", " KB", " MB", " GB", " TB", " PB", " EB", " ZB", " YB")
+		If Bytes = 0 Then
+			Return "0 Bytes"
+		Else
+			Private Po, Si As Double
+			Private I As Int
+			Bytes = Abs(Bytes)
+			I = Floor(Logarithm(Bytes, 1024))
+			Po = Power(1024, I)
+			Si = Bytes / Po
+			Return NumberFormat(Si, 1, 3) & Unit(I)
+		End If
+	Catch
+		Return "0 Bytes"
+	End Try
+End Sub
