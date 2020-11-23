@@ -1819,6 +1819,14 @@ private Sub BuildSlots
 					pl.SetText(tmpx.ToString)
 				End If
 				'
+				Dim methodName As String = $"${mName}_change"$
+				If SubExists(mCallBack, methodName) Then
+					pl.AddAttr("v-on:change", $"${methodName}(item)"$)
+					Dim args As List
+					SetMethod(methodName, args)
+				End If
+				
+				'
 '				Dim props As Map = nf.props
 '				For Each k As String In props.Keys
 '					Dim v As String = props.Get(k)
