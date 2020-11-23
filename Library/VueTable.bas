@@ -1910,6 +1910,7 @@ private Sub BuildSlots
 				avtimg.Initialize(mCallBack, $"${k}${nf.ColType}img"$, $"${k}${nf.ColType}img"$)
 				avtimg.TagName = "v-img"
 				avtimg.AddAttr(":src", $"item.${value}"$)
+				avtimg.AddAttr(":lazy-src", $"item.${value}"$)
 				avtimg.Alt = ""
 				If nf.imgHeight <> "" Then
 					avtimg.Height = nf.imgheight
@@ -1977,7 +1978,7 @@ private Sub BuildSlots
 				Dim aicon As VueElement
 				aicon.Initialize(mCallBack, $"${k}${nf.ColType}"$, $"${k}${nf.ColType}"$)
 				aicon.TagName = "v-icon"
-				aicon.SetVText($"item.${value}"$)
+				aicon.settext($"{{ item.${value} }}"$)
 				If nf.Disabled Then aicon.disabled = True
 				If nf.iconSize <> "" Then aicon.Size = nf.iconSize
 				If nf.color.StartsWith("item.") Then
@@ -2003,8 +2004,9 @@ private Sub BuildSlots
 				Dim avtimg As VueElement
 				avtimg.Initialize(mCallBack, $"${k}${nf.ColType}"$, $"${k}${nf.ColType}"$)
 				avtimg.TagName = "v-img"
-				avtimg.Src = $"item.${value}"$
-				avtimg.Alt = $"item.${value}"$
+				avtimg.AddAttr(":src", $"item.${value}"$)
+				avtimg.AddAttr(":lazy-src", $"item.${value}"$)
+				avtimg.Alt = ""
 				If nf.Disabled Then avtimg.disabled = True
 				If nf.imgHeight <> "" Then
 					avtimg.Height = nf.imgheight

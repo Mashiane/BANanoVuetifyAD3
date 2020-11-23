@@ -15,6 +15,7 @@ Sub Process_Globals
 	Private vetable As VueTable
 	Private vetable1 As VueTable
 	Private dtusers As VueTable
+	Private dtimages As VueTable
 End Sub
 
 Sub Initialize
@@ -94,8 +95,34 @@ Sub Initialize
 	tables.BindVueTable(dtusers)
 
 	
-	
-	
+	'***** IMAGES
+	vtables.Matrix(3, 1).LoadLayout("dtimages")
+	'https://day.js.org/docs/en/display/format
+	'http://numeraljs.com/
+	'
+	Dim images As List = vuetify.newlist
+	images.add(CreateMap("image": "./assets/bird.jpg", "sendto":"mashy@gmail.com", "comment":"A bird seen from above", "lat":"16.0", "lng":"20.1", "datetaken":"1973-04-15", "icon":"mdi-account-reactivate","color":"blue"))
+	images.add(CreateMap("image": "./assets/dark-beach.jpg", "sendto":"ozzie@gmail.com", "comment":"Seen whilst walking", "lat":"36.0", "lng":"24.8", "datetaken":"2003-02-27","icon":"mdi-car-outline","color":"green"))
+	images.add(CreateMap("image": "./assets/planet.jpg", "sendto":"orio@gmail.com", "comment":"A need to visit planets", "lat":"1.0", "lng":"1.1", "datetaken":"2009-04-01","icon":"mdi-filmstrip","color":"orange"))
+	images.add(CreateMap("image": "./assets/sky.jpg", "sendto":"ernesto@gmail.com", "comment":"A beautiful skyline", "lat":"0", "lng":"0", "datetaken":"2010-04-24","icon":"mdi-share-all","color":"indigo"))
+	images.add(CreateMap("image": "./assets/squirrel.jpg", "sendto":"tgifzone.inc@gmail.com", "comment":"Nutting around", "lat":"45", "lng":"30", "datetaken":"2010-09-02","icon":"mdi-shield-cross","color":"yellow"))
+	'
+	dtimages.AddImage("image", "Image")
+	dtimages.SetImageDimensions("image", "80px", "80px")
+	dtimages.AddLink("sendto", "Email To", "_blank")
+	dtimages.AddIconView("icon", "Icon", "item.color")
+	dtimages.SetColumnPrefix("sendto", "mailto:")
+	dtimages.AddColumn("comment", "Comment")
+	dtimages.AddColumn("datetaken", "Date Taken")
+	dtimages.SetColumnType("datetaken", dtimages.COLUMN_DATE)
+	dtimages.SetColumnDateFormat("datetaken", "ddd, DD MMM YYYY")
+	dtimages.AddColumn("lat", "Latitude")
+	dtimages.AddColumn("lng", "Longitude")
+	dtimages.SetColumnNumberFormat("lat", "0.00")
+	dtimages.SetColumnNumberFormat("lng", "0.00")
+	dtimages.SetDataSource(images)
+	tables.BindVueTable(dtimages)
+
 	'
 '	
 '	vetable1.AddColumn1("name", "Dessert (100g Serving", vetable.COLUMN_TEXT, 0, False, vetable.ALIGN_LEFT)
