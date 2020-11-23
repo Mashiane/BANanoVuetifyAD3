@@ -658,3 +658,16 @@ End Sub
 #Region Internal Events
 
 #End Region
+
+'get all the table data
+Sub GetTableData(tblName As VueTable) As List
+	Dim recs As List = GetData(tblName.itemsname)
+	Return recs
+End Sub
+
+
+'get all the table data selected
+Sub GetTableDataSelected(tblName As VueTable) As List
+	Dim recs As List = GetData(tblName.selected)
+	Return recs
+End Sub

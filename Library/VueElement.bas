@@ -69,6 +69,11 @@ Version=7
 #DesignerProperty: Key: MarginAXYTBLR, DisplayName: Margin AXYTBLR, FieldType: String, DefaultValue: |||||| , Description: Margins AXYSMLX
 #DesignerProperty: Key: BuildGrid, DisplayName: BuildGrid, FieldType: Boolean, DefaultValue: False, Description: BuildGrid
 #DesignerProperty: Key: ShowGridDesign, DisplayName: Show Grid Design, FieldType: Boolean, DefaultValue: False, Description: ShowGridDesign
+#DesignerProperty: Key: Border, DisplayName: Border, FieldType: String, DefaultValue:  , Description: 
+#DesignerProperty: Key: BorderColor, DisplayName: BorderColor, FieldType: String, DefaultValue:  , Description: , List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
+#DesignerProperty: Key: BorderRadius, DisplayName: BorderRadius, FieldType: String, DefaultValue:  , Description: 
+#DesignerProperty: Key: BorderStyle, DisplayName: BorderStyle, FieldType: String, DefaultValue:  , Description: , List: none|hidden|dotted|dashed|solid|double|groove|ridge|inset|outset|initial|inherit
+#DesignerProperty: Key: BorderWidth, DisplayName: BorderWidth, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: DataSource, DisplayName: DataSource, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VFor, DisplayName: VFor, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Key, DisplayName: Key, FieldType: String, DefaultValue:  , Description:
@@ -114,11 +119,6 @@ Version=7
 #DesignerProperty: Key: Solo, DisplayName: Solo, FieldType: Boolean, DefaultValue: False , Description: 
 #DesignerProperty: Key: BackgroundImage, DisplayName: BackgroundImage, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: BackgroundRepeat, DisplayName: BackgroundRepeat, FieldType: String, DefaultValue:  , Description: , List: repeat|repeat-x|repeat-y|no-repeat|initial|inherit|none
-#DesignerProperty: Key: Border, DisplayName: Border, FieldType: String, DefaultValue:  , Description: 
-#DesignerProperty: Key: BorderColor, DisplayName: BorderColor, FieldType: String, DefaultValue:  , Description: , List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
-#DesignerProperty: Key: BorderRadius, DisplayName: BorderRadius, FieldType: String, DefaultValue:  , Description: 
-#DesignerProperty: Key: BorderStyle, DisplayName: BorderStyle, FieldType: String, DefaultValue:  , Description: , List: none|hidden|dotted|dashed|solid|double|groove|ridge|inset|outset|initial|inherit
-#DesignerProperty: Key: BorderWidth, DisplayName: BorderWidth, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: FontFamily, DisplayName: FontFamily, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: FontSize, DisplayName: FontSize, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: FontStyle, DisplayName: FontStyle, FieldType: String, DefaultValue:  , Description: , List: normal|italic|oblique|initial|inherit|none
@@ -1525,6 +1525,60 @@ End Sub
 public Sub setDark(varDark As Boolean)
 	AddAttr(":dark", varDark)
 	bDark = varDark
+End Sub
+
+
+public Sub setElevation(s As String)
+	If BANano.IsNull(s) Then s = ""
+	If s = "" Then Return
+	AddAttr("elevation", S)
+	AddClass("elevation-" & s)
+End Sub
+
+public Sub setReactive(b As Boolean)
+	AddAttr(":reactive", b)
+End Sub
+
+public Sub setInset(b As Boolean)
+	AddAttr(":inset", b)
+End Sub
+
+public Sub setRotate(s As String)
+	AddAttr("rotate", s)
+End Sub
+
+
+public Sub setLarge(b As Boolean)
+	AddAttr(":large", b)
+End Sub
+
+public Sub setSmall(b As Boolean)
+	AddAttr(":small", b)
+End Sub
+
+
+public Sub setDepressed(b As Boolean)
+	AddAttr(":depressed", b)
+End Sub
+
+public Sub setFab(b As Boolean)
+	AddAttr(":fab", b)
+End Sub
+
+Sub setFalseValue(fv As Object)
+	AddAttr("false-value", fv)
+End Sub
+
+Sub setTrueValue(tv As Object)
+	AddAttr("true-value", tv)
+End Sub
+
+public Sub setLength(s As String)
+	AddAttr("length", s)
+End Sub
+
+public Sub setSize(s As String)
+	AddAttr("size", s)
 End Sub
 
 public Sub getDark() As Boolean

@@ -1281,25 +1281,34 @@ Sub Space(HM As Int) As String
 End Sub
 
 Sub MakeMoney(sValue As String) As String
-	If sValue.Length = 0 Then Return "0.00"
-	If sValue = "null" Then sValue = "0.00"
-	sValue = sValue.Replace(",","")
-	sValue = Val(sValue)
-	If sValue = "0" Then sValue = "000"
-	sValue = Round2(sValue,2)
-	Return NumberFormat2(sValue, 1, 2, 2, True)
+	Try
+		If BANano.IsNull(sValue) Or BANano.IsUndefined(sValue) Then Return "0.00"
+		If sValue.Length = 0 Then Return "0.00"
+		If sValue.IndexOf(",") Then sValue = sValue.Replace(",","")
+		sValue = Val(sValue)
+		If sValue = "0" Then sValue = "000"
+		sValue = Round2(sValue,2)
+		Return NumberFormat2(sValue, 1, 2, 2, True)
+	Catch
+		Return sValue
+	End Try
 End Sub
 
 Sub Percentage(sValue As String) As String
-	If sValue = "" Then sValue = "0.00"
-	If sValue.Length = 0 Then Return "0.00"
-	If sValue = "null" Then sValue = "0.00"
-	sValue = sValue.Replace(",","")
-	sValue = Val(sValue)
-	If sValue = "0" Then sValue = "0.00"
-	sValue = Round2(sValue,2)
-	sValue = sValue & "%"
-	Return sValue
+	Try
+		If BANano.IsNull(sValue) Or BANano.IsUndefined(sValue) Then Return "0.00"
+		If sValue = "" Then sValue = "0.00"
+		If sValue.Length = 0 Then Return "0.00"
+		If sValue = "null" Then sValue = "0.00"
+		sValue = sValue.Replace(",","")
+		sValue = Val(sValue)
+		If sValue = "0" Then sValue = "0.00"
+		sValue = Round2(sValue,2)
+		sValue = sValue & "%"
+		Return sValue
+	Catch
+		Return sValue
+	End Try
 End Sub
 
 Sub MidString(Text As String, Start As Int, lLength As Int) As String
