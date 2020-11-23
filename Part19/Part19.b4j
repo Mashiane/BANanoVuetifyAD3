@@ -1,0 +1,301 @@
+﻿AppType=JavaFX
+Build1=Default,b4j.example
+File1=1.jpg
+File10=appdialog.bjl
+File11=apple-touch-icon.png
+File12=avatar1.bjl
+File13=avatar2.bjl
+File14=avatar3.bjl
+File15=background.jpg
+File16=bg-2.jpg
+File17=bird.jpg
+File18=btndecreasebadge.bjl
+File19=btnincreasebadge.bjl
+File2=1.png
+File20=clint-mckoy.jpg
+File21=config.php
+File22=dark-beach.jpg
+File23=dialogbutton1.bjl
+File24=dialogbutton2.bjl
+File25=dialogbutton3.bjl
+File26=dtusers.bjl
+File27=favicon.ico
+File28=favicon-16x16.png
+File29=favicon-32x32.png
+File3=2.jpg
+File30=gray.png
+File31=green.png
+File32=happyface.png
+File33=lock.jpg
+File34=login.jpg
+File35=material.jpg
+File36=mavatarbadge.bjl
+File37=mbtnbadge.bjl
+File38=mbtnicon.bjl
+File39=mbtniconbadge.bjl
+File4=2.png
+File40=mbtniconleft.bjl
+File41=mbtniconright.bjl
+File42=mbutton.bjl
+File43=mdatatable.bjl
+File44=mdatepicker.bjl
+File45=miconbadge.bjl
+File46=mtextfield.bjl
+File47=mtimepicker.bjl
+File48=neutralface.png
+File49=office.jpg
+File5=3.jpg
+File50=orange.png
+File51=parallax1.jpg
+File52=parallax2.jpg
+File53=planet.jpg
+File54=pricing.jpg
+File55=red.png
+File56=register.jpg
+File57=sadface.png
+File58=sample-1.jpg
+File59=sky.jpg
+File6=4.jpg
+File60=sponge.png
+File61=squirrel.jpg
+File62=txtcity.bjl
+File63=txtFirstName.bjl
+File64=txtLastName.bjl
+File65=txtlocation.bjl
+File66=txtpassword.bjl
+File67=txtshaped.bjl
+File68=txtstreet.bjl
+File69=txtusername.bjl
+File7=5.jpg
+File70=upload.php
+File71=vabout.bjl
+File72=valert.bjl
+File73=valert1.bjl
+File74=valert2.bjl
+File75=valertcontainer.bjl
+File76=vavatars.bjl
+File77=vbadgeavatar.bjl
+File78=vbadgeicon.bjl
+File79=vbadges.bjl
+File8=android-chrome-192x192.png
+File80=vbanner.jpg
+File81=vbaseline.bjl
+File82=vbtngettexts.bjl
+File83=vbuttoncontainer.bjl
+File84=vbuttoniconright.bjl
+File85=vbuttonmenu.bjl
+File86=vbuttontogglealert.bjl
+File87=vdatepickercontainer.bjl
+File88=vdialogs.bjl
+File89=vdrawerlisticontitle.bjl
+File9=android-chrome-512x512.png
+File90=vdrawerprofile.bjl
+File91=vetable.bjl
+File92=vetable1.bjl
+File93=vhome.bjl
+File94=vquestions.bjl
+File95=vtables.bjl
+File96=vtextfieldcontainer.bjl
+File97=vtooltipcomponent.bjl
+File98=vusers.bjl
+File99=yuna.jpg
+FileGroup1=Default Group
+FileGroup10=Default Group\Views
+FileGroup11=Default Group\Images
+FileGroup12=Default Group\Views
+FileGroup13=Default Group\Views
+FileGroup14=Default Group\Views
+FileGroup15=Default Group\Images
+FileGroup16=Default Group
+FileGroup17=Default Group
+FileGroup18=Default Group\Views
+FileGroup19=Default Group\Views
+FileGroup2=Default Group
+FileGroup20=Default Group
+FileGroup21=Default Group\PHP
+FileGroup22=Default Group
+FileGroup23=Default Group\Views
+FileGroup24=Default Group\Views
+FileGroup25=Default Group\Views
+FileGroup26=Default Group
+FileGroup27=Default Group
+FileGroup28=Default Group\Images
+FileGroup29=Default Group\Images
+FileGroup3=Default Group
+FileGroup30=Default Group
+FileGroup31=Default Group
+FileGroup32=Default Group
+FileGroup33=Default Group
+FileGroup34=Default Group\Images
+FileGroup35=Default Group
+FileGroup36=Default Group\Blocks
+FileGroup37=Default Group\Blocks
+FileGroup38=Default Group\Blocks
+FileGroup39=Default Group\Blocks
+FileGroup4=Default Group
+FileGroup40=Default Group\Blocks
+FileGroup41=Default Group\Blocks
+FileGroup42=Default Group\Blocks
+FileGroup43=Default Group\Blocks
+FileGroup44=Default Group\Blocks
+FileGroup45=Default Group\Blocks
+FileGroup46=Default Group\Blocks
+FileGroup47=Default Group\Blocks
+FileGroup48=Default Group
+FileGroup49=Default Group
+FileGroup5=Default Group
+FileGroup50=Default Group
+FileGroup51=Default Group
+FileGroup52=Default Group
+FileGroup53=Default Group
+FileGroup54=Default Group
+FileGroup55=Default Group
+FileGroup56=Default Group
+FileGroup57=Default Group
+FileGroup58=Default Group
+FileGroup59=Default Group
+FileGroup6=Default Group
+FileGroup60=Default Group\Images
+FileGroup61=Default Group
+FileGroup62=Default Group
+FileGroup63=Default Group
+FileGroup64=Default Group
+FileGroup65=Default Group
+FileGroup66=Default Group
+FileGroup67=Default Group
+FileGroup68=Default Group
+FileGroup69=Default Group
+FileGroup7=Default Group
+FileGroup70=Default Group\PHP
+FileGroup71=Default Group\Views
+FileGroup72=Default Group\Views
+FileGroup73=Default Group\Views
+FileGroup74=Default Group\Views
+FileGroup75=Default Group\Views
+FileGroup76=Default Group\Views
+FileGroup77=Default Group
+FileGroup78=Default Group
+FileGroup79=Default Group
+FileGroup8=Default Group\Images
+FileGroup80=Default Group
+FileGroup81=Default Group\Views
+FileGroup82=Default Group
+FileGroup83=Default Group
+FileGroup84=Default Group\Views
+FileGroup85=Default Group\Views
+FileGroup86=Default Group\Views
+FileGroup87=Default Group
+FileGroup88=Default Group\Views
+FileGroup89=Default Group\Views
+FileGroup9=Default Group\Images
+FileGroup90=Default Group\Views
+FileGroup91=Default Group
+FileGroup92=Default Group
+FileGroup93=Default Group\Views
+FileGroup94=Default Group\Views
+FileGroup95=Default Group
+FileGroup96=Default Group\Views
+FileGroup97=Default Group\Components
+FileGroup98=Default Group\Views
+FileGroup99=Default Group
+Group=Default Group
+Library1=jcore
+Library2=jfx
+Library3=banano
+Library4=bananovuetifyad3
+Module1=BVAD3
+Module10=ViewDialog
+Module11=ViewHome
+Module12=ViewQuestions
+Module13=ViewTable
+Module14=ViewTextFields
+Module15=ViewUsers
+Module2=pgIndex
+Module3=Tooltip
+Module4=ViewAbout
+Module5=ViewAlert
+Module6=ViewAvatars
+Module7=ViewBadges
+Module8=ViewButtons
+Module9=ViewDatePicker
+NumberOfFiles=99
+NumberOfLibraries=4
+NumberOfModules=15
+Version=8.5
+@EndOfDesignText@
+#Region Project Attributes 
+	#MergeLibraries: True
+	#LibraryAuthor: Anele Mashy Mbanga
+#End Region
+
+#IgnoreWarnings:12, 15
+Sub Process_Globals
+	Public BANano As BANano 'ignore
+	Public AppName As String = "bvad3"
+	Public AppTitle As String = "BANanoVuetify AD3"
+	Private Publish As String = "C:\laragon\www"
+	Public DebugIP As String = "localhost"
+	Public Version As String = "1.00"
+	Public Port As String = "8080"
+	Public ServerIP As String = "localhost"
+End Sub
+
+Sub AppStart (Form1 As Form, Args() As String)
+	'initialize banano for first use
+	BANano.Initialize("BANano", AppName, DateTime.now)
+	BANano.HTML_NAME = "index.html"
+	BANano.Header.Title = AppTitle
+	BANano.Header.AddFavicon("favicon.ico", "16x16")
+	BANano.Header.AddAppleTouchIcon("apple-touch-icon.png", "180x180")
+	BANano.Header.Author ="Anele Mbanga (Mashy)"
+	'BANano.Header.Charset = "iso-8859-1"
+	BANano.Header.Description = "BANanoVuetify Empty Template"
+	'BANano.header.Expires = "Mon, 22 Jul 2002 11:12:01 GMT"
+	BANano.Header.Keywords = "banano,vuetify,material design"
+	BANano.Header.Language = "en"
+	BANano.Header.AddMeta($"<meta name="copyright" content="&copy; 2020 BANanoVuetifyAD3">"$)
+	BANano.Header.AddMeta($"<meta name="robots" content="ALL">"$)
+	
+	'BANano.Header.AddMSTileIcon("mstile-150x150.png", "144x144")
+	'BANano.Header.SetMaskIcon("safari-pinned-tab.svg")
+	BANano.Header.AddManifestIcon("android-chrome-192x192.png", "192x192")
+	BANano.Header.AddManifestIcon("android-chrome-512x512.png", "512x512")
+	BANano.TranspilerOptions.UseServiceWorker = False
+	BANano.TranspilerOptions.MergeAllCSSFiles = True
+	BANano.TranspilerOptions.MergeAllJavascriptFiles = True
+	BANano.TranspilerOptions.MinifyOnline = False
+	BANano.TranspilerOptions.RemoveDeadCode = True
+	'BANano.TranspilerOptions.SetFireReadyWhenReadyStateComplete
+	'BANano.TranspilerOptions.GZipGeneratedWebsite(10)
+	#if release
+		BANano.TranspilerOptions.EnableLiveCodeSwapping = False
+	#end if
+	BANano.TranspilerOptions.RedirectOutput(File.DirApp, "log.txt")
+	'set php settings
+	BANano.PHP_NAME = $"${AppName}.php"$
+	BANano.PHPHost = $"http://${ServerIP}:${Port}/${AppName}/"$
+	BANano.PHPAddHeader("Access-Control-Allow-Origin: *")
+	
+	BANano.Build(Publish)
+	
+	Dim fx As JFX
+	Dim URL As String = File.GetUri(File.DirApp,"log.txt")
+	fx.ShowExternalDocument(URL)
+	'
+	Dim appPath As String = $"http://localhost/${AppName}/index.html"$
+	If Port <> "" Then appPath = $"http://localhost:${Port}/${AppName}/index.html"$
+	fx.ShowExternalDocument(appPath)
+	#if release
+		ExitApplication
+	#end if
+End Sub
+
+'Return true to allow the default exceptions handler to handle the uncaught exception.
+Sub Application_Error (Error As Exception, StackTrace As String) As Boolean
+	Return True
+End Sub
+
+Sub BANano_Ready
+	pgIndex.Init
+End Sub
+
