@@ -29,6 +29,7 @@ Version=7
 #DesignerProperty: Key: AutoID, DisplayName: Auto ID/Name, FieldType: Boolean, DefaultValue: False, Description: Overrides the ID/Name with a random string.
 #DesignerProperty: Key: Ref, DisplayName: Ref, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: TagName, DisplayName: TagName, FieldType: String, DefaultValue: div, Description: tag of the element
+#DesignerProperty: Key: OverwriteTag, DisplayName: OverwriteTag, FieldType: String, DefaultValue: , Description: over write tag of the element with
 #DesignerProperty: Key: Caption, DisplayName: Caption, FieldType: String, DefaultValue: , Description: Text on the element
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue:  , Description: , List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: LoremIpsum, DisplayName: LoremIpsum, FieldType: Boolean, DefaultValue: False, Description: Lorem ipsum.
@@ -117,6 +118,10 @@ Version=7
 #DesignerProperty: Key: Shaped, DisplayName: Shaped, FieldType: Boolean, DefaultValue: False , Description: 
 #DesignerProperty: Key: SingleLine, DisplayName: SingleLine, FieldType: Boolean, DefaultValue: False , Description: 
 #DesignerProperty: Key: Solo, DisplayName: Solo, FieldType: Boolean, DefaultValue: False , Description: 
+#DesignerProperty: Key: ItemText, DisplayName: ItemText, FieldType: String, DefaultValue: , Description: 
+#DesignerProperty: Key: ItemValue, DisplayName: Solo, FieldType: String, DefaultValue: , Description: 
+#DesignerProperty: Key: Items, DisplayName: Solo, FieldType: String, DefaultValue: , Description: 
+#DesignerProperty: Key: ReturnObject, DisplayName: ReturnObject, FieldType: Boolean, DefaultValue: False, Description: 
 #DesignerProperty: Key: BackgroundImage, DisplayName: BackgroundImage, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: BackgroundRepeat, DisplayName: BackgroundRepeat, FieldType: String, DefaultValue:  , Description: , List: repeat|repeat-x|repeat-y|no-repeat|initial|inherit|none
 #DesignerProperty: Key: FontFamily, DisplayName: FontFamily, FieldType: String, DefaultValue:  , Description: 
@@ -152,6 +157,7 @@ Sub Class_Globals
 	Private styleList As Map
 	Private attributeList As Map
 	Private mTagName As String = "div"
+	Private mOverwriteTag As String = ""
 	Private sbText As StringBuilder
 	Private mStates As String
 	Public bindings As Map
@@ -259,6 +265,11 @@ Sub Class_Globals
 	Private stSrc As String = ""
 	Private stAlt As String = ""
 	Private stVOn As String = ""
+	Private stItemText As String = ""
+	Private stItemValue As String
+	Private stItems As String
+	Private bReturnObject As Boolean = False
+	
 	'
 	Type VueGridRow(Rows As Int, Columns As List, _
 	mt As String, mb As String, mr As String, ml As String, _
@@ -275,7 +286,7 @@ Sub Class_Globals
 	'this will hold each row definition
 	'hold our last row
 	Private LastRow As Int
-	Public Items As List
+	Public Records As List
 	Public AppTemplateName As String = "#apptemplate"
 	Public AppendHolderName As String = "#appendholder"
 	Public PlaceHolderName As String = "#placeholder"
@@ -296,13 +307,13 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	LastRow = 0
 	GridRows.Initialize
 	GridColumns.Initialize
-	Items.Initialize
+	Records.Initialize
 End Sub
 
 
 'clear the items for this
 Sub Items_Clear As VueElement
-	Items.Initialize
+	Records.Initialize
 	Return Me
 End Sub
 
@@ -310,7 +321,7 @@ End Sub
 Sub Items_AddHeader(txt As String) As VueElement
 	Dim rec As Map = CreateMap()
 	rec.Put("header", txt)
-	Items.Add(rec)
+	Records.Add(rec)
 	Return Me
 End Sub
 
@@ -333,7 +344,7 @@ Sub Items_Add(sid As String, siconleft As String, savatar As String, savataricon
 	If stextright <> "" Then rec.Put("textright", stextright)
 	If savataricon <> "" Then rec.Put("avataricon", savataricon)
 	If slinkto <> "" Then rec.Put("to", slinkto)
-	Items.Add(rec)
+	Records.Add(rec)
 End Sub
 
 'add a divider
@@ -341,7 +352,7 @@ Sub Items_AddDivider(binset As Boolean) As VueElement
 	Dim rec As Map = CreateMap()
 	rec.Put("divider", True)
 	If binset Then rec.Put("inset", binset)
-	Items.Add(rec)
+	Records.Add(rec)
 	Return Me
 End Sub
 
@@ -356,6 +367,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mAttributes = Props.Get("Attributes")
 		mStyle = Props.Get("Style")
 		mTagName = Props.Get("TagName")
+		mOverwriteTag = Props.get("OverwriteTag")
 		mCaption = Props.Get("Caption")
 		mStates = Props.Get("States")
 		eOnClick = Props.Get("OnClick")
@@ -459,15 +471,24 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		stSrc = Props.get("Src")
 		stAlt = Props.Get("Alt")
 		stVOn = Props.Get("VOn")
+		stItemText = Props.Get("ItemText")
+		stItemValue = Props.Get("ItemValue")
+		stItems = Props.Get("Items")
+		bReturnObject = Props.Get("ReturnObject")
 	End If
 	
+	AddAttrOnCondition(":return-object", bReturnObject, True)
+	AddAttr("item-text", stItemText)
+	AddAttr("item-value", stItemValue)
+	AddAttr("items", stItems)
+	AddAttr("tag", mOverwriteTag)
 	AddAttr("v-on", stVOn)
 	AddAttr("src", stSrc)
 	AddAttr("alt", stAlt)
-	AddAttr("fluid", bFluid)
+	AddAttrOnCondition(":fluid", bFluid, True)
 	AddAttr("rules", stRules)
 	AddAttr("to", stTo)
-	AddAttr(":dark", bDark)
+	AddAttrOnCondition(":dark", bDark, True)
 	AddAttr("v-slot:activator", stSlotActivator)
 	AddAttr("href", stHref)
 	AddAttr("key", stKey)
@@ -516,9 +537,9 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 
 	AddClassOnCondition("hidden-md-and-up", bHiddenMDAndUp, True)
 	AddClassOnCondition("hidden-sm-and-down", bHiddenSMAndDown, True)
-	AddAttrOnCondition("justify-center", bJustifyCenter, True)
-	AddAttrOnCondition("align-center", bAlignCenter, True)
-	AddClassOnCondition("fill-height", bFillHeight, True)
+	AddAttrOnCondition(":justify-center", bJustifyCenter, True)
+	AddAttrOnCondition(":align-center", bAlignCenter, True)
+	AddClassOnCondition(":fill-height", bFillHeight, True)
 	'
 	AddAttr("align", stAlign)
 	AddAttr("justify", stJustify)
@@ -538,26 +559,26 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	'
 	AddAttr("append-icon", stAppendIcon)
 	AddAttr("append-outer-icon", stAppendOuterIcon)
-	AddAttrOnCondition("autofocus", boAutofocus, True)
-	AddAttrOnCondition("clearable", boClearable, True)
+	AddAttrOnCondition(":autofocus", boAutofocus, True)
+	AddAttrOnCondition(":clearable", boClearable, True)
 	AddAttr("counter", stCounter)
-	AddAttrOnCondition("dense", boDense, True)
+	AddAttrOnCondition(":dense", boDense, True)
 	AddAttr("disabled", stDisabled)
-	AddAttrOnCondition("filled", boFilled, True)
-	AddAttrOnCondition("flat", boFlat, True)
-	AddAttrOnCondition("hide-details", boHideDetails, True)
+	AddAttrOnCondition(":filled", boFilled, True)
+	AddAttrOnCondition(":flat", boFlat, True)
+	AddAttrOnCondition(":hide-details", boHideDetails, True)
 	AddAttr("hint", stHint)
-	AddAttrOnCondition("outlined", boOutlined, True)
-	AddAttrOnCondition("persistent-hint", boPersistentHint, True)
+	AddAttrOnCondition(":outlined", boOutlined, True)
+	AddAttrOnCondition(":persistent-hint", boPersistentHint, True)
 	AddAttr("placeholder", stPlaceholder)
 	AddAttr("prepend-icon", stPrependIcon)
 	AddAttr("prepend-inner-icon", stPrependInnerIcon)
 	AddAttr("readonly", stReadonly)
 	AddAttr("required", stRequired)
-	AddAttrOnCondition("rounded", boRounded, True)
-	AddAttrOnCondition("shaped", boShaped, True)
-	AddAttrOnCondition("single-line", boSingleLine, True)
-	AddAttrOnCondition("solo", boSolo, True)
+	AddAttrOnCondition(":rounded", boRounded, True)
+	AddAttrOnCondition(":shaped", boShaped, True)
+	AddAttrOnCondition(":single-line", boSingleLine, True)
+	AddAttrOnCondition(":solo", boSolo, True)
 	AddAttr("active-class", stActiveClass)
 	'
 	AddClass(mClasses)
@@ -1043,6 +1064,11 @@ Public Sub AddAttr(varProp As String, varValue As String)
 			If varValue <> "" Then
 				bindings.Put(varValue, Null)
 			End If
+		Case "items"
+			If varValue <> "" Then
+				Dim lst As List = NewList
+				bindings.Put(varValue, lst)
+			End If
 		End Select
 	End If
 	Return
@@ -1504,6 +1530,14 @@ public Sub getStyleMaxWidth() As String
 	Return stStyleMaxWidth
 End Sub
 
+public Sub setOverwriteTag(varTag As String)
+	AddAttr("tag", varTag)
+	mOverwriteTag = varTag
+End Sub
+
+Sub getOverwriteTag As String
+	Return mOverwriteTag	
+End Sub
 
 public Sub setTagName(varTagName As String)
 	mTagName = varTagName
@@ -1604,7 +1638,7 @@ public Sub getHiddenSMAndDown() As Boolean
 End Sub
 
 public Sub setJustifyCenter(varJustifyCenter As Boolean)
-	AddAttrOnCondition("justify-center", varJustifyCenter, True)
+	AddAttrOnCondition(":justify-center", varJustifyCenter, True)
 	bJustifyCenter = varJustifyCenter
 End Sub
 
@@ -1613,7 +1647,7 @@ public Sub getJustifyCenter() As Boolean
 End Sub
 
 public Sub setAlignCenter(varAlignCenter As Boolean)
-	AddAttrOnCondition("align-center", varAlignCenter, True)
+	AddAttrOnCondition(":align-center", varAlignCenter, True)
 	bAlignCenter = varAlignCenter
 End Sub
 
@@ -1622,7 +1656,7 @@ public Sub getAlignCenter() As Boolean
 End Sub
 
 public Sub setFillHeight(varFillHeight As Boolean)
-	AddClassOnCondition("fill-height", varFillHeight, True)
+	AddClassOnCondition(":fill-height", varFillHeight, True)
 	bFillHeight = varFillHeight
 End Sub
 
@@ -1936,7 +1970,7 @@ End Sub
 
 'set autofocus
 public Sub setAutofocus(varAutofocus As Boolean)
-	AddAttrOnCondition("autofocus", varAutofocus, True)
+	AddAttrOnCondition(":autofocus", varAutofocus, True)
 	boAutofocus = varAutofocus
 End Sub
 
@@ -1947,7 +1981,7 @@ End Sub
 
 'set clearable
 public Sub setClearable(varClearable As Boolean)
-	AddAttrOnCondition("clearable", varClearable, True)
+	AddAttrOnCondition(":clearable", varClearable, True)
 	boClearable = varClearable
 End Sub
 
@@ -1969,7 +2003,7 @@ End Sub
 
 'set dense
 public Sub setDense(varDense As Boolean)
-	AddAttrOnCondition("dense", varDense, True)
+	AddAttrOnCondition(":dense", varDense, True)
 	boDense = varDense
 End Sub
 
@@ -1991,7 +2025,7 @@ End Sub
 
 'set filled
 public Sub setFilled(varFilled As Boolean)
-	AddAttrOnCondition("filled", varFilled, True)
+	AddAttrOnCondition(":filled", varFilled, True)
 	boFilled = varFilled
 End Sub
 
@@ -2002,7 +2036,7 @@ End Sub
 
 'set flat
 public Sub setFlat(varFlat As Boolean)
-	AddAttrOnCondition("flat", varFlat, True)
+	AddAttrOnCondition(":flat", varFlat, True)
 	boFlat = varFlat
 End Sub
 
@@ -2013,7 +2047,7 @@ End Sub
 
 'set hide-details
 public Sub setHideDetails(varHideDetails As Boolean)
-	AddAttrOnCondition("hide-details", varHideDetails, True)
+	AddAttrOnCondition(":hide-details", varHideDetails, True)
 	boHideDetails = varHideDetails
 End Sub
 
@@ -2035,7 +2069,7 @@ End Sub
 
 'set outlined
 public Sub setOutlined(varOutlined As Boolean)
-	AddAttrOnCondition("outlined", varOutlined, True)
+	AddAttrOnCondition(":outlined", varOutlined, True)
 	boOutlined = varOutlined
 End Sub
 
@@ -2046,7 +2080,7 @@ End Sub
 
 'set persistent-hint
 public Sub setPersistentHint(varPersistentHint As Boolean)
-	AddAttrOnCondition("persistent-hint", varPersistentHint, True)
+	AddAttrOnCondition(":persistent-hint", varPersistentHint, True)
 	boPersistentHint = varPersistentHint
 End Sub
 
@@ -2126,7 +2160,7 @@ End Sub
 
 'set rounded
 public Sub setRounded(varRounded As Boolean)
-	AddAttrOnCondition("rounded", varRounded, True)
+	AddAttrOnCondition(":rounded", varRounded, True)
 	boRounded = varRounded
 End Sub
 
@@ -2146,7 +2180,7 @@ End Sub
 
 'set shaped
 public Sub setShaped(varShaped As Boolean)
-	AddAttrOnCondition("shaped", varShaped, True)
+	AddAttrOnCondition(":shaped", varShaped, True)
 	boShaped = varShaped
 End Sub
 
@@ -2157,7 +2191,7 @@ End Sub
 
 'set single-line
 public Sub setSingleLine(varSingleLine As Boolean)
-	AddAttrOnCondition("single-line", varSingleLine, True)
+	AddAttrOnCondition(":single-line", varSingleLine, True)
 	boSingleLine = varSingleLine
 End Sub
 
@@ -2186,8 +2220,7 @@ End Sub
 
 'set solo
 public Sub setSolo(varSolo As Boolean)
-	AddAttrOnCondition("solo", varSolo, True)
-
+	AddAttrOnCondition(":solo", varSolo, True)
 	boSolo = varSolo
 End Sub
 
@@ -2687,65 +2720,6 @@ Sub Map2List(moptions As Map, sourcefield As String, displayfield As String) As 
 	Return recs
 End Sub
 
-'define structure for auto complete
-Sub NewSelect(vmodel As String, sLabel As String, bRequired As Boolean, bMultiple As Boolean, sPlaceHolder As String, sHelperText As String, sourceTable As String, sourceField As String, displayField As String, returnObject As Boolean)
-	setLabel(sLabel)
-	SetAttr(":required", bRequired)
-	setPlaceholder(sPlaceHolder)
-	setHint(sHelperText)
-	SetAttr(":multiple", bMultiple)
-	SetAttr(":items", sourceTable)
-	SetAttr("item-text", displayField)
-	SetAttr("item-value", sourceField)
-	SetAttr(":return-object", returnObject)
-	setVModel(vmodel)
-End Sub
-
-'define structure for auto complete, bind it after this
-Sub NewSelectOptions(vmodel As String, sLabel As String, bRequired As Boolean, bMultiple As Boolean, sPlaceHolder As String, sHelperText As String, sourceName As String, sourceMap As Map, sourceField As String, displayField As String, returnObject As Boolean)
-	setLabel(sLabel)
-	SetAttr(":required", bRequired)
-	setPlaceholder(sPlaceHolder)
-	setHint(sHelperText)
-	SetAttr(":multiple", bMultiple)
-	SetAttr(":items", sourceName)
-	SetAttr("item-text", displayField)
-	SetAttr("item-value", sourceField)
-	SetAttr(":return-object", returnObject)
-	setVModel(vmodel)
-	Dim recs As List = Map2List(sourceMap, sourceField, displayField)
-	SetData(sourceName, recs)
-End Sub
-
-'define structure for parallax
-Sub NewParallax(sheight As String, src As String, salt As String)
-	setHeight(sheight)
-	setSrc(src)
-	setAlt(salt)
-End Sub
-
-'define structure for image
-Sub NewImage(src As String, salt As String, swidth As String, sheight As String)
-	setWidth(swidth)
-	setHeight(sheight)
-	setAlt(salt)
-	setSrc(src)
-End Sub
-
-'define the structure of the icon
-Sub NewIcon(sIcon As String, sSize As String, scolor As String, sintensity As String)
-	setCaption(sIcon)
-	AddAttr("size", sSize)
-	SetColorIntensity(scolor,sintensity)
-End Sub
-
-'define structure of the button
-Sub NewButton(sLabel As String, bRaised As Boolean, bPrimary As Boolean, bFitWidth As Boolean)
-	setLabel(sLabel)
-	If bRaised = False Then AddAttr("text", True)
-	If bPrimary Then setColor("primary")
-	If bFitWidth Then AddAttr("block", True)
-End Sub
 
 'generate a treeitem for v-tree
 Sub NewTreeItem(parentID As String, key As String, text As String, mhref As String, mIcon As String, mDisabled As Boolean) As Map
@@ -2790,6 +2764,52 @@ Sub FileIcon(ext As String) As String
 	End If
 End Sub
 
+
+Sub setItems(s As String)
+	stItems = s
+	AddAttr("items", stItems)
+End Sub
+
+
+Sub getItems As String
+	Return stItems
+End Sub
+
+
+Sub setItemText(s As String)
+	AddAttr("item-text", S)
+	stItemText = S
+End Sub
+
+Sub getItemText As String
+	Return stItemText
+End Sub
+
+
+Sub setItemValue(s As String)
+	AddAttr("item-value", S)
+	stItemText = S
+End Sub
+
+Sub getItemValue As String
+	Return stItemValue
+End Sub
+
+
+Sub setReturnObject(b As Boolean)
+	AddAttr(":return-object", b)
+	bReturnObject = b
+End Sub
+
+Sub getReturnObject As Boolean
+	Return bReturnObject
+End Sub
+
+
+Sub setMultiple(b As Boolean)
+	AddAttr(":multiple", b)
+End Sub
+
 Sub SetTypeText
 	AddAttr("type", "text")
 End Sub
@@ -2818,71 +2838,6 @@ Sub SetTypeFile
 	AddAttr("type", "file")
 End Sub
 
-Sub NewFile(vmodel As String, slabel As String, splaceholder As String, bRequired As Boolean, shelperText As String)
-	setHint(shelperText)
-	setPlaceholder(splaceholder)
-	setVModel(vmodel)
-	setClearable(False)
-	setLabel(slabel)
-	setRequired(bRequired)
-End Sub
-'
-Sub NewCheckBox(vmodel As String, slabel As String, svalue As Object, struevalue As Object, sfalsevalue As Object)
-	setVModel(vmodel)
-	setValue(svalue)
-	setLabel(slabel)
-	AddAttr("false-value", sfalsevalue)
-	AddAttr("true-value", struevalue)
-End Sub
-
-Sub NewRadioGroup(vmodel As String, sLabel As String, svalue As String, sourceTable As String, sourceField As String, displayField As String, bShowLabel As Boolean, bLabelOnTop As Boolean)
-	setVModel(vmodel)
-	setLabel(sLabel)
-	If bShowLabel = False Then setLabel("")
-	If bLabelOnTop Then
-		AddAttr(":column", True)
-	Else
-		AddAttr(":row", True)
-	End If
-End Sub
-
-'define the text field
-Sub NewTextField(vmodel As String, slabel As String, splaceholder As String, bRequired As Boolean, sPrependIcon As String, iMaxLen As Int, shelpertext As String)
-	setLabel(slabel)
-	setRequired(bRequired)
-	setPrependIcon(sPrependIcon)
-	If iMaxLen > 0 Then
-		setCounter(True)
-	End If
-	setPlaceholder(splaceholder)
-	setHint(shelpertext)
-	setVModel(vmodel)
-	AddAttr("type", "text")
-	setRef(vmodel)
-End Sub
-
-Sub NewRadioGroupOptions(vmodel As String, slabel As String, svalue As Object, optionsm As Map, bShowLabel As Boolean, bLabelOnTop As Boolean)
-	setVModel(vmodel)
-	setLabel(slabel)
-	Dim recs As List = Map2List(optionsm, "id", "text")
-	'SetOptions(optionsm)
-	setValue(svalue)
-	If bShowLabel = False Then setLabel("")
-	If bLabelOnTop Then
-		AddAttr(":column", True)
-	Else
-		AddAttr(":row", True)
-	End If
-End Sub
-
-Sub NewSlider(vmodel As String, slabel As String, iMinValue As Int, iMaxValue As Int, sHint As String)
-	setVModel(vmodel)
-	AddAttr("hint", sHint)
-	AddAttr("max", iMaxValue)
-	AddAttr("min", iMinValue)
-	AddAttr("label", slabel)
-End Sub
-'
 '
 'private Sub computedDateFormatted As String   'IgnoreDeadCode
 '	Try
@@ -2970,3 +2925,61 @@ Sub FormatFileSize(Bytes As Float) As String					'ignoredeadcode
 		Return "0 Bytes"
 	End Try
 End Sub
+
+Sub NewTextField(elID As String, vmodel As String, slabel As String, splaceholder As String, bRequired As Boolean, sPrependIcon As String, iMaxLen As Int, sHint As String, props As Map)
+	elID = elID.tolowercase
+	setLabel(slabel)
+	setRequired(bRequired)
+	setPrependIcon(sPrependIcon)
+	If iMaxLen > 0 Then
+		setCounter(True)
+	End If
+	setPlaceholder(splaceholder)
+	setHint(sHint)
+	vmodel = vmodel
+	AddAttr("type", "text")
+	setRef(vmodel)
+	AddAttr("id", elID)
+	'
+	If BANano.IsNull(props) = False Then
+		For Each k As String In props.Keys
+			Dim v As Object = props.Get(k)
+			AddAttr(k, v)
+		Next
+	End If
+End Sub
+
+
+
+'
+''add html of component to app and this binds events and states
+'Sub AddToApp(vap As BANanoVue)
+'	'Dim sout As String = ToString
+'	'vap.AddHTML(sout)
+'	'apply the binding for the control
+'	For Each k As String In bindings.Keys
+'		Dim v As String = bindings.Get(k)
+'		vap.SetData(k, v)
+'	Next
+'	'apply the events
+'	For Each k As String In methods.Keys
+'		Dim cb As BANanoObject = methods.Get(k)
+'		vap.SetCallBack(k, cb)
+'	Next
+'End Sub
+'
+''add html of component to another and binds events and states
+'Sub AddToComponent(ve As VMComponent)
+'	'Dim sout As String = ToString
+'	've.AddHTML(sout)
+'	'apply the binding for the control
+'	For Each k As String In bindings.Keys
+'		Dim v As String = bindings.Get(k)
+'		ve.SetData(k, v)
+'	Next
+'	'apply the events
+'	For Each k As String In methods.Keys
+'		Dim cb As BANanoObject = methods.Get(k)
+'		ve.SetCallBack(k, cb)
+'	Next
+'End Sub

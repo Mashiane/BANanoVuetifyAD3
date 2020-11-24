@@ -2145,7 +2145,6 @@ private Sub BuildSlots
 		sb.Append(sbTotals.ToString)
 	End If
 	Dim sout As String = sb.tostring
-	Log(sout)
 	mElement.Append(sout)
 End Sub
 
