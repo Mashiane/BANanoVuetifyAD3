@@ -579,13 +579,15 @@ End Sub
 'add an attr on condition
 public Sub AddAttrOnCondition(varClass As String, varCondition As Boolean, varShouldBe As Boolean)
 	If BANano.IsUndefined(varCondition) Or BANano.IsNull(varCondition) Then Return
-	If varShouldBe <> varCondition Then Return
 	If BANano.IsUndefined(varClass) Or BANano.IsNull(varClass) Then Return
+	If BANano.IsUndefined(varShouldBe) Or BANano.IsNull(varShouldBe) Then Return
+	If varShouldBe <> varCondition Then Return
 	If BANano.IsNumber(varClass) Then varClass = BANanoShared.CStr(varClass)
 	varClass = varClass.trim
 	If varClass = "" Then Return
 	AddAttr(varClass, varShouldBe)
 End Sub
+
 
 'add a style
 public Sub AddStyle(varProp As String, varStyle As String)
@@ -599,6 +601,21 @@ public Sub AddStyle(varProp As String, varStyle As String)
 	Else
 		styleList.put(varProp, varStyle)
 	End If
+End Sub
+
+
+'add an attr on condition
+public Sub AddStyleOnCondition(varClass As String, varCondition As Boolean, varShouldBe As Object)
+	If BANano.IsUndefined(varShouldBe) Or BANano.IsNull(varShouldBe) Then Return
+	If BANano.IsUndefined(varCondition) Or BANano.IsNull(varCondition) Then Return
+	If varShouldBe <> varCondition Then Return
+	AddStyle(varClass, varCondition)
+End Sub
+
+public Sub AddStyleOnConditionTrue(varClass As String, varCondition As Boolean, varShouldBe As Boolean)
+	If BANano.IsUndefined(varShouldBe) Or BANano.IsNull(varShouldBe) Then Return
+	If BANano.IsUndefined(varCondition) Or BANano.IsNull(varCondition) Then Return
+	If varShouldBe Then AddStyle(varClass, varCondition)
 End Sub
 
 Sub SetAttr(varProp As String, varValue As String)

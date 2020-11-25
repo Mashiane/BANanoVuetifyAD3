@@ -32,6 +32,10 @@ Version=7
 #DesignerProperty: Key: OverwriteTag, DisplayName: OverwriteTag, FieldType: String, DefaultValue: , Description: over write tag of the element with
 #DesignerProperty: Key: Caption, DisplayName: Caption, FieldType: String, DefaultValue: , Description: Text on the element
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue:  , Description: , List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
+#DesignerProperty: Key: ColorIntensity, DisplayName: Color Intensity, FieldType: String, DefaultValue:  normal, Description: , List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
+#DesignerProperty: Key: TextColor, DisplayName: Text Color, FieldType: String, DefaultValue:  , Description: , List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
+#DesignerProperty: Key: TextColorIntensity, DisplayName: Text Color Intensity, FieldType: String, DefaultValue:  normal, Description: , List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
+#DesignerProperty: Key: SetColorByAttribute, DisplayName: Set Color By Attribute, FieldType: Boolean, DefaultValue: True, Description:
 #DesignerProperty: Key: LoremIpsum, DisplayName: LoremIpsum, FieldType: Boolean, DefaultValue: False, Description: Lorem ipsum.
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: False, Description: Dark
 #DesignerProperty: Key: HiddenMDAndUp, DisplayName: HiddenMDAndUp, FieldType: Boolean, DefaultValue: False, Description: HiddenMDAndUp
@@ -64,10 +68,10 @@ Version=7
 #DesignerProperty: Key: FullScreen, DisplayName: FullScreen Mobile, FieldType: Boolean, DefaultValue: False, Description: FullScreen Mobile
 #DesignerProperty: Key: Rows, DisplayName: Rows, FieldType: String, DefaultValue: , Description: Rows
 #DesignerProperty: Key: Columns, DisplayName: Columns, FieldType: String, DefaultValue: , Description: Columns
-#DesignerProperty: Key: OffSets, DisplayName: OffSets SMLX, FieldType: String, DefaultValue: ||| , Description: OffSets SMLX
-#DesignerProperty: Key: Sizes, DisplayName: Sizes SMLX, FieldType: String, DefaultValue: |||, Description: Sizes SMLX
-#DesignerProperty: Key: PaddingAXYTBLR, DisplayName: Padding AXYTBLR, FieldType: String, DefaultValue: |||||| , Description: Padding AXYSMLX
-#DesignerProperty: Key: MarginAXYTBLR, DisplayName: Margin AXYTBLR, FieldType: String, DefaultValue: |||||| , Description: Margins AXYSMLX
+#DesignerProperty: Key: OffSets, DisplayName: OffSets SMLX, FieldType: String, DefaultValue: s=?;m=?;l=?;x=? , Description: OffSets SMLX
+#DesignerProperty: Key: Sizes, DisplayName: Sizes SMLX, FieldType: String, DefaultValue: s=?;m=?;l=?;x=?, Description: Sizes SMLX
+#DesignerProperty: Key: PaddingAXYTBLR, DisplayName: Padding AXYTBLR, FieldType: String, DefaultValue: a=?;x=?;y=?t=?;b=?;l=?;r=? , Description: Padding AXYSMLX
+#DesignerProperty: Key: MarginAXYTBLR, DisplayName: Margin AXYTBLR, FieldType: String, DefaultValue: a=?;x=?;y=?t=?;b=?;l=?;r=? , Description: Margins AXYSMLX
 #DesignerProperty: Key: BuildGrid, DisplayName: BuildGrid, FieldType: Boolean, DefaultValue: False, Description: BuildGrid
 #DesignerProperty: Key: ShowGridDesign, DisplayName: Show Grid Design, FieldType: Boolean, DefaultValue: False, Description: ShowGridDesign
 #DesignerProperty: Key: Border, DisplayName: Border, FieldType: String, DefaultValue:  , Description: 
@@ -128,7 +132,14 @@ Version=7
 #DesignerProperty: Key: FontSize, DisplayName: FontSize, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: FontStyle, DisplayName: FontStyle, FieldType: String, DefaultValue:  , Description: , List: normal|italic|oblique|initial|inherit|none
 #DesignerProperty: Key: FontWeight, DisplayName: FontWeight, FieldType: String, DefaultValue:  , Description: , List: normal|bold|bolder|lighter|initial|inherit|none
-#DesignerProperty: Key: TextDecoration, DisplayName: TextDecoration, FieldType: String, DefaultValue:  , Description: 
+#DesignerProperty: Key: TextDecoration, DisplayName: TextDecoration, FieldType: String, DefaultValue:  , Description: , List: none|underline|line-through|overline
+#DesignerProperty: Key: Float, DisplayName: Float, FieldType: String, DefaultValue:  , Description: , List: left|right|none
+#DesignerProperty: Key: Italic, DisplayName: Italic, FieldType: Boolean, DefaultValue: False, Description: Italic
+#DesignerProperty: Key: Bold, DisplayName: Bold, FieldType: Boolean, DefaultValue: False, Description: Bold
+#DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
+#DesignerProperty: Key: Circle, DisplayName: Circle, FieldType: Boolean, DefaultValue: False, Description: Circle
+#DesignerProperty: Key: Center, DisplayName: Center, FieldType: Boolean, DefaultValue: False, Description: Center
+'
 #DesignerProperty: Key: OnClick, DisplayName: OnClick, FieldType: String, DefaultValue: , Description: Event arguments to be passed to the attribute.
 #DesignerProperty: Key: OnClickStop, DisplayName: OnClickStop, FieldType: String, DefaultValue: , Description: Event arguments to be passed to the attribute.
 #DesignerProperty: Key: OnChange, DisplayName: OnChange, FieldType: String, DefaultValue: , Description: Event arguments to be passed to the attribute.
@@ -140,6 +151,7 @@ Version=7
 #DesignerProperty: Key: OnClickAlt, DisplayName: OnClickAlt, FieldType: String, DefaultValue: , Description: Event arguments to be passed to the attribute.
 #DesignerProperty: Key: OnClickShift, DisplayName: OnClickShift, FieldType: String, DefaultValue: , Description: Event arguments to be passed to the attribute.
 #DesignerProperty: Key: OnClickPrevent, DisplayName: OnClickPrevent, FieldType: String, DefaultValue: , Description: Event arguments to be passed to the attribute.
+
 
 Sub Class_Globals
 	Private BANano As BANano 'ignore
@@ -188,6 +200,7 @@ Sub Class_Globals
 	Private stValue As String = ""
 	Private stVIf As String = ""
 	Private stVModel As String = ""
+	Private bSetColorByAttribute As Boolean = True
 	Private stVShow As String = ""
 	Private stVText As String = ""
 	Private stBackgroundColor As String = ""
@@ -199,6 +212,9 @@ Sub Class_Globals
 	Private stBorderStyle As String = ""
 	Private stBorderWidth As String = ""
 	Private stColor As String = ""
+	Private stColorIntensity As String = "normal"
+	Private stTextColor As String = ""
+	Private stTextColorIntensity As String = "normal"
 	Private stFontFamily As String = ""
 	Private stFontSize As String = ""
 	Private stFontStyle As String = ""
@@ -249,10 +265,10 @@ Sub Class_Globals
 	Private boShaped As Boolean = False
 	Private boSingleLine As Boolean = False
 	Private boSolo As Boolean = False
-	Private stOffSets As String = "|||"
-	Private stSizes As String = "|||"
-	Private stPaddingAXYTBLR As String = "||||||"
-	Private stMarginAXYTBLR As String = "||||||"
+	Private stOffSets As String = "s=?;m=?;l=?;x=?"
+	Private stSizes As String = "s=?;m=?;l=?;x=?"
+	Private stPaddingAXYTBLR As String = "a=?;x=?;y=?t=?;b=?;l=?;r=?"
+	Private stMarginAXYTBLR As String = "a=?;x=?;y=?t=?;b=?;l=?;r=?"
 	Private bFluid As Boolean = False
 	Private bBuildGrid As Boolean = False
 	Private bShowGridDesign As Boolean = False
@@ -269,16 +285,21 @@ Sub Class_Globals
 	Private stItemValue As String
 	Private stItems As String
 	Private bReturnObject As Boolean = False
+	Private bBold As Boolean = False
+	Private bItalic As Boolean = False
+	Private bCircle As Boolean = False
+	Private bCenter As Boolean = False
+	Private stFloat As String = ""
 	
 	'
 	Type VueGridRow(Rows As Int, Columns As List, _
-	mt As String, mb As String, mr As String, ml As String, _
-	pt As String, pb As String, pr As String, pl As String)
+	ma As String, mx As String, my As String, mt As String, mb As String, mr As String, ml As String, _
+	pa As String, px As String, py As String, pt As String, pb As String, pr As String, pl As String)
 	
 	Type VueGridColumn(Columns As Int, sm As String, md As String, lg As String, xl As String, _
 	ofsm As String, ofmd As String, oflg As String, ofxl As String, _
-	mt As String, mb As String, mr As String, ml As String, _
-	pt As String, pb As String, pr As String, pl As String)
+	ma As String, mx As String, my As String, mt As String, mb As String, mr As String, ml As String, _
+	pa As String, px As String, py As String, pt As String, pb As String, pr As String, pl As String)
 	'this will hold all our rows
 	Private GridRows As Map
 	'this will hold temporal columns
@@ -308,6 +329,56 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	GridRows.Initialize
 	GridColumns.Initialize
 	Records.Initialize
+End Sub
+
+
+
+Sub setItalic(b As Boolean)
+	AddStyleOnConditionTrue("font-style",  "italic", b)
+	bItalic = b
+End Sub
+
+Sub getItalic As Boolean
+	Return bItalic
+End Sub
+
+Sub setBold(b As Boolean)
+	AddStyleOnConditionTrue("font-weight", "bold", b)
+	bBold = b
+End Sub
+
+Sub getBold As Boolean
+	Return bBold
+End Sub
+
+
+Sub setFloat(varValue As String)
+	If BANano.IsNull(varValue) Then varValue = ""
+	stFloat = varValue
+	AddStyleOnCondition("float", "left", stFloat)
+	AddStyleOnCondition("float", "right", stFloat)
+End Sub
+
+Sub getFloat As String
+	Return stFloat
+End Sub
+
+Sub setCircle(b As Boolean)
+	AddStyleOnConditionTrue("border-radius", "50%", b)
+	bCircle = b
+End Sub
+
+Sub getCircle As Boolean
+	Return bCircle
+End Sub
+
+Sub setCenter(b As Boolean)
+	bCenter = b
+	AddStyleOnConditionTrue("text-align", "center", bCenter)
+End Sub
+
+Sub getCenter As Boolean
+	Return bCenter
 End Sub
 
 
@@ -346,6 +417,22 @@ Sub Items_Add(sid As String, siconleft As String, savatar As String, savataricon
 	If slinkto <> "" Then rec.Put("to", slinkto)
 	Records.Add(rec)
 End Sub
+
+
+'add an attr on condition
+public Sub AddStyleOnCondition(varClass As String, varCondition As Boolean, varShouldBe As Object)
+	If BANano.IsUndefined(varShouldBe) Or BANano.IsNull(varShouldBe) Then Return
+	If BANano.IsUndefined(varCondition) Or BANano.IsNull(varCondition) Then Return
+	If varShouldBe <> varCondition Then Return
+	AddStyle(varClass, varCondition)
+End Sub
+
+public Sub AddStyleOnConditionTrue(varClass As String, varCondition As Boolean, varShouldBe As Boolean)
+	If BANano.IsUndefined(varShouldBe) Or BANano.IsNull(varShouldBe) Then Return
+	If BANano.IsUndefined(varCondition) Or BANano.IsNull(varCondition) Then Return
+	If varShouldBe Then AddStyle(varClass, varCondition)
+End Sub
+
 
 'add a divider
 Sub Items_AddDivider(binset As Boolean) As VueElement
@@ -407,6 +494,9 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		stBorderStyle = Props.Get("BorderStyle")
 		stBorderWidth = Props.Get("BorderWidth")
 		stColor = Props.Get("Color")
+		stColorIntensity = Props.Get("ColorIntensity")
+		stTextColor = Props.Get("TextColor")
+		stTextColorIntensity = Props.Get("TextColorIntensity")
 		stFontFamily = Props.Get("FontFamily")
 		stFontSize = Props.Get("FontSize")
 		stFontStyle = Props.Get("FontStyle")
@@ -475,8 +565,21 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		stItemValue = Props.Get("ItemValue")
 		stItems = Props.Get("Items")
 		bReturnObject = Props.Get("ReturnObject")
+		bBold = Props.Get("Bold")
+		bItalic = Props.Get("Italic")
+		bCircle = Props.Get("Circle")
+		bCenter = Props.Get("Center")
+		stFloat = Props.Get("Float")
+		bSetColorByAttribute = Props.get("SetColorByAttribute")
 	End If
 	
+	AddStyleOnConditionTrue("font-weight", "bold", bBold)
+	AddStyleOnConditionTrue("font-style",  "italic", bItalic)
+	AddStyleOnConditionTrue("border-radius", "50%", bCircle)
+	AddStyleOnConditionTrue("text-align", "center", bCenter)
+	AddStyleOnCondition("float", "left", stFloat)
+	AddStyleOnCondition("float", "right", stFloat)
+	'
 	AddAttrOnCondition(":return-object", bReturnObject, True)
 	AddAttr("item-text", stItemText)
 	AddAttr("item-value", stItemValue)
@@ -515,7 +618,13 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	AddStyle("border-radius", stBorderRadius)
 	AddStyle("border-style", stBorderStyle)
 	AddStyle("border-width", stBorderWidth)
-	AddAttr("color", stColor)
+	
+	AddAttrOnConditionTrue("color", stColor, bSetColorByAttribute)
+	setColor(stColor)
+	setColorIntensity(stColorIntensity)
+	setTextColor(stTextColor)
+	setTextColorIntensity(stTextColorIntensity)
+		
 	AddStyle("font-family", stFontFamily)
 	AddStyle("font-size", stFontSize)
 	AddStyle("font-style", stFontStyle)
@@ -546,13 +655,14 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	'
 	setCoverImage(stCoverImage)
 	setFitScreen(bFitScreen)
-	setPaddingAXYTBLR(stPaddingAXYTBLR)
-	setMarginAXYTBLR(stMarginAXYTBLR)
+	
 	'
-	If BANano.IsUndefined(bBuildGrid) Or BANano.IsNull(bBuildGrid) Then
-	else if bBuildGrid = False Then
+	If BANano.IsNull(bBuildGrid) Then bBuildGrid = False
+	If bBuildGrid = False Then
 		setOffsets(stOffSets)
 		setSizes(stSizes)
+		setPaddingAXYTBLR(stPaddingAXYTBLR)
+		setMarginAXYTBLR(stMarginAXYTBLR)
 	End If
 	'
 	setFullScreen(bFullScreen)
@@ -619,31 +729,227 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		If BANano.IsUndefined(stOffSets) Or BANano.IsNull(stOffSets) Then
 			stOffSets = "0,0,0,0"
 		End If
-		stOffSets = stOffSets.replace(",","|")
-		stOffSets = stOffSets.replace("|",",")
-		Dim sl As List = BANanoShared.StrParse(",", stOffSets)
-		If sl.Size <> 4 Then Return
-		Dim offs As String = sl.Get(0)
-		Dim offm As String = sl.Get(1)
-		Dim offl As String = sl.Get(2)
-		Dim offx As String = sl.Get(3)
-		'
 		If BANano.IsUndefined(stSizes) Or BANano.IsNull(stSizes) Then
 			stSizes = "12,12,12,12"
 		End If
-		stSizes = stSizes.replace(",","|")
-		stSizes = stSizes.replace("|",",")
-		Dim ss As List = BANanoShared.StrParse(",", stSizes)
-		If ss.Size <> 4 Then Return
-		Dim sm As String = ss.Get(0)
-		Dim md As String = ss.Get(1)
-		Dim lg As String = ss.Get(2)
-		Dim xl As String = ss.Get(3)
+		Dim offmap As Map = GetOffsetSizes(stOffSets)
+		Dim sizmap As Map = GetOffsetSizes(stSizes)
+		'
+		Dim offs As String = offmap.get("sm")
+		Dim offm As String = offmap.get("md")
+		Dim offl As String = offmap.get("lg")
+		Dim offx As String = offmap.get("xl")
+		
+		Dim sm As String = sizmap.get("sm")
+		Dim md As String = sizmap.get("md")
+		Dim lg As String = sizmap.get("lg")
+		Dim xl As String = sizmap.get("xl")
 		'
 		AddRows(stRows)
 		AddColumnsOS(stColumns, offs, offm, offl, offx, sm, md, lg, xl)
 		BuildGrid
 	End If
+End Sub
+
+private Sub GetMarginPadding(varOffsets As String) As Map
+	Dim m As Map = CreateMap("a":"", "x":"", "y":"", "t":"", "b":"", "l":"", "r":"")
+	If BANano.IsUndefined(varOffsets) Or BANano.IsUndefined(varOffsets) Then Return m
+	varOffsets = varOffsets.replace("-","|")
+	varOffsets = varOffsets.replace(",","|")
+	varOffsets = varOffsets.replace(";","|")
+	varOffsets = varOffsets.replace("|",",")
+	varOffsets = varOffsets.replace("?","")
+	'
+	Dim ss As List = BANanoShared.StrParse(",", varOffsets)
+	Dim a As String = ""
+	Dim x As String = ""
+	Dim y As String = ""
+	Dim t As String = ""
+	Dim b As String = ""
+	Dim l As String = ""
+	Dim r As String = ""
+
+	'
+	Select Case ss.Size
+	Case 1
+		a = ss.Get(0)
+		If a.IndexOf("=") = 0 Then	a = "a=" & a
+	Case 2
+		a = ss.Get(0)
+		x = ss.Get(1)
+		'
+		If a.IndexOf("=") = 0 Then a = "a=" & a
+		If x.IndexOf("=") = 0 Then x = "x=" & x
+	Case 3
+		a = ss.Get(0)
+		x = ss.Get(1)
+		y = ss.Get(2)
+	'
+		If a.IndexOf("=") = 0 Then a = "a=" & a
+		If x.IndexOf("=") = 0 Then x = "x=" & x
+		If y.IndexOf("=") = 0 Then y = "y=" & y
+	Case 4
+		a = ss.Get(0)
+		x = ss.Get(1)
+		y = ss.Get(2)
+		t = ss.Get(3)
+	'
+		If a.IndexOf("=") = 0 Then a = "a=" & a
+		If x.IndexOf("=") = 0 Then x = "x=" & x
+		If y.IndexOf("=") = 0 Then y = "y=" & y
+		If t.IndexOf("=") = 0 Then t = "t=" & t
+	Case 5
+		a = ss.Get(0)
+		x = ss.Get(1)
+		y = ss.Get(2)
+		t = ss.Get(3)
+		b = ss.Get(4)
+			'
+		If a.IndexOf("=") = 0 Then a = "a=" & a
+		If x.IndexOf("=") = 0 Then x = "x=" & x
+		If y.IndexOf("=") = 0 Then y = "y=" & y
+		If t.IndexOf("=") = 0 Then t = "t=" & t
+		If b.IndexOf("=") = 0 Then b = "b=" & b
+	Case 6
+		a = ss.Get(0)
+		x = ss.Get(1)
+		y = ss.Get(2)
+		t = ss.Get(3)
+		b = ss.Get(4)
+		l = ss.Get(5)
+			'
+		If a.IndexOf("=") = 0 Then a = "a=" & a
+		If x.IndexOf("=") = 0 Then x = "x=" & x
+		If y.IndexOf("=") = 0 Then y = "y=" & y
+		If t.IndexOf("=") = 0 Then t = "t=" & t
+		If b.IndexOf("=") = 0 Then b = "b=" & b
+		If l.IndexOf("=") = 0 Then l = "l=" & l
+	Case 7
+		a = ss.Get(0)
+		x = ss.Get(1)
+		y = ss.Get(2)
+		t = ss.Get(3)
+		b = ss.Get(4)
+		l = ss.Get(5)
+		r = ss.Get(6)
+			'
+		If a.IndexOf("=") = 0 Then a = "a=" & a
+		If x.IndexOf("=") = 0 Then x = "x=" & x
+		If y.IndexOf("=") = 0 Then y = "y=" & y
+		If t.IndexOf("=") = 0 Then t = "t=" & t
+		If b.IndexOf("=") = 0 Then b = "b=" & b
+		If l.IndexOf("=") = 0 Then l = "l=" & l
+		If r.IndexOf("=") = 0 Then r = "r=" & r
+	End Select
+	'
+	Dim sbdata As String = $"${a};${x};${y};${t};${b};${l};${r}"$
+	Dim ssx As List = BANanoShared.StrParse(";", sbdata)
+	For Each d As String In ssx
+		Dim k As String = BANanoShared.MvField(d, 1, "=")
+		Dim v As String = BANanoShared.MvField(d, 2, "=")
+		m.Put(k, v)
+	Next
+	Return m
+End Sub
+
+
+private Sub GetOffsetSizes(varOffsets As String) As Map
+	Dim m As Map = CreateMap("sm":"", "md":"", "lg":"", "xl":"")
+	If BANano.IsUndefined(varOffsets) Or BANano.IsUndefined(varOffsets) Then Return m
+	varOffsets = varOffsets.replace("-","|")
+	varOffsets = varOffsets.replace(",","|")
+	varOffsets = varOffsets.replace(";","|")
+	varOffsets = varOffsets.replace("|",",")
+	varOffsets = varOffsets.replace("?","")
+	'
+	Dim ss As List = BANanoShared.StrParse(",", varOffsets)
+	Dim sm As String = ""
+	Dim md As String = ""
+	Dim lg As String = ""
+	Dim xl As String = ""
+	'
+	Select Case ss.Size
+	Case 1
+		sm = ss.Get(0)
+		If sm.IndexOf("=") = 0 Then	sm = "sm=" & sm
+	Case 2
+		sm = ss.Get(0)
+		md = ss.Get(1)
+		'
+		If sm.IndexOf("=") = 0 Then sm = "sm=" & sm
+		If md.IndexOf("=") = 0 Then md = "md=" & md
+	Case 3
+		sm = ss.Get(0)
+		md = ss.Get(1)
+		lg = ss.Get(2)
+		'
+		If sm.IndexOf("=") = 0 Then sm = "sm=" & sm
+		If md.IndexOf("=") = 0 Then md = "md=" & md
+		If lg.IndexOf("=") = 0 Then lg = "lg=" & lg
+	Case 4
+		sm = ss.Get(0)
+		md = ss.Get(1)
+		lg = ss.Get(2)
+		xl = ss.Get(3)
+		'
+		If sm.IndexOf("=") = 0 Then sm = "sm=" & sm
+		If md.IndexOf("=") = 0 Then md = "md=" & md
+		If lg.IndexOf("=") = 0 Then lg = "lg=" & lg
+		If xl.IndexOf("=") = 0 Then xl = "xl=" & xl
+	End Select
+	'
+	Dim sbdata As String = $"${sm};${md};${lg};${xl}"$
+	Dim ssx As List = BANanoShared.StrParse(";", sbdata)
+	For Each d As String In ssx
+		Dim k As String = BANanoShared.MvField(d, 1, "=")
+		Dim v As String = BANanoShared.MvField(d, 2, "=")
+		m.Put(k, v)
+	Next
+	Return m
+End Sub
+
+
+public Sub AddAttrOnConditionTrue(varClass As String, varCondition As Boolean, varShouldBe As Boolean)
+	If BANano.IsUndefined(varShouldBe) Or BANano.IsNull(varShouldBe) Then Return
+	If BANano.IsUndefined(varCondition) Or BANano.IsNull(varCondition) Then Return
+	If varShouldBe Then AddAttr(varClass, varCondition)
+End Sub
+
+'set color intensity
+Sub setColorIntensity(varIntensity As String)
+	If BANano.IsNull(varIntensity) Then Return
+	If varIntensity = "normal" Then Return
+	AddClass(varIntensity)
+	stColorIntensity = varIntensity
+End Sub
+
+Sub getColorIntensity As String
+	Return stColorIntensity
+End Sub
+
+'set color intensity
+Sub setTextColorIntensity(varIntensity As String)
+	If BANano.IsNull(varIntensity) Then Return
+	If varIntensity = "normal" Then Return
+	Dim xintensity As String = $"text--${varIntensity}"$
+	AddClass(xintensity)
+	stTextColorIntensity = varIntensity
+End Sub
+
+Sub getTextColorIntensity As String
+	Return stTextColorIntensity
+End Sub
+
+Sub setTextColor(varColor As String)
+	If BANano.IsNull(varColor) Then Return
+	If varColor = "none" Then Return
+	Dim xcolor As String = $"${varColor}--text"$
+	AddClass(xcolor)
+	stTextColor = varColor
+End Sub
+
+Sub getTextColor As String
+	Return stTextColor
 End Sub
 
 'add anything from the appendholder
@@ -923,26 +1229,19 @@ End Sub
 'add a class on condition
 public Sub AddClassOnCondition(varClass As String, varCondition As Boolean, varShouldBe As Boolean)
 	If BANano.IsUndefined(varCondition) Or BANano.IsNull(varCondition) Then Return
-	If varShouldBe <> varCondition Then Return
 	If BANano.IsUndefined(varClass) Or BANano.IsNull(varClass) Then Return
+	If BANano.IsUndefined(varShouldBe) Or BANano.IsNull(varShouldBe) Then Return
+	If varShouldBe <> varCondition Then Return
 	If BANano.IsNumber(varClass) Then varClass = BANanoShared.CStr(varClass)
-	varClass = varClass.trim
-	If varClass = "" Then Return
-	If mElement <> Null Then 
-		mElement.AddClass(varClass)
-	Else
-		Dim mxItems As List = BANanoShared.StrParse(" ", varClass)
-		For Each mt As String In mxItems
-			classList.put(mt, mt)
-		Next
-	End If
+	AddClass(varClass)
 End Sub
 
 'add an attr on condition
 public Sub AddAttrOnCondition(varClass As String, varCondition As Boolean, varShouldBe As Boolean)
 	If BANano.IsUndefined(varCondition) Or BANano.IsNull(varCondition) Then Return
-	If varShouldBe <> varCondition Then Return
 	If BANano.IsUndefined(varClass) Or BANano.IsNull(varClass) Then Return
+	If BANano.IsUndefined(varShouldBe) Or BANano.IsNull(varShouldBe) Then Return
+	If varShouldBe <> varCondition Then Return
 	If BANano.IsNumber(varClass) Then varClass = BANanoShared.CStr(varClass)
 	varClass = varClass.trim
 	If varClass = "" Then Return
@@ -1809,14 +2108,13 @@ Sub setOffsets(varOffSets As String)
 	stOffSets = varOffSets
 	If BANano.IsUndefined(varOffSets) Or BANano.IsNull(varOffSets) Then Return
 	If varOffSets = "" Then Return
-	varOffSets = varOffSets.replace(",","|")
-	varOffSets = varOffSets.replace("|",",")
-	Dim sl As List = BANanoShared.StrParse(",", varOffSets)
-	If sl.Size <> 4 Then Return
-	Dim offs As String = sl.Get(0)
-	Dim offm As String = sl.Get(1)
-	Dim offl As String = sl.Get(2)
-	Dim offx As String = sl.Get(3)
+	Dim offmap As Map = GetOffsetSizes(stOffSets)
+	'
+	Dim offs As String = offmap.get("sm")
+	Dim offm As String = offmap.get("md")
+	Dim offl As String = offmap.get("lg")
+	Dim offx As String = offmap.get("xl")
+	
 	AddOffsets(offs, offm, offl, offx)
 End Sub
 
@@ -1828,16 +2126,13 @@ Sub setSizes(varSizes As String)
 	stSizes = varSizes
 	If BANano.IsUndefined(varSizes) Or BANano.IsNull(varSizes) Then Return
 	If varSizes = "" Then Return
-	varSizes = varSizes.replace(",","|")
-	varSizes = varSizes.replace("|",",")
-	Dim sl As List = BANanoShared.StrParse(",", varSizes)
-	If sl.Size <> 4 Then Return
-	Dim offs As String = sl.Get(0)
-	Dim offm As String = sl.Get(1)
-	Dim offl As String = sl.Get(2)
-	Dim offx As String = sl.Get(3)
+	Dim sizmap As Map = GetOffsetSizes(stSizes)
+	Dim sm As String = sizmap.get("sm")
+	Dim md As String = sizmap.get("md")
+	Dim lg As String = sizmap.get("lg")
+	Dim xl As String = sizmap.get("xl")
 	'
-	AddSizes(offs, offm, offl, offx)
+	AddSizes(sm, md, lg, xl)
 End Sub
 
 Sub getSizes() As String
@@ -1849,26 +2144,14 @@ Sub setPaddingAXYTBLR(varsetPaddingTBLR As String)
 	stPaddingAXYTBLR = varsetPaddingTBLR
 	If BANano.IsUndefined(varsetPaddingTBLR) Or BANano.IsNull(varsetPaddingTBLR) Then Return
 	If varsetPaddingTBLR = "" Then Return
-	varsetPaddingTBLR = varsetPaddingTBLR.replace(",","|")
-	varsetPaddingTBLR = varsetPaddingTBLR.replace("|",",")
-	Dim sl As List = BANanoShared.StrParse(",", varsetPaddingTBLR)
-	If sl.Size <> 7 Then Return
-	Dim pa As String = sl.Get(0)
-	Dim px As String = sl.Get(1)
-	Dim py As String = sl.Get(2)
-	Dim pt As String = sl.Get(3)
-	Dim pb As String = sl.Get(4)
-	Dim pl As String = sl.Get(5)
-	Dim pr As String = sl.Get(6)
-	'
-	'
-	pa = pa.Trim
-	px = px.Trim
-	py = py.Trim
-	pt = pt.Trim
-	pb = pb.Trim
-	pl = pl.Trim
-	pr = pr.Trim
+	Dim m As Map = GetMarginPadding(varsetPaddingTBLR)
+	Dim pa As String = m.Get("a")
+	Dim px As String = m.Get("x")
+	Dim py As String = m.Get("y")
+	Dim pt As String = m.Get("t")
+	Dim pb As String = m.Get("b")
+	Dim pl As String = m.Get("l")
+	Dim pr As String = m.Get("r")
 	
 	If pa <> "" Then AddClass($"pa-${pa}"$)
 	If px <> "" Then AddClass($"px-${px}"$)
@@ -1887,26 +2170,52 @@ Sub setMarginAXYTBLR(varMarginAXYTBLR As String)
 	stMarginAXYTBLR = varMarginAXYTBLR
 	If BANano.IsUndefined(varMarginAXYTBLR) Or BANano.IsNull(varMarginAXYTBLR) Then Return
 	If varMarginAXYTBLR = "" Then Return
-	varMarginAXYTBLR = varMarginAXYTBLR.replace(",","|")
-	varMarginAXYTBLR = varMarginAXYTBLR.replace("|",",")
-	Dim sl As List = BANanoShared.StrParse(",", varMarginAXYTBLR)
-	If sl.Size <> 7 Then Return
-	Dim ma As String = sl.Get(0)
-	Dim mx As String = sl.Get(1)
-	Dim my As String = sl.Get(2)
-	Dim mt As String = sl.Get(3)
-	Dim mb As String = sl.Get(4)
-	Dim ml As String = sl.Get(5)
-	Dim mr As String = sl.Get(6)
+	
+	Dim m As Map = GetMarginPadding(varMarginAXYTBLR)
+	Dim ma As String = m.Get("a")
+	Dim mx As String = m.Get("x")
+	Dim my As String = m.Get("y")
+	Dim mt As String = m.Get("t")
+	Dim mb As String = m.Get("b")
+	Dim ml As String = m.Get("l")
+	Dim mr As String = m.Get("r")
+	
+	If ma <> "" Then AddClass($"ma-${ma}"$)
+	If mx <> "" Then AddClass($"mx-${mx}"$)
+	If my <> "" Then AddClass($"my-${my}"$)
+	If mt <> "" Then AddClass($"mt-${mt}"$)
+	If mb <> "" Then AddClass($"mb-${mb}"$)
+	If ml <> "" Then AddClass($"ml-${ml}"$)
+	If mr <> "" Then AddClass($"mr-${mr}"$)
+End Sub
+
+Sub AddPadding(pa As String, px As String, py As String, pt As String, pb As String, pl As String, pr As String)
+	pt = pt.Trim
+	pb = pb.Trim
+	pl = pl.Trim
+	pr = pr.Trim
+	pa = pa.Trim
+	px = px.trim
+	py = py.trim
 	'
-	ma = ma.Trim
-	mx = mx.Trim
-	my = my.Trim
+	If pa <> "" Then AddClass($"pa-${pa}"$)
+	If px <> "" Then AddClass($"px-${px}"$)
+	If py <> "" Then AddClass($"py-${py}"$)
+	If pt <> "" Then AddClass($"pt-${pt}"$)
+	If pb <> "" Then AddClass($"pb-${pb}"$)
+	If pl <> "" Then AddClass($"pl-${pl}"$)
+	If pr <> "" Then AddClass($"pr-${pr}"$)
+End Sub
+
+Sub AddMargin(ma As String, mx As String, my As String, mt As String, mb As String, ml As String, mr As String)
 	mt = mt.Trim
 	mb = mb.Trim
 	ml = ml.Trim
 	mr = mr.Trim
-	
+	ma = ma.Trim
+	mx = mx.trim
+	my = my.trim
+	'
 	If ma <> "" Then AddClass($"ma-${ma}"$)
 	If mx <> "" Then AddClass($"mx-${mx}"$)
 	If my <> "" Then AddClass($"my-${my}"$)
@@ -2255,20 +2564,26 @@ private Sub BuildRowClass(xrow As VueGridRow) As String
 	Dim sb As StringBuilder
 	sb.Initialize
 	'add the margins
-	sb.Append(BuildMargins(xrow.mt, xrow.mb, xrow.ml, xrow.mr))
+	sb.Append(BuildMargins(xrow.ma, xrow.mx, xrow.my, xrow.mt, xrow.mb, xrow.ml, xrow.mr))
 	'add the padding
-	sb.Append(BuildPadding(xrow.pt, xrow.pb, xrow.pl, xrow.pr))
+	sb.Append(BuildPadding(xrow.pa, xrow.px, xrow.py, xrow.pt, xrow.pb, xrow.pl, xrow.pr))
 	Return sb.tostring.trim
 End Sub
 
-private Sub BuildMargins(mt As String, mb As String, ml As String, mr As String) As String
+private Sub BuildMargins(ma As String, mx As String, my As String, mt As String, mb As String, ml As String, mr As String) As String
 	mt = mt.Trim
 	mb = mb.Trim
 	ml = ml.Trim
 	mr = mr.Trim
+	ma = ma.Trim
+	mx = mx.trim
+	my = my.trim
 	'
 	Dim sb As StringBuilder
 	sb.Initialize
+	If ma <> "" Then sb.Append($"ma-${ma} "$)
+	If mx <> "" Then sb.Append($"mx-${mx} "$)
+	If my <> "" Then sb.Append($"my-${my} "$)
 	If mt <> "" Then sb.Append($"mt-${mt} "$)
 	If mb <> "" Then sb.Append($"mb-${mb} "$)
 	If ml <> "" Then sb.Append($"ml-${ml} "$)
@@ -2278,14 +2593,20 @@ private Sub BuildMargins(mt As String, mb As String, ml As String, mr As String)
 	Return sout
 End Sub
 
-private Sub BuildPadding(pt As String, pb As String, pl As String, pr As String) As String
+private Sub BuildPadding(pa As String, px As String, py As String, pt As String, pb As String, pl As String, pr As String) As String
 	pt = pt.Trim
 	pb = pb.Trim
 	pl = pl.Trim
 	pr = pr.Trim
+	pa = pa.Trim
+	px = px.trim
+	py = py.trim
 	'
 	Dim sb As StringBuilder
 	sb.Initialize
+	If pa <> "" Then sb.Append($"pa-${pa} "$)
+	If px <> "" Then sb.Append($"px-${px} "$)
+	If py <> "" Then sb.Append($"py-${py} "$)
 	If pt <> "" Then sb.Append($"pt-${pt} "$)
 	If pb <> "" Then sb.Append($"pb-${pb} "$)
 	If pl <> "" Then sb.Append($"pl-${pl} "$)
@@ -2403,9 +2724,9 @@ private Sub BuildColumnClass(col As VueGridColumn) As String
 	Dim sb As StringBuilder
 	sb.Initialize
 	'add the margins
-	sb.Append(BuildMargins(col.mt, col.mb, col.ml, col.mr))
+	sb.Append(BuildMargins(col.ma, col.mx, col.my, col.mt, col.mb, col.ml, col.mr))
 	'add the padding
-	sb.Append(BuildPadding(col.pt, col.pb, col.pl, col.pr))
+	sb.Append(BuildPadding(col.pa, col.px, col.py, col.pt, col.pb, col.pl, col.pr))
 	Dim sout As String = sb.ToString
 	sout = sout.trim
 	Dim sbout As StringBuilder
@@ -2450,7 +2771,7 @@ Sub AddColumns(iColumns As Int, sm As Int, md As Int, lg As Int, xl As Int) As V
 End Sub
 
 'add columns - offsets and sizes
-private Sub AddColumnsOS(iColumns As Int, osm As Int, omd As Int, olg As Int, oxl As Int, sm As Int, md As Int, lg As Int, xl As Int) As VueElement
+Sub AddColumnsOS(iColumns As Int, osm As Int, omd As Int, olg As Int, oxl As Int, sm As Int, md As Int, lg As Int, xl As Int) As VueElement
 	Dim nCol As VueGridColumn
 	nCol.Initialize
 	nCol.Columns = iColumns
@@ -2466,10 +2787,63 @@ private Sub AddColumnsOS(iColumns As Int, osm As Int, omd As Int, olg As Int, ox
 	nCol.mb = ""
 	nCol.mr = ""
 	nCol.ml = ""
+	nCol.ma = ""
+	nCol.mx = ""
+	nCol.my = ""
+	'
 	nCol.pt = ""
 	nCol.pb = ""
 	nCol.pr = ""
 	nCol.pl = ""
+	nCol.pa = ""
+	nCol.px = ""
+	nCol.py = ""
+	'
+	'get the existing columns for this row
+	Dim rowkey As String = $"R${LastRow}"$
+	rowkey = rowkey.tolowercase
+	'get the row from existing rows
+	If GridRows.ContainsKey(rowkey) Then
+		'get the row from existing rows
+		Dim oldRow As VueGridRow = GridRows.Get(rowkey)
+		'get the existing columns from the row
+		oldRow.Columns.Add(nCol)
+		'save it back
+		GridRows.Put(rowkey,oldRow)
+	End If
+	Return Me
+End Sub
+
+'add columns - offsets and sizes
+Sub AddColumnsOSMP(iColumns As Int, osm As Int, omd As Int, olg As Int, oxl As Int, sm As Int, md As Int, lg As Int, xl As Int, pa As Int, px As Int, py As Int, pt As Int, pb As Int, pl As Int, pr As Int, _
+	ma As Int, mx As Int, my As Int, mt As Int, mb As Int, ml As Int, mr As Int) As VueElement
+	Dim nCol As VueGridColumn
+	nCol.Initialize
+	nCol.Columns = iColumns
+	nCol.lg = lg
+	nCol.md = md
+	nCol.sm = sm
+	nCol.xl = xl
+	nCol.oflg = olg
+	nCol.ofmd = omd
+	nCol.ofsm = osm
+	nCol.ofxl = oxl
+	'
+	nCol.ma = ma
+	nCol.mx = mx
+	nCol.my = my
+	nCol.mt = mt
+	nCol.mb = mb
+	nCol.mr = mr
+	nCol.ml = ml
+	'
+	nCol.pa = pa
+	nCol.px = px
+	nCol.py = py
+	nCol.pt = pt
+	nCol.pb = pb
+	nCol.pr = pr
+	nCol.pl = pl
 	'
 	'get the existing columns for this row
 	Dim rowkey As String = $"R${LastRow}"$
@@ -2691,11 +3065,6 @@ Sub AppendElement1(parentID As String, tag As String, id As String, text As Stri
 	Return el
 End Sub
 
-'set color intensity
-Sub SetColorIntensity(varColor As String, varIntensity As String)
-	Dim scolor As String = $"${varColor} ${varIntensity}"$
-	AddClass(scolor)
-End Sub
 
 Sub CStr(o As Object) As String
 	If o = BANano.UNDEFINED Then o = ""
