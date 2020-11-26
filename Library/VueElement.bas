@@ -329,6 +329,13 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	GridRows.Initialize
 	GridColumns.Initialize
 	Records.Initialize
+	'
+	'does the element exist
+	'if so, ensure we use the existing element
+	Dim fKey As String = $"#${mName}"$
+	If BANano.Exists(fKey) Then
+		mElement = BANano.GetElement(fKey)
+	End If
 End Sub
 
 
@@ -716,7 +723,13 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 
 	'build and get the element
 	Dim strHTML As String = ToString
-	mElement = mTarget.Append(strHTML).Get("#" & mName)
+	'does the element exist
+	If BANano.Exists($"#${mName}"$) Then
+		mElement = BANano.GetElement($"#${mName}"$)
+		mElement.SetHTML(strHTML) 
+	Else	
+		mElement = mTarget.Append(strHTML).Get("#" & mName)
+	End If
 	setStates(mStates)
 	'
 	If bBuildGrid Then
@@ -735,15 +748,15 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		Dim offmap As Map = GetOffsetSizes(stOffSets)
 		Dim sizmap As Map = GetOffsetSizes(stSizes)
 		'
-		Dim offs As String = offmap.get("sm")
-		Dim offm As String = offmap.get("md")
-		Dim offl As String = offmap.get("lg")
-		Dim offx As String = offmap.get("xl")
+		Dim offs As String = offmap.get("s")
+		Dim offm As String = offmap.get("m")
+		Dim offl As String = offmap.get("l")
+		Dim offx As String = offmap.get("x")
 		
-		Dim sm As String = sizmap.get("sm")
-		Dim md As String = sizmap.get("md")
-		Dim lg As String = sizmap.get("lg")
-		Dim xl As String = sizmap.get("xl")
+		Dim sm As String = sizmap.get("s")
+		Dim md As String = sizmap.get("m")
+		Dim lg As String = sizmap.get("l")
+		Dim xl As String = sizmap.get("x")
 		'
 		AddRows(stRows)
 		AddColumnsOS(stColumns, offs, offm, offl, offx, sm, md, lg, xl)
@@ -854,7 +867,7 @@ End Sub
 
 
 private Sub GetOffsetSizes(varOffsets As String) As Map
-	Dim m As Map = CreateMap("sm":"", "md":"", "lg":"", "xl":"")
+	Dim m As Map = CreateMap("s":"", "m":"", "l":"", "x":"")
 	If BANano.IsUndefined(varOffsets) Or BANano.IsUndefined(varOffsets) Then Return m
 	varOffsets = varOffsets.replace("-","|")
 	varOffsets = varOffsets.replace(",","|")
@@ -871,31 +884,31 @@ private Sub GetOffsetSizes(varOffsets As String) As Map
 	Select Case ss.Size
 	Case 1
 		sm = ss.Get(0)
-		If sm.IndexOf("=") = 0 Then	sm = "sm=" & sm
+		If sm.IndexOf("=") = 0 Then	sm = "s=" & sm
 	Case 2
 		sm = ss.Get(0)
 		md = ss.Get(1)
 		'
-		If sm.IndexOf("=") = 0 Then sm = "sm=" & sm
-		If md.IndexOf("=") = 0 Then md = "md=" & md
+		If sm.IndexOf("=") = 0 Then sm = "s=" & sm
+		If md.IndexOf("=") = 0 Then md = "m=" & md
 	Case 3
 		sm = ss.Get(0)
 		md = ss.Get(1)
 		lg = ss.Get(2)
 		'
-		If sm.IndexOf("=") = 0 Then sm = "sm=" & sm
-		If md.IndexOf("=") = 0 Then md = "md=" & md
-		If lg.IndexOf("=") = 0 Then lg = "lg=" & lg
+		If sm.IndexOf("=") = 0 Then sm = "s=" & sm
+		If md.IndexOf("=") = 0 Then md = "m=" & md
+		If lg.IndexOf("=") = 0 Then lg = "l=" & lg
 	Case 4
 		sm = ss.Get(0)
 		md = ss.Get(1)
 		lg = ss.Get(2)
 		xl = ss.Get(3)
 		'
-		If sm.IndexOf("=") = 0 Then sm = "sm=" & sm
-		If md.IndexOf("=") = 0 Then md = "md=" & md
-		If lg.IndexOf("=") = 0 Then lg = "lg=" & lg
-		If xl.IndexOf("=") = 0 Then xl = "xl=" & xl
+		If sm.IndexOf("=") = 0 Then sm = "s=" & sm
+		If md.IndexOf("=") = 0 Then md = "m=" & md
+		If lg.IndexOf("=") = 0 Then lg = "l=" & lg
+		If xl.IndexOf("=") = 0 Then xl = "x=" & xl
 	End Select
 	'
 	Dim sbdata As String = $"${sm};${md};${lg};${xl}"$
@@ -2022,6 +2035,9 @@ Sub SetCallBack(methodName As String, cb As BANanoObject)
 End Sub
 
 private Sub SetEvent(eventName As String, attrName As String, eventValue As String)
+	eventName = eventName.Replace(":","")
+	eventName = eventName.Replace(".","")
+	eventName = eventName.Replace("-","")	
 	Dim sName As String = $"${mEventName}_${eventName}"$
 	sName = sName.tolowercase
 	attrName = attrName.tolowercase
@@ -2037,6 +2053,9 @@ End Sub
 
 Sub SetOnEvent(eventHandler As Object, eventName As String, attrName As String, eventValue As String)
 	eventName = eventName.tolowercase
+	eventName = eventName.Replace(":","")
+	eventName = eventName.Replace(".","")
+	eventName = eventName.Replace("-","")
 	attrName = attrName.tolowercase
 	If SubExists(eventHandler, eventName) = False Then Return
 	If BANano.IsUndefined(eventValue) Or BANano.IsNull(eventValue) Then eventValue = ""
@@ -2057,6 +2076,8 @@ Sub OnMulti(EventHandler As String, eventName As String, args As String)    'ign
 	Dim seventname As String = eventName
 	seventname = seventname.Replace(".", "")
 	seventname = seventname.Replace(":", "")
+	seventname = seventname.Replace("-","")
+	
 	'
 	Dim sName As String = $"${EventHandler}_${seventname}"$
 	If SubExists(mCallBack, sName) = False Then Return
@@ -2077,6 +2098,8 @@ Sub On(eventName As String, args As String)    'ignoredeadcode
 	Dim seventname As String = eventName
 	seventname = seventname.Replace(".", "")
 	seventname = seventname.Replace(":", "")
+	seventname = seventname.Replace("-","")
+	
 	'
 	Dim sName As String = $"${mEventName}_${seventname}"$
 	If SubExists(mCallBack, sName) = False Then Return
@@ -2110,10 +2133,10 @@ Sub setOffsets(varOffSets As String)
 	If varOffSets = "" Then Return
 	Dim offmap As Map = GetOffsetSizes(stOffSets)
 	'
-	Dim offs As String = offmap.get("sm")
-	Dim offm As String = offmap.get("md")
-	Dim offl As String = offmap.get("lg")
-	Dim offx As String = offmap.get("xl")
+	Dim offs As String = offmap.get("s")
+	Dim offm As String = offmap.get("m")
+	Dim offl As String = offmap.get("l")
+	Dim offx As String = offmap.get("x")
 	
 	AddOffsets(offs, offm, offl, offx)
 End Sub
@@ -2127,10 +2150,10 @@ Sub setSizes(varSizes As String)
 	If BANano.IsUndefined(varSizes) Or BANano.IsNull(varSizes) Then Return
 	If varSizes = "" Then Return
 	Dim sizmap As Map = GetOffsetSizes(stSizes)
-	Dim sm As String = sizmap.get("sm")
-	Dim md As String = sizmap.get("md")
-	Dim lg As String = sizmap.get("lg")
-	Dim xl As String = sizmap.get("xl")
+	Dim sm As String = sizmap.get("s")
+	Dim md As String = sizmap.get("m")
+	Dim lg As String = sizmap.get("l")
+	Dim xl As String = sizmap.get("x")
 	'
 	AddSizes(sm, md, lg, xl)
 End Sub
@@ -3067,7 +3090,7 @@ End Sub
 
 
 Sub CStr(o As Object) As String
-	If o = BANano.UNDEFINED Then o = ""
+	If BANano.IsUndefined(o) Or BANano.IsUndefined(o) Then o = ""
 	Return "" & o
 End Sub
 

@@ -19,7 +19,7 @@ Sub Class_Globals
 	Public Path As String
 	Public Name As String
 	Public Query As Map
-	Private EventHandler As Object   'ignore
+	Public EventHandler As Object   'ignore
 	Private routes As List
 	Private components As Map
 	Private Options As Map
@@ -372,6 +372,25 @@ Sub SnackBarTopLeft As VuetifyApp
 	Return Me
 End Sub
 
+Sub SnackBarTopCentered As VuetifyApp
+	SetData("appsnackright", False)
+	SetData("appsnackleft", False)
+	SetData("appsnacktop", True)
+	SetData("appsnackbottom",False)
+	SetData("appsnackcentered",True)
+	Return Me
+End Sub
+
+
+Sub SnackBarBottomCentered As VuetifyApp
+	SetData("appsnackright", False)
+	SetData("appsnackleft", False)
+	SetData("appsnacktop", True)
+	SetData("appsnackbottom",True)
+	SetData("appsnackcentered",True)
+	Return Me
+End Sub
+
 Sub SnackBarTopRight As VuetifyApp
 	SetData("appsnackright", True)
 	SetData("appsnackleft", False)
@@ -410,6 +429,16 @@ End Sub
 
 Sub ShowDialog(b As Boolean)
 	SetData("dialogshow", b)
+End Sub
+
+
+Sub ShowDialog1
+	SetData("dialogshow", True)
+End Sub
+
+
+Sub HideDialog
+	SetData("dialogshow", False)
 End Sub
 
 'initialize the dialog
@@ -542,6 +571,11 @@ Sub ShowSnackBar(Message As String) As VuetifyApp
 	SetData("appsnackmessage", Message)
 	SetData("appsnackcolor", "")
 	SetData("appsnackshow", True)
+	Return Me
+End Sub
+
+Sub HideSnackBar As VuetifyApp
+	SetData("appsnackshow", False)
 	Return Me
 End Sub
 
@@ -1338,13 +1372,14 @@ End Sub
 
 Sub RunMethod(methodName As String, params As Object) As BANanoObject
 	methodName = methodName.tolowercase
-	If methods.ContainsKey(methodName) Then
-		Return Vue.RunMethod(methodName, params)
-	Else
-		Log($"RunMethod;${methodName} does not exist!"$)
-		Return Null
-	End If
+	Return Vue.RunMethod(methodName, params)
 End Sub
+
+Sub CallMethod(methodName As String)
+	methodName = methodName.tolowercase
+	Vue.RunMethod(methodName, Null)
+End Sub
+
 
 'set direct method
 Sub SetMethod(Module As Object, methodName As String, args As List) 
@@ -1449,7 +1484,7 @@ Sub SetStateFalse(k As String)
 End Sub
 
 Sub CStr(o As Object) As String
-	If o = BANano.UNDEFINED Then o = ""
+	If BANano.IsUndefined(o) Or BANano.IsUndefined(o) Then o = ""
 	Return "" & o
 End Sub
 
@@ -1789,3 +1824,284 @@ Sub BindVueTable(el As VueTable)
 		SetCallBack(k, cb)
 	Next
 End Sub
+
+Sub UpdateButton(VC As VueComponent, elID As String, sLabel As String, eColor As String, bOutlined As Boolean,  props As Map) 
+	Dim xEventHandler As Object = VC.mCallBack
+	elID = elID.tolowercase
+	elID = elID.Replace("#","")
+	'
+	Dim mbutton As VueElement
+	mbutton.Initialize(xEventHandler, elID, elID)
+	mbutton.Caption = sLabel
+	mbutton.AddAttr("id", elID)
+	If bOutlined Then mbutton.Outlined = True
+	mbutton.color = eColor
+	'
+	If BANano.IsNull(props) = False Then
+		For Each k As String In props.Keys
+			Dim v As Object = props.Get(k)
+			mbutton.AddAttr(k, v)
+		Next
+	End If
+	'
+	Dim clickEvent As String = $"${elID}_click"$
+	mbutton.SetOnEvent(xEventHandler, clickEvent, "click", "")
+	'
+	VC.BindVueElement(mbutton)
+End Sub
+
+Sub UpdateButtonOnApp(elID As String, sLabel As String, eColor As String, bOutlined As Boolean,  props As Map) 
+	elID = elID.tolowercase
+	elID = elID.Replace("#","")
+	'
+	Dim mbutton As VueElement
+	mbutton.Initialize(EventHandler, elID, elID)
+	mbutton.Caption = sLabel
+	mbutton.AddAttr("id", elID)
+	If bOutlined Then mbutton.Outlined = True
+	mbutton.color = eColor
+	'
+	If BANano.IsNull(props) = False Then
+		For Each k As String In props.Keys
+			Dim v As Object = props.Get(k)
+			mbutton.AddAttr(k, v)
+		Next
+	End If
+	'
+	Dim clickEvent As String = $"${elID}_click"$
+	mbutton.SetOnEvent(EventHandler, clickEvent, "click", "")
+	'
+	BindVueElement(mbutton)
+End Sub
+
+
+
+'update a bananoelement
+Sub UpdateSelects(VC As VueComponent, elID As String, vmodel As String, sLabel As String, bRequired As Boolean, bMultiple As Boolean, sPlaceHolder As String, sourceTable As String, sourceField As String, displayField As String, returnObject As Boolean, sHelperText As String, props As Map)
+	Dim EventHandler As Object = VC.mCallBack
+	elID = elID.tolowercase
+	elID = elID.Replace("#","")
+	'this will use an existing item if available
+	Dim vselect As VueElement
+	vselect.Initialize(EventHandler, elID, elID)
+	
+	vselect.label = sLabel
+	vselect.Required = bRequired
+	vselect.Placeholder = sPlaceHolder
+	vselect.Hint = sHelperText
+	vselect.Multiple = bMultiple
+	vselect.Items = $":${sourceTable}"$
+	If displayField <> "" Then vselect.ItemText = displayField
+	If sourceField <> "" Then vselect.ItemValue = sourceField
+	vselect.VModel = vmodel
+	'
+	If bMultiple Then
+		Dim lst As List = VC.NewList
+		VC.SetData(vmodel, lst)
+	Else
+		VC.SetData(vmodel, Null)
+	End If
+	'
+	If BANano.IsNull(props) = False Then
+		For Each k As String In props.Keys
+			Dim v As Object = props.Get(k)
+			vselect.AddAttr(k, v)
+		Next
+	End If
+	'
+	Dim clickEvent As String = $"${elID}_change"$
+	vselect.SetOnEvent(EventHandler, clickEvent, "change", "")
+	'
+	VC.SetData(sourceTable, NewList)
+	VC.BindVueElement(vselect)
+End Sub
+
+
+'update a bananoelement
+Sub UpdateSelectsOnApp(elID As String, vmodel As String, sLabel As String, bRequired As Boolean, bMultiple As Boolean, sPlaceHolder As String, sourceTable As String, sourceField As String, displayField As String, returnObject As Boolean, sHelperText As String, props As Map)
+	elID = elID.tolowercase
+	elID = elID.Replace("#","")
+	'this will use an existing item if available
+	Dim vselect As VueElement
+	vselect.Initialize(EventHandler, elID, elID)
+	
+	vselect.label = sLabel
+	vselect.Required = bRequired
+	vselect.Placeholder = sPlaceHolder
+	vselect.Hint = sHelperText
+	vselect.Multiple = bMultiple
+	vselect.Items = $":${sourceTable}"$
+	If displayField <> "" Then vselect.ItemText = displayField
+	If sourceField <> "" Then vselect.ItemValue = sourceField
+	vselect.VModel = vmodel
+	'
+	If bMultiple Then
+		Dim lst As List = NewList
+		SetData(vmodel, lst)
+	Else
+		SetData(vmodel, Null)
+	End If
+	'
+	If BANano.IsNull(props) = False Then
+		For Each k As String In props.Keys
+			Dim v As Object = props.Get(k)
+			vselect.AddAttr(k, v)
+		Next
+	End If
+	'
+	Dim clickEvent As String = $"${elID}_change"$
+	vselect.SetOnEvent(EventHandler, clickEvent, "change", "")
+	'
+	SetData(sourceTable, NewList)
+	BindVueElement(vselect)
+End Sub
+
+
+'update a password custom element
+Sub UpdatePassword(VC As VueComponent, elID As String, vmodel As String, slabel As String, splaceholder As String, bRequired As Boolean, sPrependIcon As String, iMaxLen As Int, sHint As String, props As Map)
+	Dim xEventHandler As Object = VC.mCallBack
+	elID = elID.tolowercase
+	elID = elID.Replace("#","")
+	
+	Dim bshowPassword As String = $"${elID}ShowPassword"$
+	bshowPassword = bshowPassword.tolowercase
+	VC.SetData(bshowPassword, False)
+	'
+	'get the text field, there is only 1 element on the layout
+	Dim vtextfield As VueElement
+	vtextfield.Initialize(xEventHandler, elID, elID)
+	vtextfield.Label = slabel
+	vtextfield.Required = bRequired
+	vtextfield.PrependIcon = sPrependIcon
+	If iMaxLen > 0 Then
+		vtextfield.Counter = True
+	End If
+	vtextfield.Placeholder = splaceholder
+	vtextfield.Hint = sHint
+	vtextfield.VModel = vmodel
+	vtextfield.AddAttr("type", "text")
+	vtextfield.Ref = vmodel
+	vtextfield.AddAttr(":type", $"${bshowPassword} ? 'text' : 'password'"$)
+	vtextfield.AddAttr(":append-icon", $"${bshowPassword} ? 'mdi-eye' : 'mdi-eye-off'"$)
+	vtextfield.AddAttr("v-on:click:append", $"${bshowPassword} = !${bshowPassword}"$)
+	vtextfield.AddAttr("autocomplete", "off")
+	'
+	If BANano.IsNull(props) = False Then
+		For Each k As String In props.Keys
+			Dim v As Object = props.Get(k)
+			vtextfield.AddAttr(k, v)
+		Next
+	End If
+	VC.BindVueElement(vtextfield)
+End Sub
+
+'update a password custom element
+Sub UpdatePasswordOnApp(elID As String, vmodel As String, slabel As String, splaceholder As String, bRequired As Boolean, sPrependIcon As String, iMaxLen As Int, sHint As String, props As Map)
+	elID = elID.tolowercase
+	elID = elID.Replace("#","")
+	
+	Dim bshowPassword As String = $"${elID}ShowPassword"$
+	bshowPassword = bshowPassword.tolowercase
+	SetData(bshowPassword, False)
+	'
+	'get the text field, there is only 1 element on the layout
+	Dim vtextfield As VueElement
+	vtextfield.Initialize(EventHandler, elID, elID)
+	vtextfield.Label = slabel
+	vtextfield.Required = bRequired
+	vtextfield.PrependIcon = sPrependIcon
+	If iMaxLen > 0 Then
+		vtextfield.Counter = True
+	End If
+	vtextfield.Placeholder = splaceholder
+	vtextfield.Hint = sHint
+	vtextfield.VModel = vmodel
+	vtextfield.AddAttr("type", "text")
+	vtextfield.Ref = vmodel
+	vtextfield.AddAttr(":type", $"${bshowPassword} ? 'text' : 'password'"$)
+	vtextfield.AddAttr(":append-icon", $"${bshowPassword} ? 'mdi-eye' : 'mdi-eye-off'"$)
+	vtextfield.AddAttr("v-on:click:append", $"${bshowPassword} = !${bshowPassword}"$)
+	vtextfield.AddAttr("autocomplete", "off")
+	'
+	If BANano.IsNull(props) = False Then
+		For Each k As String In props.Keys
+			Dim v As Object = props.Get(k)
+			vtextfield.AddAttr(k, v)
+		Next
+	End If
+	BindVueElement(vtextfield)
+End Sub
+
+
+'update an existing text field
+Sub UpdateTextField(VC As VueComponent, elID As String, vmodel As String, slabel As String, splaceholder As String, bRequired As Boolean, sPrependIcon As String, iMaxLen As Int, sHint As String, props As Map)
+	Dim xEventHandler As Object = VC.mCallBack
+	elID = elID.tolowercase
+	elID = elID.Replace("#","")
+	
+	'get the text field, there is only 1 element on the layout
+	Dim vtextfield As VueElement
+	vtextfield.Initialize(EventHandler, elID, elID)
+	vtextfield.Label = slabel
+	vtextfield.Required = bRequired
+	vtextfield.PrependIcon = sPrependIcon
+	If iMaxLen > 0 Then
+		vtextfield.Counter = True
+	End If
+	vtextfield.Placeholder = splaceholder
+	vtextfield.Hint = sHint
+	vtextfield.VModel = vmodel
+	vtextfield.AddAttr("type", "text")
+	vtextfield.Ref = vmodel
+	If SubExists(xEventHandler, $"${elID}_clickappend"$) Then vtextfield.AddAttr("v-on:click:append", $"${elID}_clickappend"$)
+	If SubExists(xEventHandler, $"${elID}_clickprepend"$) Then vtextfield.AddAttr("v-on:click:prepend", $"${elID}_clickprepend"$)
+	If SubExists(xEventHandler, $"${elID}_clickappendouter"$) Then vtextfield.AddAttr("v-on:click:append-outer", $"${elID}_clickappendouter"$)
+	If SubExists(xEventHandler, $"${elID}_clickprependinner"$) Then vtextfield.AddAttr("v-on:click:prepend-inner", $"${elID}_clickprependinner"$)
+
+	'
+	If BANano.IsNull(props) = False Then
+		For Each k As String In props.Keys
+			Dim v As Object = props.Get(k)
+			vtextfield.AddAttr(k, v)
+		Next
+	End If
+	'
+	VC.BindVueElement(vtextfield)
+End Sub
+
+'update an existing text field
+Sub UpdateTextFieldOnApp(elID As String, vmodel As String, slabel As String, splaceholder As String, bRequired As Boolean, sPrependIcon As String, iMaxLen As Int, sHint As String, props As Map)
+	elID = elID.tolowercase
+	elID = elID.Replace("#","")
+	
+	'get the text field, there is only 1 element on the layout
+	Dim vtextfield As VueElement
+	vtextfield.Initialize(EventHandler, elID, elID)
+	vtextfield.Label = slabel
+	vtextfield.Required = bRequired
+	vtextfield.PrependIcon = sPrependIcon
+	If iMaxLen > 0 Then
+		vtextfield.Counter = True
+	End If
+	vtextfield.Placeholder = splaceholder
+	vtextfield.Hint = sHint
+	vtextfield.VModel = vmodel
+	vtextfield.AddAttr("type", "text")
+	vtextfield.Ref = vmodel
+	If SubExists(EventHandler, $"${elID}_clickappend"$) Then vtextfield.AddAttr("v-on:click:append", $"${elID}_clickappend"$)
+	If SubExists(EventHandler, $"${elID}_clickprepend"$) Then vtextfield.AddAttr("v-on:click:prepend", $"${elID}_clickprepend"$)
+	If SubExists(EventHandler, $"${elID}_clickappendouter"$) Then vtextfield.AddAttr("v-on:click:append-outer", $"${elID}_clickappendouter"$)
+	If SubExists(EventHandler, $"${elID}_clickprependinner"$) Then vtextfield.AddAttr("v-on:click:prepend-inner", $"${elID}_clickprependinner"$)
+
+	'
+	If BANano.IsNull(props) = False Then
+		For Each k As String In props.Keys
+			Dim v As Object = props.Get(k)
+			vtextfield.AddAttr(k, v)
+		Next
+	End If
+	'
+	BindVueElement(vtextfield)
+End Sub
+
+

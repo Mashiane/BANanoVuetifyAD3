@@ -1804,7 +1804,7 @@ End Sub
 
 'convert object to string
 Sub CStr(o As Object) As String
-	If o = BANano.UNDEFINED Then o = ""
+	If BANano.IsUndefined(o) Or BANano.IsUndefined(o) Then o = ""
 	Return "" & o
 End Sub
 

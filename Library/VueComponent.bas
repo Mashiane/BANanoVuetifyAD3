@@ -671,3 +671,151 @@ Sub GetTableDataSelected(tblName As VueTable) As List
 	Dim recs As List = GetData(tblName.selected)
 	Return recs
 End Sub
+
+Sub CallMethod(methodName As String)
+	methodName = methodName.tolowercase
+	Dim bo As BANanoObject = Component
+	bo.GetField("methods").RunMethod(methodName, Null)
+End Sub
+
+Sub RunMethod(methodName As String, args As Object)
+	methodName = methodName.tolowercase
+	Dim bo As BANanoObject = Component
+	bo.GetField("methods").RunMethod(methodName, args)
+End Sub
+
+
+'update an existing text field
+Sub UpdateTextField(elID As String, vmodel As String, slabel As String, splaceholder As String, bRequired As Boolean, sPrependIcon As String, iMaxLen As Int, sHint As String, props As Map)
+	elID = elID.tolowercase
+	elID = elID.Replace("#","")
+	
+	'get the text field, there is only 1 element on the layout
+	Dim vtextfield As VueElement
+	vtextfield.Initialize(mCallBack, elID, elID)
+	vtextfield.Label = slabel
+	vtextfield.Required = bRequired
+	vtextfield.PrependIcon = sPrependIcon
+	If iMaxLen > 0 Then
+		vtextfield.Counter = True
+	End If
+	vtextfield.Placeholder = splaceholder
+	vtextfield.Hint = sHint
+	vtextfield.VModel = vmodel
+	vtextfield.AddAttr("type", "text")
+	vtextfield.Ref = vmodel
+	If SubExists(mCallBack, $"${elID}_clickappend"$) Then vtextfield.AddAttr("v-on:click:append", $"${elID}_clickappend"$)
+	If SubExists(mCallBack, $"${elID}_clickprepend"$) Then vtextfield.AddAttr("v-on:click:prepend", $"${elID}_clickprepend"$)
+	If SubExists(mCallBack, $"${elID}_clickappendouter"$) Then vtextfield.AddAttr("v-on:click:append-outer", $"${elID}_clickappendouter"$)
+	If SubExists(mCallBack, $"${elID}_clickprependinner"$) Then vtextfield.AddAttr("v-on:click:prepend-inner", $"${elID}_clickprependinner"$)
+
+	'
+	If BANano.IsNull(props) = False Then
+		For Each k As String In props.Keys
+			Dim v As Object = props.Get(k)
+			vtextfield.AddAttr(k, v)
+		Next
+	End If
+	'
+	BindVueElement(vtextfield)
+End Sub
+
+
+'update a password custom element
+Sub UpdatePassword(elID As String, vmodel As String, slabel As String, splaceholder As String, bRequired As Boolean, sPrependIcon As String, iMaxLen As Int, sHint As String, props As Map)
+	elID = elID.tolowercase
+	elID = elID.Replace("#","")
+	
+	Dim bshowPassword As String = $"${elID}ShowPassword"$
+	bshowPassword = bshowPassword.tolowercase
+	SetData(bshowPassword, False)
+	'
+	'get the text field, there is only 1 element on the layout
+	Dim vtextfield As VueElement
+	vtextfield.Initialize(mCallBack, elID, elID)
+	vtextfield.Label = slabel
+	vtextfield.Required = bRequired
+	vtextfield.PrependIcon = sPrependIcon
+	If iMaxLen > 0 Then
+		vtextfield.Counter = True
+	End If
+	vtextfield.Placeholder = splaceholder
+	vtextfield.Hint = sHint
+	vtextfield.VModel = vmodel
+	vtextfield.AddAttr("type", "text")
+	vtextfield.Ref = vmodel
+	vtextfield.AddAttr(":type", $"${bshowPassword} ? 'text' : 'password'"$)
+	vtextfield.AddAttr(":append-icon", $"${bshowPassword} ? 'mdi-eye' : 'mdi-eye-off'"$)
+	vtextfield.AddAttr("v-on:click:append", $"${bshowPassword} = !${bshowPassword}"$)
+	vtextfield.AddAttr("autocomplete", "off")
+	'
+	If BANano.IsNull(props) = False Then
+		For Each k As String In props.Keys
+			Dim v As Object = props.Get(k)
+			vtextfield.AddAttr(k, v)
+		Next
+	End If
+	BindVueElement(vtextfield)
+End Sub
+
+
+'update a bananoelement
+Sub UpdateSelects(elID As String, vmodel As String, slabel As String, bRequired As Boolean, bMultiple As Boolean, splaceholder As String, sourceTable As String, sourceField As String, displayField As String, returnObject As Boolean, sHelperText As String, props As Map)
+	elID = elID.tolowercase
+	elID = elID.Replace("#","")
+	'this will use an existing item if available
+	Dim vselect As VueElement
+	vselect.Initialize(mCallBack, elID, elID)
+	
+	vselect.label = slabel
+	vselect.Required = bRequired
+	vselect.Placeholder = splaceholder
+	vselect.Hint = sHelperText
+	vselect.Multiple = bMultiple
+	vselect.Items = $":${sourceTable}"$
+	If displayField <> "" Then vselect.ItemText = displayField
+	If sourceField <> "" Then vselect.ItemValue = sourceField
+	vselect.VModel = vmodel
+	'
+	If bMultiple Then
+		Dim lst As List = NewList
+		SetData(vmodel, lst)
+	Else
+		SetData(vmodel, Null)
+	End If
+	'
+	If BANano.IsNull(props) = False Then
+		For Each k As String In props.Keys
+			Dim v As Object = props.Get(k)
+			vselect.AddAttr(k, v)
+		Next
+	End If
+	'
+	Dim clickEvent As String = $"${elID}_change"$
+	vselect.SetOnEvent(mCallBack, clickEvent, "change", "")
+End Sub
+
+
+Sub UpdateButton(elID As String, sLabel As String, eColor As String, bOutlined As Boolean,  props As Map)
+	elID = elID.tolowercase
+	elID = elID.Replace("#","")
+	'
+	Dim mbutton As VueElement
+	mbutton.Initialize(mCallBack, elID, elID)
+	mbutton.Caption = sLabel
+	mbutton.AddAttr("id", elID)
+	If bOutlined Then mbutton.Outlined = True
+	mbutton.color = eColor
+	'
+	If BANano.IsNull(props) = False Then
+		For Each k As String In props.Keys
+			Dim v As Object = props.Get(k)
+			mbutton.AddAttr(k, v)
+		Next
+	End If
+	'
+	Dim clickEvent As String = $"${elID}_click"$
+	mbutton.SetOnEvent(mCallBack, clickEvent, "click", "")
+	'
+	BindVueElement(mbutton)
+End Sub
