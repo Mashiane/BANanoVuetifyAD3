@@ -38,6 +38,8 @@ Version=7
 #DesignerProperty: Key: SetColorByAttribute, DisplayName: Set Color By Attribute, FieldType: Boolean, DefaultValue: True, Description:
 #DesignerProperty: Key: LoremIpsum, DisplayName: LoremIpsum, FieldType: Boolean, DefaultValue: False, Description: Lorem ipsum.
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: False, Description: Dark
+#DesignerProperty: Key: Flat, DisplayName: Flat, FieldType: Boolean, DefaultValue: False , Description: 
+#DesignerProperty: Key: Elevation, DisplayName: Elevation, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: HiddenMDAndUp, DisplayName: HiddenMDAndUp, FieldType: Boolean, DefaultValue: False, Description: HiddenMDAndUp
 #DesignerProperty: Key: HiddenSMAndDown, DisplayName: HiddenSMAndDown, FieldType: Boolean, DefaultValue: False, Description: HiddenSMAndDown
 #DesignerProperty: Key: FillHeight, DisplayName: FillHeight, FieldType: Boolean, DefaultValue: False, Description: FillHeight
@@ -113,7 +115,6 @@ Version=7
 #DesignerProperty: Key: Dense, DisplayName: Dense, FieldType: Boolean, DefaultValue: False , Description: 
 #DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Filled, DisplayName: Filled, FieldType: Boolean, DefaultValue: False , Description: 
-#DesignerProperty: Key: Flat, DisplayName: Flat, FieldType: Boolean, DefaultValue: False , Description: 
 #DesignerProperty: Key: HideDetails, DisplayName: HideDetails, FieldType: Boolean, DefaultValue: False , Description: 
 #DesignerProperty: Key: Outlined, DisplayName: Outlined, FieldType: Boolean, DefaultValue: False , Description: 
 #DesignerProperty: Key: Readonly, DisplayName: Readonly, FieldType: String, DefaultValue:  , Description: 
@@ -290,6 +291,7 @@ Sub Class_Globals
 	Private bCircle As Boolean = False
 	Private bCenter As Boolean = False
 	Private stFloat As String = ""
+	Private stElevation As String = ""
 	
 	'
 	Type VueGridRow(Rows As Int, Columns As List, _
@@ -578,8 +580,10 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bCenter = Props.Get("Center")
 		stFloat = Props.Get("Float")
 		bSetColorByAttribute = Props.get("SetColorByAttribute")
+		stElevation = Props.Get("Elevation")
 	End If
 	
+	setElevation(stElevation)
 	AddStyleOnConditionTrue("font-weight", "bold", bBold)
 	AddStyleOnConditionTrue("font-style",  "italic", bItalic)
 	AddStyleOnConditionTrue("border-radius", "50%", bCircle)
@@ -653,9 +657,9 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 
 	AddClassOnCondition("hidden-md-and-up", bHiddenMDAndUp, True)
 	AddClassOnCondition("hidden-sm-and-down", bHiddenSMAndDown, True)
-	AddAttrOnCondition(":justify-center", bJustifyCenter, True)
-	AddAttrOnCondition(":align-center", bAlignCenter, True)
-	AddClassOnCondition(":fill-height", bFillHeight, True)
+	AddAttrOnConditionTrue("justify", "center", bJustifyCenter)
+	AddAttrOnConditionTrue("align", "center", bAlignCenter)
+	AddClassOnCondition("fill-height", bFillHeight, True)
 	'
 	AddAttr("align", stAlign)
 	AddAttr("justify", stJustify)
@@ -1314,8 +1318,10 @@ Sub BindVueElement(el As VueElement)
 		Dim v As Object = mbindings.Get(k)
 		Select Case k
 			Case "key"
-			Case Else
-				SetData(k, v)
+		Case ":rules", ":items"
+			SetData(v, NewList)
+		Case Else
+			SetData(k, v)
 		End Select
 	Next
 	'apply the events
@@ -1950,7 +1956,7 @@ public Sub getHiddenSMAndDown() As Boolean
 End Sub
 
 public Sub setJustifyCenter(varJustifyCenter As Boolean)
-	AddAttrOnCondition(":justify-center", varJustifyCenter, True)
+	AddAttrOnConditionTrue("justify", "center", varJustifyCenter)
 	bJustifyCenter = varJustifyCenter
 End Sub
 
@@ -1959,7 +1965,7 @@ public Sub getJustifyCenter() As Boolean
 End Sub
 
 public Sub setAlignCenter(varAlignCenter As Boolean)
-	AddAttrOnCondition(":align-center", varAlignCenter, True)
+	AddAttrOnConditionTrue("align", "center", varAlignCenter)
 	bAlignCenter = varAlignCenter
 End Sub
 
@@ -1968,7 +1974,7 @@ public Sub getAlignCenter() As Boolean
 End Sub
 
 public Sub setFillHeight(varFillHeight As Boolean)
-	AddClassOnCondition(":fill-height", varFillHeight, True)
+	AddClassOnCondition("fill-height", varFillHeight, True)
 	bFillHeight = varFillHeight
 End Sub
 

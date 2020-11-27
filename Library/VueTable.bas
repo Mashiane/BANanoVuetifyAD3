@@ -639,9 +639,11 @@ Sub BindVueElement(el As VueElement)
 	For Each k As String In mbindings.Keys
 		Dim v As Object = mbindings.Get(k)
 		Select Case k
-			Case "key"
-			Case Else
-				SetData(k, v)
+		Case "key"
+		Case ":rules", ":items"
+			SetData(v, NewList)
+		Case Else
+			SetData(k, v)
 		End Select
 	Next
 	'apply the events
