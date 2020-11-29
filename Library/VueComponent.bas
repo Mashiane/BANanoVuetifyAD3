@@ -32,6 +32,18 @@ Sub Class_Globals
 	Public AppTemplateName As String = "#apptemplate"
 	Public AppendHolderName As String = "#appendholder"
 	Public PlaceHolderName As String = "#placeholder"
+	'
+	Private dialogShow As String 
+	Private dialogTitle As String
+	Private dialogMessage As String
+	Private dialogcanceltitle As String 
+	Private dialogoktitle As String 
+	Private dialogokshow As String 
+	Private dialogcancelshow As String
+	Private dialogwidth As String
+	Private dialogpersistent As String 
+	Private dialogokcolor As String
+	Private dialogcancelcolor As String
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String) As VueComponent
@@ -57,7 +69,54 @@ Public Sub Initialize (CallBack As Object, Name As String) As VueComponent
 	'add the placeholder div to the app
 	TemplateID = $"${mName}ph"$
 	Template.Initialize(mCallBack, TemplateID, "template")
+	'
+	dialogShow = $"${mName}show"$
+	dialogTitle = $"${mName}title"$
+	dialogMessage = $"${mName}message"$
+	dialogcanceltitle = $"${mName}canceltitle"$
+	dialogoktitle = $"${mName}oktitle"$
+	dialogokshow = $"${mName}okshow"$
+	dialogcancelshow = $"${mName}cancelshow"$
+	dialogwidth = $"${mName}width"$
+	dialogpersistent = $"${mName}persistent"$
 	Return Me
+End Sub
+
+'show confirm dialog
+Sub ShowConfirm(process As String, Title As String, Message As String, ConfirmText As String, CancelText As String)
+	process = process.tolowercase
+	SetData("confirmkey", process)
+	SetData(dialogTitle, Title)
+	SetData(dialogMessage, Message)
+	SetData(dialogoktitle, ConfirmText)
+	SetData(dialogokshow, True)
+	SetData(dialogcanceltitle, CancelText)
+	SetData(dialogcancelshow, True)
+	SetData(dialogShow, True)
+End Sub
+
+Sub ShowAlert(title As String, Message As String, OkTitle As String)
+	SetData(dialogShow, True)
+	SetData(dialogTitle, title)
+	SetData(dialogMessage, Message)
+	SetData(dialogoktitle, OkTitle)
+	SetData(dialogokshow, True)
+	SetData(dialogcancelshow, False)
+End Sub
+
+'initialize the dialog
+Sub UsesDialog
+	SetData(dialogShow, False)
+	SetData(dialogwidth, "400")
+	SetData(dialogTitle, "")
+	SetData(dialogMessage, "")
+	SetData(dialogoktitle, "Ok")
+	SetData(dialogcanceltitle, "Cancel")
+	SetData(dialogcancelcolor, "error")
+	SetData(dialogokcolor, "primary")
+	SetData(dialogokshow, True)
+	SetData(dialogcancelshow, True)
+	SetData(dialogpersistent, True)
 End Sub
 
 'query string for router path
@@ -381,6 +440,11 @@ End Sub
 
 'set direct method
 Sub SetMethod(Module As Object, methodName As String, args As List)
+	methodName = methodName.tolowercase
+	methodName = methodName.Replace(":","")
+	methodName = methodName.Replace(".","")
+	methodName = methodName.Replace("-","")
+	methodName = methodName.tolowercase
 	methodName = methodName.ToLowerCase
 	If SubExists(Module, methodName) Then
 		Dim cb As BANanoObject = BANano.CallBack(Module, methodName, args)
@@ -614,6 +678,22 @@ Sub BANanoGetHTMLAsIs(id As String) As String
 	Dim xTemplate As String = be.GetHTML
 	be.Empty
 	Return xTemplate
+End Sub
+
+'get the confirm key
+Sub getConfirm As String
+	Dim s As String = GetData("confirmkey")
+	Return s
+End Sub
+
+'show a dialog linked to this component
+Sub ShowDialog
+	SetData(dialogShow, True)
+End Sub
+
+'hide a dialog linked to this component
+Sub HideDialog
+	SetData(dialogShow, False)
 End Sub
 
 

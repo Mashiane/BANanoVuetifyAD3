@@ -1384,8 +1384,12 @@ End Sub
 
 
 'set direct method
-Sub SetMethod(Module As Object, methodName As String, args As List) 
-	methodName = methodName.ToLowerCase
+Sub SetMethod(Module As Object, methodName As String, args As List)
+	methodName = methodName.tolowercase
+	methodName = methodName.Replace(":","")
+	methodName = methodName.Replace(".","")
+	methodName = methodName.Replace("-","")
+	methodName = methodName.tolowercase
 	If SubExists(Module, methodName) Then
 		Dim cb As BANanoObject = BANano.CallBack(Module, methodName, args)
 		methods.Put(methodName, cb)
@@ -2015,3 +2019,15 @@ Sub UpdateTextArea(Module As Object, elID As String, vmodel As String, slabel As
 	Return vtextfield
 End Sub
 
+'convert a list to a data source
+Sub ListToDataSource(keyName As String, valueName As String, lst As List) As List
+	Dim nl As List
+	nl.Initialize
+	For Each item As String In lst
+		Dim nm As Map = CreateMap()
+		nm.Put(keyName, item)
+		nm.Put(valueName, item)
+		nl.Add(nm)
+	Next
+	Return nl
+End Sub

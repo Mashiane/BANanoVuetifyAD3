@@ -56,11 +56,18 @@ Version=7
 #DesignerProperty: Key: BorderStyle, DisplayName: Border Style, FieldType: String, DefaultValue:  , Description: , List: none|hidden|dotted|dashed|solid|double|groove|ridge|inset|outset|initial|inherit
 #DesignerProperty: Key: BorderWidth, DisplayName: Border Width, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: BuildGrid, DisplayName: Build Grid, FieldType: Boolean, DefaultValue: False, Description: BuildGrid
+#DesignerProperty: Key: ShowGridDesign, DisplayName: Show Grid Design, FieldType: Boolean, DefaultValue: False, Description: ShowGridDesign
+#DesignerProperty: Key: Rows, DisplayName: Rows, FieldType: String, DefaultValue: , Description: Rows
+#DesignerProperty: Key: Columns, DisplayName: Columns, FieldType: String, DefaultValue: , Description: Columns
+#DesignerProperty: Key: OffSets, DisplayName: OffSets SMLX, FieldType: String, DefaultValue: s=?; m=?; l=?; x=? , Description: OffSets SMLX
+#DesignerProperty: Key: Sizes, DisplayName: Sizes SMLX, FieldType: String, DefaultValue: s=?; m=?; l=?; x=?, Description: Sizes SMLX
+
+
 #DesignerProperty: Key: Center, DisplayName: Center, FieldType: Boolean, DefaultValue: False, Description: Center
 #DesignerProperty: Key: Circle, DisplayName: Circle, FieldType: Boolean, DefaultValue: False, Description: Circle
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Clearable, DisplayName: Clearable, FieldType: Boolean, DefaultValue: False , Description: 
-#DesignerProperty: Key: Columns, DisplayName: Columns, FieldType: String, DefaultValue: , Description: Columns
+
 #DesignerProperty: Key: Counter, DisplayName: Counter, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: CoverImage, DisplayName: Cover Image Src, FieldType: String, DefaultValue:  , Description: CoverImage
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: False, Description: Dark
@@ -99,7 +106,7 @@ Version=7
 #DesignerProperty: Key: MaxHeight, DisplayName: Max Height, FieldType: String, DefaultValue:  , Description:
 #DesignerProperty: Key: MaxWidth, DisplayName: Max Width, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: NoGutter, DisplayName: No Gutter, FieldType: Boolean, DefaultValue: False, Description: NoGutter
-#DesignerProperty: Key: OffSets, DisplayName: OffSets SMLX, FieldType: String, DefaultValue: s=?; m=?; l=?; x=? , Description: OffSets SMLX
+
 #DesignerProperty: Key: Outlined, DisplayName: Outlined, FieldType: Boolean, DefaultValue: False , Description: 
 #DesignerProperty: Key: PaddingAXYTBLR, DisplayName: Padding AXYTBLR, FieldType: String, DefaultValue: a=?; x=?; y=?; t=?; b=?; l=?; r=? , Description: Padding AXYSMLX
 #DesignerProperty: Key: PersistentHint, DisplayName: Persistent Hint, FieldType: Boolean, DefaultValue: False , Description: 
@@ -110,12 +117,12 @@ Version=7
 #DesignerProperty: Key: Required, DisplayName: Required, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: ReturnObject, DisplayName: Return Object, FieldType: Boolean, DefaultValue: False, Description: 
 #DesignerProperty: Key: Rounded, DisplayName: Rounded, FieldType: Boolean, DefaultValue: False , Description: 
-#DesignerProperty: Key: Rows, DisplayName: Rows, FieldType: String, DefaultValue: , Description: Rows
+
 #DesignerProperty: Key: Rules, DisplayName: Rules, FieldType: String, DefaultValue:  , Description: Rules
 #DesignerProperty: Key: Shaped, DisplayName: Shaped, FieldType: Boolean, DefaultValue: False , Description: 
-#DesignerProperty: Key: ShowGridDesign, DisplayName: Show Grid Design, FieldType: Boolean, DefaultValue: False, Description: ShowGridDesign
+
 #DesignerProperty: Key: SingleLine, DisplayName: Single Line, FieldType: Boolean, DefaultValue: False , Description: 
-#DesignerProperty: Key: Sizes, DisplayName: Sizes SMLX, FieldType: String, DefaultValue: s=?; m=?; l=?; x=?, Description: Sizes SMLX
+
 #DesignerProperty: Key: Slot, DisplayName: Slot, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Solo, DisplayName: Solo, FieldType: Boolean, DefaultValue: False , Description: 
 #DesignerProperty: Key: Src, DisplayName: Src, FieldType: String, DefaultValue: , Description: Src
@@ -140,6 +147,7 @@ Version=7
 #DesignerProperty: Key: VOn, DisplayName: V-On, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VSlotActivator, DisplayName: V-Slot-Activator, FieldType: String, DefaultValue: , Description: Slot activator
+#DesignerProperty: Key: VSlotDefault, DisplayName: V-Slot-Default, FieldType: String, DefaultValue: , Description: Slot default
 #DesignerProperty: Key: VText, DisplayName: V-Text, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: , Description: Value on the element
 #DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue:  , Description: 
@@ -344,7 +352,8 @@ Sub Class_Globals
 	Private bDark As Boolean = False
 	Private stInputType As String = ""
 	Private stHref As String = ""
-	Private stSlotActivator As String = ""
+	Private stVSlotActivator As String = ""
+	Private stVSlotDefault As String = ""
 	Private bHiddenMDAndUp As Boolean = False
 	Private stTo As String = ""
 	Private bHiddenSMAndDown As Boolean = False
@@ -423,7 +432,6 @@ Sub Class_Globals
 	'this will hold each row definition
 	'hold our last row
 	Private LastRow As Int
-	Public Records As List
 	Public AppTemplateName As String = "#apptemplate"
 	Public AppendHolderName As String = "#appendholder"
 	Public PlaceHolderName As String = "#placeholder"
@@ -444,7 +452,7 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	LastRow = 0
 	GridRows.Initialize
 	GridColumns.Initialize
-	Records.Initialize
+
 	'
 	'does the element exist
 	'if so, ensure we use the existing element
@@ -505,42 +513,6 @@ Sub getCenter As Boolean
 End Sub
 
 
-'clear the items for this
-Sub Items_Clear As VueElement
-	Records.Initialize
-	Return Me
-End Sub
-
-'add a header to the lust
-Sub Items_AddHeader(txt As String) As VueElement
-	Dim rec As Map = CreateMap()
-	rec.Put("header", txt)
-	Records.Add(rec)
-	Return Me
-End Sub
-
-Sub Items_AddIconTitle(sid As String, sicon As String, siconcolor As String, stitle As String, ssubtitle As String, slinkto As String)
-	Items_Add(sid, "", "", "", sicon, siconcolor, stitle, ssubtitle, "",slinkto, "", "")
-End Sub
-
-'add an item
-Sub Items_Add(sid As String, siconleft As String, savatar As String, savataricon As String, sicon As String, siconcolor As String, stitle As String, ssubtitle As String, ssubtitle1 As String, slinkto As String, siconright As String, stextright As String)
-	Dim rec As Map = CreateMap()
-	rec.Put("id", sid)
-	If siconleft <> "" Then rec.Put("iconleft", siconleft)
-	If savatar <> "" Then rec.Put("avatar", savatar)
-	If sicon <> "" Then rec.Put("icon", sicon)
-	If siconcolor <> "" Then rec.put("iconcolor", siconcolor)
-	If stitle <> "" Then rec.Put("title", stitle)
-	If ssubtitle <> "" Then rec.Put("subtitle", ssubtitle)
-	If ssubtitle1 <> "" Then rec.Put("subtitle1", ssubtitle1)
-	If siconright <> "" Then rec.Put("iconright", siconright)
-	If stextright <> "" Then rec.Put("textright", stextright)
-	If savataricon <> "" Then rec.Put("avataricon", savataricon)
-	If slinkto <> "" Then rec.Put("to", slinkto)
-	Records.Add(rec)
-End Sub
-
 
 'add an attr on condition
 public Sub AddStyleOnCondition(varClass As String, varCondition As Boolean, varShouldBe As Object)
@@ -554,16 +526,6 @@ public Sub AddStyleOnConditionTrue(varClass As String, varCondition As Boolean, 
 	If BANano.IsUndefined(varShouldBe) Or BANano.IsNull(varShouldBe) Then Return
 	If BANano.IsUndefined(varCondition) Or BANano.IsNull(varCondition) Then Return
 	If varShouldBe Then AddStyle(varClass, varCondition)
-End Sub
-
-
-'add a divider
-Sub Items_AddDivider(binset As Boolean) As VueElement
-	Dim rec As Map = CreateMap()
-	rec.Put("divider", True)
-	If binset Then rec.Put("inset", binset)
-	Records.Add(rec)
-	Return Me
 End Sub
 
 'Create view in the designer
@@ -633,7 +595,8 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		stWidth = Props.Get("Width")
 		stInputType = Props.Get("InputType")
 		stHref = Props.Get("Href")
-		stSlotActivator = Props.get("VSlotActivator")
+		stVSlotActivator = Props.get("VSlotActivator")
+		stVSlotDefault = Props.Get("VSlotDefault")
 		bHiddenMDAndUp = Props.Get("HiddenMDAndUp")
 		stTo = Props.get("To")
 		bHiddenSMAndDown = Props.Get("HiddenSMAndDown")
@@ -719,7 +682,8 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	AddAttr("rules", stRules)
 	AddAttr("to", stTo)
 	AddAttrOnCondition(":dark", bDark, True)
-	AddAttr("v-slot:activator", stSlotActivator)
+	AddAttr("v-slot:activator", stVSlotActivator)
+	AddAttr("v-slot:default", stVSlotDefault)
 	AddAttr("href", stHref)
 	AddAttr("key", stKey)
 	AddAttr("ref", stRef)
@@ -909,10 +873,13 @@ private Sub GetMarginPadding(varOffsets As String) As Map
 	Select Case ss.Size
 	Case 1
 		a = ss.Get(0)
+		a = BANanoShared.GetNumbers(a)
 		If a.IndexOf("=") = 0 Then	a = "a=" & a
 	Case 2
 		a = ss.Get(0)
 		x = ss.Get(1)
+		a = BANanoShared.GetNumbers(a)
+		x = BANanoShared.GetNumbers(x)
 		'
 		If a.IndexOf("=") = 0 Then a = "a=" & a
 		If x.IndexOf("=") = 0 Then x = "x=" & x
@@ -920,6 +887,10 @@ private Sub GetMarginPadding(varOffsets As String) As Map
 		a = ss.Get(0)
 		x = ss.Get(1)
 		y = ss.Get(2)
+		a = BANanoShared.GetNumbers(a)
+		x = BANanoShared.GetNumbers(x)
+		y = BANanoShared.GetNumbers(y)
+			
 	'
 		If a.IndexOf("=") = 0 Then a = "a=" & a
 		If x.IndexOf("=") = 0 Then x = "x=" & x
@@ -929,7 +900,11 @@ private Sub GetMarginPadding(varOffsets As String) As Map
 		x = ss.Get(1)
 		y = ss.Get(2)
 		t = ss.Get(3)
-	'
+		a = BANanoShared.GetNumbers(a)
+		x = BANanoShared.GetNumbers(x)
+		y = BANanoShared.GetNumbers(y)
+		t = BANanoShared.GetNumbers(t)
+			'
 		If a.IndexOf("=") = 0 Then a = "a=" & a
 		If x.IndexOf("=") = 0 Then x = "x=" & x
 		If y.IndexOf("=") = 0 Then y = "y=" & y
@@ -940,6 +915,12 @@ private Sub GetMarginPadding(varOffsets As String) As Map
 		y = ss.Get(2)
 		t = ss.Get(3)
 		b = ss.Get(4)
+		'
+		a = BANanoShared.GetNumbers(a)
+		x = BANanoShared.GetNumbers(x)
+		y = BANanoShared.GetNumbers(y)
+		t = BANanoShared.GetNumbers(t)
+		b = BANanoShared.GetNumbers(b)
 			'
 		If a.IndexOf("=") = 0 Then a = "a=" & a
 		If x.IndexOf("=") = 0 Then x = "x=" & x
@@ -953,6 +934,14 @@ private Sub GetMarginPadding(varOffsets As String) As Map
 		t = ss.Get(3)
 		b = ss.Get(4)
 		l = ss.Get(5)
+		'
+		a = BANanoShared.GetNumbers(a)
+		x = BANanoShared.GetNumbers(x)
+		y = BANanoShared.GetNumbers(y)
+		t = BANanoShared.GetNumbers(t)
+		b = BANanoShared.GetNumbers(b)
+		l = BANanoShared.GetNumbers(l)
+
 			'
 		If a.IndexOf("=") = 0 Then a = "a=" & a
 		If x.IndexOf("=") = 0 Then x = "x=" & x
@@ -968,6 +957,13 @@ private Sub GetMarginPadding(varOffsets As String) As Map
 		b = ss.Get(4)
 		l = ss.Get(5)
 		r = ss.Get(6)
+		a = BANanoShared.GetNumbers(a)
+		x = BANanoShared.GetNumbers(x)
+		y = BANanoShared.GetNumbers(y)
+		t = BANanoShared.GetNumbers(t)
+		b = BANanoShared.GetNumbers(b)
+		l = BANanoShared.GetNumbers(l)
+		r = BANanoShared.GetNumbers(r)
 			'
 		If a.IndexOf("=") = 0 Then a = "a=" & a
 		If x.IndexOf("=") = 0 Then x = "x=" & x
@@ -1010,10 +1006,14 @@ private Sub GetOffsetSizes(varOffsets As String) As Map
 	Select Case ss.Size
 	Case 1
 		sm = ss.Get(0)
+		sm = BANanoShared.GetNumbers(sm)
 		If sm.IndexOf("=") = 0 Then	sm = "s=" & sm
 	Case 2
 		sm = ss.Get(0)
 		md = ss.Get(1)
+		sm = BANanoShared.GetNumbers(sm)
+		md = BANanoShared.GetNumbers(md)
+		
 		'
 		If sm.IndexOf("=") = 0 Then sm = "s=" & sm
 		If md.IndexOf("=") = 0 Then md = "m=" & md
@@ -1021,6 +1021,10 @@ private Sub GetOffsetSizes(varOffsets As String) As Map
 		sm = ss.Get(0)
 		md = ss.Get(1)
 		lg = ss.Get(2)
+		'
+		sm = BANanoShared.GetNumbers(sm)
+		md = BANanoShared.GetNumbers(md)
+		lg = BANanoShared.GetNumbers(lg)
 		'
 		If sm.IndexOf("=") = 0 Then sm = "s=" & sm
 		If md.IndexOf("=") = 0 Then md = "m=" & md
@@ -1030,6 +1034,12 @@ private Sub GetOffsetSizes(varOffsets As String) As Map
 		md = ss.Get(1)
 		lg = ss.Get(2)
 		xl = ss.Get(3)
+			'
+		sm = BANanoShared.GetNumbers(sm)
+		md = BANanoShared.GetNumbers(md)
+		lg = BANanoShared.GetNumbers(lg)
+		xl = BANanoShared.GetNumbers(xl)
+		
 		'
 		If sm.IndexOf("=") = 0 Then sm = "s=" & sm
 		If md.IndexOf("=") = 0 Then md = "m=" & md
@@ -1056,8 +1066,8 @@ End Sub
 
 'set color intensity
 Sub setColorIntensity(varIntensity As String)
-	If BANano.IsNull(varIntensity) Then Return
-	If varIntensity = "normal" Then Return
+	If BANano.IsNull(varIntensity) Or BANano.IsUndefined(varIntensity) Then varIntensity = ""
+	If varIntensity = "normal" Or varIntensity = "" Then Return
 	AddClass(varIntensity)
 	stColorIntensity = varIntensity
 End Sub
@@ -1068,9 +1078,11 @@ End Sub
 
 'set color intensity
 Sub setTextColorIntensity(varIntensity As String)
-	If BANano.IsNull(varIntensity) Then Return
-	If varIntensity = "normal" Then Return
+	If BANano.IsNull(varIntensity) Or BANano.IsUndefined(varIntensity) Then varIntensity = ""
+	If varIntensity = "normal" Or varIntensity = "" Then Return
 	Dim xintensity As String = $"text--${varIntensity}"$
+	xintensity = xintensity.Trim
+	If xintensity = "text--" Then Return
 	AddClass(xintensity)
 	stTextColorIntensity = varIntensity
 End Sub
@@ -1080,9 +1092,11 @@ Sub getTextColorIntensity As String
 End Sub
 
 Sub setTextColor(varColor As String)
-	If BANano.IsNull(varColor) Then Return
-	If varColor = "none" Then Return
+	If BANano.IsNull(varColor) Or BANano.IsUndefined(varColor) Then varColor = ""
+	If varColor = "none" Or varColor = "" Then Return
 	Dim xcolor As String = $"${varColor}--text"$
+	xcolor = xcolor.Trim
+	If xcolor = "--text" Then Return
 	AddClass(xcolor)
 	stTextColor = varColor
 End Sub
@@ -1431,6 +1445,15 @@ Sub Bind(attr As String, value As String)
 	AddAttr($":${attr}"$, value)
 End Sub
 
+Sub BindKey(value As String)
+	AddAttr($":key"$, value)
+End Sub
+
+Sub BindTo(value As String)
+	AddAttr($":to"$, value)
+End Sub
+
+
 'add html of component to app and this binds events and states
 Sub BindVueElement(el As VueElement)
 	Dim mbindings As Map = el.bindings
@@ -1614,6 +1637,10 @@ public Sub getKey() As String
 	Return stKey
 End Sub
 
+public Sub setLazySrc(varSrc As String)
+	AddAttr("lazy-src", varSrc)
+End Sub
+
 
 public Sub setSrc(varSrc As String)
 	AddAttr("src", varSrc)
@@ -1643,14 +1670,24 @@ public Sub getVOn() As String
 End Sub
 
 
-public Sub setSlotActivator(varSlotActivator As String)
+public Sub setVSlotActivator(varSlotActivator As String)
 	AddAttr("v-slot:activator", varSlotActivator)
-	stSlotActivator = varSlotActivator
+	stVSlotActivator = varSlotActivator
 End Sub
 
-public Sub getSlotActivator() As String
-	Return stSlotActivator
+public Sub getVSlotActivator() As String
+	Return stVSlotActivator
 End Sub
+
+public Sub setVSlotDefault(varSlotDefault As String)
+	AddAttr("v-slot:activator", varSlotDefault)
+	stVSlotDefault = varSlotDefault
+End Sub
+
+public Sub getVSlotDefault() As String
+	Return stVSlotDefault
+End Sub
+
 
 
 public Sub setRef(varRef As String)
@@ -2003,7 +2040,7 @@ End Sub
 
 
 public Sub setElevation(s As String)
-	If BANano.IsNull(s) Then s = ""
+	If BANano.IsNull(s) Or BANano.IsUndefined(s) Then s = ""
 	If s = "" Then Return
 	AddAttr("elevation", S)
 	AddClass("elevation-" & s)
@@ -2195,6 +2232,32 @@ Sub SetOnEvent(eventHandler As Object, eventName As String, attrName As String, 
 	methods.Put(eventName, cb)
 End Sub
 
+
+'set direct method
+Sub SetMethod(methodName As String, args As List)
+	methodName = methodName.tolowercase
+	methodName = methodName.Replace(":","")
+	methodName = methodName.Replace(".","")
+	methodName = methodName.Replace("-","")
+	methodName = methodName.tolowercase
+	If SubExists(mCallBack, methodName) Then
+		Dim cb As BANanoObject = BANano.CallBack(mCallBack, methodName, args)
+		methods.Put(methodName, cb)
+	End If
+End Sub
+
+'set direct method
+Sub SetMethod1(eventHandler As Object, methodName As String, args As List)
+	methodName = methodName.tolowercase
+	methodName = methodName.Replace(":","")
+	methodName = methodName.Replace(".","")
+	methodName = methodName.Replace("-","")
+	methodName = methodName.tolowercase
+	If SubExists(eventHandler, methodName) Then
+		Dim cb As BANanoObject = BANano.CallBack(eventHandler, methodName, args)
+		methods.Put(methodName, cb)
+	End If
+End Sub
 
 'define method
 Sub OnMulti(EventHandler As String, eventName As String, args As String)    'ignoredeadcode
@@ -3481,6 +3544,31 @@ Sub NewTextField(elID As String, vmodel As String, slabel As String, splaceholde
 	End If
 End Sub
 
+'return a moustache
+Sub InMoustache(valuex As String) As String
+	Dim s As String = $"{{ ${valuex} }}"$
+	Return s
+End Sub
+
+'return a moustache
+'returns item.
+Sub ItemInMoustache(valuex As String) As String
+	Dim s As String = $"{{ item.${valuex} }}"$
+	Return s
+End Sub
+
+'convert a list to a data source
+Sub ListToDataSource(keyName As String, valueName As String, lst As List) As List
+	Dim nl As List
+	nl.Initialize
+	For Each item As String In lst
+		Dim nm As Map = CreateMap()
+		nm.Put(keyName, item)
+		nm.Put(valueName, item)
+		nl.Add(nm)
+	Next
+	Return nl
+End Sub
 
 
 '
@@ -3515,3 +3603,17 @@ End Sub
 '		ve.SetCallBack(k, cb)
 '	Next
 'End Sub
+
+'set the event attribute only
+Sub SetOnEventAttr(eventHandler As Object, eventName As String, attrName As String, eventValue As String)
+	eventName = eventName.tolowercase
+	eventName = eventName.Replace(":","")
+	eventName = eventName.Replace(".","")
+	eventName = eventName.Replace("-","")
+	attrName = attrName.tolowercase
+	If SubExists(eventHandler, eventName) = False Then Return
+	If BANano.IsUndefined(eventValue) Or BANano.IsNull(eventValue) Then eventValue = ""
+	Dim sCode As String = $"${eventName}(${eventValue})"$
+	AddAttr($"v-on:${attrName}"$, sCode)
+End Sub
+

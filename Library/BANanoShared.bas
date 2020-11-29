@@ -1026,6 +1026,27 @@ Public Sub Val(value As String) As String
 	End Try
 End Sub
 
+'extract all numeric values from a string
+Public Sub GetNumbers(value As String) As String
+	value = CStr(value)
+	Try
+		value = value.Trim
+		Dim sout As String = ""
+		Dim mout As String = ""
+		Dim slen As Int = value.Length
+		Dim i As Int = 0
+		For i = 0 To slen - 1
+			mout = value.CharAt(i)
+			If InStr("0123456789", mout) <> -1 Then
+				sout = sout & mout
+			End If
+		Next
+		Return sout
+	Catch
+		Return value
+	End Try
+End Sub
+
 Public Sub Alpha(value As String) As String
 	value = CStr(value)
 	Try
@@ -1069,6 +1090,22 @@ Sub List2IDValue(lst As List, mapValues As List) As List
 	Next
 	Return nlst
 End Sub
+
+
+'convert a list to a data source
+Sub ListToDataSource(keyName As String, valueName As String, lst As List) As List
+	Dim nl As List
+	nl.Initialize
+	For Each item As String In lst
+		Dim nm As Map = CreateMap()
+		nm.Put(keyName, item)
+		nm.Put(valueName, item)
+		nl.Add(nm)
+	Next
+	Return nl
+End Sub
+
+
 
 Sub List2ArrayVariable(lst As List) As String
 	If lst.Size = 0 Then
@@ -1440,29 +1477,6 @@ Sub GetMapKeys(sourceMap As Map) As List
 	Next
 	Return listOfValues
 End Sub
-
-
-'extract all numeric values from a string
-Public Sub GetNumbers(value As String) As String
-	value = CStr(value)
-	Try
-		value = value.Trim
-		Dim sout As String = ""
-		Dim mout As String = ""
-		Dim slen As Int = value.Length
-		Dim i As Int = 0
-		For i = 0 To slen - 1
-			mout = value.CharAt(i)
-			If InStr("0123456789.-", mout) <> -1 Then
-				sout = sout & mout
-			End If
-		Next
-		Return sout
-	Catch
-		Return value
-	End Try
-End Sub
-
 
 Sub SortMap(m As Map) As Map
 	Try
