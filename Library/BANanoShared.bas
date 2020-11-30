@@ -625,6 +625,18 @@ Sub DateDiff(currentDate As String, otherDate As String) As Int
 	Return rslt
 End Sub
 
+Sub MinuteDiff(currentDate As String, otherDate As String) As Int
+	If BANano.IsNull(currentDate) Or BANano.IsUndefined(currentDate) Then Return 0
+	If BANano.IsNull(otherDate) Or BANano.IsUndefined(otherDate) Then Return 0
+	
+	Dim bo As BANanoObject = BANano.RunJavascriptMethod("dayjs", Array(currentDate))
+	Dim bo1 As BANanoObject = BANano.RunJavascriptMethod("dayjs", Array(otherDate))
+	'
+	Dim rslt As String = bo.RunMethod("diff", Array(bo1, "minute")).Result
+	Return rslt
+End Sub
+
+
 Sub ListRemoveDuplicates(lst As List) As List
 	Dim nd As Map = CreateMap()
 	For Each k As String In lst
@@ -1818,7 +1830,7 @@ End Sub
 
 'convert object to string
 Sub CStr(o As Object) As String
-	If BANano.IsUndefined(o) Or BANano.IsUndefined(o) Then o = ""
+	If BANano.isnull(o) Or BANano.IsUndefined(o) Then o = ""
 	Return "" & o
 End Sub
 

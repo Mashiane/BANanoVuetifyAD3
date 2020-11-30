@@ -951,7 +951,7 @@ Sub AppendElement1(parentID As String, tag As String, id As String, text As Stri
 End Sub
 
 Sub CStr(o As Object) As String
-	If BANano.IsUndefined(o) Or BANano.IsUndefined(o) Then o = ""
+	If BANano.isnull(o) Or BANano.IsUndefined(o) Then o = ""
 	Return "" & o
 End Sub
 

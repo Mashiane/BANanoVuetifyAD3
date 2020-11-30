@@ -49,7 +49,7 @@ Sub dialogbtn1_Click (e As BANanoEvent)			'IgnoreDeadCode
 End Sub
 
 Sub dialogbtn2_Click (e As BANanoEvent)			'IgnoreDeadCode
-	vuetify.ShowAlert("Done Processing", "All processing has been completed!", "Yippie!")
+	vuetify.ShowAlert("ok", "Done Processing", "All processing has been completed!", "Yippie!")
 End Sub
 
 Sub dialogbtn3_Click (e As BANanoEvent)			'IgnoreDeadCode

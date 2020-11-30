@@ -9,6 +9,233 @@ Sub Process_Globals
 	Private banano As BANano
 End Sub
 
+'add an h1 to a location
+Sub AddH1(vc As VueComponent, parentID As String, elID As String, Caption As String, bLoremIpsum As Boolean, TextColor As String, TextColorIntensity As String, props As Map)
+	parentID = parentID.tolowercase
+	elID = elID.tolowercase
+	parentID = parentID.Replace("#","")
+	parentID = parentID.tolowercase
+	'
+	'get the parent
+	Dim Ret As Long
+	Dim AllViews As Map
+   
+	Ret = banano.LoadLayoutArray($"#${parentID}"$, "mh1", False)
+	' ret returns a unique number you can use to get all views
+	AllViews = banano.GetAllViewsFromLayoutArray(Me, "mh1", Ret)
+	'
+	Dim mh1 As VueElement = AllViews.Get("mh1")
+	mh1.ID = elID
+	mh1.Caption = Caption
+	mh1.TextColor = TextColor
+	mh1.TextColorIntensity = TextColorIntensity
+	mh1.LoremIpsum = bLoremIpsum
+	'
+	If banano.IsNull(props) = False Then
+		For Each k As String In props.Keys
+			Dim v As String = props.Get(k)
+			mh1.AddAttr(k, v)
+		Next
+	End If
+	'
+	vc.BindVueElement(mh1)
+End Sub
+'
+'add an h1 to a location
+Sub AddH2(vc As VueComponent, parentID As String, elID As String, Caption As String, bLoremIpsum As Boolean, TextColor As String, TextColorIntensity As String, props As Map)
+	parentID = parentID.tolowercase
+	elID = elID.tolowercase
+	parentID = parentID.Replace("#","")
+	parentID = parentID.tolowercase
+	'
+	'get the parent
+	Dim Ret As Long
+	Dim AllViews As Map
+   
+	Ret = banano.LoadLayoutArray($"#${parentID}"$, "mh2", False)
+	' ret returns a unique number you can use to get all views
+	AllViews = banano.GetAllViewsFromLayoutArray(Me, "mh2", Ret)
+	'
+	Dim mh1 As VueElement = AllViews.Get("mh2")
+	mh1.ID = elID
+	mh1.Caption = Caption
+	mh1.TextColor = TextColor
+	mh1.TextColorIntensity = TextColorIntensity
+	mh1.LoremIpsum = bLoremIpsum
+	'
+	If banano.IsNull(props) = False Then
+		For Each k As String In props.Keys
+			Dim v As String = props.Get(k)
+			mh1.AddAttr(k, v)
+		Next
+	End If
+	'
+	vc.BindVueElement(mh1)
+End Sub
+
+'add an h1 to a location
+Sub AddH3(vc As VueComponent, parentID As String, elID As String, Caption As String, bLoremIpsum As Boolean, TextColor As String, TextColorIntensity As String, props As Map)
+	parentID = parentID.tolowercase
+	elID = elID.tolowercase
+	parentID = parentID.Replace("#","")
+	parentID = parentID.tolowercase
+	'
+	'get the parent
+	Dim Ret As Long
+	Dim AllViews As Map
+   
+	Ret = banano.LoadLayoutArray($"#${parentID}"$, "mh3", False)
+	' ret returns a unique number you can use to get all views
+	AllViews = banano.GetAllViewsFromLayoutArray(Me, "mh3", Ret)
+	'
+	Dim mh1 As VueElement = AllViews.Get("mh3")
+	mh1.ID = elID
+	mh1.Caption = Caption
+	mh1.TextColor = TextColor
+	mh1.TextColorIntensity = TextColorIntensity
+	mh1.LoremIpsum = bLoremIpsum
+	'
+	If banano.IsNull(props) = False Then
+		For Each k As String In props.Keys
+			Dim v As String = props.Get(k)
+			mh1.AddAttr(k, v)
+		Next
+	End If
+	'
+	vc.BindVueElement(mh1)
+End Sub
+
+'add an h1 to a location
+Sub AddH4(vc As VueComponent, parentID As String, elID As String, Caption As String, bLoremIpsum As Boolean, TextColor As String, TextColorIntensity As String, props As Map)
+	parentID = parentID.tolowercase
+	elID = elID.tolowercase
+	parentID = parentID.Replace("#","")
+	parentID = parentID.tolowercase
+	'
+	'get the parent
+	Dim Ret As Long
+	Dim AllViews As Map
+   
+	Ret = banano.LoadLayoutArray($"#${parentID}"$, "mh4", False)
+	' ret returns a unique number you can use to get all views
+	AllViews = banano.GetAllViewsFromLayoutArray(Me, "mh4", Ret)
+	'
+	Dim mh1 As VueElement = AllViews.Get("mh4")
+	mh1.ID = elID
+	mh1.Caption = Caption
+	mh1.TextColor = TextColor
+	mh1.TextColorIntensity = TextColorIntensity
+	mh1.LoremIpsum = bLoremIpsum
+	'
+	If banano.IsNull(props) = False Then
+		For Each k As String In props.Keys
+			Dim v As String = props.Get(k)
+			mh1.AddAttr(k, v)
+		Next
+	End If
+	'
+	vc.BindVueElement(mh1)
+End Sub
+
+'add an h1 to a location
+Sub AddH5(vc As VueComponent, parentID As String, elID As String, Caption As String, bLoremIpsum As Boolean, TextColor As String, TextColorIntensity As String, props As Map)
+	parentID = parentID.tolowercase
+	elID = elID.tolowercase
+	parentID = parentID.Replace("#","")
+	parentID = parentID.tolowercase
+	'
+	'get the parent
+	Dim Ret As Long
+	Dim AllViews As Map
+   
+	Ret = banano.LoadLayoutArray($"#${parentID}"$, "mh5", False)
+	' ret returns a unique number you can use to get all views
+	AllViews = banano.GetAllViewsFromLayoutArray(Me, "mh5", Ret)
+	'
+	Dim mh1 As VueElement = AllViews.Get("mh5")
+	mh1.ID = elID
+	mh1.Caption = Caption
+	mh1.TextColor = TextColor
+	mh1.TextColorIntensity = TextColorIntensity
+	mh1.LoremIpsum = bLoremIpsum
+	'
+	If banano.IsNull(props) = False Then
+		For Each k As String In props.Keys
+			Dim v As String = props.Get(k)
+			mh1.AddAttr(k, v)
+		Next
+	End If
+	'
+	vc.BindVueElement(mh1)
+End Sub
+
+
+'add an h1 to a location
+Sub AddH6(vc As VueComponent, parentID As String, elID As String, Caption As String, bLoremIpsum As Boolean, TextColor As String, TextColorIntensity As String, props As Map)
+	parentID = parentID.tolowercase
+	elID = elID.tolowercase
+	parentID = parentID.Replace("#","")
+	parentID = parentID.tolowercase
+	'
+	'get the parent
+	Dim Ret As Long
+	Dim AllViews As Map
+   
+	Ret = banano.LoadLayoutArray($"#${parentID}"$, "mh6", False)
+	' ret returns a unique number you can use to get all views
+	AllViews = banano.GetAllViewsFromLayoutArray(Me, "mh6", Ret)
+	'
+	Dim mh1 As VueElement = AllViews.Get("mh6")
+	mh1.ID = elID
+	mh1.Caption = Caption
+	mh1.TextColor = TextColor
+	mh1.TextColorIntensity = TextColorIntensity
+	mh1.LoremIpsum = bLoremIpsum
+	'
+	If banano.IsNull(props) = False Then
+		For Each k As String In props.Keys
+			Dim v As String = props.Get(k)
+			mh1.AddAttr(k, v)
+		Next
+	End If
+	'
+	vc.BindVueElement(mh1)
+End Sub
+
+
+'add an h1 to a location
+Sub AddParagraph(vc As VueComponent, parentID As String, elID As String, Caption As String, bLoremIpsum As Boolean, TextColor As String, TextColorIntensity As String, props As Map)
+	parentID = parentID.tolowercase
+	elID = elID.tolowercase
+	parentID = parentID.Replace("#","")
+	parentID = parentID.tolowercase
+	'
+	'get the parent
+	Dim Ret As Long
+	Dim AllViews As Map
+   
+	Ret = banano.LoadLayoutArray($"#${parentID}"$, "mpara", False)
+	' ret returns a unique number you can use to get all views
+	AllViews = banano.GetAllViewsFromLayoutArray(Me, "mpara", Ret)
+	'
+	Dim mh1 As VueElement = AllViews.Get("mpara")
+	mh1.ID = elID
+	mh1.Caption = Caption
+	mh1.TextColor = TextColor
+	mh1.TextColorIntensity = TextColorIntensity
+	mh1.LoremIpsum = bLoremIpsum
+	'
+	If banano.IsNull(props) = False Then
+		For Each k As String In props.Keys
+			Dim v As String = props.Get(k)
+			mh1.AddAttr(k, v)
+		Next
+	End If
+	'
+	vc.BindVueElement(mh1)
+End Sub
+
+
 'list
 Sub NewList(VC As VueComponent, parentID As String,  refID As String, props As Map)
 	refID = refID.tolowercase
@@ -19,7 +246,7 @@ Sub NewList(VC As VueComponent, parentID As String,  refID As String, props As M
 	Dim Ret As Long
 	Dim AllViews As Map
    
-	Ret = banano.LoadLayoutArray($"#${parentID}"$, "mlist", True)
+	Ret = banano.LoadLayoutArray($"#${parentID}"$, "mlist", False)
 	' ret returns a unique number you can use to get all views
 	AllViews = banano.GetAllViewsFromLayoutArray(Me, "mlist", Ret)
 	'
@@ -48,7 +275,7 @@ Sub NewListItem(VC As VueComponent, elID As String, DataSource As String, Key As
 	Dim Ret As Long
 	Dim AllViews As Map
    
-	Ret = banano.LoadLayoutArray($"#${elID}"$, "mlistitem", True)
+	Ret = banano.LoadLayoutArray($"#${elID}"$, "mlistitem", False)
 	' ret returns a unique number you can use to get all views
 	AllViews = banano.GetAllViewsFromLayoutArray(Me, "mlistitem", Ret)
 	'
@@ -699,7 +926,7 @@ Sub NewDialog(VC As VueComponent, Persistent As Boolean, Width As Int, OkColor A
 	
 	Dim vcardtext As VueElement = AllViews.Get("vcardtext")
 	vcardtext.ID = $"${elID}cardtext"$
-	vcardtext.Caption = $"{{ ${dialogMessage} }}"$
+	vcardtext.vhtml = dialogMessage
 	
 	Dim vdivider As VueElement = AllViews.Get("vdivider")
 	vdivider.ID = $"${elID}divider"$
@@ -2330,4 +2557,63 @@ Sub Items_AddDivider(records As List, binset As Boolean)
 	rec.Put("divider", True)
 	If binset Then rec.Put("inset", binset)
 	records.Add(rec)
+End Sub
+
+private Sub CleanParent(v As String) As String
+	v = v.Replace("#","")
+	v = $"#${v}"$
+	v = v.tolowercase
+	Return v
+End Sub
+
+
+Sub AddChipGroup(VC As VueComponent, parentID As String, elID As String, vModel As String,  activeClass As String, bMultiple As Boolean, bShowArrows As Boolean, bFilter As Boolean, DataSource As String, Key As String, Value As String, chipgroupprops As Map, chipprops As Map)
+	Dim eventHandler As Object = VC.mCallBack
+	elID = elID.tolowercase
+	parentID = CleanParent(parentID)
+	'
+	Dim Ret As Long
+	Dim AllViews As Map
+   
+	'load the layout in a temporal holder
+	Ret = banano.LoadLayoutArray(parentID, "mchipgroup", False)
+	' ret returns a unique number you can use to get all views
+	AllViews = banano.GetAllViewsFromLayoutArray(Me, "mchipgroup", Ret)
+	'
+	'get the text field, there is only 1 element on the layout
+	Dim vchipgroup As VueElement = AllViews.get("vchipgroup")
+	vchipgroup.Bind("show-arrows", bShowArrows)
+	vchipgroup.VModel = vModel
+	vchipgroup.Multiple = bMultiple
+	vchipgroup.ID = elID
+	vchipgroup.AddAttr("active-class", activeClass)
+	
+	'get the text field, there is only 1 element on the layout
+	Dim vchip As VueElement = AllViews.get("vchip")
+	vchip.ID = $"${elID}chip"$
+	vchip.VFor = $"item in ${DataSource}"$
+	vchip.BindKey($"item.${Key}"$)
+	vchip.Caption = vchip.ItemInMoustache(Value)
+	vchip.AddAttr(":filter", bFilter)
+	'
+	vchipgroup.SetOnEvent(eventHandler, $"${elID}_change"$, "change", "")
+	'
+	If banano.IsNull(chipgroupprops) = False Then
+		For Each k As String In chipgroupprops.Keys
+			Dim v As Object = chipgroupprops.Get(k)
+			vchipgroup.AddAttr(k, v)
+		Next
+	End If
+	'
+	If banano.IsNull(chipprops) = False Then
+		For Each k As String In chipprops.Keys
+			Dim v As Object = chipprops.Get(k)
+			vchip.AddAttr(k, v)
+		Next
+	End If
+	
+	'
+	VC.BindVueElement(vchipgroup)
+	VC.BindVueElement(vchip)
+	VC.SetData(vModel, VC.NewList)
 End Sub

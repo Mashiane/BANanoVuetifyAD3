@@ -53,7 +53,7 @@ Sub btnShowConfirm_click(e As BANanoEvent)
 End Sub
 
 Sub btnShowDialog_click(e As BANanoEvent)
-	mypage.ShowAlert("My Dialog", "Testing component based dialogs...", "Noted with thanks")
+	mypage.ShowAlert("ok", "My Dialog", "Testing component based dialogs...", "Noted with thanks")
 End Sub
 
 Sub mypage_okclick(e As BANanoEvent)

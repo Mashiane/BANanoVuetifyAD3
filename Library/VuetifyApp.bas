@@ -499,7 +499,9 @@ End Sub
 
 
 'show alert dialog
-Sub ShowAlert(Title As String, Message As String, OkText As String)
+Sub ShowAlert(process As String, Title As String, Message As String, OkText As String)
+	process = process.tolowercase
+	SetData("confirmkey", process)
 	SetData("apppromptshow", False)
 	SetData("confirmkey", "alert")
 	SetData("dialogtitle", Title)
@@ -1490,7 +1492,7 @@ Sub SetStateFalse(k As String)
 End Sub
 
 Sub CStr(o As Object) As String
-	If BANano.IsUndefined(o) Or BANano.IsUndefined(o) Then o = ""
+	If BANano.isnull(o) Or BANano.IsUndefined(o) Then o = ""
 	Return "" & o
 End Sub
 
@@ -1744,6 +1746,18 @@ Sub DateDiff(currentDate As String, otherDate As String) As Int
 	Dim rslt As String = bo.RunMethod("diff", Array(bo1, "day")).Result
 	Return rslt
 End Sub
+
+Sub MinuteDiff(currentDate As String, otherDate As String) As Int
+	If BANano.IsNull(currentDate) Or BANano.IsUndefined(currentDate) Then Return 0
+	If BANano.IsNull(otherDate) Or BANano.IsUndefined(otherDate) Then Return 0
+	
+	Dim bo As BANanoObject = BANano.RunJavascriptMethod("dayjs", Array(currentDate))
+	Dim bo1 As BANanoObject = BANano.RunJavascriptMethod("dayjs", Array(otherDate))
+	'
+	Dim rslt As String = bo.RunMethod("diff", Array(bo1, "minute")).Result
+	Return rslt
+End Sub
+
 
 Sub RemoveDataItems(items As List)
 	For Each k As String In items

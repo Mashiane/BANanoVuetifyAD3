@@ -95,7 +95,9 @@ Sub ShowConfirm(process As String, Title As String, Message As String, ConfirmTe
 	SetData(dialogShow, True)
 End Sub
 
-Sub ShowAlert(title As String, Message As String, OkTitle As String)
+Sub ShowAlert(process As String, title As String, Message As String, OkTitle As String)
+	process = process.tolowercase
+	SetData("confirmkey", process)
 	SetData(dialogShow, True)
 	SetData(dialogTitle, title)
 	SetData(dialogMessage, Message)
@@ -770,4 +772,11 @@ End Sub
 
 Sub getHTML As String
 	Return Template.ToString
+End Sub
+
+
+'convert object to string
+Sub CStr(o As Object) As String
+	If BANano.isnull(o) Or BANano.IsUndefined(o) Then o = ""
+	Return "" & o
 End Sub

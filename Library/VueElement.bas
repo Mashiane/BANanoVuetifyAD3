@@ -748,7 +748,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	setFitScreen(bFitScreen)
 	
 	'
-	If BANano.IsNull(bBuildGrid) Then bBuildGrid = False
+	If BANano.IsNull(bBuildGrid) Or BANano.IsUndefined(bBuildGrid) Then bBuildGrid = False
 	If bBuildGrid = False Then
 		setOffsets(stOffSets)
 		setSizes(stSizes)
@@ -861,125 +861,27 @@ private Sub GetMarginPadding(varOffsets As String) As Map
 	
 	'
 	Dim ss As List = BANanoShared.StrParse(",", varOffsets)
-	Dim a As String = ""
-	Dim x As String = ""
-	Dim y As String = ""
-	Dim t As String = ""
-	Dim b As String = ""
-	Dim l As String = ""
-	Dim r As String = ""
-
-	'
-	Select Case ss.Size
-	Case 1
-		a = ss.Get(0)
-		a = BANanoShared.GetNumbers(a)
-		If a.IndexOf("=") = 0 Then	a = "a=" & a
-	Case 2
-		a = ss.Get(0)
-		x = ss.Get(1)
-		a = BANanoShared.GetNumbers(a)
-		x = BANanoShared.GetNumbers(x)
-		'
-		If a.IndexOf("=") = 0 Then a = "a=" & a
-		If x.IndexOf("=") = 0 Then x = "x=" & x
-	Case 3
-		a = ss.Get(0)
-		x = ss.Get(1)
-		y = ss.Get(2)
-		a = BANanoShared.GetNumbers(a)
-		x = BANanoShared.GetNumbers(x)
-		y = BANanoShared.GetNumbers(y)
-			
-	'
-		If a.IndexOf("=") = 0 Then a = "a=" & a
-		If x.IndexOf("=") = 0 Then x = "x=" & x
-		If y.IndexOf("=") = 0 Then y = "y=" & y
-	Case 4
-		a = ss.Get(0)
-		x = ss.Get(1)
-		y = ss.Get(2)
-		t = ss.Get(3)
-		a = BANanoShared.GetNumbers(a)
-		x = BANanoShared.GetNumbers(x)
-		y = BANanoShared.GetNumbers(y)
-		t = BANanoShared.GetNumbers(t)
-			'
-		If a.IndexOf("=") = 0 Then a = "a=" & a
-		If x.IndexOf("=") = 0 Then x = "x=" & x
-		If y.IndexOf("=") = 0 Then y = "y=" & y
-		If t.IndexOf("=") = 0 Then t = "t=" & t
-	Case 5
-		a = ss.Get(0)
-		x = ss.Get(1)
-		y = ss.Get(2)
-		t = ss.Get(3)
-		b = ss.Get(4)
-		'
-		a = BANanoShared.GetNumbers(a)
-		x = BANanoShared.GetNumbers(x)
-		y = BANanoShared.GetNumbers(y)
-		t = BANanoShared.GetNumbers(t)
-		b = BANanoShared.GetNumbers(b)
-			'
-		If a.IndexOf("=") = 0 Then a = "a=" & a
-		If x.IndexOf("=") = 0 Then x = "x=" & x
-		If y.IndexOf("=") = 0 Then y = "y=" & y
-		If t.IndexOf("=") = 0 Then t = "t=" & t
-		If b.IndexOf("=") = 0 Then b = "b=" & b
-	Case 6
-		a = ss.Get(0)
-		x = ss.Get(1)
-		y = ss.Get(2)
-		t = ss.Get(3)
-		b = ss.Get(4)
-		l = ss.Get(5)
-		'
-		a = BANanoShared.GetNumbers(a)
-		x = BANanoShared.GetNumbers(x)
-		y = BANanoShared.GetNumbers(y)
-		t = BANanoShared.GetNumbers(t)
-		b = BANanoShared.GetNumbers(b)
-		l = BANanoShared.GetNumbers(l)
-
-			'
-		If a.IndexOf("=") = 0 Then a = "a=" & a
-		If x.IndexOf("=") = 0 Then x = "x=" & x
-		If y.IndexOf("=") = 0 Then y = "y=" & y
-		If t.IndexOf("=") = 0 Then t = "t=" & t
-		If b.IndexOf("=") = 0 Then b = "b=" & b
-		If l.IndexOf("=") = 0 Then l = "l=" & l
-	Case 7
-		a = ss.Get(0)
-		x = ss.Get(1)
-		y = ss.Get(2)
-		t = ss.Get(3)
-		b = ss.Get(4)
-		l = ss.Get(5)
-		r = ss.Get(6)
-		a = BANanoShared.GetNumbers(a)
-		x = BANanoShared.GetNumbers(x)
-		y = BANanoShared.GetNumbers(y)
-		t = BANanoShared.GetNumbers(t)
-		b = BANanoShared.GetNumbers(b)
-		l = BANanoShared.GetNumbers(l)
-		r = BANanoShared.GetNumbers(r)
-			'
-		If a.IndexOf("=") = 0 Then a = "a=" & a
-		If x.IndexOf("=") = 0 Then x = "x=" & x
-		If y.IndexOf("=") = 0 Then y = "y=" & y
-		If t.IndexOf("=") = 0 Then t = "t=" & t
-		If b.IndexOf("=") = 0 Then b = "b=" & b
-		If l.IndexOf("=") = 0 Then l = "l=" & l
-		If r.IndexOf("=") = 0 Then r = "r=" & r
-	End Select
-	'
-	Dim sbdata As String = $"${a};${x};${y};${t};${b};${l};${r}"$
-	Dim ssx As List = BANanoShared.StrParse(";", sbdata)
-	For Each d As String In ssx
-		Dim k As String = BANanoShared.MvField(d, 1, "=")
-		Dim v As String = BANanoShared.MvField(d, 2, "=")
-		m.Put(k, v)
+	'ensure that everything is numeric
+	Dim cpos As Int
+	For cpos = 0 To ss.size - 1
+		Dim ssize As String = ss.Get(cpos)
+		ssize = BANanoShared.GetNumbers(ssize)
+		Select Case cpos
+		Case 0
+			m.Put("a", ssize)
+		Case 1
+			m.Put("x", ssize)
+		Case 2
+			m.Put("y", ssize)
+		Case 3
+			m.Put("t", ssize)
+		Case 4
+			m.Put("b", ssize)
+		Case 5
+			m.Put("l", ssize)
+		Case 6
+			m.Put("r", ssize)
+		End Select
 	Next
 	Return m
 End Sub
@@ -995,64 +897,23 @@ private Sub GetOffsetSizes(varOffsets As String) As Map
 	varOffsets = varOffsets.replace("?","")
 	varOffsets = varOffsets.replace(" ","")
 	varOffsets = varOffsets.trim
-	
 	'
 	Dim ss As List = BANanoShared.StrParse(",", varOffsets)
-	Dim sm As String = ""
-	Dim md As String = ""
-	Dim lg As String = ""
-	Dim xl As String = ""
-	'
-	Select Case ss.Size
-	Case 1
-		sm = ss.Get(0)
-		sm = BANanoShared.GetNumbers(sm)
-		If sm.IndexOf("=") = 0 Then	sm = "s=" & sm
-	Case 2
-		sm = ss.Get(0)
-		md = ss.Get(1)
-		sm = BANanoShared.GetNumbers(sm)
-		md = BANanoShared.GetNumbers(md)
-		
-		'
-		If sm.IndexOf("=") = 0 Then sm = "s=" & sm
-		If md.IndexOf("=") = 0 Then md = "m=" & md
-	Case 3
-		sm = ss.Get(0)
-		md = ss.Get(1)
-		lg = ss.Get(2)
-		'
-		sm = BANanoShared.GetNumbers(sm)
-		md = BANanoShared.GetNumbers(md)
-		lg = BANanoShared.GetNumbers(lg)
-		'
-		If sm.IndexOf("=") = 0 Then sm = "s=" & sm
-		If md.IndexOf("=") = 0 Then md = "m=" & md
-		If lg.IndexOf("=") = 0 Then lg = "l=" & lg
-	Case 4
-		sm = ss.Get(0)
-		md = ss.Get(1)
-		lg = ss.Get(2)
-		xl = ss.Get(3)
-			'
-		sm = BANanoShared.GetNumbers(sm)
-		md = BANanoShared.GetNumbers(md)
-		lg = BANanoShared.GetNumbers(lg)
-		xl = BANanoShared.GetNumbers(xl)
-		
-		'
-		If sm.IndexOf("=") = 0 Then sm = "s=" & sm
-		If md.IndexOf("=") = 0 Then md = "m=" & md
-		If lg.IndexOf("=") = 0 Then lg = "l=" & lg
-		If xl.IndexOf("=") = 0 Then xl = "x=" & xl
-	End Select
-	'
-	Dim sbdata As String = $"${sm};${md};${lg};${xl}"$
-	Dim ssx As List = BANanoShared.StrParse(";", sbdata)
-	For Each d As String In ssx
-		Dim k As String = BANanoShared.MvField(d, 1, "=")
-		Dim v As String = BANanoShared.MvField(d, 2, "=")
-		m.Put(k, v)
+	'ensure that everything is numeric
+	Dim cpos As Int
+	For cpos = 0 To ss.size - 1 
+		Dim ssize As String = ss.Get(cpos)
+		ssize = BANanoShared.GetNumbers(ssize)
+		Select Case cpos
+		Case 0
+			m.Put("s", ssize)
+		Case 1
+			m.Put("m", ssize)
+		Case 2
+			m.Put("l", ssize)
+		Case 3				
+			m.Put("x", ssize)
+		End Select
 	Next
 	Return m
 End Sub
@@ -1171,6 +1032,19 @@ Sub BANanoGetHTML(id As String) As String
 	Return xTemplate
 End Sub
 
+Sub setLoremIpsum(b As Boolean)
+	bLoremIpsum = bLoremIpsum
+	If b = True Then
+		mCaption = BANanoShared.LoremIpsum(1)
+		If mElement <> Null Then
+			mElement.SetText(mCaption)
+		End If
+	End If
+End Sub
+
+Sub getLoremIpsum As Boolean
+	Return bLoremIpsum
+End Sub
 
 'return the generated html
 Sub ToString As String
@@ -2341,6 +2215,7 @@ Sub setSizes(varSizes As String)
 	If BANano.IsUndefined(varSizes) Or BANano.IsNull(varSizes) Then Return
 	If varSizes = "" Then Return
 	Dim sizmap As Map = GetOffsetSizes(stSizes)
+	
 	Dim sm As String = sizmap.get("s")
 	Dim md As String = sizmap.get("m")
 	Dim lg As String = sizmap.get("l")
@@ -2359,21 +2234,14 @@ Sub setPaddingAXYTBLR(varsetPaddingTBLR As String)
 	If BANano.IsUndefined(varsetPaddingTBLR) Or BANano.IsNull(varsetPaddingTBLR) Then Return
 	If varsetPaddingTBLR = "" Then Return
 	Dim m As Map = GetMarginPadding(varsetPaddingTBLR)
-	Dim pa As String = m.Get("a")
-	Dim px As String = m.Get("x")
-	Dim py As String = m.Get("y")
-	Dim pt As String = m.Get("t")
-	Dim pb As String = m.Get("b")
-	Dim pl As String = m.Get("l")
-	Dim pr As String = m.Get("r")
-	
-	If pa <> "" Then AddClass($"pa-${pa}"$)
-	If px <> "" Then AddClass($"px-${px}"$)
-	If py <> "" Then AddClass($"py-${py}"$)
-	If pt <> "" Then AddClass($"pt-${pt}"$)
-	If pb <> "" Then AddClass($"pb-${pb}"$)
-	If pl <> "" Then AddClass($"pl-${pl}"$)
-	If pr <> "" Then AddClass($"pr-${pr}"$)
+	'
+	For Each k As String In m.Keys
+		Dim v As String = m.Get(k)
+		If v <> "" Then
+			Dim classKey As String = $"p${k}-${v}"$
+			AddClass(classKey)
+		End If
+	Next
 End Sub
 
 Sub getPaddingAXYTBLR() As String
@@ -2386,57 +2254,35 @@ Sub setMarginAXYTBLR(varMarginAXYTBLR As String)
 	If varMarginAXYTBLR = "" Then Return
 	
 	Dim m As Map = GetMarginPadding(varMarginAXYTBLR)
-	Dim ma As String = m.Get("a")
-	Dim mx As String = m.Get("x")
-	Dim my As String = m.Get("y")
-	Dim mt As String = m.Get("t")
-	Dim mb As String = m.Get("b")
-	Dim ml As String = m.Get("l")
-	Dim mr As String = m.Get("r")
-	
-	If ma <> "" Then AddClass($"ma-${ma}"$)
-	If mx <> "" Then AddClass($"mx-${mx}"$)
-	If my <> "" Then AddClass($"my-${my}"$)
-	If mt <> "" Then AddClass($"mt-${mt}"$)
-	If mb <> "" Then AddClass($"mb-${mb}"$)
-	If ml <> "" Then AddClass($"ml-${ml}"$)
-	If mr <> "" Then AddClass($"mr-${mr}"$)
+	For Each k As String In m.Keys
+		Dim v As String = m.Get(k)
+		If v <> "" Then
+			Dim classKey As String = $"m${k}-${v}"$
+			AddClass(classKey)
+		End If
+	Next
 End Sub
 
 Sub AddPadding(pa As String, px As String, py As String, pt As String, pb As String, pl As String, pr As String)
-	pt = pt.Trim
-	pb = pb.Trim
-	pl = pl.Trim
-	pr = pr.Trim
-	pa = pa.Trim
-	px = px.trim
-	py = py.trim
-	'
-	If pa <> "" Then AddClass($"pa-${pa}"$)
-	If px <> "" Then AddClass($"px-${px}"$)
-	If py <> "" Then AddClass($"py-${py}"$)
-	If pt <> "" Then AddClass($"pt-${pt}"$)
-	If pb <> "" Then AddClass($"pb-${pb}"$)
-	If pl <> "" Then AddClass($"pl-${pl}"$)
-	If pr <> "" Then AddClass($"pr-${pr}"$)
+	Dim m As Map = CreateMap("a":pa, "x":px, "y":py, "t":pt, "b":pb, "l":pl, "r":pr)
+	For Each k As String In m.Keys
+		Dim v As String = m.Get(k)
+		If v <> "" Then
+			Dim classKey As String = $"p${k}-${v}"$
+			AddClass(classKey)
+		End If
+	Next
 End Sub
 
 Sub AddMargin(ma As String, mx As String, my As String, mt As String, mb As String, ml As String, mr As String)
-	mt = mt.Trim
-	mb = mb.Trim
-	ml = ml.Trim
-	mr = mr.Trim
-	ma = ma.Trim
-	mx = mx.trim
-	my = my.trim
-	'
-	If ma <> "" Then AddClass($"ma-${ma}"$)
-	If mx <> "" Then AddClass($"mx-${mx}"$)
-	If my <> "" Then AddClass($"my-${my}"$)
-	If mt <> "" Then AddClass($"mt-${mt}"$)
-	If mb <> "" Then AddClass($"mb-${mb}"$)
-	If ml <> "" Then AddClass($"ml-${ml}"$)
-	If mr <> "" Then AddClass($"mr-${mr}"$)
+	Dim m As Map = CreateMap("a":ma, "x":mx, "y":my, "t":mt, "b":mb, "l":ml, "r":mr)
+	For Each k As String In m.Keys
+		Dim v As String = m.Get(k)
+		If v <> "" Then
+			Dim classKey As String = $"m${k}-${v}"$
+			AddClass(classKey)
+		End If
+	Next
 End Sub
 
 Sub getMarginAXYTBLR() As String
@@ -3238,6 +3084,7 @@ Sub AddSizes(sSizeSmall As String, sSizeMedium As String, sSizeLarge As String, 
 	sSizeSmall = sSizeSmall.Trim
 	sSizeXLarge = sSizeXLarge.trim
 	sSizeMedium = sSizeMedium.trim
+	sSizeLarge = sSizeLarge.trim
 	'
 	If sSizeSmall <> "" Then AddAttr("sm", sSizeSmall)
 	If sSizeXLarge <> "" Then AddAttr("xl", sSizeXLarge)
@@ -3293,7 +3140,7 @@ End Sub
 
 
 Sub CStr(o As Object) As String
-	If BANano.IsUndefined(o) Or BANano.IsUndefined(o) Then o = ""
+	If BANano.isnull(o) Or BANano.IsUndefined(o) Then o = ""
 	Return "" & o
 End Sub
 
