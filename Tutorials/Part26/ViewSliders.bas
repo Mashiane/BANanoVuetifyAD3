@@ -26,8 +26,6 @@ Sub Initialize
 	Dim slid As BANanoElement = BVAD3.NewSlider(sliders, "slid1", "slida1", "The Slider X", 0, 10, 1, True, False, Null)
 	vsliders.Matrix(1, 1).Empty.Append(slid.GetHTML)
 	
-	'add the placeholder content to the template
-	sliders.AppendPlaceHolder
 	'add the component as a router
 	vuetify.AddRoute(sliders)
 End Sub

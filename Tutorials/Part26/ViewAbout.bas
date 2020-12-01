@@ -22,8 +22,6 @@ Sub Initialize
 	path = about.path
 	'load the template
 	banano.LoadLayout(vuetify.PlaceHolderName, "vabout")
-	'add the placeholder content to the template
-	about.AppendPlaceHolder
 	'add the component as a router
 	vuetify.AddRoute(about) 
 End Sub

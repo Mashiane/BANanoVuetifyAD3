@@ -1,30 +1,48 @@
 ﻿AppType=JavaFX
 Build1=Default,b4j.example
-File1=android-chrome-192x192.png
-File2=android-chrome-512x512.png
-File3=apple-touch-icon.png
-File4=config.php
-File5=favicon.ico
-File6=favicon-16x16.png
-File7=favicon-32x32.png
-File8=sponge.png
-File9=upload.php
-FileGroup1=Default Group
-FileGroup2=Default Group
-FileGroup3=Default Group
-FileGroup4=Default Group
-FileGroup5=Default Group
-FileGroup6=Default Group
-FileGroup7=Default Group
-FileGroup8=Default Group
-FileGroup9=Default Group
+File1=1.png
+File10=gray.png
+File11=green.png
+File12=happyface.png
+File13=neutralface.png
+File14=orange.png
+File15=red.png
+File16=sadface.png
+File17=sponge.png
+File18=upload.php
+File2=2.png
+File3=android-chrome-192x192.png
+File4=android-chrome-512x512.png
+File5=apple-touch-icon.png
+File6=config.php
+File7=favicon.ico
+File8=favicon-16x16.png
+File9=favicon-32x32.png
+FileGroup1=Default Group\Images
+FileGroup10=Default Group\Images
+FileGroup11=Default Group\Images
+FileGroup12=Default Group\Images
+FileGroup13=Default Group\Images
+FileGroup14=Default Group\Images
+FileGroup15=Default Group\Images
+FileGroup16=Default Group\Images
+FileGroup17=Default Group\Images
+FileGroup18=Default Group\PHP
+FileGroup2=Default Group\Images
+FileGroup3=Default Group\Images
+FileGroup4=Default Group\Images
+FileGroup5=Default Group\Images
+FileGroup6=Default Group\PHP
+FileGroup7=Default Group\Images
+FileGroup8=Default Group\Images
+FileGroup9=Default Group\Images
 Group=Default Group
 Library1=jcore
 Library2=jfx
 Library3=banano
 Library4=bananovuetifyad3
 Module1=pgIndex
-NumberOfFiles=9
+NumberOfFiles=18
 NumberOfLibraries=4
 NumberOfModules=1
 Version=8.5
@@ -37,13 +55,12 @@ Version=8.5
 #IgnoreWarnings:12, 15
 Sub Process_Globals
 	Public BANano As BANano 'ignore
-	Public AppName As String = "bananovuetifyad3"
-	Public AppTitle As String = "BANanoVuetify AD3"
+	Public AppName As String = "blank"
+	Public AppTitle As String = "Blank BVAD3"
 	Private Publish As String = "C:\laragon\www"
 	Public DebugIP As String = "localhost"
 	Public Version As String = "1.00"
-	Public Port As String = "8080"
-	Public ServerIP As String = "localhost"
+	Public ServerIP As String = "http://localhost:8080"
 End Sub
 
 Sub AppStart (Form1 As Form, Args() As String)
@@ -69,29 +86,32 @@ Sub AppStart (Form1 As Form, Args() As String)
 	BANano.TranspilerOptions.UseServiceWorker = False
 	BANano.TranspilerOptions.MergeAllCSSFiles = True
 	BANano.TranspilerOptions.MergeAllJavascriptFiles = True
-	'BANano.TranspilerOptions.MinifyOnline = True
+	BANano.TranspilerOptions.MinifyOnline = False
 	BANano.TranspilerOptions.RemoveDeadCode = True
+	'BANano.TranspilerOptions.SetFireReadyWhenReadyStateComplete
 	'BANano.TranspilerOptions.GZipGeneratedWebsite(10)
 	#if release
 		BANano.TranspilerOptions.EnableLiveCodeSwapping = False
 	#end if
 	BANano.TranspilerOptions.RedirectOutput(File.DirApp, "log.txt")
-	'set php settings
+	'set php settings, if your app uses PHP, else comment out
+	#if release
+	'use your own address
+	ServerIP = "https://www.google.com"
+	#end if
 	BANano.PHP_NAME = $"${AppName}.php"$
-	BANano.PHPHost = $"http://${ServerIP}:${Port}/${AppName}/"$
+	BANano.PHPHost = $"${ServerIP}/${AppName}/"$
 	BANano.PHPAddHeader("Access-Control-Allow-Origin: *")
-	
 	BANano.Build(Publish)
 	
 	Dim fx As JFX
 	Dim URL As String = File.GetUri(File.DirApp,"log.txt")
 	fx.ShowExternalDocument(URL)
 	'
-	Dim appPath As String = $"http://localhost/${AppName}/index.html"$
-	If Port <> "" Then appPath = $"http://localhost:${Port}/${AppName}/index.html"$
+	Dim appPath As String = $"${ServerIP}/${AppName}/index.html"$
 	fx.ShowExternalDocument(appPath)
 	#if release
-		ExitApplication
+	ExitApplication
 	#end if
 End Sub
 

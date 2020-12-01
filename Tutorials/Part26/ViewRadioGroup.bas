@@ -37,8 +37,6 @@ Sub Initialize
 	'
 	radiogroups.SetData("radioitems", radioitems)
 		
-	'add the placeholder content to the template
-	radiogroups.AppendPlaceHolder
 	'add the component as a router
 	vuetify.AddRoute(radiogroups)
 End Sub

@@ -47,13 +47,7 @@ Sub Initialize
 	'
 	lists.setdata("icontitle", icontitle)
 	
-	'add the placeholder content to the template
-	lists.AppendPlaceHolder
-	'
-	'
 	PageLinks
-	
-	
 	
 	'add the component as a router
 	vuetify.AddRoute(lists)

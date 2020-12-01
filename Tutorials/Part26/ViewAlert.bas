@@ -46,7 +46,6 @@ Sub Initialize
 	'the success alert should be shown
 	alerts.SetData("valert2show", True)
 	'
-	alerts.AppendPlaceHolder
 	vuetify.AddRoute(alerts)
 End Sub
 

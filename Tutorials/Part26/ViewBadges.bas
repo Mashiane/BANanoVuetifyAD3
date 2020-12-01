@@ -50,8 +50,6 @@ Sub Initialize
 	Dim ib2 As BANanoElement = BVAD3.NewAvatarBadge(badges, "ib2", "warning", "./assets/sponge.png", 50, Null, Null)
 	vbadges.Matrix(2, 3).Append(ib2.GetHTML)
 	
-	'
-	badges.AppendPlaceHolder
 	vuetify.AddRoute(badges)
 End Sub
 

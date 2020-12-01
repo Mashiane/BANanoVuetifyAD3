@@ -79,8 +79,7 @@ Sub Initialize
 	Dim btn16 As BANanoElement = BVAD3.NewButtonIconBadge(buttons, "btn16", "",  "mdi-pencil", "pink", CreateMap(":fab":True, ":small":True), Null, CreateMap(":content": "btn16badge", ":overlap":True))
 	vbuttoncontainer.matrix(3, 4).Append(btn16.GetHTML)
 	buttons.SetData("btn16badge", 2)
-	
-	buttons.AppendPlaceHolder
+	'
 	vuetify.AddRoute(buttons)
 End Sub
 

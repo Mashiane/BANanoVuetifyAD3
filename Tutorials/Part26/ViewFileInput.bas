@@ -26,8 +26,6 @@ Sub Initialize
 	Dim fi As BANanoElement = BVAD3.NewFileInput(fileinput, "fi1", "fi1", "Upload File", "Browse", False, "", Null)
 	vfileinputs.Matrix(1, 1).Empty.Append(fi.GetHTML)
 	
-	'add the placeholder content to the template
-	fileinput.AppendPlaceHolder
 	'add the component as a router
 	vuetify.AddRoute(fileinput)
 End Sub

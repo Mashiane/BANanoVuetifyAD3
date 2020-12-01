@@ -28,8 +28,6 @@ Sub Initialize
 	
 	
 	
-	'add the placeholder content to the template
-	textareas.AppendPlaceHolder
 	'add the component as a router
 	vuetify.AddRoute(textareas)
 End Sub

@@ -37,8 +37,7 @@ Sub Initialize
 	dialogs.BindVueElement(dialogbtn1)
 	dialogs.BindVueElement(dialogbtn2)
 	dialogs.BindVueElement(dialogbtn3)
-	'add the placeholder content to the template
-	dialogs.AppendPlaceHolder
+	
 	'add the component as a router
 	vuetify.AddRoute(dialogs)
 End Sub

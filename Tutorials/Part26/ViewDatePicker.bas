@@ -46,8 +46,6 @@ Sub Initialize
 	Dim btngettimes As BANanoElement = BVAD3.NewButton(datepicker, "btngettimes", "Get Times", "info", False, CreateMap("block":True))
 	vdatepickercontainer.Matrix(2, 3).Append(btngettimes.GetHTML)
 	
-	'
-	datepicker.AppendPlaceHolder
 	vuetify.AddRoute(datepicker)
 End Sub
 

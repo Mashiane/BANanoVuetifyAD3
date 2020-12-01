@@ -647,17 +647,42 @@ Sub GetBreakPointName As String
 	Return res
 End Sub
 
+'get the appnode
+Sub getAppNode As BANanoElement
+	Dim el As BANanoElement = BANano.GetElement("#app")
+	Return el
+End Sub
+
+'get the template node
+Sub getTemplateNode As BANanoElement
+	Dim el As BANanoElement = BANano.GetElement("#apptemplate")
+	Return el
+End Sub
+
+'get the placeholder node
+Sub getPlaceHolderNode As BANanoElement
+	Dim el As BANanoElement = BANano.GetElement("#placeholder")
+	Return el
+End Sub
+
+'get the appendholder node
+Sub getAppendHolderNode As BANanoElement
+	Dim el As BANanoElement = BANano.GetElement("#appendholder")
+	Return el
+End Sub
+
+'get the appendholder node
+Sub getMainNode As BANanoElement
+	Dim el As BANanoElement = BANano.GetElement("#main")
+	Return el
+End Sub
+
+
 'initialize the app with where to render and where to .GetHTML
 Public Sub Initialize(Module As Object) 
 	'get the body of the page
 	body = BANano.GetElement("#body")
 	body.Append($"<div id="app"><div id="placeholder" v-if="placeholder"></div><div id="appendholder" v-if="appendholder"></div><v-template id="apptemplate" v-if="apptemplate"></v-template></div>"$)
-	
-	'
-	SetData("placeholder", False)
-	SetData("appendholder", False)
-	SetData("apptemplate", False)
-	'
 	Vue.Initialize("Vue")
 	'
 	'***use a global prototype
@@ -679,6 +704,11 @@ Public Sub Initialize(Module As Object)
 	data.Initialize 
 	InitColors
 	
+	'
+	SetData("placeholder", False)
+	SetData("appendholder", False)
+	SetData("apptemplate", False)
+	'
 	RTL = False
 	Dark = False
 	lang = "en"
@@ -1047,6 +1077,8 @@ Sub AddRoute(comp As VueComponent)
 	If comp.mname = "" Then
 		Log("AddRoute: Please specify the name of the Route!")
 	End If
+	'ensure content in the placeholder is added
+	comp.AppendPlaceHolder
 	'
 	Dim eachroute As Map = CreateMap()
 	eachroute.Put("path", comp.path)

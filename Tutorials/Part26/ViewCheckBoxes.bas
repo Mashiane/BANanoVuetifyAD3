@@ -26,8 +26,6 @@ Sub Initialize
 	Dim chk As BANanoElement = BVAD3.NewCheckBox(chkbox, "mycheck", "check1", "My Checkbox", True, False, "green", Null)
 	vcheckboxes.Matrix(1, 1).Empty.Append(chk.GetHTML)
 	
-	'add the placeholder content to the template
-	chkbox.AppendPlaceHolder
 	'add the component as a router
 	vuetify.AddRoute(chkbox)
 End Sub

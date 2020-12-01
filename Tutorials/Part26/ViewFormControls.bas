@@ -38,8 +38,6 @@ Sub Initialize
 	forms.BindVueElement(txtprovince)
 	forms.BindVueElement(txtlastname)
 	
-	'add the placeholder content to the template
-	forms.AppendPlaceHolder
 	'set on mounted
 	Dim args As List
 	forms.SetMounted(Me, "onmounted", args)

@@ -52,8 +52,6 @@ Sub Initialize
 	'set the state and save list items
 	selects.SetData("listitems", items)
 	'
-	'add the placeholder content to the template
-	selects.AppendPlaceHolder
 	'add the component as a router
 	vuetify.AddRoute(selects)
 	'

@@ -143,10 +143,6 @@ Sub Initialize
 	'tables.SetMethod(Me, "getcolor", args)
 	'tables.SetMethod(Me, "sumfield", args)
 	
-	'add the placeholder content to the template
-	tables.AppendPlaceHolder
-	
-	'
 	'add the component as a router
 	vuetify.AddRoute(tables)
 End Sub

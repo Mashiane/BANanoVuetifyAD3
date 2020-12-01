@@ -13,7 +13,6 @@ End Sub
 Sub Init
 	'initialize the app
 	vuetify.Initialize(Me)
-	'BANano.LoadLayout(vuetify.apptemplatename, "vbaseline")
 	
 	'render the ux
 	vuetify.Serve

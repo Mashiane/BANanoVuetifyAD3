@@ -38,8 +38,6 @@ Sub Initialize
 	vmypage.Matrix(2, 1).Empty.Append(btnDoitAgain.GetHTML)
 	
 	 
-	'add the placeholder content to the template
-	mypage.AppendPlaceHolder
 	'add the component as a router
 	vuetify.AddRoute(mypage)
 End Sub

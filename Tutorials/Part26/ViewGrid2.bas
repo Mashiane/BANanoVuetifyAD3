@@ -25,7 +25,6 @@ Sub Initialize
 	'load the alert container we have created via the abstract designer
 	BANano.LoadLayout(vuetify.placeholdername, "vgrid2")
 	
-	grids2.AppendPlaceHolder
 	vuetify.AddRoute(grids2)
 End Sub
 

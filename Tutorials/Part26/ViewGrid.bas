@@ -40,7 +40,6 @@ Sub Initialize
 	vuetify.COLOR_GREEN, True, Null)
 	vgrid.Matrix(1,3).Append(btn.GetHTML)
 	
-	grids.AppendPlaceHolder
 	vuetify.AddRoute(grids)
 End Sub
 

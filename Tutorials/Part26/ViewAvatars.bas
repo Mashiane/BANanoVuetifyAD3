@@ -27,8 +27,6 @@ Sub Initialize
 	vavatars.Matrix(1, 2).LoadLayout("avatar2")
 	vavatars.Matrix(1, 3).LoadLayout("avatar3")
 	
-	'add the placeholder content to the template
-	avatars.AppendPlaceHolder
 	'add the component as a router
 	vuetify.AddRoute(avatars)
 End Sub

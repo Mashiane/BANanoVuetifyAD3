@@ -27,8 +27,6 @@ Sub Initialize
 	vswitchs.Matrix(1, 1).Empty.Append(myswitch.GetHTML)
 	
 	
-	'add the placeholder content to the template
-	switches.AppendPlaceHolder
 	'add the component as a router
 	vuetify.AddRoute(switches)
 End Sub

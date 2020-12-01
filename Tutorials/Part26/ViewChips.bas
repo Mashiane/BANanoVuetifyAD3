@@ -37,8 +37,6 @@ Sub Initialize
 	vchips.Matrix(2, 1).Empty.Append(cg1.GetHTML)
 	chips.SetData("cg1items", items)
 		
-	'add the placeholder content to the template
-	chips.AppendPlaceHolder
 	'add the component as a router
 	vuetify.AddRoute(chips)
 		

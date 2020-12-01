@@ -79,6 +79,8 @@ Public Sub Initialize (CallBack As Object, Name As String) As VueComponent
 	dialogcancelshow = $"${mName}cancelshow"$
 	dialogwidth = $"${mName}width"$
 	dialogpersistent = $"${mName}persistent"$
+	getPlaceHolderNode.empty
+	getAppendHolderNode.empty
 	Return Me
 End Sub
 
@@ -104,6 +106,25 @@ Sub ShowAlert(process As String, title As String, Message As String, OkTitle As 
 	SetData(dialogoktitle, OkTitle)
 	SetData(dialogokshow, True)
 	SetData(dialogcancelshow, False)
+End Sub
+
+'get the placeholder node
+Sub getPlaceHolderNode As BANanoElement
+	Dim el As BANanoElement = BANano.GetElement("#placeholder")
+	Return el
+End Sub
+
+'get the appendholder node
+Sub getAppendHolderNode As BANanoElement
+	Dim el As BANanoElement = BANano.GetElement("#appendholder")
+	Return el
+End Sub
+
+
+'get the template node
+Sub getTemplateNode As BANanoElement
+	Dim el As BANanoElement = BANano.GetElement("#apptemplate")
+	Return el
 End Sub
 
 'initialize the dialog

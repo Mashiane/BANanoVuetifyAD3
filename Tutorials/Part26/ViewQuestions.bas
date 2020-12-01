@@ -22,8 +22,7 @@ Sub Initialize
 	path = questions.path
 	'load the template
 	banano.LoadLayout(vuetify.PlaceHolderName, "vquestions")
-	'add the placeholder content to the template
-	questions.AppendPlaceHolder
+	
 	'add the component as a router
 	vuetify.AddRoute(questions)
 End Sub
