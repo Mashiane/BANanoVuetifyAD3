@@ -475,7 +475,7 @@ Sub AddElement(elID As String, tag As String, props As Map, styleProps As Map, c
 	elID = elID.Replace("#","")
 	Dim elIT As VueElement
 	elIT.Initialize(mCallBack, elID, tag)
-	elIT.SetText(Text)
+	elIT.Append(Text)
 	If loose <> Null Then
 		For Each k As String In loose
 			elIT.SetAttr(k, True)
@@ -834,53 +834,25 @@ Sub SetCallBack(methodName As String, cb As BANanoObject)
 	methods.Put(methodName, cb)
 End Sub
 
-private Sub SetEvent(eventName As String, attrName As String, eventValue As String)
-	Dim sName As String = $"${mEventName}_${eventName}"$
-	sName = sName.tolowercase
+Sub SetOnEvent(eventHandler As Object, event As String, args As String)
+	event = event.ToLowerCase
+	'
+	Dim attrName As String = event
 	attrName = attrName.tolowercase
-	If SubExists(mCallBack, sName) = False Then Return
-	If BANano.IsUndefined(eventValue) Or BANano.IsNull(eventValue) Then eventValue = ""
-	Dim sCode As String = $"${sName}(${eventValue})"$
-	AddAttr($"v-on:${attrName}"$, sCode)
-	'arguments for the event
-	Dim e As Object 'ignore
-	Dim cb As BANanoObject = BANano.CallBack(mCallBack, sName, Array(e))
-	methods.Put(sName, cb)
-End Sub
-
-Sub SetOnEvent(eventHandler As Object, eventName As String, attrName As String, eventValue As String)
-	eventName = eventName.tolowercase
-	attrName = attrName.tolowercase
-	If SubExists(eventHandler, eventName) = False Then Return
-	If BANano.IsUndefined(eventValue) Or BANano.IsNull(eventValue) Then eventValue = ""
-	Dim sCode As String = $"${eventName}(${eventValue})"$
-	AddAttr($"v-on:${attrName}"$, sCode)
-	'arguments for the event
-	Dim e As Object 'ignore
-	Dim cb As BANanoObject = BANano.CallBack(eventHandler, eventName, Array(e))
-	methods.Put(eventName, cb)
-End Sub
-
-
-'define method
-Sub OnMulti(EventHandler As String, eventName As String, args As String)    'ignoredeadcode
-	eventName = eventName.tolowercase
-	EventHandler = EventHandler.tolowercase
+	attrName = attrName.Replace(":","")
+	attrName = attrName.Replace(".","")
+	attrName = attrName.Replace("-","")
 	'
-	Dim seventname As String = eventName
-	seventname = seventname.Replace(".", "")
-	seventname = seventname.Replace(":", "")
+	Dim methodName As String = $"${mName}_${attrName}"$
 	'
-	Dim sName As String = $"${EventHandler}_${seventname}"$
-	If SubExists(mCallBack, sName) = False Then Return
-	'
+	If SubExists(eventHandler, methodName) = False Then Return
 	If BANano.IsUndefined(args) Or BANano.IsNull(args) Then args = ""
-	Dim sCode As String = $"${sName}(${args})"$
-	AddAttr($"v-on:${eventName}"$, sCode)
+	Dim sCode As String = $"${methodName}(${args})"$
+	AddAttr($"v-on:${event}"$, sCode)
 	'arguments for the event
-	Dim e As BANanoEvent 'ignore
-	Dim cb As BANanoObject = BANano.CallBack(mCallBack, sName, Array(e))
-	methods.Put(sName, cb)
+	Dim e As Object 'ignore
+	Dim cb As BANanoObject = BANano.CallBack(eventHandler, methodName, Array(e))
+	methods.Put(methodName, cb)
 End Sub
 
 'on event
@@ -890,6 +862,7 @@ Sub On(eventName As String, args As String)    'ignoredeadcode
 	Dim seventname As String = eventName
 	seventname = seventname.Replace(".", "")
 	seventname = seventname.Replace(":", "")
+	seventname = seventname.Replace("-","")
 	'
 	Dim sName As String = $"${mEventName}_${seventname}"$
 	If SubExists(mCallBack, sName) = False Then Return
@@ -902,7 +875,6 @@ Sub On(eventName As String, args As String)    'ignoredeadcode
 	Dim cb As BANanoObject = BANano.CallBack(mCallBack, sName, Array(e))
 	methods.Put(sName, cb)
 End Sub
-
 
 Sub IsValidID(idName As String) As Boolean
 	If idName = "" Then Return True
@@ -1002,33 +974,12 @@ End Sub
 
 'add edit icon
 Sub AddEdit()
-	Dim colField As String = "edit"
-	Dim dt As DataTableColumn = NewDataTableColumn(colField, "Edit")
-	AddExclusion(colField)
-	dt.filterable = False
-	dt.ColType = COLUMN_EDIT
-	dt.sortable = False
-	dt.align = ALIGN_CENTER
-	dt.icon = "mdi-pencil"
-	columnsM.Put(colField, dt)
+	AddAction("edit","Edit","mdi-pencil")
 End Sub
 
 'add delete icon
 Sub AddDelete()
-	Dim colField As String = "delete"
-	Dim dt As DataTableColumn = NewDataTableColumn(colField, "Delete")
-	AddExclusion(colField)
-	dt.filterable = False
-	dt.ColType = COLUMN_EDIT
-	dt.sortable = False
-	dt.align = ALIGN_CENTER
-	dt.icon = "mdi-delete"
-	columnsM.Put(colField, dt)
-End Sub
-
-'add an icon
-Sub AddIcon(colField As String, colTitle As String, colIcon As String)
-	AddAction(colField, colTitle, colIcon)
+	AddAction("delete","Delete","mdi-delete")
 End Sub
 
 'add an action
@@ -1149,83 +1100,29 @@ Sub AddProgressLinear(colField As String, colTitle As String)
 	columnsM.Put(colField, dt)
 End Sub
 
-'add edit & delete button
-Sub AddEditThrash
-	AddAction("edit", "Edit", "mdi-pencil")
-	AddAction("delete", "Delete", "mdi-delete")
-End Sub
-
-'add a delete icon
-Sub SetDelete(b As Boolean)
-	If b = False Then Return
-	AddAction("delete", "Delete", "mdi-delete")
-End Sub
-
-'add an edit icon
-Sub SetEdit(b As Boolean)
-	If b = False Then Return
-	AddAction("edit", "Edit", "mdi-pencil")
-End Sub
-
-'add a save icon
-Sub SetSave(b As Boolean)
-	If b = False Then Return
-	AddSave
-End Sub
-
-'add a cancel button
-Sub SetCancel(b As Boolean)
-	If b = False Then Return
-	AddCancel
-End Sub
-
-'add a download button
-Sub SetDownload(b As Boolean)
-	If b = False Then Return
-	AddDownload
-End Sub
-
 'add download
 Sub AddDownload
-	AddIcon("download","Download","mdi-download")
+	AddAction("download","Download","mdi-download")
 End Sub
 
 'add horizontal menu button
 Sub AddMenuH
-	AddIcon("menu","Menu","mdi-dots-horizontal")
-End Sub
-
-'add vertical menu
-Sub SetMenu(b As Boolean)
-	If b = False Then Return
-	AddMenuV
+	AddAction("menu","Menu","mdi-dots-horizontal")
 End Sub
 
 'add vertical menu
 Sub AddMenuV
-	AddIcon("menu","Menu","mdi-dots-vertical")
-End Sub
-
-'add clone
-Sub SetClone(b As Boolean)
-	If b = False Then Return
-	AddClone
+	AddAction("menu","Menu","mdi-dots-vertical")
 End Sub
 
 'add clone
 Sub AddClone
-	AddIcon("clone","Clone","mdi-content-copy")
-End Sub
-
-'add print
-Sub SetPrint(b As Boolean)
-	If b = False Then Return
-	AddPrint
+	AddAction("clone","Clone","mdi-content-copy")
 End Sub
 
 'add print
 Sub AddPrint
-	AddIcon("print", "Print", "mdi-printer")
+	AddAction("print", "Print", "mdi-printer")
 End Sub
 
 'update from a list of existing recods
@@ -1748,6 +1645,7 @@ private Sub BuildSlots
 		Dim value As String = nf.value
 		Dim bindTotals As String = nf.bindTotals
 		Dim methodName As String = $"${mName}_${value}"$
+		'
 		'does it have a total
 		If hasTotals Then
 			Select Case bindTotals
@@ -1765,65 +1663,65 @@ private Sub BuildSlots
 				Dim df As String = nf.valueFormat
 				'
 				Dim span As VueElement
-				span.Initialize(mCallBack, $"${k}${nf.ColType}"$, $"${k}${nf.ColType}"$)
+				span.Initialize(mCallBack, "", "")
 				span.TagName = "span"
-				span.SetText($"{{ getdateformat(item.${value}, "${df}") }}"$)
+				span.Append($"{{ getdateformat(item.${value}, "${df}") }}"$)
 				
 				'define template
 				Dim tmp As VueElement
-				tmp.Initialize(mCallBack, $"${k}tmp"$ , $"${k}tmp"$)
+				tmp.Initialize(mCallBack, "" , "")
 				tmp.TagName = "v-template"
 				tmp.AddAttr($"v-slot:item.${value}"$, "{ item }")
 		
-				tmp.SetText(span.ToString)
+				tmp.Append(span.ToString)
 				sb.Append(tmp.ToString)
 			Case COLUMN_LINK
 				Dim aLink As VueElement
-				aLink.Initialize(mCallBack, $"${k}${nf.ColType}"$, $"${k}${nf.ColType}"$)
+				aLink.Initialize(mCallBack, "", "")
 				aLink.TagName = "a"
 				Dim sLink As String = $"item.${value}"$
 				aLink.AddAttr(":href", "'" & nf.prefix & "' + " & sLink)
 				aLink.AddAttr("target", nf.target)
-				aLink.SetText($"{{ item.${value} }}"$)
+				aLink.Append($"{{ item.${value} }}"$)
 				
 				'define template
 				Dim tmp As VueElement
-				tmp.Initialize(mCallBack, $"${k}tmp"$ , $"${k}tmp"$)
+				tmp.Initialize(mCallBack, "" , "")
 				tmp.TagName = "v-template"
 				tmp.AddAttr($"v-slot:item.${value}"$, "{ item }")
-				tmp.SetText(aLink.ToString)
+				tmp.Append(aLink.ToString)
 				sb.Append(tmp.ToString)
 			Case COLUMN_MONEY, COLUMN_NUMBER
 				'get the date format
 				Dim mf As String = nf.valueFormat
 				Dim span As VueElement
-				span.Initialize(mCallBack, $"${k}${nf.ColType}"$, $"${k}${nf.ColType}"$)
+				span.Initialize(mCallBack, "", "")
 				span.TagName = "span"
-				span.SetText($"{{ getmoneyformat(item.${value}, "${mf}") }}"$)
+				span.Append($"{{ getmoneyformat(item.${value}, "${mf}") }}"$)
 				
 				'define template
 				Dim tmp As VueElement
-				tmp.Initialize(mCallBack, $"${k}tmp"$ , $"${k}tmp"$)
+				tmp.Initialize(mCallBack, "", "")
 				tmp.TagName = "v-template"
 				tmp.AddAttr($"v-slot:item.${value}"$, "{ item }")
-				tmp.SetText(span.ToString)
+				tmp.Append(span.ToString)
 				sb.Append(tmp.ToString)
 			Case COLUMN_FILESIZE
 				Dim span As VueElement
-				span.Initialize(mCallBack, $"${k}${nf.ColType}"$, $"${k}${nf.ColType}"$)
+				span.Initialize(mCallBack, "", "")
 				span.TagName = "span"
-				span.SetText($"{{ getfilesize(item.${value}) }}"$)
+				span.Append($"{{ getfilesize(item.${value}) }}"$)
 				
 				'define template
 				Dim tmp As VueElement
-				tmp.Initialize(mCallBack, $"${k}tmp"$ , $"${k}tmp"$)
+				tmp.Initialize(mCallBack, "" , "")
 				tmp.TagName = "v-template"
 				tmp.AddAttr($"v-slot:item.${value}"$, "{ item }")
-				tmp.SetText(span.ToString)
+				tmp.Append(span.ToString)
 				sb.Append(tmp.ToString)		
 			Case COLUMN_PROGRESS_LINEAR
 				Dim pl As VueElement
-				pl.Initialize(mCallBack, $"${k}${nf.ColType}"$, $"${k}${nf.ColType}"$)
+				pl.Initialize(mCallBack, "", "")
 				pl.TagName = "v-progress-linear" 
 				pl.SetVModel($"item.${value}"$)
 				pl.Reactive = True
@@ -1832,10 +1730,10 @@ private Sub BuildSlots
 				If nf.progressheight <> "" Then pl.Height = nf.progressheight
 				If nf.progressShowValue Then
 					Dim tmpx As VueElement
-					tmpx.Initialize(mCallBack, $"${k}${nf.ColType}val"$, $"${k}${nf.ColType}val"$)
+					tmpx.Initialize(mCallBack, "", "")
 					tmpx.TagName = "strong"
-					tmpx.SetText($"{{ Math.ceil(item.${value}) }}%"$)
-					pl.SetText(tmpx.ToString)
+					tmpx.Append($"{{ Math.ceil(item.${value}) }}%"$)
+					pl.Append(tmpx.ToString)
 				End If
 				'
 				Dim methodName As String = $"${mName}_change"$
@@ -1854,18 +1752,18 @@ private Sub BuildSlots
 '				'
 				'define template
 				Dim tmp As VueElement
-				tmp.Initialize(mCallBack, $"${k}tmp"$ , $"${k}tmp"$)
+				tmp.Initialize(mCallBack, "" , "")
 				tmp.TagName = "v-template"
 				tmp.AddAttr($"v-slot:item.${value}"$, "{ item }")
-				tmp.SetText(pl.ToString)
+				tmp.Append(pl.ToString)
 				sb.Append(tmp.ToString)
 			Case COLUMN_PROGRESS_CIRCULAR
 				Dim pc As VueElement
-				pc.Initialize(mCallBack, $"${k}${nf.ColType}"$, $"${k}${nf.ColType}"$)
+				pc.Initialize(mCallBack, "", "")
 				pc.TagName = "v-progress-circular"
 				pc.SetVModel($"item.${value}"$)
 				pc.Reactive = True
-				pc.SetText($"{{ item.${value} }}"$)
+				pc.Append($"{{ item.${value} }}"$)
 				If nf.progressRotate <> "" Then pc.Rotate = nf.progressRotate
 				If nf.progressSize <> "" Then pc.Size = nf.progressSize
 				If nf.progressWidth <> "" Then pc.Width = nf.progressWidth
@@ -1879,14 +1777,14 @@ private Sub BuildSlots
 '				'
 				'define template
 				Dim tmp As VueElement
-				tmp.Initialize(mCallBack, $"${k}tmp"$ , $"${k}tmp"$)
+				tmp.Initialize(mCallBack, "" ,"")
 				tmp.TagName = "v-template"
 				tmp.AddAttr($"v-slot:item.${value}"$, "{ item }")
-				tmp.SetText(pc.ToString)
+				tmp.Append(pc.ToString)
 				sb.Append(tmp.ToString)
 			Case COLUMN_RATING
 				Dim rat As VueElement
-				rat.Initialize(mCallBack, $"${k}${nf.ColType}"$, $"${k}${nf.ColType}"$)
+				rat.Initialize(mCallBack, "", "")
 				rat.TagName = "v-rating"
 				rat.Dense = True
 				rat.SetVModel($"item.${value}"$)
@@ -1915,18 +1813,18 @@ private Sub BuildSlots
 				'
 				'define template
 				Dim tmp As VueElement
-				tmp.Initialize(mCallBack, $"${k}tmp"$ , $"${k}tmp"$)
+				tmp.Initialize(mCallBack, "", "")
 				tmp.TagName = "v-template"
 				tmp.AddAttr($"v-slot:item.${value}"$, "{ item }")
-				tmp.SetText(rat.ToString)
+				tmp.Append(rat.ToString)
 				sb.Append(tmp.ToString)
 			Case COLUMN_AVATARIMG
 				Dim avt As VueElement
-				avt.Initialize(mCallBack, $"${k}${nf.ColType}"$, $"${k}${nf.ColType}"$)
+				avt.Initialize(mCallBack, "", "")
 				avt.TagName = "v-avatar"
 				'
 				Dim avtimg As VueElement
-				avtimg.Initialize(mCallBack, $"${k}${nf.ColType}img"$, $"${k}${nf.ColType}img"$)
+				avtimg.Initialize(mCallBack, "", "")
 				avtimg.TagName = "v-img"
 				avtimg.AddAttr(":src", $"item.${value}"$)
 				avtimg.AddAttr(":lazy-src", $"item.${value}"$)
@@ -1947,18 +1845,18 @@ private Sub BuildSlots
 '					avt.AddAttr(k, v)
 '				Next
 '								
-				avt.SetText(avtimg.ToString)
+				avt.Append(avtimg.ToString)
 				'
 				'define template
 				Dim tmp As VueElement
-				tmp.Initialize(mCallBack, $"${k}tmp"$ , $"${k}tmp"$)
+				tmp.Initialize(mCallBack, "" , "")
 				tmp.TagName = "v-template"
 				tmp.AddAttr($"v-slot:item.${value}"$, "{ item }")
-				tmp.SetText(avt.ToString)
+				tmp.Append(avt.ToString)
 				sb.Append(tmp.ToString)
 			Case COLUMN_SWITCH, COLUMN_CHECKBOX
 				Dim swt As VueElement
-				swt.Initialize(mCallBack, $"${k}${nf.ColType}"$, $"${k}${nf.ColType}"$)
+				swt.Initialize(mCallBack, "", "")
 				swt.TagName = "v-checkbox"
 				'
 				If ct = COLUMN_SWITCH Then
@@ -1988,16 +1886,16 @@ private Sub BuildSlots
 				'
 				'define template
 				Dim tmp As VueElement
-				tmp.Initialize(mCallBack, $"${k}tmp"$ , $"${k}tmp"$)
+				tmp.Initialize(mCallBack, "" , "")
 				tmp.TagName = "v-template"
 				tmp.AddAttr($"v-slot:item.${value}"$, "{ item }")
-				tmp.SetText(swt.ToString)
+				tmp.Append(swt.ToString)
 				sb.Append(tmp.ToString)
 			Case COLUMN_ICON
 				Dim aicon As VueElement
-				aicon.Initialize(mCallBack, $"${k}${nf.ColType}"$, $"${k}${nf.ColType}"$)
+				aicon.Initialize(mCallBack, "", "")
 				aicon.TagName = "v-icon"
-				aicon.settext($"{{ item.${value} }}"$)
+				aicon.Append($"{{ item.${value} }}"$)
 				If nf.Disabled Then aicon.disabled = True
 				If nf.iconSize <> "" Then aicon.Size = nf.iconSize
 				If nf.color.StartsWith("item.") Then
@@ -2014,14 +1912,14 @@ private Sub BuildSlots
 '				'
 				'define template
 				Dim tmp As VueElement
-				tmp.Initialize(mCallBack, $"${k}tmp"$ , $"${k}tmp"$)
+				tmp.Initialize(mCallBack, "", "")
 				tmp.TagName = "v-template"
 				tmp.AddAttr($"v-slot:item.${value}"$, "{ item }")
-				tmp.SetText(aicon.ToString)
+				tmp.Append(aicon.ToString)
 				sb.Append(tmp.ToString)
 			Case COLUMN_IMAGE
 				Dim avtimg As VueElement
-				avtimg.Initialize(mCallBack, $"${k}${nf.ColType}"$, $"${k}${nf.ColType}"$)
+				avtimg.Initialize(mCallBack,"", "")
 				avtimg.TagName = "v-img"
 				avtimg.AddAttr(":src", $"item.${value}"$)
 				avtimg.AddAttr(":lazy-src", $"item.${value}"$)
@@ -2044,18 +1942,18 @@ private Sub BuildSlots
 '				
 				'define template
 				Dim tmp As VueElement
-				tmp.Initialize(mCallBack, $"${k}tmp"$ , $"${k}tmp"$)
+				tmp.Initialize(mCallBack, "" , "")
 				tmp.TagName = "v-template"
 				tmp.AddAttr($"v-slot:item.${value}"$, "{ item }")
-				tmp.SetText(avtimg.ToString)
+				tmp.Append(avtimg.ToString)
 				sb.Append(tmp.ToString)
 			Case COLUMN_CHIP
 				Dim chp As VueElement
-				chp.Initialize(mCallBack, $"${k}${nf.ColType}"$, $"${k}${nf.ColType}"$)
+				chp.Initialize(mCallBack, "", "")
 				chp.TagName = "v-chip"
 				chp.dark = True
 				chp.Elevation = "4"
-				chp.SetText($"{{ item.${value} }}"$)
+				chp.Append($"{{ item.${value} }}"$)
 				If nf.Disabled Then chp.disabled = True
 				If nf.color.StartsWith("item.") Then
 					chp.AddAttr(":color", nf.color)
@@ -2074,14 +1972,14 @@ private Sub BuildSlots
 				'
 				'define template
 				Dim tmp As VueElement
-				tmp.Initialize(mCallBack, $"${k}tmp"$ , $"${k}tmp"$)
+				tmp.Initialize(mCallBack, "" , "")
 				tmp.TagName = "v-template"
 				tmp.AddAttr($"v-slot:item.${value}"$, "{ item }")
-				tmp.SetText(chp.ToString)
+				tmp.Append(chp.ToString)
 				sb.Append(tmp.ToString)
 			Case COLUMN_BUTTON
 				Dim abtn As VueElement
-				abtn.Initialize(mCallBack, $"${k}${nf.ColType}"$, $"${k}${nf.ColType}"$)
+				abtn.Initialize(mCallBack, "", "")
 				abtn.TagName = "v-btn"
 				abtn.AddClass("mr-2")
 				abtn.Depressed = nf.depressed
@@ -2107,14 +2005,14 @@ private Sub BuildSlots
 				'
 				'define template
 				Dim tmp As VueElement
-				tmp.Initialize(mCallBack, $"${k}tmp"$ , $"${k}tmp"$)
+				tmp.Initialize(mCallBack, "" ,"")
 				tmp.TagName = "v-template"
 				tmp.AddAttr($"v-slot:item.${value}"$, "{ item }")
-				tmp.SetText(abtn.ToString)
+				tmp.Append(abtn.ToString)
 				sb.Append(tmp.tostring)
 			Case COLUMN_ACTION, COLUMN_EDIT, COLUMN_DELETE, COLUMN_SAVE, COLUMN_CANCEL
 				Dim abtn As VueElement
-				abtn.Initialize(mCallBack, $"${k}${nf.ColType}"$, $"${k}${nf.ColType}"$)
+				abtn.Initialize(mCallBack, "", "")
 				abtn.TagName = "v-btn"
 				abtn.Elevation = "4"
 				abtn.Fab = True
@@ -2135,11 +2033,11 @@ private Sub BuildSlots
 '				Next
 								
 				Dim aicon As VueElement
-				aicon.Initialize(mCallBack, $"${k}${nf.ColType}icon"$, $"${k}${nf.ColType}icon"$)
+				aicon.Initialize(mCallBack, "", "")
 				aicon.TagName = "v-icon"
-				aicon.SetText(nf.icon)
+				aicon.Append(nf.icon)
 				If nf.iconSize <> "" Then aicon.Size = nf.iconSize
-				abtn.SetText(aicon.tostring)
+				abtn.Append(aicon.tostring)
 			
 				If SubExists(mCallBack, methodName) Then
 					abtn.AddAttr("v-on:click", $"${mName}_${value}(item)"$)
@@ -2150,10 +2048,10 @@ private Sub BuildSlots
 				'
 				'define template
 				Dim tmp As VueElement
-				tmp.Initialize(mCallBack, $"${k}tmp"$ , $"${k}tmp"$)
+				tmp.Initialize(mCallBack, "" , "")
 				tmp.TagName = "v-template"
 				tmp.AddAttr($"v-slot:item.${value}"$, "{ item }")
-				tmp.SetText(abtn.ToString)
+				tmp.Append(abtn.ToString)
 				sb.Append(tmp.ToString)
 		End Select
 	Next

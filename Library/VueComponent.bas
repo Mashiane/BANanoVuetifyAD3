@@ -84,6 +84,17 @@ Public Sub Initialize (CallBack As Object, Name As String) As VueComponent
 	Return Me
 End Sub
 
+'return ths vue instance
+Sub This As BANanoObject
+	Return Component
+End Sub
+
+
+'returns the placehodler
+Sub ThisTemplate As String
+	Return "placeholder"
+End Sub
+
 'show confirm dialog
 Sub ShowConfirm(process As String, Title As String, Message As String, ConfirmText As String, CancelText As String)
 	process = process.tolowercase
@@ -234,13 +245,13 @@ End Sub
 
 'add an element inside the placeholder
 Sub AddElement(ve As VueElement)
-	Template.AddChild(ve.ToString)
+	Template.Append(ve.ToString)
 	BindVueElement(ve)
 End Sub
 
 'add an element inside the placeholder
 Sub AddHTML(html As String)
-	Template.AddChild(html)
+	Template.Append(html)
 End Sub
 
 'set mounted
@@ -735,7 +746,7 @@ End Sub
 'add anything from the appendholder
 Sub AppendHolder 
 	Dim stemplate As String = BANanoGetHTMLAsIs("appendholder")
-	Template.SetText(stemplate)
+	Template.Append(stemplate)
 End Sub
 
 'add anything from the appendholder
@@ -755,7 +766,7 @@ End Sub
 'add anything from the appendholder
 Sub AppendPlaceHolder
 	Dim stemplate As String = BANanoGetHTMLAsIs("placeholder")
-	Template.SetText(stemplate)
+	Template.Append(stemplate)
 End Sub
 
 

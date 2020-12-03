@@ -152,116 +152,6 @@ Version=7
 #DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: , Description: Value on the element
 #DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue:  , Description: 
 
-
-
-
-'
-'
-'#DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: False, Description: Dark
-'#DesignerProperty: Key: Flat, DisplayName: Flat, FieldType: Boolean, DefaultValue: False , Description: 
-'#DesignerProperty: Key: Elevation, DisplayName: Elevation, FieldType: String, DefaultValue:  , Description: 
-'#DesignerProperty: Key: HiddenMDAndUp, DisplayName: Hidden MD And Up, FieldType: Boolean, DefaultValue: False, Description: HiddenMDAndUp
-'#DesignerProperty: Key: HiddenSMAndDown, DisplayName: Hidden SM And Down, FieldType: Boolean, DefaultValue: False, Description: HiddenSMAndDown
-'#DesignerProperty: Key: FillHeight, DisplayName: Fill Height, FieldType: Boolean, DefaultValue: False, Description: FillHeight
-'#DesignerProperty: Key: JustifyCenter, DisplayName: Justify Center, FieldType: Boolean, DefaultValue: False, Description: JustifyCenter
-'#DesignerProperty: Key: AlignCenter, DisplayName: Align Center, FieldType: Boolean, DefaultValue: False, Description: AlignCenter
-'#DesignerProperty: Key: Justify, DisplayName: Justify, FieldType: String, DefaultValue: , Description: Justify, List: start|center|end|space-around|space-between|none
-'#DesignerProperty: Key: Align, DisplayName: Align, FieldType: String, DefaultValue: , Description: Align, List: start|center|end|baseline|stretch|none
-'#DesignerProperty: Key: TextAlign, DisplayName: Text Align, FieldType: String, DefaultValue:  , Description: , List: left|center|right|justify|none
-'#DesignerProperty: Key: Fluid, DisplayName: Fluid, FieldType: Boolean, DefaultValue: False, Description: Fluid
-'#DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: , Description: Value on the element
-'#DesignerProperty: Key: Label, DisplayName: Label, FieldType: String, DefaultValue: , Description: Label of the element
-'#DesignerProperty: Key: Src, DisplayName: Src, FieldType: String, DefaultValue: , Description: Src
-'#DesignerProperty: Key: Alt, DisplayName: Alt, FieldType: String, DefaultValue: , Description: Alt
-'#DesignerProperty: Key: Height, DisplayName: Height, FieldType: String, DefaultValue:  , Description: 
-'#DesignerProperty: Key: MaxHeight, DisplayName: Max Height, FieldType: String, DefaultValue:  , Description:
-'#DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue:  , Description: 
-'#DesignerProperty: Key: MaxWidth, DisplayName: Max Width, FieldType: String, DefaultValue:  , Description: 
-'#DesignerProperty: Key: StyleHeight, DisplayName: Style Height, FieldType: String, DefaultValue:  , Description:
-'#DesignerProperty: Key: StyleMaxHeight, DisplayName: Style Max Height, FieldType: String, DefaultValue:  , Description: 
-'#DesignerProperty: Key: StyleWidth, DisplayName: Style Width, FieldType: String, DefaultValue:  , Description: 
-'#DesignerProperty: Key: StyleMaxWidth, DisplayName: Style Max Width, FieldType: String, DefaultValue:  , Description: 
-'#DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String.
-'#DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
-'#DesignerProperty: Key: ActiveClass, DisplayName: Active Class, FieldType: String, DefaultValue: , Description: ActiveClass.
-'#DesignerProperty: Key: Style, DisplayName: Style, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String.
-'#DesignerProperty: Key: CoverImage, DisplayName: Cover Image Src, FieldType: String, DefaultValue:  , Description: CoverImage
-'#DesignerProperty: Key: FitScreen, DisplayName: Fit Screen VH, FieldType: Boolean, DefaultValue: False, Description: FitScreen VH
-'#DesignerProperty: Key: FullScreen, DisplayName: Full Screen Mobile, FieldType: Boolean, DefaultValue: False, Description: FullScreen Mobile
-'#DesignerProperty: Key: Rows, DisplayName: Rows, FieldType: String, DefaultValue: , Description: Rows
-'#DesignerProperty: Key: NoGutter, DisplayName: No Gutter, FieldType: String, DefaultValue: False, Description: NoGutter
-'#DesignerProperty: Key: Columns, DisplayName: Columns, FieldType: String, DefaultValue: , Description: Columns
-'#DesignerProperty: Key: OffSets, DisplayName: OffSets SMLX, FieldType: String, DefaultValue: s=?; m=?; l=?; x=? , Description: OffSets SMLX
-'#DesignerProperty: Key: Sizes, DisplayName: Sizes SMLX, FieldType: String, DefaultValue: s=?; m=?; l=?; x=?, Description: Sizes SMLX
-'#DesignerProperty: Key: PaddingAXYTBLR, DisplayName: Padding AXYTBLR, FieldType: String, DefaultValue: a=?; x=?; y=?; t=?; b=?; l=?; r=? , Description: Padding AXYSMLX
-'#DesignerProperty: Key: MarginAXYTBLR, DisplayName: Margin AXYTBLR, FieldType: String, DefaultValue: a=?; x=?; y=?; t=?; b=?; l=?; r=? , Description: Margins AXYSMLX
-'#DesignerProperty: Key: BuildGrid, DisplayName: Build Grid, FieldType: Boolean, DefaultValue: False, Description: BuildGrid
-'#DesignerProperty: Key: ShowGridDesign, DisplayName: Show Grid Design, FieldType: Boolean, DefaultValue: False, Description: ShowGridDesign
-'#DesignerProperty: Key: Border, DisplayName: Border, FieldType: String, DefaultValue:  , Description: 
-'#DesignerProperty: Key: BorderColor, DisplayName: BorderColor, FieldType: String, DefaultValue:  , Description: , List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
-'#DesignerProperty: Key: BorderRadius, DisplayName: Border Radius, FieldType: String, DefaultValue:  , Description: 
-'#DesignerProperty: Key: BorderStyle, DisplayName: Border Style, FieldType: String, DefaultValue:  , Description: , List: none|hidden|dotted|dashed|solid|double|groove|ridge|inset|outset|initial|inherit
-'#DesignerProperty: Key: BorderWidth, DisplayName: Border Width, FieldType: String, DefaultValue:  , Description: 
-'#DesignerProperty: Key: DataSource, DisplayName: Data Source, FieldType: String, DefaultValue:  , Description: 
-'#DesignerProperty: Key: VFor, DisplayName: V-For, FieldType: String, DefaultValue:  , Description: 
-'#DesignerProperty: Key: Key, DisplayName: Key, FieldType: String, DefaultValue:  , Description:
-'#DesignerProperty: Key: To, DisplayName: To, FieldType: String, DefaultValue:  , Description: 
-'#DesignerProperty: Key: Href, DisplayName: Href, FieldType: String, DefaultValue: , Description: Href
-'#DesignerProperty: Key: VText, DisplayName: V-Text, FieldType: String, DefaultValue:  , Description: 
-'#DesignerProperty: Key: VHtml, DisplayName: V-Html, FieldType: String, DefaultValue:  , Description: 
-'#DesignerProperty: Key: VOn, DisplayName: V-On, FieldType: String, DefaultValue:  , Description: 
-'#DesignerProperty: Key: Slot, DisplayName: Slot, FieldType: String, DefaultValue:  , Description: 
-'#DesignerProperty: Key: VSlotActivator, DisplayName: V-Slot-Activator, FieldType: String, DefaultValue: , Description: Slot activator
-'#DesignerProperty: Key: VIf, DisplayName: V-If, FieldType: String, DefaultValue:  , Description: 
-'#DesignerProperty: Key: VElse, DisplayName: V-Else, FieldType: String, DefaultValue:  , Description: 
-'#DesignerProperty: Key: VElseIf, DisplayName: V-Else-If, FieldType: String, DefaultValue:  , Description: 
-'#DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
-'#DesignerProperty: Key: VModel, DisplayName: V-Model, FieldType: String, DefaultValue:  , Description: 
-'#DesignerProperty: Key: VBind, DisplayName: V-Bind, FieldType: String, DefaultValue:  , Description: 
-'#DesignerProperty: Key: VBindClass, DisplayName: V-Bind-Class, FieldType: String, DefaultValue:  , Description: 
-'#DesignerProperty: Key: VBindStyle, DisplayName: V-Bind-Style, FieldType: String, DefaultValue:  , Description: 
-'#DesignerProperty: Key: Rules, DisplayName: Rules, FieldType: String, DefaultValue:  , Description: Rules
-'#DesignerProperty: Key: States, DisplayName: States, FieldType: String, DefaultValue: , Description: Initial Binding States. Must be a json String.
-'#DesignerProperty: Key: InputType, DisplayName: Input Type, FieldType: String, DefaultValue: , Description: Input type, List: text|email|password|file|tel|url|number|search|none|success|info|warning|error
-'#DesignerProperty: Key: PrependIcon, DisplayName: Prepend Icon, FieldType: String, DefaultValue:  , Description: 
-'#DesignerProperty: Key: PrependInnerIcon, DisplayName: Prepend Inner Icon, FieldType: String, DefaultValue:  , Description: 
-'#DesignerProperty: Key: AppendIcon, DisplayName: Append Icon, FieldType: String, DefaultValue:  , Description: 
-'#DesignerProperty: Key: AppendOuterIcon, DisplayName: Append Outer Icon, FieldType: String, DefaultValue:  , Description: 
-'#DesignerProperty: Key: Placeholder, DisplayName: Placeholder, FieldType: String, DefaultValue:  , Description: 
-'#DesignerProperty: Key: Hint, DisplayName: Hint, FieldType: String, DefaultValue:  , Description: 
-'#DesignerProperty: Key: PersistentHint, DisplayName: Persistent Hint, FieldType: Boolean, DefaultValue: False , Description: 
-'#DesignerProperty: Key: Autofocus, DisplayName: Auto-focus, FieldType: Boolean, DefaultValue: False , Description: 
-'#DesignerProperty: Key: Clearable, DisplayName: Clearable, FieldType: Boolean, DefaultValue: False , Description: 
-'#DesignerProperty: Key: Counter, DisplayName: Counter, FieldType: String, DefaultValue:  , Description: 
-'#DesignerProperty: Key: Dense, DisplayName: Dense, FieldType: Boolean, DefaultValue: False , Description: 
-'#DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: String, DefaultValue:  , Description: 
-'#DesignerProperty: Key: Filled, DisplayName: Filled, FieldType: Boolean, DefaultValue: False , Description: 
-'#DesignerProperty: Key: HideDetails, DisplayName: Hide Details, FieldType: Boolean, DefaultValue: False , Description: 
-'#DesignerProperty: Key: Outlined, DisplayName: Outlined, FieldType: Boolean, DefaultValue: False , Description: 
-'#DesignerProperty: Key: Readonly, DisplayName: Readonly, FieldType: String, DefaultValue:  , Description: 
-'#DesignerProperty: Key: Required, DisplayName: Required, FieldType: String, DefaultValue:  , Description: 
-'#DesignerProperty: Key: Rounded, DisplayName: Rounded, FieldType: Boolean, DefaultValue: False , Description: 
-'#DesignerProperty: Key: Shaped, DisplayName: Shaped, FieldType: Boolean, DefaultValue: False , Description: 
-'#DesignerProperty: Key: SingleLine, DisplayName: Single Line, FieldType: Boolean, DefaultValue: False , Description: 
-'#DesignerProperty: Key: Solo, DisplayName: Solo, FieldType: Boolean, DefaultValue: False , Description: 
-'#DesignerProperty: Key: ItemText, DisplayName: Item Text, FieldType: String, DefaultValue: , Description: 
-'#DesignerProperty: Key: ItemValue, DisplayName: Item Value, FieldType: String, DefaultValue: , Description: 
-'#DesignerProperty: Key: Items, DisplayName: Items, FieldType: String, DefaultValue: , Description: 
-'#DesignerProperty: Key: ReturnObject, DisplayName: Return Object, FieldType: Boolean, DefaultValue: False, Description: 
-'#DesignerProperty: Key: BackgroundImage, DisplayName: Background Image, FieldType: String, DefaultValue:  , Description: 
-'#DesignerProperty: Key: BackgroundRepeat, DisplayName: Background Repeat, FieldType: String, DefaultValue:  , Description: , List: repeat|repeat-x|repeat-y|no-repeat|initial|inherit|none
-'#DesignerProperty: Key: FontFamily, DisplayName: Font Family, FieldType: String, DefaultValue:  , Description: 
-'#DesignerProperty: Key: FontSize, DisplayName: Font Size, FieldType: String, DefaultValue:  , Description: 
-'#DesignerProperty: Key: FontStyle, DisplayName: Font Style, FieldType: String, DefaultValue:  , Description: , List: normal|italic|oblique|initial|inherit|none
-'#DesignerProperty: Key: FontWeight, DisplayName: Font Weight, FieldType: String, DefaultValue:  , Description: , List: normal|bold|bolder|lighter|initial|inherit|none
-'#DesignerProperty: Key: TextDecoration, DisplayName: Text Decoration, FieldType: String, DefaultValue:  , Description: , List: none|underline|line-through|overline
-'#DesignerProperty: Key: Float, DisplayName: Float, FieldType: String, DefaultValue:  , Description: , List: left|right|none
-'#DesignerProperty: Key: Italic, DisplayName: Italic, FieldType: Boolean, DefaultValue: False, Description: Italic
-'#DesignerProperty: Key: Bold, DisplayName: Bold, FieldType: Boolean, DefaultValue: False, Description: Bold
-'#DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
-'#DesignerProperty: Key: Circle, DisplayName: Circle, FieldType: Boolean, DefaultValue: False, Description: Circle
-'#DesignerProperty: Key: Center, DisplayName: Center, FieldType: Boolean, DefaultValue: False, Description: Center
-''
 #DesignerProperty: Key: OnClick, DisplayName: On Click, FieldType: String, DefaultValue: , Description: Event arguments to be passed to the attribute.
 #DesignerProperty: Key: OnClickStop, DisplayName: On Click Stop, FieldType: String, DefaultValue: , Description: Event arguments to be passed to the attribute.
 #DesignerProperty: Key: OnChange, DisplayName: On Change, FieldType: String, DefaultValue: , Description: Event arguments to be passed to the attribute.
@@ -309,7 +199,6 @@ Sub Class_Globals
 	Private eOnMouseOut As String = ""
 	Private stKey As String = ""
 	Private stRef As String = ""
-	Private bAutoID As Boolean = False
 	Private stSlot As String = ""
 	Private stVBindClass As String = ""
 	Private stVBind As String = ""
@@ -452,17 +341,12 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	LastRow = 0
 	GridRows.Initialize
 	GridColumns.Initialize
-
 	'
-	'does the element exist
-	'if so, ensure we use the existing element
-	Dim fKey As String = $"#${mName}"$
-	If BANano.Exists(fKey) Then
-		mElement = BANano.GetElement(fKey)
+	If mName <> "" Then
+		Dim fKey As String = $"#${mName}"$
+		If BANano.Exists(fKey) Then mElement = BANano.GetElement(fKey)
 	End If
 End Sub
-
-
 
 Sub setItalic(b As Boolean)
 	AddStyleOnConditionTrue("font-style",  "italic", b)
@@ -555,7 +439,6 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		eOnMouseOut = Props.Get("OnMouseOut")
 		stKey = Props.Get("Key")
 		stRef = Props.Get("Ref")
-		bAutoID = Props.get("AutoID")
 		stSlot = Props.Get("Slot")
 		stVBindClass = Props.Get("VBindClass")
 		stVBind = Props.Get("VBind")
@@ -788,23 +671,23 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	'
 	'link the events, if any
 	'This activates Click the event exists on the module
-	SetEvent("Click", "click", eOnClick)
-	SetEvent("Change", "change", eOnChange)
-	SetEvent("ClickStop", "Click.Stop", eOnClickStop)
-	SetEvent("DblClick", "DblClick", eOnDblClick)
-	SetEvent("MouseMove", "MouseMove", eOnMouseMove)
-	SetEvent("MouseOut", "MouseOut", eOnMouseOut)
-	SetEvent("KeyUp", "KeyUp", eOnKeyUp)
-	SetEvent("KeyPress", "KeyPress", eOnKeyPress)
-	SetEvent("ClickAlt", "Click.Alt", eOnClickAlt)
-	SetEvent("ClickShift", "Click.Shift", eOnClickShift)
-	SetEvent("ClickPrevent", "Click.Prevent", eOnClickPrevent)
-	SetEvent("ClickAppend", "click:append", "")
-	SetEvent("ClickAppendOuter", "click:append-outer", "")
-	SetEvent("ClickPrepend", "click:prepend", "")
-	SetEvent("ClickClear", "click:clear", "")
-	SetEvent("ClickPrependInner", "click:prepend-inner","")
-
+	SetOnEvent(mCallBack, "click", eOnClick)
+	SetOnEvent(mCallBack, "click.stop", eOnClickStop)
+	SetOnEvent(mCallBack, "click.prevent", eOnClickPrevent)
+	SetOnEvent(mCallBack, "change", eOnChange)
+	SetOnEvent(mCallBack, "click:append", "")
+	SetOnEvent(mCallBack, "click:prepend", "")
+	SetOnEvent(mCallBack, "click:append-outer", "")
+	SetOnEvent(mCallBack, "click:prepend-inner", "")
+	SetOnEvent(mCallBack, "dblclick", eOnDblClick)
+	SetOnEvent(mCallBack, "MouseMove", eOnMouseMove)
+	SetOnEvent(mCallBack, "MouseOut", eOnMouseOut)
+	SetOnEvent(mCallBack, "KeyUp", eOnKeyUp)
+	SetOnEvent(mCallBack, "KeyPress", eOnKeyPress)
+	SetOnEvent(mCallBack,  "Click.Alt", eOnClickAlt)
+	SetOnEvent(mCallBack,  "Click.Shift", eOnClickShift)
+	SetOnEvent(mCallBack,  "click:clear", "")
+	
 	'build and get the element
 	Dim strHTML As String = ToString
 	'does the element exist
@@ -970,11 +853,7 @@ End Sub
 Sub AppendHolder
 	Dim stemplate As String = BANanoGetHTMLAsIs("appendholder")
 	mElement = BANano.GetElement($"#${mName}"$)
-	If mElement <> Null Then
-		mElement.Append(stemplate)
-	Else
-		sbText.Append(stemplate)
-	End If
+	Append(stemplate)
 End Sub
 
 'get element by data
@@ -1004,11 +883,7 @@ End Sub
 Sub AppendPlaceHolder
 	Dim stemplate As String = BANanoGetHTMLAsIs("placeholder")
 	mElement = BANano.GetElement($"#${mName}"$)
-	If mElement <> Null Then
-		mElement.Append(stemplate)
-	Else
-		sbText.Append(stemplate)
-	End If
+	Append(stemplate)
 End Sub
 
 'get the html part of a bananoelement
@@ -1148,14 +1023,13 @@ End Sub
 
 'add a break
 Sub AddBR
-	sbText.Append("<br>")
+	Append("<br>")
 End Sub
 
 'add a horizontal rule
 Sub AddHR
-	sbText.Append("<hr>")
+	Append("<hr>")
 End Sub
-
 
 'add an element to the text
 Sub AddElement(elID As String, tag As String, props As Map, styleProps As Map, classNames As List, loose As List, Text As String)
@@ -1163,7 +1037,7 @@ Sub AddElement(elID As String, tag As String, props As Map, styleProps As Map, c
 	elID = elID.Replace("#","")
 	Dim elIT As VueElement
 	elIT.Initialize(mCallBack, elID, tag)
-	elIT.SetText(Text)
+	elIT.Append(Text)
 	If loose <> Null Then
 		For Each k As String In loose
 			elIT.SetAttr(k, True)
@@ -1186,7 +1060,7 @@ Sub AddElement(elID As String, tag As String, props As Map, styleProps As Map, c
 	End If
 	'convert to string
 	Dim sElement As String = elIT.tostring
-	sbText.Append(sElement)
+	Append(sElement)
 End Sub
 
 'returns the BANanoElement
@@ -1309,10 +1183,17 @@ Sub SetVBindIs(t As String) As VueElement
 	Return Me
 End Sub
 
+Sub SetVSlotExtension
+	AddAttr("v-slot:extension", True)
+End Sub
 
 'change the text of the element
-Sub SetText(varText As String)
-	AddChild(varText)
+Sub Append(varText As String)
+	If mElement <> Null Then
+		mElement.Append(varText)
+	Else	
+		sbText.Append(varText)
+	End If
 End Sub
 
 Sub Bind(attr As String, value As String)
@@ -1326,7 +1207,6 @@ End Sub
 Sub BindTo(value As String)
 	AddAttr($":to"$, value)
 End Sub
-
 
 'add html of component to app and this binds events and states
 Sub BindVueElement(el As VueElement)
@@ -1397,11 +1277,11 @@ Public Sub AddAttr(varProp As String, varValue As String)
 		End If			
 		'
 		Select Case varProp
-		Case "v-model", "v-show", "v-if", "v-else-if", "required", "disabled", "readonly"
+		Case "v-model", "v-show", "v-if", "v-else-if", "required", "disabled", "readonly" 
 			If varValue <> "" Then
 				bindings.Put(varValue, Null)
 			End If
-		Case "items"
+		Case "items", ":items"
 			If varValue <> "" Then
 				Dim lst As List = NewList
 				bindings.Put(varValue, lst)
@@ -1541,6 +1421,14 @@ End Sub
 
 public Sub getVOn() As String
 	Return stVOn
+End Sub
+
+public Sub setTile(b As Boolean)
+	AddAttr(":tile", b)
+End Sub
+
+public Sub setRaised(b As Boolean)
+	AddAttr(":raised", b)
 End Sub
 
 
@@ -1932,6 +1820,41 @@ public Sub setRotate(s As String)
 	AddAttr("rotate", s)
 End Sub
 
+public Sub setTop(b As Boolean)
+	AddAttr(":top", b)
+End Sub
+'
+public Sub setBottom(b As Boolean)
+	AddAttr(":bottom", b)
+End Sub
+
+public Sub setRight(b As Boolean)
+	AddAttr(":right", b)
+End Sub
+
+public Sub setLeft(b As Boolean)
+	AddAttr(":left", b)
+End Sub
+
+public Sub setXLarge(b As Boolean)
+	AddAttr(":x-large", b)
+End Sub
+
+public Sub setFixed(b As Boolean)
+	AddAttr(":fixed", b)
+End Sub
+
+public Sub setDirection(s As String)
+	AddAttr("direction", s)
+End Sub
+
+public Sub setLoading(s As String)
+	AddAttr(":loading", s)
+End Sub
+
+public Sub setXSmall(b As Boolean)
+	AddAttr(":x-small", b)
+End Sub
 
 public Sub setLarge(b As Boolean)
 	AddAttr(":large", b)
@@ -1942,6 +1865,10 @@ public Sub setSmall(b As Boolean)
 End Sub
 
 
+public Sub setPosition(s As String)
+	AddAttr("position", S)
+End Sub
+
 public Sub setDepressed(b As Boolean)
 	AddAttr(":depressed", b)
 End Sub
@@ -1950,12 +1877,28 @@ public Sub setFab(b As Boolean)
 	AddAttr(":fab", b)
 End Sub
 
+public Sub setExtended(b As Boolean)
+	AddAttr(":extended", b)
+End Sub
+
+public Sub setLight(b As Boolean)
+	AddAttr(":light", b)
+End Sub
+
+public Sub setTabs(b As Boolean)
+	AddAttr(":tabs", b)
+End Sub
+
 Sub setFalseValue(fv As Object)
 	AddAttr("false-value", fv)
 End Sub
 
 Sub setTrueValue(tv As Object)
 	AddAttr("true-value", tv)
+End Sub
+
+Sub setAbsolute(tv As Boolean)
+	AddAttr(":absolute", tv)
 End Sub
 
 public Sub setLength(s As String)
@@ -2062,48 +2005,97 @@ public Sub getTo() As String
 	Return stTo
 End Sub
 
-'add a child component
-Sub AddChild(child As String)
-	sbText.Append(child)
-End Sub
-
 'set a call back
 Sub SetCallBack(methodName As String, cb As BANanoObject)
 	methodName = methodName.ToLowerCase
 	methods.Put(methodName, cb)
 End Sub
 
-private Sub SetEvent(eventName As String, attrName As String, eventValue As String)
-	eventName = eventName.Replace(":","")
-	eventName = eventName.Replace(".","")
-	eventName = eventName.Replace("-","")	
-	Dim sName As String = $"${mEventName}_${eventName}"$
-	sName = sName.tolowercase
+Sub SetOnEvent(eventHandler As Object, event As String, args As String)
+	event = event.ToLowerCase
+	'
+	Dim attrName As String = event
 	attrName = attrName.tolowercase
-	If SubExists(mCallBack, sName) = False Then Return
-	If BANano.IsUndefined(eventValue) Or BANano.IsNull(eventValue) Then eventValue = ""
-	Dim sCode As String = $"${sName}(${eventValue})"$
-	AddAttr($"v-on:${attrName}"$, sCode)
+	attrName = attrName.Replace(":","")
+	attrName = attrName.Replace(".","")
+	attrName = attrName.Replace("-","")
+	'
+	Dim methodName As String = $"${mName}_${attrName}"$
+	'
+	If SubExists(eventHandler, methodName) = False Then Return
+	If BANano.IsUndefined(args) Or BANano.IsNull(args) Then args = ""
+	Dim sCode As String = $"${methodName}(${args})"$
+	AddAttr($"v-on:${event}"$, sCode)
 	'arguments for the event
 	Dim e As Object 'ignore
+	Dim cb As BANanoObject = BANano.CallBack(eventHandler, methodName, Array(e))
+	methods.Put(methodName, cb)
+End Sub
+
+Sub SetOnOwnEvent(eventHandler As Object, methodName As String,  event As String, args As String)
+	event = event.ToLowerCase
+	methodName = methodName.tolowercase
+	'
+	Dim attrName As String = event
+	attrName = attrName.tolowercase
+	attrName = attrName.Replace(":","")
+	attrName = attrName.Replace(".","")
+	attrName = attrName.Replace("-","")
+	'
+	If SubExists(eventHandler, methodName) = False Then Return
+	If BANano.IsUndefined(args) Or BANano.IsNull(args) Then args = ""
+	Dim sCode As String = $"${methodName}(${args})"$
+	AddAttr($"v-on:${event}"$, sCode)
+	'arguments for the event
+	Dim e As Object 'ignore
+	Dim cb As BANanoObject = BANano.CallBack(eventHandler, methodName, Array(e))
+	methods.Put(methodName, cb)
+End Sub
+
+
+'on event
+Sub On(eventName As String, args As String)    'ignoredeadcode
+	eventName = eventName.tolowercase
+	'
+	Dim seventname As String = eventName
+	seventname = seventname.Replace(".", "")
+	seventname = seventname.Replace(":", "")
+	seventname = seventname.Replace("-","")
+	'
+	Dim sName As String = $"${mEventName}_${seventname}"$
+	If SubExists(mCallBack, sName) = False Then Return
+	'
+	If BANano.IsUndefined(args) Or BANano.IsNull(args) Then args = ""
+	Dim sCode As String = $"${sName}(${args})"$
+	AddAttr($"v-on:${eventName}"$, sCode)
+	'arguments for the event
+	Dim e As BANanoEvent 'ignore
 	Dim cb As BANanoObject = BANano.CallBack(mCallBack, sName, Array(e))
 	methods.Put(sName, cb)
 End Sub
 
-Sub SetOnEvent(eventHandler As Object, eventName As String, attrName As String, eventValue As String)
+
+'define method
+Sub OnMulti(EventHandler As String, eventName As String, args As String)    'ignoredeadcode
 	eventName = eventName.tolowercase
-	eventName = eventName.Replace(":","")
-	eventName = eventName.Replace(".","")
-	eventName = eventName.Replace("-","")
-	attrName = attrName.tolowercase
-	If SubExists(eventHandler, eventName) = False Then Return
-	If BANano.IsUndefined(eventValue) Or BANano.IsNull(eventValue) Then eventValue = ""
-	Dim sCode As String = $"${eventName}(${eventValue})"$
-	AddAttr($"v-on:${attrName}"$, sCode)
+	EventHandler = EventHandler.tolowercase
+	'
+	Dim seventname As String = eventName
+	seventname = seventname.Replace(".", "")
+	seventname = seventname.Replace(":", "")
+	seventname = seventname.Replace("-","")
+	
+	'
+	Dim sName As String = $"${EventHandler}_${seventname}"$
+	If SubExists(mCallBack, sName) = False Then Return
+	'
+	If BANano.IsUndefined(args) Or BANano.IsNull(args) Then args = ""
+	Dim sCode As String = $"${sName}(${args})"$
+	AddAttr($"v-on:${eventName}"$, sCode)
 	'arguments for the event
-	Dim e As Object 'ignore
-	Dim cb As BANanoObject = BANano.CallBack(eventHandler, eventName, Array(e))
-	methods.Put(eventName, cb)
+	Dim e As BANanoEvent 'ignore
+	Dim cb As BANanoObject = BANano.CallBack(mCallBack, sName, Array(e))
+	methods.Put(sName, cb)
 End Sub
 
 
@@ -2133,50 +2125,6 @@ Sub SetMethod1(eventHandler As Object, methodName As String, args As List)
 	End If
 End Sub
 
-'define method
-Sub OnMulti(EventHandler As String, eventName As String, args As String)    'ignoredeadcode
-	eventName = eventName.tolowercase
-	EventHandler = EventHandler.tolowercase
-	'
-	Dim seventname As String = eventName
-	seventname = seventname.Replace(".", "")
-	seventname = seventname.Replace(":", "")
-	seventname = seventname.Replace("-","")
-	
-	'
-	Dim sName As String = $"${EventHandler}_${seventname}"$
-	If SubExists(mCallBack, sName) = False Then Return
-	'
-	If BANano.IsUndefined(args) Or BANano.IsNull(args) Then args = ""
-	Dim sCode As String = $"${sName}(${args})"$
-	AddAttr($"v-on:${eventName}"$, sCode)
-	'arguments for the event
-	Dim e As BANanoEvent 'ignore
-	Dim cb As BANanoObject = BANano.CallBack(mCallBack, sName, Array(e))
-	methods.Put(sName, cb)
-End Sub
-
-'on event
-Sub On(eventName As String, args As String)    'ignoredeadcode
-	eventName = eventName.tolowercase
-	'
-	Dim seventname As String = eventName
-	seventname = seventname.Replace(".", "")
-	seventname = seventname.Replace(":", "")
-	seventname = seventname.Replace("-","")
-	
-	'
-	Dim sName As String = $"${mEventName}_${seventname}"$
-	If SubExists(mCallBack, sName) = False Then Return
-	'
-	If BANano.IsUndefined(args) Or BANano.IsNull(args) Then args = ""
-	Dim sCode As String = $"${sName}(${args})"$
-	AddAttr($"v-on:${eventName}"$, sCode)
-	'arguments for the event
-	Dim e As BANanoEvent 'ignore
-	Dim cb As BANanoObject = BANano.CallBack(mCallBack, sName, Array(e))
-	methods.Put(sName, cb)
-End Sub
 
 'set the conver image for the container
 Sub setCoverImage(url As String)
@@ -2514,10 +2462,19 @@ public Sub getReadonly() As String
 	Return stReadonly
 End Sub
 
+public Sub setAccordion(b As Boolean)
+	AddAttr(":accordion", b)
+End Sub
+
 'set required
 public Sub setRequired(varRequired As String)
 	AddAttr("required", varRequired)
 	stRequired = varRequired
+End Sub
+
+'focusable
+public Sub setFocusable(b As Boolean)
+	AddAttr("focusable", b)
 End Sub
 
 'get required
@@ -2625,11 +2582,7 @@ Sub BuildGrid
 		sb.Append(strRow)
 	Next
 	Dim sout As String = sb.tostring
-	If mElement <> Null Then
-		mElement.Append(sout)
-	Else
-		sbText.Append(sout)
-	End If
+	Append(sout)
 End Sub
 
 private Sub BuildRowClass(xrow As VueGridRow) As String
@@ -3080,6 +3033,16 @@ Sub IsValidID(idName As String) As Boolean
 	Return True
 End Sub
 
+'set banano text value
+Sub SetText(txt As String)
+	If mElement <> Null Then
+		mElement.SetText(txt)
+	Else
+		sbText.Append(txt)	
+	End If
+End Sub
+
+
 Sub AddSizes(sSizeSmall As String, sSizeMedium As String, sSizeLarge As String, sSizeXLarge As String) As VueElement
 	sSizeSmall = sSizeSmall.Trim
 	sSizeXLarge = sSizeXLarge.trim
@@ -3250,6 +3213,15 @@ End Sub
 
 Sub setMultiple(b As Boolean)
 	AddAttr(":multiple", b)
+End Sub
+
+
+Sub setAlertBorder(mytype As String)
+	AddAttr("border", mytype)
+End Sub
+
+Sub setAlertType(mytype As String)
+	AddAttr("type", mytype)
 End Sub
 
 Sub SetTypeText
@@ -3451,16 +3423,35 @@ End Sub
 '	Next
 'End Sub
 
-'set the event attribute only
-Sub SetOnEventAttr(eventHandler As Object, eventName As String, attrName As String, eventValue As String)
-	eventName = eventName.tolowercase
-	eventName = eventName.Replace(":","")
-	eventName = eventName.Replace(".","")
-	eventName = eventName.Replace("-","")
+Sub SetOnEventAttr(eventHandler As Object, event As String, args As String)
+	event = event.ToLowerCase
+	'
+	Dim attrName As String = event
 	attrName = attrName.tolowercase
-	If SubExists(eventHandler, eventName) = False Then Return
-	If BANano.IsUndefined(eventValue) Or BANano.IsNull(eventValue) Then eventValue = ""
-	Dim sCode As String = $"${eventName}(${eventValue})"$
-	AddAttr($"v-on:${attrName}"$, sCode)
+	attrName = attrName.Replace(":","")
+	attrName = attrName.Replace(".","")
+	attrName = attrName.Replace("-","")
+	'
+	Dim methodName As String = $"${mName}_${attrName}"$
+	'
+	If SubExists(eventHandler, methodName) = False Then Return
+	If BANano.IsUndefined(args) Or BANano.IsNull(args) Then args = ""
+	Dim sCode As String = $"${methodName}(${args})"$
+	AddAttr($"v-on:${event}"$, sCode)
 End Sub
 
+Sub SetOnOwnEventAttr(eventHandler As Object, methodName As String, event As String, args As String)
+	event = event.ToLowerCase
+	methodName = methodName.tolowercase
+	'
+	Dim attrName As String = event
+	attrName = attrName.tolowercase
+	attrName = attrName.Replace(":","")
+	attrName = attrName.Replace(".","")
+	attrName = attrName.Replace("-","")
+	'
+	If SubExists(eventHandler, methodName) = False Then Return
+	If BANano.IsUndefined(args) Or BANano.IsNull(args) Then args = ""
+	Dim sCode As String = $"${methodName}(${args})"$
+	AddAttr($"v-on:${event}"$, sCode)
+End Sub

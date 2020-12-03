@@ -2845,7 +2845,7 @@ Sub AddHTMLElement(Module As Object, parentID As String, elID As String, tag As 
 	'
 	Dim elIT As VueElement
 	elIT.Initialize(Module, elID, tag)
-	elIT.SetText(Text)
+	elIT.Append(Text)
 	'
 	If props <> Null Then
 		For Each k As String In props.Keys
