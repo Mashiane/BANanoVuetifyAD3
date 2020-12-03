@@ -23,18 +23,20 @@ Sub Initialize
 	'load the template
 	banano.LoadLayout(vuetify.PlaceHolderName, "vratingcontainer")
 	
-'	Dim rate1 As BANanoElement = BVAD3.NewRating(rating, "rate1", "ratex", 5, 60, True, "orange", Null)
-'	vratingcontainer.Matrix(1, 1).Empty.Append(rate1.GetHTML)
-	'
+	'get the grid position
 	Dim r2c1 As String = vratingcontainer.MatrixID(2, 1)
-	Dim rate2 As VueElement = vuetify.AddRating(Me, r2c1, "rate2", "ratey", 6, 50, True, "green", Null)
+	'add a rating
+	Dim rate2 As VueElement = vuetify.AddRating(Me, r2c1, "rate2", "ratey", 5, 30, True, "orange", Null)
+	'bind the rating element to this component
 	rating.BindVueElement(rate2)
 	
 	'add the component as a router
 	vuetify.AddRoute(rating)
 End Sub
 
-Sub rate1_input(e As BANanoEvent)
-	Dim rate1v As String = rating.GetData("ratex")
+Sub rate2_input(e As BANanoEvent)
+	'read the value of the rating
+	Dim rate1v As String = rating.GetData("ratey")
+	'show the value in a snackbar
 	vuetify.ShowSnackBarSuccess(rate1v)
 End Sub

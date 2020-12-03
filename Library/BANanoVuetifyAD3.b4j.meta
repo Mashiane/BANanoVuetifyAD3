@@ -16,6 +16,6 @@ ModuleClosedNodes2=2
 ModuleClosedNodes3=
 ModuleClosedNodes4=
 ModuleClosedNodes5=185,186,187,188
-NavigationStack=VueTable,AddClone,1115,0,VueTable,AddPrint,1120,0,VueElement,getBold,364,0,VueElement,setItalic,345,0,VueElement,Initialize,342,6,VueElement,GetMarginPadding,740,0,VueElement,ToString,918,0,VuetifyApp,AddVueElement,2122,0,VueTable,AddDateColumn,1143,0,VueElement,DesignerCreateView,670,0
+NavigationStack=VueElement,ToString,918,0,VuetifyApp,AddVueElement,2122,0,VueTable,AddDateColumn,1143,0,VueElement,DesignerCreateView,670,0,VuetifyApp,AddExpansionPanels,2606,0,VuetifyApp,AddCol,2622,1,VuetifyApp,AddRow,2620,0,VueComponent,Here,87,0,VueComponent,This,83,0,VuetifyApp,Here,311,0,VuetifyApp,Class_Globals,303,0
 SelectedBuild=0
 VisibleModules=

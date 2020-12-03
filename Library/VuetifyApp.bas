@@ -315,7 +315,7 @@ Sub This As BANanoObject
 End Sub
 
 'returns the app template
-Sub ThisTemplate As String
+Sub Here As String
 	Return "apptemplate"
 End Sub
 
@@ -2611,8 +2611,6 @@ Sub AddExpansionPanels(Module As Object, parentID As String, elID As String, vMo
 	Return elx
 End Sub
 
-
-
 Sub AddRow(Module As Object, parentID As String, rowpos As Int) As VueElement
 	parentID = CleanID(parentID)
 	'
@@ -2624,11 +2622,15 @@ Sub AddRow(Module As Object, parentID As String, rowpos As Int) As VueElement
 	Return mbutton
 End Sub
 
+'Add a column to the parent with sizes
+'<code>
+'AddCol(Me, "parent", 1, "12", "6", "6", "6")
+'</code>
 Sub AddCol(Module As Object, parentID As String, colpos As Int, sm As String, md As String, lg As String, xl As String) As VueElement
 	parentID = CleanID(parentID)
 	'
 	Dim colKey As String = $"${parentID}c${colpos}"$
-	BANano.GetElement(parentID).Append($"<v-col id="${colKey}"></v-row>"$)
+	BANano.GetElement(parentID).Append($"<v-col id="${colKey}"></v-col>"$)
 	Dim mbutton As VueElement
 	mbutton.Initialize(Module, colKey, colKey)
 	mbutton.AddSizes(sm, md, lg, xl)

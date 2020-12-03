@@ -24,7 +24,9 @@ Sub Initialize
 	banano.LoadLayout(vuetify.PlaceHolderName, "vimagecontainer")
 	'
 	Dim r2c1 As String = imgcontainer.MatrixID(1, 1)
-	Dim ni1 As VueElement = vuetify.AddImage(Me, r2c1, "ni2", "./assets/lock.jpg", "./assets/lock.jpg", "", "500", "500", Null)
+	'
+	Dim ni1 As VueElement = vuetify.AddImage(Me, r2c1, "ni2", "./assets/lock.jpg", "./assets/lock.jpg", "", "700", "700", Null)
+	'
 	images.BindVueElement(ni1)
 	
 	'add the component as a router

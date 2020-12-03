@@ -23,9 +23,11 @@ Sub Initialize
 	'load the template
 	banano.LoadLayout(vuetify.PlaceHolderName, "vparallax")
 	'
-	'
+	'get a grid location
 	Dim r2c1 As String = vparallaxcontainer.MatrixID(1, 1)
+	'add the parallax
 	Dim par1 As VueElement = vuetify.AddParallax(Me, r2c1, "parlx2", "500", "./assets/material.jpg", "", Null)
+	'bind to the vue-component instance
 	parallax.BindVueElement(par1)
 	
 	'add the component as a router
