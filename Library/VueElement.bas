@@ -1419,6 +1419,26 @@ public Sub setVOn(varVOn As String)
 	stVOn = varVOn
 End Sub
 
+
+public Sub setNoTitle(b As Boolean)
+	AddAttr(":no-title", b)
+End Sub
+
+
+public Sub setOpenOnClick(b As Boolean)
+	AddAttr(":open-on-click", b)
+End Sub
+
+
+public Sub setOpenOnFocus(b As Boolean)
+	AddAttr(":open-on-focus", b)
+End Sub
+
+
+public Sub setOpenOnHover(b As Boolean)
+	AddAttr(":open-on-hover", b)
+End Sub
+
 public Sub getVOn() As String
 	Return stVOn
 End Sub
@@ -1675,6 +1695,11 @@ public Sub setColor(varColor As String)
 	stColor = varColor
 End Sub
 
+
+public Sub setHeaderColor(varColor As String)
+	AddAttr("header-color", varColor)
+End Sub
+
 public Sub getColor() As String
 	Return stColor
 End Sub
@@ -1808,6 +1833,20 @@ public Sub setElevation(s As String)
 	AddClass("elevation-" & s)
 End Sub
 
+
+public Sub setTransition(s As Boolean)
+	AddAttr("transition", s)
+End Sub
+
+public Sub setOffsetY(b As Boolean)
+	AddAttr(":offset-y", b)
+End Sub
+
+
+public Sub setOffsetX(b As Boolean)
+	AddAttr(":offset-y", b)
+End Sub
+
 public Sub setReactive(b As Boolean)
 	AddAttr(":reactive", b)
 End Sub
@@ -1864,6 +1903,55 @@ public Sub setSmall(b As Boolean)
 	AddAttr(":small", b)
 End Sub
 
+
+public Sub setChips(b As Boolean)
+	AddAttr(":chips", b)
+End Sub
+
+
+public Sub setSmallChips(b As Boolean)
+	AddAttr(":small-chips", b)
+End Sub
+
+public Sub setMin(s As String)
+	AddAttr("min", s)
+End Sub
+
+
+public Sub setMinWidth(s As String)
+	AddAttr("min-width", s)
+End Sub
+
+public Sub setMinHeight(s As String)
+	AddAttr("min-height", s)
+End Sub
+
+public Sub setMax(s As String)
+	AddAttr("max", s)
+End Sub
+
+
+public Sub setUseSeconds(b As Boolean)
+	AddAttr(":use-seconds", b)
+End Sub
+
+
+public Sub setScrollable(b As Boolean)
+	AddAttr(":scrollable", b)
+End Sub
+
+
+public Sub setLandScape(s As Boolean)
+	AddAttr("landscape", s)
+End Sub
+
+public Sub setFullWidth(b As Boolean)
+	AddAttr(":full-width", b)
+End Sub
+
+public Sub setFormat(s As String)
+	AddAttr("format", S)
+End Sub
 
 public Sub setPosition(s As String)
 	AddAttr("position", S)

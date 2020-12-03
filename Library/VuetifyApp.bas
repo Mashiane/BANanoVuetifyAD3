@@ -28,7 +28,7 @@ Sub Class_Globals
 	Private ColorMap As Map
 	Public Errors As Map
 	Public Vuetify As BANanoObject
-	Private data As Map
+	Private data As BANanoObject
 	'
 	Public const ALERT_BORDER_LEFT As String = "left"
 	Public const ALERT_BORDER_RIGHT As String = "right"
@@ -710,8 +710,8 @@ Public Sub Initialize(Module As Object)
 	components.Initialize
 	Options.Initialize
 	Modules.Initialize
-	Themes.Initialize 
-	data.Initialize 
+	Themes.Initialize
+	data.Initialize5 
 	InitColors
 	
 	'
@@ -1104,7 +1104,6 @@ End Sub
 Sub RegisterComponent(compName As String, compOptions As Map) 
 	compName = compName.tolowercase
 	Vue.RunMethod("component", Array(compName, compOptions))
-	
 End Sub
 
 'empty the banano element
@@ -1247,14 +1246,14 @@ End Sub
 
 
 'click a reference
-Sub RefClick(refID As String)
+Sub Click(refID As String)
 	refID = refID.tolowercase
 	refs.GetField(refID).RunMethod("click", Null)
 End Sub
 
 'show the file select
 Sub ShowFileSelect(fsName As String)
-	RefClick(fsName)
+	Click(fsName)
 End Sub
 
 'refresh an element using the key
@@ -1322,6 +1321,33 @@ Sub ListUnshiftGlobal(lstname As String, obj As Object)
 	lstname = lstname.tolowercase
 	store.GetField(lstname).RunMethod("unshift", obj)
 End Sub
+
+'pop an item from a saved state item
+Sub SetDataPop(lstname As String)
+	lstname = lstname.tolowercase
+	data.GetField(lstname).RunMethod("pop", Null)
+End Sub
+
+'get the first item from a list
+Sub GetDataFirst(lstName As String) As Object
+	lstName = lstName.tolowercase
+	Dim lst As List = data.GetField(lstName).result
+	Dim obj As Object = lst.Get(0)
+	Return obj
+End Sub
+
+'add item at end of the list
+Sub SetDataPush(listName As String, item As Object)
+	listName = listName.ToLowerCase
+	data.GetField(listName).RunMethod("push", item)
+End Sub
+
+'add item at beginning of list
+Sub SetDataUnshift(lstname As String, obj As Object)
+	lstname = lstname.tolowercase
+	data.GetField(lstname).RunMethod("unshift", obj)
+End Sub
+
 
 'get a value from the gloval store
 Sub GetStore(prop As String) As Object
@@ -1457,30 +1483,25 @@ End Sub
 'return if state exists
 Sub HasState(k As String) As Boolean
 	k = k.tolowercase
-	Return data.ContainsKey(k)
+	Dim b As Boolean = data.RunMethod("hasOwnProperty", Array(k))
+	Return b
 End Sub
 
 'toggle the visibility of an item using vshow
 Sub ToggleItem(elID As String) 
 	elID = elID.ToLowerCase
 	Dim sstate As String = $"${elID}show"$
-	ToggleState(sstate)
-	
+	Toggle(sstate)	
 End Sub
 
-Sub Toggle(stateID As String) 
-	ToggleState(stateID)
-	
-End Sub
 
 'toggle the state value
-Sub ToggleState(stateName As String) 
-	Dim bcurrent As Boolean = GetState(stateName)
+Sub Toggle(stateName As String) 
+	Dim bcurrent As Boolean = GetData(stateName)
 	bcurrent = Not(bcurrent)
 	Dim optx As Map = CreateMap()
 	optx.Put(stateName, bcurrent)
-	SetState(optx)
-	
+	SetState(optx)	
 End Sub
 
 'check if we have state
@@ -1610,6 +1631,8 @@ Sub Serve
 	Emit = Vue.GetField(emitKey)
 	Dim srouter As String = "$router"
 	VueRouter = Vue.GetField(srouter)
+	Dim sdata As String = "$data"
+	data = Vue.GetField(sdata)
 End Sub
 
 'Use router To navigate
@@ -1738,8 +1761,9 @@ Sub AddRule(ruleName As String, Module As Object,  MethodName As String)
 	If ruleName = "" Then Return
 	MethodName = MethodName.ToLowerCase
 	Dim rules As List
-	If data.ContainsKey(ruleName) Then
-		rules = data.Get(ruleName)
+	Dim b As Boolean = data.RunMethod("hasOwnProperty", Array(ruleName))
+	If b Then	
+		rules = data.GetField(ruleName).result
 	Else
 		rules = NewList
 	End If
@@ -1749,7 +1773,7 @@ Sub AddRule(ruleName As String, Module As Object,  MethodName As String)
 	If SubExists(Module, MethodName) Then
 		rules.Add(cb.Result)
 	End If
-	data.put(ruleName, rules)
+	data.SetField(ruleName, rules)
 End Sub
 
 
@@ -1809,23 +1833,23 @@ End Sub
 
 Sub RemoveData(key As String)
 	key = key.ToLowerCase
-	data.Remove(key)
+	data.Delete(key)
 End Sub
 
 'update the state
 Sub SetData(prop As String, value As Object)
-	data.put(prop, value)
+	prop = prop.tolowercase
+	data.SetField(prop, value)
 End Sub
 
 Sub GetData(prop As String) As Object
-	Dim obj As Object = data.GetDefault(prop, "")
-	If BANano.IsNull(obj) Then Return ""
-	If BANano.IsUndefined(obj) Then Return ""
-	Return obj
-End Sub
-
-private Sub GetState(prop As String) As Object
-	Dim obj As Object = data.GetDefault(prop, "")
+	prop = prop.ToLowerCase
+	Dim obj As Object
+	Dim b As Boolean = data.RunMethod("hasOwnProperty", Array(prop)).Result
+	If b Then
+		obj = data.GetField(prop).result
+	End If
+	If BANano.IsNull(obj) Or BANano.IsUndefined(obj) Then obj = CStr(obj)
 	Return obj
 End Sub
 
@@ -1896,140 +1920,6 @@ Sub BindVueTable(el As VueTable)
 	Next
 End Sub
 
-'update a selects created on abstract designer
-Sub UpdateSelects(Module As Object, elID As String, vmodel As String, sLabel As String, bRequired As Boolean, bMultiple As Boolean, sPlaceHolder As String, sourceTable As String, sourceField As String, displayField As String, returnObject As Boolean, sHelperText As String, props As Map) As VueElement
-	elID = elID.tolowercase
-	elID = elID.Replace("#","")
-	'this will use an existing item if available
-	Dim vselect As VueElement
-	vselect.Initialize(Module, elID, elID)
-	
-	vselect.label = sLabel
-	vselect.Required = bRequired
-	vselect.Placeholder = sPlaceHolder
-	vselect.Hint = sHelperText
-	vselect.Multiple = bMultiple
-	vselect.Items = $":${sourceTable}"$
-	If displayField <> "" Then vselect.ItemText = displayField
-	If sourceField <> "" Then vselect.ItemValue = sourceField
-	vselect.VModel = vmodel
-	vselect.Bind("return-object", returnObject)
-	
-	vselect.SetData(sourceTable, NewList)
-	'
-	If bMultiple Then
-		Dim lst As List = NewList
-		SetData(vmodel, lst)
-	Else
-		SetData(vmodel, Null)
-	End If
-	'
-	If BANano.IsNull(props) = False Then
-		For Each k As String In props.Keys
-			Dim v As Object = props.Get(k)
-			vselect.AddAttr(k, v)
-		Next
-	End If
-	'
-	vselect.SetOnEvent(Module, "click", "")
-	vselect.SetOnEvent(Module, "click.stop", "")
-	vselect.SetOnEvent(Module, "click.prevent", "")
-	vselect.SetOnEvent(Module, "change", "")
-	vselect.SetOnEvent(Module, "click:append", "")
-	vselect.SetOnEvent(Module, "click:prepend", "")
-	vselect.SetOnEvent(Module, "click:append-outer", "")
-	vselect.SetOnEvent(Module, "click:prepend-inner", "")
-	'
-	Return vselect
-End Sub
-
-'update a password custom element
-Sub UpdatePassword(Module As Object, elID As String, vmodel As String, slabel As String, splaceholder As String, bRequired As Boolean, sPrependIcon As String, iMaxLen As Int, sHint As String, props As Map) As VueElement
-	elID = elID.tolowercase
-	elID = elID.Replace("#","")
-	
-	Dim bshowPassword As String = $"${elID}ShowPassword"$
-	bshowPassword = bshowPassword.tolowercase
-	SetData(bshowPassword, False)
-	'
-	'get the text field, there is only 1 element on the layout
-	Dim vtextfield As VueElement
-	vtextfield.Initialize(Module, elID, elID)
-	vtextfield.Label = slabel
-	vtextfield.Required = bRequired
-	vtextfield.PrependIcon = sPrependIcon
-	If iMaxLen > 0 Then
-		vtextfield.Counter = True
-	End If
-	vtextfield.Placeholder = splaceholder
-	vtextfield.Hint = sHint
-	vtextfield.VModel = vmodel
-	vtextfield.SetData(vmodel, "")
-	vtextfield.SetTypePassword
-	vtextfield.Ref = vmodel
-	vtextfield.AddAttr(":type", $"${bshowPassword} ? 'text' : 'password'"$)
-	vtextfield.AddAttr(":append-icon", $"${bshowPassword} ? 'mdi-eye' : 'mdi-eye-off'"$)
-	vtextfield.AddAttr("v-on:click:append", $"${bshowPassword} = !${bshowPassword}"$)
-	vtextfield.AddAttr("autocomplete", "off")
-	'
-	If BANano.IsNull(props) = False Then
-		For Each k As String In props.Keys
-			Dim v As Object = props.Get(k)
-			vtextfield.AddAttr(k, v)
-		Next
-	End If
-	'
-	vtextfield.SetOnEvent(Module, "click", "")
-	vtextfield.SetOnEvent(Module, "click.stop", "")
-	vtextfield.SetOnEvent(Module, "click.prevent", "")
-	vtextfield.SetOnEvent(Module, "change", "")
-	vtextfield.SetOnEvent(Module, "click:prepend", "")
-	vtextfield.SetOnEvent(Module, "click:append-outer", "")
-	vtextfield.SetOnEvent(Module, "click:prepend-inner", "")
-	'
-	Return vtextfield
-End Sub
-
-
-'update an existing text field
-Sub UpdateTextField(Module As Object, elID As String, vmodel As String, slabel As String, splaceholder As String, bRequired As Boolean, sPrependIcon As String, iMaxLen As Int, sHint As String, props As Map) As VueElement
-	elID = elID.tolowercase
-	elID = elID.Replace("#","")
-	
-	'get the text field, there is only 1 element on the layout
-	Dim vtextfield As VueElement
-	vtextfield.Initialize(Module, elID, elID)
-	vtextfield.Label = slabel
-	vtextfield.Required = bRequired
-	vtextfield.PrependIcon = sPrependIcon
-	If iMaxLen > 0 Then
-		vtextfield.Counter = True
-	End If
-	vtextfield.Placeholder = splaceholder
-	vtextfield.Hint = sHint
-	vtextfield.VModel = vmodel
-	vtextfield.SetTypeText
-	vtextfield.Ref = vmodel
-	vtextfield.SetData(vmodel, "")
-	'
-	vtextfield.SetOnEvent(Module, "click", "")
-	vtextfield.SetOnEvent(Module, "click.stop", "")
-	vtextfield.SetOnEvent(Module, "click.prevent", "")
-	vtextfield.SetOnEvent(Module, "change", "")
-	vtextfield.SetOnEvent(Module, "click:append", "")
-	vtextfield.SetOnEvent(Module, "click:prepend", "")
-	vtextfield.SetOnEvent(Module, "click:append-outer", "")
-	vtextfield.SetOnEvent(Module, "click:prepend-inner", "")
-	
-	If BANano.IsNull(props) = False Then
-		For Each k As String In props.Keys
-			Dim v As Object = props.Get(k)
-			vtextfield.AddAttr(k, v)
-		Next
-	End If
-	'
-	Return vtextfield
-End Sub
 
 'convert a list to a data source
 Sub ListToDataSource(keyName As String, valueName As String, lst As List) As List
@@ -2073,6 +1963,38 @@ End Sub
 
 Sub AddTemplate(Module As Object, parentID As String, elID As String) As VueElement
 	Return AddVueElement(Module, parentID, elID, "v-template", "", "", "", Null)
+End Sub
+
+Sub AddListItemAction(Module As Object, parentID As String, elID As String) As VueElement
+	Return AddVueElement(Module, parentID, elID, "v-list-item-action", "", "", "", Null)
+End Sub
+
+
+Sub AddListItemContent(Module As Object, parentID As String, elID As String) As VueElement
+	Return AddVueElement(Module, parentID, elID, "v-list-item-content", "", "", "", Null)
+End Sub
+
+
+
+Sub AddListItemIcon(Module As Object, parentID As String, elID As String) As VueElement
+	Return AddVueElement(Module, parentID, elID, "v-list-item-icon", "", "", "", Null)
+End Sub
+
+
+Sub AddListItemAvatar(Module As Object, parentID As String, elID As String) As VueElement
+	Return AddVueElement(Module, parentID, elID, "v-list-item-avatar", "", "", "", Null)
+End Sub
+
+Sub AddListItemTitle(Module As Object, parentID As String, elID As String, caption As String) As VueElement
+	Return AddVueElement(Module, parentID, elID, "v-list-item-title", "", caption, "", Null)
+End Sub
+
+Sub AddListItemSubTitle(Module As Object, parentID As String, elID As String, caption As String) As VueElement
+	Return AddVueElement(Module, parentID, elID, "v-list-item-subtitle", "", caption, "", Null)
+End Sub
+
+Sub AddListItemActionText(Module As Object, parentID As String, elID As String, caption As String) As VueElement
+	Return AddVueElement(Module, parentID, elID, "v-list-item-action-text", "", caption, "", Null)
 End Sub
 
 Sub AddHamburger(Module As Object, parentID As String, elID As String, color As String, props As Map) As VueElement
@@ -2120,10 +2042,12 @@ Sub AddVueElement(Module As Object, parentID As String, elID As String, tag As S
 	structure.put("tag", tag)
 	'convert to json data
 	Dim jsonData As String = BANano.tojson(structure)
-	'use render append
-	Dim parELE As BANanoElement
-	parELE.Initialize($"#${parentID}"$)
-	parELE.RenderAppend($"<{{tag}} id="{{id}}"></{{tag}}>"$, jsonData)
+	'check if the element exists
+	If BANano.Exists($"#${elID}"$) = False Then
+		Dim parELE As BANanoElement
+		parELE.Initialize($"#${parentID}"$)
+		parELE.RenderAppend($"<{{tag}} id="{{id}}"></{{tag}}>"$, jsonData)
+	End If
 	'get the element
 	Dim ve As VueElement
 	ve.Initialize(Module, elID, elID)
@@ -2537,7 +2461,7 @@ Sub AddSelect(Module As Object, parentID As String, elID As String, vmodel As St
 	If displayField <> "" Then vselect.ItemText = displayField
 	If sourceField <> "" Then vselect.ItemValue = sourceField
 	vselect.VModel = vmodel
-	vselect.Bind("return-object", returnObject)
+	vselect.ReturnObject = returnObject
 	'
 	If bMultiple Then
 		Dim lst As List = NewList
@@ -2611,6 +2535,11 @@ Sub AddExpansionPanels(Module As Object, parentID As String, elID As String, vMo
 	Return elx
 End Sub
 
+
+'Add a row to the parent
+'<code>
+'AddRow(Me, "parent", 1)
+'</code>
 Sub AddRow(Module As Object, parentID As String, rowpos As Int) As VueElement
 	parentID = CleanID(parentID)
 	'
@@ -2847,7 +2776,7 @@ Sub AddIcon(Module As Object, parentID As String, elID As String, eIcon As Strin
 End Sub
 
 
-Sub AddSearch(Module As Object, parentID As String, elID As String, vmodel As String, slabel As String, props As Map) As VueElement
+Sub AddSearch(Module As Object, parentID As String, elID As String, vmodel As String, slabel As String, bSolo As Boolean, props As Map) As VueElement
 	parentID = CleanID(parentID)
 	elID = elID.ToLowerCase
 	BANano.GetElement(parentID).Append($"<v-text-field id="${elID}"></v-text-field>"$)
@@ -2858,12 +2787,14 @@ Sub AddSearch(Module As Object, parentID As String, elID As String, vmodel As St
 	vtextfield.VModel = vmodel
 	vtextfield.SetTypeText
 	vtextfield.Ref = vmodel
-	vtextfield.AddAttr(":single-line", True)
-	vtextfield.AddAttr(":hide-details", True)
+	vtextfield.Solo = bSolo
+	vtextfield.SingleLine = True
+	vtextfield.HideDetails = True
 	vtextfield.SetOnEvent(Module, "click:append", "")
 	vtextfield.SetOnEvent(Module, "click:prepend", "")
 	vtextfield.SetOnEvent(Module, "click:append-outer", "")
 	vtextfield.SetOnEvent(Module, "click:prepend-inner", "")
+	vtextfield.SetOnEvent(Module, "click:clear", "")
 	If BANano.IsNull(props) = False Then
 		For Each k As String In props.Keys
 			Dim v As Object = props.Get(k)
@@ -2901,7 +2832,7 @@ Sub AddFileInput(Module As Object, parentID As String, elID As String, vmodel As
 	vfileinput.Placeholder = splaceholder
 	vfileinput.Hint = sHint
 	vfileinput.VModel = vmodel
-	vfileinput.AddAttr("type", "file")
+	vfileinput.SetTypeFile
 	vfileinput.Ref = vmodel
 	vfileinput.AddAttrOnConditionTrue("multiple", bMultiple, True)
 	vfileinput.SetOnEvent(Module, "change", "")
@@ -3185,6 +3116,11 @@ Sub AddList(Module As Object, parentID As String, elid As String, bDense As Bool
 	Return vlist
 End Sub
 
+
+Sub AddListItem(Module As Object, parentID As String, elid As String, props As Map) As VueElement
+	Return AddVueElement(Module, parentID, elid, "v-list-item", "", "", "", props)
+End Sub
+
 Sub AddFooter(Module As Object, parentID As String, elid As String, bPadless As Boolean, bFlat As Boolean, props As Map) As VueElement
 	Dim vlist As VueElement = AddVueElement(Module, parentID, elid, "v-footer", "", "", "", props)
 	vlist.Bind("padless", bPadless)
@@ -3198,11 +3134,33 @@ Sub AddHover(Module As Object, parentID As String, elid As String, props As Map)
 End Sub
 
 
+Sub AddTimePicker(Module As Object, parentID As String, elid As String, vmodel As String, defaultValue As String, props As Map) As VueElement
+	Dim elx As VueElement =  AddVueElement(Module, parentID, elid, "v-time-picker", vmodel, "", "", props)
+	elx.SetData(vmodel, defaultValue)
+	Return elx
+End Sub
+
+
+Sub AddDatePicker(Module As Object, parentID As String, elid As String, vmodel As String, defaultValue As String, props As Map) As VueElement
+	Dim elx As VueElement =  AddVueElement(Module, parentID, elid, "v-date-picker", vmodel, "", "", props)
+	elx.SetData(vmodel, defaultValue)
+	Return elx
+End Sub
+
+
+Sub AddMenu(Module As Object, parentID As String, elid As String, returnValue As String, bCloseOnContentClick As Boolean, bCloseOnClick As Boolean, props As Map) As VueElement
+	Dim elx As VueElement =  AddVueElement(Module, parentID, elid, "v-date-picker", "", "", "", props)
+	elx.Bind("close-on-content-click", bCloseOnContentClick)
+	elx.Bind("close-on-click", bCloseOnClick)
+	If returnValue <> "" Then elx.Bind("return-value.sync",returnValue)
+	Return elx
+End Sub
+
 Sub AddChipWithAvatar(Module As Object, parentID As String, elID As String, src As String, label As String, bPill As Boolean, bClose As Boolean, color As String, chipprops As Map, avatarprops As Map, imgprops As Map) As VueElement
 	parentID = CleanID(parentID)
 	elID = elID.ToLowerCase
 	Dim spanID As String = $"${elID}span"$
-	Dim avarID As String = $"${elID}avar"$
+	Dim avarID As String = $"${elID}avatar"$
 	Dim imgID As String = $"${elID}img"$
 	'
 	BANano.GetElement(parentID).Append($"<v-chip id="${elID}"><v-avatar id="${avarID}"><v-img id="${imgID}"></v-img></v-avatar><span id="${spanID}"></span></v-chip>"$)
@@ -3241,7 +3199,6 @@ Sub AddChipWithAvatar(Module As Object, parentID As String, elID As String, src 
 	span.Initialize(Module, spanID, spanID)
 	span.Caption = label
 	'
-	
 	
 	If BANano.IsNull(chipprops) = False Then
 		For Each k As String In chipprops.Keys
@@ -3303,11 +3260,12 @@ End Sub
 Sub AddRadioGroup(Module As Object, parentID As String, elID As String, vmodel As String, sLabel As String, bRow As Boolean, bMultiple As Boolean, sourceTable As String, key As String, value As String, colorField As String, radiogroupprops As Map, radioprops As Map) As VueElement
 	parentID = CleanID(parentID)
 	elID = elID.ToLowerCase
-	BANano.GetElement(parentID).Append($"<v-radio-group id="${elID}"><v-radio id="${elID}chip"></v-radio></v-radio-group>"$)
+	Dim radioID As String = $"${elID}radio"$
+	BANano.GetElement(parentID).Append($"<v-radio-group id="${elID}"><v-radio id="${radioID}"></v-radio></v-radio-group>"$)
 	sourceTable = sourceTable.ToLowerCase
 	key = key.ToLowerCase
 	value = value.ToLowerCase
-	Dim radioID As String = $"${elID}chip"$
+	
 	colorField = colorField.tolowercase
 	Dim vradiogroup As VueElement
 	vradiogroup.Initialize(Module, elID, elID)
@@ -3341,7 +3299,7 @@ Sub AddRadioGroup(Module As Object, parentID As String, elID As String, vmodel A
 	Else
 		vradiogroup.SetData(vmodel, Null)
 	End If
-	vradiogroup.SetOnEvent(Module, "change", "")
+	vradiogroup.SetOnEvent(Module, "change", $"item.${key}"$)
 	vradiogroup.BindVueElement(vradio)
 	Return vradiogroup
 End Sub
