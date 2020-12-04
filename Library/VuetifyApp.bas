@@ -26,7 +26,6 @@ Sub Class_Globals
 	Public Vue As BANanoObject
 	Public Themes As Map
 	Private ColorMap As Map
-	Public Errors As Map
 	Public Vuetify As BANanoObject
 	Private data As BANanoObject
 	'
@@ -697,7 +696,6 @@ Public Sub Initialize(Module As Object)
 	'
 	'***use a global prototype
 	state.Initialize
-	Errors.Initialize
 	Modules.Initialize
 	methods.Initialize
 	computed.Initialize
@@ -1262,13 +1260,9 @@ Sub RefreshKey(keyName As String)
 	SetData(keyName, DateTime.now)
 End Sub
 
-'set data to the global store
-Sub SetStore(prop As String, value As Object)
-	SetDataGlobal(prop, value)
-End Sub
 
 'set global state data
-private Sub SetDataGlobal(prop As String, value As Object) 
+Sub SetStore(prop As String, value As Object) 
 	prop = prop.ToLowerCase
 	state.Put(prop, value)
 	'
@@ -1284,26 +1278,20 @@ private Sub SetDataGlobal(prop As String, value As Object)
 	'
 	'computed is not set
 	If computed.ContainsKey(prop) = False Then
-		Dim cb As BANanoObject = BANano.CallBackExtra(Me, "getglobalstate", Null, Array(prop))
+		Dim cb As BANanoObject = BANano.CallBackExtra(Me, "getstore", Null, Array(prop))
 		computed.Put(prop, cb.Result)
 	End If
 	
 End Sub
 
-'read the value of the prop we need
-private Sub getglobalstate(prop As String) As Object   'IgnoreDeadCode
-	prop = prop.tolowercase
-	Dim rslt As Object = GetDataGlobal(prop)
-	Return rslt
-End Sub
-
 'remove list last item
-Sub ListPopGlobal(lstname As String)
+Sub SetStorePop(lstname As String)
 	lstname = lstname.tolowercase
 	store.GetField(lstname).RunMethod("pop", Null)
 End Sub
 
-Sub ListFirstItemGlobal(lstName As String) As Object
+'get the first list item
+Sub GetStoreFirst(lstName As String) As Object
 	lstName = lstName.tolowercase
 	Dim lst As List = store.GetField(lstName).result
 	Dim obj As Object = lst.Get(0)
@@ -1311,16 +1299,23 @@ Sub ListFirstItemGlobal(lstName As String) As Object
 End Sub
 
 'add item at end of the list
-Sub ListPushGlobal(listName As String, item As Object)
+Sub SetStorePush(listName As String, item As Object)
 	listName = listName.ToLowerCase
 	store.GetField(listName).RunMethod("push", item)
 End Sub
 
 'add item at beginning of list
-Sub ListUnshiftGlobal(lstname As String, obj As Object)
+Sub SetStoreUnshift(lstname As String, obj As Object)
 	lstname = lstname.tolowercase
 	store.GetField(lstname).RunMethod("unshift", obj)
 End Sub
+
+'remobe item at beginning of list
+Sub SetStoreShift(lstname As String)
+	lstname = lstname.tolowercase
+	store.GetField(lstname).RunMethod("shift", Null)
+End Sub
+
 
 'pop an item from a saved state item
 Sub SetDataPop(lstname As String)
@@ -1348,14 +1343,50 @@ Sub SetDataUnshift(lstname As String, obj As Object)
 	data.GetField(lstname).RunMethod("unshift", obj)
 End Sub
 
-
-'get a value from the gloval store
-Sub GetStore(prop As String) As Object
-	Return GetDataGlobal(prop)
+'remove item at beginning of list
+Sub SetDataShift(lstname As String)
+	lstname = lstname.tolowercase
+	data.GetField(lstname).RunMethod("shift", Null)
 End Sub
 
+'splice an array, add item at a position
+Sub SetDataSplice(lstname As String, pos As Int, removeHowMany As Int, obj As Object)
+	lstname = lstname.tolowercase
+	data.GetField(lstname).RunMethod("splice", Array(pos, removeHowMany, obj))
+End Sub
+
+'splice an array, remove an item at a position
+Sub SetDataSpliceRemove(lstname As String, pos As Int, removeHowMany As Int)
+	lstname = lstname.tolowercase
+	data.GetField(lstname).RunMethod("splice", Array(pos, removeHowMany))
+End Sub
+
+'slice an array
+Sub GetDataSlice(lstname As String, startPos As Int) As List
+	lstname = lstname.tolowercase
+	Dim lst As List = data.GetField(lstname).RunMethod("slice", Array(startPos)).Result
+	Return lst
+End Sub
+
+'toString an array
+Sub GetDataToString(lstname As String) As String
+	lstname = lstname.tolowercase
+	Dim lst As String = data.GetField(lstname).RunMethod("toString", Null).Result
+	Return lst
+End Sub
+
+
+''update list item at position
+'Sub SetDataUpdate(lstname As String, pos As Int, obj As Object)
+'	lstname = lstname.tolowercase
+'	Dim lst As List = data.GetField(lstname).result
+'	lst.Set(pos, obj)
+'	data.GetField(lstname).RunMethod("shift", Null)
+'End Sub
+
+
 'get global state data
-private Sub GetDataGlobal(prop As String) As Object    'IgnoreDeadCode
+Sub GetStore(prop As String) As Object    'IgnoreDeadCode
 	prop = prop.tolowercase
 	Dim rslt As Object
 	rslt = state.GetDefault(prop, Null)
@@ -1613,9 +1644,9 @@ Sub Serve
 	Vuetify.Initialize2("Vuetify", VuetifyOptions)
 	Options.Put("vuetify", Vuetify)
 	'
-	
+	Dim cb As BANanoObject = BANano.CallBack(Me, "returndata", Null)
+	Options.Put("data", cb.Result)
 	Options.Put("components", components)
-	Options.put("data", data)
 	Options.Put("methods", methods)
 	Options.Put("filters", filters)
 	Options.Put("computed", computed)
@@ -1633,6 +1664,11 @@ Sub Serve
 	VueRouter = Vue.GetField(srouter)
 	Dim sdata As String = "$data"
 	data = Vue.GetField(sdata)
+End Sub
+
+'use for components
+private Sub returndata As BANanoObject			'ignoredeadcode
+	Return data
 End Sub
 
 'Use router To navigate
@@ -1755,7 +1791,7 @@ End Sub
 
 
 'add a rule
-Sub AddRule(ruleName As String, Module As Object,  MethodName As String)
+Sub AddRule(Module As Object, ruleName As String, MethodName As String)
 	If BANano.IsNull(ruleName) Or BANano.IsUndefined(ruleName) Then ruleName = ""
 	ruleName = ruleName.ToLowerCase
 	If ruleName = "" Then Return
@@ -1944,8 +1980,11 @@ Sub AddSheet(Module As Object, parentID As String, elID As String, Height As Str
 	Return elx
 End Sub
 
-Sub AddDrawer(Module As Object, parentID As String, elID As String, vmodel As String, Color As String, props As Map) As VueElement
-	Return AddVueElement(Module, parentID, elID, "v-navigation-drawer", vmodel, "", Color, props)
+Sub AddDrawer(Module As Object, parentID As String, elID As String, vmodel As String, bVisible As Boolean, Color As String, bRight As Boolean, props As Map) As VueElement
+	Dim elx As VueElement = AddVueElement(Module, parentID, elID, "v-navigation-drawer", vmodel, "", Color, props)
+	elx.Right = bRight
+	elx.SetData(vmodel, bVisible)
+	Return elx
 End Sub
 
 Sub AddOverlay(Module As Object, parentID As String, elID As String, vmodel As String, props As Map) As VueElement
@@ -1993,6 +2032,11 @@ Sub AddListItemSubTitle(Module As Object, parentID As String, elID As String, ca
 	Return AddVueElement(Module, parentID, elID, "v-list-item-subtitle", "", caption, "", Null)
 End Sub
 
+
+Sub AddListItemGroup(Module As Object, parentID As String, elID As String, color As String) As VueElement
+	Return AddVueElement(Module, parentID, elID, "v-list-item-group", "", "", color, Null)
+End Sub
+
 Sub AddListItemActionText(Module As Object, parentID As String, elID As String, caption As String) As VueElement
 	Return AddVueElement(Module, parentID, elID, "v-list-item-action-text", "", caption, "", Null)
 End Sub
@@ -2006,7 +2050,25 @@ Sub AddToolbar(Module As Object, parentID As String, elID As String, color As St
 End Sub
 
 Sub AddAppBar(Module As Object, parentID As String, elID As String, color As String, props As Map) As VueElement
-	Return AddVueElement(Module, parentID, elID, "v-app-bar", "", "", color, props)
+	Dim elx As VueElement = AddVueElement(Module, parentID, elID, "v-app-bar", "", "", color, props)
+	elx.Bind("app", True)
+	Return elx
+End Sub
+
+Sub AddProgressLinear(Module As Object, parentID As String, elID As String, vmodel As String, color As String, props As Map) As VueElement
+	Return AddVueElement(Module, parentID, elID, "v-progress-linear", vmodel, "", color, props)
+End Sub
+
+Sub AddProgressCircular(Module As Object, parentID As String, elID As String, vmodel As String, caption As String, color As String, props As Map) As VueElement
+	Return AddVueElement(Module, parentID, elID, "v-progress-circular", vmodel, caption, color, props)
+End Sub
+
+
+Sub AddAnchor(Module As Object, parentID As String, elID As String, href As String, caption As String, target As String) As VueElement
+	Dim elx As VueElement = AddVueElement(Module, parentID, elID, "a", "", caption, "", Null)
+	elx.href = href
+	elx.target = target
+	Return elx
 End Sub
 
 Sub AddCard(Module As Object, parentID As String, elID As String, color As String, props As Map) As VueElement
@@ -2481,10 +2543,34 @@ Sub AddSelect(Module As Object, parentID As String, elID As String, vmodel As St
 	Return vselect
 End Sub
 
-Sub AddAlert(Module As Object, parentID As String, elID As String, Caption As String, bLoremIpsum As Boolean, bDismissible As Boolean, aType As String,  props As Map) As VueElement
-	Dim elx As VueElement = AddVueElement(Module, parentID, elID, "v-alert", "", Caption, "", props)
+
+Sub AddXSlideTransition(Module As Object, parentID As String, elID As String, Mode As String) As VueElement
+	Dim elx As VueElement = AddVueElement(Module, parentID, elID, "v-slide-x-transition", "", "", "", Null)
+	elx.AddAttr("mode", Mode)
+	Return elx
+End Sub
+
+
+Sub AddRouterView(Module As Object, parentID As String, elID As String) As VueElement
+	Dim elx As VueElement = AddVueElement(Module, parentID, elID, "router-view", "", "", "", Null)
+	Return elx
+End Sub
+
+
+Sub AddLabel(Module As Object, parentID As String, elID As String, Size As String, Caption As String, bLoremIpsum As Boolean, TextColor As String, TextColorIntensity As String, props As Map) As VueElement
+	Dim elx As VueElement = AddVueElement(Module, parentID, elID, Size, "", Caption, "", props)
+	elx.LoremIpsum = bLoremIpsum
+	elx.TextColor = TextColor
+	elx.TextColorIntensity = TextColorIntensity
+	Return elx
+End Sub
+
+
+Sub AddAlert(Module As Object, parentID As String, elID As String, vmodel As String, bVisible As Boolean, Caption As String, bLoremIpsum As Boolean, bDismissible As Boolean, aType As String,  props As Map) As VueElement
+	Dim elx As VueElement = AddVueElement(Module, parentID, elID, "v-alert", vmodel, Caption, "", props)
 	elx.LoremIpsum = bLoremIpsum
 	elx.Bind("dismissible", bDismissible)
+	elx.SetData(vmodel, bVisible)
 	elx.AlertType = aType
 	Return elx
 End Sub
@@ -2831,10 +2917,9 @@ Sub AddFileInput(Module As Object, parentID As String, elID As String, vmodel As
 	vfileinput.Label = slabel
 	vfileinput.Placeholder = splaceholder
 	vfileinput.Hint = sHint
-	vfileinput.VModel = vmodel
-	vfileinput.SetTypeFile
-	vfileinput.Ref = vmodel
-	vfileinput.AddAttrOnConditionTrue("multiple", bMultiple, True)
+	vfileinput.Ref = elID
+	If vmodel <> "" Then vfileinput.VModel = vmodel
+	vfileinput.AddAttrOnConditionTrue(":multiple", bMultiple, True)
 	vfileinput.SetOnEvent(Module, "change", "")
 	vfileinput.SetOnEvent(Module, "click:append", "")
 	vfileinput.SetOnEvent(Module, "click:prepend", "")
@@ -2845,6 +2930,13 @@ Sub AddFileInput(Module As Object, parentID As String, elID As String, vmodel As
 			Dim v As Object = props.Get(k)
 			vfileinput.AddAttr(k, v)
 		Next
+	End If
+	If vmodel <> "" Then
+		If bMultiple Then
+			vfileinput.SetData(vmodel, NewList)
+		Else
+			vfileinput.SetData(vmodel, Null)	
+		End If
 	End If
 	Return vfileinput
 End Sub
@@ -3317,4 +3409,17 @@ Sub AddFab(Module As Object, parentID As String, elID As String, eIcon As String
 	
 	Dim btn As VueElement = AddButtonWithIcon(Module, parentID, elID, eIcon, eColor, np, iconprops)
 	Return btn
+End Sub
+
+'get a list of selected files
+Sub GetSelectedFiles(e As BANanoEvent) As List
+	Dim files As List = e.OtherField("target").GetField("files").Result
+	Return files
+End Sub
+
+'get a selected file from file input
+Sub GetSelectedFile(e As BANanoEvent) As Map
+	Dim files As List = e.OtherField("target").GetField("files").Result
+	Dim obj As Map = files.Get(0)
+	Return obj
 End Sub

@@ -26,8 +26,23 @@ Sub Initialize
 	'inject a list
 	Dim mList As VueElement = vuetify.AddList(Me, vlists.MatrixID(1, 1), "list1", False, False, False, Null)
 	lists.BindVueElement(mList)
-	
+	'inject the tamplate
 	BVAD3.NewListItem(lists, "list1", "items", "iconleft", 0,  Null)
+	
+	'records
+	Dim recs As List = vuetify.NewList
+	Dim lvi1 As ListViewItem
+	lvi1.Initialize 
+	lvi1.ID = "1"
+	lvi1.Title = "List View Item 1"
+	lvi1.SubTitle = "Sub Title 1"
+	lvi1.SubTitle1 = "Sub Title 1.1"
+	mList.AddListViewItem(lvi1)
+	recs = mList.Records
+	Log(recs)
+	
+	
+	
 	'
 	'icon title
 	Dim list2 As VueElement = vuetify.AddList(Me, vlists.MatrixID(1, 2), "list2", False, False, False, CreateMap("avatariconclass":"grey lighten-1"))

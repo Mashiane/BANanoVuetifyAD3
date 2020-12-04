@@ -682,7 +682,7 @@ Sub RefreshKey(keyName As String) As VueComponent
 End Sub
 
 'add a rule
-Sub AddRule(ruleName As String, Module As Object,  MethodName As String)
+Sub AddRule(Module As Object, ruleName As String, MethodName As String)
 	If BANano.IsNull(ruleName) Or BANano.IsUndefined(ruleName) Then ruleName = ""
 	ruleName = ruleName.ToLowerCase
 	If ruleName = "" Then Return

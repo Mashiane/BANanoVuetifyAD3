@@ -302,6 +302,12 @@ Sub GetFileListFromTarget(e As BANanoEvent) As List
 	Return files
 End Sub
 
+Sub GetFileFromTarget(e As BANanoEvent) As Map
+	Dim files As List = e.OtherField("target").GetField("files").Result
+	Dim obj As Map = files.Get(0)
+	Return obj
+End Sub
+
 
 Sub BeautifyName(idName As String) As String
 	idName = idName.trim
@@ -653,6 +659,11 @@ End Sub
 
 
 Sub GetFileDetails(fileObj As Map) As FileObject
+	Dim ff As FileObject
+	ff.Initialize
+	
+	If BANano.IsNull(fileObj) Or BANano.IsUndefined(fileObj) Then Return ff
+	
 	Dim sname As String = fileObj.Get("name")
 	Dim slastModifiedDate As BANanoObject = fileObj.Get("lastModifiedDate")
 	Dim ssize As String = fileObj.Get("size")
@@ -672,8 +683,6 @@ Sub GetFileDetails(fileObj As Map) As FileObject
 	Dim fd As String = $"${yyyy}-${mm}-${dd} ${hh}:${minutes}"$
 	'
 	
-	Dim ff As FileObject
-	ff.Initialize
 	ff.FileName = sname
 	ff.FileDate = fd
 	ff.FileSize = ssize

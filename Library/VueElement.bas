@@ -1410,6 +1410,19 @@ public Sub setAlt(varAlt As String)
 	stAlt = varAlt
 End Sub
 
+public Sub setHref(varAlt As String)
+	AddAttr("href", varAlt)
+End Sub
+
+public Sub setTarget(varAlt As String)
+	AddAttr("target", varAlt)
+End Sub
+
+
+public Sub setNoGutters(b As Boolean)
+	AddAttr(":no-gutters", b)
+End Sub
+
 public Sub getAlt() As String
 	Return stAlt
 End Sub
@@ -1684,6 +1697,11 @@ End Sub
 public Sub setBorderWidth(varBorderWidth As String)
 	AddStyle("border-width", varBorderWidth)
 	stBorderWidth = varBorderWidth
+End Sub
+
+
+public Sub setApp(b As Boolean)
+	Bind("app", b)
 End Sub
 
 public Sub getBorderWidth() As String
@@ -1973,9 +1991,34 @@ public Sub setLight(b As Boolean)
 	AddAttr(":light", b)
 End Sub
 
+public Sub setHideInput(b As Boolean)
+	AddAttr(":hide-input", b)
+End Sub
+
+
+public Sub setShowSize(b As Boolean)
+	AddAttr(":show-size", b)
+End Sub
+
+
+public Sub setStriped(b As Boolean)
+	AddAttr(":striped", b)
+End Sub
+
+public Sub setAccept(s As String)
+	AddAttr("accept", s)
+End Sub
+
+
 public Sub setTabs(b As Boolean)
 	AddAttr(":tabs", b)
 End Sub
+
+
+public Sub setIndeterminate(b As Boolean)
+	AddAttr(":indeterminate", b)
+End Sub
+
 
 Sub setFalseValue(fv As Object)
 	AddAttr("false-value", fv)
@@ -2112,78 +2155,36 @@ Sub SetOnEvent(eventHandler As Object, event As String, args As String)
 	'
 	If SubExists(eventHandler, methodName) = False Then Return
 	If BANano.IsUndefined(args) Or BANano.IsNull(args) Then args = ""
-	Dim sCode As String = $"${methodName}(${args})"$
-	AddAttr($"v-on:${event}"$, sCode)
+	Dim scode As String
+	If args = "" Then
+		scode = methodName
+	Else	
+		scode = $"${methodName}(${args})"$
+	End If
+	AddAttr($"v-on:${event}"$, scode)
 	'arguments for the event
-	Dim e As Object 'ignore
+	Dim e As BANanoEvent 'ignore
 	Dim cb As BANanoObject = BANano.CallBack(eventHandler, methodName, Array(e))
 	methods.Put(methodName, cb)
 End Sub
 
-Sub SetOnOwnEvent(eventHandler As Object, methodName As String,  event As String, args As String)
+Sub SetOnEventOwn(eventHandler As Object, methodName As String, event As String, args As String)
 	event = event.ToLowerCase
 	methodName = methodName.tolowercase
 	'
-	Dim attrName As String = event
-	attrName = attrName.tolowercase
-	attrName = attrName.Replace(":","")
-	attrName = attrName.Replace(".","")
-	attrName = attrName.Replace("-","")
-	'
 	If SubExists(eventHandler, methodName) = False Then Return
 	If BANano.IsUndefined(args) Or BANano.IsNull(args) Then args = ""
-	Dim sCode As String = $"${methodName}(${args})"$
-	AddAttr($"v-on:${event}"$, sCode)
+	Dim scode As String
+	If args = "" Then
+		scode = methodName
+	Else
+		scode = $"${methodName}(${args})"$
+	End If
+	AddAttr($"v-on:${event}"$, scode)
 	'arguments for the event
-	Dim e As Object 'ignore
+	Dim e As BANanoEvent 'ignore
 	Dim cb As BANanoObject = BANano.CallBack(eventHandler, methodName, Array(e))
 	methods.Put(methodName, cb)
-End Sub
-
-
-'on event
-Sub On(eventName As String, args As String)    'ignoredeadcode
-	eventName = eventName.tolowercase
-	'
-	Dim seventname As String = eventName
-	seventname = seventname.Replace(".", "")
-	seventname = seventname.Replace(":", "")
-	seventname = seventname.Replace("-","")
-	'
-	Dim sName As String = $"${mEventName}_${seventname}"$
-	If SubExists(mCallBack, sName) = False Then Return
-	'
-	If BANano.IsUndefined(args) Or BANano.IsNull(args) Then args = ""
-	Dim sCode As String = $"${sName}(${args})"$
-	AddAttr($"v-on:${eventName}"$, sCode)
-	'arguments for the event
-	Dim e As BANanoEvent 'ignore
-	Dim cb As BANanoObject = BANano.CallBack(mCallBack, sName, Array(e))
-	methods.Put(sName, cb)
-End Sub
-
-
-'define method
-Sub OnMulti(EventHandler As String, eventName As String, args As String)    'ignoredeadcode
-	eventName = eventName.tolowercase
-	EventHandler = EventHandler.tolowercase
-	'
-	Dim seventname As String = eventName
-	seventname = seventname.Replace(".", "")
-	seventname = seventname.Replace(":", "")
-	seventname = seventname.Replace("-","")
-	
-	'
-	Dim sName As String = $"${EventHandler}_${seventname}"$
-	If SubExists(mCallBack, sName) = False Then Return
-	'
-	If BANano.IsUndefined(args) Or BANano.IsNull(args) Then args = ""
-	Dim sCode As String = $"${sName}(${args})"$
-	AddAttr($"v-on:${eventName}"$, sCode)
-	'arguments for the event
-	Dim e As BANanoEvent 'ignore
-	Dim cb As BANanoObject = BANano.CallBack(mCallBack, sName, Array(e))
-	methods.Put(sName, cb)
 End Sub
 
 
