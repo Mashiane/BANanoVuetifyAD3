@@ -1861,6 +1861,15 @@ public Sub setOffsetY(b As Boolean)
 End Sub
 
 
+public Sub setClipped(b As Boolean)
+	AddAttr(":clipped", b)
+End Sub
+
+
+public Sub setClippedLeft(b As Boolean)
+	AddAttr(":clipped-left", b)
+End Sub
+
 public Sub setOffsetX(b As Boolean)
 	AddAttr(":offset-y", b)
 End Sub

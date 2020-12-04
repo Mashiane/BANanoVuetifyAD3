@@ -29,7 +29,7 @@ End Sub
 
 
 'double quote each item of the mv
-Sub MVSingleQuoteItems(delim As String, mvstring As String) As String
+Sub MVSingleQuoteItems(delim As String, mvstring As String) As String     
 	Dim sbOut As StringBuilder
 	sbOut.Initialize
 	Dim lItems As List = StrParse(delim, mvstring)
@@ -355,8 +355,7 @@ Sub StrParse(delim As String, inputString As String) As List
 	Dim nl As List
 	nl.Initialize
 	inputString = CStr(inputString)
-	If inputString = "null" Then inputString = ""
-	If inputString = "undefined" Then inputString = ""
+	If BANano.IsNull(inputString) Or BANano.IsUndefined(inputString) Then inputString = ""
 	If inputString = "" Then Return nl
 	Dim values() As String = BANano.Split(delim,inputString)
 	nl.AddAll(values)
