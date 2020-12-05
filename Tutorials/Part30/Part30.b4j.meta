@@ -100,6 +100,6 @@ ModuleClosedNodes6=
 ModuleClosedNodes7=
 ModuleClosedNodes8=
 ModuleClosedNodes9=
-NavigationStack=pgIndex,Process_Globals,20,0,pgIndex,drwlist_click,127,0,ViewManualGrid,Process_Globals,1,1,pgIndex,Init,120,3,pgIndex,AddRouters,162,1,ViewManualGrid,btn1_click,80,6,ViewManualGrid,chkAgree_click,102,6,ViewManualGrid,Initialize,83,6,Main,AppStart,23,1,Main,Process_Globals,10,0
+NavigationStack=pgIndex,Process_Globals,20,0,pgIndex,drwlist_click,127,0,ViewManualGrid,Process_Globals,1,1,pgIndex,Init,120,3,pgIndex,AddRouters,162,1,ViewManualGrid,btn1_click,80,6,ViewManualGrid,chkAgree_click,102,6,ViewManualGrid,Initialize,83,6,Main,AppStart,23,1,Main,Process_Globals,7,0
 SelectedBuild=0
 VisibleModules=

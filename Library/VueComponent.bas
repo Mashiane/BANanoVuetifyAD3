@@ -44,6 +44,11 @@ Sub Class_Globals
 	Private dialogpersistent As String 
 	Private dialogokcolor As String
 	Private dialogcancelcolor As String
+	Private dialogpromptlabel As String
+	Private dialogpromptvalue As String
+	Private dialogprompthint As String
+	Private dialogpromptplaceholder As String
+	Private dialogpromptshow As String
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String) As VueComponent
@@ -79,6 +84,12 @@ Public Sub Initialize (CallBack As Object, Name As String) As VueComponent
 	dialogcancelshow = $"${mName}cancelshow"$
 	dialogwidth = $"${mName}width"$
 	dialogpersistent = $"${mName}persistent"$
+	dialogpromptlabel = $"${mName}promptlabel"$
+	dialogpromptvalue = $"${mName}promptvalue"$
+	dialogprompthint = $"${mName}prompthint"$
+	dialogpromptplaceholder = $"${mName}promptplaceholder"$
+	dialogpromptshow = $"${mName}promptshow"$
+	
 	getPlaceHolderNode.empty
 	getAppendHolderNode.empty
 	Return Me
@@ -90,10 +101,43 @@ Sub This As BANanoObject
 End Sub
 
 
+Sub NewMap As Map
+	Dim nm As Map
+	nm.Initialize
+	Return nm
+End Sub
+
+
 'returns the placehodler
 Sub Here As String
 	Return "placeholder"
 End Sub
+
+'return the dialog card title
+Sub DialogCardTitle(dlgID As String) As VueElement
+	Dim dialogTitleID As String = $"${dlgID}titleid"$
+	dialogTitleID = dialogTitleID.ToLowerCase
+	'
+	Dim elx As VueElement
+	elx.Initialize(mCallBack, dialogTitleID, dialogTitleID)
+	Return elx
+End Sub
+
+'return the dialog card container
+Sub DialogContainer(dlgID As String) As VueElement
+	Dim dialogContainerID As String = $"${dlgID}container"$
+	dialogContainerID = dialogContainerID.ToLowerCase
+	'
+	Dim elx As VueElement
+	elx.Initialize(mCallBack, dialogContainerID, dialogContainerID)
+	Return elx
+End Sub
+
+Sub DialogUpdateTitle(dlgID As String, title As String)
+	Dim dialogTitle As String = $"${dlgID}title"$
+	SetData(dialogTitle, title)
+End Sub
+
 
 'show confirm dialog
 Sub ShowConfirm(process As String, Title As String, Message As String, ConfirmText As String, CancelText As String)
@@ -106,6 +150,7 @@ Sub ShowConfirm(process As String, Title As String, Message As String, ConfirmTe
 	SetData(dialogcanceltitle, CancelText)
 	SetData(dialogcancelshow, True)
 	SetData(dialogShow, True)
+	SetData(dialogpromptshow, False)
 End Sub
 
 Sub ShowAlert(process As String, title As String, Message As String, OkTitle As String)
@@ -117,6 +162,7 @@ Sub ShowAlert(process As String, title As String, Message As String, OkTitle As 
 	SetData(dialogoktitle, OkTitle)
 	SetData(dialogokshow, True)
 	SetData(dialogcancelshow, False)
+	SetData(dialogpromptshow, False)
 End Sub
 
 'get the placeholder node
@@ -138,20 +184,33 @@ Sub getTemplateNode As BANanoElement
 	Return el
 End Sub
 
-'initialize the dialog
-Sub UsesDialog
-	SetData(dialogShow, False)
-	SetData(dialogwidth, "400")
-	SetData(dialogTitle, "")
+'show confirm dialog
+Sub ShowPrompt(process As String, Title As String, Label As String, Placeholder As String, Hint As String, DefaultValue As String, OkText As String, CancelText As String)
+	process = process.tolowercase
+	SetData("confirmkey", process)
+	SetData(dialogTitle, Title)
 	SetData(dialogMessage, "")
-	SetData(dialogoktitle, "Ok")
-	SetData(dialogcanceltitle, "Cancel")
-	SetData(dialogcancelcolor, "error")
-	SetData(dialogokcolor, "primary")
+	SetData(dialogoktitle, OkText)
 	SetData(dialogokshow, True)
+	SetData(dialogcanceltitle, CancelText)
 	SetData(dialogcancelshow, True)
-	SetData(dialogpersistent, True)
+	SetData(dialogShow, True)
+	SetData(dialogpromptlabel, Label)
+	SetData(dialogpromptplaceholder, Placeholder)
+	SetData(dialogprompthint, Hint)
+	SetData(dialogpromptvalue, DefaultValue)
+	SetData(dialogpromptshow, True)
 End Sub
+
+
+
+'get prompt value
+Sub GetPromptValue As String
+	Dim sapppromptvalue As String = GetData(dialogpromptvalue)
+	sapppromptvalue = sapppromptvalue.trim
+	Return sapppromptvalue
+End Sub
+
 
 'query string for router path
 Sub SetQueryString(k As String, v As String)
@@ -700,6 +759,20 @@ Sub AddRule(Module As Object, ruleName As String, MethodName As String)
 		rules.Add(cb.Result)
 	End If
 	data.put(ruleName, rules)
+End Sub
+
+'open an input dialog
+Sub OpenDialog(dldID As String)
+	Dim dialogShow As String = $"${dldID}show"$
+	dialogShow = dialogShow.tolowercase
+	SetData(dialogShow, True)
+End Sub
+
+'close own dialog
+Sub CloseDialog(dldID As String)
+	Dim dialogShow As String = $"${dldID}show"$
+	dialogShow = dialogShow.tolowercase
+	SetData(dialogShow, False)
 End Sub
 
 

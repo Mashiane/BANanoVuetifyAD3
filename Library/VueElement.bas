@@ -324,6 +324,7 @@ Sub Class_Globals
 	Public AppTemplateName As String = "#apptemplate"
 	Public AppendHolderName As String = "#appendholder"
 	Public PlaceHolderName As String = "#placeholder"
+	Public Records As List
 End Sub
 
 'initialize the custom view
@@ -346,6 +347,7 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 		Dim fKey As String = $"#${mName}"$
 		If BANano.Exists(fKey) Then mElement = BANano.GetElement(fKey)
 	End If
+	Records.Initialize 
 End Sub
 
 Sub setItalic(b As Boolean)
@@ -2496,9 +2498,32 @@ End Sub
 
 'set outlined
 public Sub setOutlined(varOutlined As Boolean)
-	AddAttrOnCondition(":outlined", varOutlined, True)
+	Bind("outlined", varOutlined)
 	boOutlined = varOutlined
 End Sub
+
+'set persistent
+public Sub setPersistent(b As Boolean)
+	Bind("persistent", b)
+End Sub
+
+'set hide overlay
+public Sub setHideOverlay(b As Boolean)
+	Bind("hide-overlay", b)
+End Sub
+
+public Sub setOverlayColor(s As String)
+	SetAttr("overlay-color", s)
+End Sub
+
+public Sub setOverlayOpacity(d As Double)
+	SetAttr("overlay-opacity", d)
+End Sub
+
+public Sub setReturnValue(rv As Object)
+	SetAttr("return-value", rv)
+End Sub
+
 
 'get outlined
 public Sub getOutlined() As Boolean
@@ -2858,6 +2883,66 @@ private Sub BuildColumnClass(col As VueGridColumn) As String
 		sbout.Append($"class="${sout}""$)
 	End If
 	Return sbout.tostring
+End Sub
+
+Sub AddRows1 As VueElement
+	AddRows(1)
+	Return Me
+End Sub
+
+Sub AddRows2 As VueElement
+	AddRows(2)
+	Return Me
+End Sub
+
+Sub AddRows3 As VueElement
+	AddRows(3)
+	Return Me
+End Sub
+
+Sub AddRows4 As VueElement
+	AddRows(4)
+	Return Me
+End Sub
+
+Sub AddRows5 As VueElement
+	AddRows(5)
+	Return Me
+End Sub
+
+Sub AddRows6 As VueElement
+	AddRows(6)
+	Return Me
+End Sub
+
+Sub AddRows7 As VueElement
+	AddRows(7)
+	Return Me
+End Sub
+
+Sub AddRows8 As VueElement
+	AddRows(8)
+	Return Me
+End Sub
+
+Sub AddRows9 As VueElement
+	AddRows(9)
+	Return Me
+End Sub
+
+Sub AddRows10 As VueElement
+	AddRows(10)
+	Return Me
+End Sub
+
+Sub AddRows11 As VueElement
+	AddRows(11)
+	Return Me
+End Sub
+
+Sub AddRows12 As VueElement
+	AddRows(12)
+	Return Me
 End Sub
 
 
@@ -3552,4 +3637,136 @@ Sub SetOnOwnEventAttr(eventHandler As Object, methodName As String, event As Str
 	If BANano.IsUndefined(args) Or BANano.IsNull(args) Then args = ""
 	Dim sCode As String = $"${methodName}(${args})"$
 	AddAttr($"v-on:${event}"$, sCode)
+End Sub
+
+'clear the items for this
+Sub ClearItems()
+	Records.Initialize
+End Sub
+
+'add a header to the lust
+Sub AddItemHeader(txt As String)
+	Dim rec As Map = CreateMap()
+	rec.Put("header", txt)
+	Records.Add(rec)
+End Sub
+
+'add a divider
+Sub AddItemDivider(binset As Boolean)
+	Dim rec As Map = CreateMap()
+	rec.Put("divider", True)
+	If binset Then rec.Put("inset", binset)
+	Records.Add(rec)
+End Sub
+
+'add avatar
+Sub AddItemAvatar(id As String, avatar As String, title As String, subtitle As String, _
+	subtitle1 As String, righttext As String, righticon As String, righticoncolor As String, url As String)
+	Dim rec As Map = CreateMap()
+	rec.Put("id", id)
+	Dim rec As Map = CreateMap()
+	rec.Put("id", id)
+	If url <> "" Then rec.Put("to", url)
+	If avatar <> "" Then rec.Put("avatar", avatar)
+	If title <> "" Then rec.Put("title", title)
+	If subtitle <> "" Then rec.Put("subtitle", subtitle)
+	If subtitle1 <> "" Then rec.Put("subtitle1", subtitle1)
+	'
+	If righticon <> "" Then rec.Put("righticon", righticon)
+	If righttext <> "" Then rec.Put("righttext", righttext)
+	If righticoncolor <> "" Then rec.Put("righticoncolor", righticoncolor)
+	'
+	Records.Add(rec)
+End Sub
+
+'add avatar
+Sub AddItemAction(id As String, lefticon As String, lefticoncolor As String, title As String, subtitle As String, _
+	subtitle1 As String, righttext As String, righticon As String, righticoncolor As String, url As String)
+	Dim rec As Map = CreateMap()
+	rec.Put("id", id)
+	If url <> "" Then rec.Put("to", url)
+	If lefticon <> "" Then rec.Put("lefticon", lefticon)
+	If lefticoncolor <> "" Then rec.Put("lefticoncolor", lefticoncolor)
+	If title <> "" Then rec.Put("title", title)
+	If subtitle <> "" Then rec.Put("subtitle", subtitle)
+	If subtitle1 <> "" Then rec.Put("subtitle1", subtitle1)
+	'
+	If righticon <> "" Then rec.Put("righticon", righticon)
+	If righttext <> "" Then rec.Put("righttext", righttext)
+	If righticoncolor <> "" Then rec.Put("righticoncolor", righticoncolor)
+	'
+	Records.Add(rec)
+End Sub
+
+'add an icon
+Sub AddItemIcon(id As String, icon As String, iconcolor As String, title As String, subtitle As String, _
+	subtitle1 As String, righttext As String, righticon As String, righticoncolor As String, url As String)
+	'
+	Dim rec As Map = CreateMap()
+	rec.Put("id", id)
+	If url <> "" Then rec.Put("to", url)
+	If icon <> "" Then rec.Put("icon", icon)
+	If iconcolor <> "" Then rec.put("iconcolor", iconcolor)
+	'
+	If title <> "" Then rec.Put("title", title)
+	If subtitle <> "" Then rec.Put("subtitle", subtitle)
+	If subtitle1 <> "" Then rec.Put("subtitle1", subtitle1)
+	'
+	If righticon <> "" Then rec.Put("righticon", righticon)
+	If righttext <> "" Then rec.Put("righttext", righttext)
+	If righticoncolor <> "" Then rec.Put("righticoncolor", righticoncolor)
+	'
+	Records.Add(rec)
+End Sub
+
+
+'add an avatar icon
+Sub AddItemAvatarIcon(id As String, avataricon As String, avatariconcolor As String, title As String, subtitle As String, _
+	subtitle1 As String, righttext As String, righticon As String, righticoncolor As String, url As String)
+	'
+	Dim rec As Map = CreateMap()
+	rec.Put("id", id)
+	If url <> "" Then rec.Put("to", url)
+	If avataricon <> "" Then rec.Put("avataricon", avataricon)
+	If avatariconcolor <> "" Then rec.Put("avatariconcolor", avatariconcolor)
+	
+	If title <> "" Then rec.Put("title", title)
+	If subtitle <> "" Then rec.Put("subtitle", subtitle)
+	If subtitle1 <> "" Then rec.Put("subtitle1", subtitle1)
+	'
+	If righticon <> "" Then rec.Put("righticon", righticon)
+	If righttext <> "" Then rec.Put("righttext", righttext)
+	If righticoncolor <> "" Then rec.Put("righticoncolor", righticoncolor)
+	'
+	Records.Add(rec)
+End Sub
+
+
+'add an item to the list view
+Sub AddItem(id As String, lefticon As String, lefticoncolor As String, _
+	avatar As String, avataricon As String, avatariconcolor As String, icon As String, iconcolor As String, title As String, subtitle As String, _
+	subtitle1 As String, righttext As String, righticon As String, righticoncolor As String, url As String)
+	'
+	Dim rec As Map = CreateMap()
+	rec.Put("id", id)
+	If url <> "" Then rec.Put("to", url)
+	If lefticon <> "" Then rec.Put("lefticon", lefticon)
+	If lefticoncolor <> "" Then rec.Put("lefticoncolor", lefticoncolor)
+	'
+	If avatar <> "" Then rec.Put("avatar", avatar)
+	If avataricon <> "" Then rec.Put("avataricon", avataricon)
+	If avatariconcolor <> "" Then rec.Put("avatariconcolor", avatariconcolor)
+	
+	If icon <> "" Then rec.Put("icon", icon)
+	If iconcolor <> "" Then rec.put("iconcolor", iconcolor)
+	'
+	If title <> "" Then rec.Put("title", title)
+	If subtitle <> "" Then rec.Put("subtitle", subtitle)
+	If subtitle1 <> "" Then rec.Put("subtitle1", subtitle1)
+	'
+	If righticon <> "" Then rec.Put("righticon", righticon)
+	If righttext <> "" Then rec.Put("righttext", righttext)
+	If righticoncolor <> "" Then rec.Put("righticoncolor", righticoncolor)
+	'
+	Records.Add(rec)
 End Sub
