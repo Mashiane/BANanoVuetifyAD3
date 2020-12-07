@@ -325,6 +325,7 @@ Sub Class_Globals
 	Public AppendHolderName As String = "#appendholder"
 	Public PlaceHolderName As String = "#placeholder"
 	Public Records As List
+	Public Steps As Int
 End Sub
 
 'initialize the custom view
@@ -338,6 +339,7 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	sbText.Initialize
 	bindings.Initialize
 	methods.Initialize
+	Steps = 0
 	'
 	LastRow = 0
 	GridRows.Initialize
@@ -347,7 +349,202 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 		Dim fKey As String = $"#${mName}"$
 		If BANano.Exists(fKey) Then mElement = BANano.GetElement(fKey)
 	End If
-	Records.Initialize 
+	Records.Initialize
+End Sub
+
+Sub AddItemParentChild(parent As String, key As String, iconName As String, iconColor As String, title As String, url As String)
+	parent = parent.ToLowerCase
+	key = key.ToLowerCase
+	'
+	Dim nitem As Map = CreateMap()
+	nitem.Put("id", key)
+	nitem.Put("icon", iconName)
+	nitem.Put("iconcolor", iconColor)
+	nitem.Put("title", title)
+	nitem.Put("to", url)
+	nitem.Put("parentid", parent)
+	Records.Add(nitem)
+End Sub
+
+private Sub CleanID(v As String) As String
+	v = v.Replace("#","")
+	v = $"#${v}"$
+	v = v.tolowercase
+	Return v
+End Sub
+
+
+'add step to a horizontal stepper
+Sub AddStepHorizontal(stepID As String, stepLabel As String, stepComplete As String, stepEditable As String, bHasDivider As Boolean) As VueElement
+	Steps = Steps + 1
+	Dim parentID As String = mName
+	stepID = stepID.ToLowerCase
+	'
+	Dim stepperHeader As String = $"${parentID}headers"$
+	Dim stepperItems As String = $"${parentID}items"$
+	'
+	Dim childKey As String = $"${parentID}${stepID}"$
+	'
+	Dim childHeaderKey As String = $"${childKey}hdr"$
+	Dim childContentKey As String = $"${childKey}cnt"$
+	'the element we can add content to
+	'
+	stepperHeader = CleanID(stepperHeader)
+	stepperItems = CleanID(stepperItems)
+	
+	'add child to header
+	BANano.GetElement(stepperHeader).Append($"<v-stepper-step id="${childHeaderKey}"></v-stepper-step>"$)
+	'
+	Dim vstepperstep As VueElement
+	vstepperstep.Initialize(mCallBack, childHeaderKey, childHeaderKey)
+	vstepperstep.AddAttr("step", Steps)
+	If stepComplete <> "" Then vstepperstep.AddAttr("complete", stepComplete)
+	vstepperstep.Caption = stepLabel
+	If stepEditable <> "" Then vstepperstep.AddAttr("editable", stepEditable)
+	'
+	If bHasDivider Then
+		BANano.GetElement(stepperHeader).Append($"<v-divider></v-divider>"$)
+	End If
+	
+	
+	BANano.GetElement(stepperItems).Append($"<v-stepper-content id="${childContentKey}"></v-stepper-content>"$)
+	'
+	Dim vsteppercontent As VueElement
+	vsteppercontent.Initialize(mCallBack, childContentKey, childContentKey)
+	vsteppercontent.AddAttr("step", Steps)
+	'
+	vsteppercontent.BindVueElement(vstepperstep)
+	Return vsteppercontent
+End Sub
+
+'add step to a vertical stepper
+Sub AddStep(stepID As String, stepLabel As String, stepComplete As String, stepEditable As String) As VueElement
+	Steps = Steps + 1
+	Dim parentID As String = mName
+	stepID = stepID.ToLowerCase
+	
+	Dim childKey As String = $"${parentID}${stepID}"$
+	'
+	Dim childHeaderKey As String = $"${childKey}hdr"$
+	Dim childContentKey As String = $"${childKey}cnt"$
+	'the element we can add content to
+	parentID = CleanID(parentID)
+	
+	'add child to header
+	BANano.GetElement(parentID).Append($"<v-stepper-step id="${childHeaderKey}"></v-stepper-step>"$)
+	'
+	Dim vstepperstep As VueElement
+	vstepperstep.Initialize(mCallBack, childHeaderKey, childHeaderKey)
+	vstepperstep.AddAttr("step", Steps)
+	If stepComplete <> "" Then vstepperstep.AddAttr("complete", stepComplete)
+	vstepperstep.Caption = stepLabel
+	If stepEditable <> "" Then vstepperstep.AddAttr("editable", stepEditable)
+		
+	BANano.GetElement(parentID).Append($"<v-stepper-content id="${childContentKey}"></v-stepper-content>"$)
+	'
+	Dim vsteppercontent As VueElement
+	vsteppercontent.Initialize(mCallBack, childContentKey, childContentKey)
+	vsteppercontent.AddAttr("step", Steps)
+	'
+	vsteppercontent.BindVueElement(vstepperstep)
+	Return vsteppercontent
+End Sub
+
+Sub AddTab(tabID As String, Caption As String, Icon As String, iconLeft As Boolean) As VueElement
+	tabID = tabID.ToLowerCase
+	Dim tabkey As String = $"${mName}${tabID}"$
+	Dim tabContent As String = $"${tabkey}content"$
+	Dim parentID As String = CleanID(mName)
+	Dim tabcard As String = $"${tabkey}card"$
+	Dim cardtext As String = $"${tabkey}cardtext"$
+	Dim tabicon As String = $"${tabkey}icon"$
+	'
+	Dim tabTemplate As StringBuilder
+	tabTemplate.Initialize 
+	tabTemplate.Append($"<v-tab id="${tabkey}" href="#tab${tabkey}">"$)
+	If Icon <> "" Then
+		If iconLeft Then
+			tabTemplate.Append($"<v-icon id="${tabicon}" left>${Icon}</v-icon>"$)
+			tabTemplate.Append(Caption)
+		Else
+			tabTemplate.Append(Caption)
+			tabTemplate.Append($"<v-icon id="${tabicon}">${Icon}</v-icon>"$)
+		End If
+	Else
+		tabTemplate.Append(Caption)
+	End If
+	tabTemplate.Append("</v-tab>")
+	'
+	'add the tab
+	BANano.GetElement(parentID).Append(tabTemplate.tostring)
+	'
+	Dim tabText As StringBuilder
+	tabText.Initialize 
+	tabText.Append($"<v-tab-item value="tab${tabkey}" id="${tabContent}" key="${tabkey}">"$)
+	tabText.Append($"<v-card id="${tabcard}"><v-card-text id="${cardtext}"></v-card-text></v-card>"$)
+	tabText.Append($"</v-tab-item>"$)
+	'add the tab item
+	BANano.GetElement(parentID).Append(tabText.tostring)
+	'
+	Dim vtab As VueElement
+	vtab.Initialize(mCallBack, tabkey, tabkey)
+	'
+	Dim vicon As VueElement
+	vicon.Initialize(mCallBack, tabicon, tabicon)
+	'
+	Dim vtabitem As VueElement
+	vtabitem.Initialize(mCallBack, tabContent, tabContent)
+	'
+	Dim itemcard As VueElement
+	itemcard.Initialize(mCallBack, tabcard, tabcard)
+	'
+	Dim itemtext As VueElement
+	itemtext.Initialize(mCallBack, cardtext, cardtext)
+	
+	'
+	itemtext.BindVueElement(vicon)
+	itemtext.BindVueElement(vtab)
+	itemtext.BindVueElement(itemcard)
+	itemtext.BindVueElement(vtabitem)
+	Return itemtext
+End Sub
+
+
+
+Sub setGrow(b As Boolean)
+	AddAttr(":grow", b)
+End Sub
+
+Sub setHideSlider(b As Boolean)
+	AddAttr(":hide-slider", b)
+End Sub
+
+Sub setCentered(b As Boolean)
+	AddAttr(":centered", b)
+End Sub
+
+Sub setAlignWithTitle(b As Boolean)
+	AddAttr(":align-with-title", b)
+End Sub
+
+Sub setIconsAndText(b As Boolean)
+	AddAttr(":icons-and-text",b)
+End Sub
+
+Sub setShowArrows(b As Boolean)
+	AddAttr(":show-arrows", b)
+End Sub
+
+Sub setSliderColor(s As String)
+	AddAttr("slider-color", s)
+End Sub
+
+Sub setSliderSize(s As String)
+	AddAttr("slider-size", s)
+End Sub
+
+Sub setFixedTabs(b As Boolean)
+	AddAttr(":fixed-tabs", b)
 End Sub
 
 Sub setItalic(b As Boolean)
@@ -1255,7 +1452,7 @@ Public Sub AddAttr(varProp As String, varValue As String)
 		'we are adding a string
 		If varValue.StartsWith(":") Then
 			Dim rname As String = BANanoShared.MidString2(varValue, 2)
-			If rname.Contains(".") = False Then
+			If rname.Contains(".") = False Or rname.Contains("(") = False Then
 				bindings.Put(rname, Null)
 			End If
 			If mElement <> Null Then 
@@ -1266,7 +1463,7 @@ Public Sub AddAttr(varProp As String, varValue As String)
 		Else
 			'we have a binding on the property
 			If varProp.StartsWith(":") Then
-				If varValue.Contains(".") = False Then
+				If varValue.Contains(".") = False Or varValue.Contains("(") = False Then
 					bindings.Put(varValue, Null)
 				End If
 			End If
@@ -1403,6 +1600,19 @@ public Sub setSrc(varSrc As String)
 	stSrc = varSrc
 End Sub
 
+public Sub setAltLabels(b As Boolean)
+	AddAttr(":alt-labels", b)
+End Sub
+
+public Sub setNonLinear(b As Boolean)
+	AddAttr(":non-linear", b)
+End Sub
+
+public Sub setVertical(b As Boolean)
+	AddAttr(":vertical", b)
+End Sub
+
+
 public Sub getSrc() As String
 	Return stSrc
 End Sub
@@ -1510,6 +1720,15 @@ public Sub setSlot(varSlot As String)
 	AddAttr("slot", varSlot)
 	stSlot = varSlot
 End Sub
+
+public Sub setComplete(c As String)
+	AddAttr("complete", c)
+End Sub
+
+Sub setEditable(b As Boolean)
+	AddAttr(":editable", b)
+End Sub
+
 
 public Sub getSlot() As String
 	Return stSlot
@@ -1632,6 +1851,11 @@ End Sub
 public Sub getVText() As String
 	Return stVText
 End Sub
+
+public Sub setBackgroundColorAttr(varBackgroundColor As String)
+	AddAttr("background-color", varBackgroundColor)
+End Sub
+
 
 public Sub setBackgroundColor(varBackgroundColor As String)
 	AddStyle("background-color", varBackgroundColor)
@@ -2309,6 +2533,16 @@ Sub setMarginAXYTBLR(varMarginAXYTBLR As String)
 			AddClass(classKey)
 		End If
 	Next
+End Sub
+
+'assign props
+Sub AssignProps(props As Map)
+	If BANano.IsNull(props) = False Then
+		For Each k As String In props.Keys
+			Dim v As String = props.Get(k)
+			AddAttr(k, v)
+		Next
+	End If	
 End Sub
 
 Sub AddPadding(pa As String, px As String, py As String, pt As String, pb As String, pl As String, pr As String)
@@ -3572,6 +3806,23 @@ Sub ListToDataSource(keyName As String, valueName As String, lst As List) As Lis
 	Return nl
 End Sub
 
+'convert map values to data source
+Sub MapToDataSource(m As Map) As List
+	Dim nl As List
+	nl.Initialize
+	For Each item As String In m.keys
+		Dim v As Object = m.Get(item)
+		nl.Add(v)
+	Next
+	Return nl
+End Sub
+
+'unflatten the tree
+Sub ListViewToTree As List
+	Dim recs As List = BANanoShared.Unflatten(Records, "items")
+	Return recs
+End Sub
+
 
 '
 ''add html of component to app and this binds events and states
@@ -3661,7 +3912,7 @@ End Sub
 
 'add avatar
 Sub AddItemAvatar(id As String, avatar As String, title As String, subtitle As String, _
-	subtitle1 As String, righttext As String, righticon As String, righticoncolor As String, url As String)
+	subtitle1 As String, righttext As String, righticon As String, righticoncolor As String, rating As Int, url As String)
 	Dim rec As Map = CreateMap()
 	rec.Put("id", id)
 	Dim rec As Map = CreateMap()
@@ -3675,13 +3926,13 @@ Sub AddItemAvatar(id As String, avatar As String, title As String, subtitle As S
 	If righticon <> "" Then rec.Put("righticon", righticon)
 	If righttext <> "" Then rec.Put("righttext", righttext)
 	If righticoncolor <> "" Then rec.Put("righticoncolor", righticoncolor)
+	If rating >= 0 Then rec.Put("rightrating", rating)
 	'
 	Records.Add(rec)
 End Sub
 
-'add avatar
 Sub AddItemAction(id As String, lefticon As String, lefticoncolor As String, title As String, subtitle As String, _
-	subtitle1 As String, righttext As String, righticon As String, righticoncolor As String, url As String)
+	subtitle1 As String, righttext As String, righticon As String, righticoncolor As String, rating As Int, url As String)
 	Dim rec As Map = CreateMap()
 	rec.Put("id", id)
 	If url <> "" Then rec.Put("to", url)
@@ -3694,13 +3945,46 @@ Sub AddItemAction(id As String, lefticon As String, lefticoncolor As String, tit
 	If righticon <> "" Then rec.Put("righticon", righticon)
 	If righttext <> "" Then rec.Put("righttext", righttext)
 	If righticoncolor <> "" Then rec.Put("righticoncolor", righticoncolor)
+	If rating >= 0 Then rec.Put("rightrating", rating)
+	
 	'
 	Records.Add(rec)
 End Sub
 
+Sub AddItemLeftCheckBox(id As String, bChecked As Boolean, title As String, subtitle As String, _
+	subtitle1 As String, righttext As String, righticon As String, righticoncolor As String, rating As Int, url As String)
+	Dim rec As Map = CreateMap()
+	rec.Put("id", id)
+	If url <> "" Then rec.Put("to", url)
+	rec.Put("leftcheckbox", bChecked)
+	If title <> "" Then rec.Put("title", title)
+	If subtitle <> "" Then rec.Put("subtitle", subtitle)
+	If subtitle1 <> "" Then rec.Put("subtitle1", subtitle1)
+	'
+	If righticon <> "" Then rec.Put("righticon", righticon)
+	If righttext <> "" Then rec.Put("righttext", righttext)
+	If righticoncolor <> "" Then rec.Put("righticoncolor", righticoncolor)
+	If rating >= 0 Then rec.Put("rightrating", rating)
+	
+	'
+	Records.Add(rec)
+End Sub
+
+Sub AddItemRightCheckBox(id As String, bChecked As Boolean, title As String, subtitle As String, subtitle1 As String, url As String)
+	Dim rec As Map = CreateMap()
+	rec.Put("id", id)
+	If url <> "" Then rec.Put("to", url)
+	rec.Put("rightcheckbox", bChecked)
+	If title <> "" Then rec.Put("title", title)
+	If subtitle <> "" Then rec.Put("subtitle", subtitle)
+	If subtitle1 <> "" Then rec.Put("subtitle1", subtitle1)
+	Records.Add(rec)
+End Sub
+
+
 'add an icon
 Sub AddItemIcon(id As String, icon As String, iconcolor As String, title As String, subtitle As String, _
-	subtitle1 As String, righttext As String, righticon As String, righticoncolor As String, url As String)
+	subtitle1 As String, righttext As String, righticon As String, righticoncolor As String, rating As Int, url As String)
 	'
 	Dim rec As Map = CreateMap()
 	rec.Put("id", id)
@@ -3715,6 +3999,8 @@ Sub AddItemIcon(id As String, icon As String, iconcolor As String, title As Stri
 	If righticon <> "" Then rec.Put("righticon", righticon)
 	If righttext <> "" Then rec.Put("righttext", righttext)
 	If righticoncolor <> "" Then rec.Put("righticoncolor", righticoncolor)
+	If rating >= 0 Then rec.Put("rightrating", rating)
+	
 	'
 	Records.Add(rec)
 End Sub
@@ -3722,7 +4008,7 @@ End Sub
 
 'add an avatar icon
 Sub AddItemAvatarIcon(id As String, avataricon As String, avatariconcolor As String, title As String, subtitle As String, _
-	subtitle1 As String, righttext As String, righticon As String, righticoncolor As String, url As String)
+	subtitle1 As String, righttext As String, righticon As String, righticoncolor As String, rating As Int, url As String)
 	'
 	Dim rec As Map = CreateMap()
 	rec.Put("id", id)
@@ -3737,6 +4023,8 @@ Sub AddItemAvatarIcon(id As String, avataricon As String, avatariconcolor As Str
 	If righticon <> "" Then rec.Put("righticon", righticon)
 	If righttext <> "" Then rec.Put("righttext", righttext)
 	If righticoncolor <> "" Then rec.Put("righticoncolor", righticoncolor)
+	If rating >= 0 Then rec.Put("rightrating", rating)
+	
 	'
 	Records.Add(rec)
 End Sub
@@ -3745,7 +4033,7 @@ End Sub
 'add an item to the list view
 Sub AddItem(id As String, lefticon As String, lefticoncolor As String, _
 	avatar As String, avataricon As String, avatariconcolor As String, icon As String, iconcolor As String, title As String, subtitle As String, _
-	subtitle1 As String, righttext As String, righticon As String, righticoncolor As String, url As String)
+	subtitle1 As String, righttext As String, righticon As String, righticoncolor As String, rating As Int, url As String)
 	'
 	Dim rec As Map = CreateMap()
 	rec.Put("id", id)
@@ -3767,6 +4055,8 @@ Sub AddItem(id As String, lefticon As String, lefticoncolor As String, _
 	If righticon <> "" Then rec.Put("righticon", righticon)
 	If righttext <> "" Then rec.Put("righttext", righttext)
 	If righticoncolor <> "" Then rec.Put("righticoncolor", righticoncolor)
+	If rating >= 0 Then rec.Put("rightrating", rating)
+	
 	'
 	Records.Add(rec)
 End Sub

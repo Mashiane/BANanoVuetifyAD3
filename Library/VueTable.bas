@@ -1630,7 +1630,7 @@ private Sub BuildSlots
 	sbTotals.Initialize
 	If hasTotals Then
 		'lets define the totals row
-		sbTotals.Append($"<template slot="body.append">"$)
+		sbTotals.Append($"<v-template slot="body.append">"$)
 		sbTotals.Append($"<tr>"$)
 		sbTotals.Append($"<th>Totals</th>"$)
 	End If
