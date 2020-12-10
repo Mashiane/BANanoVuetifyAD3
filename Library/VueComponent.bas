@@ -32,7 +32,8 @@ Sub Class_Globals
 	Public AppTemplateName As String = "#apptemplate"
 	Public AppendHolderName As String = "#appendholder"
 	Public PlaceHolderName As String = "#placeholder"
-	'
+	Public Here As String = "#placeholder"
+		'
 	Private dialogShow As String 
 	Private dialogTitle As String
 	Private dialogMessage As String
@@ -105,12 +106,6 @@ Sub NewMap As Map
 	Dim nm As Map
 	nm.Initialize
 	Return nm
-End Sub
-
-
-'returns the placehodler
-Sub Here As String
-	Return "placeholder"
 End Sub
 
 'return the dialog card title

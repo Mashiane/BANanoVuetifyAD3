@@ -366,6 +366,8 @@ Sub AddItemParentChild(parent As String, key As String, iconName As String, icon
 	Records.Add(nitem)
 End Sub
 
+
+
 private Sub CleanID(v As String) As String
 	v = v.Replace("#","")
 	v = $"#${v}"$
@@ -1803,6 +1805,11 @@ public Sub setVHtml(varVHtml As String)
 	stVHtml = varVHtml
 End Sub
 
+
+public Sub setBlock(b As Boolean)
+	AddAttr(":block", b)
+End Sub
+
 public Sub getVHtml() As String
 	Return stVHtml
 End Sub
@@ -1957,9 +1964,24 @@ public Sub getFontFamily() As String
 	Return stFontFamily
 End Sub
 
+
+public Sub setDismissible(b As Boolean)
+	AddAttr(":dismissible", b)
+End Sub
+
+
 public Sub setFontSize(varFontSize As String)
 	AddStyle("font-size", varFontSize)
 	stFontSize = varFontSize
+End Sub
+
+
+public Sub setColoredBorder(b As Boolean)
+	AddAttr(":colored-border", b)
+End Sub
+
+public Sub setProminent(b As Boolean)
+	AddAttr(":prominent", b)
 End Sub
 
 public Sub getFontSize() As String
@@ -2078,7 +2100,7 @@ public Sub setElevation(s As String)
 End Sub
 
 
-public Sub setTransition(s As Boolean)
+public Sub setTransition(s As String)
 	AddAttr("transition", s)
 End Sub
 

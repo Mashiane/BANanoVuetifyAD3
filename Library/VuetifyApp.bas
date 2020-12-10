@@ -29,16 +29,6 @@ Sub Class_Globals
 	Public Vuetify As BANanoObject
 	Private data As BANanoObject
 	'
-	Public const ALERT_BORDER_LEFT As String = "left"
-	Public const ALERT_BORDER_RIGHT As String = "right"
-	Public const ALERT_BORDER_BOTTOM As String = "bottom"
-	Public const ALERT_BORDER_TOP As String = "top"
-	'
-	Public const ALERT_TYPE_SUCCESS As String = "success"
-	Public const ALERT_TYPE_INFO As String = "info"
-	Public const ALERT_TYPE_WARNING As String = "warning"
-	Public const ALERT_TYPE_ERROR As String = "error"
-	'
 	Public const BORDER_DEFAULT As String = ""
 	Public const BORDER_DASHED As String = "dashed"
 	Public const BORDER_DOTTED As String = "dotted"
@@ -74,6 +64,14 @@ Sub Class_Globals
 	Public const COLOR_WHITE As String = "white"
 	Public const COLOR_YELLOW As String = "yellow"
 	Public const COLOR_NONE As String = ""
+	Public const COLOR_PRIMARY As String = "primary"
+	Public const COLOR_SECONDARY As String = "secondary"
+	Public const COLOR_ACCENT As String = "accent"
+	Public const COLOR_ERROR As String = "error"
+	Public const COLOR_INFO As String = "info"
+	Public const COLOR_SUCCESS As String = "success"
+	Public const COLOR_WARNING As String = "warning"
+	
 	'
 	Public const COLOR_AMBER_TEXT As String = "amber--text"
 	Public const COLOR_BLACK_TEXT As String = "black--text"
@@ -280,11 +278,13 @@ Sub Class_Globals
 	Public const ALERT_BORDER_RIGHT As String = "right"
 	Public const ALERT_BORDER_BOTTOM As String = "bottom"
 	Public const ALERT_BORDER_TOP As String = "top"
+	Public const ALERT_BORDER_NONE As String = ""
 	'
 	Public const ALERT_TYPE_SUCCESS As String = "success"
 	Public const ALERT_TYPE_INFO As String = "info"
 	Public const ALERT_TYPE_WARNING As String = "warning"
 	Public const ALERT_TYPE_ERROR As String = "error"
+	Public const ALERT_TYPE_NONE As String = ""
 	
 	Public const EVENT_Click As String = "click"
 	Public const EVENT_Change As String = "change"
@@ -306,6 +306,7 @@ Sub Class_Globals
 	Public AppTemplateName As String = "#apptemplate"
 	Public AppendHolderName As String = "#appendholder"
 	Public PlaceHolderName As String = "#placeholder"
+	Public Here As String = "#apptemplate"
 	'
 	Private dlgShow As String
 	Private dlgTitle As String
@@ -384,11 +385,6 @@ End Sub
 'return ths vue instance
 Sub This As BANanoObject
 	Return Vue
-End Sub
-
-'returns the app template
-Sub Here As String
-	Return "apptemplate"
 End Sub
 
 'import a component, the module should have the Initilize method without parameters
@@ -2045,6 +2041,15 @@ Sub BindVueTable(el As VueTable)
 	Next
 End Sub
 
+'convert a list to a map
+Sub ListToMap(lst As List) As Map
+	Dim nm As Map = CreateMap()
+	For Each item As String In lst
+		nm.Put(item, item)
+	Next
+	Return nm
+End Sub
+
 
 'convert a list to a data source
 Sub ListToDataSource(keyName As String, valueName As String, lst As List) As List
@@ -2227,10 +2232,18 @@ Sub AddAppBar(Module As Object, parentID As String, elID As String, color As Str
 	Return elx
 End Sub
 
+'<code>
+'dim prg1 As VueElement = vuetify.AddProgressLinear(Me, "r1c1", "prg1", "prg1v", vuetify.COLOR_GREEN, null)
+'vuetify.BindVueElement(prg1)
+'</code>
 Sub AddProgressLinear(Module As Object, parentID As String, elID As String, vmodel As String, color As String, props As Map) As VueElement
 	Return AddVueElement(Module, parentID, elID, "v-progress-linear", vmodel, "", color, props)
 End Sub
 
+'<code>
+'dim prg1 As VueElement = vuetify.AddProgressCircular(Me, "r1c1", "prg1", "prg1v", "", vuetify.COLOR_GREEN, null)
+'vuetify.BindVueElement(prg1)
+'</code>
 Sub AddProgressCircular(Module As Object, parentID As String, elID As String, vmodel As String, caption As String, color As String, props As Map) As VueElement
 	Return AddVueElement(Module, parentID, elID, "v-progress-circular", vmodel, caption, color, props)
 End Sub
@@ -2265,22 +2278,14 @@ End Sub
 
 'add a vue element on parent
 Sub AddVueElement(Module As Object, parentID As String, elID As String, tag As String, vModel As String, Caption As String, color As String, props As Map) As VueElement
-	parentID = parentID.tolowercase
+	parentID = CleanID(parentID)
 	elID = elID.tolowercase
 	elID = elID.Replace("#", "")
-	parentID = parentID.Replace("#","")
-	parentID = parentID.tolowercase
-	'build the template json
-	Dim structure As Map = CreateMap()
-	structure.Put("id", elID)
-	structure.put("tag", tag)
-	'convert to json data
-	Dim jsonData As String = BANano.tojson(structure)
 	'check if the element exists
 	If BANano.Exists($"#${elID}"$) = False Then
 		Dim parELE As BANanoElement
-		parELE.Initialize($"#${parentID}"$)
-		parELE.RenderAppend($"<{{tag}} id="{{id}}"></{{tag}}>"$, jsonData)
+		parELE.Initialize(parentID)
+		parELE.Append($"<${tag} id="${elID}"></${tag}>"$)
 	End If
 	'get the element
 	Dim ve As VueElement
@@ -2297,6 +2302,7 @@ Sub AddVueElement(Module As Object, parentID As String, elID As String, tag As S
 	ve.SetOnEvent(Module, "click:prepend", "")
 	ve.SetOnEvent(Module, "click:append-outer", "")
 	ve.SetOnEvent(Module, "click:prepend-inner", "")
+	ve.SetOnEvent(Module, "click:clear", "")
 	
 	Return ve
 End Sub
@@ -2319,7 +2325,7 @@ Sub UpdateVueElement(Module As Object, elID As String, vModel As String, Caption
 	ve.SetOnEvent(Module, "click:prepend", "")
 	ve.SetOnEvent(Module, "click:append-outer", "")
 	ve.SetOnEvent(Module, "click:prepend-inner", "")
-	'
+	ve.SetOnEvent(Module, "click:clear", "")
 	Return ve
 End Sub
 
@@ -2426,6 +2432,7 @@ Sub AddAutoComplete(Module As Object, parentID As String, elID As String, vmodel
 		vselect.SetData(vmodel, Null)
 	End If
 	vselect.SetOnEvent(Module, "change", "")
+	vselect.SetOnEvent(Module, "click:clear", "")
 	Return vselect
 End Sub
 
@@ -2456,10 +2463,19 @@ Sub AddComboBox(Module As Object, parentID As String, elID As String, vmodel As 
 		vselect.SetData(vmodel, Null)
 	End If
 	vselect.SetOnEvent(Module, "change", "")
+	vselect.SetOnEvent(Module,  "click:clear", "")
 	Return vselect
 End Sub
 
 'a button with an icon on the right
+'<code>
+'Dim btn1 As VueElement = vuetify.AddButtonWidthRightIcon(Me, "r2c1", "btn1", "Button 1", "mdi-heart", "primary", True, Null, null)
+'vuetify.BindVueElement(btn1)
+'
+'Event
+'Sub btn1_click(e As BANanoEvent)
+'End Sub
+'</code>
 Sub AddButtonWidthRightIcon(Module As Object, parentID As String, elID As String, eLabel As String, eIcon As String, eColor As String, bOutlined As Boolean, btnprops As Map, iconprops As Map) As VueElement
 	parentID = CleanID(parentID)
 	elID = elID.ToLowerCase
@@ -2499,6 +2515,14 @@ Sub AddButtonWidthRightIcon(Module As Object, parentID As String, elID As String
 End Sub
 
 'a button with an icon on the left
+'<code>
+'Dim btn1 As VueElement = vuetify.AddButtonWithLeftIcon(Me, "r2c1", "btn1", "Button 1", "mdi-heart", "primary", True, Null, null)
+'vuetify.BindVueElement(btn1)
+'
+''btn1 event
+'Sub btn1_click(e As BANanoEvent)
+'End Sub
+'</code>
 Sub AddButtonWithLeftIcon(Module As Object, parentID As String, elID As String, eLabel As String, eIcon As String, eColor As String, bOutlined As Boolean, btnprops As Map, iconprops As Map) As VueElement
 	parentID = CleanID(parentID)
 	elID = elID.ToLowerCase
@@ -2537,6 +2561,16 @@ Sub AddButtonWithLeftIcon(Module As Object, parentID As String, elID As String, 
 	Return vbtnright
 End Sub
 
+
+'a button with an icon on the right
+'<code>
+'Dim avatar1 As VueElement = vuetify.AddAvatarWithBadge(Me, "r2c1", "btn1", "./assets/sponge.png", "64", "avatar1", "red", Null, Null)
+'vuetify.BindVueElement(avatar1)
+'
+'Event
+'Sub avatar1_click(e As BANanoEvent)
+'End Sub
+'</code>
 Sub AddAvatarWithBadge(Module As Object, parentID As String, elID As String, imgURL As String, avatarSize As Int, vmodel As String, badgeColor As String, avatarprops As Map, badgeprops As Map) As VueElement
 	parentID = CleanID(parentID)
 	elID = elID.ToLowerCase
@@ -2645,6 +2679,7 @@ Sub AddSelect(Module As Object, parentID As String, elID As String, vmodel As St
 	vselect.AssignProps(props)
 	'
 	vselect.SetOnEvent(Module, "change", "")
+	vselect.SetOnEvent(Module, "click:clear", "")
 	Return vselect
 End Sub
 
@@ -2661,7 +2696,91 @@ Sub AddRouterView(Module As Object, parentID As String, elID As String) As VueEl
 	Return elx
 End Sub
 
+'add span
+'<code>
+'dim lbl1 As VueElement = vuetify.AddSpan(Me, "r1c2", "lbl1", "Span", "", "")
+'vuetify.BindVueElement(lbl1)
+'</code>
+Sub AddSpan(Module As Object, parentID As String, elID As String, Caption As String,  TextColor As String, TextColorIntensity As String) As VueElement
+	Return AddLabel(Module, parentID, elID, "span", Caption, False, TextColor, TextColorIntensity, Null)
+End Sub
 
+'add h6
+'<code>
+'dim lbl1 As VueElement = vuetify.AddH6(Me, "r1c2", "lbl1", "h6", "", "")
+'vuetify.BindVueElement(lbl1)
+'</code>
+Sub AddH6(Module As Object, parentID As String, elID As String, Caption As String, TextColor As String, TextColorIntensity As String) As VueElement
+	Return AddLabel(Module, parentID, elID, "h6", Caption, False, TextColor, TextColorIntensity, Null)
+End Sub
+
+'add h5
+'<code>
+'dim lbl1 As VueElement = vuetify.AddH5(Me, "r1c2", "lbl1", "h5", "", "")
+'vuetify.BindVueElement(lbl1)
+'</code>
+Sub AddH5(Module As Object, parentID As String, elID As String, Caption As String, TextColor As String, TextColorIntensity As String) As VueElement
+	Return AddLabel(Module, parentID, elID, "h5", Caption, False, TextColor, TextColorIntensity, Null)
+End Sub
+
+'add h4
+'<code>
+'dim lbl1 As VueElement = vuetify.AddH4(Me, "r1c2", "lbl1", "h4", "", "")
+'vuetify.BindVueElement(lbl1)
+'</code>
+Sub AddH4(Module As Object, parentID As String, elID As String, Caption As String, TextColor As String, TextColorIntensity As String) As VueElement
+	Return AddLabel(Module, parentID, elID, "h4", Caption , False, TextColor, TextColorIntensity, Null)
+End Sub
+
+'add h3
+'<code>
+'dim lbl1 As VueElement = vuetify.AddH3(Me, "r1c2", "lbl1", "h3", "", "")
+'vuetify.BindVueElement(lbl1)
+'</code>
+Sub AddH3(Module As Object, parentID As String, elID As String, Caption As String, TextColor As String, TextColorIntensity As String) As VueElement
+	Return AddLabel(Module, parentID, elID, "h3", Caption, False, TextColor, TextColorIntensity, Null)
+End Sub
+
+'add h2
+'<code>
+'dim lbl1 As VueElement = vuetify.AddH2(Me, "r1c2", "lbl1", "h2", "", "")
+'vuetify.BindVueElement(lbl1)
+'</code>
+Sub AddH2(Module As Object, parentID As String, elID As String, Caption As String, TextColor As String, TextColorIntensity As String) As VueElement
+	Return AddLabel(Module, parentID, elID, "h2", Caption, False, TextColor, TextColorIntensity, Null)
+End Sub
+
+'add paragraph
+'<code>
+'dim lbl1 As VueElement = vuetify.AddParagraph(Me, "r1c2", "lbl1", "h1", "", "")
+'vuetify.BindVueElement(lbl1)
+'</code>
+Sub AddParagraph(Module As Object, parentID As String, elID As String, Caption As String, TextColor As String, TextColorIntensity As String) As VueElement
+	Return AddLabel(Module, parentID, elID, "p", Caption, False, TextColor, TextColorIntensity, Null)
+End Sub
+
+'add h1
+'<code>
+'dim lbl1 As VueElement = vuetify.AddH1(Me, "r1c2", "lbl1", "h1", "", "")
+'vuetify.BindVueElement(lbl1)
+'</code>
+Sub AddH1(Module As Object, parentID As String, elID As String, Caption As String, TextColor As String, TextColorIntensity As String) As VueElement
+	Return AddLabel(Module, parentID, elID, "h1", Caption, False, TextColor, TextColorIntensity, Null)
+End Sub
+
+'add lorem ipsum
+'<code>
+'dim lbl1 As VueElement = vuetify.AddLoremIpsum(Me, "r1c2", "lbl1", "", "")
+'vuetify.BindVueElement(lbl1)
+'</code>
+Sub AddLoremIpsum(Module As Object, parentID As String, elID As String, TextColor As String, TextColorIntensity As String) As VueElement
+	Return AddLabel(Module, parentID, elID, "p", "", True, TextColor, TextColorIntensity, Null)
+End Sub
+
+'<code>
+'dim lbl1 As VueElement = vuetify.AddLabel(Me, "r1c2", "lbl1", "h1", "This is h1", false, "", "", null)
+'vuetify.BindVueElement(lbl1)
+'</code>
 Sub AddLabel(Module As Object, parentID As String, elID As String, Size As String, Caption As String, bLoremIpsum As Boolean, TextColor As String, TextColorIntensity As String, props As Map) As VueElement
 	Dim elx As VueElement = AddVueElement(Module, parentID, elID, Size, "", Caption, "", props)
 	elx.LoremIpsum = bLoremIpsum
@@ -2670,16 +2789,29 @@ Sub AddLabel(Module As Object, parentID As String, elID As String, Size As Strin
 	Return elx
 End Sub
 
-
-Sub AddAlert(Module As Object, parentID As String, elID As String, vmodel As String, bVisible As Boolean, Caption As String, bLoremIpsum As Boolean, bDismissible As Boolean, aType As String,  props As Map) As VueElement
+'<code>
+'Dim avue as VueElement = Vuetify.AddAlert(Me, "r1c1", "avue", False, "This is my alert", False, True, Vuetify.ALERT_TYPE_SUCCESS, Vuetify.ALERT_BORDER_LEFT, Null)
+'vuetify.BindVueElement(avue)
+'</code>
+Sub AddAlert(Module As Object, parentID As String, elID As String, vmodel As String, bVisible As Boolean, Caption As String, bLoremIpsum As Boolean, bDismissible As Boolean, aType As String,  Border As String, props As Map) As VueElement
 	Dim elx As VueElement = AddVueElement(Module, parentID, elID, "v-alert", vmodel, Caption, "", props)
 	elx.LoremIpsum = bLoremIpsum
 	elx.Bind("dismissible", bDismissible)
 	elx.SetData(vmodel, bVisible)
 	elx.AlertType = aType
+	elx.Border = Border
 	Return elx
 End Sub
 
+
+'<code>
+'Dim btn1 As VueElement = vuetify.AddButton(Me, "r2c1", "btn1", "Button 1", "primary", True, Null)
+'vuetify.BindVueElement(btn1)
+'
+'Event
+'Sub btn1_click(e As BANanoEvent)
+'End Sub
+'</code>
 Sub AddButton(Module As Object, parentID As String, elID As String, sLabel As String, eColor As String, bOutlined As Boolean,  props As Map) As VueElement
 	parentID = CleanID(parentID)
 	elID = elID.ToLowerCase
@@ -2929,8 +3061,8 @@ Sub AddDialogAlertPrompt(Module As Object, parentID As String, elID As String, b
 	sbTemplate.Initialize
 	sbTemplate.Append($"<v-dialog id="${diaglogID}" v-model="${dialogShow}" :width="${dialogwidth}" :persistent="${dialogpersistent}">"$)
 	sbTemplate.Append($"<v-card id="${dialogCardID}">"$)
-	sbTemplate.Append($"<v-card-title id="${dialogTitleID}">{{ ${dialogTitle} }}</v-card-title>"$)
-	sbTemplate.Append($"<v-card-text id="${dialogtextID}">{{ ${dialogMessage} }}"$)
+	sbTemplate.Append($"<v-card-title id="${dialogTitleID}" v-html="${dialogTitle}"></v-card-title>"$)
+	sbTemplate.Append($"<v-card-text id="${dialogtextID}" v-html="${dialogMessage}">"$)
 	sbTemplate.Append($"<v-text-field id="${dialogpromptID}" v-if="${dialogpromptshow}" "$)
 	sbTemplate.Append($":label="${dialogpromptlabel}" v-model="${dialogpromptvalue}" :hint="${dialogprompthint}" "$)
 	sbTemplate.Append($":placeholder="${dialogpromptplaceholder}" :persistent-hint="true">"$)
@@ -3158,6 +3290,7 @@ Ok</v-btn>
 	Dim vtextfield As VueElement
 	vtextfield.Initialize(Module, txtid, txtid)
 	vtextfield.AssignProps(txtprops)
+	vtextfield.SetOnEvent(Module, "click:clear", "")
 	'
 	Dim vdatepicker As VueElement
 	vdatepicker.Initialize(Module, dtpicker, dtpicker)
@@ -3414,6 +3547,7 @@ Ok</v-btn>
 	Dim vtextfield As VueElement
 	vtextfield.Initialize(Module, txtid, txtid)
 	vtextfield.AssignProps(txtprops)
+	vtextfield.SetOnEvent(Module, "click:clear", "")
 	'
 	Dim vdatepicker As VueElement
 	vdatepicker.Initialize(Module, dtpicker, dtpicker)
@@ -3478,6 +3612,22 @@ Sub AddParallax(Module As Object, parentID As String, elID As String, sheight As
 	Return vparallax
 End Sub
 
+'<code>
+'Dim fi1 As VueElement = vuetify.AddFileInput(Me, "r1c1", "fi1", "fi1", "Select File", "", False, "", null)
+'vuetify.BindVueElement(fi1)
+''****for a single file
+'Sub fi1_change(fileObj As Map)
+'If BANano.IsNull(fileObj) Or BANano.IsUndefined(fileObj) Then Return
+''get file details
+'Dim fileDet As FileObject = BANanoShared.GetFileDetails(fileObj)
+'Log(fileDet)
+'End Sub
+''****for multiple files
+'Sub fi1_change(fileList As List)
+'If BANano.IsNull(fileList) Or BANano.IsUndefined(fileList) Then Return
+'Log(fileList)
+'End Sub
+'</code>
 Sub AddFileInput(Module As Object, parentID As String, elID As String, vmodel As String, slabel As String, splaceholder As String, bMultiple As Boolean, sHint As String, props As Map) As VueElement
 	parentID = CleanID(parentID)
 	elID = elID.ToLowerCase
@@ -3495,6 +3645,7 @@ Sub AddFileInput(Module As Object, parentID As String, elID As String, vmodel As
 	vfileinput.SetOnEvent(Module, "click:prepend", "")
 	vfileinput.SetOnEvent(Module, "click:append-outer", "")
 	vfileinput.SetOnEvent(Module, "click:prepend-inner", "")
+	vfileinput.SetOnEvent(Module, "click:clear", "")
 	vfileinput.AssignProps(props)
 	If vmodel <> "" Then
 		If bMultiple Then
@@ -3531,19 +3682,33 @@ Sub AddSlider(Module As Object, parentID As String, elID As String, vmodel As St
 	Return vslider
 End Sub
 
+'<code>
+'add a telephone
+'Dim txtF As VueElement = vuetify.AddTelephone(Me, "r1c1", "txtF", "fldName", "Text Field", "Text field placeholder", True, "", 0, "Enter a text field", null)
+'vuetify.BindVueElement(txtF)
+'</code>
 Sub AddTelephone(Module As Object, parentID As String, elID As String, vmodel As String, slabel As String, splaceholder As String, bRequired As Boolean, sPrependIcon As String, iMaxLen As Int, sHint As String, props As Map) As VueElement
 	Dim el As VueElement = AddTextField(Module, parentID, elID, vmodel, slabel,splaceholder, bRequired, sPrependIcon, iMaxLen, sHint, props)
 	el.SetTypeTelephone
 	Return el
 End Sub
 
+'<code>
+'add a text field
+'Dim txtF As VueElement = vuetify.AddEmail(Me, "r1c1", "txtF", "fldName", "Text Field", "Text field placeholder", True, "", 0, "Enter a text field", null)
+'vuetify.BindVueElement(txtF)
+'</code>
 Sub AddEmail(Module As Object, parentID As String, elID As String, vmodel As String, slabel As String, splaceholder As String, bRequired As Boolean, sPrependIcon As String, iMaxLen As Int, sHint As String, props As Map) As VueElement
 	Dim el As VueElement = AddTextField(Module, parentID, elID, vmodel, slabel,splaceholder, bRequired, sPrependIcon, iMaxLen, sHint, props)
 	el.SetTypeEmail
 	Return el
 End Sub
 
-
+'<code>
+'add a text field
+'Dim txtF As VueElement = vuetify.AddTextField(Me, "r1c1", "txtF", "fldName", "Text Field", "Text field placeholder", True, "", 0, "Enter a text field", null)
+'vuetify.BindVueElement(txtF)
+'</code>
 Sub AddTextField(Module As Object, parentID As String, elID As String, vmodel As String, slabel As String, splaceholder As String, bRequired As Boolean, sPrependIcon As String, iMaxLen As Int, sHint As String, props As Map) As VueElement
 	parentID = CleanID(parentID)
 	elID = elID.ToLowerCase
@@ -3565,11 +3730,16 @@ Sub AddTextField(Module As Object, parentID As String, elID As String, vmodel As
 	vtextfield.SetOnEvent(Module, "click:prepend", "")
 	vtextfield.SetOnEvent(Module, "click:append-outer", "")
 	vtextfield.SetOnEvent(Module, "click:prepend-inner", "")
+	vtextfield.SetOnEvent(Module, "click:clear", "")
 	vtextfield.AssignProps(props)
 	Return vtextfield
 End Sub
 
-
+'<code>
+'add a text field
+'Dim txtF As VueElement = vuetify.AddTextArea(Me, "r1c1", "txtF", "fldName", "Text Field", "Text field placeholder", True, "", 0, "Enter a text field", null)
+'vuetify.BindVueElement(txtF)
+'</code>
 Sub AddTextArea(Module As Object, parentID As String, elID As String, vmodel As String, slabel As String, splaceholder As String, bRequired As Boolean, sPrependIcon As String, iMaxLen As Int, sHint As String, props As Map) As VueElement
 	parentID = CleanID(parentID)
 	elID = elID.ToLowerCase
@@ -3591,6 +3761,7 @@ Sub AddTextArea(Module As Object, parentID As String, elID As String, vmodel As 
 	vtextfield.SetOnEvent(Module, "click:prepend", "")
 	vtextfield.SetOnEvent(Module, "click:append-outer", "")
 	vtextfield.SetOnEvent(Module, "click:prepend-inner", "")
+	vtextfield.SetOnEvent(Module, "click:clear", "")
 	vtextfield.AssignProps(props)
 	Return vtextfield
 End Sub
@@ -3629,6 +3800,7 @@ Sub AddPassword(Module As Object, parentID As String, elID As String, vmodel As 
 	vtextfield.SetOnEvent(Module, "click:prepend", "")
 	vtextfield.SetOnEvent(Module, "click:append-outer", "")
 	vtextfield.SetOnEvent(Module, "click:prepend-inner", "")
+	vtextfield.SetOnEvent(Module, "click:clear", "")
 	
 	Return vtextfield
 End Sub
