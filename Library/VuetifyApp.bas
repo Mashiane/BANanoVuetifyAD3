@@ -261,6 +261,12 @@ Sub Class_Globals
 	Public const VISIBILITY_LgAndUp As String = "lg-and-up"
 	Public const VISIBILITY_XlOnly As String = "xl-only"
 	Public const VISIBILITY_ALL As String = ""
+	'
+	Public POSITION_STATIC As String = "static"
+	Public POSITION_RELATIVE As String = "relative"
+	Public POSITION_FIXED As String = "fixed"
+	Public POSITION_ABSOLUTE As String = "absolute"
+	Public POSITION_STICKY As String = "sticky"
 		
 	Public Breakpoint As Object
 	Public BreakpointName As String

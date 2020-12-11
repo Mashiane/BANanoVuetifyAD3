@@ -165,7 +165,7 @@ End Sub
 ''select where
 'dim sw As Map = CreateMap()
 'sw.put("name", "Anele")
-'dbConnect.SelectWhere1(array("id", "firstname", "lastname"), sw, array("="), array("and", "or"))
+'dbConnect.SelectWhere1(array("id", "firstname", "lastname"), sw, array("="), array("and", "or"), array("name"))
 'dbConnect.JSON = BANano.CallInlinePHPWait(dbConnect.MethodName, dbConnect.Build)
 'dbConnect.FromJSON
 'Select Case dbConnect.OK
@@ -687,6 +687,9 @@ End Sub
 'End Select
 '</code>
 Sub InsertReplace As BANanoSQLiteE
+	If Schema.Size = 0 Then
+		Log($"BANanoSQLite.InsertReplace: '${TableName}' schema is not set!"$)
+	End If
 	Dim sb As StringBuilder
 	Dim columns As StringBuilder
 	Dim values As StringBuilder
@@ -732,6 +735,9 @@ End Sub
 'End Select
 '</code>
 Sub Delete(primaryValue As String) As BANanoSQLiteE
+	If Schema.Size = 0 Then
+		Log($"BANanoSQLite.Delete: '${TableName}' schema is not set!"$)
+	End If
 	Dim qw As Map = CreateMap()
 	qw.Put(PrimaryKey, primaryValue)
 	DeleteWhere(qw, Array("="))
@@ -771,7 +777,6 @@ private Sub Join(delimiter As String, lst As List) As String
 	Return sb.ToString
 End Sub
 
-'read
 '<code>
 ''read a record
 'dbConnect.Read(10)
@@ -784,6 +789,9 @@ End Sub
 'End Select
 '</code>
 Sub Read(primaryValue As String) As BANanoSQLiteE
+	If Schema.Size = 0 Then
+		Log($"BANanoSQLite.Read: '${TableName}' schema is not set!"$)
+	End If
 	Dim qw As Map = CreateMap()
 	qw.Put(PrimaryKey, primaryValue)
 	SelectWhere(Array("*"), qw, Null, Array(PrimaryKey))
@@ -803,6 +811,9 @@ End Sub
 'End Select
 '</code>
 Sub Exists(primaryValue As String) As BANanoSQLiteE
+	If Schema.Size = 0 Then
+		Log($"BANanoSQLite.Exists: '${TableName}' schema is not set!"$)
+	End If
 	Dim qw As Map = CreateMap()
 	qw.Put(PrimaryKey, primaryValue)
 	SelectWhere(Array(PrimaryKey), qw, Null, Array(PrimaryKey))
@@ -1101,6 +1112,9 @@ End Sub
 'End Select
 '</code>
 Sub Update(priValue As String) As BANanoSQLiteE
+	If Schema.Size = 0 Then
+		Log($"BANanoSQLite.Update: '${TableName}' schema is not set!"$)
+	End If
 	Dim tblWhere As Map = CreateMap()
 	tblWhere.Put(PrimaryKey, priValue)
 	UpdateWhere(Record, tblWhere, Null)
@@ -1123,6 +1137,9 @@ End Sub
 'End Select
 '</code>
 Sub Update1(Rec As Map, priValue As String) As BANanoSQLiteE
+	If Schema.Size = 0 Then
+		Log($"BANanoSQLite.Update1: '${TableName}' schema is not set!"$)
+	End If
 	Record = Rec
 	Dim tblWhere As Map = CreateMap()
 	tblWhere.Put(PrimaryKey, priValue)
@@ -1205,6 +1222,9 @@ End Sub
 'End Select
 '</code>
 Sub UpdateAll(tblFields As Map) As BANanoSQLiteE
+	If Schema.Size = 0 Then
+		Log($"BANanoSQLite.UpdateAll: '${TableName}' schema is not set!"$)
+	End If
 	Dim operators As List = EQOperators(tblFields)
 	Dim listOfTypes As List = GetMapTypes(tblFields)
 	Dim listOfValues As List = GetMapValues(tblFields)

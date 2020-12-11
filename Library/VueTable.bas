@@ -75,6 +75,7 @@ Sub Class_Globals
 	Public AppendHolderName As String = "#appendholder"
 	Public PlaceHolderName As String = "#placeholder"
 	'
+	Private hdr As List
 	'***** DATA TABLE
 	Public PrimaryKey As String = "id"
 	'column type
@@ -109,15 +110,10 @@ Sub Class_Globals
 	Public ALIGN_LEFT As String = "start"
 	'
 	Private columnsM As Map
-	Private filters As List
-	Private hasFilters As Boolean
-	Private exclusions As List
 	Private headers As String
 	Private search As String
 	Type DataTableColumn(value As String, text As String, align As String, sortable As Boolean, filterable As Boolean, divider As Boolean, _
 	className As String, width As String, filter As String, sort As String, ColType As String, extra As String, icon As String, Disabled As Boolean, imgWidth As String, imgHeight As String, avatarSize As String, iconSize As String, ReadOnly As Boolean, progressColor As String, progressRotate As String, progressSize As String, progressWidth As String, progressHeight As String, progressShowValue As Boolean, valueFormat As String, bindTotals As String, hasTotal As Boolean, depressed As Boolean, rounded As Boolean, dark As Boolean, label As String, color As String, outlined As Boolean, shaped As Boolean, target As String, prefix As String, colprops As Map)
-	Private hdr As List
-	Public masterColumns As List
 	Private hasTotals As Boolean
 	Private hasExternalPagination As Boolean
 	Private totalVisible As String
@@ -143,18 +139,14 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	bindings.Initialize
 	methods.Initialize
 	Items.Initialize
-	filters.Initialize
-	hasFilters = False
-	exclusions.Initialize
 	columnsM.Initialize
-	masterColumns.Initialize
 	hasTotals = False
 	hasExternalPagination = False
 	totalVisible = ""
+	hdr.Initialize
 	keyID = $"${mName}key"$
 	'
 	headers = $"${mName}headers"$
-	search = $"${mName}search"$
 	selected = $"${mName}selected"$
 	groupby = $"${mName}groupby"$
 	sortby = $"${mName}sortby"$
@@ -184,7 +176,7 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	SetSortDesc(NewList)
 	SetSelected(NewList)
 	SetHeaders(NewList)
-	SetItems(NewList)
+	SetDataSource(NewList)
 	'
 	Dim sb As StringBuilder
 	sb.Initialize
@@ -198,10 +190,6 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	sb.Append($"${itemsname}=array;"$)
 	sb.Append($"${search}=string"$)
 	setStates(sb.ToString)
-End Sub
-
-Sub SetItems(records As List)
-	SetData(itemsname, records)
 End Sub
 
 Sub SetHeaders(hdrs As List)
@@ -949,7 +937,6 @@ End Sub
 Sub AddSave()
 	Dim colField As String = "save"
 	Dim dt As DataTableColumn = NewDataTableColumn(colField, "Save")
-	AddExclusion("save")
 	dt.filterable = False
 	dt.ColType = COLUMN_SAVE
 	dt.sortable = False
@@ -962,7 +949,6 @@ End Sub
 Sub AddCancel()
 	Dim colField As String = "cancel"
 	Dim dt As DataTableColumn = NewDataTableColumn(colField, "Cancel")
-	AddExclusion(colField)
 	dt.filterable = False
 	dt.ColType = COLUMN_CANCEL
 	dt.sortable = False
@@ -984,9 +970,7 @@ End Sub
 
 'add an action
 Sub AddAction(colField As String, colTitle As String, colIcon As String)
-	AddExclusion(colField)
 	Dim dt As DataTableColumn = NewDataTableColumn(colField, colTitle)
-	AddExclusion(colField)
 	dt.filterable = False
 	dt.ColType = COLUMN_ACTION
 	dt.sortable = False
@@ -1131,10 +1115,6 @@ Sub SetDataSource(ds As List)
 	SetData(itemsname, ds)
 End Sub
 
-'add columns to exclude
-Sub AddExclusion(colKey As String)
-	exclusions.Add(colKey)
-End Sub
 
 'add a column
 Sub AddColumn(colName As String, colTitle As String)
@@ -1193,16 +1173,36 @@ Sub AddColumns(flds As Map)
 	Next
 End Sub
 
+'reset everything about data-table 
+Sub Reset(VC As VueComponent)
+	VC.SetData(itemsname, NewList)
+	VC.SetData(selected, NewList)
+	VC.SetData(groupby, NewList)
+	VC.SetData(sortby, NewList)
+	VC.SetData(groupdesc, NewList)
+	VC.SetData(sortdesc, NewList)
+	VC.SetData(expanded, NewList)
+	VC.SetData(headers, NewList)
+	VC.SetData(keyID, DateTime.Now)
+	'
+	columnsM.Initialize
+End Sub
+
+'update the records
+Sub Reload(VC As VueComponent, records As List)
+	VC.SetData(itemsname, records)
+	VC.SetData(selected, NewList)
+	VC.SetData(groupby, NewList)
+	VC.SetData(sortby, NewList)
+	VC.SetData(groupdesc, NewList)
+	VC.SetData(sortdesc, NewList)
+	VC.SetData(expanded, NewList)
+	VC.SetData(keyID, DateTime.Now)
+End Sub
+
 'add a column
 'key, title, 
 Sub AddColumn1(colName As String, colTitle As String, colType As String, colWidth As Int, colSortable As Boolean, colAlign As String)
-	masterColumns.Add(colName)
-	If hasFilters Then
-		If exclusions.IndexOf(colName) = -1 Then
-			If filters.IndexOf(colName) = -1 Then Return
-		End If
-	End If
-	'
 	Dim nf As DataTableColumn = NewDataTableColumn(colName, colTitle)
 	nf.align = colAlign
 	nf.sortable = colSortable
@@ -1531,6 +1531,61 @@ Sub SetColumnWidth(colName As String, colWidth As Int)
 	
 End Sub
 
+'hide columns after table creation
+Sub HideColumns(VC As VueComponent, colNames As List)
+	hdr.Initialize 
+	'loop through each column
+	For Each k As String In columnsM.Keys
+		'get the header
+		Dim nf As DataTableColumn = columnsM.Get(k)
+		Dim colpos As Int = colNames.IndexOf(k)
+		'column is not found, thus visible
+		If colpos = -1 Then
+			Dim header As Map = BuildHeader(nf)
+			hdr.Add(header)
+		End If
+	Next
+	VC.SetData(headers, hdr)
+End Sub
+
+'Show columns after table creation
+Sub ShowColumns(VC As VueComponent, colNames As List)
+	hdr.Initialize 
+	'loop through each column
+	For Each k As String In columnsM.Keys
+		'get the header
+		Dim nf As DataTableColumn = columnsM.Get(k)
+		Dim colpos As Int = colNames.IndexOf(k)
+		'column is not found, thus visible
+		If colpos >= 0 Then
+			Dim header As Map = BuildHeader(nf)
+			hdr.Add(header)
+		End If
+	Next
+	VC.SetData(headers, hdr)
+End Sub
+
+
+'reset the columns
+Sub ResetColumns(VC As VueComponent)
+	hdr.Initialize
+	'loop through each column
+	For Each k As String In columnsM.Keys
+		'get the header
+		Dim nf As DataTableColumn = columnsM.Get(k)
+		Dim header As Map = BuildHeader(nf)
+		hdr.Add(header)
+	Next
+	VC.SetData(headers, hdr)
+	VC.SetData(selected, NewList)
+	VC.SetData(groupby, NewList)
+	VC.SetData(sortby, NewList)
+	VC.SetData(groupdesc, NewList)
+	VC.SetData(sortdesc, NewList)
+	VC.SetData(expanded, NewList)
+	VC.SetData(keyID, DateTime.Now)
+End Sub
+
 'set column filterable
 Sub SetColumnFilterable(colName As String, colFilter As Boolean)
 	If columnsM.ContainsKey(colName) Then
@@ -1559,21 +1614,26 @@ private Sub BuildHeaders(colNames As Map)
 		'get the column details
 		Dim nf As DataTableColumn = colNames.Get(k)
 		'
-		Dim header As Map = CreateMap()
-		header.Initialize
-		header.put("text", nf.text)
-		header.put("value", nf.value)
-		header.put("align", nf.align)
-		header.put("sortable", nf.Sortable)
-		header.put("filterable", nf.filterable)
-		header.put("divider", nf.divider)
-		header.Put("class", nf.classname)
-		If nf.width <> 0 Then header.Put("width", nf.width)
-		If nf.filter <> Null Then header.put("filter", nf.filter)
-		If nf.sort <> Null Then header.Put("sort", nf.sort)
+		Dim header As Map = BuildHeader(nf)
 		hdr.Add(header)
 	Next
 	SetData(headers, hdr)
+End Sub
+
+private Sub BuildHeader(nf As DataTableColumn) As Map
+	Dim header As Map = CreateMap()
+	header.Initialize
+	header.put("text", nf.text)
+	header.put("value", nf.value)
+	header.put("align", nf.align)
+	header.put("sortable", nf.Sortable)
+	header.put("filterable", nf.filterable)
+	header.put("divider", nf.divider)
+	header.Put("class", nf.classname)
+	If nf.width <> 0 Then header.Put("width", nf.width)
+	If nf.filter <> Null Then header.put("filter", nf.filter)
+	If nf.sort <> Null Then header.Put("sort", nf.sort)
+	Return header
 End Sub
 
 'set the column data template
@@ -2075,15 +2135,6 @@ Sub Refresh
 	'build the headers
 	BuildHeaders(columnsM)	
 	BuildSlots
-	'
-'	SetSortBy(NewList)
-'	SetGroupBy(NewList)
-'	SetExpanded(NewList)
-'	SetGroupDesc(NewList)
-'	SetSortDesc(NewList)
-'	SetSelected(NewList)
-'	setPage("1")
-'	SetData($"${mName}pagecount"$, "0")
 	
 	SetData(keyID, DateTime.Now)
 	If Items.Size > 0 Then

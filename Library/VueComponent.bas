@@ -101,7 +101,6 @@ Sub This As BANanoObject
 	Return Component
 End Sub
 
-
 Sub NewMap As Map
 	Dim nm As Map
 	nm.Initialize

@@ -2134,6 +2134,26 @@ public Sub setRotate(s As String)
 	AddAttr("rotate", s)
 End Sub
 
+
+public Sub SetStyleTop(s As String)
+	AddStyle("top", s)
+End Sub
+
+public Sub SetStyleBottom(s As String)
+	AddStyle("bottom", s)
+End Sub
+
+
+public Sub SetStyleLeft(s As String)
+	AddStyle("left", s)
+End Sub
+
+
+public Sub SetStyleRight(s As String)
+	AddStyle("right", s)
+End Sub
+
+
 public Sub setTop(b As Boolean)
 	AddAttr(":top", b)
 End Sub
@@ -2230,6 +2250,10 @@ End Sub
 
 public Sub setPosition(s As String)
 	AddAttr("position", S)
+End Sub
+
+public Sub setStylePosition(s As String)
+	AddStyle("position", S)
 End Sub
 
 public Sub setDepressed(b As Boolean)
@@ -3624,6 +3648,11 @@ Sub setItemText(s As String)
 	AddAttr("item-text", S)
 	stItemText = S
 End Sub
+
+Sub setOpacity(d As Double)
+	AddStyle("opacity", d)
+End Sub
+
 
 Sub getItemText As String
 	Return stItemText
