@@ -26,16 +26,17 @@ Group=Default Group
 Library1=jcore
 Library2=jfx
 Library3=banano
-Module1=BANanoMySQLE
-Module2=|absolute|C:\CodingWorld\B4XShared\B4J\BANanoShared
-Module3=BANanoSQLiteE
-Module4=VueComponent
-Module5=VueElement
-Module6=VueTable
-Module7=VuetifyApp
+Module1=BANanoMSSQLE
+Module2=BANanoMySQLE
+Module3=|absolute|C:\CodingWorld\B4XShared\B4J\BANanoShared
+Module4=BANanoSQLiteE
+Module5=VueComponent
+Module6=VueElement
+Module7=VueTable
+Module8=VuetifyApp
 NumberOfFiles=11
 NumberOfLibraries=3
-NumberOfModules=7
+NumberOfModules=8
 Version=8.5
 @EndOfDesignText@
 #Region Project Attributes 
