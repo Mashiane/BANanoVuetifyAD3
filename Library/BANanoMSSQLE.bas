@@ -286,7 +286,7 @@ Sub Update(priValue As String) As BANanoMSSQLE
 	End If
 	Dim tblWhere As Map = CreateMap()
 	tblWhere.Put(PrimaryKey, priValue)
-	UpdateWhere(TableName, Record, tblWhere, Null)
+	UpdateWhere(Record, tblWhere, Null)
 	Return Me
 End Sub
 
@@ -312,7 +312,7 @@ Sub Update1(Rec As Map, priValue As String) As BANanoMSSQLE
 	Record = Rec
 	Dim tblWhere As Map = CreateMap()
 	tblWhere.Put(PrimaryKey, priValue)
-	UpdateWhere(TableName, Rec, tblWhere, Null)
+	UpdateWhere(Rec, tblWhere, Null)
 	Return Me
 End Sub
 
@@ -481,6 +481,7 @@ End Sub
 'initialize the class, a field named "id" is assumed to be an integer
 '<code>
 ''initialize the class
+'Dim dbConnect As BANanoMSSQLE
 'dbConnect.Initialize("db1", "users", "id", "id")
 '</code>
 Sub Initialize(dbName As String, tblName As String, PK As String, AI As String) As BANanoMSSQLE
@@ -1098,9 +1099,9 @@ End Sub
 'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
-Sub UpdateWhere(tblName As String, tblfields As Map, tblWhere As Map, operators As List) As BANanoMSSQLE
+Sub UpdateWhere(tblfields As Map, tblWhere As Map, operators As List) As BANanoMSSQLE
 	If Schema.Size = 0 Then
-		Log($"BANanoMSSQLE.UpdateWhere: '${tblName}' schema is not set!"$)
+		Log($"BANanoMSSQLE.UpdateWhere: '${TableName}' schema is not set!"$)
 	End If
 	If operators = Null Then operators = EQOperators(tblWhere)
 	Dim listOfTypes As List = GetMapTypes(tblfields)
@@ -1111,7 +1112,7 @@ Sub UpdateWhere(tblName As String, tblfields As Map, tblWhere As Map, operators 
 	listOfValues.AddAll(listOfValues1)
 	Dim sb As StringBuilder
 	sb.Initialize
-	sb.Append($"UPDATE ${EscapeField(tblName)} SET "$)
+	sb.Append($"UPDATE ${EscapeField(TableName)} SET "$)
 	Dim i As Int
 	Dim iTot As Int = tblfields.Size - 1
 	For i = 0 To iTot
@@ -1189,7 +1190,7 @@ function BANanoMSSQL($command, $query, $args, $types){
 	$resp = array();
 	header('Access-Control-Allow-Origin: *');
 	header('content-type: application/json; charset=utf-8');
-	require_once './assets/config.php';
+	require_once './assets/mssqlconfig.php';
 	$serverName = DB_HOST;
 	$uid = DB_USER;
 	$pwd = DB_PASS;

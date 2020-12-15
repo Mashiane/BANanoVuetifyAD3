@@ -15,7 +15,7 @@ Sub Class_Globals
 	Public jsBoolean As BANanoObject
 	Public jsArray As BANanoObject
 	Public jsObject As BANanoObject
-	Private refs As BANanoObject
+	Public refs As BANanoObject
 	'
 	Private data As Map
 	Private opt As Map
@@ -41,10 +41,10 @@ Sub Class_Globals
 	Private dialogoktitle As String 
 	Private dialogokshow As String 
 	Private dialogcancelshow As String
-	Private dialogwidth As String
-	Private dialogpersistent As String 
-	Private dialogokcolor As String
-	Private dialogcancelcolor As String
+	Private dialogwidth As String    'ignore
+	Private dialogpersistent As String   'ignore
+	Private dialogokcolor As String   'ignore
+	Private dialogcancelcolor As String  'ignore
 	Private dialogpromptlabel As String
 	Private dialogpromptvalue As String
 	Private dialogprompthint As String

@@ -300,6 +300,7 @@ End Sub
 'initialize the class, a field named "id" is assumed to be an integer
 '<code>
 ''initialize the class
+'Dim dbConnect As BANanoMySQLE
 'dbConnect.Initialize("db1", "users", "id", "id")
 '</code>
 Public Sub Initialize(dbName As String, tblName As String, PK As String, AI As String) As BANanoMySQLE
@@ -1323,7 +1324,7 @@ function BANanoMySQL($command, $query, $args, $types) {
 	$resp = array();
 	header('Access-Control-Allow-Origin: *');
 	header('content-type: application/json; charset=utf-8');
-	require_once './assets/config.php';
+	require_once './assets/mysqlconfig.php';
     //connect To MySQL
     $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
     //we cannot connect Return an error

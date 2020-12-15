@@ -387,6 +387,13 @@ Sub NewListViewItemOptions() As ListViewItemOptions
 	Return lvio
 End Sub
 
+Sub Trim(v As String) As String
+	If BANano.IsNull(v) Or BANano.IsUndefined(v) Then v = ""
+	v = CStr(v)
+	v = v.Trim
+	Return v
+End Sub
+
 
 'return ths vue instance
 Sub This As BANanoObject

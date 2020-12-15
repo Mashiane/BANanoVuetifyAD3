@@ -1,4 +1,392 @@
 <?php header("Access-Control-Allow-Origin: *");$rest_json = file_get_contents("php://input");$_POST = json_decode($rest_json, true);$request='';if(isset($_POST['request'])){$request = $_POST['request'];$params = $_POST['params'];}if (!function_exists($request)) die("invalid request: '" . $request . "'"); 
+function BANanoMSSQL($command, $query, $args, $types){ 
+	$resp = array(); 
+	header('Access-Control-Allow-Origin: *'); 
+	header('content-type: application/json; charset=utf-8'); 
+	require_once './assets/mssqlconfig.php'; 
+	$serverName = DB_HOST; 
+	$uid = DB_USER; 
+	$pwd = DB_PASS; 
+	$database = DB_NAME; 
+	try { 
+		$conn = new PDO("sqlsrv:server=$serverName;database=$database", $uid, $pwd); 
+ 		$conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false); 
+		$conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC); 
+		$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION ); 
+		$conn->setAttribute(PDO::SQLSRV_ATTR_DIRECT_QUERY, true); 
+		 
+    	$commands = array('delete', 'update', 'replace', 'insert', 'connection', 'createdb', 'dropdb', 'createtable', 'droptable'); 
+    	if (in_array($command, $commands)) { 
+        	$command = 'changes'; 
+    	} 
+		switch ($command) { 
+    	case "changes": 
+        	$stmt = $conn->prepare($query); 
+			$stmt->execute($args); 
+			$affRows = $stmt->rowCount(); 
+			 
+			$resp['response'] = "Success"; 
+			$resp['error'] = ''; 
+			$resp['result'] = array(); 
+			$resp['affectedRows'] = $affRows; 
+			$output = json_encode($resp); 
+        	break; 
+    	default: 
+			$stmt = $conn->prepare($query); 
+			$stmt->execute($args); 
+			$rows = $stmt->fetchAll(); 
+        	$affRows = $stmt->rowCount(); 
+			$resp['response'] = "Success"; 
+			$resp['error'] = ''; 
+			$resp['result'] = $rows; 
+			$resp['affectedRows'] = $affRows; 
+			$output = json_encode($resp); 
+        	break; 
+		} 
+    	echo ($output); 
+		// Free statement and connection resources. 
+		$stmt = null; 
+		$conn = null; 
+	} catch( PDOException $e ) { 
+		$response = $e->getMessage(); 
+		$resp['response'] = "Error"; 
+		$resp['error'] = $response; 
+		$resp['result'] = array(); 
+		$output = json_encode($resp); 
+        die($output); 
+	} 
+} 
+ 
+function BANanoMSSQLDynamic($command, $query, $args, $types, $host, $username, $password, $dbname){ 
+	$resp = array(); 
+	header('Access-Control-Allow-Origin: *'); 
+	header('content-type: application/json; charset=utf-8'); 
+	$conn=null; 
+	try { 
+		$conn = new PDO("sqlsrv:server=$host;database=$dbname", $username, $password); 
+ 		$conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false); 
+		$conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC); 
+		$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION ); 
+		$conn->setAttribute(PDO::SQLSRV_ATTR_DIRECT_QUERY, true); 
+		 
+    	$commands = array('delete', 'update', 'replace', 'insert', 'connection', 'createdb', 'dropdb', 'createtable', 'droptable'); 
+    	if (in_array($command, $commands)) { 
+        	$command = 'changes'; 
+    	} 
+		switch ($command) { 
+    	case "changes": 
+        	$stmt = $conn->prepare($query); 
+			$stmt->execute($args); 
+			$affRows = $stmt->rowCount(); 
+			 
+			$resp['response'] = "Success"; 
+			$resp['error'] = ''; 
+			$resp['result'] = array(); 
+			$resp['affectedRows'] = $affRows; 
+			$output = json_encode($resp); 
+        	break; 
+    	default: 
+			$stmt = $conn->prepare($query); 
+			$stmt->execute($args); 
+			$rows = $stmt->fetchAll(); 
+        	$affRows = $stmt->rowCount(); 
+			$resp['response'] = "Success"; 
+			$resp['error'] = ''; 
+			$resp['result'] = $rows; 
+			$resp['affectedRows'] = $affRows; 
+			$output = json_encode($resp); 
+        	break; 
+		} 
+    	echo ($output); 
+		// Free statement and connection resources. 
+		$stmt = null; 
+		$conn = null; 
+	} catch( PDOException $e ) { 
+		$response = $e->getMessage(); 
+		$resp['response'] = "Error"; 
+		$resp['error'] = $response; 
+		$resp['result'] = array(); 
+		$output = json_encode($resp); 
+        die($output); 
+	} 
+} 
+ 
+ 
+function prepareMySQL($conn, $query, $types, $args) { 
+	//paramater types to execute 
+	/* Bind parameters. Types: s = string, i = integer, d = double,  b = blob */ 
+	$stmt = $conn->prepare($query); 
+	if(is_array($types)){ 
+		$a_params = array(); 
+		$param_type = ''; 
+		$n = count($types); 
+		for($i = 0; $i < $n; $i++) { 
+			$param_type .= $types[$i]; 
+		} 
+		$a_params[] = & $param_type; 
+		//values to execute 
+		for($i = 0; $i < $n; $i++) { 
+			$a_params[] = & $args[$i]; 
+		} 
+		call_user_func_array(array($stmt, 'bind_param'), $a_params); 
+	} 
+	return $stmt; 
+} 
+ 
+function BANanoMySQL($command, $query, $args, $types) { 
+	$resp = array(); 
+	header('Access-Control-Allow-Origin: *'); 
+	header('content-type: application/json; charset=utf-8'); 
+	require_once './assets/mysqlconfig.php'; 
+    //connect To MySQL 
+    $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+    //we cannot connect Return an error 
+    if ($conn->connect_error) { 
+        $response = $conn->connect_error; 
+        $resp['response'] = "Error"; 
+		$resp['error'] = $response; 
+		$resp['result'] = array(); 
+		$output = json_encode($resp); 
+        die($output); 
+    } 
+    mysqli_set_charset($conn, 'utf8'); 
+    //$query = mysqli_real_escape_string($conn, $query); 
+    $commands = array('delete', 'update', 'replace', 'insert', 'connection', 'createdb', 'dropdb', 'createtable', 'droptable'); 
+    if (in_array($command, $commands)) { 
+        $command = 'changes'; 
+    } 
+    switch ($command) { 
+    case "changes": 
+        $stmt = prepareMySQL($conn, $query, $types, $args); 
+        if (! $stmt -> execute()) { 
+			$response = $stmt->error; 
+        	$resp['response'] = "Error"; 
+			$resp['error'] = $response; 
+			$resp['result'] = array(); 
+			$output = json_encode($resp); 
+	        die($output); 
+		} 
+	 
+		$affRows = $conn->affected_rows; 
+    	$resp['response'] = "Success"; 
+		$resp['error'] = ''; 
+		$resp['result'] = array(); 
+		$resp['affectedRows'] = $affRows; 
+		$output = json_encode($resp); 
+        break; 
+    default: 
+        $stmt = prepareMySQL($conn, $query, $types, $args); 
+        //$result = $stmt->execute(); 
+		//$result = $stmt->get_result(); 
+         
+		if (!($result = $stmt->execute())) { 
+			$response = $stmt->error; 
+        	$resp['response'] = "Error"; 
+			$resp['error'] = $response; 
+			$resp['result'] = array(); 
+			$output = json_encode($resp); 
+	        die($output); 
+		} 
+		 
+		if (!($result = $stmt->get_result())) { 
+			$response = $stmt->error; 
+        	$resp['response'] = "Error"; 
+			$resp['error'] = $response; 
+			$resp['result'] = array(); 
+			$output = json_encode($resp); 
+	        die($output); 
+		} 
+		 
+		$affRows = $conn->affected_rows; 
+    	$rows = array(); 
+        while ($row = $result->fetch_assoc()) { 
+            $rows[] = $row; 
+        } 
+    	$resp['response'] = "Success"; 
+		$resp['error'] = ''; 
+		$resp['result'] = $rows; 
+		$resp['affectedRows'] = $affRows; 
+		$output = json_encode($resp); 
+        break; 
+	} 
+	echo ($output); 
+    $stmt->close(); 
+    $conn->close(); 
+} 
+ 
+function BANanoMySQLDynamic($command, $query, $args, $types, $host, $username, $password, $dbname) { 
+	$resp = array(); 
+	header('Access-Control-Allow-Origin: *'); 
+	header('content-type: application/json; charset=utf-8'); 
+	//connect To MySQL 
+    $conn = new mysqli($host, $username, $password); 
+    //we cannot connect Return an error 
+    if ($conn->connect_error) { 
+        $response = $conn->connect_error; 
+        $resp['response'] = "Error"; 
+		$resp['error'] = $response; 
+		$resp['result'] = array(); 
+		$output = json_encode($resp); 
+        die($output); 
+    } 
+	//select the database 
+	mysqli_set_charset($conn, 'utf8'); 
+    $commands = array('delete', 'update', 'replace', 'insert', 'createtable', 'droptable'); 
+    if (in_array($command, $commands)) { 
+        $command = 'changes'; 
+    } 
+    switch ($command) { 
+    case "connection": 
+		$resp['response'] = "Success"; 
+		$resp['error'] = ''; 
+		$resp['result'] = array(); 
+		$resp['affectedRows'] = 0; 
+		$output = json_encode($resp); 
+		die($output); 
+	case "createdb": 
+		$stmt = prepareMySQL($conn, $query, $types, $args); 
+        if (! $stmt -> execute()) { 
+			$response = $stmt->error; 
+        	$resp['response'] = "Error"; 
+			$resp['error'] = $response; 
+			$resp['result'] = array(); 
+			$output = json_encode($resp); 
+	        die($output); 
+		} 
+	 
+		$resp['response'] = "Success"; 
+		$resp['error'] = ''; 
+		$resp['result'] = array(); 
+		$resp['affectedRows'] = 0; 
+		$output = json_encode($resp); 
+        break; 
+	case "dropdb": 
+		$stmt = prepareMySQL($conn, $query, $types, $args); 
+        if (! $stmt -> execute()) { 
+			$response = $stmt->error; 
+        	$resp['response'] = "Error"; 
+			$resp['error'] = $response; 
+			$resp['result'] = array(); 
+			$output = json_encode($resp); 
+	        die($output); 
+		} 
+	 
+		$resp['response'] = "Success"; 
+		$resp['error'] = ''; 
+		$resp['result'] = array(); 
+		$resp['affectedRows'] = 0; 
+		$output = json_encode($resp); 
+        break; 
+	case "databases": 
+		$stmt = prepareMySQL($conn, $query, $types, $args); 
+        if (!($result = $stmt->execute())) { 
+			$response = $stmt->error; 
+        	$resp['response'] = "Error"; 
+			$resp['error'] = $response; 
+			$resp['result'] = array(); 
+			$output = json_encode($resp); 
+	        die($output); 
+		} 
+		 
+		if (!($result = $stmt->get_result())) { 
+			$response = $stmt->error; 
+        	$resp['response'] = "Error"; 
+			$resp['error'] = $response; 
+			$resp['result'] = array(); 
+			$output = json_encode($resp); 
+	        die($output); 
+		} 
+		 
+		$affRows = $conn->affected_rows; 
+    	$rows = array(); 
+        while ($row = $result->fetch_assoc()) { 
+            $rows[] = $row; 
+        } 
+    	$resp['response'] = "Success"; 
+		$resp['error'] = ''; 
+		$resp['result'] = $rows; 
+		$resp['affectedRows'] = $affRows; 
+		$output = json_encode($resp); 
+        break; 
+	case "changes": 
+		//select the db before processing 
+		$selected = mysqli_select_db($conn, $dbname); 
+		if (!$selected) { 
+			$response = $conn->connect_error; 
+        	$resp['response'] = "Error"; 
+			$resp['error'] = $response; 
+			$resp['result'] = array(); 
+			$output = json_encode($resp); 
+        	die($output); 
+		} 
+        $stmt = prepareMySQL($conn, $query, $types, $args); 
+        if (! $stmt -> execute()) { 
+			$response = $stmt->error; 
+        	$resp['response'] = "Error"; 
+			$resp['error'] = $response; 
+			$resp['result'] = array(); 
+			$output = json_encode($resp); 
+	        die($output); 
+		} 
+	 
+		$affRows = $conn->affected_rows; 
+    	$resp['response'] = "Success"; 
+		$resp['error'] = ''; 
+		$resp['result'] = array(); 
+		$resp['affectedRows'] = $affRows; 
+		$output = json_encode($resp); 
+        break; 
+    default: 
+		//select the db before processing 
+		$dbname = mysqli_real_escape_string($conn, $dbname); 
+		$selected = mysqli_select_db($conn, $dbname); 
+		if (!$selected) { 
+			$response = $conn->connect_error; 
+        	$resp['response'] = "Error"; 
+			$resp['error'] = $response; 
+			$resp['result'] = array(); 
+			$output = json_encode($resp); 
+        	die($output); 
+		} 
+        $stmt = prepareMySQL($conn, $query, $types, $args); 
+        //$result = $stmt->execute(); 
+		//$result = $stmt->get_result(); 
+         
+		if (!($result = $stmt->execute())) { 
+			$response = $stmt->error; 
+        	$resp['response'] = "Error"; 
+			$resp['error'] = $response; 
+			$resp['result'] = array(); 
+			$output = json_encode($resp); 
+	        die($output); 
+		} 
+		 
+		if (!($result = $stmt->get_result())) { 
+			$response = $stmt->error; 
+        	$resp['response'] = "Error"; 
+			$resp['error'] = $response; 
+			$resp['result'] = array(); 
+			$output = json_encode($resp); 
+	        die($output); 
+		} 
+		 
+		$affRows = $conn->affected_rows; 
+    	$rows = array(); 
+        while ($row = $result->fetch_assoc()) { 
+            $rows[] = $row; 
+        } 
+    	$resp['response'] = "Success"; 
+		$resp['error'] = ''; 
+		$resp['result'] = $rows; 
+		$resp['affectedRows'] = $affRows; 
+		$output = json_encode($resp); 
+        break; 
+	} 
+	echo ($output); 
+    $stmt->close(); 
+    $conn->close(); 
+} 
+ 
 function EmailSend($from, $to, $cc, $subject, $msg) { 
 	$hdr  = 'MIME-Version: 1.0' . "\r\n"; 
 	$hdr .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n"; 

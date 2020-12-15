@@ -261,6 +261,7 @@ End Sub
 'initialize the class, a field named "id" is assumed to be an integer
 '<code>
 ''initialize the class
+'Dim dbConnect As BANanoSQLiteE
 'dbConnect.Initialize("db1.db", "users", "id", "id")
 '</code>
 Public Sub Initialize(dbName As String, tblName As String, PK As String, AI As String) As BANanoSQLiteE

@@ -4,6 +4,7 @@ ModulesStructureVersion=1
 Type=StaticCode
 Version=8.3
 @EndOfDesignText@
+#IgnoreWarnings:12
 Sub Process_Globals
 	Private BANano As BANano  'ignore
 	Dim UnitWords() As String = Array As String( _
@@ -984,6 +985,43 @@ End Sub
 
 Sub InStrRev(value As String, search As String) As Long
 	Return value.LastIndexOf(search) + 1
+End Sub
+
+
+Sub GetFullDate(v As String) As String
+	Try
+	If BANano.IsNull(v) Or BANano.IsUndefined(v) Then v = ""
+	If v = "" Then Return v				
+	Dim xDate As BANanoObject = v   'ignore
+	Dim syear As String = xDate.RunMethod("getFullYear", Null).Result
+	Dim smonth As String = xDate.RunMethod("getMonth", Null).Result
+	Dim sday As String = xDate.RunMethod("getDate", Null).Result
+	smonth = BANano.parseInt(smonth) + 1
+	smonth = PadRight(smonth, 2, "0")
+	sday = PadRight(sday, 2, "0")
+	Dim yyyymmdd As String = $"${syear}-${smonth}-${sday}"$
+	Return yyyymmdd
+	Catch
+		Return v
+	End Try
+End Sub
+
+
+Sub GetFullTime(v As String) As String
+	Try
+	If BANano.IsNull(v) Or BANano.IsUndefined(v) Then v = ""
+	If v = "" Then Return "00:00"
+	
+	Dim xDate As BANanoObject = v   'ignore
+	Dim sHours As String = xDate.RunMethod("getHours", Null).Result
+	Dim sMinutes As String = xDate.RunMethod("getMinutes", Null).Result
+	sHours = PadRight(sHours, 2, "0")
+	sMinutes = PadRight(sMinutes, 2, "0")
+	Dim hhmm As String = $"${sHours}:${sMinutes}"$
+	Return hhmm
+	Catch
+		Return v
+	End Try
 End Sub
 
 
