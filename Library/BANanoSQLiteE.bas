@@ -847,10 +847,10 @@ Sub SelectWhere(tblfields As List, tblWhere As Map, operators As List, orderBy A
 	Dim fld1 As String = tblfields.Get(0)
 	Dim selFIelds As String = ""
 	Select Case fld1
-		Case "*"
-			selFIelds = "*"
-		Case Else
-			selFIelds = JoinFields(",", tblfields)
+	Case "*"
+		selFIelds = "*"
+	Case Else
+		selFIelds = JoinFields(",", tblfields)
 	End Select
 	Dim sb As StringBuilder
 	sb.Initialize

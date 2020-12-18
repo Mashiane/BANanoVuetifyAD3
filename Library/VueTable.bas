@@ -7,6 +7,7 @@ Version=8.5
 #IgnoreWarnings:12
 'Custom BANano View class
 
+#Event: Add_Click (e As BANanoEvent)
 #Event: Save (item As Map)
 #Event: Edit (item As Map)
 #Event: Delete (item As Map)
@@ -20,12 +21,18 @@ Version=8.5
 #Event: Clone (item As Map)
 #Event: ItemSelected (item As Map)
 #Event: ClickRow (e As BANanoEvent)
+#Event: ClearSort_Click (e As BANanoEvent)
+#Event: ClearFilter_Click (e As BANanoEvent)
+#Event: FilterChange(e As BANanoEvent)
+#Event: Filter_Click(e As BANanoEvent)
 
+#DesignerProperty: Key: Title, DisplayName: Title, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: AutoID, DisplayName: Auto ID/Name, FieldType: Boolean, DefaultValue: False, Description: Overrides the ID/Name with a random string.
 #DesignerProperty: Key: Ref, DisplayName: Ref, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: ItemKey, DisplayName: ItemKey, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: ItemsPerPage, DisplayName: ItemsPerPage, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Dense, DisplayName: Dense, FieldType: Boolean, DefaultValue:  False, Description: 
+#DesignerProperty: Key: HasSearch, DisplayName: Has Search, FieldType: Boolean, DefaultValue:  False, Description:
 #DesignerProperty: Key: ShowSelect, DisplayName: ShowSelect, FieldType: Boolean, DefaultValue:  False, Description: 
 #DesignerProperty: Key: SingleSelect, DisplayName: SingleSelect, FieldType: Boolean, DefaultValue:  False, Description: 
 #DesignerProperty: Key: Elevation, DisplayName: Elevation, FieldType: String, DefaultValue:  , Description: 
@@ -113,7 +120,7 @@ Sub Class_Globals
 	Private headers As String
 	Private search As String
 	Type DataTableColumn(value As String, text As String, align As String, sortable As Boolean, filterable As Boolean, divider As Boolean, _
-	className As String, width As String, filter As String, sort As String, ColType As String, extra As String, icon As String, Disabled As Boolean, imgWidth As String, imgHeight As String, avatarSize As String, iconSize As String, ReadOnly As Boolean, progressColor As String, progressRotate As String, progressSize As String, progressWidth As String, progressHeight As String, progressShowValue As Boolean, valueFormat As String, bindTotals As String, hasTotal As Boolean, depressed As Boolean, rounded As Boolean, dark As Boolean, label As String, color As String, outlined As Boolean, shaped As Boolean, target As String, prefix As String, colprops As Map)
+	className As String, width As String, filter As String, sort As String, ColType As String, extra As String, icon As String, Disabled As Boolean, imgWidth As String, imgHeight As String, avatarSize As String, iconSize As String, ReadOnly As Boolean, progressColor As String, progressRotate As String, progressSize As String, progressWidth As String, progressHeight As String, progressShowValue As Boolean, valueFormat As String, bindTotals As String, hasTotal As Boolean, depressed As Boolean, rounded As Boolean, dark As Boolean, label As String, color As String, outlined As Boolean, shaped As Boolean, target As String, prefix As String, colprops As Map, visible As Boolean)
 	Private hasTotals As Boolean
 	Private hasExternalPagination As Boolean
 	Private totalVisible As String
@@ -126,6 +133,15 @@ Sub Class_Globals
 	Public expanded As String
 	Public keyID As String
 	Public search As String
+	Private mTitle As String
+	Private mHasSearch As Boolean = False
+	Private titleID As String
+	Private titleText As String
+	Private searchID As String
+	Private filtershow As String 
+	Private filters As String
+	Private filterList As List
+	Private allcolumns As String
 End Sub
 
 'initialize the custom view
@@ -155,6 +171,12 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	expanded = $"${mName}expanded"$
 	itemsname = $"${mName}items"$
 	search = $"${mName}search"$
+	titleID = $"${mName}title"$
+	titleText = $"${mName}titletext"$
+	searchID = $"${mName}searchid"$
+	filtershow = $"${mName}filtershow"$
+	filters = $"${mName}filters"$
+	allcolumns = $"${mName}allcolumns"$
 	'
 	AddAttr(":items", itemsname)
 	AddAttr(":headers", headers)
@@ -169,15 +191,6 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	
 	setNoDataText("Working on it, please wait...")
 	'
-	SetSortBy(NewList)
-	SetGroupBy(NewList)
-	SetExpanded(NewList)
-	SetGroupDesc(NewList)
-	SetSortDesc(NewList)
-	SetSelected(NewList)
-	SetHeaders(NewList)
-	SetDataSource(NewList)
-	'
 	Dim sb As StringBuilder
 	sb.Initialize
 	sb.Append($"${headers}=array;"$)
@@ -188,16 +201,42 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	sb.Append($"${sortdesc}=array;"$)
 	sb.Append($"${expanded}=array;"$)
 	sb.Append($"${itemsname}=array;"$)
-	sb.Append($"${search}=string"$)
+	sb.Append($"${search}=string;"$)
+	sb.Append($"${filters}=array;"$)
+	sb.Append($"${allcolumns}=array;"$)
+	sb.Append($"${titleText}=string;"$)
+	sb.Append($"${filtershow}=false"$)
 	setStates(sb.ToString)
+	SetData(filtershow, False)
+	filterList.Initialize 
 End Sub
 
-Sub SetHeaders(hdrs As List)
-	SetData(headers, hdrs)
+'update the title of the table
+Sub setTitle(vTitle As String)
+	If BANano.IsNull(vTitle) Or BANano.IsUndefined(vTitle) Then vTitle = ""
+	mTitle = vTitle
+	SetData(titleText, vTitle)
 End Sub
 
-Sub SetSelected(varSortDesc As List)
-	SetData(selected, varSortDesc)
+'update the title
+Sub UpdateTitle(VC As VueComponent, title As String)
+	VC.SetData(titleText, title)
+End Sub
+
+Sub setHasSearch(b As Boolean)
+	mHasSearch = b
+End Sub
+
+Sub getHasSearch As Boolean
+	Return mHasSearch
+End Sub
+
+Sub SetHeaders(VC As VueComponent, hdrs As List)
+	VC.SetData(headers, hdrs)
+End Sub
+
+Sub SetSelected(VC As VueComponent, varSortDesc As List)
+	VC.SetData(selected, varSortDesc)
 End Sub
 
 'set no-data-text
@@ -206,29 +245,33 @@ Sub setNoDataText(varNoDataText As String)
 End Sub
 
 'set group-by
-Sub SetGroupBy(varGroupBy As List)
-	SetData(groupby, varGroupBy)
+Sub SetGroupBy(VC As VueComponent, varGroupBy As List)
+	VC.SetData(groupby, varGroupBy)
 End Sub
 
 'set sort-by
-Sub SetSortBy(varSortBy As List)
-	SetData(sortby, varSortBy)
+Sub SetSortBy(VC As VueComponent, varSortBy As List)
+	VC.SetData(sortby, varSortBy)
+End Sub
+
+'clear any sort
+Sub ClearSort(VC As VueComponent)
+	SetSortBy(VC, NewList)
 End Sub
 
 'set group-desc
-Sub SetGroupDesc(varGroupDesc As List)
-	SetData(groupdesc, varGroupDesc)
+Sub SetGroupDesc(VC As VueComponent, varGroupDesc As List)
+	VC.SetData(groupdesc, varGroupDesc)
 End Sub
 
-Sub SetSortDesc(varSortDesc As List)
-	SetData(sortdesc, varSortDesc)
+Sub SetSortDesc(vc As VueComponent, varSortDesc As List)
+	vc.SetData(sortdesc, varSortDesc)
 End Sub
 
 'set expanded
-Sub SetExpanded(varExpanded As List)
-	SetData(expanded, varExpanded)
+Sub SetExpanded(VC As VueComponent, varExpanded As List)
+	VC.SetData(expanded, varExpanded)
 End Sub
-
 
 'return a list of selected primary keys
 Sub GetItemKeys(lst As List) As List
@@ -278,6 +321,8 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bShowGroupBy = Props.Get("ShowGroupBy")
 		bShowSelect = Props.Get("ShowSelect")
 		bSingleSelect = Props.Get("SingleSelect")
+		mTitle = Props.Get("Title")
+		mHasSearch = Props.Get("HasSearch")
 	End If
 	
 	AddAttr("ref", stRef)
@@ -293,7 +338,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	AddAttr(":single-select", bSingleSelect)
 	If BANano.IsNull(stGroupBy) = False Then
 		Dim gb As List = BANanoShared.StrParse(",",  stGroupBy)
-		SetGroupBy(gb)
+		SetData(groupby, gb)
 	End If
 	AddAttr(":show-group-by", bShowGroupBy)
 	'
@@ -308,6 +353,12 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	Dim strHTML As String = ToString
 	mElement = mTarget.Append(strHTML).Get("#" & mName)
 	setStates(mStates)
+	setTitle(mTitle)
+	'
+	If mHasSearch = True Then
+		AddSpacer
+		AddSearch
+	End If
 End Sub
 
 'add anything from the appendholder
@@ -384,8 +435,135 @@ Sub ToString As String
 	'build element internal structure
 	Dim iStructure As String = BANanoShared.BuildAttributes(attributeList)
 	iStructure = iStructure.trim
+	'		
 	Dim rslt As String = $"<${mTagName} id="${mName}" ${iStructure}></${mTagName}>"$
-	Return rslt
+	Dim sb As StringBuilder
+	sb.Initialize 
+	sb.Append($"<v-card id="${mName}card">"$)
+	sb.Append($"<v-card-title id="${titleID}">"$)
+	sb.Append($"{{ ${titleText} }}"$)
+	sb.Append($"</v-card-title>"$)
+	sb.Append($"<v-divider v-show="${filtershow}"></v-divider>"$)
+	sb.Append($"<v-card-text v-show="${filtershow}"><p>Choose Filter Columns</p><div id="${mName}filter"></div></v-card-text>"$)
+	sb.Append(rslt)
+	sb.Append($"</v-card>"$)
+	Return sb.tostring
+End Sub
+
+'return the table title
+Sub getTableTitle As VueElement
+	Dim elx As VueElement
+	elx.Initialize(mCallBack, titleID, titleID)
+	Return elx
+End Sub
+
+'return the search text
+Sub getSearchText As VueElement
+	Dim elx As VueElement
+	elx.Initialize(mCallBack, searchID, searchID)
+	Return elx
+End Sub
+
+'add a spacer to the card title
+Sub AddSpacer
+	Dim ct As BANanoElement
+	ct.Initialize($"#${titleID}"$)
+	ct.Append("<v-spacer></v-spacer>")
+End Sub
+
+'add a spacer to the card title
+Sub AddDivider
+	Dim ct As BANanoElement
+	ct.Initialize($"#${titleID}"$)
+	ct.Append($"<v-divider vertical class="mx-2"></v-divider>"$)
+End Sub
+
+'add a column to add a new
+Sub AddNew(VC As VueComponent)
+	Dim btnKey As String = $"${mName}_add"$
+	AddTitleIcon(VC, btnKey, "mdi-plus", "blue")
+End Sub
+
+'add a column to clear sort
+Sub AddClearSort(VC As VueComponent)
+	Dim btnKey As String = $"${mName}_clearsort"$
+	AddTitleIcon(VC, btnKey, "mdi-sort-variant-remove", "orange")
+End Sub
+
+'add a column to clear filters
+Sub AddClearFilter(VC As VueComponent)
+	Dim btnKey As String = $"${mName}_clearfilter"$
+	AddTitleIcon(VC, btnKey, "mdi-filter-remove", "red")
+End Sub
+
+'a button with an icon on the left
+Sub AddTitleIcon(VC As VueComponent, elID As String, eIcon As String, btnColor As String)
+	Dim ct As BANanoElement
+	ct.Initialize($"#${titleID}"$)
+	elID = elID.ToLowerCase
+	Dim siconright As String = $"${elID}icon"$
+	ct.Append($"<v-btn id="${elID}"><v-icon id="${elID}icon"></v-icon></v-btn>"$)
+	Dim vbtnright As VueElement
+	vbtnright.Initialize(mCallBack, elID, elID)
+	vbtnright.Dark = True
+	vbtnright.Fab = True
+	vbtnright.Small = True
+	vbtnright.Color = btnColor
+	'
+	Dim viconright As VueElement
+	viconright.Initialize(mCallBack, siconright, siconright)
+	viconright.Caption = eIcon
+	viconright.Dark = True
+	
+	vbtnright.SetOnEvent(mCallBack, "click", "")
+	vbtnright.BindVueElement(viconright)
+	VC.BindVueElement(vbtnright)
+End Sub
+
+'add a filter, after all columns are added
+Sub AddFilter(VC As VueComponent, activeClass As String)
+	'show the filter
+	SetData(filtershow, True)
+	Dim btnKey As String = $"${mName}_filter"$
+	AddTitleIcon(VC, btnKey, "mdi-filter", "green")
+	'
+	Dim filterID As String = $"${mName}filter"$
+	Dim filterChips As String = $"${mName}filterchips"$
+	Dim filterChip As String = $"${mName}filterchip"$
+	
+	Dim ct As BANanoElement
+	ct.Initialize($"#${filterID}"$)
+	ct.Append($"<v-chip-group id="${filterChips}"><v-chip id="${filterChip}"></v-chip></v-chip-group><v-divider></v-divider>"$)
+		
+	'get the text field, there is only 1 element on the layout
+	Dim vchipgroup As VueElement
+	vchipgroup.Initialize(mCallBack, filterChips, filterChips)
+	vchipgroup.Bind("show-arrows", True)
+	vchipgroup.VModel = filters
+	vchipgroup.Multiple = True
+	vchipgroup.Column = True
+	vchipgroup.AddAttr("active-class", activeClass)
+	vchipgroup.SetOnEventOwn(mCallBack, $"${mName}_filterchange"$, "change", "")
+	'get the text field, there is only 1 element on the layout
+	Dim vchip As VueElement
+	vchip.Initialize(mCallBack, filterChip, filterChip)
+	vchip.VFor = $"item in ${allcolumns}"$
+	vchip.BindKey("item.value")
+	vchip.Caption = vchip.ItemInMoustache("text")
+	vchip.AddAttr(":filter", True)
+	vchip.AddAttr(":value", "item.value")
+	vchip.Outlined = True
+	vchipgroup.BindVueElement(vchip)
+	VC.BindVueElement(vchipgroup)
+End Sub
+
+
+'add a search to the card title
+Sub AddSearch
+	Dim str As String = $"<v-text-field id="${searchID}" v-model="${search}" append-icon="mdi-magnify" label="Search" single-line hide-details></v-text-field>"$
+	Dim ct As BANanoElement
+	ct.Initialize($"#${titleID}"$)
+	ct.Append(str)
 End Sub
 
 'return html of the element
@@ -444,6 +622,10 @@ public Sub setStates(varBindings As String)
 		else if v.EqualsIgnoreCase("string") Then
 			If k <> "" Then
 				bindings.Put(k, "")
+			End If
+		else if v.EqualsIgnoreCase("boolean") Then
+			If k <> "" Then
+				bindings.Put(k, False)
 			End If
 		else if v.EqualsIgnoreCase("int") Then
 			If k <> "" Then
@@ -1183,6 +1365,8 @@ Sub Reset(VC As VueComponent)
 	VC.SetData(sortdesc, NewList)
 	VC.SetData(expanded, NewList)
 	VC.SetData(headers, NewList)
+	VC.SetData(filters, NewList)
+	VC.SetData(allcolumns, NewList)
 	VC.SetData(keyID, DateTime.Now)
 	'
 	columnsM.Initialize
@@ -1556,7 +1740,6 @@ Sub ShowColumns(VC As VueComponent, colNames As List)
 		'get the header
 		Dim nf As DataTableColumn = columnsM.Get(k)
 		Dim colpos As Int = colNames.IndexOf(k)
-		'column is not found, thus visible
 		If colpos >= 0 Then
 			Dim header As Map = BuildHeader(nf)
 			hdr.Add(header)
@@ -1565,18 +1748,51 @@ Sub ShowColumns(VC As VueComponent, colNames As List)
 	VC.SetData(headers, hdr)
 End Sub
 
+'get all selected
+Sub GetSelected(VC As VueComponent) As List
+	Dim lst As List = VC.GetData(selected)
+	Return lst
+End Sub
+
+'get all the data from the table
+Sub GetData(VC As VueComponent) As List
+	Dim lst As List = VC.GetData(itemsname)
+	Return lst
+End Sub
+
+'reset the filters
+Sub ClearFilter(VC As VueComponent)
+	ResetColumns(VC)
+End Sub
+
+'apply a filters bases on fields
+Sub ApplyFilter(VC As VueComponent)
+	filterList = VC.GetData(filters)
+	Dim hdr As List
+	hdr.Initialize 
+	For Each strF As String In filterList
+		Dim nf As DataTableColumn = columnsM.Get(strF)
+		Dim header As Map = BuildHeader(nf)
+		hdr.Add(header)
+	Next
+	VC.SetData(headers, hdr)
+End Sub
 
 'reset the columns
 Sub ResetColumns(VC As VueComponent)
 	hdr.Initialize
+	filterList.Initialize 
 	'loop through each column
 	For Each k As String In columnsM.Keys
 		'get the header
 		Dim nf As DataTableColumn = columnsM.Get(k)
 		Dim header As Map = BuildHeader(nf)
 		hdr.Add(header)
+		filterList.Add(k)
 	Next
 	VC.SetData(headers, hdr)
+	VC.SetData(allcolumns, hdr)
+	VC.SetData(filters, filterList)
 	VC.SetData(selected, NewList)
 	VC.SetData(groupby, NewList)
 	VC.SetData(sortby, NewList)
@@ -1593,7 +1809,13 @@ Sub SetColumnFilterable(colName As String, colFilter As Boolean)
 		col.filterable = colFilter
 		columnsM.Put(colName,col)
 	End If
-	
+End Sub
+
+'specify columns you can filter
+Sub SetFilterable(colNames As List)
+	For Each fld As String In colNames
+		SetColumnFilterable(fld, True)
+	Next
 End Sub
 
 'set column class
@@ -1609,15 +1831,18 @@ End Sub
 'build headers
 private Sub BuildHeaders(colNames As Map)
 	hdr.Initialize
+	filterList.Initialize 
 	'
 	For Each k As String In colNames.keys
 		'get the column details
 		Dim nf As DataTableColumn = colNames.Get(k)
-		'
 		Dim header As Map = BuildHeader(nf)
 		hdr.Add(header)
+		filterList.Add(k)
 	Next
 	SetData(headers, hdr)
+	SetData(filters, filterList)
+	SetData(allcolumns, hdr)
 End Sub
 
 private Sub BuildHeader(nf As DataTableColumn) As Map
@@ -2130,8 +2355,8 @@ Sub SetTotalVisible(varTotalVisible As String)
 	totalVisible = varTotalVisible
 End Sub
 
-'update the data
-Sub Refresh
+'update the data, dont call this direct
+Sub Refresh	
 	'build the headers
 	BuildHeaders(columnsM)	
 	BuildSlots

@@ -511,6 +511,50 @@ Sub AddTab(tabID As String, Caption As String, Icon As String, iconLeft As Boole
 	Return itemtext
 End Sub
 
+'<code>
+'Dim panel1 As VueElement = Vuetify.AddExpansionPanel("panel1", "Panel 1")
+'vuetify.BindVueElement(panel1)
+'
+''trap panel change event
+'Sub panel1_change(e As BANanoEvent)
+'End Sub
+'
+''trap panel click event
+'Sub panel1_click(e As BANanoEvent)
+'End Sub
+'</code>
+Sub AddExpansionPanel(elID As String, HeaderCaption As String) As VueElement
+	Dim parentID As String = mName.Replace("#","")
+	parentID = parentID.tolowercase
+	elID = elID.Replace("#","")
+	elID = elID.ToLowerCase
+	'
+	Dim panelKey As String = $"${parentID}${elID}"$
+	Dim panelHdr As String = $"${parentID}${elID}header"$
+	Dim panelCnt As String = $"${parentID}${elID}content"$
+	'
+	parentID = CleanID(parentID)
+	
+	BANano.GetElement(parentID).Append($"<v-expansion-panel id="${panelKey}"><v-expansion-panel-header id="${panelHdr}"></v-expansion-panel-header><v-expansion-panel-content id="${panelCnt}"></v-expansion-panel-content></v-expansion-panel>"$)
+	
+	Dim pnl As VueElement
+	pnl.Initialize(mCallBack, panelKey, panelKey)
+	pnl.SetOnEvent(mCallBack, "change", "")
+	pnl.SetOnEvent(mCallBack, "click", "")
+	'
+	Dim hdr As VueElement
+	hdr.Initialize(mCallBack, panelHdr, panelHdr)
+	hdr.caption = HeaderCaption
+	'
+	Dim cnt As VueElement
+	cnt.Initialize(mCallBack, panelCnt, panelCnt)
+	'
+	BindVueElement(pnl)
+	BindVueElement(hdr)
+	BindVueElement(cnt)
+	Return cnt
+End Sub
+
 
 
 Sub setGrow(b As Boolean)
@@ -532,6 +576,35 @@ End Sub
 Sub setIconsAndText(b As Boolean)
 	AddAttr(":icons-and-text",b)
 End Sub
+
+
+Sub setAccordion(b As Boolean)
+	AddAttr(":accordion",b)
+End Sub
+
+
+Sub setFocusable(b As Boolean)
+	AddAttr(":focusable",b)
+End Sub
+
+Sub setHover(b As Boolean)
+	AddAttr(":hover",b)
+End Sub
+
+Sub setInset(b As Boolean)
+	AddAttr(":inset",b)
+End Sub
+
+
+Sub setPopOut(b As Boolean)
+	AddAttr(":popout",b)
+End Sub
+
+
+Sub setTile(b As Boolean)
+	AddAttr(":tile",b)
+End Sub
+
 
 Sub setShowArrows(b As Boolean)
 	AddAttr(":show-arrows", b)
@@ -1210,6 +1283,10 @@ public Sub setStates(varBindings As String)
 			If k <> "" Then
 				bindings.Put(k, "")
 			End If
+		else if v.EqualsIgnoreCase("boolean") Then
+			If k <> "" Then
+				bindings.Put(k, False)
+			End If
 		else if v.EqualsIgnoreCase("int") Then
 			If k <> "" Then
 				bindings.Put(k, 0)
@@ -1670,10 +1747,6 @@ public Sub getVOn() As String
 	Return stVOn
 End Sub
 
-public Sub setTile(b As Boolean)
-	AddAttr(":tile", b)
-End Sub
-
 public Sub setRaised(b As Boolean)
 	AddAttr(":raised", b)
 End Sub
@@ -2126,9 +2199,6 @@ public Sub setReactive(b As Boolean)
 	AddAttr(":reactive", b)
 End Sub
 
-public Sub setInset(b As Boolean)
-	AddAttr(":inset", b)
-End Sub
 
 public Sub setRotate(s As String)
 	AddAttr("rotate", s)
@@ -2225,6 +2295,9 @@ public Sub setMax(s As String)
 	AddAttr("max", s)
 End Sub
 
+public Sub setColumn(b As Boolean)
+	AddAttr(":column", b)
+End Sub
 
 public Sub setUseSeconds(b As Boolean)
 	AddAttr(":use-seconds", b)
@@ -2865,20 +2938,12 @@ public Sub getReadonly() As String
 	Return stReadonly
 End Sub
 
-public Sub setAccordion(b As Boolean)
-	AddAttr(":accordion", b)
-End Sub
-
 'set required
 public Sub setRequired(varRequired As String)
 	AddAttr("required", varRequired)
 	stRequired = varRequired
 End Sub
 
-'focusable
-public Sub setFocusable(b As Boolean)
-	AddAttr("focusable", b)
-End Sub
 
 'get required
 public Sub getRequired() As String
@@ -3367,6 +3432,17 @@ Sub AddColumns6x2 As VueElement
 	AddColumns(6,"12","2","2","2")
 	Return Me
 End Sub
+
+Sub AddColumns5x2 As VueElement
+	AddColumns(5,"12","2","2","2")
+	Return Me
+End Sub
+
+Sub AddColumns3x2 As VueElement
+	AddColumns(3,"12","2","2","2")
+	Return Me
+End Sub
+
 
 Sub AddColumns12x1 As VueElement
 	AddColumns(12,"12","1","1","1")

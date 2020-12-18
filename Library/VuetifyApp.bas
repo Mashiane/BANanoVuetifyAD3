@@ -387,7 +387,7 @@ Sub NewListViewItemOptions() As ListViewItemOptions
 	Return lvio
 End Sub
 
-Sub Trim(v As String) As String
+Sub TrimIt(v As String) As String
 	If BANano.IsNull(v) Or BANano.IsUndefined(v) Then v = ""
 	v = CStr(v)
 	v = v.Trim
@@ -1778,6 +1778,12 @@ Sub NavigateTo(sPath As String)
 	
 End Sub
 
+'navigate back
+Sub GoBack() 
+	VueRouter.RunMethod("push", Array(-1))
+End Sub
+
+
 'use a component module
 Sub Use(bo As BANanoObject) 
 	Vue.RunMethod("use", bo)
@@ -2077,6 +2083,111 @@ Sub ListToDataSource(keyName As String, valueName As String, lst As List) As Lis
 	Return nl
 End Sub
 
+'<code>
+'Dim dt1 As VueDataTable = vuetify.AddDataTable(Me, "r1c1", "dt1")
+'dt1.Title = "DataTable"
+'dt1.AddSpacer
+'dt1.AddNew(vc)
+'dt1.AddDivider
+'dt1.AddClearSort(vc)
+'dt1.AddDivider
+'dt1.AddFilter(vc, "primary--text")
+'dt1.AddDivider
+'dt1.AddClearFilter(vc)
+''add columns 
+'dt1.AddColumn("col1", "Column1")
+'dt1.SetFilterable(Array("col1", "col2"))
+'dt1.AddAvatarImg("avatar", "Profile")
+'dt1.AddSwitch("active", "Active")
+'dt1.AddRating("rating", "Performance")
+'dt1.AddProgressLinear("projects", "Projects")
+'dt1.SetProgressLinearDimensions("projects", "orange", "25", True)
+'dt1.AddProgressCircular("tasks", "Completed")
+'dt1.SetProgressCircularDimensions("tasks", "green", "-90", "46", "8")
+'dt1.AddImage("image", "Image")
+'dt1.SetImageDimensions("image", "80px", "80px")
+'dt1.AddLink("sendto", "Email To", "_blank")
+'dt1.AddIconView("icon", "Icon", "item.color")
+'dt1.SetColumnPrefix("sendto", "mailto:")
+'dt1.AddColumn("datetaken", "Date Taken")
+'dt1.SetColumnType("datetaken", dt1.COLUMN_DATE)
+'dt1.SetColumnDateFormat("datetaken", "ddd, DD MMM YYYY")
+'dt1.AddColumn("lat", "Latitude")
+'dt1.AddColumn("lng", "Longitude")
+'dt1.SetColumnNumberFormat("lat", "0.00")
+'dt1.SetColumnNumberFormat("lng", "0.00")
+''add actions
+'dt1.AddEdit
+'dt1.AddDelete
+'dt1.AddClone
+'dt1.AddPrint
+'dt1.AddSave
+'dt1.AddCancel
+'dt1.AddDownload
+'dt1.AddMenuV
+'dt1.SetIconDimensions("edit", "", Vuetify.COLOR_GREEN)
+'dt1.SetIconDimensions("delete", "", Vuetify.COLOR_RED)
+'dt1.SetIconDimensions("clone", "", Vuetify.COLOR_AMBER)
+'dt1.SetIconDimensions("print", "", Vuetify.COLOR_BLUE)
+'dt1.SetIconDimensions("save", "", Vuetify.COLOR_BLUEGREY)
+'dt1.SetIconDimensions("cancel", "", Vuetify.COLOR_BROWN)
+'dt1.SetIconDimensions("download", "", Vuetify.COLOR_CYAN)
+'dt1.SetIconDimensions("menu", "", Vuetify.COLOR_INDIGO)		
+'vc.BindVueTable(dt1)
+''add subs
+'
+'Sub dt1_filter_click(e As BANanoEvent)
+'	dt1.ApplyFilter(vc)
+'End Sub
+'
+'Private Sub dt1_add_Click (e As BANanoEvent)
+'End Sub
+'
+'Private Sub dt1_clearsort_click (e As BANanoEvent)
+'	dt1.ClearSort(vc)
+'End Sub
+'
+'Private Sub dt1_clearfilter_click (e As BANanoEvent)
+'	dt1.ClearFilter(vc)
+'End Sub
+'
+'Sub dt1_itemselected (item As Map)
+'End Sub
+'
+'Sub dt1_Save (item As Map)
+'End Sub
+'
+'Sub dt1_Edit (item As Map)
+'End Sub
+'
+'Sub dt1_Delete (item As Map)
+'End Sub
+'
+'Sub dt1_Print (item As Map)
+'End Sub
+'
+'Sub dt1_Cancel (item As Map)
+'End Sub
+'
+'Sub dt1_Change (item As Map)
+'End Sub
+'
+'Sub dt1_Download (item As Map)
+'End Sub
+'
+'Sub dt1_Menu (item As Map)
+'End Sub
+'
+'Sub dt1_Clone (item As Map)
+'End Sub
+'</code>
+Sub AddDataTable(Module As Object, parentID As String, elID As String) As VueTable
+	Dim elx As VueTable
+	elx.Initialize(Module, elID, elID)
+	elx.AddToParent(parentID)
+	Return elx
+End Sub
+
 Sub AddTab(Module As Object, parentID As String, elID As String, Caption As String, props As Map) As VueElement
 	Return AddVueElement(Module, parentID, elID, "v-tab", "", Caption, "", props)
 End Sub
@@ -2294,6 +2405,12 @@ Sub AddVueElement(Module As Object, parentID As String, elID As String, tag As S
 	parentID = CleanID(parentID)
 	elID = elID.tolowercase
 	elID = elID.Replace("#", "")
+	'
+	If BANano.Exists(parentID) = False Then
+		Log($"AddVueElement.${elID} could not be added to ${parentID}"$)
+		Return Null
+	End If
+		
 	'check if the element exists
 	If BANano.Exists($"#${elID}"$) = False Then
 		Dim parELE As BANanoElement
@@ -2412,6 +2529,8 @@ Sub AddChipGroup(Module As Object, parentID As String, elID As String, vModel As
 	vchip.BindKey($"item.${Key}"$)
 	vchip.Caption = vchip.ItemInMoustache(Value)
 	vchip.AddAttr(":filter", bFilter)
+	vchip.AddAttr(":value", "item.value")
+	vchip.Outlined = True
 	vchip.AssignProps(chipprops)
 	
 	vchipgroup.BindVueElement(vchip)
@@ -2821,7 +2940,7 @@ End Sub
 'Dim btn1 As VueElement = vuetify.AddButton(Me, "r2c1", "btn1", "Button 1", "primary", True, Null)
 'vuetify.BindVueElement(btn1)
 '
-'Event
+''Event
 'Sub btn1_click(e As BANanoEvent)
 'End Sub
 '</code>
@@ -2829,16 +2948,21 @@ Sub AddButton(Module As Object, parentID As String, elID As String, sLabel As St
 	parentID = CleanID(parentID)
 	elID = elID.ToLowerCase
 	'
-	BANano.GetElement(parentID).Append($"<v-btn id="${elID}"></v-btn>"$)
-	Dim mbutton As VueElement
-	mbutton.Initialize(Module, elID, elID)
-	mbutton.Caption = sLabel
-	If bOutlined Then mbutton.Outlined = True
-	mbutton.color = eColor
+	If BANano.Exists(parentID) Then
+		BANano.GetElement(parentID).Append($"<v-btn id="${elID}"></v-btn>"$)
+		Dim mbutton As VueElement
+		mbutton.Initialize(Module, elID, elID)
+		mbutton.Caption = sLabel
+		If bOutlined Then mbutton.Outlined = True
+		mbutton.color = eColor
 	'
-	mbutton.AssignProps(props)
-	mbutton.SetOnEvent(Module, "click", "")
-	Return mbutton
+		mbutton.AssignProps(props)
+		mbutton.SetOnEvent(Module, "click", "")
+		Return mbutton
+	Else
+		Log($"AddButton.${elID} could not be added to ${parentID}"$)
+		'ignore
+	End If	
 End Sub
 
 Sub AddSubHeader(Module As Object, parentID As String, elID As String, Caption As String) As VueElement
@@ -2856,12 +2980,12 @@ Sub AddCarouselItem(Module As Object, parentID As String, elID As String, cConte
 	Return elx
 End Sub
 
-
-Sub AddExpansionPanels(Module As Object, parentID As String, elID As String, vModel As String, bAccordion As Boolean, bMultiple As Boolean) As VueElement
-	Dim props As Map = CreateMap()
-	props.Put(":accordion", bAccordion)
-	props.Put(":multiple", bMultiple)
-	Dim elx As VueElement = AddVueElement(Module, parentID, elID, "v-expansion-panels", vModel ,"", "", props)
+'<code>
+'dim exp As VueElement = vuetify.AddExpansionPanel(Me, "r1c1", "exp1", "exp1value")
+'vuetify.BindVueElement(exp)
+'</code>
+Sub AddExpansionPanels(Module As Object, parentID As String, elID As String, vModel As String) As VueElement
+	Dim elx As VueElement = AddVueElement(Module, parentID, elID, "v-expansion-panels", vModel ,"", "", Null)
 	Return elx
 End Sub
 
@@ -2955,14 +3079,31 @@ Sub AddIconWithBadge(Module As Object, parentID As String, elID As String, eIcon
 	Return mbadgebtn
 End Sub
 
-Sub AddExpansionPanel(Module As Object, parentID As String, elID As String, HeaderCaption As String, ContentText As String) As VueElement
-	parentID = CleanID(parentID)
+
+'<code>
+'Dim panel1 As VueElement = Vuetify.AddExpansionPanel(Me, "exp", "panel1", "Panel 1")
+'vuetify.BindVueElement(panel1)
+'
+''trap panel change event
+'Sub panel1_change(e As BANanoEvent)
+'End Sub
+'
+''trap panel click event
+'Sub panel1_click(e As BANanoEvent)
+'End Sub
+'</code>
+Sub AddExpansionPanel(Module As Object, parentID As String, elID As String, HeaderCaption As String) As VueElement
+	parentID = parentID.Replace("#","")
+	parentID = parentID.tolowercase
+	elID = elID.Replace("#","")
 	elID = elID.ToLowerCase
 	'
 	Dim panelKey As String = $"${parentID}${elID}"$
-	Dim panelHdr As String = $"${parentID}${elID}hdr"$
-	Dim panelCnt As String = $"${parentID}${elID}cnt"$
+	Dim panelHdr As String = $"${parentID}${elID}header"$
+	Dim panelCnt As String = $"${parentID}${elID}content"$
 	'
+	parentID = CleanID(parentID)
+	
 	BANano.GetElement(parentID).Append($"<v-expansion-panel id="${panelKey}"><v-expansion-panel-header id="${panelHdr}"></v-expansion-panel-header><v-expansion-panel-content id="${panelCnt}"></v-expansion-panel-content></v-expansion-panel>"$)
 	
 	Dim pnl As VueElement
@@ -2976,7 +3117,6 @@ Sub AddExpansionPanel(Module As Object, parentID As String, elID As String, Head
 	'
 	Dim cnt As VueElement
 	cnt.Initialize(Module, panelCnt, panelCnt)
-	cnt.caption = ContentText
 	'
 	pnl.BindVueElement(cnt)
 	pnl.BindVueElement(hdr)
@@ -3266,6 +3406,27 @@ Sub getDatePicker(Module As Object, dpID As String) As VueElement
 End Sub
 
 'add date picker input
+'<code>
+'Dim dp1 As VueElement = Vuetify.AddDatePickerInput1(Me, "r1c1", "dp1", "dp1value", "Date", "Select a date", Null)
+'vuetify.BindVueElement(dp1)
+'on clear click
+'Sub dp1_clearclick(e As BANanoEvent)
+'End Sub
+'</code>
+Sub AddDatePickerInput1(Module As Object, parentID As String, elID As String, vModel As String, sLabel As String, txtprops As Map, dateprops As Map) As VueElement
+	Dim dp As VueElement = AddDatePickerInput(Module, parentID, elID, vModel, sLabel, "", False, "", "", txtprops, dateprops)
+	Return dp
+End Sub
+
+
+'add date picker input
+'<code>
+'Dim dp1 As VueElement = Vuetify.AddDatePickerInput(Me, "r1c1", "dp1", "dp1value", "Date", "Select a date", True, "mdi-calendar", "", Null, NUll)
+'vuetify.BindVueElement(dp1)
+'on clear click
+'Sub dp1_clearclick(e As BANanoEvent)
+'End Sub
+'</code>
 Sub AddDatePickerInput(Module As Object, parentID As String, elID As String, vmodel As String, slabel As String, splaceholder As String, bRequired As Boolean, sPrependIcon As String, sHint As String, txtprops As Map, dateprops As Map) As VueElement
 	parentID = CleanID(parentID)
 	elID = elID.ToLowerCase
@@ -3519,7 +3680,10 @@ sTemplate.Append($"</v-list-group>"$)
 	Return vlistitem
 End Sub
 
-
+Sub AddTimePickerInput1(Module As Object, parentID As String, elID As String, vModel As String, sLabel As String, txtprops As Map, tpprops As Map) As VueElement
+	Dim tp As VueElement = AddTimePickerInput(Module, parentID, elID, vModel, sLabel,"", False, "", "", txtprops, tpprops)
+	Return tp 
+End Sub
 
 'add time picker input
 Sub AddTimePickerInput(Module As Object, parentID As String, elID As String, vmodel As String, slabel As String, splaceholder As String, bRequired As Boolean, sPrependIcon As String, sHint As String, txtprops As Map, dateprops As Map) As VueElement
@@ -3671,7 +3835,6 @@ Sub AddFileInput(Module As Object, parentID As String, elID As String, vmodel As
 End Sub
 
 
-
 Sub AddSlider(Module As Object, parentID As String, elID As String, vmodel As String, slabel As String, iminvalue As Object, imaxvalue As Object, iStep As Int,  bShowThumb As Boolean,  bVertical As Boolean, props As Map) As VueElement
 	parentID = CleanID(parentID)
 	elID = elID.ToLowerCase
@@ -3697,6 +3860,16 @@ End Sub
 
 '<code>
 'add a telephone
+'Dim txtF As VueElement = vuetify.AddTelephone1(Me, "r1c1", "txtF", "fldName", "Text Field", null)
+'vuetify.BindVueElement(txtF)
+'</code>
+Sub AddTelephone1(Module As Object, parentID As String, elID As String, vmodel As String, slabel As String, props As Map) As VueElement
+	Return AddTelephone(Module, parentID, elID, vmodel, slabel, "", False, "", 0, "", props)
+End Sub
+
+
+'<code>
+'add a telephone
 'Dim txtF As VueElement = vuetify.AddTelephone(Me, "r1c1", "txtF", "fldName", "Text Field", "Text field placeholder", True, "", 0, "Enter a text field", null)
 'vuetify.BindVueElement(txtF)
 '</code>
@@ -3705,6 +3878,16 @@ Sub AddTelephone(Module As Object, parentID As String, elID As String, vmodel As
 	el.SetTypeTelephone
 	Return el
 End Sub
+
+'<code>
+'add an email
+'Dim txtF As VueElement = vuetify.AddEmail1(Me, "r1c1", "txtF", "fldName", "Text Field", null)
+'vuetify.BindVueElement(txtF)
+'</code>
+Sub AddEmail1(Module As Object, parentID As String, elID As String, vmodel As String, slabel As String, props As Map) As VueElement
+	Return AddEmail(Module, parentID, elID, vmodel, slabel, "", False, "", 0, "", props)
+End Sub
+
 
 '<code>
 'add a text field
@@ -3716,6 +3899,32 @@ Sub AddEmail(Module As Object, parentID As String, elID As String, vmodel As Str
 	el.SetTypeEmail
 	Return el
 End Sub
+
+
+'<code>
+'add a text field
+'Dim txtF As VueElement = vuetify.AddTextField1(Me, "r1c1", "txtF", "fldName", "Text Field", null)
+'vuetify.BindVueElement(txtF)
+'</code>
+Sub AddTextField1(Module As Object, parentID As String, elID As String, vModel As String, sLabel As String, props As Map) As VueElement
+	parentID = CleanID(parentID)
+	elID = elID.ToLowerCase
+	BANano.GetElement(parentID).Append($"<v-text-field id="${elID}"></v-v-text-field>"$)
+	Dim vtextfield As VueElement
+	vtextfield.Initialize(Module, elID, elID)
+	vtextfield.Label = sLabel
+	vtextfield.VModel = vModel
+	vtextfield.SetTypeText
+	vtextfield.Ref = vModel
+	vtextfield.SetOnEvent(Module, "click:append", "")
+	vtextfield.SetOnEvent(Module, "click:prepend", "")
+	vtextfield.SetOnEvent(Module, "click:append-outer", "")
+	vtextfield.SetOnEvent(Module, "click:prepend-inner", "")
+	vtextfield.SetOnEvent(Module, "click:clear", "")
+	vtextfield.AssignProps(props)
+	Return vtextfield
+End Sub
+
 
 '<code>
 'add a text field
@@ -3747,6 +3956,16 @@ Sub AddTextField(Module As Object, parentID As String, elID As String, vmodel As
 	vtextfield.AssignProps(props)
 	Return vtextfield
 End Sub
+
+'<code>
+'add a text field
+'Dim txtF As VueElement = vuetify.AddTextArea1(Me, "r1c1", "txtF", "fldName", "Text Field")
+'vuetify.BindVueElement(txtF)
+'</code>
+Sub AddTextArea1(Module As Object, parentID As String, elID As String, vmodel As String, slabel As String, props As Map) As VueElement
+	Return AddTextArea(Module, parentID, elID, vmodel, slabel, "", False, "", 0, "", props)
+End Sub
+
 
 '<code>
 'add a text field

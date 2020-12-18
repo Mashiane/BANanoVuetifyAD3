@@ -107,6 +107,12 @@ Sub NewMap As Map
 	Return nm
 End Sub
 
+'update the title of the table
+Sub TableSetTitle(tableName As String, Title As String)
+	Dim titleX As String = $"${tableName}titletext"$
+	SetData(titleX, Title)
+End Sub
+
 'return the dialog card title
 Sub DialogCardTitle(dlgID As String) As VueElement
 	Dim dialogTitleID As String = $"${dlgID}titleid"$
