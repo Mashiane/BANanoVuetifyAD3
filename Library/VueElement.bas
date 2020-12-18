@@ -105,7 +105,7 @@ Version=7
 #DesignerProperty: Key: MarginAXYTBLR, DisplayName: Margin AXYTBLR, FieldType: String, DefaultValue: a=?; x=?; y=?; t=?; b=?; l=?; r=? , Description: Margins AXYSMLX
 #DesignerProperty: Key: MaxHeight, DisplayName: Max Height, FieldType: String, DefaultValue:  , Description:
 #DesignerProperty: Key: MaxWidth, DisplayName: Max Width, FieldType: String, DefaultValue:  , Description: 
-#DesignerProperty: Key: NoGutter, DisplayName: No Gutter, FieldType: Boolean, DefaultValue: False, Description: NoGutter
+#DesignerProperty: Key: NoGutter, DisplayName: No Gutters, FieldType: Boolean, DefaultValue: False, Description: NoGutter
 
 #DesignerProperty: Key: Outlined, DisplayName: Outlined, FieldType: Boolean, DefaultValue: False , Description: 
 #DesignerProperty: Key: PaddingAXYTBLR, DisplayName: Padding AXYTBLR, FieldType: String, DefaultValue: a=?; x=?; y=?; t=?; b=?; l=?; r=? , Description: Padding AXYSMLX
@@ -826,7 +826,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	AddStyleOnCondition("float", "left", stFloat)
 	AddStyleOnCondition("float", "right", stFloat)
 	'
-	AddAttrOnConditionTrue(":no-gutter", bNoGutter, True)
+	AddAttrOnConditionTrue(":no-gutters", bNoGutter, True)
 	AddAttrOnCondition(":return-object", bReturnObject, True)
 	AddAttr("item-text", stItemText)
 	AddAttr("item-value", stItemValue)
@@ -1461,6 +1461,10 @@ Sub SetVBindIs(t As String) As VueElement
 	Return Me
 End Sub
 
+Sub SetVSlotAppend
+	AddAttr("v-slot:append", True)
+End Sub
+
 Sub SetVSlotExtension
 	AddAttr("v-slot:extension", True)
 End Sub
@@ -1709,11 +1713,6 @@ public Sub setTarget(varAlt As String)
 	AddAttr("target", varAlt)
 End Sub
 
-
-public Sub setNoGutters(b As Boolean)
-	AddAttr(":no-gutters", b)
-End Sub
-
 public Sub getAlt() As String
 	Return stAlt
 End Sub
@@ -1773,6 +1772,7 @@ End Sub
 
 
 public Sub setRef(varRef As String)
+	varRef = varRef.tolowercase
 	AddAttr("ref", varRef)
 	stRef = varRef
 End Sub
@@ -2473,7 +2473,8 @@ End Sub
 '
 public Sub setRules(varRules As String)
 	AddAttr("rules", varRules)
-	stWidth = varRules
+	stRules = varRules
+	SetData(varRules, NewList)
 End Sub
 
 public Sub getRules() As String
@@ -2761,13 +2762,13 @@ public Sub getClearable() As Boolean
 End Sub
 
 'set no gutter
-public Sub setNoGutter(b As Boolean)
-	AddAttrOnCondition(":no-gutter", b, True)
+public Sub setNoGutters(b As Boolean)
+	AddAttrOnCondition(":no-gutters", b, True)
 	bNoGutter = b
 End Sub
 
 'get no gutter
-public Sub getNoGutter() As Boolean
+public Sub getNoGutters() As Boolean
 	Return bNoGutter
 End Sub
 
@@ -4186,4 +4187,210 @@ Sub AddItem(id As String, lefticon As String, lefticoncolor As String, _
 	
 	'
 	Records.Add(rec)
+End Sub
+
+'add a list item template to draw item
+Sub AddListViewTemplate(numLines As Int, props As ListViewItemOptions) As VueElement
+	Dim elID As String = mName.ToLowerCase
+	Dim parentID As String = CleanID(mName)
+	'
+	Dim templateID As String = $"${elID}template"$
+	Dim headerID As String = $"${elID}header"$
+	Dim dividerID As String = $"${elID}divider"$
+	Dim listitemID As String = $"${elID}listitem"$
+	Dim leftactionID As String = $"${elID}leftaction"$
+	Dim leftactionBtnID As String = $"${elID}leftactionbtn"$
+	Dim leftactionIconID As String = $"${elID}leftactionicon"$
+	Dim leftcheckboxID As String = $"${elID}leftcheckbox"$
+	Dim rightcheckboxID As String = $"${elID}rightcheckbox"$
+	Dim avatarID As String = $"${elID}avatar"$
+	Dim avatarImgID As String = $"${elID}avatarimg"$
+	Dim avatarIconID As String = $"${elID}avataricon"$
+	Dim itemiconID As String = $"${elID}itemicon"$
+	Dim iconID As String = $"${elID}icon"$
+	Dim contentID As String = $"${elID}content"$
+	Dim titleID As String = $"${elID}title"$
+	Dim subtitleID As String = $"${elID}subtitle"$
+	Dim subtitle1ID As String = $"${elID}subtitle1"$
+	Dim rightactionID As String = $"${elID}rightaction"$
+	Dim rightactiontextID As String = $"${elID}rightactiontext"$
+	Dim rightactionBtnID As String = $"${elID}rightactionbtn"$
+	Dim rightactionIconID As String = $"${elID}rightactionicon"$
+	Dim rightratingID As String = $"${elID}rightrating"$
+	'
+	'in case the pointers are changed
+	Dim xurl As String = props.url
+	Dim xlefticon As String = props.lefticon
+	Dim xlefticoncolor As String = props.lefticoncolor
+	Dim xlefticonclass As String = props.lefticonclass
+	'
+	Dim xavatar As String = props.avatar
+	Dim xavatarclass As String = props.avatarclass
+	
+	Dim xavataricon As String = props.avataricon
+	Dim xavatariconcolor As String = props.avatariconcolor
+	Dim xavatariconclass As String = props.avatariconclass
+	
+	Dim xicon As String = props.icon
+	Dim xiconclass As String = props.iconclass
+	Dim xiconcolor As String = props.iconcolor
+	
+	Dim xtitle As String = props.title
+	Dim xsubtitle As String = props.subtitle
+	Dim xsubtitle1 As String = props.subtitle1
+	'
+	Dim xrighticon As String = props.righticon
+	Dim xrighticonclass As String = props.righticonclass
+	Dim xrighttext As String = props.righttext
+	Dim xrighticoncolor As String = props.righticoncolor
+	Dim datasource As String = props.dataSource
+	Dim key As String = props.key
+	
+	Dim xactiveclass As String = props.activeclass
+	Dim xleftcheckbox As String = props.leftcheckbox
+	Dim xrightcheckbox As String = props.rightcheckbox
+	Dim xshowleftcheckboxes As Boolean = props.showleftcheckboxes
+	Dim xshowrightcheckboxes As Boolean = props.showrightcheckboxes
+	Dim xshowrightrating As Boolean = props.showrightrating
+	Dim xrightrating As String = props.rightrating
+	'
+	datasource = datasource.ToLowerCase
+	key = key.ToLowerCase
+	'
+	Dim sTemplate As String = $"<v-template id="${templateID}" v-for="(item, index) in ${datasource}" :key="item.${key}">
+<v-subheader id="${headerID}" v-if="item.header" :key="item.header">{{ item.header }}</v-subheader>
+<v-divider id="${dividerID}" v-else-if="item.divider" :key="index" :inset="item.inset"></v-divider>
+<v-list-item id="${listitemID}" v-else="true" :key="item.${key}" :to="item.${xurl}" active-class="${xactiveclass}">
+<v-list-item-action id="${leftactionID}" v-if="item.${xlefticon} || ${xshowleftcheckboxes}">
+<v-btn id="${leftactionBtnID}" :icon="true" v-if="item.${xlefticon}">
+<v-icon id="${leftactionIconID}" :color="item.${xlefticoncolor}" v-text="item.${xlefticon}" class="${xlefticonclass}"></v-icon>
+</v-btn>
+<v-checkbox id="${leftcheckboxID}" v-if="${xshowleftcheckboxes}" :input-value="item.${xleftcheckbox}"></v-checkbox>
+</v-list-item-action>
+<v-list-item-avatar id="${avatarID}" v-if="item.${xavatar} || item.${xavataricon}">
+<v-img id="${avatarImgID}" :src="item.${xavatar}" class="${xavatarclass}" v-if="item.${xavatar}"></v-img>
+<v-icon id="${avatarIconID}" v-if="item.${xavataricon}" :color="item.${xavatariconcolor}" class="${xavatariconclass}" v-text="item.${xavataricon}"></v-icon>
+</v-list-item-avatar>
+<v-list-item-icon id="${itemiconID}" v-if="item.${xicon}">
+<v-icon id="${iconID}" :color="item.${xiconcolor}" class="${xiconclass}" v-text="item.${xicon}"></v-icon>
+</v-list-item-icon>
+<v-list-item-content id="${contentID}">
+<v-list-item-title id="${titleID}" v-if="item.${xtitle}" v-text="item.${xtitle}"></v-list-item-title>
+<v-list-item-subtitle id="${subtitleID}" v-if="item.${xsubtitle}" v-text="item.${xsubtitle}"></v-list-item-subtitle>
+<v-list-item-subtitle id="${subtitle1ID}" v-if="item.${xsubtitle1}" v-text="item.${xsubtitle1}"></v-list-item-subtitle>
+</v-list-item-content>
+<v-list-item-action id="${rightactionID}" v-if="item.${xrighticon} || item.${xrighttext} || ${xshowrightcheckboxes} || ${xshowrightrating}">
+<v-list-item-action-text id="${rightactiontextID}" v-if="item.${xrighttext}" v-text="item.${xrighttext}"></v-list-item-action-text>
+<v-btn id="${rightactionBtnID}" :icon="true" v-if="item.${xrighticon}">
+<v-icon id="${rightactionIconID}" v-text="item.${xrighticon}" class="${xrighticonclass}" :color="item.${xrighticoncolor}"></v-icon>
+</v-btn>
+<v-checkbox id="${rightcheckboxID}" v-if="${xshowrightcheckboxes}" :input-value="item.${xrightcheckbox}"></v-checkbox>
+<v-rating id="${rightratingID}" length="1" v-if="${xshowrightrating}" :value="item.${xrightrating}"></v-rating>
+</v-list-item-action>
+</v-list-item>
+</v-template>"$
+	
+	'
+	sTemplate = sTemplate.Replace("~","$")
+	
+	BANano.GetElement(parentID).Append(sTemplate)
+	'
+	Dim vlistitem As VueElement
+	vlistitem.Initialize(mCallBack, listitemID, listitemID)
+	Select Case numLines
+		Case 2
+			vlistitem.AddAttr(":two-line", True)
+		Case 3
+			vlistitem.AddAttr(":three-line", True)
+	End Select
+	vlistitem.SetOnEventOwn(mCallBack, $"${elID}_click"$, "click", "item")
+	'left action
+	'
+	Dim vleftcheckbox As VueElement
+	vleftcheckbox.Initialize(mCallBack, leftcheckboxID, leftcheckboxID)
+	'
+	Dim vrightcheckbox As VueElement
+	vrightcheckbox.Initialize(mCallBack, rightcheckboxID, rightcheckboxID)
+	
+	Dim vleftlistitemaction As VueElement
+	vleftlistitemaction.Initialize(mCallBack, leftactionID, leftactionID)
+	vleftlistitemaction.SetOnEventOwn(mCallBack, $"${elID}_leftclick"$, "click.stop", "item")
+	'
+	Dim vrightlistitemaction As VueElement
+	vrightlistitemaction.Initialize(mCallBack, rightactionID, rightactionID)
+	vrightlistitemaction.SetOnEventOwn(mCallBack, $"${elID}_rightclick"$, "click.stop", "item")
+	'
+	vlistitem.SetData(datasource, NewList)
+	vlistitem.BindVueElement(vlistitem)
+	vlistitem.BindVueElement(vleftlistitemaction)
+	vlistitem.BindVueElement(vrightlistitemaction)
+	vlistitem.BindVueElement(vleftcheckbox)
+	vlistitem.BindVueElement(vrightcheckbox)
+	'
+	BindVueElement(vlistitem)
+	Return vlistitem
+End Sub
+
+'add a list item template to draw item
+Sub AddListViewGroupTemplate(numLines As Int, props As ListViewItemOptions) As VueElement
+	Dim elID As String = mName.ToLowerCase
+	Dim parentID As String = CleanID(mName)
+	'
+	Dim listitemID As String = $"${elID}listitem"$
+	
+	'in case the pointers are changed
+	Dim xurl As String = props.url
+	Dim xicon As String = props.icon
+	Dim xiconclass As String = props.iconclass
+	Dim xiconcolor As String = props.iconcolor
+	
+	Dim xtitle As String = props.title
+	Dim xsubtitle As String = props.subtitle
+	Dim xsubtitle1 As String = props.subtitle1
+	'
+	Dim datasource As String = props.dataSource
+	Dim key As String = props.key
+	
+	Dim xactiveclass As String = props.activeclass
+	datasource = datasource.ToLowerCase
+	key = key.ToLowerCase
+	'
+	Dim sTemplate As StringBuilder
+	sTemplate.Initialize
+	sTemplate.Append($"<v-list-group v-for="item in ${datasource}" :key="item.${key}" v-model="item.${key}" no-action>"$)
+	sTemplate.Append($"<v-icon slot="prependIcon" :color="item.${xiconcolor}" v-text="item.${xicon}"></v-icon>"$)
+	sTemplate.Append($"<v-template v-slot:activator>"$)
+	sTemplate.Append($"<v-list-item-content>"$)
+	sTemplate.Append($"<v-list-item-title v-text="item.${xtitle}"></v-list-item-title>"$)
+	sTemplate.Append($"</v-list-item-content>"$)
+	sTemplate.Append($"</v-template>"$)
+	sTemplate.Append($"<v-list-item id="${listitemID}" v-for="child in item.items" :key="child.${key}" :to="child.${xurl}" active-class="${xactiveclass}">"$)
+	sTemplate.Append($"<v-list-item-icon v-if="child.${xicon}">"$)
+	sTemplate.append($"<v-icon :color="child.${xiconcolor}" class="${xiconclass}" v-text="child.${xicon}"></v-icon>"$)
+	sTemplate.Append($"</v-list-item-icon>"$)
+	sTemplate.Append($"<v-list-item-content>"$)
+	sTemplate.Append($"<v-list-item-title v-text="child.${xtitle}"></v-list-item-title>"$)
+	sTemplate.Append($"<v-list-item-subtitle v-if="child.${xsubtitle}" v-text="child.${xsubtitle}"></v-list-item-subtitle>"$)
+	sTemplate.Append($"<v-list-item-subtitle v-if="child.${xsubtitle1}" v-text="child.${xsubtitle1}"></v-list-item-subtitle>"$)
+	sTemplate.Append($"</v-list-item-content>"$)
+	sTemplate.Append($"</v-list-item>"$)
+	sTemplate.Append($"</v-list-group>"$)
+	'
+	BANano.GetElement(parentID).Append(sTemplate.tostring)
+	'
+	Dim vlistitem As VueElement
+	vlistitem.Initialize(mCallBack, listitemID, listitemID)
+	Select Case numLines
+		Case 2
+			vlistitem.AddAttr(":two-line", True)
+		Case 3
+			vlistitem.AddAttr(":three-line", True)
+	End Select
+	vlistitem.SetOnEventOwn(mCallBack, $"${elID}_click"$, "click", "child")
+	'left action
+	'
+	vlistitem.SetData(datasource, NewList)
+	vlistitem.BindVueElement(vlistitem)
+	BindVueElement(vlistitem)
+	Return vlistitem
 End Sub

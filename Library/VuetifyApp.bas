@@ -2292,11 +2292,17 @@ Sub AddStepperItems(Module As Object, parentID As String, elID As String, props 
 	Return elx
 End Sub
 
+'<code>
+'Dim frm As VueElement = vuetify.AddForm(Me, "r1c1", "frm", "frmvalid", True, Null)
+'vuetify.BindVueElement(frm)
+'</code>
 
 Sub AddForm(Module As Object, parentID As String, elID As String, vmodel As String, bLazyValidation As Boolean, props As Map) As VueElement
+	elID = elID.tolowercase
 	Dim elx As VueElement = AddVueElement(Module, parentID, elID, "v-form", vmodel, "", "", props)
 	elx.SetAttr(":lazy-validation", bLazyValidation)
 	elx.Ref = elID
+	If vmodel <> "" Then elx.setdata(vmodel, False)
 	Return elx
 End Sub
 
@@ -2353,6 +2359,12 @@ End Sub
 Sub AddAppBar(Module As Object, parentID As String, elID As String, color As String, props As Map) As VueElement
 	Dim elx As VueElement = AddVueElement(Module, parentID, elID, "v-app-bar", "", "", color, props)
 	elx.Bind("app", True)
+	Return elx
+End Sub
+
+Sub AddAppendSlot(Module As Object, parentID As String, elID As String, props As Map) As VueElement
+	Dim elx As VueElement = AddVueElement(Module, parentID, elID, "v-template", "", "", "", props)
+	elx.SetVSlotAppend
 	Return elx
 End Sub
 
@@ -2556,6 +2568,7 @@ Sub AddAutoComplete(Module As Object, parentID As String, elID As String, vmodel
 	vselect.VModel = vmodel
 	vselect.Bind("return-object", returnObject)
 	vselect.AssignProps(props)
+	vselect.Ref = elID
 	'
 	If bMultiple Then
 		Dim lst As List = NewList
@@ -2587,6 +2600,7 @@ Sub AddComboBox(Module As Object, parentID As String, elID As String, vmodel As 
 	vselect.VModel = vmodel
 	vselect.Bind("return-object", returnObject)
 	vselect.AssignProps(props)
+	vselect.Ref = elID
 	'
 	If bMultiple Then
 		Dim lst As List = NewList
@@ -2619,6 +2633,7 @@ Sub AddButtonWidthRightIcon(Module As Object, parentID As String, elID As String
 	
 	Dim vbtnright As VueElement
 	vbtnright.Initialize(Module, elID, elID)
+	vbtnright.Ref = elid
 	'
 	Dim viconright As VueElement
 	viconright.Initialize(Module, siconright, siconright)
@@ -2666,6 +2681,7 @@ Sub AddButtonWithLeftIcon(Module As Object, parentID As String, elID As String, 
 	
 	Dim vbtnright As VueElement
 	vbtnright.Initialize(Module, elID, elID)
+	vbtnright.Ref = elID
 	'
 	Dim viconright As VueElement
 	viconright.Initialize(Module, siconright, siconright)
@@ -2800,6 +2816,7 @@ Sub AddSelect(Module As Object, parentID As String, elID As String, vmodel As St
 	If sourceField <> "" Then vselect.ItemValue = sourceField
 	vselect.VModel = vmodel
 	vselect.ReturnObject = returnObject
+	vselect.Ref = elID
 	'
 	If bMultiple Then
 		Dim lst As List = NewList
@@ -2955,6 +2972,7 @@ Sub AddButton(Module As Object, parentID As String, elID As String, sLabel As St
 		mbutton.Caption = sLabel
 		If bOutlined Then mbutton.Outlined = True
 		mbutton.color = eColor
+		mbutton.Ref = elID
 	'
 		mbutton.AssignProps(props)
 		mbutton.SetOnEvent(Module, "click", "")
@@ -3236,6 +3254,7 @@ Sub AddDialogAlertPrompt(Module As Object, parentID As String, elID As String, b
 	'
 	Dim vdialog As VueElement
 	vdialog.Initialize(Module, elID, elID)
+	vdialog.Ref = diaglogID
 	'
 	Dim vbtnc As VueElement
 	vbtnc.Initialize(Module, cancelid, cancelid)
@@ -3359,6 +3378,7 @@ Sub AddDialogInput(Module As Object, parentID As String, elID As String, bPersis
 	'
 	Dim vdialog As VueElement
 	vdialog.Initialize(Module, elID, elID)
+	vdialog.Ref = diaglogID
 	'
 	Dim vbtnc As VueElement
 	vbtnc.Initialize(Module, cancelid, cancelid)
@@ -3477,208 +3497,6 @@ Ok</v-btn>
 	Return vtextfield
 End Sub
 
-'add a list item template to draw item
-Sub AddListViewTemplate(Module As Object, listname As String, numLines As Int, props As ListViewItemOptions) As VueElement
-	Dim elID As String = listname.ToLowerCase
-	Dim parentID As String = CleanID(listname)
-	'
-	Dim templateID As String = $"${elID}template"$
-	Dim headerID As String = $"${elID}header"$
-	Dim dividerID As String = $"${elID}divider"$
-	Dim listitemID As String = $"${elID}listitem"$
-	Dim leftactionID As String = $"${elID}leftaction"$
-	Dim leftactionBtnID As String = $"${elID}leftactionbtn"$
-	Dim leftactionIconID As String = $"${elID}leftactionicon"$
-	Dim leftcheckboxID As String = $"${elID}leftcheckbox"$
-	Dim rightcheckboxID As String = $"${elID}rightcheckbox"$
-	Dim avatarID As String = $"${elID}avatar"$
-	Dim avatarImgID As String = $"${elID}avatarimg"$
-	Dim avatarIconID As String = $"${elID}avataricon"$
-	Dim itemiconID As String = $"${elID}itemicon"$
-	Dim iconID As String = $"${elID}icon"$
-	Dim contentID As String = $"${elID}content"$
-	Dim titleID As String = $"${elID}title"$
-	Dim subtitleID As String = $"${elID}subtitle"$
-	Dim subtitle1ID As String = $"${elID}subtitle1"$
-	Dim rightactionID As String = $"${elID}rightaction"$
-	Dim rightactiontextID As String = $"${elID}rightactiontext"$
-	Dim rightactionBtnID As String = $"${elID}rightactionbtn"$
-	Dim rightactionIconID As String = $"${elID}rightactionicon"$
-	Dim rightratingID As String = $"${elID}rightrating"$
-	'
-	'in case the pointers are changed
-	Dim xurl As String = props.url
-	Dim xlefticon As String = props.lefticon
-	Dim xlefticoncolor As String = props.lefticoncolor
-	Dim xlefticonclass As String = props.lefticonclass
-	'
-	Dim xavatar As String = props.avatar
-	Dim xavatarclass As String = props.avatarclass
-	
-	Dim xavataricon As String = props.avataricon
-	Dim xavatariconcolor As String = props.avatariconcolor
-	Dim xavatariconclass As String = props.avatariconclass
-	
-	Dim xicon As String = props.icon
-	Dim xiconclass As String = props.iconclass
-	Dim xiconcolor As String = props.iconcolor
-	
-	Dim xtitle As String = props.title
-	Dim xsubtitle As String = props.subtitle
-	Dim xsubtitle1 As String = props.subtitle1
-	'
-	Dim xrighticon As String = props.righticon
-	Dim xrighticonclass As String = props.righticonclass
-	Dim xrighttext As String = props.righttext
-	Dim xrighticoncolor As String = props.righticoncolor
-	Dim datasource As String = props.dataSource
-	Dim key As String = props.key
-	
-	Dim xactiveclass As String = props.activeclass
-	Dim xleftcheckbox As String = props.leftcheckbox
-	Dim xrightcheckbox As String = props.rightcheckbox
-	Dim xshowleftcheckboxes As Boolean = props.showleftcheckboxes
-	Dim xshowrightcheckboxes As Boolean = props.showrightcheckboxes
-	Dim xshowrightrating As Boolean = props.showrightrating
-	Dim xrightrating As String = props.rightrating
-	'
-	datasource = datasource.ToLowerCase
-	key = key.ToLowerCase
-	'	
-Dim sTemplate As String = $"<v-template id="${templateID}" v-for="(item, index) in ${datasource}" :key="item.${key}">
-<v-subheader id="${headerID}" v-if="item.header" :key="item.header">{{ item.header }}</v-subheader>
-<v-divider id="${dividerID}" v-else-if="item.divider" :key="index" :inset="item.inset"></v-divider>
-<v-list-item id="${listitemID}" v-else="true" :key="item.${key}" :to="item.${xurl}" active-class="${xactiveclass}">
-<v-list-item-action id="${leftactionID}" v-if="item.${xlefticon} || ${xshowleftcheckboxes}">
-<v-btn id="${leftactionBtnID}" :icon="true" v-if="item.${xlefticon}">
-<v-icon id="${leftactionIconID}" :color="item.${xlefticoncolor}" v-text="item.${xlefticon}" class="${xlefticonclass}"></v-icon>
-</v-btn>
-<v-checkbox id="${leftcheckboxID}" v-if="${xshowleftcheckboxes}" :input-value="item.${xleftcheckbox}"></v-checkbox>
-</v-list-item-action>
-<v-list-item-avatar id="${avatarID}" v-if="item.${xavatar} || item.${xavataricon}">
-<v-img id="${avatarImgID}" :src="item.${xavatar}" class="${xavatarclass}" v-if="item.${xavatar}"></v-img>
-<v-icon id="${avatarIconID}" v-if="item.${xavataricon}" :color="item.${xavatariconcolor}" class="${xavatariconclass}" v-text="item.${xavataricon}"></v-icon>
-</v-list-item-avatar>
-<v-list-item-icon id="${itemiconID}" v-if="item.${xicon}">
-<v-icon id="${iconID}" :color="item.${xiconcolor}" class="${xiconclass}" v-text="item.${xicon}"></v-icon>
-</v-list-item-icon>
-<v-list-item-content id="${contentID}">
-<v-list-item-title id="${titleID}" v-if="item.${xtitle}" v-text="item.${xtitle}"></v-list-item-title>
-<v-list-item-subtitle id="${subtitleID}" v-if="item.${xsubtitle}" v-text="item.${xsubtitle}"></v-list-item-subtitle>
-<v-list-item-subtitle id="${subtitle1ID}" v-if="item.${xsubtitle1}" v-text="item.${xsubtitle1}"></v-list-item-subtitle>
-</v-list-item-content>
-<v-list-item-action id="${rightactionID}" v-if="item.${xrighticon} || item.${xrighttext} || ${xshowrightcheckboxes} || ${xshowrightrating}">
-<v-list-item-action-text id="${rightactiontextID}" v-if="item.${xrighttext}" v-text="item.${xrighttext}"></v-list-item-action-text>
-<v-btn id="${rightactionBtnID}" :icon="true" v-if="item.${xrighticon}">
-<v-icon id="${rightactionIconID}" v-text="item.${xrighticon}" class="${xrighticonclass}" :color="item.${xrighticoncolor}"></v-icon>
-</v-btn>
-<v-checkbox id="${rightcheckboxID}" v-if="${xshowrightcheckboxes}" :input-value="item.${xrightcheckbox}"></v-checkbox>
-<v-rating id="${rightratingID}" length="1" v-if="${xshowrightrating}" :value="item.${xrightrating}"></v-rating>
-</v-list-item-action>
-</v-list-item>
-</v-template>"$
-	
-	'
-	sTemplate = sTemplate.Replace("~","$")
-	
-	BANano.GetElement(parentID).Append(sTemplate)
-	'
-	Dim vlistitem As VueElement
-	vlistitem.Initialize(Module, listitemID, listitemID)
-	Select Case numLines
-	Case 2
-		vlistitem.AddAttr(":two-line", True)
-	Case 3
-		vlistitem.AddAttr(":three-line", True)
-	End Select
-	vlistitem.SetOnEventOwn(Module, $"${elID}_click"$, "click", "item")
-	'left action
-	'
-	Dim vleftcheckbox As VueElement
-	vleftcheckbox.Initialize(Module, leftcheckboxID, leftcheckboxID)
-	'
-	Dim vrightcheckbox As VueElement
-	vrightcheckbox.Initialize(Module, rightcheckboxID, rightcheckboxID)
-	
-	Dim vleftlistitemaction As VueElement
-	vleftlistitemaction.Initialize(Module, leftactionID, leftactionID)
-	vleftlistitemaction.SetOnEventOwn(Module, $"${elID}_leftclick"$, "click.stop", "item")
-	'
-	Dim vrightlistitemaction As VueElement
-	vrightlistitemaction.Initialize(Module, rightactionID, rightactionID)
-	vrightlistitemaction.SetOnEventOwn(Module, $"${elID}_rightclick"$, "click.stop", "item")
-	'
-	vlistitem.SetData(datasource, NewList)
-	vlistitem.BindVueElement(vlistitem)
-	vlistitem.BindVueElement(vleftlistitemaction)
-	vlistitem.BindVueElement(vrightlistitemaction)
-	vlistitem.BindVueElement(vleftcheckbox)
-	vlistitem.BindVueElement(vrightcheckbox)
-	Return vlistitem
-End Sub
-
-'add a list item template to draw item
-Sub AddListViewGroupTemplate(Module As Object, listname As String, numLines As Int, props As ListViewItemOptions) As VueElement
-	Dim elID As String = listname.ToLowerCase
-	Dim parentID As String = CleanID(listname)
-	'
-	Dim listitemID As String = $"${elID}listitem"$
-	
-	'in case the pointers are changed
-	Dim xurl As String = props.url
-	Dim xicon As String = props.icon
-	Dim xiconclass As String = props.iconclass
-	Dim xiconcolor As String = props.iconcolor
-	
-	Dim xtitle As String = props.title
-	Dim xsubtitle As String = props.subtitle
-	Dim xsubtitle1 As String = props.subtitle1
-	'
-	Dim datasource As String = props.dataSource
-	Dim key As String = props.key
-	
-	Dim xactiveclass As String = props.activeclass
-	datasource = datasource.ToLowerCase
-	key = key.ToLowerCase
-	'	
-Dim sTemplate As StringBuilder
-sTemplate.Initialize 
-sTemplate.Append($"<v-list-group v-for="item in ${datasource}" :key="item.${key}" v-model="item.${key}" no-action>"$)
-sTemplate.Append($"<v-icon slot="prependIcon" :color="item.${xiconcolor}" v-text="item.${xicon}"></v-icon>"$)
-sTemplate.Append($"<v-template v-slot:activator>"$)
-sTemplate.Append($"<v-list-item-content>"$)
-sTemplate.Append($"<v-list-item-title v-text="item.${xtitle}"></v-list-item-title>"$)
-sTemplate.Append($"</v-list-item-content>"$)
-sTemplate.Append($"</v-template>"$)
-sTemplate.Append($"<v-list-item id="${listitemID}" v-for="child in item.items" :key="child.${key}" :to="child.${xurl}" active-class="${xactiveclass}">"$)
-sTemplate.Append($"<v-list-item-icon v-if="child.${xicon}">"$)
-sTemplate.append($"<v-icon :color="child.${xiconcolor}" class="${xiconclass}" v-text="child.${xicon}"></v-icon>"$)
-sTemplate.Append($"</v-list-item-icon>"$)
-sTemplate.Append($"<v-list-item-content>"$)
-sTemplate.Append($"<v-list-item-title v-text="child.${xtitle}"></v-list-item-title>"$)
-sTemplate.Append($"<v-list-item-subtitle v-if="child.${xsubtitle}" v-text="child.${xsubtitle}"></v-list-item-subtitle>"$)
-sTemplate.Append($"<v-list-item-subtitle v-if="child.${xsubtitle1}" v-text="child.${xsubtitle1}"></v-list-item-subtitle>"$)
-sTemplate.Append($"</v-list-item-content>"$)
-sTemplate.Append($"</v-list-item>"$)
-sTemplate.Append($"</v-list-group>"$)
-	'
-	BANano.GetElement(parentID).Append(sTemplate.tostring)
-	'
-	Dim vlistitem As VueElement
-	vlistitem.Initialize(Module, listitemID, listitemID)
-	Select Case numLines
-	Case 2
-		vlistitem.AddAttr(":two-line", True)
-	Case 3
-		vlistitem.AddAttr(":three-line", True)
-	End Select
-	vlistitem.SetOnEventOwn(Module, $"${elID}_click"$, "click", "child")
-	'left action
-	'
-	vlistitem.SetData(datasource, NewList)
-	vlistitem.BindVueElement(vlistitem)
-	Return vlistitem
-End Sub
 
 Sub AddTimePickerInput1(Module As Object, parentID As String, elID As String, vModel As String, sLabel As String, txtprops As Map, tpprops As Map) As VueElement
 	Dim tp As VueElement = AddTimePickerInput(Module, parentID, elID, vModel, sLabel,"", False, "", "", txtprops, tpprops)
@@ -3763,7 +3581,6 @@ Sub AddSearch(Module As Object, parentID As String, elID As String, vmodel As St
 	vtextfield.AppendIcon = "mdi-magnify"
 	vtextfield.VModel = vmodel
 	vtextfield.SetTypeText
-	vtextfield.Ref = vmodel
 	vtextfield.Solo = bSolo
 	vtextfield.SingleLine = True
 	vtextfield.HideDetails = True
@@ -3915,7 +3732,7 @@ Sub AddTextField1(Module As Object, parentID As String, elID As String, vModel A
 	vtextfield.Label = sLabel
 	vtextfield.VModel = vModel
 	vtextfield.SetTypeText
-	vtextfield.Ref = vModel
+	vtextfield.Ref = elID
 	vtextfield.SetOnEvent(Module, "click:append", "")
 	vtextfield.SetOnEvent(Module, "click:prepend", "")
 	vtextfield.SetOnEvent(Module, "click:append-outer", "")
@@ -3947,7 +3764,7 @@ Sub AddTextField(Module As Object, parentID As String, elID As String, vmodel As
 	vtextfield.Hint = sHint
 	vtextfield.VModel = vmodel
 	vtextfield.SetTypeText
-	vtextfield.Ref = vmodel
+	vtextfield.Ref = elID
 	vtextfield.SetOnEvent(Module, "click:append", "")
 	vtextfield.SetOnEvent(Module, "click:prepend", "")
 	vtextfield.SetOnEvent(Module, "click:append-outer", "")
@@ -3987,8 +3804,8 @@ Sub AddTextArea(Module As Object, parentID As String, elID As String, vmodel As 
 	vtextfield.Placeholder = splaceholder
 	vtextfield.Hint = sHint
 	vtextfield.VModel = vmodel
+	vtextfield.Ref = elID
 	vtextfield.SetTypeText
-	vtextfield.Ref = vmodel
 	vtextfield.SetOnEvent(Module, "click:append", "")
 	vtextfield.SetOnEvent(Module, "click:prepend", "")
 	vtextfield.SetOnEvent(Module, "click:append-outer", "")
@@ -4017,7 +3834,7 @@ Sub AddPassword(Module As Object, parentID As String, elID As String, vmodel As 
 	vtextfield.Hint = sHint
 	vtextfield.VModel = vmodel
 	vtextfield.SetTypePassword
-	vtextfield.Ref = vmodel
+	vtextfield.Ref = elID
 	vtextfield.AddAttr(":type", $"${bshowPassword} ? 'text' : 'password'"$)
 	vtextfield.AddAttr(":append-icon", $"${bshowPassword} ? 'mdi-eye' : 'mdi-eye-off'"$)
 	vtextfield.AddAttr("v-on:click:append", $"${bshowPassword} = !${bshowPassword}"$)
@@ -4047,6 +3864,7 @@ Sub AddSwitch(Module As Object, parentID As String, sid As String, vmodel As Str
 	vswitch.VModel = vmodel
 	vswitch.label = slabel
 	vswitch.Value = truevalue
+	vswitch.Ref = sid
 	vswitch.AddAttr("true-value", truevalue)
 	vswitch.AddAttr("false-value", falsevalue)
 	vswitch.AddAttr(":inset", bInset)
@@ -4067,6 +3885,7 @@ Sub AddRating(Module As Object, parentID As String, sid As String, vmodel As Str
 	vrating.AddAttr("length", slength)
 	vrating.AddAttr("size", ssize)
 	vrating.AddAttr(":hover", bHover)
+	vrating.Ref = sid
 	vrating.Color = color
 	vrating.AssignProps(props)
 	vrating.SetOnEvent(Module, "input", "")
@@ -4085,22 +3904,35 @@ Sub AddCheckBox(Module As Object, parentID As String, sid As String, vmodel As S
 	vcheckbox.AddAttr("true-value", truevalue)
 	vcheckbox.AddAttr("false-value", falsevalue)
 	vcheckbox.Color = color
+	vcheckbox.Ref = sid
 	vcheckbox.AssignProps(props)
 	vcheckbox.SetOnEvent(Module, "click", "")
 	Return vcheckbox
 End Sub
 
+'<code>
+'Dim vimg As VueElement = vuetify.AddImage(Me, "r1c1", "vimg", "./assets/logo.png", "./assets/logo.png", "Logo", "100px", "100px", null)
+'vuetify.BindVueElement(vimg)
+'
+'Sub vimg_click(e As BANanoEvent)
+'End Sub 
+'</code>
 Sub AddImage(Module As Object, parentID As String, elID As String, src As String, lazysrc As String, alt As String, sheight As String, swidth As String, props As Map) As VueElement
 	parentID = CleanID(parentID)
 	elID = elID.ToLowerCase
 	BANano.GetElement(parentID).Append($"<v-img id="${elID}"></v-img>"$)
 	Dim vimg As VueElement
 	vimg.Initialize(Me, elID, elID)
-	vimg.Height = sheight
-	vimg.Width = swidth
+	If sheight <> "" Then vimg.Height = sheight
+	If swidth <> "" Then vimg.Width = swidth
 	vimg.Src = src
 	vimg.Alt = alt
-	vimg.AddAttr("lazy-src", lazysrc)
+	If lazysrc = "" Then 
+		vimg.AddAttr("lazy-src", src)
+	Else
+		vimg.AddAttr("lazy-src", lazysrc)
+	End If
+	vimg.Ref = elID
 	vimg.AddAttr(":aspect-ratio", "16/9")
 	vimg.SetOnEvent(Module, "click", "")
 	vimg.AssignProps(props)
@@ -4269,6 +4101,7 @@ Sub AddRadioGroup(Module As Object, parentID As String, elID As String, vmodel A
 	vradiogroup.AddAttr(":column", Not(bRow))
 	vradiogroup.VModel = vmodel
 	vradiogroup.AssignProps(radiogroupprops)
+	vradiogroup.ref = elID
 	Dim vradio As VueElement
 	vradio.Initialize(Module, radioID, radioID)
 	vradio.VFor = $"item in ${sourceTable}"$

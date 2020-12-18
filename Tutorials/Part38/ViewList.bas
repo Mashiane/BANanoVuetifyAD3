@@ -44,8 +44,6 @@ End Sub
 Sub BuildList4
 	'inject a list
 	Dim list4 As VueElement = vuetify.AddList(Me, vlists.MatrixID(2, 2), "list4", True, True, True, Null)
-	lists.BindVueElement(list4)
-	
 	'initialize the listview options, we use the default options
 	'to source the data
 	Dim list4Options As ListViewItemOptions = vuetify.NewListViewItemOptions
@@ -53,9 +51,8 @@ Sub BuildList4
 	list4Options.dataSource = "preferences"
 	list4Options.showrightcheckboxes = True
 	'add the template to the list
-	Dim list4Template As VueElement = vuetify.AddListViewTemplate(Me, "list4", 0, list4Options)
-	'bind the template
-	lists.BindVueElement(list4Template)
+	list4.AddListViewTemplate(0, list4Options)
+	lists.BindVueElement(list4)
 	'
 	list4.ClearItems
 	list4.AddItemHeader("Preferences")
@@ -79,17 +76,14 @@ End Sub
 Sub BuildList6
 	'inject a list
 	Dim list6 As VueElement = vuetify.AddList(Me, vlists.MatrixID(3, 2), "list6", True, True, True, Null)
-	lists.BindVueElement(list6)
-	
 	'initialize the listview options, we use the default options
 	'to source the data
 	Dim list6Options As ListViewItemOptions = vuetify.NewListViewItemOptions
 	'set the data source of the list items
 	list6Options.dataSource = "topics"
 	'add the group template to the list
-	Dim list6Template As VueElement = vuetify.AddListViewGroupTemplate(Me, "list6", 0, list6Options)
-	'bind the template
-	lists.BindVueElement(list6Template)
+	list6.AddListViewGroupTemplate(0, list6Options)
+	lists.BindVueElement(list6)
 	'
 	list6.ClearItems
 	list6.AddItemParentChild("", "1", "mdi-ticket", "red", "Attractions", "")
@@ -117,8 +111,6 @@ End Sub
 Sub BuildList5
 	'inject a list
 	Dim list5 As VueElement = vuetify.AddList(Me, vlists.MatrixID(3, 1), "list5", True, True, True, Null)
-	lists.BindVueElement(list5)
-	
 	'initialize the listview options, we use the default options
 	'to source the data
 	Dim list5Options As ListViewItemOptions = vuetify.NewListViewItemOptions
@@ -126,9 +118,9 @@ Sub BuildList5
 	list5Options.dataSource = "emails"
 	list5Options.showrightrating = True
 	'add the template to the list
-	Dim list5Template As VueElement = vuetify.AddListViewTemplate(Me, "list5", 0, list5Options)
+	list5.AddListViewTemplate(0, list5Options)
 	'bind the template
-	lists.BindVueElement(list5Template)
+	lists.BindVueElement(list5)
 	'
 	list5.ClearItems
 	list5.AddItemHeader("Emails")
@@ -145,8 +137,6 @@ End Sub
 Sub BuildList3
 	'inject a list
 	Dim list3 As VueElement = vuetify.AddList(Me, vlists.MatrixID(2, 1), "list3", True, True, True, Null)
-	lists.BindVueElement(list3)
-	
 	'initialize the listview options, we use the default options
 	'to source the data
 	Dim list3Options As ListViewItemOptions = vuetify.NewListViewItemOptions
@@ -154,9 +144,9 @@ Sub BuildList3
 	list3Options.dataSource = "tasks"
 	list3Options.showleftcheckboxes = True
 	'add the template to the list
-	Dim list3Template As VueElement = vuetify.AddListViewTemplate(Me, "list3", 0, list3Options)
+	list3.AddListViewTemplate(0, list3Options)
 	'bind the template
-	lists.BindVueElement(list3Template)
+	lists.BindVueElement(list3)
 	'
 	list3.ClearItems
 	list3.AddItemHeader("Tasks")
@@ -173,17 +163,15 @@ End Sub
 Sub BuildList1
 	'inject a list
 	Dim mList As VueElement = vuetify.AddList(Me, vlists.MatrixID(1, 1), "list1", False, False, False, Null)
-	lists.BindVueElement(mList)
-	
 	'initialize the listview options, we use the default options
 	'to source the data
 	Dim list1Options As ListViewItemOptions = vuetify.NewListViewItemOptions
 	'set the data source of the list items
 	list1Options.dataSource = "items"
 	'add the template to the list
-	Dim list1Template As VueElement = vuetify.AddListViewTemplate(Me, "list1", 0, list1Options)
+	mList.AddListViewTemplate(0, list1Options)
 	'bind the template
-	lists.BindVueElement(list1Template)
+	lists.BindVueElement(mList)
 	'we add the items to the list
 	mList.ClearItems  ' clear the items
 	mList.AddItemAction("1", "mdi-inbox-arrow-down", "green", "Inbox", "Incoming emails", "", "Today", "mdi-inbox-arrow-down", "", 0, "")
@@ -198,16 +186,14 @@ End Sub
 Sub BuildList2
 	'icon title
 	Dim list2 As VueElement = vuetify.AddList(Me, vlists.MatrixID(1, 2), "list2", False, False, False, Null)
-	lists.BindVueElement(list2)
 	'to source the data
 	Dim list2Options As ListViewItemOptions = vuetify.NewListViewItemOptions
 	'set the data source of the list items
 	list2Options.dataSource = "icontitle"
 	list2Options.avatariconclass = "grey lighten-1"
-	'add the template to the list
-	Dim list2Template As VueElement = vuetify.AddListViewTemplate(Me, "list2", 0, list2Options)
+	list2.AddListViewTemplate(0, list2Options)
 	'bind the template
-	lists.BindVueElement(list2Template)
+	lists.BindVueElement(list2)
 	
 	'list2.ClearItems
 	list2.AddItemHeader("Reports")

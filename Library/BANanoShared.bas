@@ -2963,3 +2963,12 @@ Sub BANanoGetHTMLAsIs(id As String) As String
 	Return xTemplate
 End Sub
 
+'get the html part of a bananoelement
+Sub BANanoGetHTMLOnly(id As String) As String
+	id = id.tolowercase
+	id = id.Replace("#","")
+	Dim be As BANanoElement
+	be.Initialize($"#${id}"$)
+	Dim xTemplate As String = be.GetHTML
+	Return xTemplate
+End Sub

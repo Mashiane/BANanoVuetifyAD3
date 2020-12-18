@@ -79,8 +79,6 @@ Sub Init
 	
 	'inject a list tp the vapp drawer
 	Dim drwlist As VueElement = vuetify.AddList(Me, "vappdrawer", "drwlist", True, False, True, Null)
-	vuetify.BindVueElement(drwlist)
-	
 	'initialize the listview options, we use the default options
 	'to source the data
 	Dim drwlistOptions As ListViewItemOptions = vuetify.NewListViewItemOptions
@@ -89,9 +87,9 @@ Sub Init
 	drwlistOptions.key = "title"
 	
 	'add the template to the list
-	Dim drwlistTemplate As VueElement = vuetify.AddListViewTemplate(Me, "drwlist", 0, drwlistOptions)
+	drwlist.AddListViewTemplate(0, drwlistOptions)
 	'bind the template
-	vuetify.BindVueElement(drwlistTemplate)
+	vuetify.BindVueElement(drwlist)
 	
 	'create a list of items to use
 	Dim links As List = vuetify.NewList

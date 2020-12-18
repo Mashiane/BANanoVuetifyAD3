@@ -118,5 +118,6 @@ ModuleClosedNodes6=
 ModuleClosedNodes7=
 ModuleClosedNodes8=
 ModuleClosedNodes9=
+NavigationStack=pgIndex,Process_Globals,15,0,ViewList,Initialize,22,0,ViewList,BuildList4,40,0,ViewList,BuildList6,71,0,ViewList,BuildList5,106,1,ViewList,BuildList3,132,0,ViewList,BuildList1,158,0,ViewList,BuildList2,181,1,pgIndex,Init,81,0
 SelectedBuild=0
-VisibleModules=1,2,3,4,5,6,7,8,9,10
+VisibleModules=1,20,23,12,24
