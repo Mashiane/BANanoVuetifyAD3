@@ -4099,7 +4099,24 @@ Sub AddItemLeftCheckBox(id As String, bChecked As Boolean, title As String, subt
 	If righttext <> "" Then rec.Put("righttext", righttext)
 	If righticoncolor <> "" Then rec.Put("righticoncolor", righticoncolor)
 	If rating >= 0 Then rec.Put("rightrating", rating)
-	
+	'
+	Records.Add(rec)
+End Sub
+
+Sub AddItemLeftSwitch(id As String, bChecked As Boolean, title As String, subtitle As String, _
+	subtitle1 As String, righttext As String, righticon As String, righticoncolor As String, rating As Int, url As String)
+	Dim rec As Map = CreateMap()
+	rec.Put("id", id)
+	If url <> "" Then rec.Put("to", url)
+	rec.Put("leftswitch", bChecked)
+	If title <> "" Then rec.Put("title", title)
+	If subtitle <> "" Then rec.Put("subtitle", subtitle)
+	If subtitle1 <> "" Then rec.Put("subtitle1", subtitle1)
+	'
+	If righticon <> "" Then rec.Put("righticon", righticon)
+	If righttext <> "" Then rec.Put("righttext", righttext)
+	If righticoncolor <> "" Then rec.Put("righticoncolor", righticoncolor)
+	If rating >= 0 Then rec.Put("rightrating", rating)
 	'
 	Records.Add(rec)
 End Sub
@@ -4114,6 +4131,19 @@ Sub AddItemRightCheckBox(id As String, bChecked As Boolean, title As String, sub
 	If subtitle1 <> "" Then rec.Put("subtitle1", subtitle1)
 	Records.Add(rec)
 End Sub
+
+
+Sub AddItemRightSwitch(id As String, bChecked As Boolean, title As String, subtitle As String, subtitle1 As String, url As String)
+	Dim rec As Map = CreateMap()
+	rec.Put("id", id)
+	If url <> "" Then rec.Put("to", url)
+	rec.Put("rightswitch", bChecked)
+	If title <> "" Then rec.Put("title", title)
+	If subtitle <> "" Then rec.Put("subtitle", subtitle)
+	If subtitle1 <> "" Then rec.Put("subtitle1", subtitle1)
+	Records.Add(rec)
+End Sub
+
 
 
 'add an icon
@@ -4223,6 +4253,8 @@ Sub AddListViewTemplate(numLines As Int, props As ListViewItemOptions) As VueEle
 	Dim rightactionBtnID As String = $"${elID}rightactionbtn"$
 	Dim rightactionIconID As String = $"${elID}rightactionicon"$
 	Dim rightratingID As String = $"${elID}rightrating"$
+	Dim leftswitchID As String = $"${elID}leftswitch"$
+	Dim rightswitchID As String = $"${elID}rightswitch"$
 	'
 	'in case the pointers are changed
 	Dim xurl As String = props.url
@@ -4260,6 +4292,13 @@ Sub AddListViewTemplate(numLines As Int, props As ListViewItemOptions) As VueEle
 	Dim xshowrightrating As Boolean = props.showrightrating
 	Dim xrightrating As String = props.rightrating
 	'
+	Dim xleftswitch As String = props.leftswitch
+	Dim xshowleftswitch As Boolean = props.showleftswitches
+	Dim xrightswitch As String = props.rightswitch
+	Dim xshowrightswitch As Boolean = props.showrightswitches
+	Dim xswitchinset As Boolean = props.switchinset
+	
+	'
 	datasource = datasource.ToLowerCase
 	key = key.ToLowerCase
 	'
@@ -4267,31 +4306,33 @@ Sub AddListViewTemplate(numLines As Int, props As ListViewItemOptions) As VueEle
 <v-subheader id="${headerID}" v-if="item.header" :key="item.header">{{ item.header }}</v-subheader>
 <v-divider id="${dividerID}" v-else-if="item.divider" :key="index" :inset="item.inset"></v-divider>
 <v-list-item id="${listitemID}" v-else="true" :key="item.${key}" :to="item.${xurl}" active-class="${xactiveclass}">
-<v-list-item-action id="${leftactionID}" v-if="item.${xlefticon} || ${xshowleftcheckboxes}">
+<v-list-item-action id="${leftactionID}" v-if="item.${xlefticon} || ${xshowleftcheckboxes} || ${xshowleftswitch}">
 <v-btn id="${leftactionBtnID}" :icon="true" v-if="item.${xlefticon}">
 <v-icon id="${leftactionIconID}" :color="item.${xlefticoncolor}" v-text="item.${xlefticon}" class="${xlefticonclass}"></v-icon>
 </v-btn>
 <v-checkbox id="${leftcheckboxID}" v-if="${xshowleftcheckboxes}" :input-value="item.${xleftcheckbox}"></v-checkbox>
+<v-switch id="${leftswitchID}" v-if="${xshowleftswitch}" :inset="${xswitchinset}" :input-value="item.${xleftswitch}"></v-switch>
 </v-list-item-action>
-<v-list-item-avatar id="${avatarID}" v-if="item.${xavatar} || item.${xavataricon}">
-<v-img id="${avatarImgID}" :src="item.${xavatar}" class="${xavatarclass}" v-if="item.${xavatar}"></v-img>
-<v-icon id="${avatarIconID}" v-if="item.${xavataricon}" :color="item.${xavatariconcolor}" class="${xavatariconclass}" v-text="item.${xavataricon}"></v-icon>
+<v-list-item-avatar id="${avatarID}" v-If="item.${xavatar} || item.${xavataricon}">
+<v-img id="${avatarImgID}" :src="item.${xavatar}" class="${xavatarclass}" v-If="item.${xavatar}"></v-img>
+<v-icon id="${avatarIconID}" v-If="item.${xavataricon}" :color="item.${xavatariconcolor}" class="${xavatariconclass}" v-text="item.${xavataricon}"></v-icon>
 </v-list-item-avatar>
-<v-list-item-icon id="${itemiconID}" v-if="item.${xicon}">
+<v-list-item-icon id="${itemiconID}" v-If="item.${xicon}">
 <v-icon id="${iconID}" :color="item.${xiconcolor}" class="${xiconclass}" v-text="item.${xicon}"></v-icon>
 </v-list-item-icon>
 <v-list-item-content id="${contentID}">
-<v-list-item-title id="${titleID}" v-if="item.${xtitle}" v-text="item.${xtitle}"></v-list-item-title>
-<v-list-item-subtitle id="${subtitleID}" v-if="item.${xsubtitle}" v-text="item.${xsubtitle}"></v-list-item-subtitle>
-<v-list-item-subtitle id="${subtitle1ID}" v-if="item.${xsubtitle1}" v-text="item.${xsubtitle1}"></v-list-item-subtitle>
+<v-list-item-title id="${titleID}" v-If="item.${xtitle}" v-text="item.${xtitle}"></v-list-item-title>
+<v-list-item-subtitle id="${subtitleID}" v-If="item.${xsubtitle}" v-text="item.${xsubtitle}"></v-list-item-subtitle>
+<v-list-item-subtitle id="${subtitle1ID}" v-If="item.${xsubtitle1}" v-text="item.${xsubtitle1}"></v-list-item-subtitle>
 </v-list-item-content>
-<v-list-item-action id="${rightactionID}" v-if="item.${xrighticon} || item.${xrighttext} || ${xshowrightcheckboxes} || ${xshowrightrating}">
-<v-list-item-action-text id="${rightactiontextID}" v-if="item.${xrighttext}" v-text="item.${xrighttext}"></v-list-item-action-text>
-<v-btn id="${rightactionBtnID}" :icon="true" v-if="item.${xrighticon}">
+<v-list-item-action id="${rightactionID}" v-If="item.${xrighticon} || item.${xrighttext} || ${xshowrightcheckboxes} || ${xshowrightrating} || ${xshowrightswitch}">
+<v-list-item-action-text id="${rightactiontextID}" v-If="item.${xrighttext}" v-text="item.${xrighttext}"></v-list-item-action-text>
+<v-btn id="${rightactionBtnID}" :icon="true" v-If="item.${xrighticon}">
 <v-icon id="${rightactionIconID}" v-text="item.${xrighticon}" class="${xrighticonclass}" :color="item.${xrighticoncolor}"></v-icon>
 </v-btn>
-<v-checkbox id="${rightcheckboxID}" v-if="${xshowrightcheckboxes}" :input-value="item.${xrightcheckbox}"></v-checkbox>
-<v-rating id="${rightratingID}" length="1" v-if="${xshowrightrating}" :value="item.${xrightrating}"></v-rating>
+<v-checkbox id="${rightcheckboxID}" v-If="${xshowrightcheckboxes}" :input-value="item.${xrightcheckbox}"></v-checkbox>
+<v-rating id="${rightratingID}" length="1" v-If="${xshowrightrating}" :value="item.${xrightrating}"></v-rating>
+<v-switch id="${rightswitchID}" v-If="${xshowrightswitch}" :inset="${xswitchinset}" :input-value="item.${xrightswitch}"></v-switch>
 </v-list-item-action>
 </v-list-item>
 </v-template>"$

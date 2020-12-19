@@ -340,9 +340,10 @@ Sub Class_Globals
 	subtitle1 As String, righticon As String, righticonclass As String, righttext As String, _
 	righticoncolor As String, key As String, dataSource As String, activeclass As String, _
 	rightcheckbox As String, leftcheckbox As String, showleftcheckboxes As Boolean, showrightcheckboxes As Boolean, _
-	rightrating As String, rightratingcolor As String, showrightrating As Boolean)
+	rightrating As String, rightratingcolor As String, showrightrating As Boolean, _
+	leftswitch As String, showleftswitches As Boolean, _
+	rightswitch As String, showrightswitches As Boolean, switchinset As Boolean)
 End Sub
-
 
 
 'new listviewitemoptions
@@ -385,7 +386,13 @@ Sub NewListViewItemOptions() As ListViewItemOptions
 	lvio.rightrating = "rightrating"
 	lvio.rightratingcolor = "rightratingcolor"
 	lvio.showrightrating = False
-	
+	'
+	lvio.leftswitch = "leftswitch"
+	lvio.showleftswitches = False
+	'
+	lvio.rightswitch = "rightswitch"
+	lvio.showrightswitches = False
+	lvio.switchinset = False
 	Return lvio
 End Sub
 
