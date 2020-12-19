@@ -131,7 +131,7 @@ Sub Class_Globals
 	Public groupdesc As String
 	Public sortdesc As String
 	Public expanded As String
-	Public keyID As String
+	'Public keyID As String
 	Public search As String
 	Private mTitle As String
 	Private mHasSearch As Boolean = False
@@ -160,7 +160,7 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	hasExternalPagination = False
 	totalVisible = ""
 	hdr.Initialize
-	keyID = $"${mName}key"$
+	'keyID = $"${mName}key"$
 	'
 	headers = $"${mName}headers"$
 	selected = $"${mName}selected"$
@@ -186,7 +186,7 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	AddAttr(":group-desc", groupdesc)
 	AddAttr(":sort-desc", sortdesc)
 	AddAttr(":expanded.sync", expanded)
-	AddAttr(":key", keyID)
+	'AddAttr(":key", keyID)
 	AddAttr(":search", search)
 	
 	setNoDataText("Working on it, please wait...")
@@ -1367,7 +1367,7 @@ Sub Reset(VC As VueComponent)
 	VC.SetData(headers, NewList)
 	VC.SetData(filters, NewList)
 	VC.SetData(allcolumns, NewList)
-	VC.SetData(keyID, DateTime.Now)
+	'VC.SetData(keyID, DateTime.Now)
 	'
 	columnsM.Initialize
 End Sub
@@ -1381,7 +1381,7 @@ Sub Reload(VC As VueComponent, records As List)
 	VC.SetData(groupdesc, NewList)
 	VC.SetData(sortdesc, NewList)
 	VC.SetData(expanded, NewList)
-	VC.SetData(keyID, DateTime.Now)
+	'VC.SetData(keyID, DateTime.Now)
 End Sub
 
 'add a column
@@ -1799,7 +1799,7 @@ Sub ResetColumns(VC As VueComponent)
 	VC.SetData(groupdesc, NewList)
 	VC.SetData(sortdesc, NewList)
 	VC.SetData(expanded, NewList)
-	VC.SetData(keyID, DateTime.Now)
+	'VC.SetData(keyID, DateTime.Now)
 End Sub
 
 'set column filterable
@@ -2361,7 +2361,7 @@ Sub Refresh
 	BuildHeaders(columnsM)	
 	BuildSlots
 	
-	SetData(keyID, DateTime.Now)
+	'SetData(keyID, DateTime.Now)
 	If Items.Size > 0 Then
 		SetData(itemsname, Items)
 	End If

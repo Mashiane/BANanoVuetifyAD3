@@ -330,6 +330,8 @@ Sub Class_Globals
 	Private dlgprompthint As String
 	Private dlgpromptplaceholder As String
 	Private dlgpromptshow As String
+	Public BreakPointLGAndUp As String = "$vuetify.breakpoint.lgAndUp"
+	Public BreakPointLGAndUpNot As String = "!$vuetify.breakpoint.lgAndUp"
 	
 	Type ListViewItemOptions(url As String, lefticon As String, lefticoncolor As String, _
 	lefticonclass As String, avatar As String, avatarclass As String, avataricon As String, _
@@ -2238,6 +2240,12 @@ Sub AddSheet(Module As Object, parentID As String, elID As String, Height As Str
 	Return elx
 End Sub
 
+'<code>
+'Dim drw as VueElement = vuetify.AddDrawer(Me, "vapp", "drw1", "drw1show", False, "", False, null)
+'drw.App = True
+'drw.Width = 300
+'vuetify.BindVueElement(drw)
+'</code>
 Sub AddDrawer(Module As Object, parentID As String, elID As String, vmodel As String, bVisible As Boolean, Color As String, bRight As Boolean, props As Map) As VueElement
 	Dim elx As VueElement = AddVueElement(Module, parentID, elID, "v-navigation-drawer", vmodel, "", Color, props)
 	elx.Right = bRight
@@ -2295,6 +2303,7 @@ End Sub
 '<code>
 'Dim frm As VueElement = vuetify.AddForm(Me, "r1c1", "frm", "frmvalid", True, Null)
 'vuetify.BindVueElement(frm)
+'Dim bValid As Boolean = vuetify.FormValidate(
 '</code>
 
 Sub AddForm(Module As Object, parentID As String, elID As String, vmodel As String, bLazyValidation As Boolean, props As Map) As VueElement

@@ -2691,6 +2691,12 @@ Sub getMarginAXYTBLR() As String
 	Return stMarginAXYTBLR
 End Sub
 
+'make element fit page
+Sub SetFitPage
+	setHeight("100vh")
+	setWidth("100vw")
+End Sub
+
 'set the conver image for the container
 Sub setFitScreen(varFitScreen As Boolean)
 	bFitScreen = varFitScreen
