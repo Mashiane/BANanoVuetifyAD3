@@ -4310,29 +4310,29 @@ Sub AddListViewTemplate(numLines As Int, props As ListViewItemOptions) As VueEle
 <v-btn id="${leftactionBtnID}" :icon="true" v-if="item.${xlefticon}">
 <v-icon id="${leftactionIconID}" :color="item.${xlefticoncolor}" v-text="item.${xlefticon}" class="${xlefticonclass}"></v-icon>
 </v-btn>
-<v-checkbox id="${leftcheckboxID}" v-if="${xshowleftcheckboxes}" :input-value="item.${xleftcheckbox}"></v-checkbox>
-<v-switch id="${leftswitchID}" v-if="${xshowleftswitch}" :inset="${xswitchinset}" :input-value="item.${xleftswitch}"></v-switch>
+<v-checkbox id="${leftcheckboxID}" v-if="${xshowleftcheckboxes}" :item="item" v-model="item.${xleftcheckbox}" :input-value="item.${xleftcheckbox}"></v-checkbox>
+<v-switch id="${leftswitchID}" v-if="${xshowleftswitch}" :inset="${xswitchinset}" :item="item" v-model="item.${xleftswitch}" :input-value="item.${xleftswitch}"></v-switch>
 </v-list-item-action>
-<v-list-item-avatar id="${avatarID}" v-If="item.${xavatar} || item.${xavataricon}">
-<v-img id="${avatarImgID}" :src="item.${xavatar}" class="${xavatarclass}" v-If="item.${xavatar}"></v-img>
-<v-icon id="${avatarIconID}" v-If="item.${xavataricon}" :color="item.${xavatariconcolor}" class="${xavatariconclass}" v-text="item.${xavataricon}"></v-icon>
+<v-list-item-avatar id="${avatarID}" v-if="item.${xavatar} || item.${xavataricon}">
+<v-img id="${avatarImgID}" :src="item.${xavatar}" class="${xavatarclass}" v-if="item.${xavatar}"></v-img>
+<v-icon id="${avatarIconID}" v-if="item.${xavataricon}" :color="item.${xavatariconcolor}" class="${xavatariconclass}" v-text="item.${xavataricon}"></v-icon>
 </v-list-item-avatar>
-<v-list-item-icon id="${itemiconID}" v-If="item.${xicon}">
+<v-list-item-icon id="${itemiconID}" v-if="item.${xicon}">
 <v-icon id="${iconID}" :color="item.${xiconcolor}" class="${xiconclass}" v-text="item.${xicon}"></v-icon>
 </v-list-item-icon>
 <v-list-item-content id="${contentID}">
-<v-list-item-title id="${titleID}" v-If="item.${xtitle}" v-text="item.${xtitle}"></v-list-item-title>
-<v-list-item-subtitle id="${subtitleID}" v-If="item.${xsubtitle}" v-text="item.${xsubtitle}"></v-list-item-subtitle>
-<v-list-item-subtitle id="${subtitle1ID}" v-If="item.${xsubtitle1}" v-text="item.${xsubtitle1}"></v-list-item-subtitle>
+<v-list-item-title id="${titleID}" v-if="item.${xtitle}" v-text="item.${xtitle}"></v-list-item-title>
+<v-list-item-subtitle id="${subtitleID}" v-if="item.${xsubtitle}" v-text="item.${xsubtitle}"></v-list-item-subtitle>
+<v-list-item-subtitle id="${subtitle1ID}" v-if="item.${xsubtitle1}" v-text="item.${xsubtitle1}"></v-list-item-subtitle>
 </v-list-item-content>
-<v-list-item-action id="${rightactionID}" v-If="item.${xrighticon} || item.${xrighttext} || ${xshowrightcheckboxes} || ${xshowrightrating} || ${xshowrightswitch}">
-<v-list-item-action-text id="${rightactiontextID}" v-If="item.${xrighttext}" v-text="item.${xrighttext}"></v-list-item-action-text>
-<v-btn id="${rightactionBtnID}" :icon="true" v-If="item.${xrighticon}">
+<v-list-item-action id="${rightactionID}" v-if="item.${xrighticon} || item.${xrighttext} || ${xshowrightcheckboxes} || ${xshowrightrating} || ${xshowrightswitch}">
+<v-list-item-action-text id="${rightactiontextID}" v-if="item.${xrighttext}" v-text="item.${xrighttext}"></v-list-item-action-text>
+<v-btn id="${rightactionBtnID}" :icon="true" v-if="item.${xrighticon}">
 <v-icon id="${rightactionIconID}" v-text="item.${xrighticon}" class="${xrighticonclass}" :color="item.${xrighticoncolor}"></v-icon>
 </v-btn>
-<v-checkbox id="${rightcheckboxID}" v-If="${xshowrightcheckboxes}" :input-value="item.${xrightcheckbox}"></v-checkbox>
-<v-rating id="${rightratingID}" length="1" v-If="${xshowrightrating}" :value="item.${xrightrating}"></v-rating>
-<v-switch id="${rightswitchID}" v-If="${xshowrightswitch}" :inset="${xswitchinset}" :input-value="item.${xrightswitch}"></v-switch>
+<v-checkbox id="${rightcheckboxID}" v-if="${xshowrightcheckboxes}" :item="item" v-model="item.${xrightcheckbox}" :input-value="item.${xrightcheckbox}"></v-checkbox>
+<v-rating id="${rightratingID}" length="1" v-if="${xshowrightrating}" v-model="item.${xrightrating}" :value="item.${xrightrating}"></v-rating>
+<v-switch id="${rightswitchID}" v-if="${xshowrightswitch}" :inset="${xswitchinset}" :item="item" v-model="item.${xrightswitch}" :input-value="item.${xrightswitch}"></v-switch>
 </v-list-item-action>
 </v-list-item>
 </v-template>"$
@@ -4353,26 +4353,50 @@ Sub AddListViewTemplate(numLines As Int, props As ListViewItemOptions) As VueEle
 	vlistitem.SetOnEventOwn(mCallBack, $"${elID}_click"$, "click", "item")
 	'left action
 	'
-	Dim vleftcheckbox As VueElement
-	vleftcheckbox.Initialize(mCallBack, leftcheckboxID, leftcheckboxID)
+'	Dim vleftcheckbox As VueElement
+'	vleftcheckbox.Initialize(mCallBack, leftcheckboxID, leftcheckboxID)
+'	If xshowleftcheckboxes Then
+'		vleftcheckbox.SetOnEventOwn(mCallBack, $"${elID}_leftclick"$, "click.stop", "item")
+'	End If
 	'
-	Dim vrightcheckbox As VueElement
-	vrightcheckbox.Initialize(mCallBack, rightcheckboxID, rightcheckboxID)
+'	Dim vrightcheckbox As VueElement
+'	vrightcheckbox.Initialize(mCallBack, rightcheckboxID, rightcheckboxID)
+'	If xshowrightcheckboxes Then
+'		vrightcheckbox.SetOnEventOwn(mCallBack, $"${elID}_rightclick"$, "click.stop", "item")
+'	End If
 	
 	Dim vleftlistitemaction As VueElement
 	vleftlistitemaction.Initialize(mCallBack, leftactionID, leftactionID)
-	vleftlistitemaction.SetOnEventOwn(mCallBack, $"${elID}_leftclick"$, "click.stop", "item")
+	'If xshowleftcheckboxes = False And xshowleftswitch = False Then
+		vleftlistitemaction.SetOnEventOwn(mCallBack, $"${elID}_leftclick"$, "click.stop", "item")
+	'End If
 	'
 	Dim vrightlistitemaction As VueElement
 	vrightlistitemaction.Initialize(mCallBack, rightactionID, rightactionID)
-	vrightlistitemaction.SetOnEventOwn(mCallBack, $"${elID}_rightclick"$, "click.stop", "item")
+	'If xshowrightcheckboxes = False And xshowrightswitch = False Then
+		vrightlistitemaction.SetOnEventOwn(mCallBack, $"${elID}_rightclick"$, "click.stop", "item")
+	'End If
 	'
+'	Dim vleftswitch As VueElement
+'	vleftswitch.Initialize(mCallBack, leftswitchID, leftswitchID)
+'	'If xshowleftswitch Then 
+	'	vleftswitch.SetOnEventOwn(mCallBack, $"${elID}_leftclick"$, "change.stop", "item")
+	'End If
+	'
+'	Dim vrightswitch As VueElement
+'	vrightswitch.Initialize(mCallBack, rightswitchID, rightswitchID)
+	'If xshowrightswitch Then
+	'	vrightswitch.SetOnEventOwn(mCallBack, $"${elID}_rightclick"$, "change.stop", "item")
+	'End If
+	
 	vlistitem.SetData(datasource, NewList)
 	vlistitem.BindVueElement(vlistitem)
 	vlistitem.BindVueElement(vleftlistitemaction)
 	vlistitem.BindVueElement(vrightlistitemaction)
-	vlistitem.BindVueElement(vleftcheckbox)
-	vlistitem.BindVueElement(vrightcheckbox)
+'	vlistitem.BindVueElement(vleftcheckbox)
+'	vlistitem.BindVueElement(vrightcheckbox)
+'	vlistitem.BindVueElement(vrightswitch)
+'	vlistitem.BindVueElement(vleftswitch)
 	'
 	BindVueElement(vlistitem)
 	Return vlistitem

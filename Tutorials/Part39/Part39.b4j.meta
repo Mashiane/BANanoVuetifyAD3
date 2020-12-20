@@ -118,6 +118,6 @@ ModuleClosedNodes6=
 ModuleClosedNodes7=
 ModuleClosedNodes8=
 ModuleClosedNodes9=
-NavigationStack=Visual Designer,vlists.bjl,-100,2,ViewList,BuildList3,157,0,ViewList,BuildList2,208,0,ViewList,BuildList5,113,0,ViewList,Initialize,33,0,ViewList,BuildList4,50,0,ViewList,BuildList7,177,1,ViewList,BuildList8,210,4
+NavigationStack=ViewList,list3_rightclick,284,2,ViewList,list1_leftclick,289,0,ViewList,list2_click,303,1,ViewList,list7_leftclick,307,0,ViewList,list8_leftclick,319,1,ViewList,list4_rightclick,331,0,ViewList,list8_rightclick,326,1,ViewList,list7_rightclick,314,1,ViewList,list1_click,300,1,ViewList,list1_rightclick,293,1
 SelectedBuild=0
 VisibleModules=20

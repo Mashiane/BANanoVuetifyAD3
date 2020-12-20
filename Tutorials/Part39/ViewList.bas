@@ -67,11 +67,11 @@ Sub BuildList4
 	
 	list4.AddItemHeader("Others")
 	list4.AddItemRightCheckBox("2", False, "Radio on at 19:05", "", "", "")
-	list4.AddItemRightCheckBox("3", False, "TV off at 22:00", "", "", "")
+	list4.AddItemRightCheckBox("3", True, "TV off at 22:00", "", "", "")
 	'
 	list4.AddItemHeader("Geyser")
 	list4.AddItemRightCheckBox("5", False, "Geyser On at 02:00 AM", "", "", "")
-	list4.AddItemRightCheckBox("6", False, "Geyser Off at 04:00 AM", "", "", "")
+	list4.AddItemRightCheckBox("6", True, "Geyser Off at 04:00 AM", "", "", "")
 	'
 	lists.SetData("preferences", list4.Records)
 End Sub
@@ -274,42 +274,61 @@ End Sub
 
 
 Sub list6_click(item As Map)
-	vuetify.ShowSnackBarWarning(item)
+	vuetify.ShowSnackBarWarning(banano.ToJson(item))
 End Sub
 
 Sub list5_rightclick(item As Map)
 	Dim emails As List = lists.GetData("emails")
-	Log(emails)
+	vuetify.ShowSnackBarWarning(banano.ToJson(emails))
 End Sub
 
-
-Sub list3_leftcheckclick(item As Map)
-	vuetify.ShowSnackBarWarning(item)
-End Sub
 
 Sub list3_leftclick(item As Map)
-	vuetify.ShowSnackBarWarning(item)
+	vuetify.ShowSnackBarWarning(banano.ToJson(item))
 End Sub
 
 Sub list3_rightclick(item As Map)
-	vuetify.ShowSnackBarWarning(item)
+	vuetify.ShowSnackBarError(banano.ToJson(item))
 End Sub
 
 
 Sub list1_leftclick(item As Map)
-	vuetify.ShowSnackBarWarning(item)
+	vuetify.ShowSnackBarWarning(banano.ToJson(item))
 End Sub
 
 Sub list1_rightclick(item As Map)
-	vuetify.ShowSnackBarError(item)
+	vuetify.ShowSnackBarError(banano.ToJson(item))
 End Sub
 
 
 Sub list1_click(item As Map)
-	vuetify.ShowSnackBarSuccess(item)
+	vuetify.ShowSnackBarSuccess(banano.ToJson(item))
 End Sub
 
 
 Sub list2_click(item As Map)
-	vuetify.ShowSnackBarSuccess(item)
+	vuetify.ShowSnackBarSuccess(banano.tojson(item))
+End Sub
+
+Sub list7_leftclick(item As Map)
+	vuetify.ShowSnackBar("left click: " & banano.ToJson(item))
+End Sub
+
+
+Sub list7_rightclick(item As Map)
+	vuetify.ShowSnackBar("right click: " & banano.ToJson(item))
+End Sub
+
+
+Sub list8_leftclick(item As Map)
+	vuetify.ShowSnackBarSuccess("left click: " & banano.ToJson(item))
+End Sub
+
+
+Sub list8_rightclick(item As Map)
+	vuetify.ShowSnackBarSuccess("right click: " & banano.ToJson(item))
+End Sub
+
+Sub list4_rightclick(item As Map)
+	vuetify.ShowSnackBarSuccess("right click: " & banano.ToJson(item))
 End Sub
