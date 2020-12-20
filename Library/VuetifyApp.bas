@@ -3043,14 +3043,14 @@ End Sub
 '<code>
 'AddCol(Me, "parent", 1, "12", "6", "6", "6")
 '</code>
-Sub AddCol(Module As Object, parentID As String, colpos As Int, sm As String, md As String, lg As String, xl As String) As VueElement
+Sub AddCol(Module As Object, parentID As String, colpos As Int, xs As String, sm As String, md As String, lg As String, xl As String) As VueElement
 	parentID = CleanID(parentID)
 	'
 	Dim colKey As String = $"${parentID}c${colpos}"$
 	BANano.GetElement(parentID).Append($"<v-col id="${colKey}"></v-col>"$)
 	Dim mbutton As VueElement
 	mbutton.Initialize(Module, colKey, colKey)
-	mbutton.AddSizes(sm, md, lg, xl)
+	mbutton.AddSizes(xs, sm, md, lg, xl)
 	mbutton.SetOnEvent(Module, "click", "")
 	Return mbutton
 End Sub

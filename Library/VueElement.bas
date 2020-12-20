@@ -59,9 +59,10 @@ Version=7
 #DesignerProperty: Key: ShowGridDesign, DisplayName: Show Grid Design, FieldType: Boolean, DefaultValue: False, Description: ShowGridDesign
 #DesignerProperty: Key: Rows, DisplayName: Rows, FieldType: String, DefaultValue: , Description: Rows
 #DesignerProperty: Key: Columns, DisplayName: Columns, FieldType: String, DefaultValue: , Description: Columns
-#DesignerProperty: Key: OffSets, DisplayName: OffSets SMLX, FieldType: String, DefaultValue: s=?; m=?; l=?; x=? , Description: OffSets SMLX
-#DesignerProperty: Key: Sizes, DisplayName: Sizes SMLX, FieldType: String, DefaultValue: s=?; m=?; l=?; x=?, Description: Sizes SMLX
-
+#DesignerProperty: Key: OffSets, DisplayName: OffSets XSMLX, FieldType: String, DefaultValue: xs=?; s=?; m=?; l=?; x=? , Description: OffSets SMLX
+#DesignerProperty: Key: Sizes, DisplayName: Sizes XSMLX, FieldType: String, DefaultValue: xs?=; s=?; m=?; l=?; x=?, Description: Sizes SMLX
+#DesignerProperty: Key: MarginAXYTBLR, DisplayName: Margin AXYTBLR, FieldType: String, DefaultValue: a=?; x=?; y=?; t=?; b=?; l=?; r=? , Description: Margins AXYSMLX
+#DesignerProperty: Key: PaddingAXYTBLR, DisplayName: Padding AXYTBLR, FieldType: String, DefaultValue: a=?; x=?; y=?; t=?; b=?; l=?; r=? , Description: Padding AXYSMLX
 
 #DesignerProperty: Key: Center, DisplayName: Center, FieldType: Boolean, DefaultValue: False, Description: Center
 #DesignerProperty: Key: Circle, DisplayName: Circle, FieldType: Boolean, DefaultValue: False, Description: Circle
@@ -102,13 +103,13 @@ Version=7
 #DesignerProperty: Key: JustifyCenter, DisplayName: Justify Center, FieldType: Boolean, DefaultValue: False, Description: JustifyCenter
 #DesignerProperty: Key: Key, DisplayName: Key, FieldType: String, DefaultValue:  , Description:
 #DesignerProperty: Key: Label, DisplayName: Label, FieldType: String, DefaultValue: , Description: Label of the element
-#DesignerProperty: Key: MarginAXYTBLR, DisplayName: Margin AXYTBLR, FieldType: String, DefaultValue: a=?; x=?; y=?; t=?; b=?; l=?; r=? , Description: Margins AXYSMLX
+
 #DesignerProperty: Key: MaxHeight, DisplayName: Max Height, FieldType: String, DefaultValue:  , Description:
 #DesignerProperty: Key: MaxWidth, DisplayName: Max Width, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: NoGutter, DisplayName: No Gutters, FieldType: Boolean, DefaultValue: False, Description: NoGutter
 
 #DesignerProperty: Key: Outlined, DisplayName: Outlined, FieldType: Boolean, DefaultValue: False , Description: 
-#DesignerProperty: Key: PaddingAXYTBLR, DisplayName: Padding AXYTBLR, FieldType: String, DefaultValue: a=?; x=?; y=?; t=?; b=?; l=?; r=? , Description: Padding AXYSMLX
+
 #DesignerProperty: Key: PersistentHint, DisplayName: Persistent Hint, FieldType: Boolean, DefaultValue: False , Description: 
 #DesignerProperty: Key: Placeholder, DisplayName: Placeholder, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: PrependIcon, DisplayName: Prepend Icon, FieldType: String, DefaultValue:  , Description: 
@@ -278,8 +279,8 @@ Sub Class_Globals
 	Private boShaped As Boolean = False
 	Private boSingleLine As Boolean = False
 	Private boSolo As Boolean = False
-	Private stOffSets As String = "s=?; m=?; l=?; x=?"
-	Private stSizes As String = "s=?; m=?; l=?; x=?"
+	Private stOffSets As String = "xs=?; s=?; m=?; l=?; x=?"
+	Private stSizes As String = "xs=?; s=?; m=?; l=?; x=?"
 	Private stPaddingAXYTBLR As String = "a=?; x=?; y=?; t=?; b=?; l=?; r=?"
 	Private stMarginAXYTBLR As String = "a=?; x=?; y=?; t=?; b=?; l=?; r=?"
 	Private bFluid As Boolean = False
@@ -310,8 +311,8 @@ Sub Class_Globals
 	ma As String, mx As String, my As String, mt As String, mb As String, mr As String, ml As String, _
 	pa As String, px As String, py As String, pt As String, pb As String, pr As String, pl As String)
 	
-	Type VueGridColumn(Columns As Int, sm As String, md As String, lg As String, xl As String, _
-	ofsm As String, ofmd As String, oflg As String, ofxl As String, _
+	Type VueGridColumn(Columns As Int, xs As String, sm As String, md As String, lg As String, xl As String, _
+	ofxs As String, ofsm As String, ofmd As String, oflg As String, ofxl As String, _
 	ma As String, mx As String, my As String, mt As String, mb As String, mr As String, ml As String, _
 	pa As String, px As String, py As String, pt As String, pb As String, pr As String, pl As String)
 	'this will hold all our rows
@@ -981,26 +982,28 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 			stColumns = "1"
 		End If
 		If BANano.IsUndefined(stOffSets) Or BANano.IsNull(stOffSets) Then
-			stOffSets = "0,0,0,0"
+			stOffSets = "0,0,0,0,0"
 		End If
 		If BANano.IsUndefined(stSizes) Or BANano.IsNull(stSizes) Then
-			stSizes = "12,12,12,12"
+			stSizes = "12,12,12,12,12"
 		End If
 		Dim offmap As Map = GetOffsetSizes(stOffSets)
 		Dim sizmap As Map = GetOffsetSizes(stSizes)
 		'
+		Dim offxs As String = offmap.Get("xs")
 		Dim offs As String = offmap.get("s")
 		Dim offm As String = offmap.get("m")
 		Dim offl As String = offmap.get("l")
 		Dim offx As String = offmap.get("x")
 		
+		Dim xs As String = sizmap.Get("xs")
 		Dim sm As String = sizmap.get("s")
 		Dim md As String = sizmap.get("m")
 		Dim lg As String = sizmap.get("l")
 		Dim xl As String = sizmap.get("x")
 		'
 		AddRows(stRows)
-		AddColumnsOS(stColumns, offs, offm, offl, offx, sm, md, lg, xl)
+		AddColumnsOS(stColumns, offxs, offs, offm, offl, offx, xs, sm, md, lg, xl)
 		BuildGrid
 	End If
 End Sub
@@ -1045,7 +1048,7 @@ End Sub
 
 
 private Sub GetOffsetSizes(varOffsets As String) As Map
-	Dim m As Map = CreateMap("s":"", "m":"", "l":"", "x":"")
+	Dim m As Map = CreateMap("xs":"", "s":"", "m":"", "l":"", "x":"")
 	If BANano.IsUndefined(varOffsets) Or BANano.IsUndefined(varOffsets) Then Return m
 	varOffsets = varOffsets.replace("-","|")
 	varOffsets = varOffsets.replace(",","|")
@@ -1063,12 +1066,14 @@ private Sub GetOffsetSizes(varOffsets As String) As Map
 		ssize = BANanoShared.GetNumbers(ssize)
 		Select Case cpos
 		Case 0
-			m.Put("s", ssize)
+			m.Put("xs", ssize)
 		Case 1
-			m.Put("m", ssize)
+			m.Put("s", ssize)
 		Case 2
+			m.Put("m", ssize)
+		Case 3
 			m.Put("l", ssize)
-		Case 3				
+		Case 4				
 			m.Put("x", ssize)
 		End Select
 	Next
@@ -2590,12 +2595,13 @@ Sub setOffsets(varOffSets As String)
 	If varOffSets = "" Then Return
 	Dim offmap As Map = GetOffsetSizes(stOffSets)
 	'
+	Dim offxs As String = offmap.get("xs")
 	Dim offs As String = offmap.get("s")
 	Dim offm As String = offmap.get("m")
 	Dim offl As String = offmap.get("l")
 	Dim offx As String = offmap.get("x")
 	
-	AddOffsets(offs, offm, offl, offx)
+	AddOffsets(offxs, offs, offm, offl, offx)
 End Sub
 
 Sub getOffSets() As String
@@ -2608,12 +2614,13 @@ Sub setSizes(varSizes As String)
 	If varSizes = "" Then Return
 	Dim sizmap As Map = GetOffsetSizes(stSizes)
 	
+	Dim xs As String = sizmap.Get("xs")
 	Dim sm As String = sizmap.get("s")
 	Dim md As String = sizmap.get("m")
 	Dim lg As String = sizmap.get("l")
 	Dim xl As String = sizmap.get("x")
 	'
-	AddSizes(sm, md, lg, xl)
+	AddSizes(xs, sm, md, lg, xl)
 End Sub
 
 Sub getSizes() As String
@@ -3119,6 +3126,7 @@ End Sub
 private Sub BuildSpans(col As VueGridColumn) As String
 	Dim sb As StringBuilder
 	sb.Initialize
+	If col.xs <> "" Then sb.Append($"cols="${col.xs}" "$)
 	If col.sm <> "" Then sb.Append($"sm="${col.sm}" "$)
 	If col.md <> "" Then sb.Append($"md="${col.md}" "$)
 	If col.lg <> "" Then sb.Append($"lg="${col.lg}" "$)
@@ -3131,6 +3139,7 @@ End Sub
 private Sub BuildOffsets(col As VueGridColumn) As String
 	Dim sb As StringBuilder
 	sb.Initialize
+	If col.ofxs <> "" Then sb.Append($"offset="${col.ofxs}" "$)
 	If col.ofsm <> "" Then sb.Append($"offset-sm="${col.ofsm}" "$)
 	If col.ofmd <> "" Then sb.Append($"offset-md="${col.ofmd}" "$)
 	If col.oflg <> "" Then sb.Append($"offset-lg="${col.oflg}" "$)
@@ -3325,13 +3334,13 @@ Sub AddRows(iRows As Int) As VueElement
 	Return Me
 End Sub
 
-Sub AddColumns(iColumns As Int, sm As Int, md As Int, lg As Int, xl As Int) As VueElement
-	AddColumnsOS(iColumns, 0,0,0,0,sm,md,lg,xl)
+Sub AddColumns(iColumns As Int, xs As Int, sm As Int, md As Int, lg As Int, xl As Int) As VueElement
+	AddColumnsOS(iColumns, 0, 0, 0, 0, 0, xs, sm, md, lg, xl)
 	Return Me
 End Sub
 
 'add columns - offsets and sizes
-Sub AddColumnsOS(iColumns As Int, osm As Int, omd As Int, olg As Int, oxl As Int, sm As Int, md As Int, lg As Int, xl As Int) As VueElement
+Sub AddColumnsOS(iColumns As Int, osxs As Int, osm As Int, omd As Int, olg As Int, oxl As Int, xs As Int, sm As Int, md As Int, lg As Int, xl As Int) As VueElement
 	Dim nCol As VueGridColumn
 	nCol.Initialize
 	nCol.Columns = iColumns
@@ -3339,6 +3348,8 @@ Sub AddColumnsOS(iColumns As Int, osm As Int, omd As Int, olg As Int, oxl As Int
 	nCol.md = md
 	nCol.sm = sm
 	nCol.xl = xl
+	nCol.xs = xs
+	nCol.ofxs = osxs
 	nCol.oflg = olg
 	nCol.ofmd = omd
 	nCol.ofsm = osm
@@ -3421,148 +3432,148 @@ Sub AddColumnsOSMP(iColumns As Int, osm As Int, omd As Int, olg As Int, oxl As I
 End Sub
 
 Sub AddColumns3x4 As VueElement
-	AddColumns(3,"12","4","4","4")
+	AddColumns(3,"12","12","4","4","4")
 	Return Me
 End Sub
 
 Sub AddColumns4x3 As VueElement
-	AddColumns(4,"12","3","3","3")
+	AddColumns(4,"12", "12","3","3","3")
 	Return Me
 End Sub
 
 Sub AddColumns2x6 As VueElement
-	AddColumns(2,"12","6","6","6")
+	AddColumns(2,"12","12","6","6","6")
 	Return Me
 End Sub
 
 Sub AddColumns6x2 As VueElement
-	AddColumns(6,"12","2","2","2")
+	AddColumns(6,"12", "12","2","2","2")
 	Return Me
 End Sub
 
 Sub AddColumns5x2 As VueElement
-	AddColumns(5,"12","2","2","2")
+	AddColumns(5,"12", "12","2","2","2")
 	Return Me
 End Sub
 
 Sub AddColumns3x2 As VueElement
-	AddColumns(3,"12","2","2","2")
+	AddColumns(3,"12", "12","2","2","2")
 	Return Me
 End Sub
 
 
 Sub AddColumns12x1 As VueElement
-	AddColumns(12,"12","1","1","1")
+	AddColumns(12,"12", "12","1","1","1")
 	Return Me
 End Sub
 
 Sub AddColumns8p4 As VueElement
-	AddColumns(1,"12","8","8","8").AddColumns(1,"12","4","4","4")
+	AddColumns(1,"12", "12","8","8","8").AddColumns(1,"12", "12","4","4","4")
 	Return Me
 End Sub
 
 Sub AddColumns4p8 As VueElement
-	AddColumns(1,"12","4","4","4").AddColumns(1,"12","8","8","8")
+	AddColumns(1,"12", "12","4","4","4").AddColumns(1,"12", "12","8","8","8")
 	Return Me
 End Sub
 
 Sub AddColumns1p11 As VueElement
-	AddColumns(1,"12","1","1","1").AddColumns(1,"12","11","11","11")
+	AddColumns(1,"12", "12","1","1","1").AddColumns(1,"12", "12","11","11","11")
 	Return Me
 End Sub
 
 Sub AddColumns11p1 As VueElement
-	AddColumns(1,"12","11","11","11").AddColumns(1,"12","1","1","1")
+	AddColumns(1,"12", "12","11","11","11").AddColumns(1,"12", "12","1","1","1")
 	Return Me
 End Sub
 
 Sub AddColumns2p10 As VueElement
-	AddColumns(1,"12","2","2","2").AddColumns(1,"12","10","10","10")
+	AddColumns(1,"12", "12","2","2","2").AddColumns(1,"12", "12","10","10","10")
 	Return Me
 End Sub
 
 Sub AddColumns10p2 As VueElement
-	AddColumns(1,"12","10","10","10").AddColumns(1,"12","2","2","2")
+	AddColumns(1,"12", "12","10","10","10").AddColumns(1,"12", "12","2","2","2")
 	Return Me
 End Sub
 
 Sub AddColumns3p9 As VueElement
-	AddColumns(1,"12","3","3","3").AddColumns(1,"12","9","9","9")
+	AddColumns(1,"12", "12","3","3","3").AddColumns(1,"12", "12","9","9","9")
 	Return Me
 End Sub
 
 Sub AddColumns9p3 As VueElement
-	AddColumns(1,"12","9","9","9").AddColumns(1,"12","3","3","3")
+	AddColumns(1,"12", "12","9","9","9").AddColumns(1,"12", "12","3","3","3")
 	Return Me
 End Sub
 
 Sub AddColumns7p5 As VueElement
-	AddColumns(1,"12","7","7","7").AddColumns(1,"12","5","5","5")
+	AddColumns(1,"12", "12","7","7","7").AddColumns(1,"12", "12","5","5","5")
 	Return Me
 End Sub
 
 Sub AddColumns5p7 As VueElement
-	AddColumns(1,"12","5","5","5").AddColumns(1,"12","7","7","7")
+	AddColumns(1,"12", "12","5","5","5").AddColumns(1,"12", "12","7","7","7")
 	Return Me
 End Sub
 
 Sub AddColumns12 As VueElement
-	AddColumns(1,"12","12","12","12")
+	AddColumns(1,"12", "12","12","12","12")
 	Return Me
 End Sub
 
 Sub AddColumns6 As VueElement
-	AddColumns(1,"12","6","6","6")
+	AddColumns(1,"12", "12","6","6","6")
 	Return Me
 End Sub
 
 Sub AddColumns2 As VueElement
-	AddColumns(1,"12","2","2","2")
+	AddColumns(1,"12", "12","2","2","2")
 	Return Me
 End Sub
 
 Sub AddColumns1 As VueElement
-	AddColumns(1,"12","1","1","1")
+	AddColumns(1,"12", "12","1","1","1")
 	Return Me
 End Sub
 
 Sub AddColumns3 As VueElement
-	AddColumns(1,"12","3","3","3")
+	AddColumns(1,"12", "12","3","3","3")
 	Return Me
 End Sub
 
 Sub AddColumns4 As VueElement
-	AddColumns(1,"12","4","4","4")
+	AddColumns(1,"12", "12","4","4","4")
 	Return Me
 End Sub
 
 Sub AddColumns5 As VueElement
-	AddColumns(1,"12","5","5","5")
+	AddColumns(1,"12", "12","5","5","5")
 	Return Me
 End Sub
 
 Sub AddColumns7 As VueElement
-	AddColumns(1,"12","7","7","7")
+	AddColumns(1,"12", "12","7","7","7")
 	Return Me
 End Sub
 
 Sub AddColumns8 As VueElement
-	AddColumns(1,"12","8","8","8")
+	AddColumns(1,"12", "12","8","8","8")
 	Return Me
 End Sub
 
 Sub AddColumns9 As VueElement
-	AddColumns(1,"12","9","9","9")
+	AddColumns(1,"12", "12","9","9","9")
 	Return Me
 End Sub
 
 Sub AddColumns10 As VueElement
-	AddColumns(1,"12","10","10","10")
+	AddColumns(1,"12", "12","10","10","10")
 	Return Me
 End Sub
 
 Sub AddColumns11 As VueElement
-	AddColumns(1,"12","11","11","11")
+	AddColumns(1,"12", "12","11","11","11")
 	Return Me
 End Sub
 
@@ -3589,12 +3600,14 @@ Sub SetText(txt As String)
 End Sub
 
 
-Sub AddSizes(sSizeSmall As String, sSizeMedium As String, sSizeLarge As String, sSizeXLarge As String) As VueElement
+Sub AddSizes(sSizeXS As String, sSizeSmall As String, sSizeMedium As String, sSizeLarge As String, sSizeXLarge As String) As VueElement
+	sSizeXS = sSizeXS.trim
 	sSizeSmall = sSizeSmall.Trim
 	sSizeXLarge = sSizeXLarge.trim
 	sSizeMedium = sSizeMedium.trim
 	sSizeLarge = sSizeLarge.trim
 	'
+	If sSizeXS <> "" Then AddAttr("cols", sSizeXS)
 	If sSizeSmall <> "" Then AddAttr("sm", sSizeSmall)
 	If sSizeXLarge <> "" Then AddAttr("xl", sSizeXLarge)
 	If sSizeMedium <> "" Then AddAttr("md", sSizeMedium)
@@ -3602,12 +3615,14 @@ Sub AddSizes(sSizeSmall As String, sSizeMedium As String, sSizeLarge As String, 
 	Return Me
 End Sub
 
-Sub AddOffsets(sOffsetSmall As String, sOffsetMedium As String,sOffsetLarge As String,sOffsetXLarge As String) As VueElement
+Sub AddOffsets(sOffSetXS As String, sOffsetSmall As String, sOffsetMedium As String,sOffsetLarge As String,sOffsetXLarge As String) As VueElement
+	sOffSetXS = sOffSetXS.Trim
 	sOffsetSmall = sOffsetSmall.Trim
 	sOffsetMedium = sOffsetMedium.Trim
 	sOffsetLarge = sOffsetLarge.Trim
 	sOffsetXLarge = sOffsetXLarge.Trim
 	'
+	If sOffSetXS <> "" Then AddAttr("offset", sOffSetXS)
 	If sOffsetSmall <> "" Then AddAttr("offset-sm", sOffsetSmall)
 	If sOffsetMedium <> "" Then AddAttr("offset-md", sOffsetMedium)
 	If sOffsetLarge <> "" Then AddAttr("offset-lg", sOffsetLarge)

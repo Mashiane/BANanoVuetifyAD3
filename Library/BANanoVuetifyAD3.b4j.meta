@@ -28,6 +28,6 @@ ModuleClosedNodes6=
 ModuleClosedNodes7=
 ModuleClosedNodes8=
 ModuleClosedNodes9=
-NavigationStack=VueElement,AddItemRightSwitch,4132,0,VueElement,AddItemRightCheckBox,4117,0,VueElement,AddItemLeftCheckBox,4085,0,VueElement,AddItemLeftSwitch,4099,0,VuetifyApp,Class_Globals,338,6,VuetifyApp,NewListViewItemOptions,387,6,VueElement,AddListViewGroupTemplate,4394,0,Main,Process_Globals,9,0,Main,AppStart,31,0,VueElement,AddListViewTemplate,4330,6
+NavigationStack=VueElement,BuildOffsets,3135,0,VueElement,BuildSpans,3122,2,VueElement,BuildPadding,3111,0,VueElement,BuildMargins,3094,0,VueElement,AddSizes,3603,1,VueElement,AddOffsets,3618,0,VuetifyApp,Class_Globals,100,0,VueElement,DesignerCreateView,986,0,VueElement,GetOffsetSizes,1062,0,VueElement,setOffsets,2586,6,Main,Process_Globals,8,0
 SelectedBuild=0
 VisibleModules=
