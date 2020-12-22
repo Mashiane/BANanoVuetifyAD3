@@ -28,6 +28,6 @@ ModuleClosedNodes6=
 ModuleClosedNodes7=
 ModuleClosedNodes8=
 ModuleClosedNodes9=
-NavigationStack=VueTable,getLoading,2460,2,VueTable,getShowExpand,2489,2,VueTable,setShowExpand,2482,2,VueTable,setMustSort,2472,2,VueTable,DesignerCreateView,336,0,VueTable,setItemsPerPage,2531,1,VueTable,setItemKey,2523,0,VueTable,getItemsPerPage,2532,0,VueTable,SetMethod,2802,0,VueTable,setElevation,2780,0,VueTable,FormatFileSize,2757,0
+NavigationStack=VueTable,NewDataTableColumn,1458,6,VueTable,SetCombo,1961,0,VueTable,SetTextArea,1972,0,VueTable,SetTextField,1963,0,VueTable,SetColumnType,1948,0,VueTable,Refresh,2470,0,VueTable,SetCallBack,1037,0,VueTable,BuildSlots,2477,6,VuetifyApp,AddRadioGroup,4095,0,Main,Process_Globals,10,0,Main,AppStart,32,0
 SelectedBuild=0
 VisibleModules=

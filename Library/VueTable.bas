@@ -19,6 +19,10 @@ Version=8.5
 #Event: Clone (item As Map)
 #Event: Input (items As List)
 #Event: Clone (item As Map)
+#Event: SaveItem (item As Map)
+#Event: CancelItem (item As Map) 
+#Event: OpenItem (item As Map)
+#Event: CloseItem (item As Map)
 #Event: ItemSelected (item As Map)
 #Event: ClickRow (e As BANanoEvent)
 #Event: ClearSort_Click (e As BANanoEvent)
@@ -126,7 +130,11 @@ Sub Class_Globals
 	Public COLUMN_SAVE As String = "save"
 	Public COLUMN_CANCEL As String = "cancel"
 	Public COLUMN_BUTTON As String = "button"
-		
+	Public COLUMN_COMBO As String = "combo"
+	Public COLUMN_AUTOCOMPLETE As String = "autocomplete"
+	Public COLUMN_TEXTFIELD As String = "textfield"
+	Public COLUMN_TEXTAREA As String = "textarea"
+			
 	'alignment
 	Public ALIGN_CENTER As String = "center"
 	Public ALIGN_RIGHT As String = "end"
@@ -136,7 +144,8 @@ Sub Class_Globals
 	Private headers As String
 	Private search As String
 	Type DataTableColumn(value As String, text As String, align As String, sortable As Boolean, filterable As Boolean, divider As Boolean, _
-	className As String, width As String, filter As String, sort As String, ColType As String, extra As String, icon As String, Disabled As Boolean, imgWidth As String, imgHeight As String, avatarSize As String, iconSize As String, ReadOnly As Boolean, progressColor As String, progressRotate As String, progressSize As String, progressWidth As String, progressHeight As String, progressShowValue As Boolean, valueFormat As String, bindTotals As String, hasTotal As Boolean, depressed As Boolean, rounded As Boolean, dark As Boolean, label As String, color As String, outlined As Boolean, shaped As Boolean, target As String, prefix As String, colprops As Map, visible As Boolean)
+	className As String, width As String, filter As String, sort As String, ColType As String, extra As String, icon As String, Disabled As Boolean, imgWidth As String, imgHeight As String, avatarSize As String, iconSize As String, ReadOnly As Boolean, progressColor As String, progressRotate As String, progressSize As String, progressWidth As String, progressHeight As String, progressShowValue As Boolean, valueFormat As String, bindTotals As String, hasTotal As Boolean, depressed As Boolean, rounded As Boolean, dark As Boolean, label As String, color As String, outlined As Boolean, shaped As Boolean, target As String, prefix As String, colprops As Map, visible As Boolean, _
+	Large As Boolean, SourceTable As String, SourceField As String, DisplayField As String, ReturnObject As Boolean)
 	Private hasTotals As Boolean
 	Private hasExternalPagination As Boolean
 	Private totalVisible As String
@@ -1456,6 +1465,11 @@ private Sub NewDataTableColumn(colname As String, coltitle As String) As DataTab
 	nf.outlined = False
 	nf.shaped = False
 	nf.colprops.Initialize 
+	nf.Large = False
+	nf.SourceTable = ""
+	nf.SourceField = ""
+	nf.DisplayField = ""
+	nf.ReturnObject = False
 	Return nf
 End Sub
 
@@ -1941,6 +1955,46 @@ Sub SetColumnType(colName As String, colType As String)
 	End If
 End Sub
 
+Sub SetCombo(colName As String, bLarge As Boolean, sourceTable As String, sourceField As String, displayField As String, returnObject As Boolean)
+	colName = colName.tolowercase
+	Dim col As DataTableColumn = columnsM.Get(colName)
+	col.Large = bLarge
+	col.SourceTable = sourceTable
+	col.SourceField = sourceField
+	col.DisplayField = displayField
+	col.ReturnObject = returnObject
+	col.ColType = COLUMN_COMBO
+	columnsM.Put(colName, col)
+End Sub
+
+Sub SetTextField(colName As String, bLarge As Boolean)
+	colName = colName.tolowercase
+	Dim col As DataTableColumn = columnsM.Get(colName)
+	col.Large = bLarge
+	col.ColType = COLUMN_TEXTFIELD
+	columnsM.Put(colName, col)
+End Sub
+
+Sub SetTextArea(colName As String, bLarge As Boolean)
+	colName = colName.tolowercase
+	Dim col As DataTableColumn = columnsM.Get(colName)
+	col.Large = bLarge
+	col.ColType = COLUMN_TEXTAREA
+	columnsM.Put(colName, col)
+End Sub
+
+Sub SetAutoComplete(colName As String, bLarge As Boolean, sourceTable As String, sourceField As String, displayField As String, returnObject As Boolean)
+	colName = colName.tolowercase
+	Dim col As DataTableColumn = columnsM.Get(colName)
+	col.Large = bLarge
+	col.SourceTable = sourceTable
+	col.SourceField = sourceField
+	col.DisplayField = displayField
+	col.ReturnObject = returnObject
+	col.ColType = COLUMN_AUTOCOMPLETE
+	columnsM.Put(colName, col)
+End Sub
+
 'build controls
 private Sub BuildSlots
 	mElement.Empty
@@ -1952,6 +2006,7 @@ private Sub BuildSlots
 		sbTotals.Append($"<tr>"$)
 		sbTotals.Append($"<th>Totals</th>"$)
 	End If
+	Dim bHasEditDialog As Boolean = False
 		
 	Dim sb As StringBuilder
 	sb.Initialize
@@ -1976,6 +2031,28 @@ private Sub BuildSlots
 		'define args for methods
 				
 		Select Case ct
+			Case COLUMN_COMBO
+				bHasEditDialog = True
+			Case COLUMN_AUTOCOMPLETE
+				bHasEditDialog = True
+			Case COLUMN_TEXTFIELD
+				bHasEditDialog = True
+				Dim slarge As String = "large"
+				If nf.Large = False Then slarge = ""
+Dim temp As String = $"<v-template v-slot:item.${value}="props">
+<v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" 
+@open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy> {{ props.item.${value} }}
+<v-template v-slot:input><v-text-field v-model="props.item.${value}" :label="props.header.text" counter></v-text-field></v-template></v-edit-dialog></v-template>"$
+sb.Append(temp)
+			Case COLUMN_TEXTAREA
+				bHasEditDialog = True
+				Dim slarge As String = "large"
+				If nf.Large = False Then slarge = ""
+				Dim temp As String = $"<v-template v-slot:item.${value}="props">
+<v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" @open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy> {{ props.item.${value} }}
+<v-template v-slot:input><v-textarea v-model="props.item.${value}" :label="props.header.text" counter></v-textarea></v-template>
+</v-edit-dialog></v-template>"$
+				sb.Append(temp)
 			Case COLUMN_DATE, COLUMN_DATETIME, COLUMN_TIME
 				'get the date format
 				Dim df As String = nf.valueFormat
@@ -2381,6 +2458,40 @@ private Sub BuildSlots
 	End If
 	Dim sout As String = sb.tostring
 	mElement.Append(sout)
+	If bHasEditDialog Then
+		Dim item As Map
+		Dim savemethodName As String = $"${mName}_saveitem"$
+		If SubExists(mCallBack, savemethodName) = False Then
+			Log($"VueTable: Please add '${mName}_saveitem(item As Map)' callback."$)
+			Return
+		End If
+		Dim cb As BANanoObject = BANano.CallBack(mCallBack, savemethodName, Array(item))
+		SetCallBack(savemethodName, cb)
+		'
+		Dim cancelmethodName As String = $"${mName}_cancelitem"$
+		If SubExists(mCallBack, cancelmethodName) = False Then
+			Log($"VueTable: Please add '${mName}_cancelitem(item As Map)' callback."$)
+			Return
+		End If
+		Dim cb As BANanoObject = BANano.CallBack(mCallBack, cancelmethodName, Array(item))
+		SetCallBack(cancelmethodName, cb)
+		'
+		Dim openmethodName As String = $"${mName}_openitem"$
+		If SubExists(mCallBack, openmethodName) = False Then
+			Log($"VueTable: Please add '${mName}_openitem(item As Map)' callback."$)
+			Return
+		End If
+		Dim cb As BANanoObject = BANano.CallBack(mCallBack, openmethodName, Array(item))
+		SetCallBack(openmethodName, cb)
+	
+		Dim closemethodName As String = $"${mName}_closeitem"$
+		If SubExists(mCallBack, closemethodName) = False Then
+			Log($"VueTable: Please add '${mName}_closeitem(item As Map)' callback."$)
+			Return
+		End If
+		Dim cb As BANanoObject = BANano.CallBack(mCallBack, closemethodName, Array(item))
+		SetCallBack(closemethodName, cb)
+	End If
 End Sub
 
 'set total-visible
