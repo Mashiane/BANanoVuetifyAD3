@@ -32,9 +32,17 @@ Version=8.5
 #DesignerProperty: Key: ItemKey, DisplayName: ItemKey, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: ItemsPerPage, DisplayName: ItemsPerPage, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Dense, DisplayName: Dense, FieldType: Boolean, DefaultValue:  False, Description: 
+#DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue:  False, Description:
 #DesignerProperty: Key: HasSearch, DisplayName: Has Search, FieldType: Boolean, DefaultValue:  False, Description:
 #DesignerProperty: Key: ShowSelect, DisplayName: ShowSelect, FieldType: Boolean, DefaultValue:  False, Description: 
 #DesignerProperty: Key: SingleSelect, DisplayName: SingleSelect, FieldType: Boolean, DefaultValue:  False, Description: 
+#DesignerProperty: Key: MultiSort, DisplayName: Multi Sort, FieldType: Boolean, DefaultValue:  False, Description: 
+#DesignerProperty: Key: MustSort, DisplayName: Must Sort, FieldType: Boolean, DefaultValue:  False, Description: 
+#DesignerProperty: Key: FixedHeader, DisplayName: Fixed Header, FieldType: Boolean, DefaultValue:  False, Description: 
+#DesignerProperty: Key: HideDefaultHeader, DisplayName: Hide Default Header, FieldType: Boolean, DefaultValue:  False, Description: 
+#DesignerProperty: Key: HideDefaultFooter, DisplayName: Hide Default Footer, FieldType: Boolean, DefaultValue:  False, Description: 
+#DesignerProperty: Key: Loading, DisplayName: Loading, FieldType: Boolean, DefaultValue:  False, Description: 
+#DesignerProperty: Key: ShowExpand, DisplayName: ShowExpand, FieldType: Boolean, DefaultValue:  False, Description: 
 #DesignerProperty: Key: Elevation, DisplayName: Elevation, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: GroupBy, DisplayName: GroupBy, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: ShowGroupBy, DisplayName: ShowGroupBy, FieldType: Boolean, DefaultValue:  False, Description:
@@ -76,6 +84,14 @@ Sub Class_Globals
 	Private bShowGroupBy As Boolean = False
 	Private bShowSelect As Boolean = False
 	Private bSingleSelect As Boolean = False
+	Private bMultiSort As Boolean = False
+	Private bMustSort As Boolean = False
+	Private bFixedHeader As Boolean = False
+	Private bHideDefaultHeader As Boolean = False
+	Private bHideDefaultFooter As Boolean = False
+	Private bLoading As Boolean = False
+	Private bShowExpand As Boolean = False
+	Private bDark As Boolean = False
 	'
 	Public Items As List
 	Public AppTemplateName As String = "#apptemplate"
@@ -323,7 +339,24 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bSingleSelect = Props.Get("SingleSelect")
 		mTitle = Props.Get("Title")
 		mHasSearch = Props.Get("HasSearch")
+		bMultiSort = Props.Get("MultiSort")
+		bMustSort = Props.Get("MustSort")
+		bFixedHeader = Props.Get("FixedHeader")
+		bHideDefaultHeader = Props.Get("HideDefaultHeader")
+		bHideDefaultFooter = Props.Get("HideDefaultFooter")
+		bLoading = Props.Get("Loading")
+		bShowExpand = Props.Get("ShowExpand")
+		bDark = Props.Get("Dark")
 	End If
+	
+	setMultiSort(bMultiSort)
+	setMustSort(bMustSort)
+	setFixedHeader(bFixedHeader)
+	setHideDefaultHeader(bHideDefaultHeader)
+	setHideDefaultFooter(bHideDefaultFooter)
+	setLoading(bLoading)
+	setShowExpand(bShowExpand)
+	setDark(bDark)
 	
 	AddAttr("ref", stRef)
 	AddAttr("v-else", stVElse)
@@ -332,7 +365,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	AddAttr("v-show", stVShow)
 	AddAttr("item-key", PrimaryKey)
 	AddAttr(":dense", bDense)
-	AddAttr("items-per-page", stItemsPerPage)
+	AddAttr("items-per-page.sync", stItemsPerPage)
 	setElevation(stElevation)
 	AddAttr(":show-select", bShowSelect)
 	AddAttr(":single-select", bSingleSelect)
@@ -2389,17 +2422,32 @@ End Sub
 'set fixed-header
 Sub setFixedHeader(varFixedHeader As Boolean)
 	AddAttr(":fixed-header", varFixedHeader)
+	bFixedHeader = varFixedHeader
+End Sub
+
+Sub getFixedHeader As Boolean
+	Return bFixedHeader
 End Sub
 
 'set hide-default-footer
 Sub setHideDefaultFooter(varHideDefaultFooter As Boolean)
 	AddAttr(":hide-default-footer", varHideDefaultFooter)
+	bHideDefaultFooter = varHideDefaultFooter
+End Sub
+
+Sub getHideDefaultFooter As Boolean
+	Return bHideDefaultFooter
 End Sub
 
 'set hide-default-header
 Sub setHideDefaultHeader(varHideDefaultHeader As Boolean)
 	AddAttr(":hide-default-header", varHideDefaultHeader)
+	bHideDefaultHeader = varHideDefaultHeader
 End Sub
+
+Sub getHideDefaultHeader As Boolean
+	Return bHideDefaultHeader
+End Sub	
 
 'set light
 Sub setLight(varLight As Boolean)
@@ -2409,27 +2457,54 @@ End Sub
 'set loading
 Sub setLoading(varLoading As Boolean)
 	AddAttr(":loading", varLoading)
+	bLoading = varLoading
+End Sub
+
+Sub getLoading As Boolean
+	Return bLoading
 End Sub
 
 'set multi-sort
 Sub setMultiSort(varMultiSort As Boolean)
 	AddAttr(":multi-sort", varMultiSort)
+	bMultiSort = varMultiSort
+End Sub
+
+Sub getMultiSort As Boolean
+	Return bMultiSort
 End Sub
 
 'set must-sort
 Sub setMustSort(varMustSort As Boolean)
 	AddAttr(":must-sort", varMustSort)
+	bMustSort = varMustSort
+End Sub
+
+Sub getMustSort As Boolean
+	Return bMustSort
 End Sub
 
 'set show-expand
 Sub setShowExpand(varShowExpand As Boolean)
-	AddAttr("show-expand", varShowExpand)
+	AddAttr(":show-expand", varShowExpand)
+	bShowExpand = varShowExpand
+End Sub
+
+Sub getShowExpand As Boolean
+	Return bShowExpand
 End Sub
 
 'set show-group-by
 Sub setShowGroupBy(varShowGroupBy As Boolean)
 	AddAttr(":show-group-by", varShowGroupBy)
 	stGroupBy = varShowGroupBy
+End Sub
+
+
+'set dark
+Sub setDark(varDark As Boolean)
+	AddAttr(":dark", varDark)
+	bDark = varDark
 End Sub
 
 'set show-select
@@ -2458,6 +2533,11 @@ End Sub
 'set items-per-page
 Sub setItemsPerPage(varItemsPerPage As String)
 	AddAttr("items-per-page", varItemsPerPage)
+	stItemsPerPage = varItemsPerPage
+End Sub
+
+Sub getItemsPerPage As String
+	Return stItemsPerPage
 End Sub
 
 'set loading-text

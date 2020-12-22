@@ -28,6 +28,6 @@ ModuleClosedNodes6=
 ModuleClosedNodes7=
 ModuleClosedNodes8=
 ModuleClosedNodes9=
-NavigationStack=VueElement,BuildOffsets,3135,0,VueElement,BuildSpans,3122,2,VueElement,BuildPadding,3111,0,VueElement,BuildMargins,3094,0,VueElement,AddSizes,3603,1,VueElement,AddOffsets,3618,0,VuetifyApp,Class_Globals,100,0,VueElement,DesignerCreateView,986,0,VueElement,GetOffsetSizes,1062,0,VueElement,setOffsets,2586,6,Main,Process_Globals,8,0
+NavigationStack=VueTable,getLoading,2460,2,VueTable,getShowExpand,2489,2,VueTable,setShowExpand,2482,2,VueTable,setMustSort,2472,2,VueTable,DesignerCreateView,336,0,VueTable,setItemsPerPage,2531,1,VueTable,setItemKey,2523,0,VueTable,getItemsPerPage,2532,0,VueTable,SetMethod,2802,0,VueTable,setElevation,2780,0,VueTable,FormatFileSize,2757,0
 SelectedBuild=0
 VisibleModules=
