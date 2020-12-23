@@ -23,21 +23,22 @@ FileGroup7=Default Group
 FileGroup8=Default Group
 FileGroup9=Default Group
 Group=Default Group
-Library1=jcore
-Library2=jfx
-Library3=banano
+Library1=banano
+Library2=jcore
+Library3=jfx
 Module1=BANanoALASQLE
+Module10=VuetifyApp
 Module2=BANanoMSSQLE
 Module3=BANanoMySQLE
 Module4=|absolute|C:\CodingWorld\B4XShared\B4J\BANanoShared
 Module5=BANanoSQLiteE
-Module6=VueComponent
-Module7=VueElement
-Module8=VueTable
-Module9=VuetifyApp
+Module6=MySQLCRUD
+Module7=VueComponent
+Module8=VueElement
+Module9=VueTable
 NumberOfFiles=11
 NumberOfLibraries=3
-NumberOfModules=9
+NumberOfModules=10
 Version=8.8
 @EndOfDesignText@
 #Region Project Attributes 
@@ -49,7 +50,7 @@ Version=8.8
 
 Sub Process_Globals
 	Private BANano As BANano 'ignore
-	Public Version As String = "2.72"
+	Public Version As String = "2.73"
 	Public AppName As String = "BANanoVuetifyAD3"
 End Sub
 

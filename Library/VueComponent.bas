@@ -444,6 +444,7 @@ End Sub
 
 'update the state
 Sub SetData(prop As String, value As Object) As VueComponent
+	prop = prop.tolowercase
 	data.put(prop, value)
 	Return Me
 End Sub
@@ -476,6 +477,7 @@ Sub RemoveData(key As String)
 End Sub
 
 Sub GetData(prop As String) As Object
+	prop = prop.tolowercase
 	Dim obj As Object = data.GetDefault(prop, "")
 	Return obj
 End Sub

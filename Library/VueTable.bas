@@ -619,6 +619,7 @@ End Sub
 
 'initialize data
 Sub SetData(prop As String, val As Object)
+	prop = prop.tolowercase
 	If prop <> "" Then
 		bindings.Put(prop, val)
 	End If
