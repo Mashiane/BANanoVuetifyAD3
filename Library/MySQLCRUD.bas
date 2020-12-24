@@ -248,6 +248,16 @@ Sub Diag_AddAvatar(fldName As String, row As Int, col As Int, url As String, ava
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
 End Sub
 
+'add an avatar to the dialog with binding
+Sub Diag_AddAvatar1(fldName As String, row As Int, col As Int, vmodel As String, avatarSize As Int)
+	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddAvatar1(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), "${fldName}", "${vmodel}", ${avatarSize}, Null)"$)
+	If Visibility.ContainsKey(fldName) Then
+		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
+	End If
+	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
+End Sub
+
+
 'add an auto complete to the dialog
 Sub Diag_AddAutoComplete(fldName As String, row As Int, col As Int, vmodel As String, Title As String, DataSource As String, Key As String, Value As String, bReturnObject As Boolean, bMultiple As Boolean)
 	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddAutoComplete(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), "${fldName}", "${SingularClean.tolowercase}.${vmodel}", "${Title}", False, ${bMultiple}, "", "${DataSource}", "${Key}", "${Value}", ${bReturnObject}, "", Null)"$).Append(CRLF)
@@ -292,6 +302,16 @@ Sub Diag_AddImage(fldName As String, row As Int, col As Int, url As String, lazy
 	End If
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
 End Sub
+
+'add an image to the dialog with binding
+Sub Diag_AddImage1(fldName As String, row As Int, col As Int, vmodel As String, alt As String, width As String, height As String)
+	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddImage1(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), "${fldName}", "${vmodel}", "${alt}", "${height}", "${width}", Null)"$).Append(CRLF)
+	If Visibility.ContainsKey(fldName) Then
+		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
+	End If
+	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
+End Sub
+
 
 'set a text area data-table edit dialog
 Sub DT_SetTextArea(colName As String, bLarge As Boolean)

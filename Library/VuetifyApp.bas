@@ -2757,7 +2757,7 @@ Sub AddAvatarWithBadge(Module As Object, parentID As String, elID As String, img
 	Dim avatarid As String = $"${elID}avatar"$
 	Dim imageid As String = $"${elID}image"$
 	'
-	BANano.GetElement(parentID).Append($"<v-badge id="${elID}"><v-avatar id="${elID}avatar"><v-img id="${elID}image"></v-img></v-avatar></v-badge>"$)
+	BANano.GetElement(parentID).Append($"<v-badge id="${elID}"><v-avatar id="${avatarid}"><v-img id="${imageid}"></v-img></v-avatar></v-badge>"$)
 	'
 	Dim vbadge As VueElement
 	vbadge.Initialize(Module, elID, elID)
@@ -2781,13 +2781,37 @@ Sub AddAvatarWithBadge(Module As Object, parentID As String, elID As String, img
 	Return vbadge
 End Sub
 
+Sub AddAvatar1(Module As Object, parentID As String, elID As String, vmodel As String, avatarSize As Int, avatarprops As Map) As VueElement
+	parentID = CleanID(parentID)
+	elID = elID.ToLowerCase
+	'
+	Dim imageid As String = $"${elID}image"$
+	'
+	BANano.GetElement(parentID).Append($"<v-avatar id="${elID}"><v-img id="${imageid}"></v-img></v-avatar>"$)
+	
+	Dim img As VueElement
+	img.Initialize(Module, imageid, imageid)
+	img.AddAttr(":src", vmodel)
+	img.AddAttr(":lazy-src", vmodel)
+	'
+	Dim avatar As VueElement
+	avatar.Initialize(Module, elID, elID)
+	If avatarSize > 0 Then avatar.AddAttr("size", avatarSize)
+	avatar.AssignProps(avatarprops)
+	img.SetOnEvent(Module, "click", "")
+	'
+	avatar.BindVueElement(img)
+	Return avatar
+End Sub
+
+
 Sub AddAvatar(Module As Object, parentID As String, elID As String, imgURL As String, avatarSize As Int, avatarprops As Map) As VueElement
 	parentID = CleanID(parentID)
 	elID = elID.ToLowerCase
 	'
 	Dim imageid As String = $"${elID}image"$
 	'
-	BANano.GetElement(parentID).Append($"<v-avatar id="${elID}"><v-img id="${elID}"></v-img></v-avatar>"$)
+	BANano.GetElement(parentID).Append($"<v-avatar id="${elID}"><v-img id="${imageid}"></v-img></v-avatar>"$)
 	
 	Dim img As VueElement
 	img.Initialize(Module, imageid, imageid)
@@ -3945,6 +3969,31 @@ Sub AddCheckBox(Module As Object, parentID As String, sid As String, vmodel As S
 		vcheckbox.SetData(vmodel, truevalue)
 	End If
 	Return vcheckbox
+End Sub
+
+'<code>
+'Dim vimg As VueElement = vuetify.AddImage1(Me, "r1c1", "vimg", "vmodel", "Logo", "100px", "100px", null)
+'vuetify.BindVueElement(vimg)
+'
+'Sub vimg_click(e As BANanoEvent)
+'End Sub 
+'</code>
+Sub AddImage1(Module As Object, parentID As String, elID As String, vmodel As String, alt As String, sheight As String, swidth As String, props As Map) As VueElement
+	parentID = CleanID(parentID)
+	elID = elID.ToLowerCase
+	BANano.GetElement(parentID).Append($"<v-img id="${elID}"></v-img>"$)
+	Dim vimg As VueElement
+	vimg.Initialize(Me, elID, elID)
+	If sheight <> "" Then vimg.Height = sheight
+	If swidth <> "" Then vimg.Width = swidth
+	vimg.AddAttr(":src", vmodel)
+	vimg.AddAttr(":lazy-src", vmodel)
+	vimg.Alt = alt
+	vimg.Ref = elID
+	vimg.AddAttr(":aspect-ratio", "16/9")
+	vimg.SetOnEvent(Module, "click", "")
+	vimg.AssignProps(props)
+	Return vimg
 End Sub
 
 '<code>
