@@ -445,7 +445,21 @@ End Sub
 'update the state
 Sub SetData(prop As String, value As Object) As VueComponent
 	prop = prop.tolowercase
-	data.put(prop, value)
+	Dim dotPos As Int = BANanoShared.InStr(prop, ".")
+	If dotPos >= 0 Then
+		Dim pEL As String = BANanoShared.MvField(prop,1, ".")
+		Dim cEL As String = BANanoShared.MvField(prop,2, ".")
+		Dim oEL As Map
+		If data.ContainsKey(pEL) Then
+			oEL = data.Get(pEL)
+		Else
+			oEL.Initialize
+		End If	
+		oEL.Put(cEL, value)
+		data.Put(pEL, oEL) 
+	Else
+		data.put(prop, value)
+	End If
 	Return Me
 End Sub
 
@@ -466,7 +480,7 @@ Sub Component As Map
 End Sub
 
 'use for components
-private Sub returndata As Map			'ignoredeadcode
+private Sub returndata As Map			'ignoredeadcode	
 	Return data
 End Sub
 

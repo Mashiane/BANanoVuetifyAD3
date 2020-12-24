@@ -617,11 +617,23 @@ Sub getHTML As String
 	End If
 End Sub
 
-'initialize data
-Sub SetData(prop As String, val As Object)
+'update the state
+Sub SetData(prop As String, value As Object)
 	prop = prop.tolowercase
-	If prop <> "" Then
-		bindings.Put(prop, val)
+	Dim dotPos As Int = BANanoShared.InStr(prop, ".")
+	If dotPos >= 0 Then
+		Dim pEL As String = BANanoShared.MvField(prop,1, ".")
+		Dim cEL As String = BANanoShared.MvField(prop,2, ".")
+		Dim oEL As Map
+		If bindings.ContainsKey(pEL) Then
+			oEL = bindings.Get(pEL)
+		Else
+			oEL.Initialize
+		End If
+		oEL.Put(cEL, value)
+		bindings.Put(pEL, oEL)
+	Else
+		bindings.put(prop, value)
 	End If
 End Sub
 
@@ -2298,7 +2310,6 @@ sb.Append(temp)
 					swt.SetInset(True)
 					swt.Dense = True
 				End If
-				swt.Value = "Yes"
 				swt.TrueValue = "Yes"
 				swt.FalseValue = "No"
 				swt.SetVModel($"item.${value}"$)

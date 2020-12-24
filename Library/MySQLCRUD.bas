@@ -49,7 +49,6 @@ Sub Class_Globals
 	Private DT_HasEditDialog As Boolean
 	Public DialogWidth As String
 	Private dtCont As StringBuilder
-	Private vuetify As VuetifyApp
 	Private SingularClean As String
 	Private PluralClean As String
 End Sub
@@ -167,6 +166,15 @@ End Sub
 'add a select to the dialog
 Sub Diag_AddSelect(fldName As String, row As Int, col As Int, vmodel As String, Title As String, DataSource As String, Key As String, Value As String, bReturnObject As Boolean, bMultiple As Boolean)
 	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddSelect(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), "${fldName}", "${SingularClean.tolowercase}.${vmodel}", "${Title}", False, ${bMultiple}, "", "${DataSource}", "${Key}", "${Value}", ${bReturnObject}, "", Null)"$).Append(CRLF)
+	If Visibility.ContainsKey(fldName) Then
+		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
+	End If
+	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
+End Sub
+
+'add an avatar to the dialog
+Sub Diag_AddAvatar(fldName As String, row As Int, col As Int, url As String, avatarSize As Int)
+	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddAvatar(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), "${fldName}", "${url}", ${avatarSize}, Null)"$)
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
@@ -465,8 +473,8 @@ private Sub ReadCode As MySQLCRUD
 	End Select
 	Dim ${SingularClean}M As Map = ${rsTB}.result.Get(0)
 	'show the drawer
-	${ComponentName}.SetData("${ModalShow}", True)
-	${ComponentName}.SetData("${SingularClean}", ${SingularClean}M)
+	${ComponentName}.SetData("${ModalShow.tolowercase}", True)
+	${ComponentName}.SetData("${SingularClean.tolowercase}", ${SingularClean}M)
 End Sub"$).Append(CRLF).Append(CRLF)
 	
 	Return Me
@@ -492,7 +500,7 @@ private Sub UpdateCode As MySQLCRUD
 	Case Else
 		vuetify.ShowSnackBarSuccess("The ${Singular.tolowercase} has been updated successfully!")
 	'hide modal form
-		${ComponentName}.SetData("${ModalShow}", False)
+		${ComponentName}.SetData("${ModalShow.tolowercase}", False)
 	'load records
 		${ComponentName}.RunMethod("Load${PluralClean}", Null)
 	End Select
@@ -522,7 +530,7 @@ private Sub CreateCode()
 	Case Else
 		vuetify.ShowSnackBarSuccess("The ${Singular.tolowercase} has been added successfully!")
 	'hide modal form
-		${ComponentName}.SetData("${ModalShow}", False)
+		${ComponentName}.SetData("${ModalShow.tolowercase}", False)
 	'Load records
 		${ComponentName}.RunMethod("Load${PluralClean}", Null)
 	End Select
@@ -728,14 +736,17 @@ private Sub CreateDialogCode
 	AddCode($"${SingularClean}Cont.AddRows1.AddColumns12"$)
 	AddCode($"${SingularClean}Cont.BuildGrid"$)
 	'
-	AddComment($"initialize the ${Singular}"$)
-	AddCode($"${ComponentName}.SetData("${SingularClean}", vuetify.NewMap)"$)
-	'
 	sb.Append(dtCont.ToString).Append(CRLF)
 	'
 	AddCode($"${ComponentName}.BindVueElement(${SingularClean}Cont)"$)
 	AddCode($"${ComponentName}.BindVueElement(${ModalName})"$)
 	'
+	AddComment($"initialize the ${Singular}"$)
+	AddCode($"Dim ${SingularClean.tolowercase} As Map = CreateMap()"$)
+	sb.Append(BuildDefaults(SingularClean.tolowercase))
+	sb.append(CRLF)
+	AddCode($"${ComponentName}.SetData(${SingularClean.tolowercase})"$)
+	
 	AddCode("End Sub")
 	sb.Append(CRLF).Append(CRLF)
 End Sub
@@ -774,9 +785,9 @@ End Sub"$).Append(CRLF).Append(CRLF)
 	sb.Append($"Sub ${ModalName}cancel_click(e As BANanoEvent)				'ignoredeadcode
 	Mode = "A"
 	'initialize the record
-	${ComponentName}.SetData("${SingularClean}", vuetify.NewMap)
+	${ComponentName}.SetData("${SingularClean.tolowercase}", vuetify.NewMap)
 	'hide the drawer/dialog
-	${ComponentName}.SetData("${ModalShow}", False)
+	${ComponentName}.SetData("${ModalShow.tolowercase}", False)
 End Sub"$).Append(CRLF).Append(CRLF)
 	'
 	'TABLE ADD
@@ -784,17 +795,19 @@ End Sub"$).Append(CRLF).Append(CRLF)
 	Add${SingularClean}
 End Sub"$).Append(CRLF).Append(CRLF)
 	'
+	Dim xDefaults As String = BuildDefaults("nt")
+	
 	'ADD RECORD
 	sb.Append($"Sub Add${SingularClean}			'ignoreDeadCode
 	${ComponentName}.DialogUpdateTitle("${ModalName}", "Add ${Singular}")
 	Mode = "A"
 	'initialize the record
 	Dim nt As Map = CreateMap()
-	${BuildDefaults}
-	${ComponentName}.SetData("${SingularClean}", nt)
+	${xDefaults}
+	${ComponentName}.SetData("${SingularClean.tolowercase}", nt)
 	${BuildVisibility}
 	'show the drawer
-	${ComponentName}.SetData("${ModalShow}", True)
+	${ComponentName}.SetData("${ModalShow.tolowercase}", True)
 	vuetify.SetFocus("${FocusOn}")
 End Sub"$).Append(CRLF).Append(CRLF)
 	'
@@ -813,7 +826,7 @@ End Sub"$).Append(CRLF).Append(CRLF)
 	sb.Append($"Private Sub ${dtName}_delete (item As Map)				'ignoredeadcode
 	Dim s${DisplayField} As String = item.Get("${DisplayField}")
 	Dim s${PrimaryKey} As String = item.Get("${PrimaryKey}")
-	${ComponentName}.SetData("${PrimaryKey}", s${PrimaryKey})
+	${ComponentName}.SetData("${PrimaryKey.tolowercase}", s${PrimaryKey})
 	${ComponentName}.ShowConfirm("delete${SingularClean.tolowercase}", ~"Confirm Delete: ~{s${DisplayField}}"~, ~"Are you sure you want to delete this ${Singular.tolowercase}?<br><br>Please note you will not be able to undo your changes. Continue?"~, "Yes", "No")
 	End Sub"$).append(CRLF).append(CRLF)
 	
@@ -854,7 +867,7 @@ End Sub"$).Append(CRLF).Append(CRLF)
 	'
 	sb.Append($"Private Sub ${dtName}_change (item As Map)				'ignoredeadcode
 	${ComponentName}.RunMethod("Update${SingularClean}", item)
-	${ComponentName}.SetData("${ModalShow}", False)
+	${ComponentName}.SetData("${ModalShow.tolowercase}", False)
 End Sub"$).Append(CRLF).Append(CRLF)
 	'
 	If DT_HasFilter Then
@@ -896,7 +909,7 @@ End Sub"$).Append(CRLF).Append(CRLF)
 	If DT_HasEditDialog Then
 		sb.Append($"Sub ${dtName}_SaveItem (item As Map)
 	${ComponentName}.RunMethod("Update${SingularClean}", item)
-	${ComponentName}.SetData("${ModalShow}", False)
+	${ComponentName}.SetData("${ModalShow.tolowercase}", False)
 End Sub"$).append(CRLF).append(CRLF)
 		'
 		sb.Append($"Private Sub ${dtName}_CancelItem (item As Map)
@@ -924,32 +937,33 @@ private Sub BuildVisibility As String
 	For Each k As String In Visibility.keys
 		Dim v As Object = Visibility.Get(k)
 		Dim ks As String = $"${k}show"$
+		ks = ks.tolowercase
 		xb.Append($"${ComponentName}.SetData("${ks}", ${v})"$).Append(CRLF)
 	Next
 	Return xb.tostring
 End Sub
 
 'build defaults
-private Sub BuildDefaults As String
+private Sub BuildDefaults(mapName As String) As String
 	Dim xb As StringBuilder
 	xb.Initialize
 	For Each k As String In Defaults.Keys
 		Dim v As Object = Defaults.Get(k)
 		Dim instrings As Int = Strings.IndexOf(k)
 		If instrings >= 0 Then
-			xb.Append($"nt.put("${k}", "${v}")"$).Append(CRLF)
+			xb.Append($"${mapName}.put("${k}", "${v}")"$).Append(CRLF)
 		End If
 		Dim inintegers As Int = Integers.IndexOf(k)
 		If inintegers >= 0 Then
-			xb.Append($"nt.put("${k}", ${v})"$).Append(CRLF)
+			xb.Append($"${mapName}.put("${k}", ${v})"$).Append(CRLF)
 		End If
 		Dim inDoubles As Int = Doubles.IndexOf(k)
 		If inDoubles >= 0 Then
-			xb.Append($"nt.put("${k}", ${v})"$).Append(CRLF)
+			xb.Append($"${mapName}.put("${k}", ${v})"$).Append(CRLF)
 		End If
 		Dim inBlobs As Int = Blobs.IndexOf(k)
 		If inBlobs >= 0 Then
-			xb.Append($"nt.put("${k}", ${v})"$).Append(CRLF)
+			xb.Append($"${mapName}.put("${k}", ${v})"$).Append(CRLF)
 		End If
 	Next
 	Return xb.tostring

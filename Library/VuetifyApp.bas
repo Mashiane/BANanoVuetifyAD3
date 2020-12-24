@@ -1988,7 +1988,22 @@ End Sub
 'update the state
 Sub SetData(prop As String, value As Object)
 	prop = prop.tolowercase
-	data.SetField(prop, value)
+	Dim dotPos As Int = BANanoShared.InStr(prop, ".")
+	If dotPos >= 0 Then
+		Dim pEL As String = BANanoShared.MvField(prop,1, ".")
+		Dim cEL As String = BANanoShared.MvField(prop,2, ".")
+		Dim oEL As Map
+		Dim b As Boolean = data.RunMethod("hasOwnProperty", Array(pEL)).Result
+		If b Then
+			oEL = data.GetField(pEL).Result
+		Else
+			oEL.Initialize
+		End If
+		oEL.Put(cEL, value)
+		data.SetField(pEL, oEL)
+	Else
+		data.SetField(prop, value)
+	End If
 End Sub
 
 Sub GetData(prop As String) As Object
@@ -2780,7 +2795,7 @@ Sub AddAvatar(Module As Object, parentID As String, elID As String, imgURL As St
 	'
 	Dim avatar As VueElement
 	avatar.Initialize(Module, elID, elID)
-	avatar.AddAttr("size", avatarSize)
+	If avatarSize > 0 Then avatar.AddAttr("size", avatarSize)
 	avatar.AssignProps(avatarprops)
 	img.SetOnEvent(Module, "click", "")
 	'
@@ -3887,6 +3902,9 @@ Sub AddSwitch(Module As Object, parentID As String, sid As String, vmodel As Str
 	vswitch.Color = color
 	vswitch.AssignProps(props)
 	vswitch.SetOnEvent(Module, "change", "")
+	If vmodel <> "" Then
+		vswitch.SetData(vmodel, truevalue)
+	End If
 	Return vswitch
 End Sub
 
@@ -3923,6 +3941,9 @@ Sub AddCheckBox(Module As Object, parentID As String, sid As String, vmodel As S
 	vcheckbox.Ref = sid
 	vcheckbox.AssignProps(props)
 	vcheckbox.SetOnEvent(Module, "click", "")
+	If vmodel <> "" Then 
+		vcheckbox.SetData(vmodel, truevalue)
+	End If
 	Return vcheckbox
 End Sub
 
