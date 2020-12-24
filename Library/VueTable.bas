@@ -1167,6 +1167,7 @@ Sub AddSave()
 	dt.sortable = False
 	dt.align = ALIGN_CENTER
 	dt.icon = "mdi-content-save"
+	dt.width = 80
 	columnsM.Put(colField, dt)
 End Sub
 
@@ -1179,6 +1180,7 @@ Sub AddCancel()
 	dt.sortable = False
 	dt.align = ALIGN_CENTER
 	dt.icon = "mdi-cancel"
+	dt.width = 80
 	columnsM.Put(colField, dt)
 End Sub
 
@@ -1201,6 +1203,7 @@ Sub AddAction(colField As String, colTitle As String, colIcon As String)
 	dt.sortable = False
 	dt.align = ALIGN_CENTER
 	dt.icon = colIcon
+	dt.width = 80
 	columnsM.Put(colField, dt)
 End Sub
 
@@ -1232,6 +1235,16 @@ Sub AddSwitch(colField As String, colTitle As String)
 	dt.sortable = False
 	columnsM.Put(colField, dt)
 End Sub
+
+'add checkbox field
+Sub AddCheckBox(colField As String, colTitle As String)
+	Dim dt As DataTableColumn = NewDataTableColumn(colField, colTitle)
+	dt.filterable = False
+	dt.ColType = COLUMN_CHECKBOX
+	dt.sortable = False
+	columnsM.Put(colField, dt)
+End Sub
+
 
 'set a field as a switch
 Sub SetColumnsSwitch(colFields As List)
@@ -1354,6 +1367,15 @@ Sub AddDateColumn(colName As String, colTitle As String, colFormat As String)
 	SetColumnDateFormat(colName, colFormat)
 End Sub
 
+'add time column and use any of dayjs formats
+'<code>.AddTimeColumn("timeColumn", "Date", "DD/MM/YYY")
+'</code>
+Sub AddTimeColumn(colName As String, colTitle As String)
+	AddColumn(colName, colTitle)
+	SetColumnType(colName, COLUMN_TIME)
+End Sub
+
+
 'add date time column and use any dayjs formats
 '<code>.AddDateColumn("dateColumn", "Date", "DD/MM/YYY HH:MM:SS")
 '</code>
@@ -1368,6 +1390,22 @@ End Sub
 Sub AddNumberColumn(colName As String, colTitle As String, colFormat As String)
 	AddColumn(colName, colTitle)
 	SetColumnNumberFormat(colName, colFormat)
+End Sub
+
+'add money column and use any numeraljs formats
+'<code>.AddMoneyColumn("money", "Received", "$0,0.00")
+'</code>
+Sub AddMoneyColumn(colName As String, colTitle As String)
+	AddColumn(colName, colTitle)
+	SetColumnType(colName, COLUMN_MONEY)
+End Sub
+
+'add file size column
+'<code>.AddFileSizeColumn("fs", "File Size")
+'</code>
+Sub AddFileSizeColumn(colName As String, colTitle As String)
+	AddColumn(colName, colTitle)
+	SetColumnType(colName, COLUMN_FILESIZE)
 End Sub
 
 'add button column

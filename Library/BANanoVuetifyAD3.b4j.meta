@@ -31,6 +31,6 @@ ModuleClosedNodes6=
 ModuleClosedNodes7=
 ModuleClosedNodes8=
 ModuleClosedNodes9=
-NavigationStack=MySQLCRUD,InitilizeCode,660,0,MySQLCRUD,CreateTableCode,647,0,MySQLCRUD,CreateDialogCode,714,0,MySQLCRUD,SupportCode,891,0,MySQLCRUD,BuildVisibility,903,0,MySQLCRUD,BuildDefaults,929,0,MySQLCRUD,AddComment,947,0,MySQLCRUD,AddCode,956,0,MySQLCRUD,Save,960,0,MySQLCRUD,ToString,936,0
+NavigationStack=MySQLCRUD,DT_AddChip,246,0,MySQLCRUD,DT_AddSwitch,251,0,VueTable,AddCheckBox,1233,0,VueTable,AddMoneyColumn,1391,0,VueTable,AddTimeColumn,1366,0,MySQLCRUD,DT_AddCheckBox,256,0,MySQLCRUD,DT_AddImage,262,0,VueTable,AddFileSizeColumn,1399,0,Main,Process_Globals,11,0,MySQLCRUD,DT_AddFileSize,265,0,MySQLCRUD,Class_Globals,31,0
 SelectedBuild=0
 VisibleModules=6

@@ -255,10 +255,32 @@ Sub DT_AddSwitch(colField As String, colTitle As String)
 	dtCode.Append($"${dtName}.AddSwitch("${colField}", "${colTitle}")"$).Append(CRLF)
 End Sub
 
+'add a checkbox column to the data-table
+Sub DT_AddCheckBox(colField As String, colTitle As String)
+	dtCode.Append($"${dtName}.AddCheckBox("${colField}", "${colTitle}")"$).Append(CRLF)
+End Sub
+
 'add an image column to the data-table
 Sub DT_AddImage(colField As String, colTitle As String)
 	dtCode.Append($"${dtName}.AddImage("${colField}", "${colTitle}")"$).Append(CRLF)
 End Sub
+
+'add a file size column to the data-table
+Sub DT_AddFileSize(colField As String, colTitle As String)
+	dtCode.Append($"${dtName}.AddFileSizeColumn("${colField}", "${colTitle}")"$).Append(CRLF)
+End Sub
+
+'add a time column to the data-table
+Sub DT_AddTime(colField As String, colTitle As String)
+	dtCode.Append($"${dtName}.AddTimeColumn("${colField}", "${colTitle}")"$).Append(CRLF)
+End Sub
+
+
+'add a money column to the data-table
+Sub DT_AddMoney(colField As String, colTitle As String)
+	dtCode.Append($"${dtName}.AddMoneyColumn("${colField}", "${colTitle}")"$).Append(CRLF)
+End Sub
+
 
 'add a link column to the data-table
 Sub DT_AddLink(colField As String, colTitle As String, target As String)
