@@ -100,6 +100,73 @@ Public Sub Initialize As MySQLCRUD
 	Return Me
 End Sub
 
+Sub Diag_AddParagraph(fldName As String, row As Int, col As Int, vmodel As String, Caption As String)
+	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddParagraph(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), ${fldName}, "{{ ${SingularClean.tolowercase}.${vmodel} }}", "", "")"$).Append(CRLF)
+	dtCont.Append($"${ComponentName}.setdata("${SingularClean.tolowercase}.${vmodel}", "${Caption}")"$).Append(CRLF)
+	If Visibility.ContainsKey(fldName) Then
+		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
+	End If
+	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
+End Sub
+
+
+Sub Diag_AddH6(fldName As String, row As Int, col As Int, vmodel As String, Caption As String)
+	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddH6(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), ${fldName}, "{{ ${SingularClean.tolowercase}.${vmodel} }}", "", "")"$).Append(CRLF)
+	dtCont.Append($"${ComponentName}.setdata("${SingularClean.tolowercase}.${vmodel}", "${Caption}")"$).Append(CRLF)
+	If Visibility.ContainsKey(fldName) Then
+		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
+	End If
+	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
+End Sub
+
+
+Sub Diag_AddH5(fldName As String, row As Int, col As Int, vmodel As String, Caption As String)
+	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddH5(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), ${fldName}, "{{ ${SingularClean.tolowercase}.${vmodel} }}", "", "")"$).Append(CRLF)
+	dtCont.Append($"${ComponentName}.setdata("${SingularClean.tolowercase}.${vmodel}", "${Caption}")"$).Append(CRLF)
+	If Visibility.ContainsKey(fldName) Then
+		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
+	End If
+	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
+End Sub
+
+
+Sub Diag_AddH4(fldName As String, row As Int, col As Int, vmodel As String, Caption As String)
+	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddH4(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), ${fldName}, "{{ ${SingularClean.tolowercase}.${vmodel} }}", "", "")"$).Append(CRLF)
+	dtCont.Append($"${ComponentName}.setdata("${SingularClean.tolowercase}.${vmodel}", "${Caption}")"$).Append(CRLF)
+	If Visibility.ContainsKey(fldName) Then
+		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
+	End If
+	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
+End Sub
+
+Sub Diag_AddH3(fldName As String, row As Int, col As Int, vmodel As String, Caption As String)
+	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddH3(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), ${fldName}, "{{ ${SingularClean.tolowercase}.${vmodel} }}", "", "")"$).Append(CRLF)
+	dtCont.Append($"${ComponentName}.setdata("${SingularClean.tolowercase}.${vmodel}", "${Caption}")"$).Append(CRLF)
+	If Visibility.ContainsKey(fldName) Then
+		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
+	End If
+	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
+End Sub
+
+Sub Diag_AddH2(fldName As String, row As Int, col As Int, vmodel As String, Caption As String)
+	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddH2(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), ${fldName}, "{{ ${SingularClean.tolowercase}.${vmodel} }}", "", "")"$).Append(CRLF)
+	dtCont.Append($"${ComponentName}.setdata("${SingularClean.tolowercase}.${vmodel}", "${Caption}")"$).Append(CRLF)
+	If Visibility.ContainsKey(fldName) Then
+		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
+	End If
+	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
+End Sub
+
+
+Sub Diag_AddH1(fldName As String, row As Int, col As Int, vmodel As String, Caption As String)
+	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddH1(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), ${fldName}, "{{ ${SingularClean.tolowercase}.${vmodel} }}", "", "")"$).Append(CRLF)
+	dtCont.Append($"${ComponentName}.setdata("${SingularClean.tolowercase}.${vmodel}", "${Caption}")"$).Append(CRLF)
+	If Visibility.ContainsKey(fldName) Then
+		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
+	End If
+	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
+End Sub
+
 'add a text field to the dialog
 Sub Diag_AddTextField(fldName As String, row As Int, col As Int, vmodel As String, title As String)
 	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddTextField1(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), "${fldName}", "${SingularClean.tolowercase}.${vmodel}", "${title}", Null)"$).Append(CRLF)
@@ -745,7 +812,7 @@ private Sub CreateDialogCode
 	AddCode($"Dim ${SingularClean.tolowercase} As Map = CreateMap()"$)
 	sb.Append(BuildDefaults(SingularClean.tolowercase))
 	sb.append(CRLF)
-	AddCode($"${ComponentName}.SetData(${SingularClean.tolowercase})"$)
+	AddCode($"${ComponentName}.SetData("${SingularClean.tolowercase}", ${SingularClean.tolowercase})"$)
 	
 	AddCode("End Sub")
 	sb.Append(CRLF).Append(CRLF)
@@ -912,20 +979,20 @@ End Sub"$).Append(CRLF).Append(CRLF)
 	${ComponentName}.SetData("${ModalShow.tolowercase}", False)
 End Sub"$).append(CRLF).append(CRLF)
 		'
-		sb.Append($"Private Sub ${dtName}_CancelItem (item As Map)
-	End Sub"$).append(CRLF).append(CRLF)
-		'
-		sb.Append($"Private Sub ${dtName}_OpenItem (item As Map)
-	End Sub"$).append(CRLF).append(CRLF)
-		'
-		sb.Append($"Private Sub ${dtName}_CloseItem (item As Map)
-	End Sub"$).append(CRLF).append(CRLF)
+sb.Append($"Private Sub ${dtName}_CancelItem (item As Map)
+End Sub"$).append(CRLF).append(CRLF)
+'
+sb.Append($"Private Sub ${dtName}_OpenItem (item As Map)
+End Sub"$).append(CRLF).append(CRLF)
+'
+sb.Append($"Private Sub ${dtName}_CloseItem (item As Map)
+End Sub"$).append(CRLF).append(CRLF)
 
-		sb.Append($"Private Sub ${dtName}_ItemSelected (item As Map)
-	End Sub"$).append(CRLF).append(CRLF)
+sb.Append($"Private Sub ${dtName}_ItemSelected (item As Map)
+End Sub"$).append(CRLF).append(CRLF)
 
-		sb.Append($"Private Sub ${dtName}_ClickRow (e As BANanoEvent)
-	End Sub"$).Append(CRLF).Append(CRLF)
+sb.Append($"Private Sub ${dtName}_ClickRow (e As BANanoEvent)
+End Sub"$).Append(CRLF).Append(CRLF)
 
 	End If
 End Sub
