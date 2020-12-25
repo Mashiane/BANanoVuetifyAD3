@@ -42,10 +42,10 @@ Version=8.5
 #DesignerProperty: Key: SingleSelect, DisplayName: SingleSelect, FieldType: Boolean, DefaultValue:  False, Description: 
 #DesignerProperty: Key: MultiSort, DisplayName: Multi Sort, FieldType: Boolean, DefaultValue:  False, Description: 
 #DesignerProperty: Key: MustSort, DisplayName: Must Sort, FieldType: Boolean, DefaultValue:  False, Description: 
+#DesignerProperty: Key: Loading, DisplayName: Loading, FieldType: Boolean, DefaultValue:  False, Description: 
 #DesignerProperty: Key: FixedHeader, DisplayName: Fixed Header, FieldType: Boolean, DefaultValue:  False, Description: 
 #DesignerProperty: Key: HideDefaultHeader, DisplayName: Hide Default Header, FieldType: Boolean, DefaultValue:  False, Description: 
 #DesignerProperty: Key: HideDefaultFooter, DisplayName: Hide Default Footer, FieldType: Boolean, DefaultValue:  False, Description: 
-#DesignerProperty: Key: Loading, DisplayName: Loading, FieldType: Boolean, DefaultValue:  False, Description: 
 #DesignerProperty: Key: ShowExpand, DisplayName: ShowExpand, FieldType: Boolean, DefaultValue:  False, Description: 
 #DesignerProperty: Key: Elevation, DisplayName: Elevation, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: GroupBy, DisplayName: GroupBy, FieldType: String, DefaultValue:  , Description: 
@@ -93,9 +93,9 @@ Sub Class_Globals
 	Private bFixedHeader As Boolean = False
 	Private bHideDefaultHeader As Boolean = False
 	Private bHideDefaultFooter As Boolean = False
-	Private bLoading As Boolean = False
 	Private bShowExpand As Boolean = False
 	Private bDark As Boolean = False
+	private bLoading as boolean = false
 	'
 	Public Items As List
 	Public AppTemplateName As String = "#apptemplate"
@@ -167,6 +167,7 @@ Sub Class_Globals
 	Private filters As String
 	Private filterList As List
 	Private allcolumns As String
+	Private sloading As String
 End Sub
 
 'initialize the custom view
@@ -202,7 +203,9 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	filtershow = $"${mName}filtershow"$
 	filters = $"${mName}filters"$
 	allcolumns = $"${mName}allcolumns"$
+	sloading = $"${mName}loading"$
 	'
+	AddAttr(":loading", sloading)
 	AddAttr(":items", itemsname)
 	AddAttr(":headers", headers)
 	AddAttr(":value", selected)
@@ -230,7 +233,8 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	sb.Append($"${filters}=array;"$)
 	sb.Append($"${allcolumns}=array;"$)
 	sb.Append($"${titleText}=string;"$)
-	sb.Append($"${filtershow}=false"$)
+	sb.Append($"${filtershow}=false;"$)
+	sb.Append($"${sloading}=false"$)
 	setStates(sb.ToString)
 	SetData(filtershow, False)
 	filterList.Initialize 
@@ -246,6 +250,10 @@ End Sub
 'update the title
 Sub UpdateTitle(VC As VueComponent, title As String)
 	VC.SetData(titleText, title)
+End Sub
+
+Sub UpdateLoading(VC As VueComponent, b As Boolean)
+	VC.SetData(sloading, b)
 End Sub
 
 Sub setHasSearch(b As Boolean)
@@ -353,17 +361,17 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bFixedHeader = Props.Get("FixedHeader")
 		bHideDefaultHeader = Props.Get("HideDefaultHeader")
 		bHideDefaultFooter = Props.Get("HideDefaultFooter")
-		bLoading = Props.Get("Loading")
 		bShowExpand = Props.Get("ShowExpand")
+		bLoading = Props.Get("Loading")
 		bDark = Props.Get("Dark")
 	End If
 	
+	setLoading(bLoading)
 	setMultiSort(bMultiSort)
 	setMustSort(bMustSort)
 	setFixedHeader(bFixedHeader)
 	setHideDefaultHeader(bHideDefaultHeader)
 	setHideDefaultFooter(bHideDefaultFooter)
-	setLoading(bLoading)
 	setShowExpand(bShowExpand)
 	setDark(bDark)
 	
@@ -536,6 +544,18 @@ End Sub
 Sub AddClearFilter(VC As VueComponent)
 	Dim btnKey As String = $"${mName}_clearfilter"$
 	AddTitleIcon(VC, btnKey, "mdi-filter-remove", "red")
+End Sub
+
+'add a back button 
+Sub AddBack(VC As VueComponent)
+	Dim btnKey As String = $"${mName}_back"$
+	AddTitleIcon(VC, btnKey, "mdi-chevron-left", "cyan")
+End Sub
+
+'add a back button 
+Sub AddRefresh(VC As VueComponent)
+	Dim btnKey As String = $"${mName}_refresh"$
+	AddTitleIcon(VC, btnKey, "mdi-reload", "purple")
 End Sub
 
 'a button with an icon on the left
@@ -2617,8 +2637,9 @@ End Sub
 
 'set loading
 Sub setLoading(varLoading As Boolean)
-	AddAttr(":loading", varLoading)
+	AddAttr(":loading", sloading)
 	bLoading = varLoading
+	SetData(sloading, bLoading)
 End Sub
 
 Sub getLoading As Boolean

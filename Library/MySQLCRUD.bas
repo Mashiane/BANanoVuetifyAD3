@@ -38,6 +38,7 @@ Sub Class_Globals
 	Public DT_ItemsPerPage As String
 	Public DT_HasClearSort As Boolean
 	Public DT_HasFilter As Boolean
+	Public DT_HasBack As Boolean
 	Public DT_HasRefresh As Boolean
 	Public HasDialog As Boolean
 	Public DT_HasMenu As Boolean
@@ -51,11 +52,16 @@ Sub Class_Globals
 	Private dtCont As StringBuilder
 	Private SingularClean As String
 	Private PluralClean As String
+	Type DBRelationship(source As String, key As String, value As String, vmodel As String)
+	Private relationships As List
+	Private className As String
+	Private addedFiles As List
 End Sub
 
 'initialize the crud class
-Public Sub Initialize As MySQLCRUD
+Public Sub Initialize(clsName As String) As MySQLCRUD
 	Fields.Initialize
+	className = clsName
 	sb.Initialize
 	DatabaseName = ""
 	TableName = ""
@@ -87,6 +93,7 @@ Public Sub Initialize As MySQLCRUD
 	DT_HasClearSort = False
 	DT_HasFilter = False
 	DT_HasRefresh = False
+	DT_HasBack = false
 	HasDialog = False
 	DT_HasMenu = False
 	DT_HasDownload = False
@@ -97,11 +104,13 @@ Public Sub Initialize As MySQLCRUD
 	dtCode.Initialize
 	DialogWidth = "600"
 	dtCont.Initialize
+	relationships.Initialize 
+	addedFiles.Initialize 
 	Return Me
 End Sub
 
 Sub Diag_AddParagraph(fldName As String, row As Int, col As Int, vmodel As String, Caption As String)
-	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddParagraph(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), ${fldName}, "{{ ${SingularClean.tolowercase}.${vmodel} }}", "", "")"$).Append(CRLF)
+	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddParagraph(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), "${fldName}", "{{ ${SingularClean.tolowercase}.${vmodel} }}", "", "")"$).Append(CRLF)
 	dtCont.Append($"${ComponentName}.setdata("${SingularClean.tolowercase}.${vmodel}", "${Caption}")"$).Append(CRLF)
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
@@ -111,7 +120,7 @@ End Sub
 
 
 Sub Diag_AddH6(fldName As String, row As Int, col As Int, vmodel As String, Caption As String)
-	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddH6(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), ${fldName}, "{{ ${SingularClean.tolowercase}.${vmodel} }}", "", "")"$).Append(CRLF)
+	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddH6(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), "${fldName}", "{{ ${SingularClean.tolowercase}.${vmodel} }}", "", "")"$).Append(CRLF)
 	dtCont.Append($"${ComponentName}.setdata("${SingularClean.tolowercase}.${vmodel}", "${Caption}")"$).Append(CRLF)
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
@@ -121,7 +130,7 @@ End Sub
 
 
 Sub Diag_AddH5(fldName As String, row As Int, col As Int, vmodel As String, Caption As String)
-	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddH5(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), ${fldName}, "{{ ${SingularClean.tolowercase}.${vmodel} }}", "", "")"$).Append(CRLF)
+	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddH5(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), "${fldName}", "{{ ${SingularClean.tolowercase}.${vmodel} }}", "", "")"$).Append(CRLF)
 	dtCont.Append($"${ComponentName}.setdata("${SingularClean.tolowercase}.${vmodel}", "${Caption}")"$).Append(CRLF)
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
@@ -131,7 +140,7 @@ End Sub
 
 
 Sub Diag_AddH4(fldName As String, row As Int, col As Int, vmodel As String, Caption As String)
-	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddH4(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), ${fldName}, "{{ ${SingularClean.tolowercase}.${vmodel} }}", "", "")"$).Append(CRLF)
+	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddH4(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), "${fldName}", "{{ ${SingularClean.tolowercase}.${vmodel} }}", "", "")"$).Append(CRLF)
 	dtCont.Append($"${ComponentName}.setdata("${SingularClean.tolowercase}.${vmodel}", "${Caption}")"$).Append(CRLF)
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
@@ -140,7 +149,7 @@ Sub Diag_AddH4(fldName As String, row As Int, col As Int, vmodel As String, Capt
 End Sub
 
 Sub Diag_AddH3(fldName As String, row As Int, col As Int, vmodel As String, Caption As String)
-	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddH3(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), ${fldName}, "{{ ${SingularClean.tolowercase}.${vmodel} }}", "", "")"$).Append(CRLF)
+	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddH3(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), "${fldName}", "{{ ${SingularClean.tolowercase}.${vmodel} }}", "", "")"$).Append(CRLF)
 	dtCont.Append($"${ComponentName}.setdata("${SingularClean.tolowercase}.${vmodel}", "${Caption}")"$).Append(CRLF)
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
@@ -149,7 +158,7 @@ Sub Diag_AddH3(fldName As String, row As Int, col As Int, vmodel As String, Capt
 End Sub
 
 Sub Diag_AddH2(fldName As String, row As Int, col As Int, vmodel As String, Caption As String)
-	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddH2(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), ${fldName}, "{{ ${SingularClean.tolowercase}.${vmodel} }}", "", "")"$).Append(CRLF)
+	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddH2(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), "${fldName}", "{{ ${SingularClean.tolowercase}.${vmodel} }}", "", "")"$).Append(CRLF)
 	dtCont.Append($"${ComponentName}.setdata("${SingularClean.tolowercase}.${vmodel}", "${Caption}")"$).Append(CRLF)
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
@@ -159,7 +168,7 @@ End Sub
 
 
 Sub Diag_AddH1(fldName As String, row As Int, col As Int, vmodel As String, Caption As String)
-	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddH1(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), ${fldName}, "{{ ${SingularClean.tolowercase}.${vmodel} }}", "", "")"$).Append(CRLF)
+	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddH1(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), "${fldName}", "{{ ${SingularClean.tolowercase}.${vmodel} }}", "", "")"$).Append(CRLF)
 	dtCont.Append($"${ComponentName}.setdata("${SingularClean.tolowercase}.${vmodel}", "${Caption}")"$).Append(CRLF)
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
@@ -210,6 +219,64 @@ Sub Diag_AddFileInput(fldName As String, row As Int, col As Int, vmodel As Strin
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
+	'to remove from adding
+	addedFiles.Add(vmodel)
+	
+	'file upload code
+	Select Case bMultiple
+	Case True
+		AddCode($"Sub ${fldName}_change(fileList As List)"$)
+		AddCode($"If banano.IsNull(fileList) Or banano.IsUndefined(fileList) Then Return"$)
+		AddCode($"Dim uploads As List = ${ComponentName}.NewList"$)
+		AddCode("for each fileObj As Map in fileList")
+		AddComment("get file details")
+		AddCode($"Dim fileDet As FileObject = BANanoShared.GetFileDetails(fileObj)"$)
+		AddCode($"Dim fn As String = fileDet.FileName"$)
+		AddComment("you can check the size here")
+		AddComment("start uploading the file")
+		AddCode($"Dim fd As BANanoObject"$)
+		AddCode($"fd.Initialize2("FormData", Null)"$)
+		AddCode($"fd.RunMethod("append", Array("upload", fileObj))"$)
+		AddCode($"Dim Res As String = BANano.CallAjaxWait("./assets/upload.php", "POST", "", fd, True, Null)"$)
+		AddCode($"Dim result As Map = banano.FromJson(Res)"$)
+		AddCode($"Dim sstatus As String = result.Get("status")"$)
+		AddCode($"Select Case sstatus"$)
+		AddCode($"Case "error""$)
+		AddCode($"vuetify.ShowSnackBarError("The file was not uploaded successfully!")"$)
+		AddCode($"Case "success""$)
+		AddCode($"vuetify.ShowSnackBarSuccess("The file was uploaded successfully!")"$)
+		AddCode($"End Select"$)
+		AddCode($"Dim fp As String = ~"./assets/~{fn}"~"$)
+		AddCode($"uploads.Add(fp)"$)
+		AddCode("next")
+		AddCode($"End Sub"$)
+	Case False	
+		AddCode($"Sub ${fldName}_change(fileObj As Map)"$)
+		AddCode($"If banano.IsNull(fileObj) Or banano.IsUndefined(fileObj) Then Return"$)
+		AddComment("get file details")
+		AddCode($"Dim fileDet As FileObject = BANanoShared.GetFileDetails(fileObj)"$)
+		AddCode($"Dim fn As String = fileDet.FileName"$)
+		AddComment("you can check the size here")
+		AddComment("start uploading the file")
+		AddCode($"Dim fd As BANanoObject"$)
+		AddCode($"fd.Initialize2("FormData", Null)"$)
+		AddCode($"fd.RunMethod("append", Array("upload", fileObj))"$)
+		AddCode($"Dim Res As String = BANano.CallAjaxWait("./assets/upload.php", "POST", "", fd, True, Null)"$)
+		AddCode($"Dim result As Map = banano.FromJson(Res)"$)
+		AddCode($"Dim sstatus As String = result.Get("status")"$)
+		AddCode($"Select Case sstatus"$)
+		AddCode($"Case "error""$)
+		AddCode($"vuetify.ShowSnackBarError("The file was not uploaded successfully!")"$)
+		AddCode("Return")
+		AddCode($"Case "success""$)
+		AddCode($"vuetify.ShowSnackBarSuccess("The file was uploaded successfully!")"$)
+		AddCode($"End Select"$)
+		AddCode($"Dim fp As String = ~"./assets/~{fn}"~"$)
+		AddComment("update state of some element")
+		AddCode($"${ComponentName}.SetData("${vmodel}", fp)"$)
+		AddCode($"End Sub"$)
+	End Select
+	
 End Sub
 
 'add a password to the dialog
@@ -228,6 +295,14 @@ Sub Diag_AddCombo(fldName As String, row As Int, col As Int, vmodel As String, T
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
+	'
+	Dim rel As DBRelationship
+	rel.Initialize 
+	rel.key = Key
+	rel.value = Value
+	rel.source = DataSource
+	rel.vmodel = vmodel
+	relationships.Add(rel)
 End Sub
 
 'add a select to the dialog
@@ -237,11 +312,19 @@ Sub Diag_AddSelect(fldName As String, row As Int, col As Int, vmodel As String, 
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
+	'
+	Dim rel As DBRelationship
+	rel.Initialize
+	rel.key = Key
+	rel.value = Value
+	rel.source = DataSource
+	rel.vmodel = vmodel
+	relationships.Add(rel)
 End Sub
 
 'add an avatar to the dialog
 Sub Diag_AddAvatar(fldName As String, row As Int, col As Int, url As String, avatarSize As Int)
-	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddAvatar(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), "${fldName}", "${url}", ${avatarSize}, Null)"$)
+	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddAvatar(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), "${fldName}", "${url}", ${avatarSize}, Null)"$).Append(CRLF)
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
@@ -250,7 +333,7 @@ End Sub
 
 'add an avatar to the dialog with binding
 Sub Diag_AddAvatar1(fldName As String, row As Int, col As Int, vmodel As String, avatarSize As Int)
-	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddAvatar1(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), "${fldName}", "${vmodel}", ${avatarSize}, Null)"$)
+	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddAvatar1(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), "${fldName}", "${vmodel}", ${avatarSize}, Null)"$).Append(CRLF)
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
@@ -265,6 +348,14 @@ Sub Diag_AddAutoComplete(fldName As String, row As Int, col As Int, vmodel As St
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
+	'
+	Dim rel As DBRelationship
+	rel.Initialize
+	rel.key = Key
+	rel.value = Value
+	rel.source = DataSource
+	rel.vmodel = vmodel
+	relationships.Add(rel)
 End Sub
 
 'add a checkbox to the dialog
@@ -292,6 +383,15 @@ Sub Diag_AddRadioGroup(fldName As String, row As Int, col As Int, vmodel As Stri
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
+	'
+	Dim rel As DBRelationship
+	rel.Initialize
+	rel.key = Key
+	rel.value = Value
+	rel.source = DataSource
+	rel.vmodel = vmodel
+	relationships.Add(rel)
+
 End Sub
 
 'add an image to the dialog
@@ -448,7 +548,7 @@ Sub AddVisibility(fld As String, bVisibility As Boolean)
 End Sub
 
 'prepare for execution
-Sub Prepare As MySQLCRUD
+Sub Prepare
 	SingularClean = Singular.Replace(" ", "")
 	SingularClean = SingularClean.trim
 	PluralClean = Plural.Replace(" ", "")
@@ -458,7 +558,6 @@ Sub Prepare As MySQLCRUD
 	dtName = $"dt${PluralClean}"$
 	ModalName = $"dlg${PluralClean}"$
 	ModalShow = $"${ModalName}show"$
-	Return Me
 End Sub
 
 'add field data types - strings
@@ -497,10 +596,16 @@ Sub AddBlobs(blobNames As List)
 End Sub
 
 'loading code
-private Sub LoadCode As MySQLCRUD
+private Sub LoadCode
+	Dim sbSchemas As String = BuildSchemas
+	'
 	sb.Append($"Sub Load${PluralClean}		'ignoredeadcode
-	Dim ${rsTB} As BANanoMySQLE
+	'Show progress loader
+	${dtName}.UpdateLoading(${ComponentName}, True)
+	Dim ${rsTB} As ${className}
 	${rsTB}.Initialize("${DatabaseName}", "${TableName}", "${PrimaryKey}", "${AutoIncrement}")
+	'add field types
+	${sbSchemas}
 	${rsTB}.SelectAll(Array("*"), Array("${SortBy}"))
 	${rsTB}.JSON = banano.CallInlinePHPWait(${rsTB}.MethodName, ${rsTB}.Build)
 	${rsTB}.FromJSON
@@ -508,13 +613,50 @@ private Sub LoadCode As MySQLCRUD
 	Case False
 	'clear content
 		${dtName}.Reload(${ComponentName}, ${ComponentName}.NewList)
+		'hide progress loader
+		${dtName}.UpdateLoading(${ComponentName}, False)
 		Dim strError As String = ${rsTB}.Error
 		vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 		Return
 	End Select
 	${dtName}.Reload(${ComponentName}, ${rsTB}.Result)
+	'hide progress loader
+	${dtName}.UpdateLoading(${ComponentName}, False)
 End Sub"$).Append(CRLF).Append(CRLF)
-	Return Me
+End Sub
+
+'build the relationships
+private Sub RelationshipsCode
+	If relationships.Size = 0 Then Return
+	For Each rec As DBRelationship In relationships
+		Dim ssource As String = rec.source
+		Dim skey As String = rec.key
+		Dim svmodel As String = rec.vmodel 
+		Dim svalue As String = rec.value
+		'
+		Dim xfields As List
+		xfields.Initialize 
+		xfields.Add(skey)
+		xfields.Add(svalue)
+		Dim xarri As String = BANanoShared.List2ArrayVariable(xfields)
+		Dim tbName As String = $"rs${ssource}"$
+		'
+		sb.Append($"Sub Load${ssource}		'ignoredeadcode
+	Dim ${tbName} As ${className}
+	${tbName}.Initialize("${DatabaseName}", "${ssource}", "${skey}", "")
+	${tbName}.SelectAll(Array(${xarri}), Array("${svalue}"))
+	${tbName}.JSON = banano.CallInlinePHPWait(${tbName}.MethodName, ${tbName}.Build)
+	${tbName}.FromJSON
+	Select Case ${tbName}.OK
+	Case False
+		${ComponentName}.SetData("${ssource}", ${ComponentName}.NewList)
+		Dim strError As String = ${tbName}.Error
+		vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
+		Return
+	End Select
+	${ComponentName}.SetData("${ssource}", ${tbName}.Result)
+End Sub"$).Append(CRLF).Append(CRLF)  
+	Next
 End Sub
 
 'build schemas
@@ -545,7 +687,8 @@ private Sub ReadCode As MySQLCRUD
 	Dim sbSchemas As String = BuildSchemas
 	'
 	sb.Append($"Sub Read${SingularClean}(s${PrimaryKey} As String)			'ignoredeadcode
-	Dim ${rsTB} As BANanoMySQLE
+	${LoadRelationships}
+	Dim ${rsTB} As ${className}
 	${rsTB}.Initialize("${DatabaseName}", "${TableName}", "${PrimaryKey}", "${AutoIncrement}")
 	'add field types
 	${sbSchemas}
@@ -571,8 +714,9 @@ End Sub
 private Sub UpdateCode As MySQLCRUD
 	Dim sbSchemas As String = BuildSchemas
 	sb.Append($"Sub Update${SingularClean}(${SingularClean}M As Map)			'ignoredeadcode
+	${RemoveFiles}
 	Dim s${PrimaryKey} As String = ${SingularClean}M.Get("${PrimaryKey}")
-	Dim ${rsTB} As BANanoMySQLE
+	Dim ${rsTB} As ${className}
 	${rsTB}.Initialize("${DatabaseName}", "${TableName}", "${PrimaryKey}", "${AutoIncrement}")
 	'add field types
 	${sbSchemas}
@@ -586,13 +730,22 @@ private Sub UpdateCode As MySQLCRUD
 		vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 	Case Else
 		vuetify.ShowSnackBarSuccess("The ${Singular.tolowercase} has been updated successfully!")
-	'hide modal form
+		'hide modal form
 		${ComponentName}.SetData("${ModalShow.tolowercase}", False)
-	'load records
+		'load records
 		${ComponentName}.RunMethod("Load${PluralClean}", Null)
 	End Select
 End Sub"$).Append(CRLF).Append(CRLF)
 	Return Me
+End Sub
+
+private Sub RemoveFiles As String
+	Dim sbr As StringBuilder
+	sbr.Initialize 
+	For Each fn As String In addedFiles
+		sbr.Append($"${Singular}M.Remove("${fn}")"$).Append(CRLF)
+	Next
+	Return sbr.tostring
 End Sub
 
 'create code
@@ -602,7 +755,8 @@ private Sub CreateCode()
 	sb.Append($"Sub Create${SingularClean}(${SingularClean}M As Map)			'ignoredeadcode
 	'remove the auto-increment key field
 	${SingularClean}M.Remove("${AutoIncrement}")
-	Dim ${rsTB} As BANanoMySQLE
+	${RemoveFiles}
+	Dim ${rsTB} As ${className}
 	${rsTB}.Initialize("${DatabaseName}", "${TableName}", "${PrimaryKey}", "${AutoIncrement}")
 	'add field types
 	${sbSchemas}
@@ -616,9 +770,9 @@ private Sub CreateCode()
 		vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 	Case Else
 		vuetify.ShowSnackBarSuccess("The ${Singular.tolowercase} has been added successfully!")
-	'hide modal form
+		'hide modal form
 		${ComponentName}.SetData("${ModalShow.tolowercase}", False)
-	'Load records
+		'Load records
 		${ComponentName}.RunMethod("Load${PluralClean}", Null)
 	End Select
 End Sub"$).Append(CRLF).Append(CRLF)
@@ -629,7 +783,7 @@ private Sub DeleteCode()
 	Dim sbSchemas As String = BuildSchemas
 	
 	sb.Append($"Sub Delete${SingularClean}(s${PrimaryKey} As String)			'ignoredeadcode
-	Dim ${rsTB} As BANanoMySQLE
+	Dim ${rsTB} As ${className}
 	${rsTB}.Initialize("${DatabaseName}", "${TableName}", "${PrimaryKey}", "${AutoIncrement}")
 	'add field types
 	${sbSchemas}
@@ -689,7 +843,13 @@ private Sub CreateTableCode()
 	End If
 	
 	If DT_HasRefresh Then
-		AddCode($"${dtName}.AddTitleIcon(${ComponentName}, "btnRefresh", "mdi-cloud-refresh", "purple")"$)
+		AddCode($"${dtName}.AddRefresh(${ComponentName})"$)
+		AddCode($"${dtName}.AddDivider"$)
+	End If
+	
+	If DT_HasBack Then
+		AddCode($"${dtName}.AddBack(${ComponentName})"$)
+		AddCode($"${dtName}.AddDivider"$)
 	End If
 	'
 	If Filters.Size > 0 Then
@@ -806,11 +966,33 @@ End Sub"$).append(CRLF).append(CRLF)
 	AddCode($"${ComponentName}.SetMethod(Me, "Delete${SingularClean}", args)"$)
 	AddCode($"${ComponentName}.SetMethod(Me, "Update${SingularClean}", args)"$)
 	AddCode($"${ComponentName}.SetMethod(Me, "Read${SingularClean}", args)"$)
+		
+	If relationships.Size > 0 Then
+		For Each rec As DBRelationship In relationships
+			Dim ssource As String = rec.source
+			AddCode($"${ComponentName}.SetMethod(Me, "Load${ssource}", args)"$)
+		Next
+	End If
+	
+	
 	AddComment("'add the component as a router")
 	AddCode($"vuetify.AddRoute(${ComponentName})"$)
 	AddCode("End Sub")
 	sb.Append(CRLF).Append(CRLF)
 End Sub
+
+private Sub LoadRelationships As String
+	Dim xb As StringBuilder
+	xb.Initialize
+	If relationships.Size > 0 Then
+		For Each rec As DBRelationship In relationships
+			Dim ssource As String = rec.source
+			xb.Append($"${ComponentName}.RunMethod("Load${ssource}", Null)"$).Append(CRLF)
+		Next
+	End If
+	Return xb.tostring
+End Sub
+
 
 private Sub CreateDialogCode
 	AddCode($"Sub CreateDialog"$)
@@ -840,11 +1022,6 @@ End Sub
 
 'support code
 private Sub SupportCode
-	'REFRESH RECORDS
-	sb.Append($"Sub btnRefresh_click(e As BANanoEvent)			'ignoredeadcode
-${ComponentName}.RunMethod("Load${PluralClean}", Null)
-End Sub"$).Append(CRLF).Append(CRLF)
-	'
 	'SAVE RECORD
 	sb.Append($"Sub ${ModalName}ok_click(e As BANanoEvent)			'ignoredeadcode
 	'validate the form
@@ -886,6 +1063,7 @@ End Sub"$).Append(CRLF).Append(CRLF)
 	
 	'ADD RECORD
 	sb.Append($"Sub Add${SingularClean}			'ignoreDeadCode
+	${LoadRelationships}
 	${ComponentName}.DialogUpdateTitle("${ModalName}", "Add ${Singular}")
 	Mode = "A"
 	'initialize the record
@@ -895,7 +1073,7 @@ End Sub"$).Append(CRLF).Append(CRLF)
 	${BuildVisibility}
 	'show the drawer
 	${ComponentName}.SetData("${ModalShow.tolowercase}", True)
-	vuetify.SetFocus("${FocusOn}")
+	'vuetify.SetFocus("${FocusOn}")
 End Sub"$).Append(CRLF).Append(CRLF)
 	'
 	'TABLE EDIT
@@ -951,10 +1129,22 @@ End Sub"$).append(CRLF).append(CRLF)
 	${dtName}.ClearFilter(${ComponentName})
 End Sub"$).Append(CRLF).Append(CRLF)
 	End If
+	
+	If DT_HasRefresh Then
+sb.Append($"Private Sub ${dtName}_refresh_click (e As BANanoEvent)			'ignoredeadcode
+${ComponentName}.RunMethod("Load${PluralClean}", Null)
+End Sub"$).Append(CRLF).Append(CRLF)
+	End If
+	'
+	If DT_HasBack Then
+sb.Append($"Private Sub ${dtName}_back_click (e As BANanoEvent)			'ignoredeadcode
+vuetify.NavigateTo(-1)
+End Sub"$).Append(CRLF).Append(CRLF)
+	End If
+	
 	'
 	sb.Append($"Private Sub ${dtName}_change (item As Map)				'ignoredeadcode
 	${ComponentName}.RunMethod("Update${SingularClean}", item)
-	${ComponentName}.SetData("${ModalShow.tolowercase}", False)
 End Sub"$).Append(CRLF).Append(CRLF)
 	'
 	If DT_HasFilter Then
@@ -964,7 +1154,8 @@ End Sub"$).Append(CRLF).Append(CRLF)
 	End If
 	'
 	If DT_HasSave Then
-		sb.Append($"Sub ${dtName}_save (item As Map)
+sb.Append($"Sub ${dtName}_save (item As Map)
+${ComponentName}.RunMethod("Update${SingularClean}", item)
 End Sub"$).append(CRLF).append(CRLF)
 	End If
 	'
@@ -989,14 +1180,14 @@ End Sub"$).Append(CRLF).Append(CRLF)
 	End If
 	'
 	If DT_HasClone Then
-		sb.Append($"Sub ${dtName}_clone (item As Map)
-	End Sub"$).Append(CRLF).Append(CRLF)
+sb.Append($"Sub ${dtName}_clone (item As Map)
+${ComponentName}.RunMethod("Create${SingularClean}", item)
+End Sub"$).Append(CRLF).Append(CRLF)
 	End If
 
 	If DT_HasEditDialog Then
 		sb.Append($"Sub ${dtName}_SaveItem (item As Map)
 	${ComponentName}.RunMethod("Update${SingularClean}", item)
-	${ComponentName}.SetData("${ModalShow.tolowercase}", False)
 End Sub"$).append(CRLF).append(CRLF)
 		'
 sb.Append($"Private Sub ${dtName}_CancelItem (item As Map)
@@ -1067,6 +1258,7 @@ Sub ToString As String
 	CreateTableCode
 	SupportCode
 	CreateDialogCode
+	RelationshipsCode
 	'
 	Dim sout As String = sb.ToString
 	sout = sout.Replace("~","$")
