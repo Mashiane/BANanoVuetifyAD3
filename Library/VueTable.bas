@@ -95,7 +95,7 @@ Sub Class_Globals
 	Private bHideDefaultFooter As Boolean = False
 	Private bShowExpand As Boolean = False
 	Private bDark As Boolean = False
-	private bLoading as boolean = false
+	Private bLoading As Boolean = False
 	'
 	Public Items As List
 	Public AppTemplateName As String = "#apptemplate"

@@ -4497,3 +4497,23 @@ Sub AddListViewGroupTemplate(numLines As Int, props As ListViewItemOptions) As V
 	BindVueElement(vlistitem)
 	Return vlistitem
 End Sub
+
+'add a spacer to the card title
+Sub AddSpacer
+	mElement.Append("<v-spacer></v-spacer>")
+End Sub
+
+'add a spacer to the card title
+Sub AddVerticalDivider
+	mElement.Append($"<v-divider vertical class="mx-2"></v-divider>"$)
+End Sub
+
+'add a spacer to the card title
+Sub AddDivider
+	mElement.Append($"<v-divider></v-divider>"$)
+End Sub
+
+'add a spacer to the card title
+Sub AddInsetDivider
+	mElement.Append($"<v-divider inset></v-divider>"$)
+End Sub

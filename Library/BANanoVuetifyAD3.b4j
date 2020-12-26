@@ -1,19 +1,23 @@
 ﻿AppType=JavaFX
 Build1=Default,b4j.example
 File1=1.png
-File10=sadface.png
-File11=upload.php
+File10=red.png
+File11=sadface.png
+File12=upload.php
+File13=vue-google-maps.js
 File2=2.png
 File3=avatar.png
-File4=gray.png
-File5=green.png
-File6=happyface.png
-File7=neutralface.png
-File8=orange.png
-File9=red.png
+File4=fileSaver.min.js
+File5=gray.png
+File6=green.png
+File7=happyface.png
+File8=neutralface.png
+File9=orange.png
 FileGroup1=Default Group
 FileGroup10=Default Group
 FileGroup11=Default Group
+FileGroup12=Default Group
+FileGroup13=Default Group
 FileGroup2=Default Group
 FileGroup3=Default Group
 FileGroup4=Default Group
@@ -27,7 +31,8 @@ Library1=banano
 Library2=jcore
 Library3=jfx
 Module1=BANanoALASQLE
-Module10=VuetifyApp
+Module10=VueTable
+Module11=VuetifyApp
 Module2=BANanoMSSQLE
 Module3=BANanoMySQLE
 Module4=|absolute|C:\CodingWorld\B4XShared\B4J\BANanoShared
@@ -35,10 +40,10 @@ Module5=BANanoSQLiteE
 Module6=MySQLCRUD
 Module7=VueComponent
 Module8=VueElement
-Module9=VueTable
-NumberOfFiles=11
+Module9=VueGMap
+NumberOfFiles=13
 NumberOfLibraries=3
-NumberOfModules=10
+NumberOfModules=11
 Version=8.8
 @EndOfDesignText@
 #Region Project Attributes 
@@ -50,7 +55,7 @@ Version=8.8
 
 Sub Process_Globals
 	Private BANano As BANano 'ignore
-	Public Version As String = "2.79"
+	Public Version As String = "2.83"
 	Public AppName As String = "BANanoVuetifyAD3"
 End Sub
 
@@ -66,7 +71,9 @@ Sub AppStart (Form1 As Form, Args() As String)
 	BANano.Header.AddJavascriptFile("https://cdn.jsdelivr.net/npm/vue-router@3.x/dist/vue-router.min.js")
 	BANano.Header.AddJavascriptFile("https://cdn.jsdelivr.net/npm/dayjs@1.9.6/dayjs.min.js")
 	BANano.Header.AddJavascriptFile("https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js")
-	
+	BANano.Header.AddJavascriptFile("https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.20/lodash.min.js")
+	BANano.Header.AddJavascriptFile("vue-google-maps.js")
+	BANano.Header.AddJavascriptfile("fileSaver.min.js")
 	' start the build
 	#if release
 		BANano.BuildAsB4Xlib(Version)

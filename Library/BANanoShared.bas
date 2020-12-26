@@ -24,7 +24,7 @@ Sub Process_Globals
         "", "Thousand", "Million", "Billion", "Trillion", _
         "Quadrillion", "Pentillion", "Sexillion", "Septillion", "Octillion" _
     )
-	Type FileObject(FileName As String, FileDate As String, FileSize As Long, FileType As String)
+	Type FileObject(FileName As String, FileDate As String, FileSize As Long, FileType As String, Status As String, FullPath As String)
 	Private SourceCode As StringBuilder
 End Sub
 
@@ -188,21 +188,24 @@ function EmailSend($from, $to, $cc, $subject, $msg) {
 #End If
 
 
-''on file change
-Sub UploadFileWait(e As BANanoEvent) As String
-	'get selected file(s)
-	Dim fileList As List = GetFileListFromTarget(e)
-	If fileList.size = 0 Then Return ""
-	
-	'get the file to upload
-	Dim fileO As Map = fileList.Get(0)
+'upload file to server and return success or error
+'server should have write permissions
+Sub UploadFileWait(fileO As Map) As FileObject
+	'get the file details
+	Dim fileDet As FileObject = GetFileDetails(fileO)
+	'get the file name
+	Dim fn As String = fileDet.FileName
 	'start uploading the file
 	Dim fd As BANanoObject
 	fd.Initialize2("FormData", Null)
 	fd.RunMethod("append", Array("upload", fileO))
 	'
 	Dim Res As String = BANano.CallAjaxWait("./assets/upload.php", "POST", "", fd, True, Null)
-	Return Res
+	Dim result As Map = BANano.FromJson(Res)
+	Dim sstatus As String = result.Get("status")
+	fileDet.Status = sstatus
+	fileDet.FullPath = $"./assets/${fn}"$
+	Return fileDet
 End Sub
 
 Sub SetInterval(module As Object, methodname As String, ms As Int, args As List) As Object

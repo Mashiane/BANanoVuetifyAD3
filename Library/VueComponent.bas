@@ -263,6 +263,26 @@ Sub BindVueTable(el As VueTable)
 	Next
 End Sub
 
+Sub BindVueGMap(el As VueGMap)
+	Dim mbindings As Map = el.bindings
+	Dim mmethods As Map = el.methods
+	'apply the binding for the control
+	For Each k As String In mbindings.Keys
+		Dim v As Object = mbindings.Get(k)
+		Select Case k
+		Case "key"
+		Case ":rules", ":items"
+			SetData(v, NewList)
+		Case Else
+			SetData(k, v)
+		End Select
+	Next
+	'apply the events
+	For Each k As String In mmethods.Keys
+		Dim cb As BANanoObject = mmethods.Get(k)
+		SetCallBack(k, cb)
+	Next
+End Sub
 
 Sub NewList As List
 	Dim elx As List
