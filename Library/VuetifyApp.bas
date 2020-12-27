@@ -2565,6 +2565,7 @@ End Sub
 
 Sub AddChipGroup(Module As Object, parentID As String, elID As String, vModel As String,  activeClass As String, bMultiple As Boolean, bShowArrows As Boolean, bFilter As Boolean, DataSource As String, Key As String, Value As String, chipgroupprops As Map, chipprops As Map) As VueElement
 	elID = elID.tolowercase
+	DataSource = DataSource.tolowercase
 	parentID = CleanID(parentID)
 	'
 	BANano.GetElement(parentID).Append($"<v-chip-group id="${elID}"><v-chip id="${elID}chip"></v-chip></v-chip-group>"$)
@@ -2605,6 +2606,9 @@ End Sub
 Sub AddAutoComplete(Module As Object, parentID As String, elID As String, vmodel As String, sLabel As String, bRequired As Boolean, bMultiple As Boolean, sPlaceHolder As String, sourceTable As String, sourceField As String, displayField As String, returnObject As Boolean, sHelperText As String, props As Map) As VueElement
 	parentID = CleanID(parentID)
 	elID = elID.ToLowerCase
+	sourceTable = sourceTable.ToLowerCase
+	sourceField = sourceField.ToLowerCase
+	displayField = displayField.tolowercase
 	'
 	BANano.GetElement(parentID).Append($"<v-autocomplete id="${elID}"></v-autocomplete>"$)
 	Dim vselect As VueElement
@@ -2637,6 +2641,10 @@ End Sub
 Sub AddComboBox(Module As Object, parentID As String, elID As String, vmodel As String, sLabel As String, bRequired As Boolean, bMultiple As Boolean, sPlaceHolder As String, sourceTable As String, sourceField As String, displayField As String, returnObject As Boolean, sHelperText As String, props As Map) As VueElement
 	parentID = CleanID(parentID)
 	elID = elID.ToLowerCase
+	sourceTable = sourceTable.ToLowerCase
+	sourceField = sourceField.ToLowerCase
+	displayField = displayField.tolowercase
+	
 	'
 	BANano.GetElement(parentID).Append($"<v-combobox id="${elID}"></v-combobox>"$)
 	Dim vselect As VueElement
@@ -2878,6 +2886,10 @@ End Sub
 Sub AddSelect(Module As Object, parentID As String, elID As String, vmodel As String, sLabel As String, bRequired As Boolean, bMultiple As Boolean, sPlaceHolder As String, sourceTable As String, sourceField As String, displayField As String, returnObject As Boolean, sHelperText As String, props As Map) As VueElement
 	parentID = CleanID(parentID)
 	elID = elID.ToLowerCase
+	sourceTable = sourceTable.ToLowerCase
+	sourceField = sourceField.ToLowerCase
+	displayField = displayField.tolowercase
+	
 	'
 	BANano.GetElement(parentID).Append($"<v-select id="${elID}"></v-select>"$)
 	Dim vselect As VueElement

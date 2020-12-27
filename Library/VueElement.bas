@@ -1046,6 +1046,62 @@ private Sub GetMarginPadding(varOffsets As String) As Map
 	Return m
 End Sub
 
+Sub setMA(sma As String)
+	AddClass($"ma-${sma}"$)
+End Sub
+
+Sub setMX(sma As String)
+	AddClass($"mx-${sma}"$)
+End Sub
+
+Sub setMY(sma As String)
+	AddClass($"my-${sma}"$)
+End Sub
+
+Sub setMT(sma As String)
+	AddClass($"mt-${sma}"$)
+End Sub
+
+Sub setMB(sma As String)
+	AddClass($"mb-${sma}"$)
+End Sub
+
+Sub setML(sma As String)
+	AddClass($"ml-${sma}"$)
+End Sub
+
+Sub setMR(sma As String)
+	AddClass($"mr-${sma}"$)
+End Sub
+
+Sub setPA(sma As String)
+	AddClass($"pa-${sma}"$)
+End Sub
+
+Sub setPX(sma As String)
+	AddClass($"px-${sma}"$)
+End Sub
+
+Sub setPY(sma As String)
+	AddClass($"py-${sma}"$)
+End Sub
+
+Sub setPT(sma As String)
+	AddClass($"pt-${sma}"$)
+End Sub
+
+Sub setPB(sma As String)
+	AddClass($"pb-${sma}"$)
+End Sub
+
+Sub setPL(sma As String)
+	AddClass($"pl-${sma}"$)
+End Sub
+
+Sub setPR(sma As String)
+	AddClass($"pr-${sma}"$)
+End Sub
+
 
 private Sub GetOffsetSizes(varOffsets As String) As Map
 	Dim m As Map = CreateMap("xs":"", "s":"", "m":"", "l":"", "x":"")
@@ -1883,6 +1939,7 @@ public Sub getVFor() As String
 End Sub
 
 public Sub setDataSource(varVFor As String)
+	varVFor = varVFor.tolowercase
 	stDataSource = varVFor
 	SetData(stDataSource, NewList)
 End Sub

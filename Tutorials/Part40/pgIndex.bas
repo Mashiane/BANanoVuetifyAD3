@@ -94,13 +94,11 @@ Sub Init
 	'create a list of items to use
 	Dim links As List = vuetify.NewList
 	links.Add(CreateMap("icon": "mdi-view-dashboard", "title": "Home", "to": "/"))
-	links.Add(CreateMap("icon": "mdi-account", "title": "Users", "to": "/users"))
-	links.Add(CreateMap("icon": "mdi-note", "title": "Questions", "to": "/questions"))
-	links.Add(CreateMap("icon": "mdi-cog", "title": "Alert", "to": "/alerts"))
-	links.Add(CreateMap("icon": "mdi-cog", "title": "Avatars", "to": "/avatars"))
+	links.Add(CreateMap("icon": "mdi-cog", "title": "Alert", "to": ViewAlert.path))
+	links.Add(CreateMap("icon": "mdi-cog", "title": "Avatars", "to": ViewAvatars.path))
 	links.Add(CreateMap("icon": "mdi-cog", "title": "Badges", "to": ViewBadges.path))
 	links.Add(CreateMap("icon": "mdi-cog", "title": "Buttons", "to": ViewButtons.path))
-	links.Add(CreateMap("icon": "mdi-cog", "title": "Dialogs", "to": "/dialogs"))
+	links.Add(CreateMap("icon": "mdi-cog", "title": "Dialogs", "to": ViewDialog.path))
 	links.Add(CreateMap("icon": "mdi-cog", "title": "Date Picker", "to": ViewDatePicker.path))
 	links.Add(CreateMap("icon": "mdi-cog", "title": "Text Fields", "to": ViewTextFields.path))
 	links.Add(CreateMap("icon": "mdi-cog", "title": "Tables", "to": ViewTable.path))
@@ -129,6 +127,7 @@ Sub Init
 	links.Add(CreateMap("icon": "mdi-cog", "title": "MySQL PHP", "to": ViewMySQL.path))
 	links.Add(CreateMap("icon": "mdi-cog", "title": "MSSQL PHP (PDO)", "to": ViewMSSQL.path))
 	links.Add(CreateMap("icon": "mdi-cog", "title": "BANanoSQL (IndexedDB via AlaSQL)", "to": ViewBANanoSQL.path))
+	links.Add(CreateMap("icon": "mdi-cog", "title": "Expansion Panels", "to": ViewExpansionPanels.path))
 	'
 	vuetify.SetData("links", links)
 	'close the drawer
@@ -153,7 +152,6 @@ Sub AddRouters
 	ViewImage.Initialize 
 	ViewHome.Initialize 
 	ViewAbout.Initialize 
-	ViewUsers.Initialize 
 	ViewQuestions.Initialize 
 	ViewAvatars.Initialize
 	ViewAlert.Initialize  
@@ -182,6 +180,7 @@ Sub AddRouters
 	ViewManualGrid.Initialize 
 	ViewStepper.Initialize 
 	ViewTabs.Initialize  
+	ViewExpansionPanels.Initialize 
 End Sub
 
 Sub vappbarnavicon_ClickStop (e As BANanoEvent)

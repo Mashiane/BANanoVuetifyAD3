@@ -2028,6 +2028,9 @@ End Sub
 
 Sub SetCombo(colName As String, bLarge As Boolean, sourceTable As String, sourceField As String, displayField As String, returnObject As Boolean)
 	colName = colName.tolowercase
+	sourceTable = sourceTable.ToLowerCase
+	sourceField = sourceField.ToLowerCase
+	displayField = displayField.tolowercase
 	Dim col As DataTableColumn = columnsM.Get(colName)
 	col.Large = bLarge
 	col.SourceTable = sourceTable
@@ -2056,6 +2059,9 @@ End Sub
 
 Sub SetAutoComplete(colName As String, bLarge As Boolean, sourceTable As String, sourceField As String, displayField As String, returnObject As Boolean)
 	colName = colName.tolowercase
+	sourceTable = sourceTable.ToLowerCase
+	sourceField = sourceField.ToLowerCase
+	displayField = displayField.tolowercase
 	Dim col As DataTableColumn = columnsM.Get(colName)
 	col.Large = bLarge
 	col.SourceTable = sourceTable

@@ -224,35 +224,35 @@ Module1=pgIndex
 Module10=ViewChips
 Module11=ViewDatePicker
 Module12=ViewDialog
-Module13=ViewFileInput
-Module14=ViewFormControls
-Module15=ViewGrid
-Module16=ViewGrid2
-Module17=ViewHome
-Module18=ViewImage
-Module19=ViewInputDialog
+Module13=ViewExpansionPanels
+Module14=ViewFileInput
+Module15=ViewFormControls
+Module16=ViewGrid
+Module17=ViewGrid2
+Module18=ViewHome
+Module19=ViewImage
 Module2=Tooltip
-Module20=ViewList
-Module21=ViewManualGrid
-Module22=ViewMSSQL
-Module23=ViewMySQL
-Module24=ViewPageDialog
-Module25=ViewParallax
-Module26=ViewPHPSQLite
-Module27=ViewProgress
-Module28=ViewQuestions
-Module29=ViewRadioGroup
+Module20=ViewInputDialog
+Module21=ViewList
+Module22=ViewManualGrid
+Module23=ViewMSSQL
+Module24=ViewMySQL
+Module25=ViewPageDialog
+Module26=ViewParallax
+Module27=ViewPHPSQLite
+Module28=ViewProgress
+Module29=ViewQuestions
 Module3=ViewAbout
-Module30=ViewRating
-Module31=ViewSelects
-Module32=ViewSliders
-Module33=ViewStepper
-Module34=ViewSwitches
-Module35=ViewTable
-Module36=ViewTabs
-Module37=ViewTextArea
-Module38=ViewTextFields
-Module39=ViewUsers
+Module30=ViewRadioGroup
+Module31=ViewRating
+Module32=ViewSelects
+Module33=ViewSliders
+Module34=ViewStepper
+Module35=ViewSwitches
+Module36=ViewTable
+Module37=ViewTabs
+Module38=ViewTextArea
+Module39=ViewTextFields
 Module4=ViewAlert
 Module5=ViewAvatars
 Module6=ViewBadges
@@ -339,6 +339,87 @@ Sub Application_Error (Error As Exception, StackTrace As String) As Boolean
 End Sub
 
 Sub BANano_Ready
+'	define and initialize the code builder
+'	Dim crud As MySQLCRUD
+'	crud.Initialize("BANanoMySQLE")
+'	'define the database name
+'	crud.databasename = "test"
+'	'define the table name
+'	crud.tablename = "user_devices"
+'	'what is the primary key of this table
+'	crud.PrimaryKey = "userdeviceid"
+'	'which field is the auto-increment field, if none comment out
+'	crud.AutoIncrement = "userdeviceid"
+'	'what is the singular name for each record
+'	crud.Singular = "User Device"
+'	'what is the plural name for many records
+'	crud.Plural = "User Devices"
+'	'which field should be used to sort the records
+'	crud.SortBy = "allocationdate"
+'	'what is the component name to create
+'	crud.componentname = "userdevices"
+'	'we have an alert/confirm dialog
+'	crud.HasDialog = True
+'	'IMPORTANT before execution
+'	crud.Prepare
+'	
+'	'add data types for the backend
+'	crud.AddStrings(Array("devicesn", "allocationdate", "active"))
+'	crud.AddIntegers(Array("userdeviceid", "userid"))
+'	
+'	'add these after data type indications to specify the default values per field
+'	crud.AddDefaults("userdeviceid", -1)
+'	crud.AddDefaults("userid", -1)
+'	crud.AddDefaults("devicesn", "")
+'	crud.AddDefaults("allocationdate", "")
+'	crud.AddDefaults("active", "Yes")
+'	
+'	'when dialog is opened, focus on which field. NB: This currently raises an error, comment it out on final file
+'	crud.focuson = "devicesn"
+'	'the field value to show to confirm deletion
+'	crud.DisplayField = "devicesn"
+'	'
+'	'the data-table has search
+'	crud.DT_HasSearch = True
+'	'the data-table has an add new button
+'	crud.DT_HasAddNew = True
+'	'the data-table has clear sort
+'	crud.DT_HasClearSort = True
+'	'the data-table has a column visibility filter
+'	crud.DT_HasFilter = True
+'	'the data-table has a refresh button
+'	crud.DT_HasRefresh = True
+'	
+'	'the data-table has an edit column
+'	crud.DT_HasEdit = True
+'	'the data-table has a delete column
+'	crud.DT_HasDelete = True
+'	'
+'	'add columns to data table
+'	crud.DT_AddColumn("devicesn", "Device")
+'	crud.DT_AddDateTimeColumnDate("allocationdate", "Allocation Date", "ddd, DD MMM YYYY @ HH:mm:ss")
+'	crud.DT_AddSwitch("active", "Active")
+'	
+'	'we want inline-editing on the data-table, these columns should use a text field
+'	crud.DT_SetTextField("devicesn", True)
+'		
+'	'dialog settings
+'	'set visibility for the fields you want hidden in the dialog
+'	crud.AddVisibility("userdeviceid", False)
+'	crud.AddVisibility("userid", False)
+'	'the width of the dialog box
+'	crud.DialogWidth = "600"
+'	
+'	crud.Diag_AddTextField("userdeviceid", 1, 1, "userdeviceid", "User Device No")
+'	crud.Diag_AddTextField("userid", 2, 1, "userid", "User No.")
+'	crud.Diag_AddTextField("devicesn", 3, 1, "devicesn", "Device No.")
+'	crud.Diag_AddDatePicker("allocationdate", 4, 1, "allocationdate", "Allocation Date")
+'	
+'	'crud.Diag_AddSwitch("active", 10, 1, "active", "Active", "Yes", "No", True)
+'	'
+'	crud.Save
+	
+	
 	'create the database
 	Dim db As BANanoSQL
 	db.OpenWait("test", "test")
