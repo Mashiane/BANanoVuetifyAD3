@@ -66,8 +66,7 @@ Sub CreateDialog1
 	
 	'*R1
 	Dim txtfname As VueElement
-	txtfname = vuetify.AddTextField(Me, dlg1Cnt.MatrixID(1, 1), "txtfname", "profile.firstname", _
-	"First Name*", "", True, "", 0, "", Null)
+	txtfname = vuetify.AddTextField(Me, dlg1Cnt.MatrixID(1, 1), "txtfname", "profile.firstname", "First Name*", "", True, "", 0, "", Null)
 	inputdialog.BindVueElement(txtfname)
 	'
 	Dim txtmname As VueElement

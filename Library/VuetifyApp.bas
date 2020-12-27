@@ -3939,10 +3939,14 @@ Sub AddSwitch(Module As Object, parentID As String, sid As String, vmodel As Str
 	vswitch.Initialize(Module, sid, sid)
 	vswitch.VModel = vmodel
 	vswitch.label = slabel
-	vswitch.Value = truevalue
 	vswitch.Ref = sid
-	vswitch.AddAttr("true-value", truevalue)
-	vswitch.AddAttr("false-value", falsevalue)
+	If BANano.IsNull(truevalue) = False Or BANano.IsUndefined(truevalue) = False Then 
+		vswitch.Value = truevalue
+		vswitch.AddAttr("true-value", truevalue)
+	End If
+	If BANano.IsNull(falsevalue) = False Or BANano.IsUndefined(truevalue) = False Then 
+		vswitch.AddAttr("false-value", falsevalue)
+	End If
 	vswitch.AddAttr(":inset", bInset)
 	vswitch.Color = color
 	vswitch.AssignProps(props)
@@ -3979,9 +3983,13 @@ Sub AddCheckBox(Module As Object, parentID As String, sid As String, vmodel As S
 	vcheckbox.Initialize(Module, sid, sid)
 	vcheckbox.VModel = vmodel
 	vcheckbox.label = slabel
-	vcheckbox.Value = truevalue
-	vcheckbox.AddAttr("true-value", truevalue)
-	vcheckbox.AddAttr("false-value", falsevalue)
+	If BANano.IsNull(truevalue) = False Or BANano.IsUndefined(truevalue) = False Then
+		vcheckbox.Value = truevalue
+		vcheckbox.AddAttr("true-value", truevalue)
+	End If
+	If BANano.IsNull(falsevalue) = False Or BANano.IsUndefined(truevalue) = False Then
+		vcheckbox.AddAttr("false-value", falsevalue)
+	End If
 	vcheckbox.Color = color
 	vcheckbox.Ref = sid
 	vcheckbox.AssignProps(props)

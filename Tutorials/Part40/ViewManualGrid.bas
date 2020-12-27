@@ -56,7 +56,6 @@ Sub Initialize
 	
 	'get a column id * after grid is built
 	Dim r1c1 As String = vcontainer.MatrixID(1, 1)
-	Log(r1c1)
 	' now lets add an item
 	Dim img As VueElement = vuetify.AddImage(Me, r1c1, "imgx", "./assets/sponge.png", "", "Anele", "200", "200", Null)
 	'lets add a text field
