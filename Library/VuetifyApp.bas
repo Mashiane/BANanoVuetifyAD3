@@ -3040,6 +3040,33 @@ Sub AddAlert(Module As Object, parentID As String, elID As String, vmodel As Str
 	Return elx
 End Sub
 
+'<code>
+'Dim btn1 As VueElement = vuetify.AddButton1(Me, "r2c1", "btn1", "Button 1", Null)
+'vuetify.BindVueElement(btn1)
+'
+''Event
+'Sub btn1_click(e As BANanoEvent)
+'End Sub
+'</code>
+Sub AddButton1(Module As Object, parentID As String, elID As String, sLabel As String, props As Map) As VueElement
+	parentID = CleanID(parentID)
+	elID = elID.ToLowerCase
+	'
+	If BANano.Exists(parentID) Then
+		BANano.GetElement(parentID).Append($"<v-btn id="${elID}"></v-btn>"$)
+		Dim mbutton As VueElement
+		mbutton.Initialize(Module, elID, elID)
+		mbutton.Caption = sLabel
+		mbutton.Ref = elID
+		'
+		mbutton.AssignProps(props)
+		mbutton.SetOnEvent(Module, "click", "")
+		Return mbutton
+	Else
+		Log($"AddButton1.${elID} could not be added to ${parentID}"$)
+		'ignore
+	End If
+End Sub
 
 '<code>
 'Dim btn1 As VueElement = vuetify.AddButton(Me, "r2c1", "btn1", "Button 1", "primary", True, Null)

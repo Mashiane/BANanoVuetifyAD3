@@ -1821,6 +1821,7 @@ public Sub getVOn() As String
 End Sub
 
 public Sub setRaised(b As Boolean)
+	AddAttr(":text", Not(b))
 	AddAttr(":raised", b)
 End Sub
 
@@ -2331,6 +2332,7 @@ public Sub setDirection(s As String)
 	AddAttr("direction", s)
 End Sub
 
+'bind loading
 public Sub setLoading(s As String)
 	AddAttr(":loading", s)
 End Sub
@@ -4573,4 +4575,25 @@ End Sub
 'add a spacer to the card title
 Sub AddInsetDivider
 	mElement.Append($"<v-divider inset></v-divider>"$)
+End Sub
+
+'add a vue element on this element
+Sub AddVueElement(elID As String, tag As String, props As Map) As VueElement
+	Dim parentid As String = mName
+	parentid = CleanID(parentid)
+	elID = elID.tolowercase
+	elID = elID.Replace("#", "")
+		
+	'check if the element exists
+	If BANano.Exists($"#${elID}"$) = False Then
+		Dim parELE As BANanoElement
+		parELE.Initialize(parentid)
+		parELE.Append($"<${tag} id="${elID}"></${tag}>"$)
+	End If
+	'get the element
+	Dim ve As VueElement
+	ve.Initialize(mCallBack, elID, elID)
+	ve.AssignProps(props)
+	BindVueElement(ve)
+	Return ve
 End Sub
