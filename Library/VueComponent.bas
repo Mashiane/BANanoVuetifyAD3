@@ -153,6 +153,25 @@ Sub ShowConfirm(process As String, Title As String, Message As String, ConfirmTe
 	SetData(dialogpromptshow, False)
 End Sub
 
+'format date to meet your needs
+Sub FormatDisplayDate(item As String, sFormat As String) As String			'ignoredeadcode
+	item = "" & item
+	If item = "" Then Return ""
+	If BANano.isnull(item) Or BANano.IsUndefined(item) Then Return ""
+	Dim bo As BANanoObject = BANano.RunJavascriptMethod("dayjs", Array(item))
+	Dim sDate As String = bo.RunMethod("format", Array(sFormat)).Result
+	Return sDate
+End Sub
+
+'return a date with day, month year name
+Sub NiceDate(sdate As String) As String
+	Return FormatDisplayDate(sdate, "ddd, DD MMM YYYY")
+End Sub
+
+Sub NiceTime(stime As String) As String
+	Return FormatDisplayDate(stime, "ddd, DD MMM YYYY @ HH:mm:ss")
+End Sub
+
 Sub ShowAlert(process As String, title As String, Message As String, OkTitle As String)
 	process = process.tolowercase
 	SetData("confirmkey", process)
@@ -512,7 +531,24 @@ End Sub
 
 Sub GetData(prop As String) As Object
 	prop = prop.tolowercase
-	Dim obj As Object = data.GetDefault(prop, "")
+	Dim obj As Object = Null
+	Dim dotPos As Int = BANanoShared.InStr(prop, ".")
+	If dotPos >= 0 Then
+		Dim pEL As String = BANanoShared.MvField(prop,1, ".")
+		Dim cEL As String = BANanoShared.MvField(prop,2, ".")
+		Dim oEL As Map
+		If data.ContainsKey(pEL) Then
+			oEL = data.Get(pEL)
+			If oEL.ContainsKey(cEL) Then
+				obj = oEL.Get(cEL)
+			End If
+		End If
+	Else
+		If data.ContainsKey(prop) Then
+			obj = data.get(prop)
+		End If
+	End If
+	If BANano.IsNull(obj) Or BANano.IsUndefined(obj) Then obj = CStr(obj)
 	Return obj
 End Sub
 

@@ -428,6 +428,15 @@ Sub AppendHolderTo(target As String)
 	elx.append(stemplate)
 End Sub
 
+'return a date with day, month year name
+Sub NiceDate(sdate As String) As String
+	Return FormatDisplayDate(sdate, "ddd, DD MMM YYYY")
+End Sub
+
+Sub NiceTime(stime As String) As String
+	Return FormatDisplayDate(stime, "ddd, DD MMM YYYY @ HH:mm:ss")
+End Sub
+
 'initialize the snackbar
 Sub SnackBarInitialize
 	SetData("appsnackmessage", "")
@@ -2008,10 +2017,24 @@ End Sub
 
 Sub GetData(prop As String) As Object
 	prop = prop.ToLowerCase
-	Dim obj As Object
-	Dim b As Boolean = data.RunMethod("hasOwnProperty", Array(prop)).Result
-	If b Then
-		obj = data.GetField(prop).result
+	Dim obj As Object = Null
+	Dim dotPos As Int = BANanoShared.InStr(prop, ".")
+	If dotPos >= 0 Then
+		Dim pEL As String = BANanoShared.MvField(prop,1, ".")
+		Dim cEL As String = BANanoShared.MvField(prop,2, ".")
+		Dim oEL As Map
+		Dim b As Boolean = data.RunMethod("hasOwnProperty", Array(pEL)).Result
+		If b Then
+			oEL = data.GetField(pEL).Result
+			If oEL.ContainsKey(cEL) Then 
+				obj = oEL.Get(cEL)
+			End If
+		End If
+	Else
+		Dim b As Boolean = data.RunMethod("hasOwnProperty", Array(prop)).Result
+		If b Then
+			obj = data.GetField(prop).result
+		End If
 	End If
 	If BANano.IsNull(obj) Or BANano.IsUndefined(obj) Then obj = CStr(obj)
 	Return obj
