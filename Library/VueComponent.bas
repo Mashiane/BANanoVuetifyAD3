@@ -50,6 +50,7 @@ Sub Class_Globals
 	Private dialogprompthint As String
 	Private dialogpromptplaceholder As String
 	Private dialogpromptshow As String
+	Public vuetify As VuetifyApp
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String) As VueComponent
@@ -95,6 +96,13 @@ Public Sub Initialize (CallBack As Object, Name As String) As VueComponent
 	getAppendHolderNode.empty
 	Return Me
 End Sub
+
+Sub AddMsgBox(bPersistent As Boolean, width As Int, okColor As String, cancelColor As String)
+	'**** this page needs to use its own dialog, lets add it
+	Dim fbDialog As VueElement = vuetify.AddDialogAlertPrompt(mCallBack, Here, mName, bPersistent, width, okColor, cancelColor)
+	BindVueElement(fbDialog)
+End Sub
+
 
 'return ths vue instance
 Sub This As BANanoObject

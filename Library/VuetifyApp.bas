@@ -28,6 +28,7 @@ Sub Class_Globals
 	Private ColorMap As Map
 	Public Vuetify As BANanoObject
 	Private data As BANanoObject
+	Public AppName As String
 	'
 	Public const BORDER_DEFAULT As String = ""
 	Public const BORDER_DASHED As String = "dashed"
@@ -452,6 +453,25 @@ Sub SnackBarInitialize
 	SetData("appsnackrounded", False)
 End Sub
 
+'add a master snack bar for the app
+Sub AddAppSnackBar As VueElement
+	Dim elx As VueElement = AddVueElement(EventHandler, AppName, "appsnack", "v-snackbar", "appsnackshow", "", "", Null)
+	elx.Bind("app", True)
+	elx.Caption = "{{ appsnackmessage }}"
+	elx.Bind("right", "appsnackright")
+	elx.Bind("top", "appsnacktop")
+	elx.Bind("color", "appsnackcolor")
+	elx.Bind("bottom", "appsnackbottom")
+	elx.Bind("centered", "appsnackcentered")
+	elx.Bind("outlined", "appsnackoutlined")
+	elx.Bind("left", "appsnackleft")
+	elx.Bind("shaped", "appsnackshaped")
+	elx.Bind("rounded", "appsnackrounded")
+	BindVueElement(elx)
+	SnackBarInitialize
+	Return elx
+End Sub
+
 Sub SnackBarColor(s As String) As VuetifyApp
 	SetData("appsnackcolor",s)
 	Return Me
@@ -769,7 +789,8 @@ End Sub
 
 
 'initialize the app with where to render and where to .GetHTML
-Public Sub Initialize(Module As Object, appName As String) 
+Public Sub Initialize(Module As Object, myapp As String) 
+	appName = myapp.ToLowerCase
 	'get the body of the page
 	body = BANano.GetElement("#body")
 	body.Append($"<div id="app"><div id="placeholder" v-if="placeholder"></div><div id="appendholder" v-if="appendholder"></div><v-template id="apptemplate" v-if="apptemplate"></v-template></div>"$)
@@ -2328,10 +2349,15 @@ Sub AddToolbarTitle(Module As Object, parentID As String, elID As String, Captio
 	Return AddVueElement(Module, parentID, elID, "v-toolbar-title", "", Caption, Color, props)
 End Sub
 
-Sub AddApp(Module As Object, parentID As String, elID As String, props As Map) As VueElement
-	Return AddVueElement(Module, parentID, elID, "v-app", "", "", "", props)
+'add the vapp
+Sub AddApp As VueElement
+	Return AddVueElement(EventHandler, "apptemplate", AppName, "v-app", "", "", "", Null)
 End Sub
 
+'add the main container
+Sub AddMain As VueElement
+	Return AddVueElement(EventHandler, AppName, $"${AppName}main"$, "v-main", "", "", "", Null)
+End Sub
 
 Sub AddStepper(Module As Object, parentID As String, elID As String, vmodel As String, altLabels As Boolean, nonLinear As Boolean, bVertical As Boolean, props As Map) As VueElement
 	Dim elx As VueElement = AddVueElement(Module, parentID, elID, "v-stepper", vmodel, "", "", props)
@@ -2434,6 +2460,11 @@ End Sub
 Sub AddAppBar(Module As Object, parentID As String, elID As String, color As String, props As Map) As VueElement
 	Dim elx As VueElement = AddVueElement(Module, parentID, elID, "v-app-bar", "", "", color, props)
 	elx.Bind("app", True)
+	Return elx
+End Sub
+
+Sub AddSnackBar(Module As Object, parentID As String, elID As String, vmodel As String, Caption As String, color As String, props As Map) As VueElement
+	Dim elx As VueElement = AddVueElement(Module, parentID, elID, "v-snackbar", vmodel, Caption, color, props)
 	Return elx
 End Sub
 
@@ -2944,7 +2975,7 @@ Sub AddSelect(Module As Object, parentID As String, elID As String, vmodel As St
 End Sub
 
 
-Sub AddXSlideTransition(Module As Object, parentID As String, elID As String, Mode As String) As VueElement
+Sub AddSlideXTransition(Module As Object, parentID As String, elID As String, Mode As String) As VueElement
 	Dim elx As VueElement = AddVueElement(Module, parentID, elID, "v-slide-x-transition", "", "", "", Null)
 	elx.AddAttr("mode", Mode)
 	Return elx
@@ -4081,7 +4112,7 @@ Sub AddImage1(Module As Object, parentID As String, elID As String, vmodel As St
 	vimg.AddAttr(":lazy-src", vmodel)
 	vimg.Alt = alt
 	vimg.Ref = elID
-	vimg.AddAttr(":aspect-ratio", "16/9")
+	'vimg.AddAttr(":aspect-ratio", "16/9")
 	vimg.SetOnEvent(Module, "click", "")
 	vimg.AssignProps(props)
 	Return vimg
@@ -4110,7 +4141,7 @@ Sub AddImage(Module As Object, parentID As String, elID As String, src As String
 		vimg.AddAttr("lazy-src", lazysrc)
 	End If
 	vimg.Ref = elID
-	vimg.AddAttr(":aspect-ratio", "16/9")
+	'vimg.AddAttr(":aspect-ratio", "16/9")
 	vimg.SetOnEvent(Module, "click", "")
 	vimg.AssignProps(props)
 	Return vimg
