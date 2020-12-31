@@ -353,7 +353,7 @@ End Sub
 
 'add a checkbox to the dialog
 Sub Diag_AddCheckBox(fldName As String, row As Int, col As Int, vmodel As String, title As String, YesValue As Object, NoValue As Object)
-	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddCheckBox(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), "${fldName}", "${SingularClean.tolowercase}.${vmodel}", "${title}", "${YesValue}", "${NoValue}", "primary", Null)"$).Append(CRLF)
+	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddCheckBox(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), "${fldName}", "${SingularClean.tolowercase}.${vmodel}", "${title}", "${YesValue}", "${NoValue}", "", Null)"$).Append(CRLF)
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
@@ -362,7 +362,7 @@ End Sub
 
 'add a switch to the dialog
 Sub Diag_AddSwitch(fldName As String, row As Int, col As Int, vmodel As String, title As String, YesValue As Object, NoValue As Object, bInset As Boolean)
-	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddSwitch(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), "${fldName}", "${SingularClean.tolowercase}.${vmodel}", "${title}", "${YesValue}", "${NoValue}", "primary", ${bInset}, null)"$).Append(CRLF)
+	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddSwitch(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), "${fldName}", "${SingularClean.tolowercase}.${vmodel}", "${title}", "${YesValue}", "${NoValue}", "", ${bInset}, null)"$).Append(CRLF)
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If

@@ -570,7 +570,7 @@ Sub AddTitleIcon(VC As VueComponent, elID As String, eIcon As String, btnColor A
 	vbtnright.Dark = True
 	vbtnright.Fab = True
 	vbtnright.Small = True
-	vbtnright.Color = btnColor
+	if btncolor <> "" then vbtnright.Color = btnColor
 	'
 	Dim viconright As VueElement
 	viconright.Initialize(mCallBack, siconright, siconright)

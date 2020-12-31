@@ -2747,7 +2747,7 @@ Sub AddButtonWidthRightIcon(Module As Object, parentID As String, elID As String
 	
 	Dim vbtnright As VueElement
 	vbtnright.Initialize(Module, elID, elID)
-	vbtnright.Ref = elid
+	vbtnright.Ref = elID
 	'
 	Dim viconright As VueElement
 	viconright.Initialize(Module, siconright, siconright)
@@ -2761,7 +2761,7 @@ Sub AddButtonWidthRightIcon(Module As Object, parentID As String, elID As String
 	viconright.AddAttr(":right", True)
 	'
 	vbtnright.Dark = True
-	vbtnright.Color = eColor
+	if ecolor <> "" then vbtnright.Color = eColor
 	If bOutlined Then vbtnright.Outlined = True
 	'
 	vbtnright.AssignProps(btnprops)
@@ -2809,7 +2809,7 @@ Sub AddButtonWithLeftIcon(Module As Object, parentID As String, elID As String, 
 	viconright.AddAttr(":left", True)
 	'
 	vbtnright.Dark = True
-	vbtnright.Color = eColor
+	if ecolor <> "" then vbtnright.Color = eColor
 	If bOutlined Then vbtnright.Outlined = True
 	'
 	vbtnright.AssignProps(btnprops)
@@ -2844,7 +2844,7 @@ Sub AddAvatarWithBadge(Module As Object, parentID As String, elID As String, img
 	'
 	Dim vbadge As VueElement
 	vbadge.Initialize(Module, elID, elID)
-	vbadge.Color = badgeColor
+	If badgeColor <> "" Then vbadge.Color = badgeColor
 	If vmodel <> "" Then vbadge.Bind("content", vmodel)
 	If vmodel <> "" Then vbadge.Bind("value", vmodel)
 	vbadge.AssignProps(badgeprops)
@@ -2855,7 +2855,7 @@ Sub AddAvatarWithBadge(Module As Object, parentID As String, elID As String, img
 	'
 	Dim avatar As VueElement
 	avatar.Initialize(Module, avatarid, avatarid)
-	avatar.AddAttr("size", avatarSize)
+	if avatarSize <> 0 then avatar.AddAttr("size", avatarSize)
 	avatar.AssignProps(avatarprops)
 	img.SetOnEvent(Module, "click", "")
 	'
@@ -2920,15 +2920,15 @@ Sub AddAvatarWithText(Module As Object, parentID As String, elID As String, Capt
 	'
 	Dim avatar As VueElement
 	avatar.Initialize(Module, elID, elID)
-	avatar.AddAttr("size", avatarSize)
-	avatar.Color = Color
+	If avatarSize <> 0 Then avatar.AddAttr("size", avatarSize)
+	If Color <> "" Then avatar.Color = Color
 	avatar.AssignProps(avatarprops)
 	'
 	Dim txt As VueElement
 	txt.Initialize(Module, spaniD, spaniD)
 	txt.Caption = Caption
-	txt.TextColor = TextColor
-	txt.TextColorIntensity = TextColorIntensity
+	If TextColor <> "" Then txt.TextColor = TextColor
+	If TextColorIntensity <> "" Then txt.TextColorIntensity = TextColorIntensity
 	txt.AssignProps(textProps)
 	avatar.SetOnEvent(Module, "click", "")
 	'
@@ -3140,7 +3140,7 @@ Sub AddButton(Module As Object, parentID As String, elID As String, sLabel As St
 		mbutton.Initialize(Module, elID, elID)
 		mbutton.Caption = sLabel
 		If bOutlined Then mbutton.Outlined = True
-		mbutton.color = eColor
+		if ecolor <> "" then mbutton.color = eColor
 		mbutton.Ref = elID
 	'
 		mbutton.AssignProps(props)
@@ -3223,7 +3223,7 @@ Sub AddButtonWithBadge(Module As Object, parentID As String, elID As String, elL
 	Dim mbadgebtn As VueElement
 	mbadgebtn.Initialize(Module, elID, elID)
 	mbadgebtn.Caption = elLabel
-	mbadgebtn.Color = btnColor
+	If btnColor <> "" Then mbadgebtn.Color = btnColor
 	mbadgebtn.SetOnEvent(Module, "click", "")
 	'
 	mbadgebtn.AssignProps(btnproperties)
@@ -3233,7 +3233,7 @@ Sub AddButtonWithBadge(Module As Object, parentID As String, elID As String, elL
 	If vmodel <> "" Then badgex.Bind("content", vmodel)
 	If vmodel <> "" Then badgex.Bind("value", vmodel)
 	If badgeIcon <> "" Then badgex.SetAttr("icon", badgeIcon)
-	badgex.Color = badgeColor
+	If badgeColor <> "" Then badgex.Color = badgeColor
 	
 	badgex.AssignProps(badgeproperties)
 	mbadgebtn.BindVueElement(badgex)
@@ -3249,7 +3249,7 @@ Sub AddIconWithBadge(Module As Object, parentID As String, elID As String, eIcon
 	Dim mbadgebtn As VueElement
 	mbadgebtn.Initialize(Module, elID, elID)
 	mbadgebtn.Caption = eIcon
-	mbadgebtn.Color = eColor
+	If eColor <> "" Then mbadgebtn.Color = eColor
 	mbadgebtn.SetOnEvent(Module, "click", "")
 	'
 	mbadgebtn.AssignProps(btnproperties)
@@ -3259,11 +3259,11 @@ Sub AddIconWithBadge(Module As Object, parentID As String, elID As String, eIcon
 	If vmodel <> "" Then badgex.Bind("content", vmodel)
 	If vmodel <> "" Then badgex.Bind("value", vmodel)
 	If badgeIcon <> "" Then badgex.SetAttr("icon", badgeIcon)
-	badgex.Color = badgeColor
-	
+	If badgeColor <> "" Then badgex.Color = badgeColor
+	badgex.Overlap = True
 	badgex.AssignProps(badgeproperties)
-	mbadgebtn.BindVueElement(badgex)
-	Return mbadgebtn
+	badgex.BindVueElement(mbadgebtn)
+	Return badgex
 End Sub
 
 
@@ -3322,7 +3322,7 @@ Sub AddButtonWithIconWithBadge(Module As Object, parentID As String, elID As Str
 	If vmodel <> "" Then badgex.Bind("content", vmodel)
 	If vmodel <> "" Then badgex.Bind("value", vmodel)
 	If badgeIcon <> "" Then badgex.SetAttr("icon", badgeIcon)
-	badgex.Color = badgeColor
+	If badgeColor <> "" Then badgex.Color = badgeColor
 	badgex.AssignProps(badgeProperties)
 		
 	Dim vbtnright As VueElement
@@ -3335,7 +3335,7 @@ Sub AddButtonWithIconWithBadge(Module As Object, parentID As String, elID As Str
 	viconright.Initialize(Module, sicon, sicon)
 	viconright.Caption = eIcon
 	viconright.Dark = True
-	vbtnright.Color = btnColor
+	If btnColor <> "" Then vbtnright.Color = btnColor
 	vbtnright.AssignProps(iconprops)
 	vbtnright.BindVueElement(viconright)
 	vbtnright.BindVueElement(badgex)
@@ -3358,7 +3358,7 @@ Sub AddButtonWithIcon(Module As Object, parentID As String, elID As String, eIco
 	viconright.Initialize(Module, siconright, siconright)
 	viconright.Caption = eIcon
 	viconright.Dark = True
-	vbtnright.Color = btnColor
+	If btnColor <> "" Then vbtnright.Color = btnColor
 	vbtnright.AssignProps(iconprops)
 	vbtnright.SetOnEvent(Module, "click", "")
 	vbtnright.BindVueElement(viconright)
@@ -3733,9 +3733,27 @@ Sub AddIcon(Module As Object, parentID As String, elID As String, eIcon As Strin
 	vbtnright.Initialize(Module, elID, elID)
 	vbtnright.Dark = bDark
 	vbtnright.Caption = eIcon
-	vbtnright.Color = color
+	If color <> "" Then vbtnright.Color = color
 	vbtnright.AssignProps(iconprops)
 	vbtnright.SetOnEvent(Module, "click", "")
+	Return vbtnright
+End Sub
+
+Sub AddBadge(Module As Object, parentID As String, elID As String, vmodel As String, content As String, color As String, bDot As Boolean, bOverLap As Boolean, bDark As Boolean, badgeProps As Map) As VueElement
+	parentID = CleanID(parentID)
+	elID = elID.ToLowerCase
+	BANano.GetElement(parentID).Append($"<v-badge id="${elID}"></v-badge>"$)
+	Dim vbtnright As VueElement
+	vbtnright.Initialize(Module, elID, elID)
+	vbtnright.Dark = bDark
+	if color <> "" then vbtnright.Color = color
+	vbtnright.Dot = bDot
+	vbtnright.Overlap = bOverLap
+	If vmodel <> "" Then 
+		vbtnright.VModel = vmodel
+		vbtnright.SetData(vmodel, content)
+	End If
+	vbtnright.AssignProps(badgeProps)
 	Return vbtnright
 End Sub
 
@@ -4041,7 +4059,7 @@ Sub AddSwitch(Module As Object, parentID As String, sid As String, vmodel As Str
 		vswitch.AddAttr("false-value", falsevalue)
 	End If
 	vswitch.AddAttr(":inset", bInset)
-	vswitch.Color = color
+	If color <> "" Then vswitch.Color = color
 	vswitch.AssignProps(props)
 	vswitch.SetOnEvent(Module, "change", "")
 	If vmodel <> "" Then
@@ -4062,7 +4080,7 @@ Sub AddRating(Module As Object, parentID As String, sid As String, vmodel As Str
 	vrating.AddAttr("size", ssize)
 	vrating.AddAttr(":hover", bHover)
 	vrating.Ref = sid
-	vrating.Color = color
+	if color <> "" then vrating.Color = color
 	vrating.AssignProps(props)
 	vrating.SetOnEvent(Module, "input", "")
 	Return vrating
@@ -4083,7 +4101,7 @@ Sub AddCheckBox(Module As Object, parentID As String, sid As String, vmodel As S
 	If BANano.IsNull(falsevalue) = False Or BANano.IsUndefined(truevalue) = False Then
 		vcheckbox.AddAttr("false-value", falsevalue)
 	End If
-	vcheckbox.Color = color
+	If color <> "" Then vcheckbox.Color = color
 	vcheckbox.Ref = sid
 	vcheckbox.AssignProps(props)
 	vcheckbox.SetOnEvent(Module, "click", "")
@@ -4231,7 +4249,7 @@ Sub AddChipWithAvatar(Module As Object, parentID As String, elID As String, src 
 	vchip.Initialize(Module, elID, elID)
 	vchip.AddAttr(":pill", bPill)
 	vchip.AddAttr(":close", bClose)
-	vchip.Color = color
+	if color <> "" then vchip.Color = color
 	vchip.AssignProps(chipprops)
 	
 	vchip.SetOnEvent(Module, "click", $"'${elID}'"$)
@@ -4271,7 +4289,7 @@ Sub AddChipWithIcon(Module As Object, parentID As String, elID As String, sicon 
 	vchip.Initialize(Module, elID, elID)
 	vchip.AddAttr(":pill", bPill)
 	vchip.AddAttr(":close", bClose)
-	vchip.Color = color
+	if color <> "" then vchip.Color = color
 	vchip.SetOnEvent(Module, "click", $"'${elID}'"$)
 	vchip.SetOnEvent(Module, "click:close", $"'${elID}'"$)'
 	'

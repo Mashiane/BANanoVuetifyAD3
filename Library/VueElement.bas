@@ -640,6 +640,8 @@ Sub getBold As Boolean
 End Sub
 
 
+
+
 Sub setFloat(varValue As String)
 	If BANano.IsNull(varValue) Then varValue = ""
 	stFloat = varValue
@@ -3804,6 +3806,13 @@ Sub FileIcon(ext As String) As String
 	End If
 End Sub
 
+Sub setOverlap(b As Boolean)
+	Bind("overlap", b)
+End Sub
+
+Sub setDot(b As Boolean)
+	Bind("dot", b)
+End Sub
 
 Sub setItems(s As String)
 	stItems = s
