@@ -31,7 +31,7 @@ Sub Initialize
 	switches.BindVueElement(btnsn)
 	
 	
-	Dim switchyesnoa As VueElement = vuetify.AddSwitch(Me, vswitchs.MatrixID(2,1), "switchyesnoa", "switchyesno", "Switch Yes/No", "Yes", "No", "primary", False, Null)
+	Dim switchyesnoa As VueElement = vuetify.AddSwitch(Me, vswitchs.MatrixID(2,1), "switchyesnoa", "switchyesno", "Switch Yes/No", "Yes", "No", "success", False, Null)
 	switches.BindVueElement(switchyesnoa)
 	
 	Dim btns1 As VueElement = vuetify.AddButton(Me, vswitchs.MatrixID(2,2), "btns1", "Toggle Switch Yes/No", "", False, Null)

@@ -93,7 +93,7 @@ Public Sub Initialize(clsName As String) As MySQLCRUD
 	DT_HasClearSort = False
 	DT_HasFilter = False
 	DT_HasRefresh = False
-	DT_HasBack = false
+	DT_HasBack = False
 	HasDialog = False
 	DT_HasMenu = False
 	DT_HasDownload = False

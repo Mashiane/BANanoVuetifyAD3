@@ -121,6 +121,6 @@ ModuleClosedNodes6=
 ModuleClosedNodes7=
 ModuleClosedNodes8=
 ModuleClosedNodes9=
-NavigationStack=ViewFirebase,btnSend_click,281,0,ViewFirebase,SendingBlock,271,0,ViewFirebase,onTokenRefresh,380,0,ViewFirebase,btnrp_click,433,0,ViewFirebase,btngettopics_click,188,6,ViewFirebase,SubscribeBlock,127,0,ViewFirebase,subscriptionsLV_rightclick,171,0,ViewFirebase,subscriptionsLV_leftclick,133,6,Main,AppStart,73,3,ViewFirebase,Initialize,29,5
+NavigationStack=ViewFirebase,fbcancel_click,198,0,ViewFirebase,Unsubscribe,184,3,ViewFileInput,Initialize,14,0,ViewInputDialog,CreateDialog1,52,0,ViewInputDialog,btn1_click,37,0,ViewInputDialog,Initialize,31,0,ViewSwitches,Initialize,12,1,Main,Process_Globals,9,0,Main,AppStart,80,0,ViewFirebase,Initialize,25,6
 SelectedBuild=0
 VisibleModules=15

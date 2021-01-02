@@ -50,6 +50,7 @@ Sub Class_Globals
 	Private dialogprompthint As String
 	Private dialogpromptplaceholder As String
 	Private dialogpromptshow As String
+	Private dialogtexttype As String
 	Public vuetify As VuetifyApp
 End Sub
 
@@ -91,6 +92,7 @@ Public Sub Initialize (CallBack As Object, Name As String) As VueComponent
 	dialogprompthint = $"${mName}prompthint"$
 	dialogpromptplaceholder = $"${mName}promptplaceholder"$
 	dialogpromptshow = $"${mName}promptshow"$
+	dialogtexttype = $"${mName}type"$
 	
 	getPlaceHolderNode.empty
 	getAppendHolderNode.empty
@@ -103,6 +105,24 @@ Sub AddMsgBox(bPersistent As Boolean, width As Int, okColor As String, cancelCol
 	BindVueElement(fbDialog)
 End Sub
 
+
+private Sub CleanID(v As String) As String
+	v = v.Replace("#","")
+	v = $"#${v}"$
+	v = v.tolowercase
+	Return v
+End Sub
+
+Sub GetVueElement(Module As Object, elID As String) As VueElement
+	elID = CleanID(elID)
+	If BANano.Exists(elID) Then
+		Dim ve As VueElement
+		ve.Initialize(Module, elID, elID)
+		Return ve
+	Else
+		Return Null
+	End If
+End Sub
 
 'return ths vue instance
 Sub This As BANanoObject
@@ -142,8 +162,8 @@ Sub DialogContainer(dlgID As String) As VueElement
 End Sub
 
 Sub DialogUpdateTitle(dlgID As String, title As String)
-	Dim dialogTitle As String = $"${dlgID}title"$
-	SetData(dialogTitle, title)
+	Dim dlgTitle As String = $"${dlgID}title"$
+	SetData(dlgTitle, title)
 End Sub
 
 
@@ -227,12 +247,30 @@ Sub ShowPrompt(process As String, Title As String, Label As String, Placeholder 
 	SetData(dialogprompthint, Hint)
 	SetData(dialogpromptvalue, DefaultValue)
 	SetData(dialogpromptshow, True)
+	SetData(dialogtexttype, "text")
 End Sub
 
-
+'show confirm dialog
+Sub ShowPrompt1(process As String, InputType As String, Title As String, Label As String, Placeholder As String, Hint As String, DefaultValue As String, OkText As String, CancelText As String)
+	process = process.tolowercase
+	SetData("confirmkey", process)
+	SetData(dialogTitle, Title)
+	SetData(dialogMessage, "")
+	SetData(dialogoktitle, OkText)
+	SetData(dialogokshow, True)
+	SetData(dialogcanceltitle, CancelText)
+	SetData(dialogcancelshow, True)
+	SetData(dialogShow, True)
+	SetData(dialogpromptlabel, Label)
+	SetData(dialogpromptplaceholder, Placeholder)
+	SetData(dialogprompthint, Hint)
+	SetData(dialogpromptvalue, DefaultValue)
+	SetData(dialogpromptshow, True)
+	SetData(dialogtexttype, InputType)
+End Sub
 
 'get prompt value
-Sub GetPromptValue As String
+Sub getPromptValue As String
 	Dim sapppromptvalue As String = GetData(dialogpromptvalue)
 	sapppromptvalue = sapppromptvalue.trim
 	Return sapppromptvalue
@@ -869,6 +907,12 @@ End Sub
 
 'get the confirm key
 Sub getConfirm As String
+	Dim s As String = GetData("confirmkey")
+	Return s
+End Sub
+
+'get the confirm key
+Sub getPromptProcess As String
 	Dim s As String = GetData("confirmkey")
 	Return s
 End Sub

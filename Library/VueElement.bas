@@ -331,6 +331,8 @@ End Sub
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	mName = Name.ToLowerCase
 	mEventName = EventName.ToLowerCase
+	mName = mName.Replace("#","")
+	mEventName = mEventName.Replace("#","")
 	mCallBack = CallBack
 	classList.Initialize
 	styleList.Initialize
@@ -671,6 +673,9 @@ Sub getCenter As Boolean
 	Return bCenter
 End Sub
 
+Sub Shrink
+	AddClass("shrink")
+End Sub
 
 
 'add an attr on condition
@@ -3860,10 +3865,41 @@ Sub getReturnObject As Boolean
 End Sub
 
 
+Sub setReverse(b As Boolean)
+	AddAttr(":reverse", b)
+End Sub
+
 Sub setMultiple(b As Boolean)
 	AddAttr(":multiple", b)
 End Sub
 
+Sub OnClick(args As String)
+	SetOnEvent(mCallBack, "click", args)
+End Sub
+
+Sub OnChange(args As String)
+	SetOnEvent(mCallBack, "change", args)
+End Sub
+
+Sub OnClickAppend(args As String)
+	SetOnEvent(mCallBack, "click:append", args)
+End Sub
+
+Sub OnClickPrepend(args As String)
+	SetOnEvent(mCallBack, "click:prepend", args)
+End Sub
+
+Sub OnClickAppendOuter(args As String)
+	SetOnEvent(mCallBack, "click:append-outer", args)
+End Sub
+
+Sub OnClickPrependInner(args As String)
+	SetOnEvent(mCallBack, "click:prepend-inner", args)
+End Sub
+
+Sub OnClickClear(args As String)
+	SetOnEvent(mCallBack, "click:clear", args)
+End Sub
 
 Sub setAlertBorder(mytype As String)
 	AddAttr("border", mytype)

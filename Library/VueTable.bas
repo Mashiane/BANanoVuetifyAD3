@@ -622,7 +622,7 @@ End Sub
 
 'add a search to the card title
 Sub AddSearch
-	Dim str As String = $"<v-text-field id="${searchID}" v-model="${search}" append-icon="mdi-magnify" label="Search" single-line hide-details></v-text-field>"$
+	Dim str As String = $"<v-text-field id="${searchID}" v-model="${search}" append-icon="mdi-magnify" label="Search" single-line hide-details clearable class="shrink"></v-text-field>"$
 	Dim ct As BANanoElement
 	ct.Initialize($"#${titleID}"$)
 	ct.Append(str)

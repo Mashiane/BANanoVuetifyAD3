@@ -341,14 +341,14 @@ importScripts("https://www.gstatic.com/firebasejs/8.2.1/firebase-messaging.js");
 importScripts("https://www.gstatic.com/firebasejs/8.2.1/firebase-analytics.js");
 
 var firebaseConfig = {
-    apiKey: "(redacted)",
-    authDomain: "(redacted)",
-	databaseURL: "(redacted)",
-    projectId: "(redacted)",
-    storageBucket: "(redacted)",
-    messagingSenderId: "(redacted)",
-    appId: "(redacted)",
-    measurementId: "(redacted)"
+    apiKey: "",
+    authDomain: "",
+	databaseURL: "",
+    projectId: "",
+    storageBucket: "",
+    messagingSenderId: "",
+    appId: "",
+    measurementId: ""
 };
 
 firebase.initializeApp(firebaseConfig);

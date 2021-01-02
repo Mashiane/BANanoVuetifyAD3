@@ -1,5 +1,5 @@
 ﻿B4J=true
-Group=Default Group
+Group=Default Group\Views
 ModulesStructureVersion=1
 Type=StaticCode
 Version=8.8
@@ -21,24 +21,28 @@ Sub Initialize
 	vuetify = pgIndex.vuetify
 	'initialize the component
 	fb.Initialize(Me, name)
+	fb.vuetify = vuetify
 	path = fb.path
 	'
 	firebase.Initialize
-	firebase.apiKey = "(redacted)"
-	firebase.authDomain = "(redacted)"
-	firebase.databaseURL = "(redacted)"
-	firebase.projectId = "(redacted)"
-	firebase.storageBucket = "(redacted)"
-	firebase.messagingSenderId = "(redacted)"
-	firebase.appId = "(redacted)"
-	firebase.measurementId = "(redacted)"
-	firebase.vapidKey = "(redacted)"
-	firebase.ServerKey = "(redacted)"
+	firebase.apiKey = ""
+	firebase.authDomain = ""
+	firebase.databaseURL = ""
+	firebase.projectId = ""
+	firebase.storageBucket = ""
+	firebase.messagingSenderId = ""
+	firebase.appId = ""
+	firebase.measurementId = ""
+	firebase.vapidKey = ""
+	firebase.ServerKey = ""
 	
 	'add a container
 	Dim cont As VueElement = vuetify.AddContainer(Me, fb.Here, "fbcont", True)
 	cont.AddRows5.AddColumns2x6
 	cont.BuildGrid
+	'**** this page needs to use its own dialog, lets add it
+	fb.AddMsgBox(True, 500, "primary", "error")
+	
 	'
 	Dim btnperm As VueElement = vuetify.AddButton(Me, cont.MatrixID(1,1), "btnperm", "Request Permission", "", True, Null)
 	btnperm.Raised = False
@@ -157,26 +161,51 @@ End Sub
 Sub subscriptionsLV_rightclick(item As Map)
 	'get the topic name
 	Dim sTopic As String = item.Get("id")
-	'
-	'use fetch
+	fb.SetData("topic", sTopic)
+	'show confirmation
+	fb.ShowConfirm("unsubscribe", "Confirm", $"Are you sure you want to un-subscribe from topic '${sTopic}'?"$, "Yep", "Nada")
+End Sub
+
+Sub Unsubscribe(stopic As String)
 	Dim response As BANanoFetchResponse
 	Dim error As BANanoObject
 	
 	'use batchRemove
-	Dim fetch As BANanoFetch = messaging.removeTopic(sTopic)
-	'use unsubscribe	
+	Dim fetch As BANanoFetch = messaging.removeTopic(stopic)
+	'use unsubscribe
 	'Dim fetch As BANanoFetch = messaging.unsubscribe(sTopic)
 	banano.Await(fetch)
 	fetch.Then(response)
 	'
 	If (response.Status < 200 Or response.Status >= 400) Then
-		vuetify.ShowSnackBarError($"Removal of the subscription to topic '${sTopic}' was not successful!"$)
+		vuetify.ShowSnackBarError($"Removal of the subscription to topic '${stopic}' was not successful!"$)
 	Else
-		vuetify.ShowSnackBarSuccess($"Removal of the subscription to topic '${sTopic}' was successful!"$)
+		vuetify.ShowSnackBarSuccess($"Removal of the subscription to topic '${stopic}' was successful!"$)
 	End If
 	fetch.Else(error)
-	vuetify.ShowSnackBarError($"Removal of the subscription to topic '${sTopic}' was not successful!"$)
+	vuetify.ShowSnackBarError($"Removal of the subscription to topic '${stopic}' was not successful!"$)
 	fetch.End
+End Sub
+
+'ok button for component is clicked
+Sub fbok_click(e As BANanoEvent)
+	'hide the dialog
+	fb.HideDialog
+	'get the process
+	Dim sconfirm As String = fb.Confirm
+	Select Case sconfirm
+	Case "unsubscribe"
+		Dim stopic As String = fb.GetData("topic")
+		Unsubscribe(stopic)
+	End Select
+End Sub
+
+'confirm cancel button clicked
+Sub fbcancel_click(e As BANanoEvent)
+	fb.HideDialog
+	Dim sconfirm As String = fb.Confirm
+	Select Case sconfirm
+	End Select
 End Sub
 
 'get subscribed topics

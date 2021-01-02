@@ -331,6 +331,7 @@ Sub Class_Globals
 	Private dlgprompthint As String
 	Private dlgpromptplaceholder As String
 	Private dlgpromptshow As String
+	Private dlgtexttype As String
 	Public BreakPointLGAndUp As String = "$vuetify.breakpoint.lgAndUp"
 	Public BreakPointLGAndUpNot As String = "!$vuetify.breakpoint.lgAndUp"
 	
@@ -404,6 +405,16 @@ Sub TrimIt(v As String) As String
 	Return v
 End Sub
 
+Sub GetVueElement(Module As Object, elID As String) As VueElement
+	elID = CleanID(elID)
+	If BANano.Exists(elID) Then
+		Dim ve As VueElement
+		ve.Initialize(Module, elID, elID)
+		Return ve
+	Else
+		Return Null	
+	End If
+End Sub
 
 'return ths vue instance
 Sub This As BANanoObject
@@ -582,6 +593,7 @@ End Sub
 Sub ShowConfirm(process As String, Title As String, Message As String, ConfirmText As String, CancelText As String)
 	process = process.tolowercase
 	SetData("confirmkey", process)
+	InitDialog
 	SetData(dlgTitle, Title)
 	SetData(dlgMessage, Message)
 	SetData(dlgoktitle, ConfirmText)
@@ -596,6 +608,7 @@ End Sub
 Sub ShowPrompt(process As String, Title As String, Label As String, Placeholder As String, Hint As String, DefaultValue As String, OkText As String, CancelText As String)
 	process = process.tolowercase
 	SetData("confirmkey", process)
+	InitDialog
 	SetData(dlgTitle, Title)
 	SetData(dlgMessage, "")
 	SetData(dlgoktitle, OkText)
@@ -608,12 +621,35 @@ Sub ShowPrompt(process As String, Title As String, Label As String, Placeholder 
 	SetData(dlgprompthint, Hint)
 	SetData(dlgpromptvalue, DefaultValue)
 	SetData(dlgpromptshow, True)
+	SetData(dlgtexttype, "text")
+End Sub
+
+
+'show prompt for dialog for tel specifying an input type
+Sub ShowPrompt1(process As String, Title As String, Label As String, Placeholder As String, Hint As String, DefaultValue As String, OkText As String, CancelText As String, InputType As String)
+	InitDialog
+	process = process.tolowercase
+	SetData("confirmkey", process)
+	SetData(dlgTitle, Title)
+	SetData(dlgMessage, "")
+	SetData(dlgoktitle, OkText)
+	SetData(dlgokshow, True)
+	SetData(dlgcanceltitle, CancelText)
+	SetData(dlgcancelshow, True)
+	SetData(dlgShow, True)
+	SetData(dlgpromptlabel, Label)
+	SetData(dlgpromptplaceholder, Placeholder)
+	SetData(dlgprompthint, Hint)
+	SetData(dlgpromptvalue, DefaultValue)
+	SetData(dlgpromptshow, True)
+	SetData(dlgtexttype, InputType)
 End Sub
 
 
 Sub ShowAlert(process As String, title As String, Message As String, OkTitle As String)
 	process = process.tolowercase
 	SetData("confirmkey", process)
+	InitDialog
 	SetData(dlgShow, True)
 	SetData(dlgTitle, title)
 	SetData(dlgMessage, Message)
@@ -628,6 +664,13 @@ Sub getConfirm As String
 	Dim s As String = GetData("confirmkey")
 	Return s
 End Sub
+
+'get the confirm key
+Sub getPromptProcess As String
+	Dim s As String = GetData("confirmkey")
+	Return s
+End Sub
+
 
 Sub ShowSnackBarError(Message As String) As VuetifyApp
 	If BANano.IsNull(Message) Then Return Me
@@ -790,7 +833,7 @@ End Sub
 
 'initialize the app with where to render and where to .GetHTML
 Public Sub Initialize(Module As Object, myapp As String) 
-	appName = myapp.ToLowerCase
+	AppName = myapp.ToLowerCase
 	'get the body of the page
 	body = BANano.GetElement("#body")
 	body.Append($"<div id="app"><div id="placeholder" v-if="placeholder"></div><div id="appendholder" v-if="appendholder"></div><v-template id="apptemplate" v-if="apptemplate"></v-template></div>"$)
@@ -823,22 +866,27 @@ Public Sub Initialize(Module As Object, myapp As String)
 	Dark = False
 	lang = "en"
 	VuetifyOptions.Initialize
-	'
-	dlgShow = $"${appName}show"$
-	dlgTitle = $"${appName}title"$
-	dlgMessage = $"${appName}message"$
-	dlgcanceltitle = $"${appName}canceltitle"$
-	dlgoktitle = $"${appName}oktitle"$
-	dlgokshow = $"${appName}okshow"$
-	dlgcancelshow = $"${appName}cancelshow"$
-	dlgwidth = $"${appName}width"$
-	dlgpersistent = $"${appName}persistent"$
-	dlgpromptlabel = $"${appName}promptlabel"$
-	dlgpromptvalue = $"${appName}promptvalue"$
-	dlgprompthint = $"${appName}prompthint"$
-	dlgpromptplaceholder = $"${appName}promptplaceholder"$
-	dlgpromptshow = $"${appName}promptshow"$
+	InitDialog
 End Sub
+
+private Sub InitDialog
+	dlgShow = $"${AppName}show"$
+	dlgTitle = $"${AppName}title"$
+	dlgMessage = $"${AppName}message"$
+	dlgcanceltitle = $"${AppName}canceltitle"$
+	dlgoktitle = $"${AppName}oktitle"$
+	dlgokshow = $"${AppName}okshow"$
+	dlgcancelshow = $"${AppName}cancelshow"$
+	dlgwidth = $"${AppName}width"$
+	dlgpersistent = $"${AppName}persistent"$
+	dlgpromptlabel = $"${AppName}promptlabel"$
+	dlgpromptvalue = $"${AppName}promptvalue"$
+	dlgprompthint = $"${AppName}prompthint"$
+	dlgpromptplaceholder = $"${AppName}promptplaceholder"$
+	dlgpromptshow = $"${AppName}promptshow"$
+	dlgtexttype = $"${AppName}type"$
+End Sub
+
 
 private Sub InitColors
 	ColorMap.Initialize
@@ -3365,6 +3413,13 @@ Sub AddButtonWithIcon(Module As Object, parentID As String, elID As String, eIco
 	Return vbtnright
 End Sub
 
+
+Sub AddMsgBox(Module As Object, bPersistent As Boolean, width As Int, okColor As String, cancelColor As String)
+	'**** this page needs to use its own dialog, lets add it
+	Dim fbDialog As VueElement = AddDialogAlertPrompt(Module, Here, AppName, bPersistent, width, okColor, cancelColor)
+	BindVueElement(fbDialog)
+End Sub
+
 'add alert dialog
 Sub AddDialogAlertPrompt(Module As Object, parentID As String, elID As String, bPersistent As Boolean, dWidth As String, OkColor As String, CancelColor As String) As VueElement
 	parentID = CleanID(parentID)
@@ -3396,16 +3451,18 @@ Sub AddDialogAlertPrompt(Module As Object, parentID As String, elID As String, b
 	Dim cancelid As String = $"${elID}cancel"$
 	Dim okid As String = $"${elID}ok"$
 	Dim diaglogID As String = $"${elID}dialog"$
+	Dim texttype As String = $"${elID}type"$
 	'
 	Dim sbTemplate As StringBuilder
 	sbTemplate.Initialize
 	sbTemplate.Append($"<v-dialog id="${diaglogID}" v-model="${dialogShow}" :width="${dialogwidth}" :persistent="${dialogpersistent}">"$)
 	sbTemplate.Append($"<v-card id="${dialogCardID}">"$)
 	sbTemplate.Append($"<v-card-title id="${dialogTitleID}" v-html="${dialogTitle}"></v-card-title>"$)
-	sbTemplate.Append($"<v-card-text id="${dialogtextID}" v-html="${dialogMessage}">"$)
+	sbTemplate.Append($"<v-card-text id="${dialogtextID}">"$)
+	sbTemplate.Append($"<p v-html="${dialogMessage}"></p>"$)
 	sbTemplate.Append($"<v-text-field id="${dialogpromptID}" v-if="${dialogpromptshow}" "$)
 	sbTemplate.Append($":label="${dialogpromptlabel}" v-model="${dialogpromptvalue}" :hint="${dialogprompthint}" "$)
-	sbTemplate.Append($":placeholder="${dialogpromptplaceholder}" :persistent-hint="true">"$)
+	sbTemplate.Append($":placeholder="${dialogpromptplaceholder}" :persistent-hint="true" :type="${texttype}">"$)
 	sbTemplate.Append($"</v-text-field>"$)
 	sbTemplate.Append($"</v-card-text>"$)
 	sbTemplate.Append($"<v-divider id="${divider}" class="mx-2"></v-divider>"$)
@@ -3455,6 +3512,7 @@ Sub AddDialogAlertPrompt(Module As Object, parentID As String, elID As String, b
 	vdialog.SetData(dialogokshow, True)
 	vdialog.SetData(dialogokcolor, OkColor)
 	vdialog.SetData(dialogoktitle, "Ok")
+	vdialog.SetData(texttype, "text")
 	Return vdialog
 End Sub
 
@@ -3746,7 +3804,7 @@ Sub AddBadge(Module As Object, parentID As String, elID As String, vmodel As Str
 	Dim vbtnright As VueElement
 	vbtnright.Initialize(Module, elID, elID)
 	vbtnright.Dark = bDark
-	if color <> "" then vbtnright.Color = color
+	If color <> "" Then vbtnright.Color = color
 	vbtnright.Dot = bDot
 	vbtnright.Overlap = bOverLap
 	If vmodel <> "" Then 
@@ -3769,6 +3827,7 @@ Sub AddSearch(Module As Object, parentID As String, elID As String, vmodel As St
 	vtextfield.VModel = vmodel
 	vtextfield.SetTypeText
 	vtextfield.Solo = bSolo
+	vtextfield.Clearable = True
 	vtextfield.SingleLine = True
 	vtextfield.HideDetails = True
 	vtextfield.SetOnEvent(Module, "click:append", "")
@@ -3776,6 +3835,7 @@ Sub AddSearch(Module As Object, parentID As String, elID As String, vmodel As St
 	vtextfield.SetOnEvent(Module, "click:append-outer", "")
 	vtextfield.SetOnEvent(Module, "click:prepend-inner", "")
 	vtextfield.SetOnEvent(Module, "click:clear", "")
+	vtextfield.Shrink
 	vtextfield.AssignProps(props)
 	Return vtextfield
 End Sub
@@ -3796,17 +3856,48 @@ End Sub
 '<code>
 'Dim fi1 As VueElement = vuetify.AddFileInput(Me, "r1c1", "fi1", "fi1", "Select File", "", False, "", null)
 'vuetify.BindVueElement(fi1)
-''****for a single file
 'Sub fi1_change(fileObj As Map)
-'If BANano.IsNull(fileObj) Or BANano.IsUndefined(fileObj) Then Return
+'If banano.IsNull(fileObj) Or banano.IsUndefined(fileObj) Then Return
 ''get file details
-'Dim fileDet As FileObject = BANanoShared.GetFileDetails(fileObj)
-'Log(fileDet)
+'Dim fileDet As FileObject
+'fileDet = BANanoShared.GetFileDetails(fileObj)
+'Dim fn As String = fileDet.FileName
+''you can check the size here
+'start uploading the file
+'fileDet = BANanoShared.UploadFileWait(fileObj)
+'Dim sstatus As String = fileDet.Status
+'Select Case sstatus
+'Case "error"
+'vuetify.ShowSnackBarError($"The file '${fn}' was not uploaded successfully!"$)
+'Case "success"
+'vuetify.ShowSnackBarSuccess($"The file '${fn}' was uploaded successfully!"$)
+'End Select
+'Dim fp As String = fileDet.FullPath
+''update state of some element
+''VC.SetData("vmodel, fp)
 'End Sub
 ''****for multiple files
 'Sub fi1_change(fileList As List)
-'If BANano.IsNull(fileList) Or BANano.IsUndefined(fileList) Then Return
-'Log(fileList)
+'If banano.IsNull(fileList) Or banano.IsUndefined(fileList) Then Return
+'Dim uploads As List = vc.NewList
+''for each fileObj As Map in fileList
+''get file details
+'Dim fileDet As FileObject
+'fileDet = BANanoShared.GetFileDetails(fileObj)
+'Dim fn As String = fileDet.FileName
+''you can check the size here
+''start uploading the file
+'fileDet = BANanoShared.UploadFileWait(fileObj)
+'Dim sstatus As String = fileDet.Status
+'Select Case sstatus
+'Case "error"
+'vuetify.ShowSnackBarError($"The file '${fn}' was not uploaded successfully!"$)
+'Case "success"
+'vuetify.ShowSnackBarSuccess($"The file '${fn}' was uploaded successfully!"$)
+'End Select
+'Dim fp As String = fileDet.FullPath
+''uploads.Add(fp)
+'next
 'End Sub
 '</code>
 Sub AddFileInput(Module As Object, parentID As String, elID As String, vmodel As String, slabel As String, splaceholder As String, bMultiple As Boolean, sHint As String, props As Map) As VueElement
@@ -3822,11 +3913,11 @@ Sub AddFileInput(Module As Object, parentID As String, elID As String, vmodel As
 	If vmodel <> "" Then vfileinput.VModel = vmodel
 	vfileinput.AddAttrOnConditionTrue(":multiple", bMultiple, True)
 	vfileinput.SetOnEvent(Module, "change", "")
+	vfileinput.SetOnEvent(Module, "click:clear", "")
 	vfileinput.SetOnEvent(Module, "click:append", "")
 	vfileinput.SetOnEvent(Module, "click:prepend", "")
 	vfileinput.SetOnEvent(Module, "click:append-outer", "")
 	vfileinput.SetOnEvent(Module, "click:prepend-inner", "")
-	vfileinput.SetOnEvent(Module, "click:clear", "")
 	vfileinput.AssignProps(props)
 	If vmodel <> "" Then
 		If bMultiple Then
@@ -3838,6 +3929,58 @@ Sub AddFileInput(Module As Object, parentID As String, elID As String, vmodel As
 	Return vfileinput
 End Sub
 
+
+'<code>
+'Dim fi As VueElement = vuetify.AddFileInput(Me, "r1c1", "fi", "fi", "Browse File", null)
+'vuetify.BindVueElement(fi)
+'Sub fi_change(fileObj As Map)
+'If banano.IsNull(fileObj) Or banano.IsUndefined(fileObj) Then Return
+''get file details
+'Dim fileDet As FileObject
+'fileDet = BANanoShared.GetFileDetails(fileObj)
+'Dim fn As String = fileDet.FileName
+''you can check the size here
+''start uploading the file
+'fileDet = BANanoShared.UploadFileWait(fileObj)
+'Dim sstatus As String = fileDet.Status
+'Select Case sstatus
+'Case "error"
+'vuetify.ShowSnackBarError($"The file '${fn}' was not uploaded successfully!"$)
+'Case "success"
+'vuetify.ShowSnackBarSuccess($"The file '${fn}' was uploaded successfully!"$)
+'End Select
+'Dim fp As String = fileDet.FullPath
+''update state of some element
+''VC.SetData("vmodel, fp)
+'End Sub
+''****for multiple files
+'Sub fi1_change(fileList As List)
+'If banano.IsNull(fileList) Or banano.IsUndefined(fileList) Then Return
+'Dim uploads As List = vc.NewList
+''for each fileObj As Map in fileList
+''get file details
+'Dim fileDet As FileObject
+'fileDet = BANanoShared.GetFileDetails(fileObj)
+'Dim fn As String = fileDet.FileName
+''you can check the size here
+''start uploading the file
+'fileDet = BANanoShared.UploadFileWait(fileObj)
+'Dim sstatus As String = fileDet.Status
+'Select Case sstatus
+'Case "error"
+'vuetify.ShowSnackBarError($"The file '${fn}' was not uploaded successfully!"$)
+'Case "success"
+'vuetify.ShowSnackBarSuccess($"The file '${fn}' was uploaded successfully!"$)
+'End Select
+'Dim fp As String = fileDet.FullPath
+''uploads.Add(fp)
+'next
+'End Sub
+'</code>
+Sub AddFileInput1(Module As Object, parentID As String, fldName As String, vmodel As String, title As String, props As Map) As VueElement
+	Dim elx As VueElement = AddFileInput(Module, parentID, fldName, vmodel, title, "", False, "", props)
+	Return elx
+End Sub
 
 Sub AddSlider(Module As Object, parentID As String, elID As String, vmodel As String, slabel As String, iminvalue As Object, imaxvalue As Object, iStep As Int,  bShowThumb As Boolean,  bVertical As Boolean, props As Map) As VueElement
 	parentID = CleanID(parentID)
@@ -4123,7 +4266,7 @@ Sub AddImage1(Module As Object, parentID As String, elID As String, vmodel As St
 	elID = elID.ToLowerCase
 	BANano.GetElement(parentID).Append($"<v-img id="${elID}"></v-img>"$)
 	Dim vimg As VueElement
-	vimg.Initialize(Me, elID, elID)
+	vimg.Initialize(Module, elID, elID)
 	If sheight <> "" Then vimg.Height = sheight
 	If swidth <> "" Then vimg.Width = swidth
 	vimg.AddAttr(":src", vmodel)
@@ -4148,7 +4291,7 @@ Sub AddImage(Module As Object, parentID As String, elID As String, src As String
 	elID = elID.ToLowerCase
 	BANano.GetElement(parentID).Append($"<v-img id="${elID}"></v-img>"$)
 	Dim vimg As VueElement
-	vimg.Initialize(Me, elID, elID)
+	vimg.Initialize(Module, elID, elID)
 	If sheight <> "" Then vimg.Height = sheight
 	If swidth <> "" Then vimg.Width = swidth
 	vimg.Src = src
