@@ -225,39 +225,41 @@ Library5=jfx
 Library6=bananofirestore
 Module1=pgIndex
 Module10=ViewChips
-Module11=ViewDatePicker
-Module12=ViewDialog
-Module13=ViewExpansionPanels
-Module14=ViewFileInput
-Module15=ViewFirebase
-Module16=ViewFormControls
-Module17=ViewGrid
-Module18=ViewGrid2
-Module19=ViewHome
+Module11=ViewContacts
+Module12=ViewCRUDBuilder
+Module13=ViewDatePicker
+Module14=ViewDialog
+Module15=ViewExpansionPanels
+Module16=ViewFileInput
+Module17=ViewFirebase
+Module18=ViewFormControls
+Module19=ViewGrid
 Module2=Tooltip
-Module20=ViewImage
-Module21=ViewInputDialog
-Module22=ViewList
-Module23=ViewManualGrid
-Module24=ViewMSSQL
-Module25=ViewMySQL
-Module26=ViewPageDialog
-Module27=ViewParallax
-Module28=ViewPHPSQLite
-Module29=ViewProgress
+Module20=ViewGrid2
+Module21=ViewHome
+Module22=ViewImage
+Module23=ViewInputDialog
+Module24=ViewList
+Module25=ViewManualGrid
+Module26=ViewMSSQL
+Module27=ViewMySQL
+Module28=ViewPageDialog
+Module29=ViewParallax
 Module3=ViewAbout
-Module30=ViewQuestions
-Module31=ViewRadioGroup
-Module32=ViewRating
-Module33=ViewSelects
-Module34=ViewSliders
-Module35=ViewStepper
-Module36=ViewSwitches
-Module37=ViewTable
-Module38=ViewTabs
-Module39=ViewTextArea
+Module30=ViewPHPSQLite
+Module31=ViewProgress
+Module32=ViewQuestions
+Module33=ViewRadioGroup
+Module34=ViewRating
+Module35=ViewSelects
+Module36=ViewSliders
+Module37=ViewStepper
+Module38=ViewSwitches
+Module39=ViewTable
 Module4=ViewAlert
-Module40=ViewTextFields
+Module40=ViewTabs
+Module41=ViewTextArea
+Module42=ViewTextFields
 Module5=ViewAvatars
 Module6=ViewBadges
 Module7=ViewBANanoSQL
@@ -265,7 +267,7 @@ Module8=ViewButtons
 Module9=ViewCheckBoxes
 NumberOfFiles=108
 NumberOfLibraries=6
-NumberOfModules=40
+NumberOfModules=42
 Version=8.8
 @EndOfDesignText@
 #Region Project Attributes 
@@ -341,14 +343,14 @@ importScripts("https://www.gstatic.com/firebasejs/8.2.1/firebase-messaging.js");
 importScripts("https://www.gstatic.com/firebasejs/8.2.1/firebase-analytics.js");
 
 var firebaseConfig = {
-    apiKey: "redacted",
-    authDomain: "redacted",
-	databaseURL: "redacted",
-    projectId: "redacted",
-    storageBucket: "redacted",
-    messagingSenderId: "redacted",
-    appId: "redacted",
-    measurementId: "redacted"
+    apiKey: "(redacted)",
+    authDomain: "(redacted)",
+	databaseURL: "(redacted)",
+    projectId: "(redacted)",
+    storageBucket: "(redacted)",
+    messagingSenderId: "(redacted)",
+    appId: "(redacted)",
+    measurementId: "(redacted)"
 };
 
 firebase.initializeApp(firebaseConfig);

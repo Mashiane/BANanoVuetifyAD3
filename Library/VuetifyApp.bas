@@ -2704,6 +2704,17 @@ Sub AddChipGroup(Module As Object, parentID As String, elID As String, vModel As
 	Return vchipgroup
 End Sub
 
+Sub AddComboBox1(Module As Object, parentID As String, fldName As String, vmodel As String, Title As String, DataSource As String, Key As String, Value As String, bMultiple As Boolean, ReturnObject As Boolean) As VueElement
+	Return AddComboBox(Module, parentID, fldName, vmodel, Title, False, bMultiple, "", DataSource, Key, Value, ReturnObject, "", Null)
+End Sub
+
+Sub AddSelect1(Module As Object, parentID As String, fldName As String, vmodel As String, Title As String, DataSource As String, Key As String, Value As String, bMultiple As Boolean, ReturnObject As Boolean) As VueElement
+	Return AddSelect(Module, parentID, fldName, vmodel, Title, False, bMultiple, "", DataSource, Key, Value, ReturnObject, "", Null)
+End Sub
+
+Sub AddAutoComplete1(Module As Object, parentID As String, fldName As String, vmodel As String, Title As String, DataSource As String, Key As String, Value As String, bMultiple As Boolean , ReturnObject As Boolean) As VueElement
+	Return AddAutoComplete(Module, parentID, fldName, vmodel, Title, False, bMultiple, "", DataSource, Key, Value, ReturnObject, "", Null)
+End Sub
 
 Sub AddAutoComplete(Module As Object, parentID As String, elID As String, vmodel As String, sLabel As String, bRequired As Boolean, bMultiple As Boolean, sPlaceHolder As String, sourceTable As String, sourceField As String, displayField As String, returnObject As Boolean, sHelperText As String, props As Map) As VueElement
 	parentID = CleanID(parentID)
@@ -3128,6 +3139,10 @@ Sub AddLabel(Module As Object, parentID As String, elID As String, Size As Strin
 	Return elx
 End Sub
 
+Sub AddDiv(module As Object, parentID As String, elID As String) As VueElement
+	Return AddVueElement(module, parentID, elID, "div","", "", "", Null)
+End Sub
+
 '<code>
 'Dim avue as VueElement = Vuetify.AddAlert(Me, "r1c1", "avue", False, "This is my alert", False, True, Vuetify.ALERT_TYPE_SUCCESS, Vuetify.ALERT_BORDER_LEFT, Null)
 'vuetify.BindVueElement(avue)
@@ -3414,10 +3429,11 @@ Sub AddButtonWithIcon(Module As Object, parentID As String, elID As String, eIco
 End Sub
 
 
-Sub AddMsgBox(Module As Object, bPersistent As Boolean, width As Int, okColor As String, cancelColor As String)
+Sub AddMsgBox(Module As Object, bPersistent As Boolean, width As Int, okColor As String, cancelColor As String) As VueElement
 	'**** this page needs to use its own dialog, lets add it
 	Dim fbDialog As VueElement = AddDialogAlertPrompt(Module, Here, AppName, bPersistent, width, okColor, cancelColor)
 	BindVueElement(fbDialog)
+	Return fbDialog
 End Sub
 
 'add alert dialog
@@ -3450,12 +3466,12 @@ Sub AddDialogAlertPrompt(Module As Object, parentID As String, elID As String, b
 	Dim cardspacer As String = $"${elID}spacer"$
 	Dim cancelid As String = $"${elID}cancel"$
 	Dim okid As String = $"${elID}ok"$
-	Dim diaglogID As String = $"${elID}dialog"$
 	Dim texttype As String = $"${elID}type"$
+	Dim dialogID As String = $"${elID}diag"$
 	'
 	Dim sbTemplate As StringBuilder
 	sbTemplate.Initialize
-	sbTemplate.Append($"<v-dialog id="${diaglogID}" v-model="${dialogShow}" :width="${dialogwidth}" :persistent="${dialogpersistent}">"$)
+	sbTemplate.Append($"<v-dialog id="${dialogID}" v-model="${dialogShow}" :width="${dialogwidth}" :persistent="${dialogpersistent}">"$)
 	sbTemplate.Append($"<v-card id="${dialogCardID}">"$)
 	sbTemplate.Append($"<v-card-title id="${dialogTitleID}" v-html="${dialogTitle}"></v-card-title>"$)
 	sbTemplate.Append($"<v-card-text id="${dialogtextID}">"$)
@@ -3479,8 +3495,8 @@ Sub AddDialogAlertPrompt(Module As Object, parentID As String, elID As String, b
 	BANano.GetElement(parentID).Append(sbTemplate.tostring)
 	'
 	Dim vdialog As VueElement
-	vdialog.Initialize(Module, elID, elID)
-	vdialog.Ref = diaglogID
+	vdialog.Initialize(Module, dialogID, dialogID)
+	vdialog.Ref = dialogID
 	'
 	Dim vbtnc As VueElement
 	vbtnc.Initialize(Module, cancelid, cancelid)
@@ -3578,12 +3594,12 @@ Sub AddDialogInput(Module As Object, parentID As String, elID As String, bPersis
 	Dim cardspacer As String = $"${elID}spacer"$
 	Dim cancelid As String = $"${elID}cancel"$
 	Dim okid As String = $"${elID}ok"$
-	Dim diaglogID As String = $"${elID}dialog"$
 	Dim dialogContainerID As String = $"${elID}container"$
+	Dim diagID As String = $"${elID}diag"$
 	'
 	Dim sbTemplate As StringBuilder
 	sbTemplate.Initialize
-	sbTemplate.Append($"<v-dialog id="${diaglogID}" v-model="${dialogShow}" :width="${dialogwidth}" :persistent="${dialogpersistent}">"$)
+	sbTemplate.Append($"<v-dialog id="${diagID}" v-model="${dialogShow}" :width="${dialogwidth}" :persistent="${dialogpersistent}">"$)
 	sbTemplate.Append($"<v-card id="${dialogCardID}">"$)
 	sbTemplate.Append($"<v-card-title id="${dialogTitleID}">{{ ${dialogTitle} }}</v-card-title>"$)
 	sbTemplate.Append($"<v-card-text id="${dialogtextID}">"$)
@@ -3604,8 +3620,8 @@ Sub AddDialogInput(Module As Object, parentID As String, elID As String, bPersis
 	BANano.GetElement(parentID).Append(sbTemplate.tostring)
 	'
 	Dim vdialog As VueElement
-	vdialog.Initialize(Module, elID, elID)
-	vdialog.Ref = diaglogID
+	vdialog.Initialize(Module, diagID, diagID)
+	vdialog.Ref = diagID
 	'
 	Dim vbtnc As VueElement
 	vbtnc.Initialize(Module, cancelid, cancelid)
@@ -4145,6 +4161,9 @@ Sub AddTextArea(Module As Object, parentID As String, elID As String, vmodel As 
 	Return vtextfield
 End Sub
 
+Sub AddPassword1(Module As Object, parentID As String, fldName As String, vmodel As String, title As String, maxLen As Int, props As Map) As VueElement
+	Return AddPassword(Module, parentID, fldName, vmodel, title, "", False, "", maxLen, "", props)
+End Sub
 
 Sub AddPassword(Module As Object, parentID As String, elID As String, vmodel As String, slabel As String, splaceholder As String, bRequired As Boolean, sPrependIcon As String, iMaxLen As Int, sHint As String, props As Map) As VueElement
 	parentID = CleanID(parentID)
@@ -4223,7 +4242,7 @@ Sub AddRating(Module As Object, parentID As String, sid As String, vmodel As Str
 	vrating.AddAttr("size", ssize)
 	vrating.AddAttr(":hover", bHover)
 	vrating.Ref = sid
-	if color <> "" then vrating.Color = color
+	If color <> "" Then vrating.Color = color
 	vrating.AssignProps(props)
 	vrating.SetOnEvent(Module, "input", "")
 	Return vrating
@@ -4392,7 +4411,7 @@ Sub AddChipWithAvatar(Module As Object, parentID As String, elID As String, src 
 	vchip.Initialize(Module, elID, elID)
 	vchip.AddAttr(":pill", bPill)
 	vchip.AddAttr(":close", bClose)
-	if color <> "" then vchip.Color = color
+	If color <> "" Then vchip.Color = color
 	vchip.AssignProps(chipprops)
 	
 	vchip.SetOnEvent(Module, "click", $"'${elID}'"$)
@@ -4432,7 +4451,7 @@ Sub AddChipWithIcon(Module As Object, parentID As String, elID As String, sicon 
 	vchip.Initialize(Module, elID, elID)
 	vchip.AddAttr(":pill", bPill)
 	vchip.AddAttr(":close", bClose)
-	if color <> "" then vchip.Color = color
+	If color <> "" Then vchip.Color = color
 	vchip.SetOnEvent(Module, "click", $"'${elID}'"$)
 	vchip.SetOnEvent(Module, "click:close", $"'${elID}'"$)'
 	'

@@ -202,7 +202,7 @@ Private Sub vetable_ClearFilter_Click (e As BANanoEvent)
 End Sub
 
 Private Sub vetable_ItemSelected (item As Map)
-	vuetify.ShowSnackBar(item)
+	vuetify.ShowSnackBar(BANano.ToJson(item))
 End Sub
 
 

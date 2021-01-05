@@ -130,10 +130,11 @@ Sub Class_Globals
 	Public COLUMN_SAVE As String = "save"
 	Public COLUMN_CANCEL As String = "cancel"
 	Public COLUMN_BUTTON As String = "button"
-	Public COLUMN_COMBO As String = "combo"
+	Public COLUMN_COMBOBOX As String = "combo"
 	Public COLUMN_AUTOCOMPLETE As String = "autocomplete"
 	Public COLUMN_TEXTFIELD As String = "textfield"
 	Public COLUMN_TEXTAREA As String = "textarea"
+	Public COLUMN_SELECT As String = "select"
 			
 	'alignment
 	Public ALIGN_CENTER As String = "center"
@@ -411,6 +412,10 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	End If
 End Sub
 
+Sub getShowGroupBy As Boolean
+	Return bShowGroupBy
+End Sub
+
 'add anything from the appendholder
 Sub AppendHolder
 	Dim stemplate As String = BANanoGetHTMLAsIs("appendholder")
@@ -558,6 +563,11 @@ Sub AddRefresh(VC As VueComponent)
 	AddTitleIcon(VC, btnKey, "mdi-reload", "purple")
 End Sub
 
+'add a button to the header
+Sub AddButtonIcon(VC As VueComponent, elID As String, eIcon As String, btnColor As String)
+	AddTitleIcon(VC, elID, eIcon, btnColor)
+End Sub	
+
 'a button with an icon on the left
 Sub AddTitleIcon(VC As VueComponent, elID As String, eIcon As String, btnColor As String)
 	Dim ct As BANanoElement
@@ -570,7 +580,7 @@ Sub AddTitleIcon(VC As VueComponent, elID As String, eIcon As String, btnColor A
 	vbtnright.Dark = True
 	vbtnright.Fab = True
 	vbtnright.Small = True
-	if btncolor <> "" then vbtnright.Color = btnColor
+	If btnColor <> "" Then vbtnright.Color = btnColor
 	'
 	Dim viconright As VueElement
 	viconright.Initialize(mCallBack, siconright, siconright)
@@ -1409,9 +1419,9 @@ End Sub
 
 
 'add date time column and use any dayjs formats
-'<code>.AddDateColumn("dateColumn", "Date", "DD/MM/YYY HH:MM:SS")
+'<code>.AddDateTimeColumn("dateColumn", "Date", "DD/MM/YYY HH:MM:SS")
 '</code>
-Sub AddDateTimeColumnDate(colName As String, colTitle As String, colFormat As String)
+Sub AddDateTimeColumn(colName As String, colTitle As String, colFormat As String)
 	AddColumn(colName, colTitle)
 	SetColumnDateTimeFormat(colName, colFormat)
 End Sub
@@ -1483,6 +1493,12 @@ Sub Reset(VC As VueComponent)
 	'VC.SetData(keyID, DateTime.Now)
 	'
 	columnsM.Initialize
+End Sub
+
+'set own filter
+Sub ApplyFilter1(VC As VueComponent, fltrs As List)
+	VC.SetData(filters, fltrs)
+	ApplyFilter(VC)
 End Sub
 
 'update the records
@@ -2026,7 +2042,7 @@ Sub SetColumnType(colName As String, colType As String)
 	End If
 End Sub
 
-Sub SetCombo(colName As String, bLarge As Boolean, sourceTable As String, sourceField As String, displayField As String, returnObject As Boolean)
+Sub SetComboBox(colName As String, bLarge As Boolean, sourceTable As String, sourceField As String, displayField As String, returnObject As Boolean)
 	colName = colName.tolowercase
 	sourceTable = sourceTable.ToLowerCase
 	sourceField = sourceField.ToLowerCase
@@ -2037,7 +2053,7 @@ Sub SetCombo(colName As String, bLarge As Boolean, sourceTable As String, source
 	col.SourceField = sourceField
 	col.DisplayField = displayField
 	col.ReturnObject = returnObject
-	col.ColType = COLUMN_COMBO
+	col.ColType = COLUMN_COMBOBOX
 	columnsM.Put(colName, col)
 End Sub
 
@@ -2108,7 +2124,9 @@ private Sub BuildSlots
 		'define args for methods
 				
 		Select Case ct
-			Case COLUMN_COMBO
+			Case COLUMN_SELECT
+				bHasEditDialog = True
+			Case COLUMN_COMBOBOX
 				bHasEditDialog = True
 			Case COLUMN_AUTOCOMPLETE
 				bHasEditDialog = True
@@ -2330,6 +2348,8 @@ sb.Append(temp)
 				Dim swt As VueElement
 				swt.Initialize(mCallBack, "", "")
 				swt.TagName = "v-checkbox"
+				swt.MA = 0
+				swt.HideDetails = True
 				'
 				If ct = COLUMN_SWITCH Then
 					swt.tagname = "v-switch"

@@ -40,15 +40,21 @@ Sub Class_Globals
 	Public DT_HasFilter As Boolean
 	Public DT_HasBack As Boolean
 	Public DT_HasRefresh As Boolean
+	Public DT_ShowGroupBy As Boolean
 	Public HasDialog As Boolean
 	Public DT_HasMenu As Boolean
 	Public DT_HasDownload As Boolean
 	Public DT_HasPrint As Boolean
 	Public DT_HasSave As Boolean
 	Public DT_HasCancel As Boolean
+	Public DT_ShowSelect As Boolean
+	Public DT_SingleSelect As Boolean
 	Private dtCode As StringBuilder
 	Private DT_HasEditDialog As Boolean
-	Public DialogWidth As String
+	Public DT_Dense As Boolean
+	Public DT_MustSort As Boolean
+	Public DT_MultiSort As Boolean
+	Public Diag_Width As String
 	Private dtCont As StringBuilder
 	Private SingularClean As String
 	Private PluralClean As String
@@ -56,6 +62,22 @@ Sub Class_Globals
 	Private relationships As List
 	Private className As String
 	Private addedFiles As List
+	Private matrix As List
+	Private matrixMap As Map
+	Private BANano As BANano
+	Private HideDetailsM As Map
+	Private DenseM As Map
+	Private RequiredM As Map
+	Private ReadOnlyM As Map
+	Private DisabledM As Map
+	Private OutlinedM As Map
+	Private RoundedM As Map
+	Private ClearableM As Map
+	Private AutoFocusM As Map
+	Private FilledM As Map
+	Private ShapedM As  Map
+	Public Diag_FullScreenOnMobile As Boolean
+	public DB_CreateTable as string
 End Sub
 
 'initialize the crud class
@@ -101,79 +123,250 @@ Public Sub Initialize(clsName As String) As MySQLCRUD
 	DT_HasSave = False
 	DT_HasCancel = False
 	DT_HasEditDialog = False
+	DT_ShowGroupBy = False
+	DT_ShowSelect = False
+	DT_SingleSelect = False
 	dtCode.Initialize
-	DialogWidth = "600"
+	Diag_Width = "600"
 	dtCont.Initialize
 	relationships.Initialize 
 	addedFiles.Initialize 
+	matrix.initialize
+	matrixMap.initialize
+	HideDetailsM.Initialize
+	DenseM.Initialize
+	RequiredM.Initialize
+	ReadOnlyM.Initialize
+	DisabledM.Initialize
+	OutlinedM.Initialize
+	RoundedM.Initialize
+	ClearableM.Initialize
+	AutoFocusM.Initialize
+	FilledM.Initialize
+	ShapedM.Initialize
+	DT_Dense = False
+	DT_MustSort = False
+	DT_MultiSort = False
+	Diag_FullScreenOnMobile = False
+	DB_CreateTable = ""
 	Return Me
 End Sub
 
+'set dialog element to filled
+Sub Diag_SetFilled(fldname As String, b As Boolean)
+	If b = False Then Return
+	FilledM.Put(fldname, fldname)
+End Sub
+
+'set dialog elemnt to shaped
+Sub Diag_SetShaped(fldname As String, b As Boolean)
+	If b = False Then Return
+	ShapedM.Put(fldname, fldname)
+End Sub
+
+'set dialog element tp auto focus
+Sub Diag_SetAutoFocus(fldname As String, b As Boolean)
+	If b = False Then Return
+	AutoFocusM.Put(fldname, fldname)
+End Sub
+
+'set dialog element to clearable
+Sub Diag_SetClearable(fldname As String, b As Boolean)
+	If b = False Then Return
+	ClearableM.Put(fldname, fldname)
+End Sub
+
+'set dialog element to hide details
+Sub Diag_SetHideDetails(fldName As String, b As Boolean)
+	If b = False Then Return
+	HideDetailsM.Put(fldName, fldName)
+End Sub
+
+'set dialog element to dense
+Sub Diag_SetDense(fldName As String, b As Boolean)
+	If b = False Then Return
+	DenseM.Put(fldName, fldName)
+End Sub
+
+'set dialog element to required
+Sub Diag_SetRequired(fldName As String, b As Boolean)
+	If b = False Then Return
+	RequiredM.Put(fldName, fldName)
+End Sub
+
+'set dialog element to read only
+Sub Diag_SetReadOnly(fldName As String, b As Boolean)
+	If b = False Then Return
+	ReadOnlyM.Put(fldName, fldName)
+End Sub
+
+'set dialog element to disabled
+Sub Diag_SetDisabled(fldName As String, b As Boolean)
+	If b = False Then Return
+	DisabledM.Put(fldName, fldName)
+End Sub
+
+'set dialog element tp outlined
+Sub Diag_SetOutlined(fldName As String, b As Boolean)
+	If b = False Then Return
+	OutlinedM.Put(fldName, fldName)
+End Sub
+
+'set dialog element to rounded
+Sub Diag_SetRounded(fldName As String, b As Boolean)
+	If b = False Then Return
+	RoundedM.Put(fldName, fldName)
+End Sub
+
+'set properties
+private Sub SetProperties(fldNAme As String)
+	If HideDetailsM.ContainsKey(fldNAme) Then
+		dtCont.Append($"${fldNAme}.HideDetails = True"$).Append(CRLF)
+	End If
+	If DenseM.ContainsKey(fldNAme) Then
+		dtCont.Append($"${fldNAme}.Dense = True"$).Append(CRLF)
+	End If
+	If RequiredM.ContainsKey(fldNAme) Then
+		dtCont.Append($"${fldNAme}.Required = ":${fldNAme}required""$).Append(CRLF)
+	End If
+	If ReadOnlyM.ContainsKey(fldNAme) Then
+		dtCont.Append($"${fldNAme}.ReadOnly = ":${fldNAme}readonly""$).Append(CRLF)
+	End If
+	If DisabledM.ContainsKey(fldNAme) Then
+		dtCont.Append($"${fldNAme}.Disabled = ":${fldNAme}disabled""$).Append(CRLF)
+	End If
+	If OutlinedM.ContainsKey(fldNAme) Then
+		dtCont.Append($"${fldNAme}.Outlined = True"$).Append(CRLF)
+	End If
+	If RoundedM.ContainsKey(fldNAme) Then
+		dtCont.Append($"${fldNAme}.Rounded = True"$).Append(CRLF)
+	End If
+	If ClearableM.ContainsKey(fldNAme) Then
+		dtCont.Append($"${fldNAme}.Clearable = True"$).Append(CRLF)
+	End If
+	If AutoFocusM.ContainsKey(fldNAme) Then
+		dtCont.Append($"${fldNAme}.AutoFocus = True"$).Append(CRLF)
+	End If
+	If FilledM.ContainsKey(fldNAme) Then
+		dtCont.Append($"${fldNAme}.Filled = True"$).Append(CRLF)
+	End If
+	If ShapedM.ContainsKey(fldNAme) Then
+		dtCont.Append($"${fldNAme}.Shaped = True"$).Append(CRLF)
+	End If
+End Sub
+
+'build properties
+private Sub BuildProperties As String
+	Dim xb As StringBuilder
+	xb.Initialize
+	For Each k As String In RequiredM.keys
+		Dim ks As String = $"${k}required"$
+		ks = ks.tolowercase
+		xb.Append($"${ComponentName}.SetData("${ks}", True)"$).Append(CRLF)
+	Next
+	For Each k As String In ReadOnlyM.keys
+		Dim ks As String = $"${k}readonly"$
+		ks = ks.tolowercase
+		xb.Append($"${ComponentName}.SetData("${ks}", True)"$).Append(CRLF)
+	Next
+	For Each k As String In DisabledM.keys
+		Dim ks As String = $"${k}disabled"$
+		ks = ks.tolowercase
+		xb.Append($"${ComponentName}.SetData("${ks}", True)"$).Append(CRLF)
+	Next
+	Return xb.tostring
+End Sub
+
+'add paragraph to dialog
 Sub Diag_AddParagraph(fldName As String, row As Int, col As Int, vmodel As String, Caption As String)
 	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddParagraph(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), "${fldName}", "{{ ${SingularClean.tolowercase}.${vmodel} }}", "", "")"$).Append(CRLF)
 	dtCont.Append($"${ComponentName}.setdata("${SingularClean.tolowercase}.${vmodel}", "${Caption}")"$).Append(CRLF)
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
+	SetProperties(fldName)
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
+	UpdateMatrix(row, col)
 End Sub
 
+'update the grid matrix
+private Sub UpdateMatrix(row As Int, col As Int)
+	Dim scol As String = BANanoShared.PadRight(col, 2, "0")
+	Dim srow As String = BANanoShared.PadRight(row, 2, "0")
+	Dim skey As String = $"${srow}.${scol}"$
+	matrix.Add(skey)
+End Sub
 
+'add h6 element to dialog
 Sub Diag_AddH6(fldName As String, row As Int, col As Int, vmodel As String, Caption As String)
 	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddH6(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), "${fldName}", "{{ ${SingularClean.tolowercase}.${vmodel} }}", "", "")"$).Append(CRLF)
 	dtCont.Append($"${ComponentName}.setdata("${SingularClean.tolowercase}.${vmodel}", "${Caption}")"$).Append(CRLF)
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
+	SetProperties(fldName)
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
+	UpdateMatrix(row, col)
 End Sub
 
-
+'add h5 element to dialog
 Sub Diag_AddH5(fldName As String, row As Int, col As Int, vmodel As String, Caption As String)
 	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddH5(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), "${fldName}", "{{ ${SingularClean.tolowercase}.${vmodel} }}", "", "")"$).Append(CRLF)
 	dtCont.Append($"${ComponentName}.setdata("${SingularClean.tolowercase}.${vmodel}", "${Caption}")"$).Append(CRLF)
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
+	SetProperties(fldName)
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
+	UpdateMatrix(row, col)
 End Sub
 
-
+'add h4 element to dialog
 Sub Diag_AddH4(fldName As String, row As Int, col As Int, vmodel As String, Caption As String)
 	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddH4(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), "${fldName}", "{{ ${SingularClean.tolowercase}.${vmodel} }}", "", "")"$).Append(CRLF)
 	dtCont.Append($"${ComponentName}.setdata("${SingularClean.tolowercase}.${vmodel}", "${Caption}")"$).Append(CRLF)
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
+	SetProperties(fldName)
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
+	UpdateMatrix(row, col)
 End Sub
 
+'add h3 element to dialog
 Sub Diag_AddH3(fldName As String, row As Int, col As Int, vmodel As String, Caption As String)
 	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddH3(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), "${fldName}", "{{ ${SingularClean.tolowercase}.${vmodel} }}", "", "")"$).Append(CRLF)
 	dtCont.Append($"${ComponentName}.setdata("${SingularClean.tolowercase}.${vmodel}", "${Caption}")"$).Append(CRLF)
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
+	SetProperties(fldName)
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
+	UpdateMatrix(row, col)
 End Sub
 
+'add h2 element to dialog
 Sub Diag_AddH2(fldName As String, row As Int, col As Int, vmodel As String, Caption As String)
 	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddH2(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), "${fldName}", "{{ ${SingularClean.tolowercase}.${vmodel} }}", "", "")"$).Append(CRLF)
 	dtCont.Append($"${ComponentName}.setdata("${SingularClean.tolowercase}.${vmodel}", "${Caption}")"$).Append(CRLF)
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
+	SetProperties(fldName)
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
+	UpdateMatrix(row, col)
 End Sub
 
-
+'add h1 element to dialog
 Sub Diag_AddH1(fldName As String, row As Int, col As Int, vmodel As String, Caption As String)
 	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddH1(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), "${fldName}", "{{ ${SingularClean.tolowercase}.${vmodel} }}", "", "")"$).Append(CRLF)
 	dtCont.Append($"${ComponentName}.setdata("${SingularClean.tolowercase}.${vmodel}", "${Caption}")"$).Append(CRLF)
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
+	SetProperties(fldName)
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
+	UpdateMatrix(row, col)
 End Sub
 
 'add a text field to the dialog
@@ -182,7 +375,9 @@ Sub Diag_AddTextField(fldName As String, row As Int, col As Int, vmodel As Strin
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
+	SetProperties(fldName)
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
+	UpdateMatrix(row, col)
 End Sub
 
 'add a text area to the dialog
@@ -191,7 +386,9 @@ Sub Diag_AddTextArea(fldName As String, row As Int, col As Int, vmodel As String
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
+	SetProperties(fldName)
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
+	UpdateMatrix(row, col)
 End Sub
 
 'add a time picker dialog
@@ -200,7 +397,9 @@ Sub Diag_AddTimePicker(fldName As String, row As Int, col As Int, vmodel As Stri
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
+	SetProperties(fldName)
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
+	UpdateMatrix(row, col)
 End Sub
 
 'add a date picker to the dialog
@@ -209,7 +408,9 @@ Sub Diag_AddDatePicker(fldName As String, row As Int, col As Int, vmodel As Stri
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
+	SetProperties(fldName)
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
+	UpdateMatrix(row, col)
 End Sub
 
 'add a file input to the dialog
@@ -218,6 +419,7 @@ Sub Diag_AddFileInput(fldName As String, row As Int, col As Int, vmodel As Strin
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
+	SetProperties(fldName)
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
 	'to remove from adding
 	addedFiles.Add(vmodel)
@@ -269,7 +471,7 @@ Sub Diag_AddFileInput(fldName As String, row As Int, col As Int, vmodel As Strin
 		AddCode($"${ComponentName}.SetData("${vmodel}", fp)"$)
 		AddCode($"End Sub"$)
 	End Select
-	
+	UpdateMatrix(row, col)
 End Sub
 
 'add a password to the dialog
@@ -278,15 +480,19 @@ Sub Diag_AddPassword(fldName As String, row As Int, col As Int, vmodel As String
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
+	SetProperties(fldName)
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
+	UpdateMatrix(row, col)
 End Sub
 
 'add a combo to the dialog
-Sub Diag_AddCombo(fldName As String, row As Int, col As Int, vmodel As String, Title As String, DataSource As String, Key As String, Value As String, bReturnObject As Boolean, bMultiple As Boolean)
+Sub Diag_AddComboBox(fldName As String, row As Int, col As Int, vmodel As String, Title As String, DataSource As String, Key As String, Value As String, bReturnObject As Boolean, bMultiple As Boolean)
 	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddComboBox(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), "${fldName}", "${SingularClean.tolowercase}.${vmodel}", "${Title}", False, ${bMultiple}, "", "${DataSource}", "${Key}", "${Value}", ${bReturnObject}, "", Null)"$).Append(CRLF)
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
+	SetProperties(fldName)
+	dtCont.Append($"${fldName}.SetData("${DataSource}", ${ComponentName}.NewList)"$).Append(CRLF)
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
 	'
 	Dim rel As DBRelationship
@@ -296,6 +502,7 @@ Sub Diag_AddCombo(fldName As String, row As Int, col As Int, vmodel As String, T
 	rel.source = DataSource
 	rel.vmodel = vmodel
 	relationships.Add(rel)
+	UpdateMatrix(row, col)
 End Sub
 
 'add a select to the dialog
@@ -304,6 +511,8 @@ Sub Diag_AddSelect(fldName As String, row As Int, col As Int, vmodel As String, 
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
+	SetProperties(fldName)
+	dtCont.Append($"${fldName}.SetData("${DataSource}", ${ComponentName}.NewList)"$).Append(CRLF)
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
 	'
 	Dim rel As DBRelationship
@@ -313,6 +522,7 @@ Sub Diag_AddSelect(fldName As String, row As Int, col As Int, vmodel As String, 
 	rel.source = DataSource
 	rel.vmodel = vmodel
 	relationships.Add(rel)
+	UpdateMatrix(row, col)
 End Sub
 
 'add an avatar to the dialog
@@ -321,7 +531,9 @@ Sub Diag_AddAvatar(fldName As String, row As Int, col As Int, url As String, ava
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
+	SetProperties(fldName)
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
+	UpdateMatrix(row, col)
 End Sub
 
 'add an avatar to the dialog with binding
@@ -330,7 +542,10 @@ Sub Diag_AddAvatar1(fldName As String, row As Int, col As Int, vmodel As String,
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
+	SetProperties(fldName)
+	
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
+	UpdateMatrix(row, col)
 End Sub
 
 
@@ -340,6 +555,8 @@ Sub Diag_AddAutoComplete(fldName As String, row As Int, col As Int, vmodel As St
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
+	SetProperties(fldName)
+	dtCont.Append($"${fldName}.SetData("${DataSource}", ${ComponentName}.NewList)"$).Append(CRLF)
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
 	'
 	Dim rel As DBRelationship
@@ -349,6 +566,7 @@ Sub Diag_AddAutoComplete(fldName As String, row As Int, col As Int, vmodel As St
 	rel.source = DataSource
 	rel.vmodel = vmodel
 	relationships.Add(rel)
+	UpdateMatrix(row, col)
 End Sub
 
 'add a checkbox to the dialog
@@ -357,7 +575,9 @@ Sub Diag_AddCheckBox(fldName As String, row As Int, col As Int, vmodel As String
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
+	SetProperties(fldName)
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
+	UpdateMatrix(row, col)
 End Sub
 
 'add a switch to the dialog
@@ -366,7 +586,9 @@ Sub Diag_AddSwitch(fldName As String, row As Int, col As Int, vmodel As String, 
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
+	SetProperties(fldName)
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
+	UpdateMatrix(row, col)
 End Sub
 
 'add a radio group to the dialog
@@ -375,6 +597,8 @@ Sub Diag_AddRadioGroup(fldName As String, row As Int, col As Int, vmodel As Stri
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
+	SetProperties(fldName)
+	dtCont.Append($"${fldName}.SetData("${DataSource}", ${ComponentName}.NewList)"$).Append(CRLF)
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
 	'
 	Dim rel As DBRelationship
@@ -384,7 +608,7 @@ Sub Diag_AddRadioGroup(fldName As String, row As Int, col As Int, vmodel As Stri
 	rel.source = DataSource
 	rel.vmodel = vmodel
 	relationships.Add(rel)
-
+	UpdateMatrix(row, col)
 End Sub
 
 'add an image to the dialog
@@ -393,7 +617,9 @@ Sub Diag_AddImage(fldName As String, row As Int, col As Int, url As String, lazy
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
+	SetProperties(fldName)
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
+	UpdateMatrix(row, col)
 End Sub
 
 'add an image to the dialog with binding
@@ -402,7 +628,9 @@ Sub Diag_AddImage1(fldName As String, row As Int, col As Int, vmodel As String, 
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
+	SetProperties(fldName)
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
+	UpdateMatrix(row, col)
 End Sub
 
 
@@ -416,6 +644,10 @@ End Sub
 Sub DT_SetTextField(colName As String, bLarge As Boolean)
 	dtCode.Append($"${dtName}.SetTextField("${colName}", ${bLarge})"$).Append(CRLF)
 	DT_HasEditDialog = True
+End Sub
+
+Sub DT_SetColumnSortable(colName As String, b As Boolean)
+	dtCode.Append($"${dtName}.SetColumnSortable("${colName}", ${b})"$).Append(CRLF)
 End Sub
 
 'add an icon to the data-table toolbar
@@ -506,8 +738,8 @@ Sub DT_AddDateColumn(colName As String, colTitle As String, colFormat As String)
 End Sub
 
 'add a date time column to the data-table
-Sub DT_AddDateTimeColumnDate(colName As String, colTitle As String, colFormat As String)
-	dtCode.Append($"${dtName}.AddDateTimeColumnDate("${colName}", "${colTitle}", "${colFormat}")"$).Append(CRLF)
+Sub DT_AddDateTimeColumn(colName As String, colTitle As String, colFormat As String)
+	dtCode.Append($"${dtName}.AddDateTimeColumn("${colName}", "${colTitle}", "${colFormat}")"$).Append(CRLF)
 End Sub
 
 'add a number column to the data-table
@@ -553,6 +785,26 @@ Sub Prepare
 	ModalShow = $"${ModalName}show"$
 End Sub
 
+'add a blob field
+Sub AddBlob(v As String)
+	Blobs.Add(v)
+End Sub
+
+'add a string field
+Sub AddString(v As String)
+	Strings.Add(v)
+End Sub
+
+'add a double field
+Sub AddDouble(v As String)
+	Doubles.Add(v)
+End Sub
+
+'add an integer field
+Sub AddInteger(v As String)
+	Integers.Add(v)
+End Sub
+
 'add field data types - strings
 Sub AddStrings(stringNames As List)
 	For Each k As String In stringNames
@@ -560,8 +812,13 @@ Sub AddStrings(stringNames As List)
 	Next
 End Sub
 
+'add a filter field
+Sub DT_AddFilter(flt As String)
+	Filters.Add(flt)
+End Sub
+
 'add columns to filter
-Sub AddFilters(fltName As List)
+Sub DT_AddFilters(fltName As List)
 	For Each k As String In fltName
 		Filters.Add(k)
 	Next
@@ -732,6 +989,7 @@ End Sub"$).Append(CRLF).Append(CRLF)
 	Return Me
 End Sub
 
+'remove file vmodels
 private Sub RemoveFiles As String
 	Dim sbr As StringBuilder
 	sbr.Initialize 
@@ -810,9 +1068,33 @@ private Sub CreateTableCode()
 	AddCode($"${dtName}.Title = "${Plural}""$)
 	AddCode($"${dtName}.ItemKey = "${PrimaryKey}""$)
 	AddCode($"${dtName}.ItemsPerPage = ${DT_ItemsPerPage}"$)
-
+	
+	If DT_Dense Then
+		AddCode($"${dtName}.Dense = True"$)
+	End If
+	
+	If DT_MustSort Then
+		AddCode($"${dtName}.MustSort = True"$)
+	End If
+	
+	If DT_MultiSort Then
+		AddCode($"${dtName}.MultiSort = True"$)
+	End If
+		
 	AddCode($"${dtName}.AddSpacer"$)
 	'
+	If DT_ShowGroupBy Then
+		AddCode($"${dtName}.ShowGroupBy = True"$)
+	End If
+	
+	If DT_ShowSelect Then
+		AddCode($"${dtName}.ShowSelect = True"$)
+	End If
+	
+	If DT_SingleSelect Then
+		AddCode($"${dtName}.SingleSelect = True"$)
+	End If
+		
 	If DT_HasSearch Then
 		AddCode($"${dtName}.AddSearch"$)
 		sb.Append($"${dtName}.AddDivider"$).Append(CRLF)
@@ -923,7 +1205,7 @@ End Sub
 
 'initialize code
 private Sub InitilizeCode
-	AddComment("statis code module")
+	AddComment("static code module")
 	AddCode("Sub Process_Globals")
 	
 	sb.Append($"Public vuetify As VuetifyApp
@@ -933,6 +1215,7 @@ Public name As String = "${ComponentName}"
 Private banano As BANano
 Private ${dtName} As VueTable
 Private ${ModalName} As VueElement
+Private msgBox As VueElement
 Private Mode As String 
 End Sub"$).append(CRLF).append(CRLF)
 	'
@@ -944,9 +1227,8 @@ End Sub"$).append(CRLF).append(CRLF)
 	AddCode($"${ComponentName}.Initialize(Me, name)"$)
 	AddCode($"path = ${ComponentName}.path"$)
 	AddComment("")
-	AddComment("'add a dialog for this page")
-	AddCode($"Dim dlg As VueElement = vuetify.AddDialogAlertPrompt(Me, ${ComponentName}.Here, name, True, 500, "primary", "error")"$)
-	AddCode($"${ComponentName}.BindVueElement(dlg)"$)
+	AddComment("'add a msgbox dialog for this page")
+	AddCode($"msgBox = ${ComponentName}.AddMsgBox(True, 500, "success", "error")"$)
 	AddComment("")
 	AddCode("CreateTable")
 	AddCode("CreateDialog")
@@ -974,6 +1256,7 @@ End Sub"$).append(CRLF).append(CRLF)
 	sb.Append(CRLF).Append(CRLF)
 End Sub
 
+'load relationships
 private Sub LoadRelationships As String
 	Dim xb As StringBuilder
 	xb.Initialize
@@ -986,17 +1269,24 @@ private Sub LoadRelationships As String
 	Return xb.tostring
 End Sub
 
-
+'create dialog code
 private Sub CreateDialogCode
 	AddCode($"Sub CreateDialog"$)
 	AddComment("create a container")
-	AddCode($"Dim ${ModalName} As VueElement = vuetify.AddDialogInput(Me, ${ComponentName}.Here, "${ModalName}", True, "${DialogWidth}", "${Plural}", "Save", "primary", "Cancel", "error")"$)
+	AddCode($"Dim ${ModalName} As VueElement = vuetify.AddDialogInput(Me, ${ComponentName}.Here, "${ModalName}", True, "${Diag_Width}", "${Plural}", "Save", "primary", "Cancel", "error")"$)
+	'
+	If Diag_FullScreenOnMobile Then
+		AddCode($"${ModalName}.FullScreenOnMobile = True"$)
+	End If
+	
 	AddCode($"${ComponentName}.BindVueElement(${ModalName})"$)
 	'
 	AddComment("get the container")
 	AddCode($"Dim ${SingularClean}Cont As VueElement = ${ComponentName}.DialogContainer("${ModalName}")"$)
-	AddCode($"${SingularClean}Cont.AddRows1.AddColumns12"$)
+	sb.Append(BuildGrid)
+	'AddCode($"${SingularClean}Cont.AddRows1.AddColumns12"$)
 	AddCode($"${SingularClean}Cont.BuildGrid"$)
+	AddCode("")
 	'
 	sb.Append(dtCont.ToString).Append(CRLF)
 	'
@@ -1048,6 +1338,7 @@ End Sub"$).Append(CRLF).Append(CRLF)
 End Sub"$).Append(CRLF).Append(CRLF)
 	'
 	'TABLE ADD
+	If DT_HasAddNew Then
 	sb.Append($"Sub ${dtName}_add_click(e As BANanoEvent)				'ignoredeadcode
 	Add${SingularClean}
 End Sub"$).Append(CRLF).Append(CRLF)
@@ -1064,23 +1355,29 @@ End Sub"$).Append(CRLF).Append(CRLF)
 	${xDefaults}
 	${ComponentName}.SetData("${SingularClean.tolowercase}", nt)
 	${BuildVisibility}
+	${BuildProperties}
 	'show the drawer
 	${ComponentName}.SetData("${ModalShow.tolowercase}", True)
 	'vuetify.SetFocus("${FocusOn}")
 End Sub"$).Append(CRLF).Append(CRLF)
+End If
 	'
 	'TABLE EDIT
+	If DT_HasEdit Then
 	sb.Append($"Private Sub ${dtName}_edit (item As Map)				'ignoredeadcode
 	${ComponentName}.DialogUpdateTitle("${ModalName}", "Edit ${Singular}")
 	Mode = "E"
 	Dim s${PrimaryKey} As String = item.Get("${PrimaryKey}")
 	${ComponentName}.RunMethod("Read${SingularClean}", s${PrimaryKey})
 	${BuildVisibility}
+	${BuildProperties}
 	vuetify.SetFocus("${FocusOn}")
 End Sub"$).Append(CRLF).Append(CRLF)
-
+	End If
+	
 	'
 	'TABLE DELETE
+	If DT_HasDelete Then
 	sb.Append($"Private Sub ${dtName}_delete (item As Map)				'ignoredeadcode
 	Dim s${DisplayField} As String = item.Get("${DisplayField}")
 	Dim s${PrimaryKey} As String = item.Get("${PrimaryKey}")
@@ -1109,6 +1406,7 @@ End Sub"$).append(CRLF).append(CRLF)
 	Select Case sconfirm
 	End Select
 End Sub"$).append(CRLF).append(CRLF)
+	End If
 	'
 	'OTHER TABLE STUFF
 	If DT_HasClearSort Then
@@ -1174,7 +1472,8 @@ End Sub"$).Append(CRLF).Append(CRLF)
 	'
 	If DT_HasClone Then
 sb.Append($"Sub ${dtName}_clone (item As Map)
-${ComponentName}.RunMethod("Create${SingularClean}", item)
+Dim rec As Map = BANanoShared.CopyMap(item, array("*"))
+${ComponentName}.RunMethod("Create${SingularClean}", rec)
 End Sub"$).Append(CRLF).Append(CRLF)
 	End If
 
@@ -1214,6 +1513,7 @@ private Sub BuildVisibility As String
 	Return xb.tostring
 End Sub
 
+
 'build defaults
 private Sub BuildDefaults(mapName As String) As String
 	Dim xb As StringBuilder
@@ -1240,8 +1540,74 @@ private Sub BuildDefaults(mapName As String) As String
 	Return xb.tostring
 End Sub
 
+'build the grid
+private Sub BuildGrid As String
+	matrixMap.Initialize 
+	'sort the matrix
+	matrix.Sort(True)
+	For Each entryx As String In matrix
+		Dim srow As String = BANanoShared.MvField(entryx, 1, ".")
+		Dim scol As String = BANanoShared.MvField(entryx, 2, ".")
+		'convert to integers
+		srow = BANano.parseInt(srow)
+		scol = BANano.parseInt(scol)
+		If matrixMap.ContainsKey(srow) Then
+			Dim lastCol As Int = matrixMap.Get(srow)
+			lastCol = BANano.ParseInt(lastCol)
+			If scol > lastCol Then
+				matrixMap.Put(srow, scol)
+			End If
+		Else
+			matrixMap.Put(srow, scol)	
+		End If
+	Next
+	Dim sba As StringBuilder
+	sba.Initialize
+	For Each k As String In matrixMap.Keys
+		Dim v As Int = matrixMap.Get(k)
+		sba.Append($"${SingularClean}Cont.AddRows1"$)
+		Select Case v
+		Case 1
+			'add columns12
+			sba.Append(".AddColumns12")
+		Case 2
+			'add columns2x6
+			sba.Append(".AddColumns2x6")
+		Case 3
+			'addcolumns3x4
+			sba.Append(".AddColumns3x4")
+		Case 4
+			'addcolumns4x3
+			sba.Append(".AddColumns4x3")
+		Case 5
+			sba.Append(".AddColumns5x2")
+		Case 6
+			'addcolumns6x2
+			sba.Append(".AddColumns6x2")
+		Case 7
+			sba.Append(".AddColumns7x1")
+		Case 8
+			sba.Append(".AddColumns8x1")
+		Case 9
+			sba.Append(".AddColumns9x1")
+		Case 10
+			sba.Append(".AddColumns10x1")
+		Case 11
+			sba.Append(".AddColumns11x1")
+		Case 12
+			'addcolumns12x1	
+			sba.Append(".AddColumns12x1")	
+		End Select
+		sba.Append(CRLF)
+	Next
+	Return sba.ToString
+End Sub
+
 'convert to string
 Sub ToString As String
+	AddCode(DB_CreateTable)
+	AddCode("")
+	'
 	InitilizeCode
 	LoadCode
 	ReadCode

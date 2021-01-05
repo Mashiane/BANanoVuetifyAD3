@@ -99,10 +99,11 @@ Public Sub Initialize (CallBack As Object, Name As String) As VueComponent
 	Return Me
 End Sub
 
-Sub AddMsgBox(bPersistent As Boolean, width As Int, okColor As String, cancelColor As String)
+Sub AddMsgBox(bPersistent As Boolean, width As Int, okColor As String, cancelColor As String) As VueElement
 	'**** this page needs to use its own dialog, lets add it
 	Dim fbDialog As VueElement = vuetify.AddDialogAlertPrompt(mCallBack, Here, mName, bPersistent, width, okColor, cancelColor)
 	BindVueElement(fbDialog)
+	Return fbDialog
 End Sub
 
 

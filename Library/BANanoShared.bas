@@ -2975,3 +2975,17 @@ Sub BANanoGetHTMLOnly(id As String) As String
 	Dim xTemplate As String = be.GetHTML
 	Return xTemplate
 End Sub
+
+'remove items in a list containing this property value
+Sub ListRemoveItemsWithProp(olst As List, prop As String, value As String) As List
+	Dim nflds As List
+	nflds.Initialize 
+	For Each fldm As Map In olst
+		Dim ofldname As String = fldm.Get(prop)
+		If ofldname.EqualsIgnoreCase(value) Then
+		Else
+			nflds.Add(fldm)
+		End If
+	Next
+	Return nflds
+End Sub

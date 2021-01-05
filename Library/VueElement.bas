@@ -325,6 +325,7 @@ Sub Class_Globals
 	Public PlaceHolderName As String = "#placeholder"
 	Public Records As List
 	Public Steps As Int
+	Private ntxRow As Int
 End Sub
 
 'initialize the custom view
@@ -351,6 +352,16 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 		If BANano.Exists(fKey) Then mElement = BANano.GetElement(fKey)
 	End If
 	Records.Initialize
+	ntxRow = 0
+End Sub
+
+Sub NextRow As Int
+	ntxRow = ntxRow + 1
+	Return ntxRow
+End Sub
+
+Sub ThisRow As Int
+	Return ntxRow
 End Sub
 
 Sub AddItemParentChild(parent As String, key As String, iconName As String, iconColor As String, title As String, url As String)
@@ -919,7 +930,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		setMarginAXYTBLR(stMarginAXYTBLR)
 	End If
 	'
-	setFullScreen(bFullScreen)
+	setFullScreenOnMobile(bFullScreen)
 	'
 	AddAttr("append-icon", stAppendIcon)
 	AddAttr("append-outer-icon", stAppendOuterIcon)
@@ -2798,17 +2809,44 @@ public Sub getFitScreen() As Boolean
 	Return bFitScreen
 End Sub
 
-'set the conver image for the container
-Sub setFullScreen(varFullScreen As Boolean)
+'set full screen on mobile
+Sub setFullScreenOnMobile(varFullScreen As Boolean)
 	bFullScreen = varFullScreen
 	If BANano.IsUndefined(varFullScreen) Or BANano.IsNull(varFullScreen) Then Return
 	If varFullScreen = False Then Return
 	AddAttr(":fullscreen", "$vuetify.breakpoint.mobile")
 End Sub
 
+
+Sub getDialogTitleID As String
+	Return $"${mName}title"$
+End Sub
+
+Sub getDialogTextID As String
+	Return $"${mName}textid"$
+End Sub
+
+Sub getDialogContainerID As String
+	Return $"${mName}container"$
+End Sub
+
+Sub getDialogActionsID As String
+	Return  $"${mName}cardactions"$
+End Sub
+
+Sub getDialogOkButtonID As String
+	Return $"${mName}ok"$
+End Sub
+
+Sub getDialogCancelButtonID As String
+	Return  $"${mName}cancel"$
+End Sub
+
 public Sub getFullScreen() As Boolean
 	Return bFullScreen
 End Sub
+
+
 
 'set append-icon
 public Sub setAppendIcon(varAppendIcon As String)
@@ -2946,7 +2984,7 @@ End Sub
 
 'set outlined
 public Sub setOutlined(varOutlined As Boolean)
-	Bind("outlined", varOutlined)
+	AddAttrOnCondition("outlined", varOutlined, True)
 	boOutlined = varOutlined
 End Sub
 
@@ -3061,7 +3099,7 @@ End Sub
 
 'set rounded
 public Sub setRounded(varRounded As Boolean)
-	AddAttrOnCondition(":rounded", varRounded, True)
+	AddAttrOnCondition("rounded", varRounded, True)
 	boRounded = varRounded
 End Sub
 
@@ -3081,7 +3119,7 @@ End Sub
 
 'set shaped
 public Sub setShaped(varShaped As Boolean)
-	AddAttrOnCondition(":shaped", varShaped, True)
+	Bind("shaped", varShaped)
 	boShaped = varShaped
 End Sub
 
@@ -3542,6 +3580,31 @@ Sub AddColumns3x2 As VueElement
 	Return Me
 End Sub
 
+
+Sub AddColumns11x1 As VueElement
+	AddColumns(11,"12", "12","1","1","1")
+	Return Me
+End Sub
+
+Sub AddColumns10x1 As VueElement
+	AddColumns(10,"12", "12","1","1","1")
+	Return Me
+End Sub
+
+Sub AddColumns9x1 As VueElement
+	AddColumns(9,"12", "12","1","1","1")
+	Return Me
+End Sub
+
+Sub AddColumns8x1 As VueElement
+	AddColumns(8,"12", "12","1","1","1")
+	Return Me
+End Sub
+
+Sub AddColumns7x1 As VueElement
+	AddColumns(7,"12", "12","1","1","1")
+	Return Me
+End Sub
 
 Sub AddColumns12x1 As VueElement
 	AddColumns(12,"12", "12","1","1","1")
@@ -4278,7 +4341,61 @@ Sub AddItemRightSwitch(id As String, bChecked As Boolean, title As String, subti
 	Records.Add(rec)
 End Sub
 
+Sub GetPreferences(VC As VueComponent) As Map
+	Dim nm As Map = CreateMap()
+	Dim ds As String = getDataSource
+	Dim rs1 As List = VC.GetData(ds)
+	For Each rsm As Map In rs1
+		Dim sid As String = rsm.Get("id")
+		Dim brs As Boolean = False
+		If rsm.ContainsKey("leftcheckbox") Then
+			brs = rsm.Get("leftcheckbox")
+			nm.Put(sid, brs)
+		End If
+		If rsm.ContainsKey("rightcheckbox") Then
+			brs = rsm.Get("rightcheckbox")
+			nm.Put(sid, brs)
+		End If
+		If rsm.ContainsKey("rightswitch") Then
+			brs = rsm.Get("rightswitch")
+			nm.Put(sid, brs)
+		End If
+		If rsm.ContainsKey("leftswitch") Then
+			brs = rsm.Get("leftswitch")
+			nm.Put(sid, brs)
+		End If
+	Next
+	Return nm
+End Sub
 
+Sub SetPreferences(VC As VueComponent, prefM As Map)
+	Dim ds As String = getDataSource
+	Dim rs1 As List = VC.GetData(ds)
+	Dim rsTot As Int = rs1.Size - 1
+	Dim rsCnt As Int
+	For rsCnt = 0 To rsTot
+		Dim rsm As Map = rs1.Get(rsCnt)
+		Dim sid As String = rsm.Get("id")
+		Dim brs As Boolean = False
+		If prefM.ContainsKey(sid) Then
+			brs = prefM.Get(sid)
+			If rsm.ContainsKey("leftcheckbox") Then 
+				rsm.Put("leftcheckbox", brs)
+			End If	
+			If rsm.ContainsKey("rightcheckbox") Then 
+				rsm.Put("rightcheckbox", brs)
+			End If
+			If rsm.ContainsKey("rightswitch") Then 
+				rsm.Put("rightswitch", brs)
+			End If
+			If rsm.ContainsKey("leftswitch") Then
+				rsm.Put("leftswitch", brs)
+			End If
+			rs1.Set(rsCnt, rsm)
+		End If
+	Next
+	VC.SetData(ds, rs1)
+End Sub
 
 'add an icon
 Sub AddItemIcon(id As String, icon As String, iconcolor As String, title As String, subtitle As String, _

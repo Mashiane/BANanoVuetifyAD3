@@ -1,5 +1,5 @@
 ﻿B4J=true
-Group=Default Group
+Group=Default Group\Views
 ModulesStructureVersion=1
 Type=StaticCode
 Version=8.8
@@ -25,16 +25,16 @@ Sub Initialize
 	path = fb.path
 	'
 	firebase.Initialize
-	firebase.apiKey = "redacted"
-	firebase.authDomain = "redacted"
-	firebase.databaseURL = "redacted"
-	firebase.projectId = "redacted"
-	firebase.storageBucket = "redacted"
-	firebase.messagingSenderId = "redacted"
-	firebase.appId = "redacted"
-	firebase.measurementId = "redacted"
-	firebase.vapidKey = "redacted"
-	firebase.ServerKey = "redacted"
+	firebase.apiKey = "(redacted)"
+	firebase.authDomain = "(redacted)"
+	firebase.databaseURL = "(redacted)"
+	firebase.projectId = "(redacted)"
+	firebase.storageBucket = "(redacted)"
+	firebase.messagingSenderId = "(redacted)"
+	firebase.appId = "(redacted)"
+	firebase.measurementId = "(redacted)"
+	firebase.vapidKey = "(redacted)"
+	firebase.ServerKey = "(redacted)"
 	
 	'add a container
 	Dim cont As VueElement = vuetify.AddContainer(Me, fb.Here, "fbcont", True)

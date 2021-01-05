@@ -41,11 +41,13 @@ End Sub
 Sub Init
 	'initialize the app
 	vuetify.Initialize(Me, "inspire")
+	
+	'initialize the snack bar
+	BANano.LoadLayout(vuetify.apptemplatename, "vbaseline")
+	'
 	'BANano.GetElement("#body").AddClass("md-scrollbar")
 	AddRouters
 		
-	'initialize the snack bar
-	BANano.LoadLayout(vuetify.apptemplatename, "vbaseline")
 	Dim appDialog As VueElement = vuetify.AddDialogAlertPrompt(Me, "vapp", "inspire", True, 400, "primary", "error")
 	vuetify.BindVueElement(appDialog)
 	
@@ -135,6 +137,8 @@ Sub Init
 	drwlist.AddItemParentChild("database", ViewMySQL.name, "", "", "MySQL PHP", ViewMySQL.path)
 	drwlist.AddItemParentChild("database", ViewMSSQL.name, "", "", "MSSQL PHP (PDO)", ViewMSSQL.path)
 	drwlist.AddItemParentChild("database", ViewBANanoSQL.name, "", "", "IndexedDB", ViewBANanoSQL.path)
+	drwlist.AddItemParentChild("database", ViewCRUDBuilder.name, "", "", "CRUD Builder", ViewCRUDBuilder.path)
+	drwlist.AddItemParentChild("database", ViewContacts.name, "", "", "Contacts Example", ViewContacts.path)
 	'
 	drwlist.AddItemParentChild("", "firebase", "mdi-firebase", "", "FireBase", "")
 	drwlist.AddItemParentChild("firebase", ViewFirebase.name, "", "", "Firebase Messaging", ViewFirebase.path)
@@ -152,8 +156,6 @@ Sub Init
 	vuetify.SetData("appdrawer", False)
 	'render the ux
 	vuetify.Serve
-	
-	
 End Sub
 
 'a list item on the drawer is clicked
@@ -162,6 +164,8 @@ Sub drwlist_click(item As String)
 End Sub
 
 Sub AddRouters
+	ViewContacts.Initialize
+	ViewCRUDBuilder.Initialize 
 	ViewFirebase.Initialize 
 	ViewBANanoSQL.Initialize 
 	ViewMSSQL.Initialize 

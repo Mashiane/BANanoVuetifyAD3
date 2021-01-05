@@ -119,7 +119,7 @@ Sub dlg1ok_click(e As BANanoEvent)
 	'get the entered user profile, this is an object
 	Dim profile As Map = inputdialog.GetData("profile")
 	'show content on snack bar
-	vuetify.ShowSnackBarSuccess(profile)
+	vuetify.ShowSnackBarSuccess(BANano.ToJson(profile))
 	'close the dialog
 	inputdialog.CloseDialog("dlg1")
 End Sub
