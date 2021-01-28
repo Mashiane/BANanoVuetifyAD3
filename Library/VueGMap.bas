@@ -283,6 +283,9 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	mmarkers.vif = smarkersVisible
 	mmarkers.SetAttr(":clickable", sMarkersClickable)
 	mmarkers.SetAttr(":draggable", sMarkersDraggable)
+	mmarkers.SetAttr(":icon", "m.icon")
+	mmarkers.SetAttr(":title", "m.label")
+	mmarkers.SetAttr(":animation", "m.animation")
 	mmarkers.VFor = $"(m,i) in ${markerName}"$
 	mmarkers.BindKey("m.id")
 	mmarkers.SetAttr("v-on:click", "toggleinfowindow(m, i)")
@@ -751,7 +754,7 @@ Public Sub AddAttr(varProp As String, varValue As String)
 		varValue = varValue.Replace("#","$")
 		'we are adding a string
 		If varValue.StartsWith(":") Then
-			Dim rname As String = BANanoShared.MidString2(varValue, 2)
+			Dim rname As String = BANanoShared.MidS(varValue, 2)
 			If rname.Contains(".") = False Then
 				bindings.Put(rname, Null)
 			End If
@@ -1159,6 +1162,26 @@ Sub AddMarker(mID As String, lat As Double, lng As Double, label As String, info
 	marker.put("id", mID)
 	If info <> Null Then marker.Put("infoText", info)
 	If label <> Null Then marker.put("label", label)
+	points.add(marker)
+End Sub
+
+Sub AddMarker1(mID As String, lat As Double, lng As Double, label As String, info As String, icon As String)
+	mID = mID.tolowercase
+	Dim point As Map = CreateMap()
+	Dim marker As Map = CreateMap()
+	'
+	lat = BANano.parseFloat(lat)
+	lng = BANano.parseFloat(lng)
+	
+	point.Put("lat", lat)
+	point.put("lng", lng)
+	'
+	marker.put("position", point)
+	marker.put("id", mID)
+	If icon <> Null Then marker.Put("icon", icon)
+	If info <> Null Then marker.Put("infoText", info)
+	If label <> Null Then marker.put("label", label)
+	marker.Put("animation", "bounce")
 	points.add(marker)
 End Sub
 

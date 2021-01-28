@@ -574,13 +574,12 @@ Sub AddTitleIcon(VC As VueComponent, elID As String, eIcon As String, btnColor A
 	ct.Initialize($"#${titleID}"$)
 	elID = elID.ToLowerCase
 	Dim siconright As String = $"${elID}icon"$
-	ct.Append($"<v-btn id="${elID}"><v-icon id="${elID}icon"></v-icon></v-btn>"$)
+	ct.Append($"<v-btn icon id="${elID}"><v-icon id="${elID}icon"></v-icon></v-btn>"$)
 	Dim vbtnright As VueElement
 	vbtnright.Initialize(mCallBack, elID, elID)
-	vbtnright.Dark = True
-	vbtnright.Fab = True
-	vbtnright.Small = True
+	'vbtnright.Small = True
 	If btnColor <> "" Then vbtnright.Color = btnColor
+	vbtnright.Elevation = 4
 	'
 	Dim viconright As VueElement
 	viconright.Initialize(mCallBack, siconright, siconright)
@@ -930,7 +929,7 @@ Public Sub AddAttr(varProp As String, varValue As String)
 		varValue = varValue.Replace("#","$")
 		'we are adding a string
 		If varValue.StartsWith(":") Then
-			Dim rname As String = BANanoShared.MidString2(varValue, 2)
+			Dim rname As String = BANanoShared.MidS(varValue, 2)
 			If rname.Contains(".") = False Then
 				bindings.Put(rname, Null)
 			End If
@@ -2424,6 +2423,7 @@ sb.Append(temp)
 					avtimg.Width = nf.imgWidth
 					avtimg.MaxWidth = nf.imgWidth
 				End If
+				avtimg.AddClass("rounded-lg")
 				'
 '				Dim props As Map = nf.props
 '				For Each k As String In props.Keys
@@ -2506,9 +2506,9 @@ sb.Append(temp)
 				abtn.Initialize(mCallBack, "", "")
 				abtn.TagName = "v-btn"
 				abtn.Elevation = "4"
-				abtn.Fab = True
-				abtn.Small = True
-				abtn.dark = True
+				'abtn.Small = True
+				'abtn.dark = True
+				abtn.ButtonIcon = True
 				abtn.AddClass("mr-2")
 				If nf.color.StartsWith("item.") Then
 					abtn.AddAttr(":color", nf.color)
@@ -2527,6 +2527,7 @@ sb.Append(temp)
 				aicon.Initialize(mCallBack, "", "")
 				aicon.TagName = "v-icon"
 				aicon.Append(nf.icon)
+				aicon.Dark = True
 				If nf.iconSize <> "" Then aicon.Size = nf.iconSize
 				abtn.Append(aicon.tostring)
 			

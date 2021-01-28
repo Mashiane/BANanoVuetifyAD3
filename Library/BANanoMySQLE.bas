@@ -49,6 +49,8 @@ Sub Class_Globals
 	Public Record As Map
 	Public Auto As String
 	Public fields As List
+	Public view As String
+	Public action As String
 End Sub
 
 'set database connection settings
@@ -57,6 +59,12 @@ Sub SetConnection(shost As String, susername As String, spassword As String) As 
 	username = susername
 	password = spassword
 	Return Me
+End Sub
+
+
+Sub SetCallBack(v As String, a As String)
+	view = v
+	action = a
 End Sub
 
 private Sub RecordFromMap(sm As Map)
@@ -198,7 +206,7 @@ End Sub
 '</code>
 Sub GetMax As BANanoMySQLE
 	query = $"SELECT MAX(${PrimaryKey}) As ${PrimaryKey} FROM ${EscapeField(TableName)}"$
-	command = "getmax"
+	command = "select"
 	Return Me
 End Sub
 
@@ -216,7 +224,7 @@ End Sub
 '</code>
 Sub GetMin As BANanoMySQLE
 	query = $"SELECT MIN(${PrimaryKey}) As ${PrimaryKey} FROM ${EscapeField(TableName)}"$
-	command = "getmin"
+	command = "select"
 	Return Me
 End Sub
 
@@ -224,7 +232,7 @@ End Sub
 'get table names
 Sub GetDatabases As BANanoMySQLE
 	query = $"SHOW DATABASES"$
-	command = "databases"
+	command = "select"
 	Return Me
 End Sub
 
@@ -1117,17 +1125,21 @@ Sub SelectDistinctAll(tblfields As List, orderBy As List) As BANanoMySQLE
 	Return Me
 End Sub
 
-Sub Build As Map
+Sub Build(isPHP As Boolean) As Map
 	Dim b As Map = CreateMap()
 	b.Put("command", command)
 	b.Put("query", query)
 	b.Put("args", args)
 	b.Put("types", types)
+	If isPHP = False Then
+		b.Put("view", view)
+		b.Put("action", action)
+	End If
 	Return b
 End Sub
 
 'build with connection settings
-Sub BuildDynamic As Map
+Sub BuildDynamic(isPHP As Boolean) As Map
 	Dim b As Map = CreateMap()
 	b.Put("command", command)
 	b.Put("query", query)
@@ -1137,8 +1149,31 @@ Sub BuildDynamic As Map
 	b.Put("username", username)
 	b.Put("password", password)
 	b.Put("dbname", DBase)
+	If isPHP = False Then
+		b.Put("view", view)
+		b.Put("action", action)
+	End If
 	Return b
 End Sub
+
+'return a sql to truncate table
+'<code>
+''delete all records and reset auto increment
+'dbConnect.Truncate
+'dbConnect.JSON = BANano.CallInlinePHPWait(dbConnect.MethodName, dbConnect.Build)
+'dbConnect.FromJSON
+'Select Case dbConnect.OK
+'Case False
+'Dim strError As String = dbConnect.Error
+'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
+'End Select
+'</code>
+Sub Truncate As BANanoMySQLE
+	query = $"TRUNCATE TABLE ${EscapeField(TableName)}"$
+	command = "delete"
+	Return Me
+End Sub
+
 
 
 Sub FirstRecord As Map
@@ -1298,6 +1333,68 @@ Sub UpdateAll(tblFields As Map) As BANanoMySQLE
 	Return Me
 End Sub
 
+'return a sql to select record of table where one exists
+'<code>
+''select all records
+'dbConnect.SelectAllDesc(array("*"), array("name"), array("name"))
+'dbConnect.JSON = BANano.CallInlinePHPWait(dbConnect.MethodName, dbConnect.Build)
+'dbConnect.FromJSON
+'Select Case dbConnect.OK
+'Case False
+'Dim strError As String = dbConnect.Error
+'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
+'End Select
+'</code>
+Sub SelectAllAscDesc(tblfields As List, orderBy As List, AscDesc As List)
+	'are we selecting all fields or just some
+	Dim fld1 As String = tblfields.Get(0)
+	Dim selFIelds As String = ""
+	Select Case fld1
+		Case "*"
+			selFIelds = "*"
+		Case Else
+			selFIelds = JoinFields(",", tblfields)
+	End Select
+	Dim sb As StringBuilder
+	sb.Initialize
+	sb.Append($"SELECT ${selFIelds} FROM ${EscapeField(TableName)}"$)
+	If orderBy.IsInitialized Then
+		'order by
+		Dim xOrder As List
+		xOrder.Initialize
+		'
+		Dim obTot As Int = orderBy.Size - 1
+		Dim obCnt As Int
+		For obCnt = 0 To obTot
+			Dim xfld As String = orderBy.Get(obCnt)
+			If AscDesc.IsInitialized Then
+				'does the field exist in sort order
+				If AscDesc.IndexOf(xfld) >= 0 Then
+					xfld = EscapeField(xfld) & " DESC"
+					xOrder.Add(xfld)
+				End If
+			Else
+				xOrder.Add(EscapeField(xfld))
+			End If
+		Next
+		Dim strO As String = Join(",", xOrder)
+		If strO.Length > 0 Then
+			sb.Append(" ORDER BY ").Append(strO)
+		End If
+	End If
+	query = sb.tostring
+	command =  "select"
+	args = Null
+	types = Null
+	response = ""
+	error = ""
+	result = NewList
+	json = ""
+	affectedRows = 0
+End Sub
+
+
+
 #if PHP
 function prepareMySQL($conn, $query, $types, $args) {
 	//paramater types to execute
@@ -1324,6 +1421,9 @@ function BANanoMySQL($command, $query, $args, $types) {
 	$resp = array();
 	header('Access-Control-Allow-Origin: *');
 	header('content-type: application/json; charset=utf-8');
+	header("Access-Control-Allow-Credentials: true");
+	header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
+	header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token , Authorization');
 	require_once './assets/mysqlconfig.php';
     //connect To MySQL
     $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
@@ -1405,6 +1505,9 @@ function BANanoMySQLDynamic($command, $query, $args, $types, $host, $username, $
 	$resp = array();
 	header('Access-Control-Allow-Origin: *');
 	header('content-type: application/json; charset=utf-8');
+	header("Access-Control-Allow-Credentials: true");
+	header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
+	header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token , Authorization');
 	//connect To MySQL
     $conn = new mysqli($host, $username, $password);
     //we cannot connect Return an error

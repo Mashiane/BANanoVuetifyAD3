@@ -1,25 +1,63 @@
 ﻿AppType=JavaFX
 Build1=Default,b4j.example
 File1=1.png
-File10=red.png
-File11=sadface.png
-File12=upload.php
-File13=vue-google-maps.js
+File10=materialdesignicons.min.css
+File11=materialdesignicons-webfont.eot
+File12=materialdesignicons-webfont.ttf
+File13=materialdesignicons-webfont.woff
+File14=materialdesignicons-webfont.woff2
+File15=neutralface.png
+File16=numeral.min.js
+File17=orange.png
+File18=red.png
+File19=roboto.min.css
 File2=2.png
+File20=Roboto100.ttf
+File21=Roboto300.ttf
+File22=Roboto400.ttf
+File23=Roboto500.ttf
+File24=Roboto700.ttf
+File25=Roboto900.ttf
+File26=sadface.png
+File27=upload.php
+File28=vue.min.js
+File29=vue-google-maps.js
 File3=avatar.png
-File4=fileSaver.min.js
-File5=gray.png
-File6=green.png
-File7=happyface.png
-File8=neutralface.png
-File9=orange.png
+File30=vue-router.min.js
+File31=vuetify.min.css
+File32=vuetify.min.js
+File4=dayjs.min.js
+File5=fileSaver.min.js
+File6=gray.png
+File7=green.png
+File8=happyface.png
+File9=lodash.min.js
 FileGroup1=Default Group
 FileGroup10=Default Group
 FileGroup11=Default Group
 FileGroup12=Default Group
 FileGroup13=Default Group
+FileGroup14=Default Group
+FileGroup15=Default Group
+FileGroup16=Default Group
+FileGroup17=Default Group
+FileGroup18=Default Group
+FileGroup19=Default Group
 FileGroup2=Default Group
+FileGroup20=Default Group
+FileGroup21=Default Group
+FileGroup22=Default Group
+FileGroup23=Default Group
+FileGroup24=Default Group
+FileGroup25=Default Group
+FileGroup26=Default Group
+FileGroup27=Default Group
+FileGroup28=Default Group
+FileGroup29=Default Group
 FileGroup3=Default Group
+FileGroup30=Default Group
+FileGroup31=Default Group
+FileGroup32=Default Group
 FileGroup4=Default Group
 FileGroup5=Default Group
 FileGroup6=Default Group
@@ -41,7 +79,7 @@ Module6=MySQLCRUD
 Module7=VueComponent
 Module8=VueElement
 Module9=VueGMap
-NumberOfFiles=13
+NumberOfFiles=32
 NumberOfLibraries=3
 NumberOfModules=11
 Version=8.8
@@ -55,7 +93,7 @@ Version=8.8
 
 Sub Process_Globals
 	Private BANano As BANano 'ignore
-	Public Version As String = "2.95"
+	Public Version As String = "3.04"
 	Public AppName As String = "BANanoVuetifyAD3"
 End Sub
 
@@ -63,17 +101,29 @@ Sub AppStart (Form1 As Form, Args() As String)
 	
 	' you can change some output params here
 	BANano.Initialize("BANano", AppName,DateTime.now)
-	BANano.Header.AddCSSFile("https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900")
-	BANano.Header.AddCSSFile("https://cdn.jsdelivr.net/npm/@mdi/font@latest/css/materialdesignicons.min.css")
-	BANano.Header.AddCSSFile("https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css")
-	BANano.Header.AddJavascriptFile("https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.min.js")
-	BANano.Header.AddJavascriptFile("https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.js")
-	BANano.Header.AddJavascriptFile("https://cdn.jsdelivr.net/npm/vue-router@3.x/dist/vue-router.min.js")
-	BANano.Header.AddJavascriptFile("https://cdn.jsdelivr.net/npm/dayjs@1.9.6/dayjs.min.js")
-	BANano.Header.AddJavascriptFile("https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js")
-	BANano.Header.AddJavascriptFile("https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.20/lodash.min.js")
+'	BANano.Header.AddCSSFile("https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900")
+'	BANano.Header.AddCSSFile("https://cdn.jsdelivr.net/npm/@mdi/font@latest/css/materialdesignicons.min.css")
+'	BANano.Header.AddCSSFile("https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css")
+'	BANano.Header.AddJavascriptFile("https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.min.js")
+'	BANano.Header.AddJavascriptFile("https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.js")
+'	BANano.Header.AddJavascriptFile("https://cdn.jsdelivr.net/npm/vue-router@3.x/dist/vue-router.min.js")
+'	BANano.Header.AddJavascriptFile("https://cdn.jsdelivr.net/npm/dayjs@1.10.3/dayjs.min.js")
+'	BANano.Header.AddJavascriptFile("https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js")
+'	BANano.Header.AddJavascriptFile("https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.20/lodash.min.js")
+		'
+	BANano.Header.AddCSSFile("roboto.min.css")
+	BANano.Header.AddCSSFile("materialdesignicons.min.css")
+	BANano.Header.AddCSSFile("vuetify.min.css")
+	BANano.Header.AddJavascriptFile("vue.min.js")
+	BANano.Header.AddJavascriptFile("vuetify.min.js")
+	BANano.Header.AddJavascriptFile("vue-router.min.js")
+	BANano.Header.AddJavascriptFile("dayjs.min.js")
+	BANano.Header.AddJavascriptFile("numeral.min.js")
+	BANano.Header.AddJavascriptFile("lodash.min.js")
+	
 	BANano.Header.AddJavascriptFile("vue-google-maps.js")
 	BANano.Header.AddJavascriptfile("fileSaver.min.js")
+	
 	' start the build
 	#if release
 		BANano.BuildAsB4Xlib(Version)

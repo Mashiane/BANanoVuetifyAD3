@@ -45,6 +45,8 @@ Sub Class_Globals
 	Private username As String
 	Private password As String
 	Private Auto As String
+	Public view As String
+	Public action As String
 End Sub
 
 'set database connection settings
@@ -55,6 +57,29 @@ Sub SetConnection(shost As String, susername As String, spassword As String) As 
 	Return Me
 End Sub
 
+'return a sql to truncate table
+'<code>
+''delete all records and reset auto increment
+'dbConnect.Truncate
+'dbConnect.JSON = BANano.CallInlinePHPWait(dbConnect.MethodName, dbConnect.Build)
+'dbConnect.FromJSON
+'Select Case dbConnect.OK
+'Case False
+'Dim strError As String = dbConnect.Error
+'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
+'End Select
+'</code>
+Sub Truncate As BANanoMSSQLE
+	query = $"TRUNCATE TABLE ${EscapeField(TableName)}"$
+	command = "delete"
+	Return Me
+End Sub
+
+
+Sub SetCallBack(v As String, a As String)
+	view = v
+	action = a
+End Sub
 
 private Sub AndOrOperators(sm As Map) As List    'ignore
 	Dim nl As List
@@ -427,7 +452,7 @@ End Sub
 Sub GetMax As BANanoMSSQLE
 	Dim sb As String = $"SELECT MAX(${PrimaryKey}) As ${PrimaryKey} FROM ${EscapeField(TableName)}"$
 	query = sb
-	command = "getmax"
+	command = "select"
 	Return Me
 End Sub
 
@@ -446,7 +471,7 @@ End Sub
 Sub GetMin As BANanoMSSQLE
 	Dim sb As String = $"SELECT MIN(${PrimaryKey}) As ${PrimaryKey} FROM ${EscapeField(TableName)}"$
 	query = sb
-	command = "getmin"
+	command = "select"
 	Return Me
 End Sub
 
@@ -1059,12 +1084,16 @@ Sub SelectDistinctAll(tblfields As List, orderBy As List) As BANanoMSSQLE
 End Sub
 
 'build the map to pass to php from statement
-Sub Build As Map
+Sub Build(isPHP As Boolean) As Map
 	Dim b As Map = CreateMap()
 	b.Put("command", command)
 	b.Put("query", query)
 	b.Put("args", args)
 	b.Put("types", types)
+	If isPHP = False Then
+		b.Put("view", view)
+		b.Put("action", action)
+	end if
 	Return b
 End Sub
 
@@ -1185,11 +1214,77 @@ Sub UpdateAll(tblFields As Map) As BANanoMSSQLE
 	Return Me
 End Sub
 
+'return a sql to select record of table where one exists
+'<code>
+''select all records
+'dbConnect.SelectAllDesc(array("*"), array("name"), array("name"))
+'dbConnect.JSON = BANano.CallInlinePHPWait(dbConnect.MethodName, dbConnect.Build)
+'dbConnect.FromJSON
+'Select Case dbConnect.OK
+'Case False
+'Dim strError As String = dbConnect.Error
+'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
+'End Select
+'</code>
+Sub SelectAllAscDesc(tblfields As List, orderBy As List, AscDesc As List)
+	'are we selecting all fields or just some
+	Dim fld1 As String = tblfields.Get(0)
+	Dim selFIelds As String = ""
+	Select Case fld1
+		Case "*"
+			selFIelds = "*"
+		Case Else
+			selFIelds = JoinFields(",", tblfields)
+	End Select
+	Dim sb As StringBuilder
+	sb.Initialize
+	sb.Append($"SELECT ${selFIelds} FROM ${EscapeField(TableName)}"$)
+	If orderBy.IsInitialized Then
+		'order by
+		Dim xOrder As List
+		xOrder.Initialize
+		'
+		Dim obTot As Int = orderBy.Size - 1
+		Dim obCnt As Int
+		For obCnt = 0 To obTot
+			Dim xfld As String = orderBy.Get(obCnt)
+			If AscDesc.IsInitialized Then
+				'does the field exist in sort order
+				If AscDesc.IndexOf(xfld) >= 0 Then
+					xfld = EscapeField(xfld) & " DESC"
+					xOrder.Add(xfld)
+				End If
+			Else
+				xOrder.Add(EscapeField(xfld))
+			End If
+		Next
+		Dim strO As String = Join(",", xOrder)
+		If strO.Length > 0 Then
+			sb.Append(" ORDER BY ").Append(strO)
+		End If
+	End If
+	query = sb.tostring
+	command =  "select"
+	args = Null
+	types = Null
+	response = ""
+	error = ""
+	result = NewList
+	json = ""
+	affectedRows = 0
+End Sub
+
+
+
+
 #if php
 function BANanoMSSQL($command, $query, $args, $types){
 	$resp = array();
 	header('Access-Control-Allow-Origin: *');
 	header('content-type: application/json; charset=utf-8');
+	header("Access-Control-Allow-Credentials: true");
+	header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
+	header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token , Authorization');
 	require_once './assets/mssqlconfig.php';
 	$serverName = DB_HOST;
 	$uid = DB_USER;
@@ -1248,6 +1343,9 @@ function BANanoMSSQLDynamic($command, $query, $args, $types, $host, $username, $
 	$resp = array();
 	header('Access-Control-Allow-Origin: *');
 	header('content-type: application/json; charset=utf-8');
+	header("Access-Control-Allow-Credentials: true");
+	header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
+	header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token , Authorization');
 	$conn=null;
 	try {
 		$conn = new PDO("sqlsrv:server=$host;database=$dbname", $username, $password);

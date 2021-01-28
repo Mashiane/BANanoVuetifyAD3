@@ -26,6 +26,7 @@ Sub Process_Globals
     )
 	Type FileObject(FileName As String, FileDate As String, FileSize As Long, FileType As String, Status As String, FullPath As String)
 	Private SourceCode As StringBuilder
+	Type sequencePair(value As Int, numTimes As Int)
 End Sub
 
 
@@ -37,7 +38,8 @@ Sub MVSingleQuoteItems(delim As String, mvstring As String) As String
 	For Each k As String In lItems
 		k = CStr(k)
 		k = k.Trim
-		sbOut.Append($"'${k}'"$).Append(delim)
+		sbOut.Append($"'${k}'"$)
+		sbOut.Append(delim)
 	Next
 	Dim sout As String = sbOut.ToString
 	sout = RemDelim(sout, delim)
@@ -445,17 +447,6 @@ Sub RemDelim(sValue As String, Delim As String) As String
 	End If
 End Sub
 
-Sub DateIconv(sdate As String) As Long
-	Dim lps As Long = DateTime.DateParse(sdate)
-	Return lps
-End Sub
-
-Sub DateOconv(lDate As Long) As String
-	DateTime.DateFormat = "yyyy-MM-dd"
-	Dim sdate As String = DateTime.Date(lDate)
-	Return sdate
-End Sub
-
 'break a string at uppercase to have a space
 Sub StringBreakAtUpperCase(st As String) As String
 	If st.Length = 0 Then Return ""
@@ -842,6 +833,57 @@ Sub JoinLists(lst As List) As List
 	Return nl
 End Sub
 
+'extract map properties to a list
+Sub MapProperty2List(om As List, prop As String) As List
+	Dim lst As List
+	lst.initialize
+	Dim mtot As Int = om.Size - 1
+	Dim mcnt As Int = 0
+	For mcnt = 0 To mtot
+		Dim omm As Map = om.Get(mcnt)
+		Dim strvalue As String = omm.GetDefault(prop,"")
+		lst.Add(strvalue)
+	Next
+	Return lst
+End Sub
+
+
+Public Sub ProgressRAG(dVariance As Double) As String
+	If dVariance < 0 Then
+		Return "./assets/red.png"
+	else if dVariance > 0 Then
+		Return "./assets/green.png"
+	else if dVariance = 0 Then
+		Return "./assets/orange.png"
+	Else
+		Return "./assets/gray.png"
+	End If
+End Sub
+
+Public Sub ExpenditureRAG(dVariance As Double) As String
+	If dVariance > 0 Then
+		Return "./assets/green.png"
+	else if dVariance < 0 Then
+		Return "./assets/red.png"
+	else if dVariance = 0 Then
+		Return "./assets/orange.png"
+	Else
+		Return "./assets/gray.png"
+	End If
+End Sub
+
+Public Sub ExpectedRAG(dValue As Double) As String
+	If dValue = 0 Then
+		Return "./assets/orange.png"
+	else if dValue > 0 Then
+		Return "./assets/red.png"
+	else if dValue < 0 Then
+		Return "./assets/green.png"
+	Else
+		Return "./assets/red.png"
+	End If
+End Sub
+
 
 'convert map keys to a list
 Sub MapKeys2List(m As Map) As List
@@ -868,10 +910,10 @@ End Sub
 Sub RSAIDNumber2DateOfBirth(rsaID As String) As String
 	'south african id
 	If rsaID.length = 13 Then
-		Dim yymmdd As String = LeftString(rsaID, 6)
-		Dim yy As String = LeftString(yymmdd,2)
-		Dim mm As String = MidString(yymmdd,3,2)
-		Dim dd As String = RightString(yymmdd,2)
+		Dim yymmdd As String = LeftS(rsaID, 6)
+		Dim yy As String = LeftS(yymmdd,2)
+		Dim mm As String = Mid2(yymmdd,3,2)
+		Dim dd As String = RightS(yymmdd,2)
 		yymmdd = $"19${yy}-${mm}-${dd}"$
 		Return yymmdd
 	Else
@@ -1240,11 +1282,11 @@ Sub NewDateTime(year As Int, month As Int, day As Int, hour As Int, minute As In
 	Return dd
 End Sub
 
-Sub Pad(Value As String, MaxLen As Int, PadChar As String, right As Boolean) As String
+Sub Pad(Value As String, MaxLen As Int, PadChar As String, bright As Boolean) As String
 	Dim  intOrdNoLen As Int = Value.Length
 	Dim i As Int
 	For i = 1 To (MaxLen - intOrdNoLen) Step 1
-		If right Then
+		If bright Then
 			Value =  Value & PadChar
 		Else
 			Value = PadChar & Value
@@ -1409,28 +1451,6 @@ Sub Percentage(sValue As String) As String
 	End Try
 End Sub
 
-Sub MidString(Text As String, Start As Int, lLength As Int) As String
-	Return Text.SubString2(Start-1,Start+lLength-1)
-End Sub
-
-Sub MidString2(Text As String, Start As Int) As String
-	Return Text.SubString(Start-1)
-End Sub
-
-Sub RightString(Text As String, lLength As Long) As String
-	If lLength>Text.Length Then lLength=Text.Length
-	Return Text.SubString(Text.Length-lLength)
-End Sub
-
-Sub LeftString(Text As String, lLength As Long)As String
-	If lLength>Text.Length Then lLength=Text.Length
-	Return Text.SubString2(0, lLength)
-End Sub
-
-Sub ReplaceString(Text As String, sFind As String, sReplaceWith As String) As String
-	Return Text.Replace(sFind, sReplaceWith)
-End Sub
-
 Sub LongDate(sDate As String) As String
 	If sDate.Length = 0 Then Return ""
 	Try
@@ -1455,11 +1475,11 @@ Sub LongDateTime(sDate As String) As String
 	End Try
 End Sub
 
-private Sub TrimString(strValue As String) As String
+Sub TrimS(strValue As String) As String
 	Return strValue.trim
 End Sub
 
-Sub LCase(Text As String) As String
+Sub LCaseS(Text As String) As String
 	Return Text.ToLowerCase
 End Sub
 
@@ -2064,49 +2084,238 @@ End Sub
 'End Sub
 '
 
+'return position of a key in the map
+private Sub MapKeySearch(nm As Map, s As String) As Int
+	Dim mpos As Int = -1
+	For Each strKey As String In nm.Keys
+		mpos = mpos + 1
+		If strKey.EqualsIgnoreCase(s) Then
+			Return mpos
+		End If
+	Next
+	Return mpos
+End Sub
+
+Sub ToBoolean(sValue As String) As Boolean
+	Return BANano.iif(sValue = "0", False, True)
+End Sub
+
+Sub IndexOfNth(occur As Int, query As String, data As String) As Int
+	Dim index As Int = data.IndexOf(query)
+	Do While index > -1 And occur > 1
+		index = data.IndexOf2(query, index + 1)
+		occur = occur - 1
+	Loop
+	Return index
+End Sub
+
+
+Sub MvLast(delim As String, value As String) As String
+	Dim tot As Int = MvCount(value,delim)
+	Return MvField(value,tot,delim)
+End Sub
+
+public Sub RemPrefix(xvalue As String, delim As String) As String
+	If xvalue.StartsWith(delim) Then
+		xvalue = MidS(xvalue,delim.Length)
+		Return xvalue
+	End If
+	Return xvalue
+End Sub
+
+
+Sub MaxOfList(lst As List) As Int
+	Dim maxcnt As Int = 0
+	Dim curCnt As Int = 0
+	For Each strID As String In lst
+		curCnt = CInt(strID)
+		If curCnt > maxcnt Then 
+			maxcnt = curCnt
+		End If
+	Next
+	Return maxcnt
+End Sub
+
+Sub MaxOfMapKeys(lst As Map) As Int
+	Dim maxcnt As Int = 0
+	Dim curCnt As Int = 0
+	For Each strID As String In lst.keys
+		curCnt = CInt(strID)
+		If curCnt > maxcnt Then 
+			maxcnt = curCnt
+		End If
+	Next
+	Return maxcnt
+End Sub
+
+
+Sub MinOfList(lst As List) As Int
+	'lets get the first value
+	Dim fValue As String = lst.Get(0)
+	Dim maxcnt As Int = CInt(fValue)
+	Dim curCnt As Int = 0
+	For Each strID As String In lst
+		curCnt = CInt(strID)
+		If curCnt < maxcnt Then 
+			maxcnt = curCnt
+		End If
+	Next
+	Return maxcnt
+End Sub
+
+Sub GetRecordFromJSONList(jsonValue As String, sPrimaryKey As String, sPrimaryValue As String) As Map
+	Dim outList As Map
+	outList.Initialize
+	If sPrimaryKey.Length = 0 Then 
+		Return outList
+	End If
+	Dim lItems As List = Json2List(jsonValue)
+	For Each recMap As Map In lItems
+		Dim strKey As String = recMap.GetDefault(sPrimaryKey.tolowercase,"")
+		If strKey.EqualsIgnoreCase(sPrimaryValue) Then
+			Return recMap
+		End If
+	Next
+End Sub
+
+'extract a particular key value from a list of maps in JSON format
+Sub ExtraListFromJSONMaps(strJSON As String, Property As String) As List
+	Property = Property.tolowercase
+	Dim lstNew As List
+	lstNew.initialize
+	Dim lst As List = Json2List(strJSON)
+	For Each m As Map In lst
+		Dim sprop As String = m.GetDefault(Property,"")
+		If sprop.Length > 0 Then 
+			lstNew.add(sprop)
+		End If
+	Next
+	Return lstNew
+End Sub
+
+'extract a particular key value from a list of maps
+Sub ExtraPropertyFromListOfMaps(lst As List, Property As String) As List
+	Property = Property.tolowercase
+	Dim lstNew As List
+	lstNew.initialize
+	For Each m As Map In lst
+		Dim sprop As String = m.GetDefault(Property,"")
+		If sprop.Length > 0 Then 
+			lstNew.add(sprop)
+		End If
+	Next
+	Return lstNew
+End Sub
+
+
+Sub AddMap2Json(strJSON As String, m As Map) As String
+	Dim lst As List = Json2List(strJSON)
+	lst.Add(m)
+	Dim sjson As String = List2Json(lst)
+	Return sjson
+End Sub
+
+Sub ListOfMapsExtractKey(lst As List, skey As String) As List
+	Dim nm As List
+	nm.Initialize
+	For Each oldm As Map In lst
+		Dim svalue As Object = oldm.Get(skey.tolowercase)
+		nm.Add(svalue)
+	Next
+	Return nm
+End Sub
+
+
+Sub SumMapValues(m As Map) As Double
+	Dim itv As Double = 0
+	For Each strKey As String In m.keys
+		Dim intValue As Double = m.Get(strKey)
+		itv = itv + intValue
+	Next
+	Return itv
+End Sub
+
+Sub ListHas(data As String, listObj As List) As Boolean
+	Dim i As Int = listObj.IndexOf(data)
+	Return (i > -1)
+End Sub
+
+Sub ListDoesNotHave(data As String, listObj As List) As Boolean
+	Dim i As Boolean = listObj.IndexOf(data)
+	Return (i = -1)
+End Sub
+
+Sub OnList(searchList As List, searchValue As String) As Boolean
+	'If searchList.IsInitialized = False Then Return False
+	For Each strTable As String In searchList
+		If strTable.EqualsIgnoreCase(searchValue) = True Then
+			Return True
+		End If
+	Next
+	Return False
+End Sub
+
+'extract a particular key value from a list of maps
+Sub ExtraPropertyFromListOfMaps1(lst As List, Property As String) As Map
+	Property = Property.tolowercase
+	Dim lstNew As Map
+	lstNew.initialize
+	For Each m As Map In lst
+		Dim sprop As String = m.GetDefault(Property,"")
+		If sprop.Length > 0 Then lstNew.put(sprop,m)
+	Next
+	Return lstNew
+End Sub
+
+'add an item to a delimited string
+Sub MvAdd(oldValue As String, delim As String, item As String) As String
+	Dim lst As List = StrParse(delim, oldValue)
+	lst.Add(item)
+	oldValue = Join(delim, lst)
+	Return oldValue
+End Sub
+
+'get the rest of the mv data from a particular position
+Sub MvRest(delim As String, svalue As String, startPos As String) As String
+	Dim spItems() As String = BANano.Split(delim, svalue)
+	Dim lst As List
+	lst.initialize
+	Dim rCnt As Int = startPos-1
+	Dim rTot As Int = spItems.Length - 1
+	For rCnt = (startPos-1) To rTot
+		lst.Add(spItems(rCnt))
+	Next
+	Return Join(delim,lst)
+End Sub
+
+Sub GenerateRandomPassword(numChars As Int, numbers As Boolean, lowercase As Boolean, uppercase As Boolean, symbols As Boolean) As String
+	Dim uppercaseArray() As String = Array As String ("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z")
+	Dim lowercaseArray() As String = Array As String ("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z")
+	Dim numbersArray()   As String = Array As String ("0","1","2","3","4","5","6","7","8","9")
+	Dim symbolsArray() As String = Array As String ("@","$","%","&","?","#","!","*","+","-",";","_")
+  
+	Dim charList As List
+	charList.Initialize
+  
+	If numbers   Then charList.AddAll(numbersArray)
+	If lowercase Then charList.AddAll(lowercaseArray)
+	If uppercase Then charList.AddAll(uppercaseArray)
+	If symbols   Then charList.AddAll(symbolsArray)
+
+	Dim newPassword As StringBuilder
+	newPassword.Initialize
+  
+	For i = 1 To numChars
+		newPassword.Append(charList.Get(Rnd(0, charList.Size)))
+	Next
+	Return newPassword
+End Sub
+
 public Sub AfterTodayRG(dVariance As Long) As String
 	If dVariance <= 0 Then
 		Return "./assets/green.png"
 	else if dVariance > 0 Then
 		Return "./assets/red.png"
-	Else
-		Return "./assets/gray.png"
-	End If
-End Sub
-
-
-Public Sub ProgressRAG(dVariance As Double) As String
-	If dVariance < 0 Then
-		Return "./assets/red.png"
-	else if dVariance > 0 Then
-		Return "./assets/green.png"
-	else if dVariance = 0 Then
-		Return "./assets/orange.png"
-	Else
-		Return "./assets/gray.png"
-	End If
-End Sub
-
-
-Public Sub ExpectedRAG(dValue As Double) As String
-	If dValue = 0 Then
-		Return "./assets/orange.png"
-	else if dValue > 0 Then
-		Return "./assets/red.png"
-	else if dValue < 0 Then
-		Return "./assets/green.png"
-	Else
-		Return "./assets/red.png"
-	End If
-End Sub
-
-Public Sub ExpenditureRAG(dVariance As Double) As String
-	If dVariance > 0 Then
-		Return "./assets/green.png"
-	else if dVariance < 0 Then
-		Return "./assets/red.png"
-	else if dVariance = 0 Then
-		Return "./assets/orange.png"
 	Else
 		Return "./assets/gray.png"
 	End If
@@ -2988,4 +3197,461 @@ Sub ListRemoveItemsWithProp(olst As List, prop As String, value As String) As Li
 		End If
 	Next
 	Return nflds
+End Sub
+
+'get sequences of the sizes to add
+Sub ListGetSequences(lst As List) As List
+	Dim l As List
+	l.Initialize
+	l.AddAll(lst)
+	Dim l2 As List = FindSequences(l)
+	Return l2
+End Sub
+
+
+'detect sequences within the list of sizes to add: thanks to JordiCP for this
+private Sub FindSequences(srcList As List) As List
+	Dim dstList As List
+	dstList.initialize
+	Dim currentSequencePair As sequencePair
+	currentSequencePair.initialize
+	currentSequencePair.value = srcList.Get(0)
+	currentSequencePair.numTimes = 1
+	For k = 1 To srcList.size - 1  '<-- edited!! (originally was 0)
+		Dim newVal As Int=srcList.Get(k)
+		If newVal=currentSequencePair.value Then
+			currentSequencePair.numTimes = currentSequencePair.numTimes + 1
+		Else
+			dstList.Add(currentSequencePair)
+			Dim currentSequencePair As sequencePair
+			currentSequencePair.initialize
+			currentSequencePair.value = newVal
+			currentSequencePair.numTimes=1
+		End If
+	Next
+	If currentSequencePair.numTimes > 0 Then 
+		dstList.add(currentSequencePair)
+	End If
+	Return dstList
+End Sub
+
+Sub Map2Map(readFrom As Map, putIn As Map, keys As List, bLower As Boolean)
+	Dim value As Object
+	For Each strKey As String In keys
+		If bLower = True Then strKey = strKey.ToLowerCase
+		If readFrom.ContainsKey(strKey) Then
+			value = readFrom.Get(strKey)
+			putIn.Put(strKey,value)
+		End If
+	Next
+End Sub
+
+'break a string at uppercase to have a space
+public Sub BreakAtUpperCase(st As String) As String
+	If st.Length = 0 Then Return ""
+	Dim k As Int
+    Dim s As String
+    Dim newst As String = st.CharAt(0)
+    For i = 1 To st.Length - 1
+        s = st.CharAt(i)
+        k = Asc(s)
+        If k>64 And k < 91 And st.CharAt(i-1) <> " " Then
+            newst = newst & " " & s
+        Else
+            newst = newst & s
+        End If
+    Next
+	Return newst
+End Sub
+
+'Returns the number of days that have passed between two dates.
+'Pass the dates as a String
+Sub DateNOD(CurrentDate As String, OtherDate As String) As Int
+	Dim CurrDate, OthDate As Long
+	CurrDate = DateTime.DateParse(CurrentDate)
+	OthDate = DateTime.DateParse(OtherDate)
+	Dim i As Int = (CurrDate - OthDate) / DateTime.TicksPerDay
+	Return i
+End Sub
+
+
+Sub MapLowerKeys(m As Map) As Map
+	Dim nm As Map
+	nm.initialize
+	For Each strKey As String In m.Keys
+		Dim objValue As Object = m.Get(strKey)
+		If objValue = Null Then objValue = ""
+		nm.Put(strKey.ToLowerCase,objValue)
+	Next
+	Return nm
+End Sub
+
+
+Sub At(Text As String, sInStr As String) As Int
+	Return Text.IndexOf(sInStr)
+End Sub
+
+Sub LTrim(Text As String) As String
+	Do While LeftS(Text, 1) =" "
+		Text = RightS(Text, Len(Text)-1)
+	Loop
+	Return Text
+End Sub
+
+Sub RTrim(Text As String) As String
+	Do While RightS(Text, 1) =" "
+		Text = LeftS(Text, Len(Text)-1)
+	Loop
+	Return Text
+End Sub
+
+Sub RndChrGen(Howmany As Int, CT As Int) As String
+	Dim a As String =""
+	Dim l As Int
+	Dim u As Int
+	Dim ha As Int
+	If CT = 0 Then
+		L=65
+		U=122
+	Else If CT=1 Then
+		L=65
+		U=90
+	Else
+		L=97
+		U=122
+	End If
+	For x=1 To Howmany
+		Do While Len(a) < Howmany
+			ha = Rnd(L, U)
+			If ha>=91 And ha<=96 Then
+			Else
+				a = a & Chr(ha)
+			End If
+		Loop
+	Next
+	Return a
+End Sub
+
+Sub Mid2(Text As String, istart As Int, xLength As Int) As String
+	Dim x As String = Text.SubString2(istart - 1, istart + xLength - 1)
+	Return x
+End Sub
+
+Sub MidS(Text As String, iStart As Int) As String
+	Dim x As String = Text.SubString(iStart - 1)
+	Return x
+End Sub
+
+
+Sub ListRemoveItem(lst As List, item As String)
+	Dim lPos As Int = lst.IndexOf(item)
+	If lPos <> -1 Then lst.RemoveAt(lPos)
+End Sub
+
+
+Sub MvRemoveDuplicates(sValue As String, Delim As String) As String
+	Dim nMap As Map
+	nMap.Initialize
+	Dim spValues As List = StrParse(Delim,sValue)
+	For Each strvalue As String In spValues
+		If strvalue <> "" Then 
+			nMap.Put(strvalue,"")
+		End If
+	Next
+	Dim sb As StringBuilder
+	sb.Initialize
+	For Each strKey As String In nMap.Keys
+		sb.Append(strKey).Append(Delim)
+	Next
+	Dim strOutput As String = sb.ToString
+	strOutput = RemDelim(strOutput,Delim)
+	Return strOutput
+End Sub
+
+Sub MvRemoveBlanks(sValue As String, Delim As String) As String
+	Dim nMap As Map
+	nMap.Initialize
+	Dim spValues As List = StrParse(Delim,sValue)
+	For Each strvalue As String In spValues
+		If strvalue.Trim.Length > 0 Then 
+			nMap.Put(strvalue,"")
+		End If
+	Next
+	'
+	Dim sb As StringBuilder
+	sb.Initialize
+	For Each strKey As String In nMap.Keys
+		sb.Append(strKey)
+		sb.Append(Delim)
+	Next
+	Dim strOutput As String = sb.ToString
+	strOutput = RemDelim(strOutput,Delim)
+	Return strOutput
+End Sub
+
+Sub YesNo2ZeroOne(value As String) As String
+	If value = "N" Or value = "" Then
+		Return "0"
+	Else
+		Return "1"
+	End If
+End Sub
+
+Sub ZeroOne2YN(value As String) As String
+	If value = "0" Or value = "" Then
+		Return "N"
+	Else
+		Return "Y"
+	End If
+End Sub
+
+
+Sub LeftS(Text As String, xLength As Long)As String
+	If xLength > Text.Length Then 
+		xLength = Text.Length
+	End If
+	Dim x As String = Text.SubString2(0, xLength)
+	return x
+End Sub
+
+
+Sub SortStringArray(sa() As String) As String()
+	Dim lst As List
+	Dim aTot As Int
+	Dim aCnt As Int
+	Dim aStr As String
+	
+	lst.Initialize
+	lst.AddAll(sa)
+	lst.SortCaseInsensitive(True)
+	aTot = lst.Size - 1
+	For aCnt = 0 To aTot
+		aStr = lst.Get(aCnt)
+		sa(aCnt) = aStr
+	Next
+	Return sa
+End Sub
+
+
+Sub GetExtension(fil As String) As String
+	Return MvField(fil,-1,".")
+End Sub
+'
+Sub EndsWithS(svalue As String, sfind As String) As Boolean
+	Return svalue.EndsWith(sfind)
+End Sub
+
+Sub StartsWithS(svalue As String, sfind As String) As Boolean
+	Return svalue.StartsWith(sfind)
+End Sub
+
+Sub ReplaceS(Text As String, sFind As String, sReplaceWith As String) As String
+	Return Text.Replace(sFind, sReplaceWith)
+End Sub
+
+Sub MvFromArray(varArry() As String, delim As String) As String
+	Dim lTot As Int
+	Dim lCnt As Int
+	Dim str As StringBuilder
+	str.Initialize 
+	lTot = varArry.Length -1
+	For lCnt = 0 To lTot
+		str.Append(varArry(lCnt)).append(delim)
+	Next
+	Return str.tostring
+End Sub
+
+
+Sub SortedKeys(m As Map) As List
+	Dim lst As List
+	lst.Initialize
+	For Each strkey As String In m.Keys
+		lst.Add(strkey)
+	Next
+	'sort the list keys
+	lst.Sort(True)
+	Return lst
+End Sub
+
+' return a quoted string
+Sub InQuotes1(sValue As String) As String
+	sValue = RemDelim(sValue,QUOTE)
+	sValue = RemPrefix(sValue,QUOTE)
+	If sValue = QUOTE Then sValue = ""
+	Return "$" & QUOTE & sValue & QUOTE & "$"
+End Sub
+
+' remove some unwanted characters from a string
+Public Sub CleanValue(sValue As String) As String
+	sValue = sValue.replace(" ","")
+	sValue = sValue.Replace(".","")
+	sValue = sValue.Replace("-","")
+	sValue = sValue.Replace("&","")
+	sValue = sValue.trim
+	Return sValue
+End Sub
+
+
+Sub MvSearch(delimiter As String, Mv As String, searchfor As String) As Boolean
+	Mv = Mv.tolowercase
+	searchfor = searchfor.ToLowerCase
+	Dim spItems As List = StrParse(delimiter, Mv)
+	Return OnList(spItems,searchfor)
+End Sub
+
+Sub MvPos(delimiter As String, mv As String, searchfor As String) As Int
+	mv = mv.tolowercase
+	searchfor = searchfor.ToLowerCase
+	Dim spItems As List = StrParse(delimiter, mv)
+	Return spItems.indexof(searchfor)
+End Sub
+
+
+Sub MvQuoteEach(strMV As String, delim As String) As String
+	strMV = strMV.Replace(QUOTE,"")
+	Dim sp As List = StrParse(delim,strMV)
+	Dim lst As List
+	lst.Initialize
+	For Each strItem As String In sp
+		strItem = InQuotes(strItem)
+		lst.add(strItem)
+	Next
+	Return Join(",", lst)
+End Sub
+
+Sub ListSingleQuote(lst As List)
+	Dim lstTot As Int = lst.Size - 1
+	Dim lstCnt As Int
+	For lstCnt = 0 To lstTot
+		Dim strItem As String = lst.Get(lstCnt)
+		strItem = "'" & strItem & "'"
+		lst.Set(lstCnt,strItem)
+	Next
+End Sub
+
+Sub MvFromKeys(lst As Map, Delim As String) As String
+	Dim lStr As StringBuilder
+	lStr.Initialize
+	For Each strKey As String In lst.Keys
+		lStr.Append(strKey).Append(Delim)
+	Next
+	lStr.Remove(lStr.Length-Delim.Length,lStr.Length)
+	Return lStr.tostring
+End Sub
+
+Sub JoinArray(Delimiter As String, varArray() As String) As String
+	Dim sb As StringBuilder
+	sb.Initialize
+	For Each strLine As String In varArray
+		sb.Append(strLine).Append(Delimiter)
+	Next
+	If sb.ToString.EndsWith(Delimiter) Then
+		sb.Remove(sb.Length-Delimiter.Length,sb.Length)
+	End If
+	Return sb.tostring
+End Sub
+
+
+Sub ListSearch(lst As List, searchFor As String) As Boolean
+	searchFor = LCaseS(searchFor)
+	For Each strItem As String In lst
+		strItem = strItem.Trim.tolowercase
+		If strItem = searchFor Then
+			Return True
+			Exit
+		End If
+	Next
+	Return False
+End Sub
+
+Sub MvFromListSingleQuote(lst As List, Delim As String) As String
+	Dim lTot As Int
+	Dim lCnt As Int
+	Dim lStr As StringBuilder
+	lStr.Initialize
+	lTot = lst.Size - 1
+	For lCnt = 0 To lTot
+		lStr.Append("'")
+		lStr.Append(lst.Get(lCnt))
+		lStr.Append("'")
+		If lCnt <> lTot Then 
+			lStr.Append(Delim)
+		End If
+	Next
+	Return lStr.tostring
+End Sub
+
+
+Sub RightS(Text As String, xLength As Long) As String
+	If xLength > Text.Length Then
+		xLength = Text.Length
+	End If
+	Dim x As String = Text.SubString(Text.Length - xLength)
+	Return x
+End Sub
+
+'convert a string to a date
+Sub DateIconv(sDate As String) As Long
+	Dim lng As Long
+	Dim OrigFormat As String=DateTime.DateFormat
+	DateTime.DateFormat = "yyyy-MM-dd"
+	DateTime.DateFormat = "HH:mm:ss"
+	lng = DateTime.Dateparse(sDate)
+	DateTime.DateFormat=OrigFormat
+	Return lng
+End Sub
+
+'convert a date to a string
+Sub DateOconv(lDate As Long, withTime As Boolean) As String
+	Dim OrigFormat As String=DateTime.DateFormat
+	If withTime Then
+		DateTime.DateFormat="yyyy-MM-dd'T'HH:mm:ss"
+	Else
+		DateTime.DateFormat="yyyy-MM-dd"
+	End If
+	Dim MyDate As String =DateTime.Date(lDate)
+	DateTime.DateFormat=OrigFormat
+	Return MyDate
+End Sub
+
+
+Sub MapProperty2ListQuote(om As List,prop As String,def As String) As List
+	Dim lst As List: lst.initialize
+	Dim mtot As Int = om.Size - 1
+	Dim mcnt As Int = 0
+	For mcnt = 0 To mtot
+		Dim omm As Map = om.Get(mcnt)
+		Dim strvalue As String = omm.GetDefault(prop,def)
+		lst.Add(QUOTE & strvalue & QUOTE)
+	Next
+	Return lst
+End Sub
+
+'Verify if an import is valid
+Sub IsImportValid(m As Map, fields As List) As Boolean
+	Dim vCnt As Int = 0
+	If (fields.Size - 1) = 0 Then Return True
+	For Each strField As String In fields
+		Dim strValue As String = m.GetDefault(strField.ToLowerCase,"")
+		If strValue.Length = 0 Then
+			vCnt = vCnt + 1
+		End If
+	Next
+	If vCnt = 0 Then
+		Return True
+	Else
+		Return False
+	End If
+End Sub
+
+Sub DeDuplicateMap(oldMap As Map) As Map
+	Dim nMap As Map
+	Dim strValue As Object
+	nMap.Initialize
+	For Each strKey As String In oldMap.Keys
+		strValue = oldMap.Get(strKey)
+		strKey = strKey.ToLowerCase
+		nMap.Put(strKey,strValue)
+	Next
+	Return nMap
 End Sub

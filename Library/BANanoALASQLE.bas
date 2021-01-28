@@ -31,6 +31,8 @@ Sub Class_Globals
 	Public OK As Boolean
 	Private Auto As String  'ignore
 	Private DBase As String  'ignore
+	Public view As String
+	Public action As String
 End Sub
 
 
@@ -59,9 +61,15 @@ public Sub Initialize(dbName As String, tblName As String, PK As String, AI As S
 	affectedRows = 0
 	Record.initialize
 	OK = False
+	view = ""
+	action = ""
 	Return Me
 End Sub
 
+Sub SetCallBack(v As String, a As String)
+	view = v
+	action = a
+End Sub
 
 Sub SchemaAddBlob(bools As List) As BANanoALASQLE
 	For Each b As String In bools
@@ -444,7 +452,7 @@ Sub GetMax As BANanoALASQLE
 	query = sb
 	args = Null
 	types = Null
-	command = "getmax"
+	command = "select"
 	response = ""
 	error = ""
 	result = NewList
@@ -470,7 +478,7 @@ Sub GetMin As BANanoALASQLE
 	query = sb
 	args = Null
 	types = Null
-	command = "getmin"
+	command = "select"
 	response = ""
 	error = ""
 	result = NewList
@@ -958,7 +966,7 @@ Sub GetMaxWhere(fldName As String, tblWhere As Map, operators As List) As BANano
 	query = sb.tostring
 	args = listOfValues
 	types = listOfTypes
-	command = "getmax"
+	command = "select"
 	response = ""
 	error = ""
 	result = NewList
@@ -1227,4 +1235,64 @@ Sub SelectAll(tblfields As List, orderBy As List) As BANanoALASQLE
 	json = ""
 	affectedRows = 0
 	Return Me
+End Sub
+
+'return a sql to select record of table where one exists
+'<code>
+''select all records
+'dbConnect.SelectAllDesc(array("*"), array("name"), array("name"))
+'dbConnect.result = db.ExecuteWait(dbConnect.query, dbConnect.args)
+'dbConnect.FromJSON
+'Select Case dbConnect.OK
+'Case False
+'Dim strError As String = dbConnect.Error
+'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
+'End Select
+'</code>
+Sub SelectAllAscDesc(tblfields As List, orderBy As List, AscDesc As List)
+	'are we selecting all fields or just some
+	Dim fld1 As String = tblfields.Get(0)
+	Dim selFIelds As String = ""
+	Select Case fld1
+	Case "*"
+		selFIelds = "*"
+	Case Else
+		selFIelds = JoinFields(",", tblfields)
+	End Select
+	Dim sb As StringBuilder
+	sb.Initialize
+	sb.Append($"SELECT ${selFIelds} FROM ${EscapeField(TableName)}"$)
+	If orderBy.IsInitialized Then
+		'order by
+		Dim xOrder As List
+		xOrder.Initialize
+		'
+		Dim obTot As Int = orderBy.Size - 1
+		Dim obCnt As Int
+		For obCnt = 0 To obTot
+			Dim xfld As String = orderBy.Get(obCnt)
+			If AscDesc.IsInitialized Then
+				'does the field exist in sort order
+				If AscDesc.IndexOf(xfld) >= 0 Then
+					xfld = EscapeField(xfld) & " DESC"
+					xOrder.Add(xfld)
+				End If
+			Else
+				xOrder.Add(EscapeField(xfld))
+			End If
+		Next
+		Dim strO As String = Join(",", xOrder)
+		If strO.Length > 0 Then
+			sb.Append(" ORDER BY ").Append(strO)
+		End If
+	End If
+	query = sb.tostring
+	command =  "select"
+	args = Null
+	types = Null
+	response = ""
+	error = ""
+	result = NewList
+	json = ""
+	affectedRows = 0
 End Sub

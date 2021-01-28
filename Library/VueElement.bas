@@ -326,6 +326,8 @@ Sub Class_Globals
 	Public Records As List
 	Public Steps As Int
 	Private ntxRow As Int
+	Private mRouterReplace As Boolean
+	Private mRouterAppend As Boolean
 End Sub
 
 'initialize the custom view
@@ -353,15 +355,29 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	End If
 	Records.Initialize
 	ntxRow = 0
+	mRouterReplace = False
+	mRouterAppend = False
 End Sub
 
+'generate the next row
 Sub NextRow As Int
 	ntxRow = ntxRow + 1
 	Return ntxRow
 End Sub
 
+'get the current row
 Sub ThisRow As Int
 	Return ntxRow
+End Sub
+
+'in lists replace routers
+Sub setRouterReplace(b As Boolean)
+	mRouterReplace = b
+End Sub
+
+'in lists append routers
+Sub setRouterAppend(b As Boolean)
+	mRouterAppend = b
 End Sub
 
 Sub AddItemParentChild(parent As String, key As String, iconName As String, iconColor As String, title As String, url As String)
@@ -375,6 +391,15 @@ Sub AddItemParentChild(parent As String, key As String, iconName As String, icon
 	nitem.Put("title", title)
 	nitem.Put("to", url)
 	nitem.Put("parentid", parent)
+	'
+	If mRouterReplace Then
+		nitem.put("replace", True)
+	End If
+	'
+	If mRouterAppend Then
+		nitem.put("append", True)
+	End If
+	
 	Records.Add(nitem)
 End Sub
 
@@ -594,6 +619,9 @@ Sub setAccordion(b As Boolean)
 	AddAttr(":accordion",b)
 End Sub
 
+Sub setButtonIcon(b As Boolean)
+	AddAttr(":icon", b)
+End Sub
 
 Sub setFocusable(b As Boolean)
 	AddAttr(":focusable",b)
@@ -1624,7 +1652,7 @@ Public Sub AddAttr(varProp As String, varValue As String)
 		varValue = varValue.Replace("#","$")
 		'we are adding a string
 		If varValue.StartsWith(":") Then
-			Dim rname As String = BANanoShared.MidString2(varValue, 2)
+			Dim rname As String = BANanoShared.MidS(varValue, 2)
 			If rname.Contains(".") = False Or rname.Contains("(") = False Then
 				bindings.Put(rname, Null)
 			End If
@@ -2042,18 +2070,88 @@ public Sub getBackgroundColor() As String
 	Return stBackgroundColor
 End Sub
 
-public Sub setBackgroundImage(varBackgroundImage As String)
-	AddStyle("background-image", varBackgroundImage)
-	stBackgroundImage = varBackgroundImage
-End Sub
-
-public Sub getBackgroundImage() As String
-	Return stBackgroundImage
+public Sub setBackgroundSize(varBackgroundRepeat As String)
+	AddStyle("background-size", varBackgroundRepeat)
 End Sub
 
 public Sub setBackgroundRepeat(varBackgroundRepeat As String)
 	AddStyle("background-repeat", varBackgroundRepeat)
 	stBackgroundRepeat = varBackgroundRepeat
+End Sub
+
+public Sub setBackgroundClip(varBackgroundRepeat As String)
+	AddStyle("background-clip", varBackgroundRepeat)
+End Sub
+
+public Sub setBackgroundOrigin(varBackgroundRepeat As String)
+	AddStyle("background-origin", varBackgroundRepeat)
+End Sub
+
+public Sub setBackgroundPosition(varBackgroundPosition As String)
+	AddStyle("background-position", varBackgroundPosition)
+End Sub
+
+
+public Sub setBackgroundAttachment(varBackgroundRepeat As String)
+	AddStyle("background-attachment", varBackgroundRepeat)
+End Sub
+
+public Sub setBorderImageSource(s As String)
+	AddStyle("border-image-source", $"url('${s}')"$)
+End Sub
+
+public Sub setBorderImageRepeat(s As String)
+	AddStyle("border-image-repeat", s)
+End Sub
+
+public Sub setBorderImageSlice(s As String)
+	AddStyle("border-image-slice", s)
+End Sub
+
+public Sub setBorderImageWidth(s As String)
+	AddStyle("border-image-width", s)
+End Sub
+
+public Sub setBorderTopLeftRadius(varBorderRadius As String)
+	AddStyle("border-top-left-radius", varBorderRadius)
+End Sub
+
+public Sub setBorderTopRightRadius(varBorderRadius As String)
+	AddStyle("border-top-right-radius", varBorderRadius)
+End Sub
+
+public Sub setBorderBottomLeftRadius(varBorderRadius As String)
+	AddStyle("border-bottom-left-radius", varBorderRadius)
+End Sub
+
+public Sub setBorderBottomRightRadius(varBorderRadius As String)
+	AddStyle("border-bottom-right-radius", varBorderRadius)
+End Sub
+
+public Sub setFontSizeAdjust(varFontSize As String)
+	AddStyle("font-size-adjust", varFontSize)
+End Sub
+
+
+public Sub setFontVariant(varFontVariant As String)
+	AddStyle("font-variant", varFontVariant)
+End Sub
+
+
+public Sub setFontStretch(varFontVariant As String)
+	AddStyle("font-stretch", varFontVariant)
+End Sub
+
+
+
+
+public Sub setBackgroundImage(varBackgroundImage As String)
+	AddStyle("background-image", $"url('${varBackgroundImage}')"$)
+	stBackgroundImage = varBackgroundImage
+End Sub
+
+public Sub getBackgroundImage() As String
+	Return stBackgroundImage
 End Sub
 
 public Sub getBackgroundRepeat() As String
@@ -2847,6 +2945,36 @@ public Sub getFullScreen() As Boolean
 End Sub
 
 
+'return the dialog card container
+Sub DialogContainer As VueElement
+	Dim dialogContainerID As String = $"${mName}container"$
+	dialogContainerID = dialogContainerID.ToLowerCase
+	'
+	Dim elx As VueElement
+	elx.Initialize(mCallBack, dialogContainerID, dialogContainerID)
+	Return elx
+End Sub
+
+'return the dialog card title
+Sub DialogTitle As VueElement
+	Dim dialogContainerID As String = $"${mName}title"$
+	dialogContainerID = dialogContainerID.ToLowerCase
+	'
+	Dim elx As VueElement
+	elx.Initialize(mCallBack, dialogContainerID, dialogContainerID)
+	Return elx
+End Sub
+
+
+'return the dialog card title
+Sub DialogActions As VueElement
+	Dim dialogContainerID As String = $"${mName}cardactions"$
+	dialogContainerID = dialogContainerID.ToLowerCase
+	'
+	Dim elx As VueElement
+	elx.Initialize(mCallBack, dialogContainerID, dialogContainerID)
+	Return elx
+End Sub
 
 'set append-icon
 public Sub setAppendIcon(varAppendIcon As String)
@@ -4259,6 +4387,14 @@ Sub AddItemAvatar(id As String, avatar As String, title As String, subtitle As S
 	If righticoncolor <> "" Then rec.Put("righticoncolor", righticoncolor)
 	If rating >= 0 Then rec.Put("rightrating", rating)
 	'
+	If mRouterReplace Then
+		rec.put("replace", True)
+	End If
+	'
+	If mRouterAppend Then
+		rec.put("append", True)
+	End If
+	'
 	Records.Add(rec)
 End Sub
 
@@ -4277,7 +4413,14 @@ Sub AddItemAction(id As String, lefticon As String, lefticoncolor As String, tit
 	If righttext <> "" Then rec.Put("righttext", righttext)
 	If righticoncolor <> "" Then rec.Put("righticoncolor", righticoncolor)
 	If rating >= 0 Then rec.Put("rightrating", rating)
-	
+	'
+	If mRouterReplace Then
+		rec.put("replace", True)
+	End If
+	'
+	If mRouterAppend Then
+		rec.put("append", True)
+	End If
 	'
 	Records.Add(rec)
 End Sub
@@ -4297,6 +4440,14 @@ Sub AddItemLeftCheckBox(id As String, bChecked As Boolean, title As String, subt
 	If righticoncolor <> "" Then rec.Put("righticoncolor", righticoncolor)
 	If rating >= 0 Then rec.Put("rightrating", rating)
 	'
+	If mRouterReplace Then
+		rec.put("replace", True)
+	End If
+	'
+	If mRouterAppend Then
+		rec.put("append", True)
+	End If
+	'
 	Records.Add(rec)
 End Sub
 
@@ -4315,6 +4466,14 @@ Sub AddItemLeftSwitch(id As String, bChecked As Boolean, title As String, subtit
 	If righticoncolor <> "" Then rec.Put("righticoncolor", righticoncolor)
 	If rating >= 0 Then rec.Put("rightrating", rating)
 	'
+	If mRouterReplace Then
+		rec.put("replace", True)
+	End If
+	'
+	If mRouterAppend Then
+		rec.put("append", True)
+	End If
+	'
 	Records.Add(rec)
 End Sub
 
@@ -4326,6 +4485,14 @@ Sub AddItemRightCheckBox(id As String, bChecked As Boolean, title As String, sub
 	If title <> "" Then rec.Put("title", title)
 	If subtitle <> "" Then rec.Put("subtitle", subtitle)
 	If subtitle1 <> "" Then rec.Put("subtitle1", subtitle1)
+	'
+	If mRouterReplace Then
+		rec.put("replace", True)
+	End If
+	'
+	If mRouterAppend Then
+		rec.put("append", True)
+	End If
 	Records.Add(rec)
 End Sub
 
@@ -4415,7 +4582,14 @@ Sub AddItemIcon(id As String, icon As String, iconcolor As String, title As Stri
 	If righttext <> "" Then rec.Put("righttext", righttext)
 	If righticoncolor <> "" Then rec.Put("righticoncolor", righticoncolor)
 	If rating >= 0 Then rec.Put("rightrating", rating)
-	
+	'
+	If mRouterReplace Then
+		rec.put("replace", True)
+	End If
+	'
+	If mRouterAppend Then
+		rec.put("append", True)
+	End If
 	'
 	Records.Add(rec)
 End Sub
@@ -4439,7 +4613,14 @@ Sub AddItemAvatarIcon(id As String, avataricon As String, avatariconcolor As Str
 	If righttext <> "" Then rec.Put("righttext", righttext)
 	If righticoncolor <> "" Then rec.Put("righticoncolor", righticoncolor)
 	If rating >= 0 Then rec.Put("rightrating", rating)
-	
+	'
+	If mRouterReplace Then
+		rec.put("replace", True)
+	End If
+	'
+	If mRouterAppend Then
+		rec.put("append", True)
+	End If
 	'
 	Records.Add(rec)
 End Sub
@@ -4471,7 +4652,14 @@ Sub AddItem(id As String, lefticon As String, lefticoncolor As String, _
 	If righttext <> "" Then rec.Put("righttext", righttext)
 	If righticoncolor <> "" Then rec.Put("righticoncolor", righticoncolor)
 	If rating >= 0 Then rec.Put("rightrating", rating)
-	
+	'
+	If mRouterReplace Then
+		rec.put("replace", True)
+	End If
+	'
+	If mRouterAppend Then
+		rec.put("append", True)
+	End If
 	'
 	Records.Add(rec)
 End Sub
@@ -4758,4 +4946,522 @@ Sub AddVueElement(elID As String, tag As String, props As Map) As VueElement
 	ve.AssignProps(props)
 	BindVueElement(ve)
 	Return ve
+End Sub
+
+Sub HiddenSMAndDown
+	AddClass("hidden-sm-and-down")
+End Sub
+
+Sub HiddenMDAndUp
+	AddClass("hidden-md-and-up")
+End Sub
+	
+Sub HiddenMDAndDown
+	AddClass("hidden-md-and-down")
+End Sub
+
+Sub HiddenXLAndDown
+	AddClass("hidden-xl-and-down")
+End Sub
+
+Sub HiddenSMAndUp
+	AddClass("hidden-sm-and-up")
+End Sub
+
+Sub HiddenXLAndUp
+	AddClass("hidden-xl-and-up")
+End Sub
+
+Sub HiddenXSOnly
+	AddClass("hidden-xs-only")
+End Sub
+
+
+Sub HiddenXLOnly
+	AddClass("hidden-xl-only")
+End Sub
+
+Sub HideOnAll
+	AddClass("d-none")
+End Sub
+
+Sub HideOnlyOnXS
+	AddClass("d-none d-sm-flex")
+End Sub
+
+Sub HideOnlyOnSM
+	AddClass("d-sm-none d-md-flex")
+End Sub
+
+Sub HideOnlyOnMD
+	AddClass("d-md-none d-lg-flex")
+End Sub
+
+Sub HideOnlyOnLG
+	AddClass("d-lg-none d-xl-flex")
+End Sub
+
+Sub HideOnlyOnXL
+	AddClass("d-xl-none")
+End Sub
+
+Sub VisibleOnAll
+	AddClass("d-flex")
+End Sub
+
+Sub VisibleOnlyOnXS
+	AddClass("d-flex d-sm-none")
+End Sub
+
+Sub VisibleOnlyOnSM
+	AddClass("d-none d-sm-flex d-md-none")
+End Sub
+
+Sub VisibleOnlyOnMD
+	AddClass("d-none d-md-flex d-lg-none")
+End Sub
+
+Sub VisibleOnlyOnLG
+	AddClass("d-none d-lg-flex d-xl-none")
+End Sub
+
+Sub VisibleOnlyOnXL
+	AddClass("d-none d-xl-flex")
+End Sub
+
+'add style on mouse over
+Sub AddStyleOnMouseOver(prop As String, value As String)
+	Dim sstyle As String = $"this.style.${prop}='${value}'"$
+	AddAttr("onMouseOver", sstyle)
+End Sub
+
+'add style on mouse out
+Sub AddStyleOnMouseOut(prop As String, value As String)
+	Dim sstyle As String = $"this.style.${prop}='${value}'"$
+	AddAttr("onMouseOut", sstyle)
+End Sub
+
+Sub setRoundedLG
+	AddClass("rounded-lg")
+End Sub
+
+Sub setRounded0
+	AddClass("rounded-0")
+End Sub
+
+Sub setRoundedSM
+	AddClass("rounded-sm")
+End Sub
+
+Sub setRoundedXL
+	AddClass("rounded-xl")
+End Sub
+
+Sub setRoundedPill
+	AddClass("rounded-pill")
+End Sub
+
+Sub setRoundedCircle
+	AddClass("rounded-circle")
+End Sub
+
+Sub setTransitionSwing
+	AddClass("transition-swing")
+End Sub
+
+
+Sub setDisplayBlock()
+	AddStyle("display", "block")
+End Sub
+
+Sub setResizeNone()
+	AddStyle("resize", "none")
+End Sub
+
+Sub setCursorPointer()
+	AddStyle("cursor", "pointer")
+End Sub
+
+Sub setDisplayInlineBlock()
+	AddStyle("display", "inline-block")
+End Sub
+
+Sub setBorderNone()
+	AddStyle("border", "none")
+End Sub
+
+Sub setFitBlock()
+	AddStyle("width", "100%")
+End Sub
+
+Sub setListStyleType(t As String)
+	AddStyle("list-style-type", t)
+End Sub
+
+Sub setLineHeight(t As String)
+	AddStyle("line-height", t)
+End Sub
+
+Sub setListStylePosition(t As String)
+	AddStyle("list-style-position", t)
+End Sub
+
+Sub setOutlineOffset(t As String)
+	AddStyle("outline-offset", t)
+End Sub
+
+Sub setTextAlignLast(t As String)
+	AddStyle("text-align-last", t)
+End Sub
+
+Sub setTextEmphasis(t As String)
+	AddStyle("text-emphasis", t)
+End Sub
+
+Sub setTextOverflow(t As String)
+	AddStyle("text-overflow", t)
+End Sub
+
+Sub setWordBreak(t As String)
+	AddStyle("word-break", t)
+End Sub
+
+Sub setWordWrap(t As String)
+	AddStyle("word-wrap", t)
+End Sub
+
+Sub setListStyleImage(t As String)
+	AddStyle("list-style-image", $"url('${t}')"$)
+End Sub
+
+
+Sub setOverflow(t As String)
+	AddStyle("overflow", t)
+End Sub
+
+Sub setListStyle(t As String)
+	AddStyle("list-style", t)
+End Sub
+
+public Sub setOutlineColorStyle(varBorder As String)
+	AddStyle("outline-color-style", varBorder)
+End Sub
+
+public Sub setOutlineWidth(varBorder As String)
+	AddStyle("outline-width", varBorder)
+End Sub
+
+public Sub setOutlineStyle(varBorder As String)
+	AddStyle("outline-style", varBorder)
+End Sub
+
+public Sub setOutlineColor(varBorder As String)
+	AddStyle("outline-color", varBorder)
+End Sub
+
+public Sub setOutline(varBorder As String)
+	AddStyle("outline", varBorder)
+End Sub
+
+public Sub setBorderBottomWidth(varBorder As String)
+	AddStyle("border-bottom-width", varBorder)
+End Sub
+
+public Sub setBorderTopWidth(varBorder As String)
+	AddStyle("border-top-width", varBorder)
+End Sub
+
+public Sub setBorderLeftWidth(varBorder As String)
+	AddStyle("border-left-width", varBorder)
+End Sub
+
+public Sub setBorderRightWidth(varBorder As String)
+	AddStyle("border-right-width", varBorder)
+End Sub
+
+public Sub setBorderBottomStyle(varBorder As String)
+	AddStyle("border-bottom-style", varBorder)
+End Sub
+
+public Sub setBorderTopStyle(varBorder As String)
+	AddStyle("border-top-style", varBorder)
+End Sub
+
+public Sub setBorderleftStyle(varBorder As String)
+	AddStyle("border-left-style", varBorder)
+End Sub
+
+'put this in a parend iv
+Sub setResponsiveImage
+	AddStyle("height", "100vh")
+	AddStyle("width", "auto")
+End Sub
+
+public Sub setBorderRightStyle(varBorder As String)
+	AddStyle("border-right-style", varBorder)
+End Sub
+
+public Sub setBorderBottomColor(varBorder As String)
+	AddStyle("border-bottom-color", varBorder)
+End Sub
+
+public Sub setBorderTopColor(varBorder As String)
+	AddStyle("border-top-color", varBorder)
+End Sub
+
+public Sub setBorderLeftColor(varBorder As String)
+	AddStyle("border-left-color", varBorder)
+End Sub
+
+public Sub setBorderRightColor(varBorder As String)
+	AddStyle("border-right-color", varBorder)
+End Sub
+
+public Sub setBorderBottom(varBorder As String)
+	AddStyle("border-bottom", varBorder)
+End Sub
+
+public Sub setOutlineNone()
+	AddStyle("outline", "none")
+End Sub
+
+public Sub setControls
+	AddAttr("controls", "true")
+End Sub
+
+public Sub setAutoPlay()
+	AddAttr("autoplay", "true")
+End Sub
+
+'play in a loop
+public Sub setRepeat()
+	AddAttr("loop", "true")
+End Sub
+
+
+public Sub setWhiteSpaceNoWrap()
+	AddStyle("white-space", "nowrap")
+End Sub
+
+'center the text
+Sub setCenterText
+	AddStyle("text-align", "center")
+End Sub
+
+'set filter
+Sub setAlpha(a As Int)
+	a = BANano.parseInt(a)
+	AddStyle("filter", $"alpha(opacity=${a})"$)
+End Sub
+
+Sub setTextAlignCenter()
+	AddStyle("text-align", "center")
+End Sub
+
+Sub setTextDecorationNone()
+	AddStyle("text-decoration", "none")
+End Sub
+
+Sub setVerticalAlignMiddle()
+	AddStyle("vertical-align", "middle")
+End Sub
+
+Sub setVerticalAlign(s As String)
+	AddStyle("vertical-align", s)
+End Sub
+
+Sub setVisibility(s As String)
+	AddStyle("visibility", s)
+End Sub
+
+Sub setRelative
+	setPosition("relative")
+End Sub
+
+
+Sub appendValue(s As String)
+	Dim sold As String = mElement.GetValue
+	sold = sold & s
+	mElement.setvalue(sold)
+End Sub
+
+Sub appendText(s As String)
+	Dim sold As String = mElement.GetText
+	sold = sold & s
+	mElement.SetText(sold)
+End Sub
+
+
+Sub setSmallCaps()
+	AddStyle("text-transform", "small-caps")
+End Sub
+
+Sub setTextTransform(s As String)
+	AddStyle("text-transform", s)
+End Sub
+
+Sub setResize(l As String)
+	AddStyle("resize", l)
+End Sub
+
+Sub setTranslate(x As String, y As String)
+	
+End Sub
+
+Sub setTranslateX(a As String)
+	AddStyle("-ms-transform", $"translateX(${a})"$)
+	AddStyle("-webkit-transform", $"translateX(${a})"$)
+	AddStyle("transform", $"translateX(${a})"$)
+End Sub
+
+Sub setTranslateY(a As String)
+	AddStyle("-ms-transform", $"translateY(${a})"$)
+	AddStyle("-webkit-transform", $"translateY(${a})"$)
+	AddStyle("transform", $"translateY(${a})"$)
+	
+End Sub
+
+Sub setScale(x As String, y As String)
+	
+End Sub
+
+Sub setScaleX(a As String)
+	AddStyle("-ms-transform", $"scaleX(${a})"$)
+	AddStyle("-webkit-transform", $"scaleX(${a})"$)
+	AddStyle("transform", $"scaleX(${a})"$)
+End Sub
+
+Sub setScaleY(a As String)
+	AddStyle("-ms-transform", $"scaleY(${a})"$)
+	AddStyle("-webkit-transform", $"scaleY(${a})"$)
+	AddStyle("transform", $"scaleY(${a})"$)
+End Sub
+
+'Sub setRotate(a As String)
+'	AddStyle("-ms-transform", $"rotate(${a})"$)
+'	AddStyle("-webkit-transform", $"rotate(${a})"$)
+'	AddStyle("transform", $"rotate(${a})"$)	
+'End Sub
+
+Sub setRotateZ(a As String)
+	AddStyle("-ms-transform", $"rotateZ(${a})"$)
+	AddStyle("-webkit-transform", $"rotateZ(${a})"$)
+	AddStyle("transform", $"rotateZ(${a})"$)	
+End Sub
+
+
+Sub setSkewX(a As String)
+	AddStyle("-ms-transform", $"skewX(${a})"$)
+	AddStyle("-webkit-transform", $"skewX(${a})"$)
+	AddStyle("transform", $"skewX(${a})"$)
+End Sub
+
+Sub setSkewY(a As String)
+	AddStyle("-ms-transform", $"skewY(${a})"$)
+	AddStyle("-webkit-transform", $"skewY(${a})"$)
+	AddStyle("transform", $"skewY(${a})"$)
+End Sub
+
+Sub setLinearGradient(orientation As String, firstColor As String, secondColor As String)
+	AddStyle("background-image", $"-webkit-linear-gradient(${orientation},${firstColor},${secondColor})"$)
+	AddStyle("background-image", $"-o-linear-gradient(${orientation},${firstColor},${secondColor})"$)
+	AddStyle("background-image", $"-moz-linear-gradient(${orientation},${firstColor},${secondColor})"$)
+	AddStyle("background-image", $"linear-gradient(${orientation},${firstColor},${secondColor})"$)
+End Sub
+
+'set gradient to use more than 2 colors
+Sub setLinearGradient1(orientation As String, colors As List)
+	Dim strColor As String = BANanoShared.Join(", ", colors) 
+	AddStyle("background-image", $"-webkit-linear-gradient(${orientation},${strColor})"$)
+	AddStyle("background-image", $"-o-linear-gradient(${orientation},${strColor})"$)
+	AddStyle("background-image", $"-moz-linear-gradient(${orientation},${strColor})"$)
+	AddStyle("background-image", $"linear-gradient(${orientation},${strColor})"$)
+End Sub
+
+Sub setHorizontalAlignment(v As String)
+	Select Case v
+	Case "center"
+		AddStyle("margin", "auto")	
+	Case "left"
+	Case "right"		
+	End Select
+End Sub
+
+Sub setVerticalAlignment(v As String)
+	Select Case v
+	Case "top"
+	Case "center"
+	Case "bottom"
+	End Select
+End Sub
+
+Sub setLetterSpacing(d As String)
+	AddStyle("letter-spacing", d)
+End Sub
+
+Sub setWordSpacing(d As String)
+	AddStyle("word-spacing", d)
+End Sub
+
+Sub setTextIndent(d As String)
+	AddStyle("text-indent", d)
+End Sub
+
+Sub AddStyleOnHover(prop As String, onOver As String, onOut As String)
+	AddStyleOnMouseOut(prop, onOut)
+	AddStyleOnMouseOver(prop, onOver)
+End Sub
+
+Sub setCapitalize(b As Boolean)
+	If b = False Then Return
+	setTextDecoration("capitalize")
+End Sub
+
+Sub setUpperCase(b As Boolean)
+	If b = False Then Return
+	setTextDecoration("uppercase")
+End Sub
+
+Sub setLowerCase(b As Boolean)
+	If b = False Then Return
+	setTextDecoration("lowercase")
+End Sub
+
+Sub setUnderLine(b As Boolean)
+	If b = False Then Return
+	setTextDecoration("underline")
+End Sub
+
+Sub setLineThrough(b As Boolean)
+	If b = False Then Return
+	setTextDecoration("line-through")
+End Sub
+
+Sub setOverline(b As Boolean)
+	If b = False Then Return
+	setTextDecoration("overline")
+End Sub
+
+Sub setBlink(b As Boolean)
+	If b = False Then Return
+	setTextDecoration("blink")
+End Sub
+
+Sub setNoneTextDecoration(b As Boolean)
+	If b = False Then Return
+	setTextDecoration("none")
+End Sub
+
+'set the conver image for the container
+Sub setFullScreen(varFullScreen As Boolean)
+	bFullScreen = varFullScreen
+	If BANano.IsUndefined(varFullScreen) Or BANano.IsNull(varFullScreen) Then Return
+	If varFullScreen = False Then Return
+	AddAttr(":fullscreen", "$vuetify.breakpoint.mobile")
+End Sub
+
+Sub setBoxSizingBorderBox()
+	AddStyle("-moz-box-sizing", "border-box")
+	AddStyle("-webkit-box-sizing", "border-box")
+	AddStyle("box-sizing","border-box")
 End Sub

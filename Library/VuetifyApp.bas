@@ -29,6 +29,8 @@ Sub Class_Globals
 	Public Vuetify As BANanoObject
 	Private data As BANanoObject
 	Public AppName As String
+	Public Root As BANanoObject
+	Public Route As BANanoObject
 	'
 	Public const BORDER_DEFAULT As String = ""
 	Public const BORDER_DASHED As String = "dashed"
@@ -334,6 +336,51 @@ Sub Class_Globals
 	Private dlgtexttype As String
 	Public BreakPointLGAndUp As String = "$vuetify.breakpoint.lgAndUp"
 	Public BreakPointLGAndUpNot As String = "!$vuetify.breakpoint.lgAndUp"
+	'
+	Public const LIST_STYLE_CIRCLE As String = "circle"
+	Public const LIST_STYLE_SQUARE As String = "square"
+	Public const LIST_STYLE_DECIMAL As String = "decimal"
+	Public const LIST_STYLE_LOWER_ALPHA As String = "lower-alpha"
+	Public const LIST_STYLE_LOWER_ROMAN As String = "lower-roman"
+	'
+	Public const LIST_STYLE_POSITION_NONE As String = "none"
+	Public const LIST_STYLE_POSITION_INSIDE As String = "inside"
+	Public const LIST_STYLE_POSITION_OUTSIDE As String = "outside"
+	'
+	Public const POSITION_ABSOLUTE As String = "absolute"
+	Public const POSITION_RELAVIVE As String = "relative"
+	Public const POSITION_FIXED As String = "fixed"
+	Public const POSITION_STATIC As String = "static"
+	Public const POSITION_INHERIT As String = "inherit"
+	'
+	Public const HORIZONTAL_ALIGN_LEFT As String = "left"
+	Public const HORIZONTAL_ALIGN_CENTER As String = "center"
+	Public const HORIZONTAL_ALIGN_RIGHT As String  = "right"
+	'
+	Public const VERTICAL_ALIGN_TOP As String = "top"
+	Public const VERTICAL_ALIGN_CENTER As String = "center"
+	Public const VERTICAL_ALIGN_BOTTOM As String = "bottom"
+	'
+	Public const ORIENTATION_TOP_BOTTOM As String = "to bottom"
+	Public const ORIENTATION_RIGHT_LEFT As String = "to left"
+	Public const ORIENTATION_BOTTOM_TOP As String = "to top"
+	Public const ORIENTATION_LEFT_RIGHT As String = "to right"
+	Public const ORIENTATION_TL_BR As String = "to bottom right"
+	Public const ORIENTATION_BL_TR As String = "to top right"
+	Public const ORIENTATION_TR_BL As String = "to bottom left"
+	Public const ORIENTATION_BR_TL As String = "to top left"
+	'
+	Public const BACKGROUND_POSITION_LEFT_TOP As String = "left top"
+	Public const BACKGROUND_POSITION_LEFT_CENTER As String = "left center"
+	Public const BACKGROUND_POSITION_LEFT_BOTTOM As String = "left bottom"
+	'
+	Public const BACKGROUND_POSITION_CENTER_TOP As String = "center top"
+	Public const BACKGROUND_POSITION_CENTER_CENTER As String = "center center"
+	Public const BACKGROUND_POSITION_CENTER_BOTTOM As String = "center bottom"
+	'
+	Public const BACKGROUND_POSITION_RIGHT_TOP As String = "right top"
+	Public const BACKGROUND_POSITION_RIGHT_CENTER As String = "right center"
+	Public const BACKGROUND_POSITION_RIGHT_BOTTOM As String = "right bottom"	
 	
 	Type ListViewItemOptions(url As String, lefticon As String, lefticoncolor As String, _
 	lefticonclass As String, avatar As String, avatarclass As String, avataricon As String, _
@@ -396,6 +443,31 @@ Sub NewListViewItemOptions() As ListViewItemOptions
 	lvio.showrightswitches = False
 	lvio.switchinset = False
 	Return lvio
+End Sub
+
+#if javascript
+	Number.prototype.toRad = function() {
+      return this * Math.PI / 180;
+    };
+
+	function calculateDistance(lat1, lon1, lat2, lon2) {
+      var R = 6371; // km
+      var dLat = (lat2 - lat1).toRad();
+      var dLon = (lon2 - lon1).toRad(); 
+      var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(lat1.toRad()) * Math.cos(lat2.toRad()) * 
+      Math.sin(dLon / 2) * Math.sin(dLon / 2); 
+      var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)); 
+      var d = R * c;
+      return d;
+    };
+#End If
+
+
+Sub CalculateDistance(lat1 As Double, lon1 As Double, lat2 As Double, lon2 As Double) As Int
+	Dim res As Int = BANano.RunJavascriptMethod("calculateDistance", Array(lat1, lon1, lat2, lon2))
+	res = BANano.parseInt(res)
+	Return res
 End Sub
 
 Sub TrimIt(v As String) As String
@@ -1256,8 +1328,12 @@ Sub AddRoute(comp As VueComponent)
 	Dim eachroute As Map = CreateMap()
 	eachroute.Put("path", comp.path)
 	eachroute.Put("name", comp.mname)
-	Dim compx As Map = comp.Component
+	'Dim compx As Map = comp.Component
+	'eachroute.Put("component", compx)
+	'
+	Dim compx As BANanoObject = Vue.RunMethod("component", Array(comp.mname, comp.component))
 	eachroute.Put("component", compx)
+	
 	'eachroute.Put("props", True)
 	routes.Add(eachroute)
 End Sub
@@ -1849,6 +1925,10 @@ Sub Serve
 	VueRouter = Vue.GetField(srouter)
 	Dim sdata As String = "$data"
 	data = Vue.GetField(sdata)
+	Dim sroot As String= "$root"
+	Root = Vue.GetField(sroot)
+	Dim sroute As String = "$route"
+	Route = Vue.GetField(sroute)
 End Sub
 
 'use for components
@@ -1856,13 +1936,24 @@ private Sub returndata As BANanoObject			'ignoredeadcode
 	Return data
 End Sub
 
+'get the current path
+Sub getCurrentPath As String
+	Dim sroute As String = "$route"
+	Route = Vue.GetField(sroute)
+	Dim cr As String = Route.GetField("path").result
+	Return cr
+End Sub
+
 'Use router To navigate
-Sub NavigateTo(sPath As String) 
+Sub NavigateTo(sPath As String)
+	'get the current path
 	sPath = sPath.tolowercase
-	Dim namem As Map = CreateMap()
-	namem.put("path", sPath)
-	VueRouter.RunMethod("push", Array(namem))
-	
+	Dim sprev As String = getCurrentPath
+	If sPath.EqualsIgnoreCase(sprev) = False Then
+		Dim namem As Map = CreateMap()
+		namem.put("path", sPath)
+		VueRouter.RunMethod("push", Array(namem))
+	End If
 End Sub
 
 'navigate back
@@ -2388,6 +2479,19 @@ Sub AddDrawer(Module As Object, parentID As String, elID As String, vmodel As St
 	Return elx
 End Sub
 
+'<code>
+'Dim drw as VueElement = vuetify.AddAppDrawer(Me, "vapp", "drw1", "drw1show", False, "", False, null)
+'drw.App = True
+'drw.Width = 300
+'vuetify.BindVueElement(drw)
+'</code>
+Sub AddAppDrawer(Module As Object, elID As String, vmodel As String, bVisible As Boolean, Color As String, bRight As Boolean, props As Map) As VueElement
+	Dim elx As VueElement = AddVueElement(Module, AppName, elID, "v-navigation-drawer", vmodel, "", Color, props)
+	elx.Right = bRight
+	elx.SetData(vmodel, bVisible)
+	Return elx
+End Sub
+
 Sub AddOverlay(Module As Object, parentID As String, elID As String, vmodel As String, props As Map) As VueElement
 	Return AddVueElement(Module, parentID, elID, "v-overlay", vmodel, "", "", props)
 End Sub
@@ -2505,8 +2609,8 @@ Sub AddToolbar(Module As Object, parentID As String, elID As String, color As St
 	Return AddVueElement(Module, parentID, elID, "v-toolbar", "", "", color, props)
 End Sub
 
-Sub AddAppBar(Module As Object, parentID As String, elID As String, color As String, props As Map) As VueElement
-	Dim elx As VueElement = AddVueElement(Module, parentID, elID, "v-app-bar", "", "", color, props)
+Sub AddAppBar(Module As Object, elID As String, color As String, props As Map) As VueElement
+	Dim elx As VueElement = AddVueElement(Module, AppName, elID, "v-app-bar", "", "", color, props)
 	elx.Bind("app", True)
 	Return elx
 End Sub
@@ -2819,8 +2923,7 @@ Sub AddButtonWidthRightIcon(Module As Object, parentID As String, elID As String
 	viconright.Dark = True
 	viconright.AddAttr(":right", True)
 	'
-	vbtnright.Dark = True
-	if ecolor <> "" then vbtnright.Color = eColor
+	If eColor <> "" Then vbtnright.Color = eColor
 	If bOutlined Then vbtnright.Outlined = True
 	'
 	vbtnright.AssignProps(btnprops)
@@ -2867,8 +2970,7 @@ Sub AddButtonWithLeftIcon(Module As Object, parentID As String, elID As String, 
 	viconright.Dark = True
 	viconright.AddAttr(":left", True)
 	'
-	vbtnright.Dark = True
-	if ecolor <> "" then vbtnright.Color = eColor
+	If eColor <> "" Then vbtnright.Color = eColor
 	If bOutlined Then vbtnright.Outlined = True
 	'
 	vbtnright.AssignProps(btnprops)
@@ -2944,6 +3046,28 @@ Sub AddAvatar1(Module As Object, parentID As String, elID As String, vmodel As S
 	'
 	avatar.BindVueElement(img)
 	Return avatar
+End Sub
+
+
+Sub AddUnorderedList(Module As Object, parentID As String, id As String) As VueElement
+	Dim elx As VueElement = AddVueElement(Module, parentID, id, "ul", "", "", "", Null)
+	Return elx
+End Sub
+
+Sub AddOrderedList(Module As Object, parentID As String, id As String) As VueElement
+	Dim elx As VueElement = AddVueElement(Module, parentID, id, "ol", "", "", "", Null)
+	Return elx
+End Sub
+
+Sub AddLI(Module As Object, parentID As String, id As String, text As String) As VueElement
+	Dim elx As VueElement = AddVueElement(Module, parentID, id, "li", "", text, "", Null)
+	Return elx
+End Sub
+
+Sub AddLink(Module As Object, parentID As String, id As String, href As String, text As String) As VueElement
+	Dim elx As VueElement = AddVueElement(Module, parentID, id, "a", "", text, "", Null)
+	elx.href = href
+	Return elx
 End Sub
 
 
@@ -3303,31 +3427,6 @@ Sub AddButtonWithBadge(Module As Object, parentID As String, elID As String, elL
 	Return mbadgebtn
 End Sub
 
-Sub AddIconWithBadge(Module As Object, parentID As String, elID As String, eIcon As String, eColor As String, vmodel As String, badgeIcon As String, badgeColor As String, btnproperties As Map, badgeproperties As Map) As VueElement
-	parentID = CleanID(parentID)
-	elID = elID.ToLowerCase
-	Dim badgeID As String = $"${elID}badge"$
-	'
-	BANano.GetElement(parentID).Append($"<v-badge id="${badgeID}"><v-icon id="${elID}"></v-icon></v-badge>"$)
-	Dim mbadgebtn As VueElement
-	mbadgebtn.Initialize(Module, elID, elID)
-	mbadgebtn.Caption = eIcon
-	If eColor <> "" Then mbadgebtn.Color = eColor
-	mbadgebtn.SetOnEvent(Module, "click", "")
-	'
-	mbadgebtn.AssignProps(btnproperties)
-	'
-	Dim badgex As VueElement
-	badgex.Initialize(Module, badgeID, badgeID)
-	If vmodel <> "" Then badgex.Bind("content", vmodel)
-	If vmodel <> "" Then badgex.Bind("value", vmodel)
-	If badgeIcon <> "" Then badgex.SetAttr("icon", badgeIcon)
-	If badgeColor <> "" Then badgex.Color = badgeColor
-	badgex.Overlap = True
-	badgex.AssignProps(badgeproperties)
-	badgex.BindVueElement(mbadgebtn)
-	Return badgex
-End Sub
 
 
 '<code>
@@ -3386,12 +3485,12 @@ Sub AddButtonWithIconWithBadge(Module As Object, parentID As String, elID As Str
 	If vmodel <> "" Then badgex.Bind("value", vmodel)
 	If badgeIcon <> "" Then badgex.SetAttr("icon", badgeIcon)
 	If badgeColor <> "" Then badgex.Color = badgeColor
+	badgex.Overlap = True
 	badgex.AssignProps(badgeProperties)
 		
 	Dim vbtnright As VueElement
 	vbtnright.Initialize(Module, elID, elID)
 	vbtnright.SetOnEvent(Module, "click", "")
-	vbtnright.Dark = True
 	vbtnright.AssignProps(btnprops)
 	
 	Dim viconright As VueElement
@@ -3406,15 +3505,40 @@ Sub AddButtonWithIconWithBadge(Module As Object, parentID As String, elID As Str
 End Sub
 
 
+Sub AddIconWithBadge(Module As Object, parentID As String, elID As String, eIcon As String, eColor As String, vmodel As String, badgeIcon As String, badgeColor As String, btnproperties As Map, badgeproperties As Map) As VueElement
+	parentID = CleanID(parentID)
+	elID = elID.ToLowerCase
+	Dim badgeID As String = $"${elID}badge"$
+	'
+	BANano.GetElement(parentID).Append($"<v-badge id="${badgeID}"><v-icon id="${elID}"></v-icon></v-badge>"$)
+	Dim mbadgebtn As VueElement
+	mbadgebtn.Initialize(Module, elID, elID)
+	mbadgebtn.Caption = eIcon
+	If eColor <> "" Then mbadgebtn.Color = eColor
+	mbadgebtn.SetOnEvent(Module, "click", "")
+	'
+	mbadgebtn.AssignProps(btnproperties)
+	'
+	Dim badgex As VueElement
+	badgex.Initialize(Module, badgeID, badgeID)
+	If vmodel <> "" Then badgex.Bind("content", vmodel)
+	If vmodel <> "" Then badgex.Bind("value", vmodel)
+	If badgeIcon <> "" Then badgex.SetAttr("icon", badgeIcon)
+	If badgeColor <> "" Then badgex.Color = badgeColor
+	badgex.Overlap = True
+	badgex.AssignProps(badgeproperties)
+	badgex.BindVueElement(mbadgebtn)
+	Return badgex
+End Sub
+
 'a button with an icon on the left
 Sub AddButtonWithIcon(Module As Object, parentID As String, elID As String, eIcon As String, btnColor As String, btnprops As Map, iconprops As Map) As VueElement
 	parentID = CleanID(parentID)
 	elID = elID.ToLowerCase
 	Dim siconright As String = $"${elID}icon"$
-	BANano.GetElement(parentID).Append($"<v-btn id="${elID}"><v-icon id="${elID}icon"></v-icon></v-btn>"$)
+	BANano.GetElement(parentID).Append($"<v-btn icon id="${elID}"><v-icon id="${elID}icon"></v-icon></v-btn>"$)
 	Dim vbtnright As VueElement
 	vbtnright.Initialize(Module, elID, elID)
-	vbtnright.Dark = True
 	vbtnright.AssignProps(btnprops)
 	'
 	Dim viconright As VueElement
@@ -3570,6 +3694,7 @@ Sub CloseDialog(dldID As String)
 	dialogShow = dialogShow.tolowercase
 	SetData(dialogShow, False)
 End Sub
+
 
 'add input dialog
 Sub AddDialogInput(Module As Object, parentID As String, elID As String, bPersistent As Boolean, dWidth As String, Title As String, OkTitle As String, OkColor As String, CancelTitle As String, CancelColor As String) As VueElement
@@ -4286,8 +4411,8 @@ Sub AddImage1(Module As Object, parentID As String, elID As String, vmodel As St
 	BANano.GetElement(parentID).Append($"<v-img id="${elID}"></v-img>"$)
 	Dim vimg As VueElement
 	vimg.Initialize(Module, elID, elID)
-	If sheight <> "" Then vimg.Height = sheight
-	If swidth <> "" Then vimg.Width = swidth
+	If sheight <> "" Then vimg.MaxHeight = sheight
+	If swidth <> "" Then vimg.MaxWidth = swidth
 	vimg.AddAttr(":src", vmodel)
 	vimg.AddAttr(":lazy-src", vmodel)
 	vimg.Alt = alt
@@ -4311,8 +4436,8 @@ Sub AddImage(Module As Object, parentID As String, elID As String, src As String
 	BANano.GetElement(parentID).Append($"<v-img id="${elID}"></v-img>"$)
 	Dim vimg As VueElement
 	vimg.Initialize(Module, elID, elID)
-	If sheight <> "" Then vimg.Height = sheight
-	If swidth <> "" Then vimg.Width = swidth
+	If sheight <> "" Then vimg.MaxHeight = sheight
+	If swidth <> "" Then vimg.MaxWidth = swidth
 	vimg.Src = src
 	vimg.Alt = alt
 	If lazysrc = "" Then 

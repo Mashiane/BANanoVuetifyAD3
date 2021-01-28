@@ -33,6 +33,13 @@ Sub Class_Globals
 	Public PrimaryKey As String
 	Public Record As Map
 	Private mAI As String
+	Public view As String
+	Public action As String
+End Sub
+
+Sub SetCallBack(v As String, a As String)
+	view = v
+	action = a
 End Sub
 
 Sub RecordFromMap(sm As Map)
@@ -66,7 +73,7 @@ End Sub
 '</code>
 Sub GetMax As BANanoSQLiteE
 	query = $"SELECT MAX(${PrimaryKey}) As ${PrimaryKey} FROM ${EscapeField(TableName)}"$
-	command = "getmax"
+	command = "select"
 	Return Me
 End Sub
 
@@ -84,7 +91,7 @@ End Sub
 '</code>
 Sub GetMin As BANanoSQLiteE
 	query = $"SELECT MIN(${PrimaryKey}) As ${PrimaryKey} FROM ${EscapeField(TableName)}"$
-	command = "getmin"
+	command = "select"
 	Return Me
 End Sub
 
@@ -719,7 +726,7 @@ Sub InsertReplace As BANanoSQLiteE
 	query = sb.ToString
 	args = listOfValues
 	types = listOfTypes
-	command = "replace"
+	command = "insert"
 	Return Me
 End Sub
 
@@ -956,6 +963,44 @@ Sub DeleteAll As BANanoSQLiteE
 	Return Me
 End Sub
 
+'reset the auto-increment key
+'<code>
+''reset the auto-increment key
+'dbConnect.ResetAutoIncrement
+'dbConnect.JSON = BANano.CallInlinePHPWait(dbConnect.MethodName, dbConnect.Build)
+'dbConnect.FromJSON
+'Select Case dbConnect.OK
+'Case False
+'Dim strError As String = dbConnect.Error
+'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
+'End Select
+'</code>
+Sub ResetAutoIncrement As BANanoSQLiteE
+	query = $"delete from sqlite_sequence where name='${TableName}'"$
+	command = "delete"
+	Return Me
+End Sub
+
+'return a sql to truncate table
+'<code>
+''delete all records and reset auto increment
+'dbConnect.Truncate
+'dbConnect.JSON = BANano.CallInlinePHPWait(dbConnect.MethodName, dbConnect.Build)
+'dbConnect.FromJSON
+'Select Case dbConnect.OK
+'Case False
+'Dim strError As String = dbConnect.Error
+'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
+'End Select
+'</code>
+Sub Truncate As BANanoSQLiteE
+	query = $"TRUNCATE TABLE ${EscapeField(TableName)}"$
+	command = "delete"
+	Return Me
+End Sub
+
+
+
 private Sub EQOperators(sm As Map) As List   'ignore
 	Dim nl As List
 	nl.initialize
@@ -1084,13 +1129,17 @@ Sub SelectDistinctAll(tblfields As List, orderBy As List) As BANanoSQLiteE
 End Sub
 
 'build the query string
-Sub Build As Map
+Sub Build(isPHP As Boolean) As Map
 	Dim b As Map = CreateMap()
 	b.Put("dbname", DBase)
 	b.Put("command", command)
 	b.Put("query", query)
 	b.Put("args", args)
 	b.Put("types", types)
+	If isPHP = False Then
+		b.Put("view", view)
+		b.Put("action", action)
+	End If
 	Return b
 End Sub
 
@@ -1278,6 +1327,67 @@ Sub FromJSON As BANanoSQLiteE
 	Return Me
 End Sub
 
+'return a sql to select record of table where one exists
+'<code>
+''select all records
+'dbConnect.SelectAllDesc(array("*"), array("name"), array("name"))
+'dbConnect.JSON = BANano.CallInlinePHPWait(dbConnect.MethodName, dbConnect.Build)
+'dbConnect.FromJSON
+'Select Case dbConnect.OK
+'Case False
+'Dim strError As String = dbConnect.Error
+'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
+'End Select
+'</code>
+Sub SelectAllAscDesc(tblfields As List, orderBy As List, AscDesc As List)
+	'are we selecting all fields or just some
+	Dim fld1 As String = tblfields.Get(0)
+	Dim selFIelds As String = ""
+	Select Case fld1
+		Case "*"
+			selFIelds = "*"
+		Case Else
+			selFIelds = JoinFields(",", tblfields)
+	End Select
+	Dim sb As StringBuilder
+	sb.Initialize
+	sb.Append($"SELECT ${selFIelds} FROM ${EscapeField(TableName)}"$)
+	If orderBy.IsInitialized Then
+		'order by
+		Dim xOrder As List
+		xOrder.Initialize
+		'
+		Dim obTot As Int = orderBy.Size - 1
+		Dim obCnt As Int
+		For obCnt = 0 To obTot
+			Dim xfld As String = orderBy.Get(obCnt)
+			If AscDesc.IsInitialized Then
+				'does the field exist in sort order
+				If AscDesc.IndexOf(xfld) >= 0 Then
+					xfld = EscapeField(xfld) & " DESC"
+					xOrder.Add(xfld)
+				End If
+			Else
+				xOrder.Add(EscapeField(xfld))
+			End If
+		Next
+		Dim strO As String = Join(",", xOrder)
+		If strO.Length > 0 Then
+			sb.Append(" ORDER BY ").Append(strO)
+		End If
+	End If
+	query = sb.tostring
+	command =  "select"
+	args = Null
+	types = Null
+	response = ""
+	error = ""
+	result = NewList
+	json = ""
+	affectedRows = 0
+End Sub
+
+
 
 #if PHP
 function preparesqlite($db, $sql, $types, $values) {
@@ -1313,6 +1423,9 @@ function BANanoSQLite($dbname,$command,$query,$args,$types) {
    	//set the header
 	header('Access-Control-Allow-Origin: *');
 	header('content-type: application/json; charset=utf-8');
+	header("Access-Control-Allow-Credentials: true");
+	header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
+	header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token , Authorization');
    	$db = new SQLite3($dbname, SQLITE3_OPEN_CREATE | SQLITE3_OPEN_READWRITE);
 	if(!$db) {
   		$response = $db->lastErrorMsg();
