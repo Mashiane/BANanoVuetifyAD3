@@ -2643,6 +2643,14 @@ Sub AddProgressCircular(Module As Object, parentID As String, elID As String, vm
 End Sub
 
 
+'<code>
+'dim slot1 As VueElement = vuetify.AddSlot(Me, "r1c1", "slot1")
+'</code>
+Sub AddSlot(Module As Object, parentID As String, elID As String) As VueElement
+	Dim elx As VueElement = AddVueElement(Module, parentID, elID, "slot", "", "", "", Null)
+	Return elx
+End Sub
+
 Sub AddAnchor(Module As Object, parentID As String, elID As String, href As String, caption As String, target As String) As VueElement
 	Dim elx As VueElement = AddVueElement(Module, parentID, elID, "a", "", caption, "", Null)
 	elx.href = href

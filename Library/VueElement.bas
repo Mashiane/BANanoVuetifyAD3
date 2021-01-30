@@ -5274,6 +5274,7 @@ Sub setVisibility(s As String)
 	AddStyle("visibility", s)
 End Sub
 
+'set position relative
 Sub setRelative
 	setPosition("relative")
 End Sub
@@ -5412,56 +5413,74 @@ Sub AddStyleOnHover(prop As String, onOver As String, onOut As String)
 	AddStyleOnMouseOver(prop, onOver)
 End Sub
 
+'set text decoration capitalize
 Sub setCapitalize(b As Boolean)
 	If b = False Then Return
 	setTextDecoration("capitalize")
 End Sub
 
+'set text decoration uppercase
 Sub setUpperCase(b As Boolean)
 	If b = False Then Return
 	setTextDecoration("uppercase")
 End Sub
 
+'set text decoration lowercase
 Sub setLowerCase(b As Boolean)
 	If b = False Then Return
 	setTextDecoration("lowercase")
 End Sub
 
+'set text decoration underline
 Sub setUnderLine(b As Boolean)
 	If b = False Then Return
 	setTextDecoration("underline")
 End Sub
 
+'set text decoration line through
 Sub setLineThrough(b As Boolean)
 	If b = False Then Return
 	setTextDecoration("line-through")
 End Sub
 
+'set text decoration overline
 Sub setOverline(b As Boolean)
 	If b = False Then Return
 	setTextDecoration("overline")
 End Sub
 
+'set text decoration blick
 Sub setBlink(b As Boolean)
 	If b = False Then Return
 	setTextDecoration("blink")
 End Sub
 
+'set text decoration none
 Sub setNoneTextDecoration(b As Boolean)
 	If b = False Then Return
 	setTextDecoration("none")
 End Sub
 
-'set the conver image for the container
-Sub setFullScreen(varFullScreen As Boolean)
-	bFullScreen = varFullScreen
-	If BANano.IsUndefined(varFullScreen) Or BANano.IsNull(varFullScreen) Then Return
-	If varFullScreen = False Then Return
-	AddAttr(":fullscreen", "$vuetify.breakpoint.mobile")
-End Sub
-
+'set box size border box
 Sub setBoxSizingBorderBox()
 	AddStyle("-moz-box-sizing", "border-box")
 	AddStyle("-webkit-box-sizing", "border-box")
 	AddStyle("box-sizing","border-box")
+End Sub
+
+'set on v-bind atts
+Sub setVBindAttrs(b As Boolean)
+	If b = False Then Return
+	AddAttr("v-bind", "$attrs")
+End Sub
+
+'set v-on listeners
+Sub setVOnListerners(b As Boolean)
+	If b = False Then Return
+	AddAttr("v-on", "$listeners")
+End Sub
+
+'set the name of the element
+Sub setname(s As String)
+	AddAttr("name", s)
 End Sub
