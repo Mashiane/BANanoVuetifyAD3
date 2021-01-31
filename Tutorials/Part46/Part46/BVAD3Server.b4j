@@ -1,0 +1,186 @@
+﻿AppType=StandardJava
+Build1=Default,b4j.example
+File1=1.png
+File10=favicon-32x32.png
+File11=firebase-logo.png
+File12=gray.png
+File13=green.png
+File14=happyface.png
+File15=neutralface.png
+File16=orange.png
+File17=red.png
+File18=sadface.png
+File19=sponge.png
+File2=2.png
+File20=test.db
+File3=alasql.min.js
+File4=android-chrome-192x192.png
+File5=android-chrome-512x512.png
+File6=apple-touch-icon.png
+File7=config.properties
+File8=favicon.ico
+File9=favicon-16x16.png
+FileGroup1=Default Group
+FileGroup10=Default Group
+FileGroup11=Default Group
+FileGroup12=Default Group
+FileGroup13=Default Group
+FileGroup14=Default Group
+FileGroup15=Default Group
+FileGroup16=Default Group
+FileGroup17=Default Group
+FileGroup18=Default Group
+FileGroup19=Default Group
+FileGroup2=Default Group
+FileGroup20=Default Group
+FileGroup3=Default Group
+FileGroup4=Default Group
+FileGroup5=Default Group
+FileGroup6=Default Group
+FileGroup7=Default Group
+FileGroup8=Default Group
+FileGroup9=Default Group
+Group=Default Group
+Library1=banano
+Library10=jsql
+Library11=jstringutils
+Library12=bananobase64
+Library2=bananofaker
+Library3=bananoserver
+Library4=bananovuetifyad3
+Library5=byteconverter
+Library6=encryption
+Library7=jcore
+Library8=jrandomaccessfile
+Library9=json
+Module1=BROWSERIndex
+Module10=ViewJRDC2
+Module11=ViewMySQL
+Module12=ViewSQLite
+Module13=ViewUsers
+Module14=WebUtils
+Module2=DBRequestManager
+Module3=modBVAD3
+Module4=SERVERIndex
+Module5=SHAREDODBC
+Module6=Utility
+Module7=ViewAbout
+Module8=ViewBANanoSQL
+Module9=ViewHome
+NumberOfFiles=20
+NumberOfLibraries=12
+NumberOfModules=14
+Version=8.8
+@EndOfDesignText@
+'Non-UI application (console / server application)
+#Region Project Attributes 
+	#CommandLineArgs:
+	#MergeLibraries: True 
+	#IgnoreWarnings: 16, 10, 14, 15	
+	#AdditionalJar: mysql-connector-java-8.0.12.jar
+	#AdditionalJar: sqlite-jdbc-3.25.2.jar
+'	#AdditionalJar: jtds-1.3.1.jar
+'	#AdditionalJar: ucanaccess-5.0.1.jar
+'    #AdditionalJar: lib\jackcess-3.0.1.jar
+'    #AdditionalJar: lib\hsqldb-2.5.0.jar
+'    #AdditionalJar: lib\commons-logging-1.2.jar
+'    #AdditionalJar: lib\commons-lang3-3.8.1.jar
+	
+	'#VirtualMachineArgs: -Xbootclasspath/p:alpn-boot-8.1.11.v20170118.jar 
+#End Region
+
+Sub Process_Globals
+	' must be public in Main because everyone has to use this one. 
+	Public Server As BANanoServer 
+	Public ServerIP As String = "http://www.localhost:55056"
+	Public SQLiteFolder As String
+	Type DBResult (Tag As Object, Columns As Map, Rows As List)
+	Type DBCommand (Name As String, Parameters() As Object)
+End Sub
+
+Sub AppStart (Args() As String)
+	' initialize the BANano Server
+	'read the configuration settings
+	Dim config As Map = Utility.ReadConfig
+	'the path to the configuration file
+	Dim configPath As String = File.Combine(File.DirApp, "www/assets/config.properties")
+	Server.Initialize(configPath) ' in Objects path defined
+	'Log("Port: " & Server.Port)
+	Server.AppVersion = config.Get("AppVersion")
+	Server.AppName = config.Get("AppName")
+	' for our caching
+	Server.SessionMaxInactiveIntervalSeconds = config.Get("SessionMaxInactiveIntervalSeconds")
+	Server.CacheScavengePeriodSeconds = config.Get("CacheScavengePeriodSeconds")
+	' for our upload
+	Server.UploadAllowedFileTypes = config.Get("UploadAllowedFileTypes")
+	Server.UploadMaxSize = config.Get("UploadMaxSize")
+	' Other important ones
+	' the prefix of our BROWSER (BANano only code) classes that miror their SERVER counterpart (default is "BROWSER")
+	Server.BROWSERPrefix = config.Get("BROWSERPrefix") ' IMPORTANT to set this one if you do not use this default Prefix!
+	Server.SHAREDPrefix = config.Get("SHAREDPrefix")
+				
+	' initialize BANano
+	Server.BANano.Initialize("BANano", "BANanoServer", DateTime.now)
+	Server.BANano.Header.Title = modBVAD3.Apptitle
+	Server.BANano.Header.AddFavicon("favicon.ico", "16x16")
+	Server.BANano.Header.AddAppleTouchIcon("apple-touch-icon.png", "180x180")
+	Server.BANano.Header.Author ="Anele Mbanga (Mashy)"
+	Server.BANano.Header.Description = "BANanoVuetify Empty Template"
+	'BANano.header.Expires = "Mon, 22 Jul 2002 11:12:01 GMT"
+	Server.BANano.Header.Keywords = "banano,vuetify,material design"
+	Server.BANano.Header.Language = "en"
+	Server.BANano.Header.AddMeta($"<meta name="copyright" content="&copy; 2020 BANanoVuetifyAD3">"$)
+	Server.BANano.Header.AddMeta($"<meta name="robots" content="ALL">"$)
+	
+	'Server.BANano.Header.AddMSTileIcon("mstile-150x150.png", "144x144")
+	'Server.BANano.Header.SetMaskIcon("safari-pinned-tab.svg")
+	Server.BANano.Header.AddManifestIcon("android-chrome-192x192.png", "192x192")
+	Server.BANano.Header.AddManifestIcon("android-chrome-512x512.png", "512x512")
+	Server.BANano.TranspilerOptions.UseServiceWorker = False
+	Server.BANano.TranspilerOptions.MergeAllCSSFiles = False
+	Server.BANano.TranspilerOptions.MergeAllJavascriptFiles = False
+	Server.BANano.TranspilerOptions.MinifyOnline = False
+	Server.BANano.TranspilerOptions.RemoveDeadCode = False
+	'
+	'BANano.TranspilerOptions.SetFireReadyWhenReadyStateComplete
+	'BANano.TranspilerOptions.GZipGeneratedWebsite(10)
+	#if release
+		Server.BANano.TranspilerOptions.EnableLiveCodeSwapping = False
+	#end if
+	'Server.BANano.TranspilerOptions.RedirectOutput(File.DirApp, "log.txt")
+	'	
+	Server.BANano.TranspilerOptions.SetStaticFolder("www")
+	' some B4J typical libs we want to be ignored by the Transpiler
+	Server.BANano.TranspilerOptions.IgnoreB4JLibrary("Json")
+	Server.BANano.TranspilerOptions.IgnoreB4JLibrary("ByteConverter")
+	Server.BANano.TranspilerOptions.IgnoreB4JLibrary("jOkHttpUtils2")
+	Server.BANano.TranspilerOptions.IgnoreB4JLibrary("jRandomAccessFile")
+	Server.BANano.TranspilerOptions.IgnoreB4JLibrary("encryption")
+		
+	' transpile all the BANano b4J code to javascript
+	Server.BANano.BuildForServer(Server.OutputFolder)
+	SQLiteFolder = Server.OutputFolder & "\www\assets"
+		
+	' add your SERVER classes, not the BROWSER parts:
+	Server.AddWebSocket("/ws/" & Server.BANano.StaticFolder & "/index" , "SERVERIndex")
+	
+	'limit page to 5 seconds to prevent dos attacks
+	'Server.AddDoSFilter("/one_specific_path", CreateMap("maxRequestMs": 5 * 60 * 1000))
+	
+	' set the start page one will go to if they enter the site by the root
+	Server.StartPage = config.Get("StartPage")
+	
+	' lets start the B4J server
+	If Server.PortSSL <> 0 Then
+		Server.StartServerHTTP2("keystore.jks", "SSLKeyStorePassword", "SSLKeyManagerPassword")
+	Else
+		Server.StartServer
+	End If
+	
+	StartMessageLoop
+End Sub
+
+'Return true to allow the default exceptions handler to handle the uncaught exception.
+Sub Application_Error (Error As Exception, StackTrace As String) As Boolean
+	Return True
+End Sub
