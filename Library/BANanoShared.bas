@@ -884,28 +884,6 @@ Public Sub ExpectedRAG(dValue As Double) As String
 	End If
 End Sub
 
-
-'convert map keys to a list
-Sub MapKeys2List(m As Map) As List
-	Dim lst As List
-	lst.Initialize
-	For Each k As String In m.Keys
-		lst.Add(k)
-	Next
-	Return lst
-End Sub
-
-'convert map keys to a list
-Sub MapValues2List(m As Map) As List
-	Dim lst As List
-	lst.Initialize
-	For Each k As String In m.values
-		lst.Add(k)
-	Next
-	Return lst
-End Sub
-
-
 'rsa id to date of birth
 Sub RSAIDNumber2DateOfBirth(rsaID As String) As String
 	'south african id
@@ -3654,4 +3632,74 @@ Sub DeDuplicateMap(oldMap As Map) As Map
 		nMap.Put(strKey,strValue)
 	Next
 	Return nMap
+End Sub
+
+
+Sub MapValues2List(m As Map) As List
+	Dim mtot As Int = m.Size-1
+	Dim mcnt As Int
+	Dim nl As List
+	nl.Initialize 
+	For mcnt = 0 To mtot
+		Dim v As Object = m.GetValueAt(mcnt)
+		nl.Add(v)
+	Next
+	Return nl
+End Sub
+
+Sub MapValues2MV(m As Map, delim As String, keys As List) As String
+	Dim nl As List
+	nl.Initialize
+	For Each k As String In keys
+		If m.ContainsKey(k) Then
+			Dim v As Object = m.Get(k)
+			nl.Add(v)
+		End If
+	Next
+	Dim sout As String = Join(delim, nl)
+	Return sout
+End Sub
+
+Sub MapKeys2List(m As Map) As List
+	Dim mtot As Int = m.Size-1
+	Dim mcnt As Int
+	Dim nl As List
+	nl.Initialize 
+	For mcnt = 0 To mtot
+		Dim v As Object = m.GetKeyAt(mcnt)
+		nl.Add(v)
+	Next
+	Return nl
+End Sub
+
+Sub List2ObjectArray(lst As List) As Object()
+	Dim rTot As Int = lst.size
+	Dim rCnt As Int = 0
+	Dim xout(rTot) As Object
+	For rCnt = 0 To rTot - 1
+		xout(rCnt) = lst.Get(rCnt)
+	Next
+	Return xout
+End Sub
+
+Sub MapValues2ObjectArray(m As Map) As Object()
+	Dim mtot As Int = m.size
+	Dim mcnt As Int
+	Dim obj(mtot) As Object
+	For mcnt = 0 To mtot - 1
+		Dim v As Object = m.GetValueAt(mcnt)
+		obj(mcnt) = v
+	Next
+	Return obj
+End Sub
+
+Sub Args2ObjectArray(m As List) As Object()
+	Dim mtot As Int = m.size
+	Dim mcnt As Int
+	Dim obj(mtot) As Object
+	For mcnt = 0 To mtot - 1
+		Dim v As Object = m.Get(mcnt)
+		obj(mcnt) = v
+	Next
+	Return obj
 End Sub

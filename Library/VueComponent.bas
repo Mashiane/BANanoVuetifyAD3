@@ -15,8 +15,7 @@ Sub Class_Globals
 	Public jsBoolean As BANanoObject
 	Public jsArray As BANanoObject
 	Public jsObject As BANanoObject
-	Public refs As BANanoObject
-	'
+	
 	Private data As Map
 	Private opt As Map
 	Private methods As Map
@@ -33,6 +32,7 @@ Sub Class_Globals
 	Public AppendHolderName As String = "#appendholder"
 	Public PlaceHolderName As String = "#placeholder"
 	Public Here As String = "#placeholder"
+	Public meta As Map
 		'
 	Private dialogShow As String 
 	Private dialogTitle As String
@@ -52,6 +52,26 @@ Sub Class_Globals
 	Private dialogpromptshow As String
 	Private dialogtexttype As String
 	Public vuetify As VuetifyApp
+	Public refs As BANanoObject
+End Sub
+
+'reset a form
+Sub FormReset(formName As String)
+	formName = formName.ToLowerCase
+	refs.GetField(formName).runmethod("reset", Null)
+End Sub
+
+'resetValidation a form
+Sub FormResetValidation(formName As String)
+	formName = formName.ToLowerCase
+	refs.GetField(formName).runmethod("resetValidation", Null)
+End Sub
+
+'validate a form
+Sub FormValidate(formName As String) As Boolean
+	formName = formName.ToLowerCase
+	Dim b As Boolean = refs.GetField(formName).runmethod("validate", Null).Result
+	Return b
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String) As VueComponent
@@ -73,6 +93,7 @@ Public Sub Initialize (CallBack As Object, Name As String) As VueComponent
 	jsBoolean.Initialize("Boolean")
 	jsArray.Initialize("Array")
 	jsObject.Initialize("Object")
+	meta.Initialize 
 	'
 	'add the placeholder div to the app
 	TemplateID = $"${mName}ph"$
@@ -106,7 +127,6 @@ Sub AddMsgBox(bPersistent As Boolean, width As Int, okColor As String, cancelCol
 	Return fbDialog
 End Sub
 
-
 private Sub CleanID(v As String) As String
 	v = v.Replace("#","")
 	v = $"#${v}"$
@@ -123,11 +143,6 @@ Sub GetVueElement(Module As Object, elID As String) As VueElement
 	Else
 		Return Null
 	End If
-End Sub
-
-'return ths vue instance
-Sub This As BANanoObject
-	Return Component
 End Sub
 
 Sub NewMap As Map
@@ -292,8 +307,6 @@ Sub BindVueElement(el As VueElement)
 		Dim v As Object = mbindings.Get(k)
 		Select Case k
 		Case "key"
-		Case ":rules", ":items"
-			SetData(v, NewList)
 		Case Else
 			SetData(k, v)
 		End Select
@@ -316,8 +329,6 @@ Sub BindVueTable(el As VueTable)
 		Dim v As Object = mbindings.Get(k)
 		Select Case k
 		Case "key"
-		Case ":rules", ":items"
-			SetData(v, NewList)
 		Case Else
 			SetData(k, v)
 		End Select
@@ -337,8 +348,6 @@ Sub BindVueGMap(el As VueGMap)
 		Dim v As Object = mbindings.Get(k)
 		Select Case k
 		Case "key"
-		Case ":rules", ":items"
-			SetData(v, NewList)
 		Case Else
 			SetData(k, v)
 		End Select
@@ -530,6 +539,10 @@ End Sub
 
 'update the state
 Sub SetData(prop As String, value As Object) As VueComponent
+	If BANano.IsNull(prop) Or BANano.IsUndefined(prop) Then
+		prop = ""
+	End If
+	If prop = "" Then Return Me
 	prop = prop.tolowercase
 	Dim dotPos As Int = BANanoShared.InStr(prop, ".")
 	If dotPos >= 0 Then
@@ -547,6 +560,11 @@ Sub SetData(prop As String, value As Object) As VueComponent
 		data.put(prop, value)
 	End If
 	Return Me
+End Sub
+
+'add a meta tag to the property
+Sub AddMeta(prop As String, value As String)
+	meta.Put(prop, value)
 End Sub
 
 'return the component
@@ -1009,4 +1027,9 @@ End Sub
 Sub CStr(o As Object) As String
 	If BANano.isnull(o) Or BANano.IsUndefined(o) Then o = ""
 	Return "" & o
+End Sub
+
+Sub IsVisible(ve As VueElement, bShow As Boolean)
+	Dim vkey As String = ve.VShow
+	SetData(vkey, bShow)
 End Sub

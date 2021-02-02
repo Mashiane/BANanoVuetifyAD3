@@ -92,7 +92,6 @@ Version=8.8
 Sub Process_Globals
 	' must be public in Main because everyone has to use this one. 
 	Public Server As BANanoServer 
-	Public ServerIP As String = "http://www.localhost:55056"
 	Public SQLiteFolder As String
 	Type DBResult (Tag As Object, Columns As Map, Rows As List)
 	Type DBCommand (Name As String, Parameters() As Object)
@@ -105,7 +104,7 @@ Sub AppStart (Args() As String)
 	'the path to the configuration file
 	Dim configPath As String = File.Combine(File.DirApp, "www/assets/config.properties")
 	Server.Initialize(configPath) ' in Objects path defined
-	'Log("Port: " & Server.Port)
+	Log("Port: " & Server.Port)
 	Server.AppVersion = config.Get("AppVersion")
 	Server.AppName = config.Get("AppName")
 	' for our caching

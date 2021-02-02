@@ -483,22 +483,12 @@ End Sub
 
 'update the state
 Sub SetData(prop As String, value As Object)
-	prop = prop.tolowercase
-	Dim dotPos As Int = BANanoShared.InStr(prop, ".")
-	If dotPos >= 0 Then
-		Dim pEL As String = BANanoShared.MvField(prop,1, ".")
-		Dim cEL As String = BANanoShared.MvField(prop,2, ".")
-		Dim oEL As Map
-		If bindings.ContainsKey(pEL) Then
-			oEL = bindings.Get(pEL)
-		Else
-			oEL.Initialize
-		End If
-		oEL.Put(cEL, value)
-		bindings.Put(pEL, oEL)
-	Else
-		bindings.put(prop, value)
+	If BANano.IsNull(prop) Or BANano.IsUndefined(prop) Then
+		prop = ""
 	End If
+	If prop = "" Then Return
+	prop = prop.tolowercase
+	bindings.put(prop, value)
 End Sub
 
 'new list
@@ -719,8 +709,6 @@ Sub BindVueElement(el As VueElement)
 		Dim v As Object = mbindings.Get(k)
 		Select Case k
 		Case "key"
-		Case ":rules", ":items"
-			SetData(v, NewList)
 		Case Else
 			SetData(k, v)
 		End Select
@@ -778,12 +766,12 @@ Public Sub AddAttr(varProp As String, varValue As String)
 			End If
 		End If
 		'
-		Select Case varProp
-			Case "v-model", "v-show", "v-if", "v-else-if", "required", "disabled", "readonly"
-				If varValue <> "" Then
-					bindings.Put(varValue, Null)
-				End If
-		End Select
+'		Select Case varProp
+'			Case "v-model", "v-show", "v-if", "v-else-if", "required", "disabled", "readonly"
+'				If varValue <> "" Then
+'					bindings.Put(varValue, Null)
+'				End If
+'		End Select
 	End If
 	Return
 End Sub
@@ -1048,6 +1036,8 @@ Sub SetMethod(methodName As String, args As List)
 	If SubExists(mCallBack, methodName) Then
 		Dim cb As BANanoObject = BANano.CallBack(mCallBack, methodName, args)
 		methods.Put(methodName, cb)
+	Else
+		Log("SetMethod: " & methodName & ", callback is missing.")
 	End If
 End Sub
 

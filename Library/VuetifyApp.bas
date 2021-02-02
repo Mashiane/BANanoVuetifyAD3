@@ -15,7 +15,6 @@ Sub Class_Globals
 	Private watches As Map
 	Private filters As Map
 	Private opt As Map
-	Public refs As BANanoObject
 	Public Path As String
 	Public Name As String
 	Public Query As Map
@@ -31,6 +30,8 @@ Sub Class_Globals
 	Public AppName As String
 	Public Root As BANanoObject
 	Public Route As BANanoObject
+	Public refs As BANanoObject
+	Public RouterView As BANanoObject
 	'
 	Public const BORDER_DEFAULT As String = ""
 	Public const BORDER_DASHED As String = "dashed"
@@ -392,6 +393,7 @@ Sub Class_Globals
 	rightrating As String, rightratingcolor As String, showrightrating As Boolean, _
 	leftswitch As String, showleftswitches As Boolean, _
 	rightswitch As String, showrightswitches As Boolean, switchinset As Boolean)
+	Public RouterViewName As String
 End Sub
 
 
@@ -484,7 +486,7 @@ Sub GetVueElement(Module As Object, elID As String) As VueElement
 		ve.Initialize(Module, elID, elID)
 		Return ve
 	Else
-		Return Null	
+		Return Null
 	End If
 End Sub
 
@@ -852,8 +854,6 @@ Sub BindVueElement(elx As VueElement)
 		Dim v As Object = mbindings.Get(k)
 		Select Case k
 		Case "key"
-		Case ":rules", ":items"
-			SetData(v, NewList)
 		Case Else
 			SetData(k, v)
 		End Select
@@ -908,7 +908,8 @@ Public Sub Initialize(Module As Object, myapp As String)
 	AppName = myapp.ToLowerCase
 	'get the body of the page
 	body = BANano.GetElement("#body")
-	body.Append($"<div id="app"><div id="placeholder" v-if="placeholder"></div><div id="appendholder" v-if="appendholder"></div><v-template id="apptemplate" v-if="apptemplate"></v-template></div>"$)
+	body.Append($"<div ref="app" id="app"><div id="placeholder" v-if="placeholder"></div><div id="appendholder" v-if="appendholder"></div><v-template id="apptemplate" v-if="apptemplate"></v-template></div>"$)
+	'
 	Vue.Initialize("Vue")
 	'
 	'***use a global prototype
@@ -938,6 +939,7 @@ Public Sub Initialize(Module As Object, myapp As String)
 	Dark = False
 	lang = "en"
 	VuetifyOptions.Initialize
+	RouterViewName = "routerview"
 	InitDialog
 End Sub
 
@@ -1317,24 +1319,21 @@ Sub NewMap As Map
 	Return nm
 End Sub
 
-'add a router page
+'add a router component
 Sub AddRoute(comp As VueComponent) 
 	If comp.mname = "" Then
 		Log("AddRoute: Please specify the name of the Route!")
 	End If
 	'ensure content in the placeholder is added
 	comp.AppendPlaceHolder
-	'
+	
+	Dim compx As BANanoObject = Vue.RunMethod("component", Array(comp.mname, comp.component))
 	Dim eachroute As Map = CreateMap()
 	eachroute.Put("path", comp.path)
 	eachroute.Put("name", comp.mname)
-	'Dim compx As Map = comp.Component
-	'eachroute.Put("component", compx)
-	'
-	Dim compx As BANanoObject = Vue.RunMethod("component", Array(comp.mname, comp.component))
 	eachroute.Put("component", compx)
-	
-	'eachroute.Put("props", True)
+	eachroute.Put("props", True)
+	eachroute.Put("meta", comp.meta)
 	routes.Add(eachroute)
 End Sub
 
@@ -1467,25 +1466,6 @@ Sub State2Another(source As String, target As String, defaultValue As Object)
 	SetStateSingle(target, readObj)
 End Sub
 
-'reset a form
-Sub FormReset(formName As String)
-	formName = formName.ToLowerCase
-	refs.GetField(formName).runmethod("reset", Null)
-End Sub
-
-'resetValidation a form
-Sub FormResetValidation(formName As String)
-	formName = formName.ToLowerCase
-	refs.GetField(formName).runmethod("resetValidation", Null)
-End Sub
-
-
-'validate a form
-Sub FormValidate(formName As String) As Boolean
-	formName = formName.ToLowerCase
-	Dim b As Boolean = refs.GetField(formName).runmethod("validate", Null).Result
-	Return b
-End Sub
 
 'focus on a ref
 Sub SetFocus(refID As String) 
@@ -1913,10 +1893,9 @@ Sub Serve
 	Options.Put("computed", computed)
 	Options.Put("watch", watches)
 	Options.Put("template", Template)
+	Options.Put("name", AppName)
 	Vue.Initialize2("Vue", Array(Options))
-	'get the refs
-	Dim rKey As String = "$refs"
-	refs = Vue.GetField(rKey)
+	
 	Dim sstore As String = "$store"
 	store = Vue.GetField(sstore)
 	Dim emitKey As String = "$emit"
@@ -1929,6 +1908,43 @@ Sub Serve
 	Root = Vue.GetField(sroot)
 	Dim sroute As String = "$route"
 	Route = Vue.GetField(sroute)
+	Dim rKey As String = "$refs"
+	refs = Vue.GetField(rKey)
+	RouterView = refs.GetField(RouterViewName)
+End Sub
+
+
+'reset a form
+Sub FormReset(formName As String)
+	formName = formName.ToLowerCase
+	refs.GetField(formName).runmethod("reset", Null)
+End Sub
+
+'resetValidation a form
+Sub FormResetValidation(formName As String)
+	formName = formName.ToLowerCase
+	refs.GetField(formName).runmethod("resetValidation", Null)
+End Sub
+
+'validate a form
+Sub FormValidate(formName As String) As Boolean
+	formName = formName.ToLowerCase
+	Dim b As Boolean = refs.GetField(formName).runmethod("validate", Null).Result
+	Return b
+End Sub
+
+'get the active component refs
+Sub GetRefs As BANanoObject
+	Dim rKey As String = "$refs"
+	Dim refsx As BANanoObject = RouterView.GetField(rKey)
+	Return refsx
+End Sub
+
+'get the active component slots
+Sub GetSlots As BANanoObject
+	Dim rKey As String = "$slots"
+	Dim refsx As BANanoObject = RouterView.GetField(rKey)
+	Return refsx
 End Sub
 
 'use for components
@@ -2156,6 +2172,10 @@ End Sub
 
 'update the state
 Sub SetData(prop As String, value As Object)
+	If BANano.IsNull(prop) Or BANano.IsUndefined(prop) Then
+		prop = ""
+	End If
+	If prop = "" Then Return
 	prop = prop.tolowercase
 	Dim dotPos As Int = BANanoShared.InStr(prop, ".")
 	If dotPos >= 0 Then
@@ -2254,8 +2274,6 @@ Sub BindVueTable(el As VueTable)
 		Dim v As Object = mbindings.Get(k)
 		Select Case k
 		Case "key"
-		Case ":rules", ":items"
-			SetData(v, NewList)
 		Case Else
 			SetData(k, v)
 		End Select
@@ -2275,8 +2293,6 @@ Sub BindVueGMap(el As VueGMap)
 		Dim v As Object = mbindings.Get(k)
 		Select Case k
 			Case "key"
-			Case ":rules", ":items"
-				SetData(v, NewList)
 			Case Else
 				SetData(k, v)
 		End Select
@@ -2453,6 +2469,7 @@ Sub AddTabs(Module As Object, parentID As String, elID As String, vmodel As Stri
 	Dim vtabs As VueElement
 	vtabs.Initialize(Module, elID, elID)
 	vtabs.VModel = vmodel
+	vtabs.SetData(vmodel, "")
 	vtabs.Centered = bCentered
 	vtabs.IconsAndText = bIconsAndText
 	vtabs.Grow = bGrow
@@ -2549,13 +2566,14 @@ End Sub
 'vuetify.BindVueElement(frm)
 'Dim bValid As Boolean = vuetify.FormValidate(
 '</code>
-
 Sub AddForm(Module As Object, parentID As String, elID As String, vmodel As String, bLazyValidation As Boolean, props As Map) As VueElement
 	elID = elID.tolowercase
 	Dim elx As VueElement = AddVueElement(Module, parentID, elID, "v-form", vmodel, "", "", props)
-	elx.SetAttr(":lazy-validation", bLazyValidation)
 	elx.Ref = elID
-	If vmodel <> "" Then elx.setdata(vmodel, False)
+	elx.SetAttr(":lazy-validation", bLazyValidation)
+	If vmodel <> "" Then 
+		elx.setdata(vmodel, False)
+	End If
 	Return elx
 End Sub
 
@@ -2662,6 +2680,14 @@ Sub AddCard(Module As Object, parentID As String, elID As String, color As Strin
 	Return AddVueElement(Module, parentID, elID, "v-card", "", "", color, props)
 End Sub
 
+Sub AddWindow(Module As Object, parentID As String, elID As String) As VueElement
+	Return AddVueElement(Module, parentID, elID, "v-window", "", "", "", Null)
+End Sub
+
+Sub AddWindowItem(Module As Object, parentID As String, elID As String) As VueElement
+	Return AddVueElement(Module, parentID, elID, "v-window-item", "", "", "", Null)
+End Sub
+
 Sub AddCardTitle(Module As Object, parentID As String, elID As String, color As String, props As Map) As VueElement
 	Return AddVueElement(Module, parentID, elID, "v-card-title", "", "", color, props)
 End Sub
@@ -2699,7 +2725,8 @@ Sub AddVueElement(Module As Object, parentID As String, elID As String, tag As S
 	Dim ve As VueElement
 	ve.Initialize(Module, elID, elID)
 	If Caption <> "" Then ve.Caption = Caption
-	If vModel <> "" Then ve.VModel = vModel
+	ve.VModel = vModel
+	ve.SetData(vModel, "")
 	If color <> "" Then ve.Color = color
 	ve.AssignProps(props)
 	ve.SetOnEvent(Module, "click", "")
@@ -2723,7 +2750,8 @@ Sub UpdateVueElement(Module As Object, elID As String, vModel As String, Caption
 	Dim ve As VueElement
 	ve.Initialize(Module, elID, elID)
 	If Caption <> "" Then ve.Caption = Caption
-	If vModel <> "" Then ve.VModel = vModel
+	ve.VModel = vModel
+	ve.SetData(vModel, "")
 	ve.AssignProps(props)
 	ve.SetOnEvent(Module, "click", "")
 	ve.SetOnEvent(Module, "click.stop", "")
@@ -2766,6 +2794,7 @@ Sub AddStepperHorizontal(Module As Object, parentID As String, elID As String, v
 	Dim vstepper As VueElement
 	vstepper.Initialize(Module, elID, elID)
 	vstepper.VModel = vmodel
+	vstepper.SetData(vmodel, "")
 	vstepper.AddAttr(":alt-labels", altLabels)
 	vstepper.AddAttr(":non-linear", nonLinear)
 	vstepper.SetOnEvent(Module, "change", "")
@@ -2798,8 +2827,9 @@ Sub AddChipGroup(Module As Object, parentID As String, elID As String, vModel As
 	If bMultiple Then
 		vchipgroup.SetData(vModel, NewList)
 	Else
-		vchipgroup.SetData(vModel, Null)
-	End If	
+		vchipgroup.SetData(vModel, "")
+	End If
+	vchipgroup.SetData(DataSource, NewList)
 	'
 	'get the text field, there is only 1 element on the layout
 	Dim vchip As VueElement
@@ -2849,7 +2879,6 @@ Sub AddAutoComplete(Module As Object, parentID As String, elID As String, vmodel
 	vselect.VModel = vmodel
 	vselect.Bind("return-object", returnObject)
 	vselect.AssignProps(props)
-	vselect.Ref = elID
 	'
 	If bMultiple Then
 		Dim lst As List = NewList
@@ -2857,6 +2886,11 @@ Sub AddAutoComplete(Module As Object, parentID As String, elID As String, vmodel
 	Else
 		vselect.SetData(vmodel, Null)
 	End If
+	If returnObject = False Then
+		vselect.SetData(vmodel, "")
+	End If
+	Dim lst As List = NewList
+	vselect.SetData(sourceTable, lst)
 	vselect.SetOnEvent(Module, "change", "")
 	vselect.SetOnEvent(Module, "click:clear", "")
 	Return vselect
@@ -2885,7 +2919,6 @@ Sub AddComboBox(Module As Object, parentID As String, elID As String, vmodel As 
 	vselect.VModel = vmodel
 	vselect.Bind("return-object", returnObject)
 	vselect.AssignProps(props)
-	vselect.Ref = elID
 	'
 	If bMultiple Then
 		Dim lst As List = NewList
@@ -2893,6 +2926,11 @@ Sub AddComboBox(Module As Object, parentID As String, elID As String, vmodel As 
 	Else
 		vselect.SetData(vmodel, Null)
 	End If
+	If returnObject = False Then
+		vselect.SetData(vmodel, "")
+	End If
+	Dim lst As List = NewList
+	vselect.SetData(sourceTable, lst)
 	vselect.SetOnEvent(Module, "change", "")
 	vselect.SetOnEvent(Module,  "click:clear", "")
 	Return vselect
@@ -2918,7 +2956,6 @@ Sub AddButtonWidthRightIcon(Module As Object, parentID As String, elID As String
 	
 	Dim vbtnright As VueElement
 	vbtnright.Initialize(Module, elID, elID)
-	vbtnright.Ref = elID
 	'
 	Dim viconright As VueElement
 	viconright.Initialize(Module, siconright, siconright)
@@ -2965,7 +3002,6 @@ Sub AddButtonWithLeftIcon(Module As Object, parentID As String, elID As String, 
 	
 	Dim vbtnright As VueElement
 	vbtnright.Initialize(Module, elID, elID)
-	vbtnright.Ref = elID
 	'
 	Dim viconright As VueElement
 	viconright.Initialize(Module, siconright, siconright)
@@ -3149,7 +3185,6 @@ Sub AddSelect(Module As Object, parentID As String, elID As String, vmodel As St
 	If sourceField <> "" Then vselect.ItemValue = sourceField
 	vselect.VModel = vmodel
 	vselect.ReturnObject = returnObject
-	vselect.Ref = elID
 	'
 	If bMultiple Then
 		Dim lst As List = NewList
@@ -3157,9 +3192,13 @@ Sub AddSelect(Module As Object, parentID As String, elID As String, vmodel As St
 	Else
 		vselect.SetData(vmodel, Null)
 	End If
+	If returnObject = False Then
+		vselect.SetData(vmodel, "")
+	End If
 	'
 	vselect.AssignProps(props)
 	'
+	vselect.SetData(sourceTable, NewList)
 	vselect.SetOnEvent(Module, "change", "")
 	vselect.SetOnEvent(Module, "click:clear", "")
 	Return vselect
@@ -3174,7 +3213,9 @@ End Sub
 
 
 Sub AddRouterView(Module As Object, parentID As String, elID As String) As VueElement
+	elID = elID.tolowercase
 	Dim elx As VueElement = AddVueElement(Module, parentID, elID, "router-view", "", "", "", Null)
+	elx.Ref = elID
 	Return elx
 End Sub
 
@@ -3306,7 +3347,6 @@ Sub AddButton1(Module As Object, parentID As String, elID As String, sLabel As S
 		Dim mbutton As VueElement
 		mbutton.Initialize(Module, elID, elID)
 		mbutton.Caption = sLabel
-		mbutton.Ref = elID
 		'
 		mbutton.AssignProps(props)
 		mbutton.SetOnEvent(Module, "click", "")
@@ -3335,9 +3375,8 @@ Sub AddButton(Module As Object, parentID As String, elID As String, sLabel As St
 		mbutton.Initialize(Module, elID, elID)
 		mbutton.Caption = sLabel
 		If bOutlined Then mbutton.Outlined = True
-		if ecolor <> "" then mbutton.color = eColor
-		mbutton.Ref = elID
-	'
+		If eColor <> "" Then mbutton.color = eColor
+		
 		mbutton.AssignProps(props)
 		mbutton.SetOnEvent(Module, "click", "")
 		Return mbutton
@@ -3628,7 +3667,6 @@ Sub AddDialogAlertPrompt(Module As Object, parentID As String, elID As String, b
 	'
 	Dim vdialog As VueElement
 	vdialog.Initialize(Module, dialogID, dialogID)
-	vdialog.Ref = dialogID
 	'
 	Dim vbtnc As VueElement
 	vbtnc.Initialize(Module, cancelid, cancelid)
@@ -3754,7 +3792,6 @@ Sub AddDialogInput(Module As Object, parentID As String, elID As String, bPersis
 	'
 	Dim vdialog As VueElement
 	vdialog.Initialize(Module, diagID, diagID)
-	vdialog.Ref = diagID
 	'
 	Dim vbtnc As VueElement
 	vbtnc.Initialize(Module, cancelid, cancelid)
@@ -3956,10 +3993,8 @@ Sub AddBadge(Module As Object, parentID As String, elID As String, vmodel As Str
 	If color <> "" Then vbtnright.Color = color
 	vbtnright.Dot = bDot
 	vbtnright.Overlap = bOverLap
-	If vmodel <> "" Then 
-		vbtnright.VModel = vmodel
-		vbtnright.SetData(vmodel, content)
-	End If
+	vbtnright.VModel = vmodel
+	vbtnright.SetData(vmodel, content)
 	vbtnright.AssignProps(badgeProps)
 	Return vbtnright
 End Sub
@@ -3974,6 +4009,7 @@ Sub AddSearch(Module As Object, parentID As String, elID As String, vmodel As St
 	vtextfield.Label = slabel
 	vtextfield.AppendIcon = "mdi-magnify"
 	vtextfield.VModel = vmodel
+	vtextfield.SetData(vmodel, "")
 	vtextfield.SetTypeText
 	vtextfield.Solo = bSolo
 	vtextfield.Clearable = True
@@ -4058,8 +4094,7 @@ Sub AddFileInput(Module As Object, parentID As String, elID As String, vmodel As
 	vfileinput.Label = slabel
 	vfileinput.Placeholder = splaceholder
 	vfileinput.Hint = sHint
-	vfileinput.Ref = elID
-	If vmodel <> "" Then vfileinput.VModel = vmodel
+	vfileinput.VModel = vmodel
 	vfileinput.AddAttrOnConditionTrue(":multiple", bMultiple, True)
 	vfileinput.SetOnEvent(Module, "change", "")
 	vfileinput.SetOnEvent(Module, "click:clear", "")
@@ -4072,7 +4107,7 @@ Sub AddFileInput(Module As Object, parentID As String, elID As String, vmodel As
 		If bMultiple Then
 			vfileinput.SetData(vmodel, NewList)
 		Else
-			vfileinput.SetData(vmodel, Null)	
+			vfileinput.SetData(vmodel, null)	
 		End If
 	End If
 	Return vfileinput
@@ -4140,6 +4175,7 @@ Sub AddSlider(Module As Object, parentID As String, elID As String, vmodel As St
 	vslider.Initialize(Module, elID, elID)
 	vslider.Label = slabel
 	vslider.VModel = vmodel
+	vslider.SetData(vmodel, 0)
 	If bShowThumb Then vslider.AddAttr("thumb-label", "always")
 	vslider.AddAttr(":vertical", bVertical)
 	vslider.AddAttr("min", iminvalue)
@@ -4210,8 +4246,8 @@ Sub AddTextField1(Module As Object, parentID As String, elID As String, vModel A
 	vtextfield.Initialize(Module, elID, elID)
 	vtextfield.Label = sLabel
 	vtextfield.VModel = vModel
+	vtextfield.SetData(vModel, "")
 	vtextfield.SetTypeText
-	vtextfield.Ref = elID
 	vtextfield.SetOnEvent(Module, "click:append", "")
 	vtextfield.SetOnEvent(Module, "click:prepend", "")
 	vtextfield.SetOnEvent(Module, "click:append-outer", "")
@@ -4242,8 +4278,8 @@ Sub AddTextField(Module As Object, parentID As String, elID As String, vmodel As
 	vtextfield.Placeholder = splaceholder
 	vtextfield.Hint = sHint
 	vtextfield.VModel = vmodel
+	vtextfield.SetData(vmodel, "")
 	vtextfield.SetTypeText
-	vtextfield.Ref = elID
 	vtextfield.SetOnEvent(Module, "click:append", "")
 	vtextfield.SetOnEvent(Module, "click:prepend", "")
 	vtextfield.SetOnEvent(Module, "click:append-outer", "")
@@ -4283,7 +4319,7 @@ Sub AddTextArea(Module As Object, parentID As String, elID As String, vmodel As 
 	vtextfield.Placeholder = splaceholder
 	vtextfield.Hint = sHint
 	vtextfield.VModel = vmodel
-	vtextfield.Ref = elID
+	vtextfield.SetData(vmodel, "")
 	vtextfield.SetTypeText
 	vtextfield.SetOnEvent(Module, "click:append", "")
 	vtextfield.SetOnEvent(Module, "click:prepend", "")
@@ -4315,8 +4351,8 @@ Sub AddPassword(Module As Object, parentID As String, elID As String, vmodel As 
 	vtextfield.Placeholder = splaceholder
 	vtextfield.Hint = sHint
 	vtextfield.VModel = vmodel
+	vtextfield.SetData(vmodel, "")
 	vtextfield.SetTypePassword
-	vtextfield.Ref = elID
 	vtextfield.AddAttr(":type", $"${bshowPassword} ? 'text' : 'password'"$)
 	vtextfield.AddAttr(":append-icon", $"${bshowPassword} ? 'mdi-eye' : 'mdi-eye-off'"$)
 	vtextfield.AddAttr("v-on:click:append", $"${bshowPassword} = !${bshowPassword}"$)
@@ -4344,8 +4380,8 @@ Sub AddSwitch(Module As Object, parentID As String, sid As String, vmodel As Str
 	Dim vswitch As VueElement
 	vswitch.Initialize(Module, sid, sid)
 	vswitch.VModel = vmodel
+	vswitch.SetData(vmodel, "")
 	vswitch.label = slabel
-	vswitch.Ref = sid
 	If BANano.IsNull(truevalue) = False Or BANano.IsUndefined(truevalue) = False Then 
 		vswitch.Value = truevalue
 		vswitch.AddAttr("true-value", truevalue)
@@ -4371,10 +4407,10 @@ Sub AddRating(Module As Object, parentID As String, sid As String, vmodel As Str
 	Dim vrating As VueElement
 	vrating.Initialize(Module, sid, sid)
 	vrating.VModel = vmodel
+	vrating.SetData(vmodel, null)
 	vrating.AddAttr("length", slength)
 	vrating.AddAttr("size", ssize)
 	vrating.AddAttr(":hover", bHover)
-	vrating.Ref = sid
 	If color <> "" Then vrating.Color = color
 	vrating.AssignProps(props)
 	vrating.SetOnEvent(Module, "input", "")
@@ -4388,6 +4424,7 @@ Sub AddCheckBox(Module As Object, parentID As String, sid As String, vmodel As S
 	Dim vcheckbox As VueElement
 	vcheckbox.Initialize(Module, sid, sid)
 	vcheckbox.VModel = vmodel
+	vcheckbox.SetData(vmodel, Null)
 	vcheckbox.label = slabel
 	If BANano.IsNull(truevalue) = False Or BANano.IsUndefined(truevalue) = False Then
 		vcheckbox.Value = truevalue
@@ -4397,7 +4434,6 @@ Sub AddCheckBox(Module As Object, parentID As String, sid As String, vmodel As S
 		vcheckbox.AddAttr("false-value", falsevalue)
 	End If
 	If color <> "" Then vcheckbox.Color = color
-	vcheckbox.Ref = sid
 	vcheckbox.AssignProps(props)
 	vcheckbox.SetOnEvent(Module, "click", "")
 	If vmodel <> "" Then 
@@ -4424,7 +4460,6 @@ Sub AddImage1(Module As Object, parentID As String, elID As String, vmodel As St
 	vimg.AddAttr(":src", vmodel)
 	vimg.AddAttr(":lazy-src", vmodel)
 	vimg.Alt = alt
-	vimg.Ref = elID
 	'vimg.AddAttr(":aspect-ratio", "16/9")
 	vimg.SetOnEvent(Module, "click", "")
 	vimg.AssignProps(props)
@@ -4453,7 +4488,6 @@ Sub AddImage(Module As Object, parentID As String, elID As String, src As String
 	Else
 		vimg.AddAttr("lazy-src", lazysrc)
 	End If
-	vimg.Ref = elID
 	'vimg.AddAttr(":aspect-ratio", "16/9")
 	vimg.SetOnEvent(Module, "click", "")
 	vimg.AssignProps(props)
@@ -4622,7 +4656,6 @@ Sub AddRadioGroup(Module As Object, parentID As String, elID As String, vmodel A
 	vradiogroup.AddAttr(":column", Not(bRow))
 	vradiogroup.VModel = vmodel
 	vradiogroup.AssignProps(radiogroupprops)
-	vradiogroup.ref = elID
 	Dim vradio As VueElement
 	vradio.Initialize(Module, radioID, radioID)
 	vradio.VFor = $"item in ${sourceTable}"$
@@ -4637,6 +4670,8 @@ Sub AddRadioGroup(Module As Object, parentID As String, elID As String, vmodel A
 	Else
 		vradiogroup.SetData(vmodel, Null)
 	End If
+	Dim lst As List = NewList
+	vradiogroup.SetData(sourceTable, lst)
 	vradiogroup.SetOnEvent(Module, "change", $"item.${key}"$)
 	vradiogroup.BindVueElement(vradio)
 	Return vradiogroup
@@ -4652,8 +4687,15 @@ Sub AddFab(Module As Object, parentID As String, elID As String, eIcon As String
 			np.Put(k, v)
 		Next
 	End If
-	
-	Dim btn As VueElement = AddButtonWithIcon(Module, parentID, elID, eIcon, eColor, np, iconprops)
+	Dim ip As Map = CreateMap()
+	ip.Put(":fab", True)
+	If BANano.IsNull(iconprops) = False Then
+		For Each k As String In iconprops.Keys
+			Dim v As String = iconprops.Get(k)
+			ip.Put(k, v)
+		Next
+	End If
+	Dim btn As VueElement = AddButtonWithIcon(Module, parentID, elID, eIcon, eColor, np, ip)
 	Return btn
 End Sub
 
@@ -4668,4 +4710,9 @@ Sub GetSelectedFile(e As BANanoEvent) As Map
 	Dim files As List = e.OtherField("target").GetField("files").Result
 	Dim obj As Map = files.Get(0)
 	Return obj
+End Sub
+
+Sub IsVisible(ve As VueElement, bShow As Boolean)
+	Dim vkey As String = ve.VShow
+	SetData(vkey, bShow)
 End Sub

@@ -35,6 +35,7 @@ Sub Class_Globals
 	Private mAI As String
 	Public view As String
 	Public action As String
+	Public NoResult As Boolean
 End Sub
 
 Sub SetCallBack(v As String, a As String)
@@ -291,6 +292,7 @@ Public Sub Initialize(dbName As String, tblName As String, PK As String, AI As S
 	json = ""
 	OK = False
 	mAI = AI
+	NoResult = False
 	Return Me
 End Sub
 
@@ -1129,17 +1131,27 @@ Sub SelectDistinctAll(tblfields As List, orderBy As List) As BANanoSQLiteE
 End Sub
 
 'build the query string
-Sub Build(isPHP As Boolean) As Map
+Sub Build As Map
 	Dim b As Map = CreateMap()
 	b.Put("dbname", DBase)
 	b.Put("command", command)
 	b.Put("query", query)
 	b.Put("args", args)
 	b.Put("types", types)
-	If isPHP = False Then
-		b.Put("view", view)
-		b.Put("action", action)
-	End If
+	Return b
+End Sub
+
+'build the query string
+Sub Build1 As Map
+	Dim b As Map = CreateMap()
+	b.Put("dbname", DBase)
+	b.Put("command", command)
+	b.Put("query", query)
+	b.Put("args", args)
+	b.Put("types", types)
+	b.Put("view", view)
+	b.Put("action", action)
+	b.Put("noresult", NoResult)
 	Return b
 End Sub
 

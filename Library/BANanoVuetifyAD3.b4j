@@ -1,37 +1,53 @@
 ﻿AppType=JavaFX
 Build1=Default,b4j.example
 File1=1.png
-File10=materialdesignicons.min.css
-File11=materialdesignicons-webfont.eot
-File12=materialdesignicons-webfont.ttf
-File13=materialdesignicons-webfont.woff
-File14=materialdesignicons-webfont.woff2
-File15=neutralface.png
-File16=numeral.min.js
-File17=orange.png
-File18=red.png
-File19=roboto.min.css
+File10=fa-regular-400.eot
+File11=fa-regular-400.svg
+File12=fa-regular-400.ttf
+File13=fa-regular-400.woff
+File14=fa-regular-400.woff2
+File15=fa-solid-900.eot
+File16=fa-solid-900.svg
+File17=fa-solid-900.ttf
+File18=fa-solid-900.woff
+File19=fa-solid-900.woff2
 File2=2.png
-File20=Roboto100.ttf
-File21=Roboto300.ttf
-File22=Roboto400.ttf
-File23=Roboto500.ttf
-File24=Roboto700.ttf
-File25=Roboto900.ttf
-File26=sadface.png
-File27=upload.php
-File28=vue.min.js
-File29=vue-google-maps.js
+File20=fileSaver.min.js
+File21=fontawesome.css
+File22=gray.png
+File23=green.png
+File24=happyface.png
+File25=lodash.min.js
+File26=materialdesignicons.min.css
+File27=materialdesignicons-webfont.eot
+File28=materialdesignicons-webfont.ttf
+File29=materialdesignicons-webfont.woff
 File3=avatar.png
-File30=vue-router.min.js
-File31=vuetify.min.css
-File32=vuetify.min.js
+File30=materialdesignicons-webfont.woff2
+File31=neutralface.png
+File32=numeral.min.js
+File33=orange.png
+File34=red.png
+File35=roboto.min.css
+File36=Roboto100.ttf
+File37=Roboto300.ttf
+File38=Roboto400.ttf
+File39=Roboto500.ttf
 File4=dayjs.min.js
-File5=fileSaver.min.js
-File6=gray.png
-File7=green.png
-File8=happyface.png
-File9=lodash.min.js
+File40=Roboto700.ttf
+File41=Roboto900.ttf
+File42=sadface.png
+File43=upload.php
+File44=vue.min.js
+File45=vue-google-maps.js
+File46=vue-router.min.js
+File47=vuetify.min.css
+File48=vuetify.min.js
+File5=fa-brands-400.eot
+File6=fa-brands-400.svg
+File7=fa-brands-400.ttf
+File8=fa-brands-400.woff
+File9=fa-brands-400.woff2
 FileGroup1=Default Group
 FileGroup10=Default Group
 FileGroup11=Default Group
@@ -58,7 +74,23 @@ FileGroup3=Default Group
 FileGroup30=Default Group
 FileGroup31=Default Group
 FileGroup32=Default Group
+FileGroup33=Default Group
+FileGroup34=Default Group
+FileGroup35=Default Group
+FileGroup36=Default Group
+FileGroup37=Default Group
+FileGroup38=Default Group
+FileGroup39=Default Group
 FileGroup4=Default Group
+FileGroup40=Default Group
+FileGroup41=Default Group
+FileGroup42=Default Group
+FileGroup43=Default Group
+FileGroup44=Default Group
+FileGroup45=Default Group
+FileGroup46=Default Group
+FileGroup47=Default Group
+FileGroup48=Default Group
 FileGroup5=Default Group
 FileGroup6=Default Group
 FileGroup7=Default Group
@@ -79,7 +111,7 @@ Module6=MySQLCRUD
 Module7=VueComponent
 Module8=VueElement
 Module9=VueGMap
-NumberOfFiles=32
+NumberOfFiles=48
 NumberOfLibraries=3
 NumberOfModules=11
 Version=8.8
@@ -93,7 +125,7 @@ Version=8.8
 
 Sub Process_Globals
 	Private BANano As BANano 'ignore
-	Public Version As String = "3.04"
+	Public Version As String = "3.10"
 	Public AppName As String = "BANanoVuetifyAD3"
 End Sub
 
@@ -123,6 +155,7 @@ Sub AppStart (Form1 As Form, Args() As String)
 	
 	BANano.Header.AddJavascriptFile("vue-google-maps.js")
 	BANano.Header.AddJavascriptfile("fileSaver.min.js")
+	BANano.Header.AddCSSFile("fontawesome.css")
 	
 	' start the build
 	#if release

@@ -328,6 +328,7 @@ Sub Class_Globals
 	Private ntxRow As Int
 	Private mRouterReplace As Boolean
 	Private mRouterAppend As Boolean
+	Public HasRules As Boolean
 End Sub
 
 'initialize the custom view
@@ -344,6 +345,7 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	bindings.Initialize
 	methods.Initialize
 	Steps = 0
+	HasRules = False
 	'
 	LastRow = 0
 	GridRows.Initialize
@@ -592,7 +594,70 @@ Sub AddExpansionPanel(elID As String, HeaderCaption As String) As VueElement
 	Return cnt
 End Sub
 
+Sub setTextCenterClass(b As Boolean)
+	If b = False Then Return
+	AddClass("text-center")
+End Sub
 
+Sub setDisplay2Class(b As Boolean)
+	If b = False Then Return
+	AddClass("display-2")
+End Sub
+
+Sub setDisplay1Class(b As Boolean)
+	If b = False Then Return
+	AddClass("display-1")
+End Sub
+
+Sub setDisplay3Class(b As Boolean)
+	If b = False Then Return
+	AddClass("display-3")
+End Sub
+
+Sub setDisplay4Class(b As Boolean)
+	If b = False Then Return
+	AddClass("display-4")
+End Sub
+
+Sub setHeadLineClass(b As Boolean)
+	If b = False Then Return
+	AddClass("headline")
+End Sub
+
+Sub setTitleClass(b As Boolean)
+	If b = False Then Return
+	AddClass("title")
+End Sub
+
+Sub setOverlineClass(b As Boolean)
+	If b = False Then Return
+	AddClass("overline")
+End Sub
+
+Sub setBody1Class(b As Boolean)
+	If b = False Then Return
+	AddClass("body-1")
+End Sub
+
+Sub setBody2Class(b As Boolean)
+	If b = False Then Return
+	AddClass("body-2")
+End Sub
+
+Sub setSubTitle1Class(b As Boolean)
+	If b = False Then Return
+	AddClass("subtitle-1")
+End Sub
+
+Sub setSubTitle2Class(b As Boolean)
+	If b = False Then Return
+	AddClass("subtitle-2")
+End Sub
+
+Sub setCaptionClass(b As Boolean)
+	If b = False Then Return
+	AddClass("caption")
+End Sub
 
 Sub setGrow(b As Boolean)
 	AddAttr(":grow", b)
@@ -875,13 +940,13 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	AddAttrOnCondition(":return-object", bReturnObject, True)
 	AddAttr("item-text", stItemText)
 	AddAttr("item-value", stItemValue)
-	AddAttr("items", stItems)
+	setItems(stItems)
 	AddAttr("tag", mOverwriteTag)
 	AddAttr("v-on", stVOn)
 	AddAttr("src", stSrc)
 	AddAttr("alt", stAlt)
 	AddAttrOnCondition(":fluid", bFluid, True)
-	AddAttr("rules", stRules)
+	setRules(stRules)
 	AddAttr("to", stTo)
 	AddAttrOnCondition(":dark", bDark, True)
 	AddAttr("v-slot:activator", stVSlotActivator)
@@ -913,6 +978,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	AddStyle("border-width", stBorderWidth)
 	
 	AddAttrOnConditionTrue("color", stColor, bSetColorByAttribute)
+	
 	setColor(stColor)
 	setColorIntensity(stColorIntensity)
 	setTextColor(stTextColor)
@@ -1342,23 +1408,35 @@ End Sub
 
 'update the state
 Sub SetData(prop As String, value As Object)
-	prop = prop.tolowercase
-	Dim dotPos As Int = BANanoShared.InStr(prop, ".")
-	If dotPos >= 0 Then
-		Dim pEL As String = BANanoShared.MvField(prop,1, ".")
-		Dim cEL As String = BANanoShared.MvField(prop,2, ".")
-		Dim oEL As Map
-		If bindings.ContainsKey(pEL) Then
-			oEL = bindings.Get(pEL)
-		Else
-			oEL.Initialize
-		End If
-		oEL.Put(cEL, value)
-		bindings.Put(pEL, oEL)
-	Else
-		bindings.put(prop, value)
+	If BANano.IsNull(prop) Or BANano.IsUndefined(prop) Then
+		prop = ""
 	End If
+	If prop = "" Then Return
+	prop = prop.tolowercase
+	bindings.put(prop, value)
 End Sub
+
+'add a rule
+Sub AddRule(MethodName As String)
+	If stRules = "" Then Return
+	MethodName = MethodName.ToLowerCase
+	Dim rules As List
+	If bindings.ContainsKey(stRules) Then
+		rules = bindings.Get(stRules)
+	Else
+		rules = NewList
+	End If
+	'
+	Dim v As Object
+	Dim cb As BANanoObject = BANano.CallBack(mCallBack, MethodName, Array(v))
+	If SubExists(mCallBack, MethodName) Then
+		rules.Add(cb.Result)
+	Else
+		Log("AddRule: " & MethodName & ", rule callback is missing.")
+	End If
+	bindings.put(stRules, rules)
+End Sub
+
 
 Sub NewList As List
 	Dim elx As List
@@ -1596,6 +1674,14 @@ Sub Append(varText As String)
 	End If
 End Sub
 
+Sub BindEnabled(value As String)
+	AddAttr(":disabled", value)
+End Sub
+
+Sub BindValue(value As String)
+	AddAttr(":value", value)
+End Sub
+
 Sub Bind(attr As String, value As String)
 	AddAttr($":${attr}"$, value)
 End Sub
@@ -1616,9 +1702,7 @@ Sub BindVueElement(el As VueElement)
 	For Each k As String In mbindings.Keys
 		Dim v As Object = mbindings.Get(k)
 		Select Case k
-			Case "key"
-		Case ":rules", ":items"
-			SetData(v, NewList)
+		Case "key"
 		Case Else
 			SetData(k, v)
 		End Select
@@ -1656,7 +1740,7 @@ Public Sub AddAttr(varProp As String, varValue As String)
 			If rname.Contains(".") = False Or rname.Contains("(") = False Then
 				bindings.Put(rname, Null)
 			End If
-			If mElement <> Null Then 
+			If mElement <> Null Then
 				mElement.SetAttr($":${varProp}"$, rname)
 			Else
 				attributeList.put($":${varProp}"$, rname)
@@ -1675,18 +1759,13 @@ Public Sub AddAttr(varProp As String, varValue As String)
 				attributeList.put(varProp, varValue)
 			End If
 		End If			
-		'
-		Select Case varProp
-		Case "v-model", "v-show", "v-if", "v-else-if", "required", "disabled", "readonly" 
-			If varValue <> "" Then
-				bindings.Put(varValue, Null)
-			End If
-		Case "items", ":items"
-			If varValue <> "" Then
-				Dim lst As List = NewList
-				bindings.Put(varValue, lst)
-			End If
-		End Select
+'		'
+'		Select Case varProp
+'		Case "v-model", "v-show", "v-if", "v-else-if", "required", "disabled", "readonly" 
+'			If varValue <> "" Then
+'				bindings.Put(varValue, Null)
+'			End If
+'		End Select
 	End If
 	Return
 End Sub
@@ -2017,6 +2096,10 @@ public Sub getVIf() As String
 End Sub
 
 public Sub setVModel(varVModel As String)
+	If BANano.IsNull(varVModel) Or BANano.IsUndefined(varVModel) Then
+		varVModel = ""
+	End If
+	If varVModel = "" Then Return
 	AddAttr("v-model", varVModel)
 	stVModel = varVModel
 End Sub
@@ -2209,10 +2292,27 @@ public Sub getBorderWidth() As String
 End Sub
 
 public Sub setColor(varColor As String)
+	If BANano.IsNull(varColor) Or BANano.IsUndefined(varColor) Then varColor = ""
+	If varColor = "normal" Or varColor = "" Then Return
 	AddAttr("color", varColor)
 	stColor = varColor
 End Sub
 
+'set color by class
+public Sub setColorClass(varColor As String)
+	If BANano.IsNull(varColor) Or BANano.IsUndefined(varColor) Then varColor = ""
+	If varColor = "normal" Or varColor = "" Then Return
+	AddClass(varColor)
+	stColor = varColor
+End Sub
+
+'set color by attribute
+public Sub setColorAttr(varColor As String)
+	If BANano.IsNull(varColor) Or BANano.IsUndefined(varColor) Then varColor = ""
+	If varColor = "normal" Or varColor = "" Then Return
+	AddAttr("color", varColor)
+	stColor = varColor
+End Sub
 
 public Sub setHeaderColor(varColor As String)
 	AddAttr("header-color", varColor)
@@ -2665,11 +2765,18 @@ End Sub
 public Sub getStyleWidth() As String
 	Return stStyleWidth
 End Sub
-'
+
+'set rules, needs binding
 public Sub setRules(varRules As String)
-	AddAttr("rules", varRules)
+	If BANano.IsNull(varRules) Or BANano.IsNull(varRules) Then 
+		Return
+	End If
+	varRules = varRules.tolowercase
+	varRules = varRules.Replace(":","")
+	AddAttr(":rules", varRules)
 	stRules = varRules
 	SetData(varRules, NewList)
+	HasRules = True
 End Sub
 
 public Sub getRules() As String
@@ -2748,6 +2855,8 @@ Sub SetMethod(methodName As String, args As List)
 	If SubExists(mCallBack, methodName) Then
 		Dim cb As BANanoObject = BANano.CallBack(mCallBack, methodName, args)
 		methods.Put(methodName, cb)
+	Else
+		Log("SetMethod: " & methodName & ", callback is missing.")
 	End If
 End Sub
 
@@ -2761,6 +2870,8 @@ Sub SetMethod1(eventHandler As Object, methodName As String, args As List)
 	If SubExists(eventHandler, methodName) Then
 		Dim cb As BANanoObject = BANano.CallBack(eventHandler, methodName, args)
 		methods.Put(methodName, cb)
+	Else
+		Log("SetMethod1: " & methodName & ", callback is missing.")
 	End If
 End Sub
 
@@ -2890,17 +3001,20 @@ End Sub
 
 'make element fit page
 Sub SetFitPage
-	setHeight("100vh")
-	setWidth("100vw")
+	setStyleHeight("100vh")
+	setStyleWidth("100vw")
+	setStyleMaxHeight("100vh")
+	setStyleMaxWidth("100vw")
 End Sub
 
-'set the conver image for the container
 Sub setFitScreen(varFitScreen As Boolean)
 	bFitScreen = varFitScreen
 	If BANano.IsUndefined(varFitScreen) Or BANano.IsNull(varFitScreen) Then Return
 	If varFitScreen = False Then Return
-	Dim sm As String = $"height=100vh !important;max-height=100vh !important"$
-	setStyles(sm)
+	setStyleHeight("100vh")
+	setStyleWidth("100vw")
+	setStyleMaxHeight("100vh")
+	setStyleMaxWidth("100vw")
 End Sub
 
 public Sub getFitScreen() As Boolean
@@ -3060,6 +3174,7 @@ public Sub setDisabled(varDisabled As String)
 	AddAttr("disabled", varDisabled)
 	stDisabled = varDisabled
 End Sub
+
 
 'get disabled
 public Sub getDisabled() As String
@@ -3373,14 +3488,38 @@ End Sub
 private Sub BuildSpans(col As VueGridColumn) As String
 	Dim sb As StringBuilder
 	sb.Initialize
-	If col.xs <> "" Then sb.Append($"cols="${col.xs}" "$)
-	If col.sm <> "" Then sb.Append($"sm="${col.sm}" "$)
-	If col.md <> "" Then sb.Append($"md="${col.md}" "$)
-	If col.lg <> "" Then sb.Append($"lg="${col.lg}" "$)
-	If col.xl <> "" Then sb.Append($"xl="${col.xl}" "$)
+	If col.xs <> "" And col.xs <> "0" Then sb.Append($"cols="${col.xs}" "$)
+	If col.sm <> "" And col.sm <> "0" Then sb.Append($"sm="${col.sm}" "$)
+	If col.md <> "" And col.md <> "0" Then sb.Append($"md="${col.md}" "$)
+	If col.lg <> "" And col.lg <> "0" Then sb.Append($"lg="${col.lg}" "$)
+	If col.xl <> "" And col.xl <> "0" Then sb.Append($"xl="${col.xl}" "$)
 	Dim sout As String = sb.ToString
 	sout = sout.trim
 	Return sout
+End Sub
+
+Sub setCols(cols As String) 
+	AddAttr("cols", cols)
+End Sub
+
+Sub setSM(sm As String)
+	AddAttr("sm", sm)
+End Sub
+
+Sub setMD(md As String)
+	AddAttr("md", md)
+End Sub
+
+Sub setLG(lg As String)
+	AddAttr("lg", lg)
+End Sub
+
+Sub setXL(xl As String)
+	AddAttr("xl", xl)
+End Sub
+
+Sub setXS(xs As String)
+	AddAttr("xs", xs)
 End Sub
 
 private Sub BuildOffsets(col As VueGridColumn) As String
@@ -3394,6 +3533,26 @@ private Sub BuildOffsets(col As VueGridColumn) As String
 	Dim sout As String = sb.ToString
 	sout = sout.trim
 	Return sout
+End Sub
+
+
+'return the vueelement at row pos
+Sub MatrixElement(RowPos As Int, ColPos As Int) As VueElement
+	Dim rcKey As String = ""
+	If ColPos = 0 Then
+		rcKey = $"${mName}R${RowPos}"$
+	Else
+		rcKey = $"${mName}R${RowPos}C${ColPos}"$
+	End If
+	rcKey = rcKey.tolowercase
+	rcKey = CleanID(rcKey)
+	If BANano.Exists(rcKey) Then
+		Dim ve As VueElement
+		ve.Initialize(mCallBack, rcKey, rcKey)
+		Return ve
+	Else
+		Return Null
+	End If
 End Sub
 
 'get a row
@@ -4011,10 +4170,15 @@ Sub setDot(b As Boolean)
 End Sub
 
 Sub setItems(s As String)
+	If BANano.IsNull(s) Or BANano.IsNull(s) Then
+		Return
+	End If
+	s = s.ToLowerCase
+	s = s.Replace(":","")
 	stItems = s
-	AddAttr("items", stItems)
+	AddAttr(":items", stItems)
+	SetData(stItems, NewList)
 End Sub
-
 
 Sub getItems As String
 	Return stItems
@@ -4226,9 +4390,9 @@ Sub NewTextField(elID As String, vmodel As String, slabel As String, splaceholde
 	End If
 	setPlaceholder(splaceholder)
 	setHint(sHint)
-	vmodel = vmodel
+	setVModel(vmodel)
+	SetData(vmodel, "")
 	AddAttr("type", "text")
-	setRef(vmodel)
 	AddAttr("id", elID)
 	'
 	If BANano.IsNull(props) = False Then
@@ -5483,4 +5647,14 @@ End Sub
 'set the name of the element
 Sub setname(s As String)
 	AddAttr("name", s)
+End Sub
+
+Sub setTextXSCenter(b As Boolean)
+	If b = False Then Return
+	AddClass("text-xs-center")
+End Sub
+
+Sub setFontWeightBold(b As Boolean)
+	If b = False Then Return
+	AddClass("font-weight-bold")
 End Sub

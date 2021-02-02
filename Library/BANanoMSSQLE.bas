@@ -47,6 +47,7 @@ Sub Class_Globals
 	Private Auto As String
 	Public view As String
 	Public action As String
+	Public NoResult As Boolean
 End Sub
 
 'set database connection settings
@@ -533,6 +534,7 @@ Sub Initialize(dbName As String, tblName As String, PK As String, AI As String) 
 	username = ""
 	password = ""
 	Auto = AI
+	NoResult = false
 	Return Me
 End Sub
 
@@ -1084,16 +1086,25 @@ Sub SelectDistinctAll(tblfields As List, orderBy As List) As BANanoMSSQLE
 End Sub
 
 'build the map to pass to php from statement
-Sub Build(isPHP As Boolean) As Map
+Sub Build As Map
 	Dim b As Map = CreateMap()
 	b.Put("command", command)
 	b.Put("query", query)
 	b.Put("args", args)
 	b.Put("types", types)
-	If isPHP = False Then
-		b.Put("view", view)
-		b.Put("action", action)
-	end if
+	Return b
+End Sub
+
+'build the map to pass to php from statement
+Sub Build1 As Map
+	Dim b As Map = CreateMap()
+	b.Put("command", command)
+	b.Put("query", query)
+	b.Put("args", args)
+	b.Put("types", types)
+	b.Put("view", view)
+	b.Put("action", action)
+	b.Put("noresult", NoResult)
 	Return b
 End Sub
 
