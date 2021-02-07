@@ -29,6 +29,38 @@ Sub Process_Globals
 	Type sequencePair(value As Int, numTimes As Int)
 End Sub
 
+Sub MapKeys2List(m As Map) As List
+	Dim mtot As Int = m.Size-1
+	Dim mcnt As Int
+	Dim nl As List
+	nl.Initialize
+	For mcnt = 0 To mtot
+		Dim v As Object = m.GetKeyAt(mcnt)
+		nl.Add(v)
+	Next
+	Return nl
+End Sub
+
+Sub List2ObjectArray(lst As List) As Object()
+	Dim rTot As Int = lst.size
+	Dim rCnt As Int = 0
+	Dim xout(rTot) As Object
+	For rCnt = 0 To rTot - 1
+		xout(rCnt) = lst.Get(rCnt)
+	Next
+	Return xout
+End Sub
+
+Sub MapValues2ObjectArray(m As Map) As Object()
+	Dim mtot As Int = m.size
+	Dim mcnt As Int
+	Dim obj(mtot) As Object
+	For mcnt = 0 To mtot - 1
+		Dim v As Object = m.GetValueAt(mcnt)
+		obj(mcnt) = v
+	Next
+	Return obj
+End Sub
 
 'double quote each item of the mv
 Sub MVSingleQuoteItems(delim As String, mvstring As String) As String     
@@ -1816,6 +1848,15 @@ Public Sub DateTimeNow() As String
 	Return dt
 End Sub
 
+Public Sub Now() As String
+	Dim lNow As Long
+	Dim dt As String
+	lNow = DateTime.Now
+	DateTime.DateFormat = "yyyy-MM-dd HH:mm:ss"
+	dt = DateTime.Date(lNow)
+	Return dt
+End Sub
+
 
 Sub LongDateTimeToday() As String
 	DateTime.DateFormat = "yyyy-MM-dd HH:mm"
@@ -2769,6 +2810,14 @@ Sub MapRemovePrefix(m As Map) As Map
 	Return nm
 End Sub
 
+Sub MapRemoveKeys(m As Map, remkeys As List)
+	For Each k As String In remkeys
+		If m.ContainsKey(k) Then
+			m.Remove(k)
+		End If
+	Next
+End Sub
+
 
 'set the background image style
 Sub SetCoverImage(imgURL As String)
@@ -3660,39 +3709,6 @@ Sub MapValues2MV(m As Map, delim As String, keys As List) As String
 	Return sout
 End Sub
 
-Sub MapKeys2List(m As Map) As List
-	Dim mtot As Int = m.Size-1
-	Dim mcnt As Int
-	Dim nl As List
-	nl.Initialize 
-	For mcnt = 0 To mtot
-		Dim v As Object = m.GetKeyAt(mcnt)
-		nl.Add(v)
-	Next
-	Return nl
-End Sub
-
-Sub List2ObjectArray(lst As List) As Object()
-	Dim rTot As Int = lst.size
-	Dim rCnt As Int = 0
-	Dim xout(rTot) As Object
-	For rCnt = 0 To rTot - 1
-		xout(rCnt) = lst.Get(rCnt)
-	Next
-	Return xout
-End Sub
-
-Sub MapValues2ObjectArray(m As Map) As Object()
-	Dim mtot As Int = m.size
-	Dim mcnt As Int
-	Dim obj(mtot) As Object
-	For mcnt = 0 To mtot - 1
-		Dim v As Object = m.GetValueAt(mcnt)
-		obj(mcnt) = v
-	Next
-	Return obj
-End Sub
-
 Sub Args2ObjectArray(m As List) As Object()
 	Dim mtot As Int = m.size
 	Dim mcnt As Int
@@ -3702,4 +3718,12 @@ Sub Args2ObjectArray(m As List) As Object()
 		obj(mcnt) = v
 	Next
 	Return obj
+End Sub
+
+Sub PushIfExist(nl As List, item As String) As List
+	item = item.Trim
+	If item <> "" Then 
+		nl.Add(item)
+	End If
+	Return nl
 End Sub

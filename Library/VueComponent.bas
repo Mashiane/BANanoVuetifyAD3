@@ -55,6 +55,22 @@ Sub Class_Globals
 	Public refs As BANanoObject
 End Sub
 
+'click a reference
+Sub Click(refID As String)
+	refID = refID.tolowercase
+	refs.GetField(refID).RunMethod("click", Null)
+End Sub
+
+'focus on a ref
+Sub SetFocus(refID As String)
+	Try
+		refID = refID.tolowercase
+		refs.GetField(refID).RunMethod("focus", Null)
+	Catch
+		Log(LastException)
+	End Try
+End Sub
+
 'reset a form
 Sub FormReset(formName As String)
 	formName = formName.ToLowerCase
@@ -562,6 +578,95 @@ Sub SetData(prop As String, value As Object) As VueComponent
 	Return Me
 End Sub
 
+'add item at end of the list
+Sub SetDataPush(listName As String, item As Object)
+	listName = listName.ToLowerCase
+	Dim dat As BANanoObject = data
+	dat.GetField(listName).RunMethod("push", item)
+End Sub
+
+'splice an array, add item at a position
+Sub SetDataSplice(lstname As String, pos As Int, removeHowMany As Int, obj As Object)
+	lstname = lstname.tolowercase
+	Dim dat As BANanoObject = data
+	dat.GetField(lstname).RunMethod("splice", Array(pos, removeHowMany, obj))
+End Sub
+
+'splice an array, remove an item at a position
+Sub SetDataSpliceRemove(lstname As String, pos As Int, removeHowMany As Int)
+	lstname = lstname.tolowercase
+	Dim dat As BANanoObject = data
+	dat.GetField(lstname).RunMethod("splice", Array(pos, removeHowMany))
+End Sub
+
+'slice an array
+Sub GetDataSlice(lstname As String, startPos As Int) As List
+	lstname = lstname.tolowercase
+	Dim dat As BANanoObject = data
+	Dim lst As List = dat.GetField(lstname).RunMethod("slice", Array(startPos)).Result
+	Return lst
+End Sub
+
+'get the data at the position
+Sub GetDataAtPosition(lstName As String, pos As Int) As Map
+	lstName = lstName.tolowercase
+	Dim res As List = data.Get(lstName)
+	Dim out As Map = res.Get(pos)
+	Return out
+End Sub
+
+'return the position of the data with these properties
+Sub GetDataPositionWhere(lstName As String, props As Map) As Int
+	lstName = lstName.tolowercase
+	Dim res As List = data.Get(lstName)
+	Dim rCnt As Int = 0
+	Dim rTot As Int = res.Size - 1
+	Dim pTot As Int = props.size
+	For rCnt = 0 To rTot
+		Dim iFound As Int = 0
+		'get the record at the position
+		Dim rec As Map = res.Get(rCnt)
+		'loop through each position
+		For Each k As String In props.Keys
+			Dim v As String = props.GetDefault(k,"")
+			'does the field at that position match
+			If rec.ContainsKey(k) Then
+				Dim recvalue As String = rec.GetDefault(k, "")
+				v = BANanoShared.CStr(v)
+				recvalue = BANanoShared.CStr(recvalue)
+				If recvalue.EqualsIgnoreCase(v) Then
+					iFound = iFound + 1
+				End If
+			End If
+		Next
+		If iFound = pTot Then
+			Return rCnt
+		End If
+	Next
+	Return -1
+End Sub
+
+'remove item at beginning of list
+Sub SetDataShift(lstname As String)
+	lstname = lstname.tolowercase
+	Dim dat As BANanoObject = data
+	dat.GetField(lstname).RunMethod("shift", Null)
+End Sub
+
+'remove an item from the end of the list
+Sub SetDataPop(lstname As String)
+	lstname = lstname.tolowercase
+	Dim dat As BANanoObject = data
+	dat.GetField(lstname).RunMethod("pop", Null)
+End Sub
+
+'add item at beginning of list
+Sub SetDataUnshift(lstname As String, obj As Object)
+	lstname = lstname.tolowercase
+	Dim dat As BANanoObject = data
+	dat.GetField(lstname).RunMethod("unshift", obj)
+End Sub
+
 'add a meta tag to the property
 Sub AddMeta(prop As String, value As String)
 	meta.Put(prop, value)
@@ -841,13 +946,6 @@ Sub Show(elID As String)
 	SetStateSingle($"${elID}show"$, True)
 End Sub
 
-'focus on a ref
-Sub SetFocus(refID As String)
-	refID = refID.tolowercase
-	refs.GetField(refID).RunMethod("focus", Null)
-End Sub
-
-
 'nullify the file select
 Sub NullifyFileSelect(refID As String)
 	RefNull(refID)
@@ -1032,4 +1130,11 @@ End Sub
 Sub IsVisible(ve As VueElement, bShow As Boolean)
 	Dim vkey As String = ve.VShow
 	SetData(vkey, bShow)
+End Sub
+
+
+'reset the validation and perform validation
+Sub FormValidate1(formName As String) As Boolean
+	FormResetValidation(formName)
+	Return FormValidate(formName)
 End Sub

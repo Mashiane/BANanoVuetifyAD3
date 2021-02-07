@@ -141,6 +141,7 @@ Sub Class_Globals
 	Public const MAPTYPE_SATELLITE As String = "satellite"
 	Public const MAPTYPE_HYBRID As String = "hybrid"
 	Public const MAPTYPE_TERRAIN As String = "terrain"
+	private gmapkey As String
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -153,6 +154,7 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	bindings.Initialize
 	methods.Initialize
 	'
+	gmapkey = $"${mName}key"$
 	skmllayer = $"${mName}kmllayer"$
 	smarkers = $"${mName}markers"$
 	sinfowindow = $"${mName}infowindow"$
@@ -327,6 +329,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	SetData(markerName, NewList)
 	SetData(iwOptions, woptions)
 	SetData(kmlName, NewList)
+	SetData(gmapkey, DateTime.Now)
 	'
 	setFullScreenControl(bFullScreenControl)
 	setDisableDefaultUI(bDisableDefaultUI)
@@ -342,6 +345,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	setMarkersClickable(bMarkersClickable)
 	setMarkersDraggable(bMarkersDraggable)
 	setKMLClickable(bKMLClickable)
+	
 End Sub
 
 'set the google map key
@@ -468,7 +472,7 @@ Sub ToString As String
 	'
 	Dim sb As StringBuilder
 	sb.Initialize
-	sb.Append($"<gmap-map ref="${mName}" id="${mName}"><gmap-marker id="${smarkers}"></gmap-marker><google-kml-layer id="${skmllayer}"></google-kml-layer><gmap-info-window id="${sinfowindow}"></gmap-info-window></gmap-map>"$)
+	sb.Append($"<gmap-map :key="${gmapkey}" ref="${mName}" id="${mName}"><gmap-marker id="${smarkers}"></gmap-marker><google-kml-layer id="${skmllayer}"></google-kml-layer><gmap-info-window id="${sinfowindow}"></gmap-info-window></gmap-map>"$)
 	Return sb.tostring
 End Sub
 
@@ -1128,11 +1132,11 @@ End Sub
 'clear all markers
 Sub ClearMarkers   'ignoreDeadcode
 	points.Initialize
-	Refresh
 End Sub
 
 'refresh markers
 Sub Refresh
+	VC.SetData(gmapkey, DateTime.Now)
 	VC.SetData(soptions, options)
 	VC.SetData(markerName, points)
 End Sub

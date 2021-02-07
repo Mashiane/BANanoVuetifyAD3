@@ -2108,6 +2108,10 @@ public Sub getVModel() As String
 	Return stVModel
 End Sub
 
+Sub setRowHeight(rh As String)
+	AddAttr("row-height", rh)
+End Sub
+
 public Sub setValue(varValue As String)
 	AddAttr("value", varValue)
 	stValue = varValue
@@ -2336,6 +2340,10 @@ public Sub setDismissible(b As Boolean)
 	AddAttr(":dismissible", b)
 End Sub
 
+Sub setFontWeightLight(b As Boolean)
+	If b = False Then Return
+	AddClass("font-weight-light")
+End Sub
 
 public Sub setFontSize(varFontSize As String)
 	AddStyle("font-size", varFontSize)
@@ -2466,6 +2474,18 @@ public Sub setElevation(s As String)
 	AddClass("elevation-" & s)
 End Sub
 
+Sub setDisableResizeWatcher(b As Boolean)
+	AddAttr(":disable-resize-watcher", b)
+End Sub
+
+Sub setAutoGrow(b As Boolean)
+	AddAttr(":auto-grow", b)
+End Sub
+
+Sub setAutoComplete(s As Object)
+	AddAttr("autocomplete", s)
+End Sub
+
 
 public Sub setTransition(s As String)
 	AddAttr("transition", s)
@@ -2475,13 +2495,12 @@ public Sub setOffsetY(b As Boolean)
 	AddAttr(":offset-y", b)
 End Sub
 
-
-public Sub setClipped(b As Boolean)
+public Sub setClipped(b As Object)
 	AddAttr(":clipped", b)
 End Sub
 
 
-public Sub setClippedLeft(b As Boolean)
+public Sub setClippedLeft(b As Object)
 	AddAttr(":clipped-left", b)
 End Sub
 
@@ -2517,6 +2536,9 @@ public Sub SetStyleRight(s As String)
 	AddStyle("right", s)
 End Sub
 
+Sub setTimeOut(tout As Int)
+	AddAttr(":timeout", tout)
+End Sub
 
 public Sub setTop(b As Boolean)
 	AddAttr(":top", b)
@@ -3090,9 +3112,20 @@ Sub DialogActions As VueElement
 	Return elx
 End Sub
 
+'set clear-icon
+public Sub setClearIcon(varClearIcon As String)
+	AddAttr("clear-icon", varClearIcon)
+End Sub
+
 'set append-icon
 public Sub setAppendIcon(varAppendIcon As String)
 	AddAttr("append-icon", varAppendIcon)
+	stAppendIcon = varAppendIcon
+End Sub
+
+'set append-icon
+public Sub setBindAppendIcon(varAppendIcon As String)
+	AddAttr(":append-icon", varAppendIcon)
 	stAppendIcon = varAppendIcon
 End Sub
 
@@ -3104,6 +3137,12 @@ End Sub
 'set append-icon
 public Sub setAppendOuterIcon(varAppendIcon As String)
 	AddAttr("append-outer-icon", varAppendIcon)
+	stAppendOuterIcon = varAppendIcon
+End Sub
+
+'bind append-icon
+public Sub setBindAppendOuterIcon(varAppendIcon As String)
+	AddAttr(":append-outer-icon", varAppendIcon)
 	stAppendOuterIcon = varAppendIcon
 End Sub
 
@@ -3146,6 +3185,14 @@ public Sub getNoGutters() As Boolean
 	Return bNoGutter
 End Sub
 
+Sub setNoResize(b As Boolean)
+	AddAttr(":no-resize", b)
+End Sub
+
+'set rows for the text area
+Sub setRows(r As Int)
+	AddAttr("rows", r)
+End Sub
 
 'set counter
 public Sub setCounter(varCounter As String)
@@ -3287,6 +3334,13 @@ public Sub setPrependIcon(varPrependIcon As String)
 	stPrependIcon = varPrependIcon
 End Sub
 
+'set prepend-icon
+public Sub setBindPrependIcon(varPrependIcon As String)
+	AddAttr(":prepend-icon", varPrependIcon)
+	stPrependIcon = varPrependIcon
+End Sub
+
+
 'get prepend-icon
 public Sub getPrependIcon() As String
 	Return stPrependIcon
@@ -3297,6 +3351,13 @@ public Sub setPrependInnerIcon(varPrependIcon As String)
 	AddAttr("prepend-inner-icon", varPrependIcon)
 	stPrependInnerIcon = varPrependIcon
 End Sub
+
+'set prepend-icon
+public Sub setBindPrependInnerIcon(varPrependIcon As String)
+	AddAttr(":prepend-inner-icon", varPrependIcon)
+	stPrependInnerIcon = varPrependIcon
+End Sub
+
 
 'get prepend-icon
 public Sub getPrependInnerIcon() As String
@@ -4038,11 +4099,21 @@ Sub AddSizes(sSizeXS As String, sSizeSmall As String, sSizeMedium As String, sSi
 	sSizeMedium = sSizeMedium.trim
 	sSizeLarge = sSizeLarge.trim
 	'
-	If sSizeXS <> "" Then AddAttr("cols", sSizeXS)
-	If sSizeSmall <> "" Then AddAttr("sm", sSizeSmall)
-	If sSizeXLarge <> "" Then AddAttr("xl", sSizeXLarge)
-	If sSizeMedium <> "" Then AddAttr("md", sSizeMedium)
-	If sSizeLarge <> "" Then AddAttr("lg", sSizeLarge)
+	If sSizeXS <> "" And sSizeXS <> "0" Then 
+		AddAttr("cols", sSizeXS)
+	End If
+	If sSizeSmall <> "" And sSizeSmall <> "0" Then 
+		AddAttr("sm", sSizeSmall)
+	End If
+	If sSizeXLarge <> "" And sSizeXLarge <> "0" Then 
+		AddAttr("xl", sSizeXLarge)
+	End If
+	If sSizeMedium <> "" And sSizeMedium <> "0" Then 
+		AddAttr("md", sSizeMedium)
+	End If
+	If sSizeLarge <> "" And sSizeLarge <> "0" Then
+		 AddAttr("lg", sSizeLarge)
+	End If
 	Return Me
 End Sub
 
@@ -4256,6 +4327,54 @@ Sub OnClickClear(args As String)
 	SetOnEvent(mCallBack, "click:clear", args)
 End Sub
 
+Sub OnClickStop(args As String)
+	SetOnEvent(mCallBack, "click.stop", args)
+End Sub
+	
+Sub OnClickPrevent(args As String)
+	SetOnEvent(mCallBack, "click.prevent", args)
+End Sub
+
+Sub OnDblClick(args As String)
+	SetOnEvent(mCallBack, "dblclick", args)
+End Sub
+
+Sub OnMouseMove(args As String)
+	SetOnEvent(mCallBack, "MouseMove", args)
+End Sub
+
+Sub OnMouseOut(args As String)
+	SetOnEvent(mCallBack, "MouseOut", args)
+End Sub	
+
+Sub OnKeyUp(args As String)
+	SetOnEvent(mCallBack, "KeyUp", args)
+End Sub
+
+Sub OnKeyPress(args As String)
+	SetOnEvent(mCallBack, "KeyPress", args)
+End Sub	
+
+Sub OnClickAlt(args As String)
+	SetOnEvent(mCallBack,  "Click.Alt", args)
+End Sub
+
+Sub OnShift(args As String)
+	SetOnEvent(mCallBack,  "Click.Shift", args)
+End Sub
+
+Sub OnStart(args As String)
+	SetOnEvent(mCallBack, "start", args)
+End Sub
+
+Sub OnEnd(args As String)
+	SetOnEvent(mCallBack, "end", args)
+End Sub
+
+Sub OnClickClose(args As String)
+	SetOnEvent(mCallBack, "click:close", args)
+End Sub
+
 Sub setAlertBorder(mytype As String)
 	AddAttr("border", mytype)
 End Sub
@@ -4291,6 +4410,36 @@ End Sub
 Sub SetTypeFile
 	AddAttr("type", "file")
 End Sub
+
+Sub BindType(s As String)
+	AddAttr(":type", s)
+End Sub
+
+Sub setInfo(b As Boolean)
+	If b = False Then Return
+	AddAttr("type", "info")
+End Sub
+
+Sub setWarning(b As Boolean)
+	If b = False Then Return
+	AddAttr("type", "warning")
+End Sub
+
+Sub setError(b As Boolean)
+	If b = False Then Return
+	AddAttr("type", "error")
+End Sub
+
+Sub setSuccess(b As Boolean)
+	If b = False Then Return
+	AddAttr("type", "success")
+End Sub
+
+Sub setIsTex(b As Boolean)
+	AddAttr(":text", b)
+End Sub
+
+
 
 '
 'private Sub computedDateFormatted As String   'IgnoreDeadCode
@@ -5657,4 +5806,1881 @@ End Sub
 Sub setFontWeightBold(b As Boolean)
 	If b = False Then Return
 	AddClass("font-weight-bold")
+End Sub
+
+Sub setFontWeightMedium(b As Boolean)
+	If b = False Then Return
+	AddClass("font-weight-medium")
+End Sub
+
+Sub setTextWrap(b As Boolean)
+	If b = False Then Return
+	AddClass("text-wrap")
+end sub	
+
+'<code>
+'Dim frm As VueElement = el.AddForm("frm", "frmvalid", True, Null)
+'vuetify.BindVueElement(frm)
+'Dim bValid As Boolean = vuetify.FormValidate(
+'</code>
+Sub AddForm(elID As String, vmodel As String, bLazyValidation As Boolean, props As Map) As VueElement
+	elID = elID.tolowercase
+	Dim elx As VueElement = AddVueElement1(elID, "v-form", vmodel, "", "", props)
+	elx.Ref = elID
+	elx.SetAttr(":lazy-validation", bLazyValidation)
+	If vmodel <> "" Then
+		elx.setdata(vmodel, False)
+	End If
+	Return elx
+End Sub
+
+
+Sub AddListItemAction(elID As String) As VueElement
+	Return AddVueElement1(elID, "v-list-item-action", "", "", "", Null)
+End Sub
+
+
+Sub AddListItemContent(elID As String) As VueElement
+	Return AddVueElement1(elID, "v-list-item-content", "", "", "", Null)
+End Sub
+
+Sub AddListItemIcon(elID As String) As VueElement
+	Return AddVueElement1(elID, "v-list-item-icon", "", "", "", Null)
+End Sub
+
+
+Sub AddListItemAvatar(elID As String) As VueElement
+	Return AddVueElement1(elID, "v-list-item-avatar", "", "", "", Null)
+End Sub
+
+Sub AddListItemTitle(elID As String, caption As String) As VueElement
+	Return AddVueElement1(elID, "v-list-item-title", "", caption, "", Null)
+End Sub
+
+Sub AddListItemSubTitle(elID As String, caption As String) As VueElement
+	Return AddVueElement1(elID, "v-list-item-subtitle", "", caption, "", Null)
+End Sub
+
+
+Sub AddListItemGroup(elID As String, color As String) As VueElement
+	Return AddVueElement1(elID, "v-list-item-group", "", "", color, Null)
+End Sub
+
+Sub AddListItemActionText(elID As String, caption As String) As VueElement
+	Return AddVueElement1(elID, "v-list-item-action-text", "", caption, "", Null)
+End Sub
+
+
+Sub AddToolbar(elID As String, color As String, props As Map) As VueElement
+	Return AddVueElement1(elID, "v-toolbar", "", "", color, props)
+End Sub
+
+'<code>
+'dim prg1 As VueElement = vuetify.AddProgressLinear(Me, "r1c1", "prg1", "prg1v", vuetify.COLOR_GREEN, null)
+'vuetify.BindVueElement(prg1)
+'</code>
+Sub AddProgressLinear(elID As String, vmodel As String, color As String, props As Map) As VueElement
+	Return AddVueElement1(elID, "v-progress-linear", vmodel, "", color, props)
+End Sub
+
+'<code>
+'dim prg1 As VueElement = vuetify.AddProgressCircular(Me, "r1c1", "prg1", "prg1v", "", vuetify.COLOR_GREEN, null)
+'vuetify.BindVueElement(prg1)
+'</code>
+Sub AddProgressCircular(elID As String, vmodel As String, caption As String, color As String, props As Map) As VueElement
+	Return AddVueElement1(elID, "v-progress-circular", vmodel, caption, color, props)
+End Sub
+
+Sub AddCard(elID As String, color As String, props As Map) As VueElement
+	Return AddVueElement1(elID, "v-card", "", "", color, props)
+End Sub
+
+Sub AddWindow(elID As String) As VueElement
+	Return AddVueElement1(elID, "v-window", "", "", "", Null)
+End Sub
+
+Sub AddWindowItem(elID As String) As VueElement
+	Return AddVueElement1(elID, "v-window-item", "", "", "", Null)
+End Sub
+
+Sub AddCardTitle(elID As String, color As String, props As Map) As VueElement
+	Return AddVueElement1(elID, "v-card-title", "", "", color, props)
+End Sub
+
+Sub AddCardSubTitle(elID As String, color As String, props As Map) As VueElement
+	Return AddVueElement1(elID, "v-card-subtitle", "", "", color, props)
+End Sub
+
+Sub AddCardText(elID As String, color As String, props As Map) As VueElement
+	Return AddVueElement1(elID, "v-card-text", "", "", color, props)
+End Sub
+
+Sub AddCardActions(elID As String, color As String, props As Map) As VueElement
+	Return AddVueElement1(elID, "v-card-actions", "", "", color, props)
+End Sub
+
+'add a vue element on parent
+Sub AddVueElement1(elID As String, tag As String, vModel As String, Caption As String, color As String, props As Map) As VueElement
+	Dim parentID As String = CleanID(mName)
+	elID = elID.tolowercase
+	elID = elID.Replace("#", "")
+	'
+	If BANano.Exists(parentID) = False Then
+		Log($"AddVueElement.${elID} could not be added to ${parentID}"$)
+		Return Null
+	End If
+		
+	'check if the element exists
+	If BANano.Exists($"#${elID}"$) = False Then
+		Dim parELE As BANanoElement
+		parELE.Initialize(parentID)
+		parELE.Append($"<${tag} id="${elID}"></${tag}>"$)
+	End If
+	'get the element
+	Dim ve As VueElement
+	ve.Initialize(mCallBack, elID, elID)
+	If Caption <> "" Then ve.Caption = Caption
+	ve.VModel = vModel
+	ve.SetData(vModel, "")
+	If color <> "" Then ve.Color = color
+	ve.AssignProps(props)
+	ve.SetOnEvent(mCallBack, "click", "")
+	ve.SetOnEvent(mCallBack, "click.stop", "")
+	ve.SetOnEvent(mCallBack, "click.prevent", "")
+	ve.SetOnEvent(mCallBack, "change", "")
+	ve.SetOnEvent(mCallBack, "click:append", "")
+	ve.SetOnEvent(mCallBack, "click:prepend", "")
+	ve.SetOnEvent(mCallBack, "click:append-outer", "")
+	ve.SetOnEvent(mCallBack, "click:prepend-inner", "")
+	ve.SetOnEvent(mCallBack, "click:clear", "")
+	ve.SetOnEvent(mCallBack, "dblclick", "")
+	ve.SetOnEvent(mCallBack, "MouseMove", "")
+	ve.SetOnEvent(mCallBack, "MouseOut", "")
+	ve.SetOnEvent(mCallBack, "KeyUp", "")
+	ve.SetOnEvent(mCallBack, "KeyPress", "")
+	ve.SetOnEvent(mCallBack,  "Click.Alt", "")
+	ve.SetOnEvent(mCallBack,  "Click.Shift", "")
+	ve.SetOnEvent(mCallBack,  "click:clear", "")
+	ve.SetOnEvent(mCallBack, "start", "")
+	ve.SetOnEvent(mCallBack, "end", "")
+	ve.SetOnEvent(mCallBack, "click:close", "")
+	Return ve
+End Sub
+
+
+Sub AddChipGroup(elID As String, vModel As String,  activeClass As String, bMultiple As Boolean, bShowArrows As Boolean, bFilter As Boolean, DataSource As String, Key As String, Value As String, chipgroupprops As Map, chipprops As Map) As VueElement
+	elID = elID.tolowercase
+	DataSource = DataSource.tolowercase
+	Dim parentID As String = CleanID(mName)
+	'
+	BANano.GetElement(parentID).Append($"<v-chip-group id="${elID}"><v-chip id="${elID}chip"></v-chip></v-chip-group>"$)
+	Dim chipid As String = $"${elID}chip"$
+	
+	'get the text field, there is only 1 element on the layout
+	Dim vchipgroup As VueElement
+	vchipgroup.Initialize(mCallBack, elID, elID)
+	vchipgroup.Bind("show-arrows", bShowArrows)
+	vchipgroup.VModel = vModel
+	vchipgroup.Multiple = bMultiple
+	vchipgroup.AddAttr("active-class", activeClass)
+	vchipgroup.AssignProps(chipgroupprops)
+	vchipgroup.SetOnEvent(mCallBack, "change", "")
+	
+	If bMultiple Then
+		vchipgroup.SetData(vModel, NewList)
+	Else
+		vchipgroup.SetData(vModel, "")
+	End If
+	vchipgroup.SetData(DataSource, NewList)
+	'
+	'get the text field, there is only 1 element on the layout
+	Dim vchip As VueElement
+	vchip.Initialize(mCallBack, chipid, chipid)
+	vchip.VFor = $"item in ${DataSource}"$
+	vchip.BindKey($"item.${Key}"$)
+	vchip.Caption = vchip.ItemInMoustache(Value)
+	vchip.AddAttr(":filter", bFilter)
+	vchip.AddAttr(":value", "item.value")
+	vchip.Outlined = True
+	vchip.AssignProps(chipprops)
+	
+	vchipgroup.BindVueElement(vchip)
+	Return vchipgroup
+End Sub
+
+Sub AddComboBox1(fldName As String, vmodel As String, Title As String, DataSource As String, Key As String, Value As String, bMultiple As Boolean, ReturnObject As Boolean) As VueElement
+	Return AddComboBox(fldName, vmodel, Title, False, bMultiple, "", DataSource, Key, Value, ReturnObject, "", Null)
+End Sub
+
+Sub AddSelect1(fldName As String, vmodel As String, Title As String, DataSource As String, Key As String, Value As String, bMultiple As Boolean, ReturnObject As Boolean) As VueElement
+	Return AddSelect(fldName, vmodel, Title, False, bMultiple, "", DataSource, Key, Value, ReturnObject, "", Null)
+End Sub
+
+Sub AddAutoComplete1(fldName As String, vmodel As String, Title As String, DataSource As String, Key As String, Value As String, bMultiple As Boolean , ReturnObject As Boolean) As VueElement
+	Return AddAutoComplete(fldName, vmodel, Title, False, bMultiple, "", DataSource, Key, Value, ReturnObject, "", Null)
+End Sub
+
+Sub AddAutoComplete(elID As String, vmodel As String, sLabel As String, bRequired As Boolean, bMultiple As Boolean, sPlaceHolder As String, sourceTable As String, sourceField As String, displayField As String, returnObject As Boolean, sHelperText As String, props As Map) As VueElement
+	Dim parentID As String = CleanID(mName)
+	elID = elID.ToLowerCase
+	sourceTable = sourceTable.ToLowerCase
+	sourceField = sourceField.ToLowerCase
+	displayField = displayField.tolowercase
+	'
+	BANano.GetElement(parentID).Append($"<v-autocomplete id="${elID}"></v-autocomplete>"$)
+	Dim vselect As VueElement
+	vselect.Initialize(mCallBack, elID, elID)
+	vselect.label = sLabel
+	vselect.Required = bRequired
+	vselect.Placeholder = sPlaceHolder
+	vselect.Hint = sHelperText
+	vselect.Multiple = bMultiple
+	vselect.Items = $":${sourceTable}"$
+	If displayField <> "" Then vselect.ItemText = displayField
+	If sourceField <> "" Then vselect.ItemValue = sourceField
+	vselect.VModel = vmodel
+	vselect.Bind("return-object", returnObject)
+	vselect.AssignProps(props)
+	'
+	If bMultiple Then
+		Dim lst As List = NewList
+		vselect.SetData(vmodel, lst)
+	Else
+		vselect.SetData(vmodel, Null)
+	End If
+	If returnObject = False Then
+		vselect.SetData(vmodel, "")
+	End If
+	Dim lst As List = NewList
+	vselect.SetData(sourceTable, lst)
+	vselect.SetOnEvent(mCallBack, "change", "")
+	vselect.SetOnEvent(mCallBack, "click:clear", "")
+	Return vselect
+End Sub
+
+
+Sub AddAvatar(elID As String, imgURL As String, avatarSize As Int, avatarprops As Map) As VueElement
+	Dim parentID As String = CleanID(mName)
+	elID = elID.ToLowerCase
+	'
+	Dim imageid As String = $"${elID}image"$
+	'
+	BANano.GetElement(parentID).Append($"<v-avatar id="${elID}"><v-img id="${imageid}"></v-img></v-avatar>"$)
+	
+	Dim img As VueElement
+	img.Initialize(mCallBack, imageid, imageid)
+	img.Src = imgURL
+	'
+	Dim avatar As VueElement
+	avatar.Initialize(mCallBack, elID, elID)
+	If avatarSize > 0 Then avatar.AddAttr("size", avatarSize)
+	avatar.AssignProps(avatarprops)
+	img.SetOnEvent(mCallBack, "click", "")
+	'
+	avatar.BindVueElement(img)
+	Return avatar
+End Sub
+
+
+Sub AddAvatarWithText(elID As String, Caption As String, Color As String, avatarSize As Int, TextColor As String, TextColorIntensity As String, avatarprops As Map, textProps As Map) As VueElement
+	Dim parentID As String = CleanID(mName)
+	elID = elID.ToLowerCase
+	Dim spaniD As String = $"${elID}span"$
+	'
+	BANano.GetElement(parentID).Append($"<v-avatar id="${elID}"><span id="${spaniD}"></span></v-avatar>"$)
+	'
+	Dim avatar As VueElement
+	avatar.Initialize(mCallBack, elID, elID)
+	If avatarSize <> 0 Then avatar.AddAttr("size", avatarSize)
+	If Color <> "" Then avatar.Color = Color
+	avatar.AssignProps(avatarprops)
+	'
+	Dim txt As VueElement
+	txt.Initialize(mCallBack, spaniD, spaniD)
+	txt.Caption = Caption
+	If TextColor <> "" Then txt.TextColor = TextColor
+	If TextColorIntensity <> "" Then txt.TextColorIntensity = TextColorIntensity
+	txt.AssignProps(textProps)
+	avatar.SetOnEvent(mCallBack, "click", "")
+	'
+	avatar.BindVueElement(txt)
+	Return avatar
+End Sub
+
+
+Sub AddSelect(elID As String, vmodel As String, sLabel As String, bRequired As Boolean, bMultiple As Boolean, sPlaceHolder As String, sourceTable As String, sourceField As String, displayField As String, returnObject As Boolean, sHelperText As String, props As Map) As VueElement
+	Dim parentID As String = CleanID(mName)
+	elID = elID.ToLowerCase
+	sourceTable = sourceTable.ToLowerCase
+	sourceField = sourceField.ToLowerCase
+	displayField = displayField.tolowercase
+	
+	'
+	BANano.GetElement(parentID).Append($"<v-select id="${elID}"></v-select>"$)
+	Dim vselect As VueElement
+	vselect.Initialize(mCallBack, elID, elID)
+	vselect.label = sLabel
+	vselect.Required = bRequired
+	vselect.Placeholder = sPlaceHolder
+	vselect.Hint = sHelperText
+	vselect.Multiple = bMultiple
+	vselect.Items = $":${sourceTable}"$
+	If displayField <> "" Then vselect.ItemText = displayField
+	If sourceField <> "" Then vselect.ItemValue = sourceField
+	vselect.VModel = vmodel
+	vselect.ReturnObject = returnObject
+	'
+	If bMultiple Then
+		Dim lst As List = NewList
+		vselect.SetData(vmodel, lst)
+	Else
+		vselect.SetData(vmodel, Null)
+	End If
+	If returnObject = False Then
+		vselect.SetData(vmodel, "")
+	End If
+	'
+	vselect.AssignProps(props)
+	'
+	vselect.SetData(sourceTable, NewList)
+	vselect.SetOnEvent(mCallBack, "change", "")
+	vselect.SetOnEvent(mCallBack, "click:clear", "")
+	Return vselect
+End Sub
+
+
+Sub AddSlideXTransition(elID As String, Mode As String) As VueElement
+	Dim elx As VueElement = AddVueElement1(elID, "v-slide-x-transition", "", "", "", Null)
+	elx.AddAttr("mode", Mode)
+	Return elx
+End Sub
+
+'add span
+'<code>
+'dim lbl1 As VueElement = vuetify.AddSpan(Me, "r1c2", "lbl1", "Span", "", "")
+'vuetify.BindVueElement(lbl1)
+'</code>
+Sub AddSpan(elID As String, Caption As String,  TextColor As String, TextColorIntensity As String) As VueElement
+	Return AddLabel(elID, "span", Caption, False, TextColor, TextColorIntensity, Null)
+End Sub
+
+'add h6
+'<code>
+'dim lbl1 As VueElement = vuetify.AddH6(Me, "r1c2", "lbl1", "h6", "", "")
+'vuetify.BindVueElement(lbl1)
+'</code>
+Sub AddH6(elID As String, Caption As String, TextColor As String, TextColorIntensity As String) As VueElement
+	Return AddLabel(elID, "h6", Caption, False, TextColor, TextColorIntensity, Null)
+End Sub
+
+'add h5
+'<code>
+'dim lbl1 As VueElement = vuetify.AddH5(Me, "r1c2", "lbl1", "h5", "", "")
+'vuetify.BindVueElement(lbl1)
+'</code>
+Sub AddH5(elID As String, Caption As String, TextColor As String, TextColorIntensity As String) As VueElement
+	Return AddLabel(elID, "h5", Caption, False, TextColor, TextColorIntensity, Null)
+End Sub
+
+'add h4
+'<code>
+'dim lbl1 As VueElement = vuetify.AddH4(Me, "r1c2", "lbl1", "h4", "", "")
+'vuetify.BindVueElement(lbl1)
+'</code>
+Sub AddH4(elID As String, Caption As String, TextColor As String, TextColorIntensity As String) As VueElement
+	Return AddLabel(elID, "h4", Caption , False, TextColor, TextColorIntensity, Null)
+End Sub
+
+'add h3
+'<code>
+'dim lbl1 As VueElement = vuetify.AddH3(Me, "r1c2", "lbl1", "h3", "", "")
+'vuetify.BindVueElement(lbl1)
+'</code>
+Sub AddH3(elID As String, Caption As String, TextColor As String, TextColorIntensity As String) As VueElement
+	Return AddLabel(elID, "h3", Caption, False, TextColor, TextColorIntensity, Null)
+End Sub
+
+'add h2
+'<code>
+'dim lbl1 As VueElement = vuetify.AddH2(Me, "r1c2", "lbl1", "h2", "", "")
+'vuetify.BindVueElement(lbl1)
+'</code>
+Sub AddH2(elID As String, Caption As String, TextColor As String, TextColorIntensity As String) As VueElement
+	Return AddLabel(elID, "h2", Caption, False, TextColor, TextColorIntensity, Null)
+End Sub
+
+'add paragraph
+'<code>
+'dim lbl1 As VueElement = vuetify.AddParagraph(Me, "r1c2", "lbl1", "h1", "", "")
+'vuetify.BindVueElement(lbl1)
+'</code>
+Sub AddParagraph(elID As String, Caption As String, TextColor As String, TextColorIntensity As String) As VueElement
+	Return AddLabel(elID, "p", Caption, False, TextColor, TextColorIntensity, Null)
+End Sub
+
+'add h1
+'<code>
+'dim lbl1 As VueElement = vuetify.AddH1(Me, "r1c2", "lbl1", "h1", "", "")
+'vuetify.BindVueElement(lbl1)
+'</code>
+Sub AddH1(elID As String, Caption As String, TextColor As String, TextColorIntensity As String) As VueElement
+	Return AddLabel(elID, "h1", Caption, False, TextColor, TextColorIntensity, Null)
+End Sub
+
+'add lorem ipsum
+'<code>
+'dim lbl1 As VueElement = vuetify.AddLoremIpsum(Me, "r1c2", "lbl1", "", "")
+'vuetify.BindVueElement(lbl1)
+'</code>
+Sub AddLoremIpsum(elID As String, TextColor As String, TextColorIntensity As String) As VueElement
+	Return AddLabel(elID, "p", "", True, TextColor, TextColorIntensity, Null)
+End Sub
+
+'<code>
+'dim lbl1 As VueElement = vuetify.AddLabel(Me, "r1c2", "lbl1", "h1", "This is h1", false, "", "", null)
+'vuetify.BindVueElement(lbl1)
+'</code>
+Sub AddLabel(elID As String, Size As String, Caption As String, iLoremIpsum As Boolean, TextColor As String, TextColorIntensity As String, props As Map) As VueElement
+	Dim elx As VueElement = AddVueElement1(elID, Size, "", Caption, "", props)
+	elx.LoremIpsum = iLoremIpsum
+	elx.TextColor = TextColor
+	elx.TextColorIntensity = TextColorIntensity
+	Return elx
+End Sub
+
+Sub AddDiv(elID As String) As VueElement
+	Return AddVueElement1(elID, "div","", "", "", Null)
+End Sub
+
+'<code>
+'Dim avue as VueElement = Vuetify.AddAlert(Me, "r1c1", "avue", False, "This is my alert", False, True, Vuetify.ALERT_TYPE_SUCCESS, Vuetify.ALERT_BORDER_LEFT, Null)
+'vuetify.BindVueElement(avue)
+'</code>
+Sub AddAlert(elID As String, vmodel As String, bVisible As Boolean, Caption As String, iLoremIpsum As Boolean, bDismissible As Boolean, aType As String,  Border As String, props As Map) As VueElement
+	Dim elx As VueElement = AddVueElement1(elID, "v-alert", vmodel, Caption, "", props)
+	elx.LoremIpsum = iLoremIpsum
+	elx.Bind("dismissible", bDismissible)
+	elx.SetData(vmodel, bVisible)
+	elx.AlertType = aType
+	elx.Border = Border
+	Return elx
+End Sub
+
+'<code>
+'Dim btn1 As VueElement = vuetify.AddButton1(Me, "r2c1", "btn1", "Button 1", Null)
+'vuetify.BindVueElement(btn1)
+'
+''Event
+'Sub btn1_click(e As BANanoEvent)
+'End Sub
+'</code>
+Sub AddButton1(elID As String, sLabel As String, props As Map) As VueElement
+	Dim parentID As String = CleanID(mName)
+	elID = elID.ToLowerCase
+	'
+	If BANano.Exists(parentID) Then
+		BANano.GetElement(parentID).Append($"<v-btn id="${elID}"></v-btn>"$)
+		Dim mbutton As VueElement
+		mbutton.Initialize(mCallBack, elID, elID)
+		mbutton.Caption = sLabel
+		'
+		mbutton.AssignProps(props)
+		mbutton.SetOnEvent(mCallBack, "click", "")
+		Return mbutton
+	Else
+		Log($"AddButton1.${elID} could not be added to ${parentID}"$)
+		'ignore
+	End If
+End Sub
+
+'<code>
+'Dim btn1 As VueElement = vuetify.AddButton(Me, "r2c1", "btn1", "Button 1", "primary", True, Null)
+'vuetify.BindVueElement(btn1)
+'
+''Event
+'Sub btn1_click(e As BANanoEvent)
+'End Sub
+'</code>
+Sub AddButton(elID As String, sLabel As String, eColor As String, bOutlined As Boolean,  props As Map) As VueElement
+	Dim parentID As String = CleanID(mName)
+	elID = elID.ToLowerCase
+	'
+	If BANano.Exists(parentID) Then
+		BANano.GetElement(parentID).Append($"<v-btn id="${elID}"></v-btn>"$)
+		Dim mbutton As VueElement
+		mbutton.Initialize(mCallBack, elID, elID)
+		mbutton.Caption = sLabel
+		If bOutlined Then mbutton.Outlined = True
+		If eColor <> "" Then mbutton.color = eColor
+		
+		mbutton.AssignProps(props)
+		mbutton.SetOnEvent(mCallBack, "click", "")
+		Return mbutton
+	Else
+		Log($"AddButton.${elID} could not be added to ${parentID}"$)
+		'ignore
+	End If
+End Sub
+
+Sub AddSubHeader(elID As String, Caption As String) As VueElement
+	Dim elx As VueElement = AddVueElement1(elID, "v-subheader", "", Caption, "", Null)
+	Return elx
+End Sub
+
+Sub AddCarousel(elID As String, vmodel As String) As VueElement
+	Dim elx As VueElement = AddVueElement1(elID, "v-carousel", vmodel, "", "", Null)
+	Return elx
+End Sub
+
+Sub AddCarouselItem(elID As String, cContent As String) As VueElement
+	Dim elx As VueElement = AddVueElement1(elID, "v-carousel-item", "" ,cContent, "", Null)
+	Return elx
+End Sub
+
+'<code>
+'dim exp As VueElement = vuetify.AddExpansionPanel(Me, "r1c1", "exp1", "exp1value")
+'vuetify.BindVueElement(exp)
+'</code>
+Sub AddExpansionPanels(elID As String, vModel As String) As VueElement
+	Dim elx As VueElement = AddVueElement1(elID, "v-expansion-panels", vModel ,"", "", Null)
+	Return elx
+End Sub
+
+
+'a button with a badge
+Sub AddButtonWithBadge(elID As String, elLabel As String, btnColor As String, vmodel As String, badgeIcon As String, badgeColor As String, btnproperties As Map, badgeproperties As Map) As VueElement
+	Dim parentID As String = CleanID(mName)
+	elID = elID.ToLowerCase
+	Dim badgeID As String = $"${elID}badge"$
+	'
+	BANano.GetElement(parentID).Append($"<v-badge id="${badgeID}"><v-btn id="${elID}"></v-btn></v-badge>"$)
+	Dim mbadgebtn As VueElement
+	mbadgebtn.Initialize(mCallBack, elID, elID)
+	mbadgebtn.Caption = elLabel
+	If btnColor <> "" Then mbadgebtn.Color = btnColor
+	mbadgebtn.SetOnEvent(mCallBack, "click", "")
+	'
+	mbadgebtn.AssignProps(btnproperties)
+	'
+	Dim badgex As VueElement
+	badgex.Initialize(mCallBack, badgeID, badgeID)
+	If vmodel <> "" Then badgex.Bind("content", vmodel)
+	If vmodel <> "" Then badgex.Bind("value", vmodel)
+	If badgeIcon <> "" Then badgex.SetAttr("icon", badgeIcon)
+	If badgeColor <> "" Then badgex.Color = badgeColor
+	
+	badgex.AssignProps(badgeproperties)
+	mbadgebtn.BindVueElement(badgex)
+	Return mbadgebtn
+End Sub
+
+
+
+Sub AddButtonWithIconWithBadge(elID As String, eIcon As String, btnColor As String, vmodel As String, badgeIcon As String, badgeColor As String, btnprops As Map, iconprops As Map, badgeProperties As Map) As VueElement
+	Dim parentID As String = CleanID(mName)
+	elID = elID.ToLowerCase
+	Dim sicon As String = $"${elID}icon"$
+	Dim badgeID As String = $"${elID}badge"$
+	BANano.GetElement(parentID).Append($"<v-badge id="${badgeID}"><v-btn id="${elID}"><v-icon id="${sicon}"></v-icon></v-btn></v-badge>"$)
+	
+	Dim badgex As VueElement
+	badgex.Initialize(mCallBack, badgeID, badgeID)
+	If vmodel <> "" Then badgex.Bind("content", vmodel)
+	If vmodel <> "" Then badgex.Bind("value", vmodel)
+	If badgeIcon <> "" Then badgex.SetAttr("icon", badgeIcon)
+	If badgeColor <> "" Then badgex.Color = badgeColor
+	badgex.Overlap = True
+	badgex.AssignProps(badgeProperties)
+		
+	Dim vbtnright As VueElement
+	vbtnright.Initialize(mCallBack, elID, elID)
+	vbtnright.SetOnEvent(mCallBack, "click", "")
+	vbtnright.AssignProps(btnprops)
+	
+	Dim viconright As VueElement
+	viconright.Initialize(mCallBack, sicon, sicon)
+	viconright.Caption = eIcon
+	viconright.Dark = True
+	If btnColor <> "" Then vbtnright.Color = btnColor
+	vbtnright.AssignProps(iconprops)
+	vbtnright.BindVueElement(viconright)
+	vbtnright.BindVueElement(badgex)
+	Return vbtnright
+End Sub
+
+
+Sub AddIconWithBadge(elID As String, eIcon As String, eColor As String, vmodel As String, badgeIcon As String, badgeColor As String, btnproperties As Map, badgeproperties As Map) As VueElement
+	Dim parentID As String = CleanID(mName)
+	elID = elID.ToLowerCase
+	Dim badgeID As String = $"${elID}badge"$
+	'
+	BANano.GetElement(parentID).Append($"<v-badge id="${badgeID}"><v-icon id="${elID}"></v-icon></v-badge>"$)
+	Dim mbadgebtn As VueElement
+	mbadgebtn.Initialize(mCallBack, elID, elID)
+	mbadgebtn.Caption = eIcon
+	If eColor <> "" Then mbadgebtn.Color = eColor
+	mbadgebtn.SetOnEvent(mCallBack, "click", "")
+	'
+	mbadgebtn.AssignProps(btnproperties)
+	'
+	Dim badgex As VueElement
+	badgex.Initialize(mCallBack, badgeID, badgeID)
+	If vmodel <> "" Then badgex.Bind("content", vmodel)
+	If vmodel <> "" Then badgex.Bind("value", vmodel)
+	If badgeIcon <> "" Then badgex.SetAttr("icon", badgeIcon)
+	If badgeColor <> "" Then badgex.Color = badgeColor
+	badgex.Overlap = True
+	badgex.AssignProps(badgeproperties)
+	badgex.BindVueElement(mbadgebtn)
+	Return badgex
+End Sub
+
+'a button with an icon on the left
+Sub AddButtonWithIcon(elID As String, eIcon As String, btnColor As String, btnprops As Map, iconprops As Map) As VueElement
+	Dim parentID As String = CleanID(mName)
+	elID = elID.ToLowerCase
+	Dim siconright As String = $"${elID}icon"$
+	BANano.GetElement(parentID).Append($"<v-btn icon id="${elID}"><v-icon id="${elID}icon"></v-icon></v-btn>"$)
+	Dim vbtnright As VueElement
+	vbtnright.Initialize(mCallBack, elID, elID)
+	vbtnright.AssignProps(btnprops)
+	'
+	Dim viconright As VueElement
+	viconright.Initialize(mCallBack, siconright, siconright)
+	viconright.Caption = eIcon
+	viconright.Dark = True
+	If btnColor <> "" Then vbtnright.Color = btnColor
+	vbtnright.AssignProps(iconprops)
+	vbtnright.SetOnEvent(mCallBack, "click", "")
+	vbtnright.BindVueElement(viconright)
+	Return vbtnright
+End Sub
+
+
+
+Sub AddComboBox(elID As String, vmodel As String, sLabel As String, bRequired As Boolean, bMultiple As Boolean, sPlaceHolder As String, sourceTable As String, sourceField As String, displayField As String, returnObject As Boolean, sHelperText As String, props As Map) As VueElement
+	Dim parentID As String = CleanID(mName)
+	elID = elID.ToLowerCase
+	sourceTable = sourceTable.ToLowerCase
+	sourceField = sourceField.ToLowerCase
+	displayField = displayField.tolowercase
+	
+	'
+	BANano.GetElement(parentID).Append($"<v-combobox id="${elID}"></v-combobox>"$)
+	Dim vselect As VueElement
+	vselect.Initialize(mCallBack, elID, elID)
+	vselect.label = sLabel
+	vselect.Required = bRequired
+	vselect.Placeholder = sPlaceHolder
+	vselect.Hint = sHelperText
+	vselect.Multiple = bMultiple
+	vselect.Items = $":${sourceTable}"$
+	If displayField <> "" Then vselect.ItemText = displayField
+	If sourceField <> "" Then vselect.ItemValue = sourceField
+	vselect.VModel = vmodel
+	vselect.Bind("return-object", returnObject)
+	vselect.AssignProps(props)
+	'
+	If bMultiple Then
+		Dim lst As List = NewList
+		vselect.SetData(vmodel, lst)
+	Else
+		vselect.SetData(vmodel, Null)
+	End If
+	If returnObject = False Then
+		vselect.SetData(vmodel, "")
+	End If
+	Dim lst As List = NewList
+	vselect.SetData(sourceTable, lst)
+	vselect.SetOnEvent(mCallBack, "change", "")
+	vselect.SetOnEvent(mCallBack,  "click:clear", "")
+	Return vselect
+End Sub
+
+'a button with an icon on the right
+'<code>
+'Dim btn1 As VueElement = vuetify.AddButtonWidthRightIcon(Me, "r2c1", "btn1", "Button 1", "mdi-heart", "primary", True, Null, null)
+'vuetify.BindVueElement(btn1)
+'
+'Event
+'Sub btn1_click(e As BANanoEvent)
+'End Sub
+'</code>
+Sub AddButtonWidthRightIcon(elID As String, eLabel As String, eIcon As String, eColor As String, bOutlined As Boolean, btnprops As Map, iconprops As Map) As VueElement
+	Dim parentID As String = CleanID(mName)
+	elID = elID.ToLowerCase
+	'
+	Dim siconright As String = $"${elID}icon"$
+	Dim sspanright As String = $"${elID}span"$
+	'
+	BANano.GetElement(parentID).Append($"<v-btn id="${elID}"><span id="${elID}span"></span><v-icon id="${elID}icon"></v-icon></v-btn>"$)
+	
+	Dim vbtnright As VueElement
+	vbtnright.Initialize(mCallBack, elID, elID)
+	'
+	Dim viconright As VueElement
+	viconright.Initialize(mCallBack, siconright, siconright)
+	'
+	Dim vspanleft As VueElement
+	vspanleft.Initialize(mCallBack, sspanright, sspanright)
+	
+	vspanleft.Caption = eLabel
+	viconright.Caption = eIcon
+	viconright.Dark = True
+	viconright.AddAttr(":right", True)
+	'
+	If eColor <> "" Then vbtnright.Color = eColor
+	If bOutlined Then vbtnright.Outlined = True
+	'
+	vbtnright.AssignProps(btnprops)
+	viconright.AssignProps(iconprops)
+	'
+	vbtnright.SetOnEvent(mCallBack, "click", "")
+	'
+	vbtnright.BindVueElement(viconright)
+	vbtnright.BindVueElement(vspanleft)
+	'
+	Return vbtnright
+End Sub
+
+'a button with an icon on the left
+'<code>
+'Dim btn1 As VueElement = vuetify.AddButtonWithLeftIcon(Me, "r2c1", "btn1", "Button 1", "mdi-heart", "primary", True, Null, null)
+'vuetify.BindVueElement(btn1)
+'
+''btn1 event
+'Sub btn1_click(e As BANanoEvent)
+'End Sub
+'</code>
+Sub AddButtonWithLeftIcon(elID As String, eLabel As String, eIcon As String, eColor As String, bOutlined As Boolean, btnprops As Map, iconprops As Map) As VueElement
+	Dim parentID As String = CleanID(mName)
+	elID = elID.ToLowerCase
+	'
+	Dim siconright As String = $"${elID}icon"$
+	Dim sspanright As String = $"${elID}span"$
+	'
+	BANano.GetElement(parentID).Append($"<v-btn id="${elID}"><v-icon id="${elID}icon"></v-icon><span id="${elID}span"></span></v-btn>"$)
+	
+	Dim vbtnright As VueElement
+	vbtnright.Initialize(mCallBack, elID, elID)
+	'
+	Dim viconright As VueElement
+	viconright.Initialize(mCallBack, siconright, siconright)
+	'
+	Dim vspanleft As VueElement
+	vspanleft.Initialize(mCallBack, sspanright, sspanright)
+	
+	vspanleft.Caption = eLabel
+	viconright.Caption = eIcon
+	viconright.Dark = True
+	viconright.AddAttr(":left", True)
+	'
+	If eColor <> "" Then vbtnright.Color = eColor
+	If bOutlined Then vbtnright.Outlined = True
+	'
+	vbtnright.AssignProps(btnprops)
+	viconright.AssignProps(iconprops)
+	'
+	vbtnright.SetOnEvent(mCallBack, "click", "")
+	'
+	vbtnright.BindVueElement(viconright)
+	vbtnright.BindVueElement(vspanleft)
+	'
+	Return vbtnright
+End Sub
+
+
+'a button with an icon on the right
+'<code>
+'Dim avatar1 As VueElement = vuetify.AddAvatarWithBadge(Me, "r2c1", "btn1", "./assets/sponge.png", "64", "avatar1", "red", Null, Null)
+'vuetify.BindVueElement(avatar1)
+'
+'Event
+'Sub avatar1_click(e As BANanoEvent)
+'End Sub
+'</code>
+Sub AddAvatarWithBadge(elID As String, imgURL As String, avatarSize As Int, vmodel As String, badgeColor As String, avatarprops As Map, badgeprops As Map) As VueElement
+	Dim parentID As String = CleanID(mName)
+	elID = elID.ToLowerCase
+	'
+	Dim avatarid As String = $"${elID}avatar"$
+	Dim imageid As String = $"${elID}image"$
+	'
+	BANano.GetElement(parentID).Append($"<v-badge id="${elID}"><v-avatar id="${avatarid}"><v-img id="${imageid}"></v-img></v-avatar></v-badge>"$)
+	'
+	Dim vbadge As VueElement
+	vbadge.Initialize(mCallBack, elID, elID)
+	If badgeColor <> "" Then vbadge.Color = badgeColor
+	If vmodel <> "" Then vbadge.Bind("content", vmodel)
+	If vmodel <> "" Then vbadge.Bind("value", vmodel)
+	vbadge.AssignProps(badgeprops)
+	'
+	Dim img As VueElement
+	img.Initialize(mCallBack, imageid, imageid)
+	img.Src = imgURL
+	'
+	Dim avatar As VueElement
+	avatar.Initialize(mCallBack, avatarid, avatarid)
+	If avatarSize <> 0 Then avatar.AddAttr("size", avatarSize)
+	avatar.AssignProps(avatarprops)
+	img.SetOnEvent(mCallBack, "click", "")
+	'
+	vbadge.BindVueElement(img)
+	vbadge.BindVueElement(avatar)
+	Return vbadge
+End Sub
+
+Sub AddAvatar1(elID As String, vmodel As String, avatarSize As Int, avatarprops As Map) As VueElement
+	Dim parentID As String = CleanID(mName)
+	elID = elID.ToLowerCase
+	'
+	Dim imageid As String = $"${elID}image"$
+	'
+	BANano.GetElement(parentID).Append($"<v-avatar id="${elID}"><v-img id="${imageid}"></v-img></v-avatar>"$)
+	
+	Dim img As VueElement
+	img.Initialize(mCallBack, imageid, imageid)
+	img.AddAttr(":src", vmodel)
+	img.AddAttr(":lazy-src", vmodel)
+	'
+	Dim avatar As VueElement
+	avatar.Initialize(mCallBack, elID, elID)
+	If avatarSize > 0 Then avatar.AddAttr("size", avatarSize)
+	avatar.AssignProps(avatarprops)
+	img.SetOnEvent(mCallBack, "click", "")
+	'
+	avatar.BindVueElement(img)
+	Return avatar
+End Sub
+
+'add date picker input
+'<code>
+'Dim dp1 As VueElement = Vuetify.AddDatePickerInput1(Me, "r1c1", "dp1", "dp1value", "Date", "Select a date", Null)
+'vuetify.BindVueElement(dp1)
+'on clear click
+'Sub dp1_clearclick(e As BANanoEvent)
+'End Sub
+'</code>
+Sub AddDatePickerInput1(elID As String, vModel As String, sLabel As String, txtprops As Map, dateprops As Map) As VueElement
+	Dim dp As VueElement = AddDatePickerInput(elID, vModel, sLabel, "", False, "", "", txtprops, dateprops)
+	Return dp
+End Sub
+
+
+'add date picker input
+'<code>
+'Dim dp1 As VueElement = Vuetify.AddDatePickerInput(Me, "r1c1", "dp1", "dp1value", "Date", "Select a date", True, "mdi-calendar", "", Null, NUll)
+'vuetify.BindVueElement(dp1)
+'on clear click
+'Sub dp1_clearclick(e As BANanoEvent)
+'End Sub
+'</code>
+Sub AddDatePickerInput(elID As String, vmodel As String, slabel As String, splaceholder As String, bRequired As Boolean, sPrependIcon As String, sHint As String, txtprops As Map, dateprops As Map) As VueElement
+	Dim parentID As String = CleanID(mName)
+	elID = elID.ToLowerCase
+	Dim menuref As String = $"${elID}menu"$
+	Dim txtid As String = $"${elID}txt"$
+	Dim btnok As String = $"${elID}ok"$
+	Dim btncancel As String = $"${elID}cancel"$
+	Dim dtpicker As String = $"${elID}dp"$
+	Dim btnclear As String = $"${elID}clear"$
+	Dim spacer As String = $"${elID}spacer"$
+	Dim tempID As String = $"${elID}template"$
+	'
+Dim sbTemplate As String = $"<v-menu id="${menuref}" :close-on-content-click="false" transition="scale-transition" :offset-y="true"
+ref="${menuref}" :return-value.sync="${vmodel}" v-model="${menuref}" min-width="460px" max-width="460px" :nudge-right="40">
+<v-template id="${tempID}" v-slot:activator="{ on, attrs }">
+<v-text-field id="${txtid}" v-on="on" v-bind="attrs" label="${slabel}" v-model="${vmodel}" prepend-icon="${sPrependIcon}"
+:required="${bRequired}" hint="${sHint}" ref="${vmodel}" autocomplete="off" splaceholder="${splaceholder}"></v-text-field>
+</v-template>
+<v-date-picker id="${dtpicker}" :scrollable="true" v-model="${vmodel}" :landscape="true">
+<v-btn id="${btnclear}" color="error" :text="true" v-on:click="${vmodel} = ''" :outlined="true">Clear</v-btn>
+<v-spacer id="${spacer}"></v-spacer>
+<v-btn id="${btncancel}" color="primary" :text="true" v-on:click="${menuref} = false" :outlined="true">
+Cancel</v-btn>
+<v-btn id="${btnok}" color="primary" :text="true" v-on:click="~refs.${menuref}.save(${vmodel})" :outlined="true">
+Ok</v-btn>
+</v-date-picker>
+</v-menu>"$
+	'fix the refs
+	sbTemplate = sbTemplate.Replace("~","$")
+	BANano.GetElement(parentID).Append(sbTemplate)
+	'
+	Dim vmenu As VueElement
+	vmenu.Initialize(mCallBack, menuref, menuref)
+	
+	Dim vtextfield As VueElement
+	vtextfield.Initialize(mCallBack, txtid, txtid)
+	vtextfield.AssignProps(txtprops)
+	vtextfield.SetOnEvent(mCallBack, "click:clear", "")
+	'
+	Dim vdatepicker As VueElement
+	vdatepicker.Initialize(mCallBack, dtpicker, dtpicker)
+	vdatepicker.AssignProps(dateprops)
+	'
+	vtextfield.BindVueElement(vmenu)
+	vtextfield.BindVueElement(vdatepicker)
+	vtextfield.SetData(vmodel, "")
+	vtextfield.SetData(menuref, False)
+	Return vtextfield
+End Sub
+
+
+Sub AddTimePickerInput1(elID As String, vModel As String, sLabel As String, txtprops As Map, tpprops As Map) As VueElement
+	Dim tp As VueElement = AddTimePickerInput(elID, vModel, sLabel,"", False, "", "", txtprops, tpprops)
+	Return tp 
+End Sub
+
+'add time picker input
+Sub AddTimePickerInput(elID As String, vmodel As String, slabel As String, splaceholder As String, bRequired As Boolean, sPrependIcon As String, sHint As String, txtprops As Map, dateprops As Map) As VueElement
+	Dim parentID As String = CleanID(mName)
+	elID = elID.ToLowerCase
+	Dim menuref As String = $"${elID}menu"$
+	Dim txtid As String = $"${elID}txt"$
+	Dim btnok As String = $"${elID}ok"$
+	Dim btncancel As String = $"${elID}cancel"$
+	Dim dtpicker As String = $"${elID}dp"$
+	Dim btnclear As String = $"${elID}clear"$
+	Dim spacer As String = $"${elID}spacer"$
+	Dim tempID As String = $"${elID}template"$
+	'
+Dim sbTemplate As String = $"<v-menu id="${menuref}" :close-on-content-click="false" transition="scale-transition" :offset-y="true"
+ref="${menuref}" :return-value.sync="${vmodel}" v-model="${menuref}" min-width="460px" max-width="460px" :nudge-right="40">
+<v-template id="${tempID}" v-slot:activator="{ on, attrs }">
+<v-text-field id="${txtid}" v-on="on" v-bind="attrs" label="${slabel}" v-model="${vmodel}" prepend-icon="${sPrependIcon}"
+:required="${bRequired}" hint="${sHint}" ref="${vmodel}" autocomplete="off" splaceholder="${splaceholder}"></v-text-field>
+</v-template>
+<v-time-picker id="${dtpicker}" :scrollable="true" v-model="${vmodel}" :landscape="true">
+<v-btn id="${btnclear}" color="error" :text="true" v-on:click="${vmodel} = ''" :outlined="true">Clear</v-btn>
+<v-spacer id="${spacer}"></v-spacer>
+<v-btn id="${btncancel}" color="primary" :text="true" v-on:click="${menuref} = false" :outlined="true">
+Cancel</v-btn>
+<v-btn id="${btnok}" color="primary" :text="true" v-on:click="~refs.${menuref}.save(${vmodel})" :outlined="true">
+Ok</v-btn>
+</v-time-picker>
+</v-menu>"$
+
+	'fix the refs
+	sbTemplate = sbTemplate.Replace("~","$")
+	BANano.GetElement(parentID).Append(sbTemplate)
+	'
+	Dim vmenu As VueElement
+	vmenu.Initialize(mCallBack, menuref, menuref)
+	
+	Dim vtextfield As VueElement
+	vtextfield.Initialize(mCallBack, txtid, txtid)
+	vtextfield.AssignProps(txtprops)
+	vtextfield.SetOnEvent(mCallBack, "click:clear", "")
+	'
+	Dim vdatepicker As VueElement
+	vdatepicker.Initialize(mCallBack, dtpicker, dtpicker)
+	vdatepicker.AssignProps(dateprops)
+	'
+	vtextfield.BindVueElement(vmenu)
+	vtextfield.BindVueElement(vdatepicker)
+	vtextfield.SetData(vmodel, "")
+	vtextfield.SetData(menuref, False)
+	Return vtextfield
+End Sub
+
+
+Sub AddIcon(elID As String, eIcon As String, color As String, iDark As Boolean, iconprops As Map) As VueElement
+	Dim parentID As String = CleanID(mName)
+	elID = elID.ToLowerCase
+	BANano.GetElement(parentID).Append($"<v-icon id="${elID}"></v-icon>"$)
+	Dim vbtnright As VueElement
+	vbtnright.Initialize(mCallBack, elID, elID)
+	vbtnright.Dark = iDark
+	vbtnright.Caption = eIcon
+	If color <> "" Then vbtnright.Color = color
+	vbtnright.AssignProps(iconprops)
+	vbtnright.SetOnEvent(mCallBack, "click", "")
+	Return vbtnright
+End Sub
+
+Sub AddBadge(elID As String, vmodel As String, content As String, color As String, bDot As Boolean, bOverLap As Boolean, iDark As Boolean, badgeProps As Map) As VueElement
+	Dim parentID As String  = CleanID(mName)
+	elID = elID.ToLowerCase
+	BANano.GetElement(parentID).Append($"<v-badge id="${elID}"></v-badge>"$)
+	Dim vbtnright As VueElement
+	vbtnright.Initialize(mCallBack, elID, elID)
+	vbtnright.Dark = iDark
+	If color <> "" Then vbtnright.Color = color
+	vbtnright.Dot = bDot
+	vbtnright.Overlap = bOverLap
+	vbtnright.VModel = vmodel
+	vbtnright.SetData(vmodel, content)
+	vbtnright.AssignProps(badgeProps)
+	Return vbtnright
+End Sub
+
+
+Sub AddSearch(elID As String, vmodel As String, slabel As String, bSolo As Boolean, props As Map) As VueElement
+	Dim parentID As String = CleanID(mName)
+	elID = elID.ToLowerCase
+	BANano.GetElement(parentID).Append($"<v-text-field id="${elID}"></v-text-field>"$)
+	Dim vtextfield As VueElement
+	vtextfield.Initialize(mCallBack, elID, elID)
+	vtextfield.Label = slabel
+	vtextfield.AppendIcon = "mdi-magnify"
+	vtextfield.VModel = vmodel
+	vtextfield.SetData(vmodel, "")
+	vtextfield.SetTypeText
+	vtextfield.Solo = bSolo
+	vtextfield.Clearable = True
+	vtextfield.SingleLine = True
+	vtextfield.HideDetails = True
+	vtextfield.SetOnEvent(mCallBack, "click:append", "")
+	vtextfield.SetOnEvent(mCallBack, "click:prepend", "")
+	vtextfield.SetOnEvent(mCallBack, "click:append-outer", "")
+	vtextfield.SetOnEvent(mCallBack, "click:prepend-inner", "")
+	vtextfield.SetOnEvent(mCallBack, "click:clear", "")
+	vtextfield.Shrink
+	vtextfield.AssignProps(props)
+	Return vtextfield
+End Sub
+
+Sub AddParallax(elID As String, sheight As String, src As String, alt As String, props As Map) As VueElement
+	Dim parentID As String = CleanID(mName)
+	elID = elID.ToLowerCase
+	BANano.GetElement(parentID).Append($"<v-parallax id="${elID}"></v-parallax>"$)
+	Dim vparallax As VueElement
+	vparallax.Initialize(mCallBack, elID, elID)
+	vparallax.Src = src
+	vparallax.Height = sheight
+	vparallax.Alt = alt
+	vparallax.AssignProps(props)
+	Return vparallax
+End Sub
+
+'<code>
+'Dim fi1 As VueElement = vuetify.AddFileInput(Me, "r1c1", "fi1", "fi1", "Select File", "", False, "", null)
+'vuetify.BindVueElement(fi1)
+'Sub fi1_change(fileObj As Map)
+'If banano.IsNull(fileObj) Or banano.IsUndefined(fileObj) Then Return
+''get file details
+'Dim fileDet As FileObject
+'fileDet = BANanoShared.GetFileDetails(fileObj)
+'Dim fn As String = fileDet.FileName
+''you can check the size here
+'start uploading the file
+'fileDet = BANanoShared.UploadFileWait(fileObj)
+'Dim sstatus As String = fileDet.Status
+'Select Case sstatus
+'Case "error"
+'vuetify.ShowSnackBarError($"The file '${fn}' was not uploaded successfully!"$)
+'Case "success"
+'vuetify.ShowSnackBarSuccess($"The file '${fn}' was uploaded successfully!"$)
+'End Select
+'Dim fp As String = fileDet.FullPath
+''update state of some element
+''VC.SetData("vmodel, fp)
+'End Sub
+''****for multiple files
+'Sub fi1_change(fileList As List)
+'If banano.IsNull(fileList) Or banano.IsUndefined(fileList) Then Return
+'Dim uploads As List = vc.NewList
+''for each fileObj As Map in fileList
+''get file details
+'Dim fileDet As FileObject
+'fileDet = BANanoShared.GetFileDetails(fileObj)
+'Dim fn As String = fileDet.FileName
+''you can check the size here
+''start uploading the file
+'fileDet = BANanoShared.UploadFileWait(fileObj)
+'Dim sstatus As String = fileDet.Status
+'Select Case sstatus
+'Case "error"
+'vuetify.ShowSnackBarError($"The file '${fn}' was not uploaded successfully!"$)
+'Case "success"
+'vuetify.ShowSnackBarSuccess($"The file '${fn}' was uploaded successfully!"$)
+'End Select
+'Dim fp As String = fileDet.FullPath
+''uploads.Add(fp)
+'next
+'End Sub
+'</code>
+Sub AddFileInput(elID As String, vmodel As String, slabel As String, splaceholder As String, bMultiple As Boolean, sHint As String, props As Map) As VueElement
+	Dim parentID As String = CleanID(mName)
+	elID = elID.ToLowerCase
+	BANano.GetElement(parentID).Append($"<v-file-input id="${elID}"></v-file-input>"$)
+	Dim vfileinput As VueElement
+	vfileinput.Initialize(mCallBack, elID, elID)
+	vfileinput.Label = slabel
+	vfileinput.Placeholder = splaceholder
+	vfileinput.Hint = sHint
+	vfileinput.VModel = vmodel
+	vfileinput.AddAttrOnConditionTrue(":multiple", bMultiple, True)
+	vfileinput.SetOnEvent(mCallBack, "change", "")
+	vfileinput.SetOnEvent(mCallBack, "click:clear", "")
+	vfileinput.SetOnEvent(mCallBack, "click:append", "")
+	vfileinput.SetOnEvent(mCallBack, "click:prepend", "")
+	vfileinput.SetOnEvent(mCallBack, "click:append-outer", "")
+	vfileinput.SetOnEvent(mCallBack, "click:prepend-inner", "")
+	vfileinput.AssignProps(props)
+	If vmodel <> "" Then
+		If bMultiple Then
+			vfileinput.SetData(vmodel, NewList)
+		Else
+			vfileinput.SetData(vmodel, Null)	
+		End If
+	End If
+	Return vfileinput
+End Sub
+
+
+'<code>
+'Dim fi As VueElement = vuetify.AddFileInput(Me, "r1c1", "fi", "fi", "Browse File", null)
+'vuetify.BindVueElement(fi)
+'Sub fi_change(fileObj As Map)
+'If banano.IsNull(fileObj) Or banano.IsUndefined(fileObj) Then Return
+''get file details
+'Dim fileDet As FileObject
+'fileDet = BANanoShared.GetFileDetails(fileObj)
+'Dim fn As String = fileDet.FileName
+''you can check the size here
+''start uploading the file
+'fileDet = BANanoShared.UploadFileWait(fileObj)
+'Dim sstatus As String = fileDet.Status
+'Select Case sstatus
+'Case "error"
+'vuetify.ShowSnackBarError($"The file '${fn}' was not uploaded successfully!"$)
+'Case "success"
+'vuetify.ShowSnackBarSuccess($"The file '${fn}' was uploaded successfully!"$)
+'End Select
+'Dim fp As String = fileDet.FullPath
+''update state of some element
+''VC.SetData("vmodel, fp)
+'End Sub
+''****for multiple files
+'Sub fi1_change(fileList As List)
+'If banano.IsNull(fileList) Or banano.IsUndefined(fileList) Then Return
+'Dim uploads As List = vc.NewList
+''for each fileObj As Map in fileList
+''get file details
+'Dim fileDet As FileObject
+'fileDet = BANanoShared.GetFileDetails(fileObj)
+'Dim fn As String = fileDet.FileName
+''you can check the size here
+''start uploading the file
+'fileDet = BANanoShared.UploadFileWait(fileObj)
+'Dim sstatus As String = fileDet.Status
+'Select Case sstatus
+'Case "error"
+'vuetify.ShowSnackBarError($"The file '${fn}' was not uploaded successfully!"$)
+'Case "success"
+'vuetify.ShowSnackBarSuccess($"The file '${fn}' was uploaded successfully!"$)
+'End Select
+'Dim fp As String = fileDet.FullPath
+''uploads.Add(fp)
+'next
+'End Sub
+'</code>
+Sub AddFileInput1(fldName As String, vmodel As String, title As String, props As Map) As VueElement
+	Dim elx As VueElement = AddFileInput(fldName, vmodel, title, "", False, "", props)
+	Return elx
+End Sub
+
+Sub AddSlider(elID As String, vmodel As String, slabel As String, iminvalue As Object, imaxvalue As Object, iStep As Int,  bShowThumb As Boolean,  bVertical As Boolean, props As Map) As VueElement
+	Dim parentID As String = CleanID(mName)
+	elID = elID.ToLowerCase
+	BANano.GetElement(parentID).Append($"<v-slider id="${elID}"></v-slider>"$)
+	'get the text field, there is only 1 element on the layout
+	Dim vslider As VueElement
+	vslider.Initialize(mCallBack, elID, elID)
+	vslider.Label = slabel
+	vslider.VModel = vmodel
+	vslider.SetData(vmodel, 0)
+	If bShowThumb Then vslider.AddAttr("thumb-label", "always")
+	vslider.AddAttr(":vertical", bVertical)
+	vslider.AddAttr("min", iminvalue)
+	vslider.AddAttr("max", imaxvalue)
+	If iStep > 0 Then vslider.AddAttr("step", iStep)
+	vslider.SetOnEvent(mCallBack, "click:append", "")
+	vslider.SetOnEvent(mCallBack, "click:prepend", "")
+	vslider.SetOnEvent(mCallBack, "click", "")
+	vslider.SetOnEvent(mCallBack, "start", "")
+	vslider.SetOnEvent(mCallBack, "end", "")
+	vslider.AssignProps(props)
+	Return vslider
+End Sub
+
+'<code>
+'add a telephone
+'Dim txtF As VueElement = vuetify.AddTelephone1(Me, "r1c1", "txtF", "fldName", "Text Field", null)
+'vuetify.BindVueElement(txtF)
+'</code>
+Sub AddTelephone1(elID As String, vmodel As String, slabel As String, props As Map) As VueElement
+	Return AddTelephone(elID, vmodel, slabel, "", False, "", 0, "", props)
+End Sub
+
+
+'<code>
+'add a telephone
+'Dim txtF As VueElement = vuetify.AddTelephone(Me, "r1c1", "txtF", "fldName", "Text Field", "Text field placeholder", True, "", 0, "Enter a text field", null)
+'vuetify.BindVueElement(txtF)
+'</code>
+Sub AddTelephone(elID As String, vmodel As String, slabel As String, splaceholder As String, bRequired As Boolean, sPrependIcon As String, iMaxLen As Int, sHint As String, props As Map) As VueElement
+	Dim el As VueElement = AddTextField(elID, vmodel, slabel,splaceholder, bRequired, sPrependIcon, iMaxLen, sHint, props)
+	el.SetTypeTelephone
+	Return el
+End Sub
+
+'<code>
+'add an email
+'Dim txtF As VueElement = vuetify.AddEmail1(Me, "r1c1", "txtF", "fldName", "Text Field", null)
+'vuetify.BindVueElement(txtF)
+'</code>
+Sub AddEmail1(elID As String, vmodel As String, slabel As String, props As Map) As VueElement
+	Return AddEmail(elID, vmodel, slabel, "", False, "", 0, "", props)
+End Sub
+
+
+'<code>
+'add a text field
+'Dim txtF As VueElement = vuetify.AddEmail(Me, "r1c1", "txtF", "fldName", "Text Field", "Text field placeholder", True, "", 0, "Enter a text field", null)
+'vuetify.BindVueElement(txtF)
+'</code>
+Sub AddEmail(elID As String, vmodel As String, slabel As String, splaceholder As String, bRequired As Boolean, sPrependIcon As String, iMaxLen As Int, sHint As String, props As Map) As VueElement
+	Dim el As VueElement = AddTextField(elID, vmodel, slabel,splaceholder, bRequired, sPrependIcon, iMaxLen, sHint, props)
+	el.SetTypeEmail
+	Return el
+End Sub
+
+
+'<code>
+'add a text field
+'Dim txtF As VueElement = vuetify.AddTextField1(Me, "r1c1", "txtF", "fldName", "Text Field", null)
+'vuetify.BindVueElement(txtF)
+'</code>
+Sub AddTextField1(elID As String, vModel As String, sLabel As String, props As Map) As VueElement
+	Dim parentID As String = CleanID(mName)
+	elID = elID.ToLowerCase
+	BANano.GetElement(parentID).Append($"<v-text-field id="${elID}"></v-v-text-field>"$)
+	Dim vtextfield As VueElement
+	vtextfield.Initialize(mCallBack, elID, elID)
+	vtextfield.Label = sLabel
+	vtextfield.VModel = vModel
+	vtextfield.SetData(vModel, "")
+	vtextfield.SetTypeText
+	vtextfield.SetOnEvent(mCallBack, "click:append", "")
+	vtextfield.SetOnEvent(mCallBack, "click:prepend", "")
+	vtextfield.SetOnEvent(mCallBack, "click:append-outer", "")
+	vtextfield.SetOnEvent(mCallBack, "click:prepend-inner", "")
+	vtextfield.SetOnEvent(mCallBack, "click:clear", "")
+	vtextfield.AssignProps(props)
+	Return vtextfield
+End Sub
+
+
+'<code>
+'add a text field
+'Dim txtF As VueElement = vuetify.AddTextField(Me, "r1c1", "txtF", "fldName", "Text Field", "Text field placeholder", True, "", 0, "Enter a text field", null)
+'vuetify.BindVueElement(txtF)
+'</code>
+Sub AddTextField(elID As String, vmodel As String, slabel As String, splaceholder As String, bRequired As Boolean, sPrependIcon As String, iMaxLen As Int, sHint As String, props As Map) As VueElement
+	Dim parentID As String = CleanID(mName)
+	elID = elID.ToLowerCase
+	BANano.GetElement(parentID).Append($"<v-text-field id="${elID}"></v-v-text-field>"$)
+	Dim vtextfield As VueElement
+	vtextfield.Initialize(mCallBack, elID, elID)
+	vtextfield.Label = slabel
+	vtextfield.Required = bRequired
+	vtextfield.PrependIcon = sPrependIcon
+	If iMaxLen > 0 Then
+		vtextfield.Counter = True
+	End If
+	vtextfield.Placeholder = splaceholder
+	vtextfield.Hint = sHint
+	vtextfield.VModel = vmodel
+	vtextfield.SetData(vmodel, "")
+	vtextfield.SetTypeText
+	vtextfield.SetOnEvent(mCallBack, "click:append", "")
+	vtextfield.SetOnEvent(mCallBack, "click:prepend", "")
+	vtextfield.SetOnEvent(mCallBack, "click:append-outer", "")
+	vtextfield.SetOnEvent(mCallBack, "click:prepend-inner", "")
+	vtextfield.SetOnEvent(mCallBack, "click:clear", "")
+	vtextfield.AssignProps(props)
+	Return vtextfield
+End Sub
+
+'<code>
+'add a text field
+'Dim txtF As VueElement = vuetify.AddTextArea1(Me, "r1c1", "txtF", "fldName", "Text Field")
+'vuetify.BindVueElement(txtF)
+'</code>
+Sub AddTextArea1(elID As String, vmodel As String, slabel As String, props As Map) As VueElement
+	Return AddTextArea(elID, vmodel, slabel, "", False, "", 0, "", props)
+End Sub
+
+
+'<code>
+'add a text field
+'Dim txtF As VueElement = vuetify.AddTextArea(Me, "r1c1", "txtF", "fldName", "Text Field", "Text field placeholder", True, "", 0, "Enter a text field", null)
+'vuetify.BindVueElement(txtF)
+'</code>
+Sub AddTextArea(elID As String, vmodel As String, slabel As String, splaceholder As String, bRequired As Boolean, sPrependIcon As String, iMaxLen As Int, sHint As String, props As Map) As VueElement
+	Dim parentID As String = CleanID(mName)
+	elID = elID.ToLowerCase
+	BANano.GetElement(parentID).Append($"<v-textarea id="${elID}"></v-textarea>"$)
+	Dim vtextfield As VueElement
+	vtextfield.Initialize(mCallBack, elID, elID)
+	vtextfield.Label = slabel
+	vtextfield.Required = bRequired
+	vtextfield.PrependIcon = sPrependIcon
+	If iMaxLen > 0 Then
+		vtextfield.Counter = True
+	End If
+	vtextfield.Placeholder = splaceholder
+	vtextfield.Hint = sHint
+	vtextfield.VModel = vmodel
+	vtextfield.SetData(vmodel, "")
+	vtextfield.SetTypeText
+	vtextfield.SetOnEvent(mCallBack, "click:append", "")
+	vtextfield.SetOnEvent(mCallBack, "click:prepend", "")
+	vtextfield.SetOnEvent(mCallBack, "click:append-outer", "")
+	vtextfield.SetOnEvent(mCallBack, "click:prepend-inner", "")
+	vtextfield.SetOnEvent(mCallBack, "click:clear", "")
+	vtextfield.AssignProps(props)
+	Return vtextfield
+End Sub
+
+Sub AddPassword1(fldName As String, vmodel As String, title As String, maxLen As Int, props As Map) As VueElement
+	Return AddPassword(fldName, vmodel, title, "", False, "", maxLen, "", props)
+End Sub
+
+Sub AddPassword(elID As String, vmodel As String, slabel As String, splaceholder As String, bRequired As Boolean, sPrependIcon As String, iMaxLen As Int, sHint As String, props As Map) As VueElement
+	Dim parentID As String = CleanID(mName)
+	elID = elID.ToLowerCase
+	BANano.GetElement(parentID).Append($"<v-text-field id="${elID}"></v-text-field>"$)
+	Dim bshowPassword As String = $"${elID}ShowPassword"$
+	bshowPassword = bshowPassword.tolowercase
+	Dim vtextfield As VueElement
+	vtextfield.Initialize(mCallBack, elID, elID)
+	vtextfield.Label = slabel
+	vtextfield.Required = bRequired
+	vtextfield.PrependIcon = sPrependIcon
+	If iMaxLen > 0 Then
+		vtextfield.Counter = True
+	End If
+	vtextfield.Placeholder = splaceholder
+	vtextfield.Hint = sHint
+	vtextfield.VModel = vmodel
+	vtextfield.SetData(vmodel, "")
+	vtextfield.SetTypePassword
+	vtextfield.AddAttr(":type", $"${bshowPassword} ? 'text' : 'password'"$)
+	vtextfield.AddAttr(":append-icon", $"${bshowPassword} ? 'mdi-eye' : 'mdi-eye-off'"$)
+	vtextfield.AddAttr("v-on:click:append", $"${bshowPassword} = !${bshowPassword}"$)
+	vtextfield.AddAttr("autocomplete", "off")
+	vtextfield.AssignProps(props)
+	vtextfield.SetData(bshowPassword, False)
+	'
+	vtextfield.SetOnEvent(mCallBack, "click", "")
+	vtextfield.SetOnEvent(mCallBack, "click.stop", "")
+	vtextfield.SetOnEvent(mCallBack, "click.prevent", "")
+	vtextfield.SetOnEvent(mCallBack, "change", "")
+	vtextfield.SetOnEvent(mCallBack, "click:prepend", "")
+	vtextfield.SetOnEvent(mCallBack, "click:append-outer", "")
+	vtextfield.SetOnEvent(mCallBack, "click:prepend-inner", "")
+	vtextfield.SetOnEvent(mCallBack, "click:clear", "")
+	
+	Return vtextfield
+End Sub
+
+
+Sub AddSwitch(sid As String, vmodel As String, slabel As String, truevalue As Object, falsevalue As Object, color As String, bInset As Boolean, props As Map) As VueElement
+	Dim parentID As String = CleanID(mName)
+	sid = sid.ToLowerCase
+	BANano.GetElement(parentID).Append($"<v-switch id="${sid}"></v-switch>"$)
+	Dim vswitch As VueElement
+	vswitch.Initialize(mCallBack, sid, sid)
+	vswitch.VModel = vmodel
+	vswitch.SetData(vmodel, "")
+	vswitch.label = slabel
+	If BANano.IsNull(truevalue) = False Or BANano.IsUndefined(truevalue) = False Then 
+		vswitch.Value = truevalue
+		vswitch.AddAttr("true-value", truevalue)
+	End If
+	If BANano.IsNull(falsevalue) = False Or BANano.IsUndefined(truevalue) = False Then 
+		vswitch.AddAttr("false-value", falsevalue)
+	End If
+	vswitch.AddAttr(":inset", bInset)
+	If color <> "" Then vswitch.Color = color
+	vswitch.AssignProps(props)
+	vswitch.SetOnEvent(mCallBack, "change", "")
+	If vmodel <> "" Then
+		vswitch.SetData(vmodel, truevalue)
+	End If
+	Return vswitch
+End Sub
+
+
+Sub AddRating(sid As String, vmodel As String, slength As Int, ssize As Int, bHover As Boolean, color As String, props As Map) As VueElement
+	Dim parentID As String = CleanID(mName)
+	sid = sid.ToLowerCase
+	BANano.GetElement(parentID).Append($"<v-rating id="${sid}"></v-rating>"$)
+	Dim vrating As VueElement
+	vrating.Initialize(mCallBack, sid, sid)
+	vrating.VModel = vmodel
+	vrating.SetData(vmodel, Null)
+	vrating.AddAttr("length", slength)
+	vrating.AddAttr("size", ssize)
+	vrating.AddAttr(":hover", bHover)
+	If color <> "" Then vrating.Color = color
+	vrating.AssignProps(props)
+	vrating.SetOnEvent(mCallBack, "input", "")
+	Return vrating
+End Sub
+
+Sub AddCheckBox(sid As String, vmodel As String, slabel As String, truevalue As Object, falsevalue As Object, color As String, props As Map) As VueElement
+	Dim parentID As String = CleanID(mName)
+	sid = sid.ToLowerCase
+	BANano.GetElement(parentID).Append($"<v-checkbox id="${sid}"></v-checkbox>"$)
+	Dim vcheckbox As VueElement
+	vcheckbox.Initialize(mCallBack, sid, sid)
+	vcheckbox.VModel = vmodel
+	vcheckbox.SetData(vmodel, Null)
+	vcheckbox.label = slabel
+	If BANano.IsNull(truevalue) = False Or BANano.IsUndefined(truevalue) = False Then
+		vcheckbox.Value = truevalue
+		vcheckbox.AddAttr("true-value", truevalue)
+	End If
+	If BANano.IsNull(falsevalue) = False Or BANano.IsUndefined(truevalue) = False Then
+		vcheckbox.AddAttr("false-value", falsevalue)
+	End If
+	If color <> "" Then vcheckbox.Color = color
+	vcheckbox.AssignProps(props)
+	vcheckbox.SetOnEvent(mCallBack, "click", "")
+	If vmodel <> "" Then 
+		vcheckbox.SetData(vmodel, truevalue)
+	End If
+	Return vcheckbox
+End Sub
+
+'<code>
+'Dim vimg As VueElement = vuetify.AddImage1(Me, "r1c1", "vimg", "vmodel", "Logo", "100px", "100px", null)
+'vuetify.BindVueElement(vimg)
+'
+'Sub vimg_click(e As BANanoEvent)
+'End Sub 
+'</code>
+Sub AddImage1(elID As String, vmodel As String, alt As String, sheight As String, swidth As String, props As Map) As VueElement
+	Dim parentID As String = CleanID(mName)
+	elID = elID.ToLowerCase
+	BANano.GetElement(parentID).Append($"<v-img id="${elID}"></v-img>"$)
+	Dim vimg As VueElement
+	vimg.Initialize(mCallBack, elID, elID)
+	If sheight <> "" Then vimg.MaxHeight = sheight
+	If swidth <> "" Then vimg.MaxWidth = swidth
+	vimg.AddAttr(":src", vmodel)
+	vimg.AddAttr(":lazy-src", vmodel)
+	vimg.Alt = alt
+	'vimg.AddAttr(":aspect-ratio", "16/9")
+	vimg.SetOnEvent(mCallBack, "click", "")
+	vimg.AssignProps(props)
+	Return vimg
+End Sub
+
+'<code>
+'Dim vimg As VueElement = vuetify.AddImage(Me, "r1c1", "vimg", "./assets/logo.png", "./assets/logo.png", "Logo", "100px", "100px", null)
+'vuetify.BindVueElement(vimg)
+'
+'Sub vimg_click(e As BANanoEvent)
+'End Sub 
+'</code>
+Sub AddImage(elID As String, src As String, lazysrc As String, alt As String, sheight As String, swidth As String, props As Map) As VueElement
+	Dim parentID As String = CleanID(mName)
+	elID = elID.ToLowerCase
+	BANano.GetElement(parentID).Append($"<v-img id="${elID}"></v-img>"$)
+	Dim vimg As VueElement
+	vimg.Initialize(mCallBack, elID, elID)
+	If sheight <> "" Then vimg.MaxHeight = sheight
+	If swidth <> "" Then vimg.MaxWidth = swidth
+	vimg.Src = src
+	vimg.Alt = alt
+	If lazysrc = "" Then 
+		vimg.AddAttr("lazy-src", src)
+	Else
+		vimg.AddAttr("lazy-src", lazysrc)
+	End If
+	'vimg.AddAttr(":aspect-ratio", "16/9")
+	vimg.SetOnEvent(mCallBack, "click", "")
+	vimg.AssignProps(props)
+	Return vimg
+End Sub
+
+'add spacer
+Sub AddSpacer1(elid As String, props As Map) As VueElement
+	Dim vlist As VueElement = AddVueElement1(elid, "v-spacer", "", "", "", props)
+	Return vlist
+End Sub
+
+'add divider
+Sub AddDivider1(elid As String, props As Map) As VueElement
+	Dim vlist As VueElement = AddVueElement1(elid, "v-divider", "", "", "", props)
+	Return vlist
+End Sub
+
+
+Sub AddList(elid As String, bDense As Boolean, bFlat As Boolean, bRounded As Boolean, props As Map) As VueElement
+	Dim vlist As VueElement = AddVueElement1(elid, "v-list", "", "", "", props)
+	vlist.Bind("rounded", bRounded)
+	vlist.Bind("flat", bFlat)
+	vlist.Bind("dense", bDense)
+	Return vlist
+End Sub
+
+
+Sub AddListItem(elid As String, props As Map) As VueElement
+	Return AddVueElement1(elid, "v-list-item", "", "", "", props)
+End Sub
+
+Sub AddFooter(elid As String, bPadless As Boolean, bFlat As Boolean, props As Map) As VueElement
+	Dim vlist As VueElement = AddVueElement1(elid, "v-footer", "", "", "", props)
+	vlist.Bind("padless", bPadless)
+	vlist.Bind("flat", bFlat)
+	Return vlist
+End Sub
+
+
+Sub AddHover(elid As String, props As Map) As VueElement
+	Return AddVueElement1(elid, "v-hover", "", "", "", props)
+End Sub
+
+
+Sub AddTimePicker(elid As String, vmodel As String, defaultValue As String, props As Map) As VueElement
+	Dim elx As VueElement =  AddVueElement1(elid, "v-time-picker", vmodel, "", "", props)
+	elx.SetData(vmodel, defaultValue)
+	Return elx
+End Sub
+
+
+Sub AddDatePicker(elid As String, vmodel As String, defaultValue As String, props As Map) As VueElement
+	Dim elx As VueElement =  AddVueElement1(elid, "v-date-picker", vmodel, "", "", props)
+	elx.SetData(vmodel, defaultValue)
+	Return elx
+End Sub
+
+
+Sub AddMenu(elid As String, returnValue As String, bCloseOnContentClick As Boolean, bCloseOnClick As Boolean, props As Map) As VueElement
+	Dim elx As VueElement =  AddVueElement1(elid, "v-menu", "", "", "", props)
+	elx.Bind("close-on-content-click", bCloseOnContentClick)
+	elx.Bind("close-on-click", bCloseOnClick)
+	If returnValue <> "" Then elx.Bind("return-value.sync",returnValue)
+	Return elx
+End Sub
+
+
+Sub AddDialog(elid As String, vmodel As String, bPersistent As Boolean, width As String, props As Map) As VueElement
+	Dim elx As VueElement =  AddVueElement1(elid, "v-dialog", vmodel, "", "", props)
+	elx.Width = width
+	elx.Persistent = bPersistent
+	elx.SetData(vmodel, False)
+	Return elx
+End Sub
+
+
+Sub AddChipWithAvatar(elID As String, src As String, label As String, bPill As Boolean, bClose As Boolean, color As String, chipprops As Map, avatarprops As Map, imgprops As Map) As VueElement
+	Dim parentID As String = CleanID(mName)
+	elID = elID.ToLowerCase
+	Dim spanID As String = $"${elID}span"$
+	Dim avarID As String = $"${elID}avatar"$
+	Dim imgID As String = $"${elID}img"$
+	'
+	BANano.GetElement(parentID).Append($"<v-chip id="${elID}"><v-avatar id="${avarID}"><v-img id="${imgID}"></v-img></v-avatar><span id="${spanID}"></span></v-chip>"$)
+	
+	Dim vchip As VueElement
+	vchip.Initialize(mCallBack, elID, elID)
+	vchip.AddAttr(":pill", bPill)
+	vchip.AddAttr(":close", bClose)
+	If color <> "" Then vchip.Color = color
+	vchip.AssignProps(chipprops)
+	
+	vchip.SetOnEvent(mCallBack, "click", $"'${elID}'"$)
+	vchip.SetOnEvent(mCallBack, "click:close", $"'${elID}'"$)
+	'
+	Dim vavatar As VueElement
+	vavatar.Initialize(mCallBack, avarID, avarID)
+	vavatar.AddAttr(":left", True)
+	vavatar.AssignProps(avatarprops)
+	'
+	Dim vimg As VueElement
+	vimg.Initialize(mCallBack, imgID, imgID)
+	vimg.Src = src
+	vimg.lazysrc = src
+	vimg.AssignProps(imgprops)
+	'
+	Dim span As VueElement
+	span.Initialize(mCallBack, spanID, spanID)
+	span.Caption = label
+	'
+	vchip.BindVueElement(span)
+	vchip.BindVueElement(vavatar)
+	vchip.BindVueElement(vimg)
+	'
+	Return vchip
+End Sub
+
+
+Sub AddChipWithIcon(elID As String, sicon As String, label As String, bPill As Boolean, bClose As Boolean, color As String, chipprops As Map, iconprops As Map) As VueElement
+	Dim parentID As String = CleanID(mName)
+	elID = elID.ToLowerCase
+	Dim iconID As String = $"${elID}icon"$
+	Dim spanID As String = $"${elID}span"$
+	BANano.GetElement(parentID).Append($"<v-chip id="${elID}"><v-icon id="${iconID}"></v-icon><span id="${spanID}"></span></v-chip>"$)
+	'
+	Dim vchip As VueElement
+	vchip.Initialize(mCallBack, elID, elID)
+	vchip.AddAttr(":pill", bPill)
+	vchip.AddAttr(":close", bClose)
+	If color <> "" Then vchip.Color = color
+	vchip.SetOnEvent(mCallBack, "click", $"'${elID}'"$)
+	vchip.SetOnEvent(mCallBack, "click:close", $"'${elID}'"$)'
+	'
+	Dim vicon As VueElement
+	vicon.Initialize(mCallBack, iconID, iconID)
+	vicon.caption = sicon
+	'
+	Dim span As VueElement
+	span.Initialize(mCallBack, spanID, spanID)
+	span.Caption = label
+	'
+	vchip.AssignProps(chipprops)
+	vicon.AssignProps(iconprops)
+	'
+	vchip.BindVueElement(vicon)
+	vchip.BindVueElement(span)
+	Return vchip
+End Sub
+
+Sub AddRadioGroup(elID As String, vmodel As String, sLabel As String, bRow As Boolean, bMultiple As Boolean, sourceTable As String, key As String, value As String, colorField As String, radiogroupprops As Map, radioprops As Map) As VueElement
+	Dim parentID As String = CleanID(mName)
+	elID = elID.ToLowerCase
+	Dim radioID As String = $"${elID}radio"$
+	BANano.GetElement(parentID).Append($"<v-radio-group id="${elID}"><v-radio id="${radioID}"></v-radio></v-radio-group>"$)
+	sourceTable = sourceTable.ToLowerCase
+	key = key.ToLowerCase
+	value = value.ToLowerCase
+	
+	colorField = colorField.tolowercase
+	Dim vradiogroup As VueElement
+	vradiogroup.Initialize(mCallBack, elID, elID)
+	vradiogroup.label = sLabel
+	vradiogroup.Multiple = bMultiple
+	vradiogroup.AddAttr(":row", bRow)
+	vradiogroup.AddAttr(":column", Not(bRow))
+	vradiogroup.VModel = vmodel
+	vradiogroup.AssignProps(radiogroupprops)
+	Dim vradio As VueElement
+	vradio.Initialize(mCallBack, radioID, radioID)
+	vradio.VFor = $"item in ${sourceTable}"$
+	vradio.BindKey($"item.${key}"$)
+	vradio.Bind("label", $"item.${value}"$)
+	vradio.Bind("value", $"item.${key}"$)
+	If colorField <> "" Then vradio.Bind("color", $"item.${colorField}"$)
+	vradio.AssignProps(radioprops)
+	If bMultiple Then
+		Dim lst As List = NewList
+		vradiogroup.SetData(vmodel, lst)
+	Else
+		vradiogroup.SetData(vmodel, Null)
+	End If
+	Dim lst As List = NewList
+	vradiogroup.SetData(sourceTable, lst)
+	vradiogroup.SetOnEvent(mCallBack, "change", $"item.${key}"$)
+	vradiogroup.BindVueElement(vradio)
+	Return vradiogroup
+End Sub
+
+Sub AddFab(elID As String, eIcon As String, eColor As String, bOutlined As Boolean, btnprops As Map, iconprops As Map) As VueElement
+	Dim np As Map = CreateMap()
+	np.Put(":fab", True)
+	np.Put(":outlined", bOutlined)
+	If BANano.IsNull(btnprops) = False Then
+		For Each k As String In btnprops.Keys
+			Dim v As String = btnprops.Get(k)
+			np.Put(k, v)
+		Next
+	End If
+	Dim ip As Map = CreateMap()
+	ip.Put(":fab", True)
+	If BANano.IsNull(iconprops) = False Then
+		For Each k As String In iconprops.Keys
+			Dim v As String = iconprops.Get(k)
+			ip.Put(k, v)
+		Next
+	End If
+	Dim btn As VueElement = AddButtonWithIcon(elID, eIcon, eColor, np, ip)
+	Return btn
+End Sub
+
+Sub setMXAuto(b As Boolean)
+	If b = False Then Return
+	AddClass("mx-auto")
+End Sub
+
+
+Sub setMarginTop(v As String)
+	AddStyle("margin-top", v)
+End Sub
+
+Sub setMarginBottom(v As String)
+	AddStyle("margin-bottom", v)
+End Sub
+
+Sub setMarginLeft(v As String)
+	AddStyle("margin-left", v)
+End Sub
+
+Sub setMarginRight(v As String)
+	AddStyle("margin-right", v)
+End Sub
+
+
+Sub setPaddingTop(v As String)
+	AddStyle("padding-top", v)
+End Sub
+
+Sub setPaddingBottom(v As String)
+	AddStyle("padding-bottom", v)
+End Sub
+
+Sub setPaddingLeft(v As String)
+	AddStyle("padding-left", v)
+End Sub
+
+Sub setPaddingRight(v As String)
+	AddStyle("padding-right", v)
+End Sub
+
+Sub setMiniVariantWidth(w As String)
+	SetAttr("mini-variant-width", w)
+End Sub
+
+Sub setExpandOnHover(eoh As String)
+	SetAttr("expand-on-hover", eoh)
+End Sub
+
+'<code>
+'Dim drw as VueElement = vuetify.AddDrawer(Me, "vapp", "drw1", "drw1show", False, "", False, null)
+'drw.App = True
+'drw.Width = 300
+'vuetify.BindVueElement(drw)
+'</code>
+Sub AddDrawer(elID As String, vmodel As String, bVisible As Boolean, Color As String, bRight As Boolean, props As Map) As VueElement
+	Dim elx As VueElement = AddVueElement1(elID, "v-navigation-drawer", vmodel, "", Color, props)
+	elx.Right = bRight
+	elx.SetData(vmodel, bVisible)
+	Return elx
+End Sub
+
+Sub AddNavigationDrawer(elID As String, vmodel As String) As VueElement
+	Return AddVueElement1(elID, "v-navigation-drawer", vmodel, "", "", Null)
+End Sub
+
+Sub AddOverlay(elID As String, vmodel As String, props As Map) As VueElement
+	Return AddVueElement1(elID, "v-overlay", vmodel, "", "", props)
+End Sub
+
+Sub setDisableRouteWatcher(b As Object)
+	AddAttr(":disable-route-watcher", b)
+End Sub
+
+
+Sub AddToolbarTitle(elID As String, Caption As String, Color As String, props As Map) As VueElement
+	Return AddVueElement1(elID, "v-toolbar-title", "", Caption, Color, props)
+End Sub
+
+
+Sub AddSnackBar(elID As String, vmodel As String, Caption As String, color As String, props As Map) As VueElement
+	Dim elx As VueElement = AddVueElement1(elID, "v-snackbar", vmodel, Caption, color, props)
+	Return elx
+End Sub
+
+Sub AddNav(elID As String) As VueElement
+	Return AddVueElement1(elID, "nav", "", "", "", Null)
+End Sub
+
+Sub AddAppBar(elID As String) As VueElement
+	Dim elx As VueElement = AddVueElement1(elID, "v-app-bar", "", "", "", Null)
+	Return elx
+End Sub
+
+Sub AddAppBarNavIcon(elID As String) As VueElement
+	Return AddVueElement1(elID, "v-app-bar-nav-icon", "", "", "", Null)
+End Sub
+
+Sub setIcon(sicon As String)
+	AddAttr("icon", sicon)
+End Sub
+
+Sub setIconColor(sicon As String)
+	AddAttr("icon-color", sicon)
+End Sub
+
+
+'Add a row to the parent
+'<code>
+'AddRow(Me, "parent", 1)
+'</code>
+Sub AddRow(rowpos As Int) As VueElement
+	Dim parentID As String = CleanID(mName)
+	'
+	Dim rowkey As String = $"${parentID}r${rowpos}"$
+	BANano.GetElement(parentID).Append($"<v-row id="${rowkey}"></v-row>"$)
+	Dim mbutton As VueElement
+	mbutton.Initialize(mCallBack, rowkey, rowkey)
+	mbutton.SetOnEvent(mCallBack, "click", "")
+	Return mbutton
+End Sub
+
+'Add a column to the parent with sizes
+'<code>
+'AddCol(Me, "parent", 1, "12", "6", "6", "6")
+'</code>
+Sub AddCol(colpos As Int, xs As String, sm As String, md As String, lg As String, xl As String) As VueElement
+	Dim parentID As String = CleanID(mName)
+	'
+	Dim colKey As String = $"${parentID}c${colpos}"$
+	BANano.GetElement(parentID).Append($"<v-col id="${colKey}"></v-col>"$)
+	Dim mbutton As VueElement
+	mbutton.Initialize(mCallBack, colKey, colKey)
+	mbutton.AddSizes(xs, sm, md, lg, xl)
+	mbutton.SetOnEvent(mCallBack, "click", "")
+	Return mbutton
+End Sub
+
+Sub AddTimeLine(elID As String) As VueElement
+	Dim elx As VueElement = AddVueElement1(elID, "v-timeline", "", "", "", Null)
+	Return elx
+End Sub
+
+Sub AddTimeLineItem(elID As String) As VueElement
+	Dim elx As VueElement = AddVueElement1(elID, "v-timeline-item", "", "", "", Null)
+	Return elx
+End Sub
+
+Sub setAlignTop(b As Object)
+	AddAttr(":align-top", b)
+End Sub
+
+Sub setFillDot(b As Object)
+	AddAttr(":fill-dot", b)
+End Sub
+
+Sub setHideDot(b As Object)
+	AddAttr(":hide-dot", b)
+End Sub
+
+Sub AddSlideXReverseTransition(elID As String) As VueElement
+	Dim elx As VueElement = AddVueElement1(elID, "v-slide-x-reverse-transition", "", "", "", Null)
+	Return elx
+End Sub
+
+Sub setGroup(b As Object)
+	AddAttr("group", b)
+End Sub
+
+Sub setHideOnLeave(b As Object)
+	AddAttr("hide-on-leave", b)
 End Sub

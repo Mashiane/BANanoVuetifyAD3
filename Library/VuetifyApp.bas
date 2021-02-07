@@ -32,6 +32,7 @@ Sub Class_Globals
 	Public Route As BANanoObject
 	Public refs As BANanoObject
 	Public RouterView As BANanoObject
+	public GoogleMapKey As String
 	'
 	Public const BORDER_DEFAULT As String = ""
 	Public const BORDER_DASHED As String = "dashed"
@@ -1469,8 +1470,12 @@ End Sub
 
 'focus on a ref
 Sub SetFocus(refID As String) 
-	refID = refID.tolowercase
-	refs.GetField(refID).RunMethod("focus", Null)
+	Try
+		refID = refID.tolowercase
+		refs.GetField(refID).RunMethod("focus", Null)
+	Catch
+		Log(LastException)
+	End Try	
 End Sub
 
 'nullify the file select
@@ -1545,20 +1550,38 @@ Sub SetStorePush(listName As String, item As Object)
 	store.GetField(listName).RunMethod("push", item)
 End Sub
 
+'add item at end of the list
+Sub SetDataPush(listName As String, item As Object)
+	listName = listName.ToLowerCase
+	data.GetField(listName).RunMethod("push", item)
+End Sub
+
 'add item at beginning of list
 Sub SetStoreUnshift(lstname As String, obj As Object)
 	lstname = lstname.tolowercase
 	store.GetField(lstname).RunMethod("unshift", obj)
 End Sub
 
-'remobe item at beginning of list
+'add item at beginning of list
+Sub SetDataUnshift(lstname As String, obj As Object)
+	lstname = lstname.tolowercase
+	data.GetField(lstname).RunMethod("unshift", obj)
+End Sub
+
+'remove item at beginning of list
 Sub SetStoreShift(lstname As String)
 	lstname = lstname.tolowercase
 	store.GetField(lstname).RunMethod("shift", Null)
 End Sub
 
+'remove item at beginning of list
+Sub SetDataShift(lstname As String)
+	lstname = lstname.tolowercase
+	data.GetField(lstname).RunMethod("shift", Null)
+End Sub
 
-'pop an item from a saved state item
+
+'remove an item from the end of the list
 Sub SetDataPop(lstname As String)
 	lstname = lstname.tolowercase
 	data.GetField(lstname).RunMethod("pop", Null)
@@ -1570,24 +1593,6 @@ Sub GetDataFirst(lstName As String) As Object
 	Dim lst As List = data.GetField(lstName).result
 	Dim obj As Object = lst.Get(0)
 	Return obj
-End Sub
-
-'add item at end of the list
-Sub SetDataPush(listName As String, item As Object)
-	listName = listName.ToLowerCase
-	data.GetField(listName).RunMethod("push", item)
-End Sub
-
-'add item at beginning of list
-Sub SetDataUnshift(lstname As String, obj As Object)
-	lstname = lstname.tolowercase
-	data.GetField(lstname).RunMethod("unshift", obj)
-End Sub
-
-'remove item at beginning of list
-Sub SetDataShift(lstname As String)
-	lstname = lstname.tolowercase
-	data.GetField(lstname).RunMethod("shift", Null)
 End Sub
 
 'splice an array, add item at a position
@@ -1933,8 +1938,17 @@ Sub FormValidate(formName As String) As Boolean
 	Return b
 End Sub
 
+'reset the validation and perform validation
+Sub FormValidate1(formName As String) As Boolean
+	FormResetValidation(formName)
+	Return FormValidate(formName)
+End Sub
+
+
 'get the active component refs
 Sub GetRefs As BANanoObject
+	'get the router view
+	RouterView = refs.GetField(RouterViewName)
 	Dim rKey As String = "$refs"
 	Dim refsx As BANanoObject = RouterView.GetField(rKey)
 	Return refsx
@@ -1942,6 +1956,7 @@ End Sub
 
 'get the active component slots
 Sub GetSlots As BANanoObject
+	RouterView = refs.GetField(RouterViewName)
 	Dim rKey As String = "$slots"
 	Dim refsx As BANanoObject = RouterView.GetField(rKey)
 	Return refsx
@@ -1972,9 +1987,26 @@ Sub NavigateTo(sPath As String)
 	End If
 End Sub
 
+'Use router To navigate
+Sub RouterReplace(sPath As String)
+	'get the current path
+	sPath = sPath.tolowercase
+	Dim sprev As String = getCurrentPath
+	If sPath.EqualsIgnoreCase(sprev) = False Then
+		Dim namem As Map = CreateMap()
+		namem.put("path", sPath)
+		VueRouter.RunMethod("replace", Array(namem))
+	End If
+End Sub
+
 'navigate back
 Sub GoBack() 
 	VueRouter.RunMethod("push", Array(-1))
+End Sub
+
+'navigate forward
+Sub GoForward() 
+	VueRouter.RunMethod("push", Array(1))
 End Sub
 
 
@@ -2509,10 +2541,17 @@ Sub AddAppDrawer(Module As Object, elID As String, vmodel As String, bVisible As
 	Return elx
 End Sub
 
+Sub AddNavigationDrawer(Module As Object, parentID As String, elID As String, vmodel As String) As VueElement
+	Return AddVueElement(Module, parentID, elID, "v-navigation-drawer", vmodel, "", "", Null)
+End Sub
+
 Sub AddOverlay(Module As Object, parentID As String, elID As String, vmodel As String, props As Map) As VueElement
 	Return AddVueElement(Module, parentID, elID, "v-overlay", vmodel, "", "", props)
 End Sub
 
+Sub AddNav(Module As Object, parentID As String, elID As String) As VueElement
+	Return AddVueElement(Module, parentID, elID, "nav", "", "", "", Null)
+End Sub
 
 Sub AddToolbarTitle(Module As Object, parentID As String, elID As String, Caption As String, Color As String, props As Map) As VueElement
 	Return AddVueElement(Module, parentID, elID, "v-toolbar-title", "", Caption, Color, props)
@@ -2623,6 +2662,10 @@ Sub AddHamburger(Module As Object, parentID As String, elID As String, color As 
 	Return AddVueElement(Module, parentID, elID, "v-app-bar-nav-icon", "", "", color, props)
 End Sub
 
+Sub AddAppBarNavIcon(Module As Object, parentID As String, elID As String) As VueElement
+	Return AddVueElement(Module, parentID, elID, "v-app-bar-nav-icon", "", "", "", Null)
+End Sub
+
 Sub AddToolbar(Module As Object, parentID As String, elID As String, color As String, props As Map) As VueElement
 	Return AddVueElement(Module, parentID, elID, "v-toolbar", "", "", color, props)
 End Sub
@@ -2630,6 +2673,22 @@ End Sub
 Sub AddAppBar(Module As Object, elID As String, color As String, props As Map) As VueElement
 	Dim elx As VueElement = AddVueElement(Module, AppName, elID, "v-app-bar", "", "", color, props)
 	elx.Bind("app", True)
+	Return elx
+End Sub
+
+Sub AddSlideXReverseTransition(Module As Object, parentID As String, elID As String) As VueElement
+	Dim elx As VueElement = AddVueElement(Module, parentID, elID, "v-slide-x-reverse-transition", "", "", "", Null)
+	Return elx
+End Sub
+
+
+Sub AddTimeLine(Module As Object, parentID As String, elID As String) As VueElement
+	Dim elx As VueElement = AddVueElement(Module, parentID, elID, "v-timeline", "", "", "", Null)
+	Return elx
+End Sub
+
+Sub AddTimeLineItem(Module As Object, parentID As String, elID As String) As VueElement
+	Dim elx As VueElement = AddVueElement(Module, parentID, elID, "v-timeline-item", "", "", "", Null)
 	Return elx
 End Sub
 
@@ -2738,7 +2797,16 @@ Sub AddVueElement(Module As Object, parentID As String, elID As String, tag As S
 	ve.SetOnEvent(Module, "click:append-outer", "")
 	ve.SetOnEvent(Module, "click:prepend-inner", "")
 	ve.SetOnEvent(Module, "click:clear", "")
-	
+	ve.SetOnEvent(Module, "dblclick", "")
+	ve.SetOnEvent(Module, "MouseMove", "")
+	ve.SetOnEvent(Module, "MouseOut", "")
+	ve.SetOnEvent(Module, "KeyUp", "")
+	ve.SetOnEvent(Module, "KeyPress", "")
+	ve.SetOnEvent(Module,  "Click.Alt", "")
+	ve.SetOnEvent(Module,  "Click.Shift", "")
+	ve.SetOnEvent(Module, "start", "")
+	ve.SetOnEvent(Module, "end", "")
+	ve.SetOnEvent(Module, "click:close", "")
 	Return ve
 End Sub
 
@@ -3060,7 +3128,7 @@ Sub AddAvatarWithBadge(Module As Object, parentID As String, elID As String, img
 	'
 	Dim avatar As VueElement
 	avatar.Initialize(Module, avatarid, avatarid)
-	if avatarSize <> 0 then avatar.AddAttr("size", avatarSize)
+	If avatarSize <> 0 Then avatar.AddAttr("size", avatarSize)
 	avatar.AssignProps(avatarprops)
 	img.SetOnEvent(Module, "click", "")
 	'
@@ -4107,7 +4175,7 @@ Sub AddFileInput(Module As Object, parentID As String, elID As String, vmodel As
 		If bMultiple Then
 			vfileinput.SetData(vmodel, NewList)
 		Else
-			vfileinput.SetData(vmodel, null)	
+			vfileinput.SetData(vmodel, Null)	
 		End If
 	End If
 	Return vfileinput
@@ -4715,4 +4783,63 @@ End Sub
 Sub IsVisible(ve As VueElement, bShow As Boolean)
 	Dim vkey As String = ve.VShow
 	SetData(vkey, bShow)
+End Sub
+
+Sub UseGoogleMaps(gk As String)
+	GoogleMapKey = gk
+	'ensure that the module is loaded
+	If ModuleExist("googlemap") = False Then
+		Dim VueGoogleMaps As BANanoObject
+		VueGoogleMaps.Initialize("VueGoogleMaps")
+		
+		Dim load As Map = CreateMap()
+		load.Put("key", GoogleMapKey)
+		load.Put("libraries", "places")
+		'
+		Dim VueGoogleMapsOptions As Map = CreateMap()
+		VueGoogleMapsOptions.Put("load", load)
+		VueGoogleMapsOptions.Put("installComponents", True)
+		Use1(VueGoogleMaps, VueGoogleMapsOptions)
+		AddModule("googlemap")
+	End If
+End Sub
+
+
+'get the data at the position
+Sub GetDataAtPosition(lstName As String, pos As Int) As Map
+	lstName = lstName.tolowercase
+	Dim res As List = data.GetField(lstName).Result
+	Dim out As Map = res.Get(pos)
+	Return out
+End Sub
+
+'return the position of the data with these properties
+Sub GetDataPositionWhere(lstName As String, props As Map) As Int
+	lstName = lstName.tolowercase
+	Dim res As List = data.GetField(lstName).Result
+	Dim rCnt As Int = 0
+	Dim rTot As Int = res.Size - 1
+	Dim pTot As Int = props.size
+	For rCnt = 0 To rTot
+		Dim iFound As Int = 0
+		'get the record at the position
+		Dim rec As Map = res.Get(rCnt)
+		'loop through each position
+		For Each k As String In props.Keys
+			Dim v As String = props.GetDefault(k,"")
+			'does the field at that position match
+			If rec.ContainsKey(k) Then
+				Dim recvalue As String = rec.GetDefault(k, "")
+				v = BANanoShared.CStr(v)
+				recvalue = BANanoShared.CStr(recvalue)
+				If recvalue.EqualsIgnoreCase(v) Then
+					iFound = iFound + 1
+				End If
+			End If
+		Next
+		If iFound = pTot Then
+			Return rCnt
+		End If
+	Next
+	Return -1
 End Sub

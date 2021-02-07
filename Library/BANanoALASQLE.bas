@@ -1019,7 +1019,7 @@ Sub SelectDistinctWhere(tblfields As List, tblWhere As Map, operators As List, o
 		sb.Append(EscapeField(col))
 		sb.Append($" ${oper} ?"$)
 	Next
-	If orderBy <> Null Then
+	If orderBy.IsInitialized Then
 		'order by
 		Dim stro As String = JoinFields(",", orderBy)
 		If stro.Length > 0 Then
@@ -1084,7 +1084,7 @@ Sub SelectWhere(tblfields As List, tblWhere As Map, operators As List, orderBy A
 		Dim opr As String = operators.Get(i)
 		sb.Append($" ${opr} ?"$)
 	Next
-	If orderBy <> Null Then
+	If orderBy.IsInitialized Then
 		'order by
 		Dim stro As String = JoinFields(",", orderBy)
 		If stro.Length > 0 Then
@@ -1158,7 +1158,7 @@ Sub SelectWhere1(tblfields As List, tblWhere As Map, operators As List, AndOr As
 		Dim opr As String = operators.Get(i)
 		sb.Append($" ${opr} ?"$)
 	Next
-	If orderBy <> Null Then
+	If orderBy.IsInitialized Then
 		'order by
 		Dim stro As String = JoinFields(",", orderBy)
 		If stro.Length > 0 Then
@@ -1176,6 +1176,83 @@ Sub SelectWhere1(tblfields As List, tblWhere As Map, operators As List, AndOr As
 	affectedRows = 0
 	Return Me
 End Sub
+
+'return a sql to select record of table where one exists
+'<code>
+''select where
+'Dim sw As Map = CreateMap()
+'sw.put("id", 10)
+'sw.put("age", 20)
+'dbConnect.SelectWhereAscDesc(array("*"), sw, array(">=", "<"), array("name"), array("name"))
+'dbConnect.result = db.ExecuteWait(dbConnect.query, dbConnect.args)
+'dbConnect.FromJSON
+'Select Case dbConnect.OK
+'Case False
+'Dim strError As String = dbConnect.Error
+'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
+'End Select
+'</code>
+Sub SelectWhereAscDesc(tblfields As List, tblWhere As Map, operators As List, orderBy As List, AscDesc As List) As BANanoALASQLE
+	If Schema.Size = 0 Then
+		Log($"BANanoALASQLE.SelectWhereAscDesc: '${TableName}' schema is not set!"$)
+	End If
+	If operators = Null Then operators = EQOperators(tblWhere)
+	Dim listOfTypes As List = GetMapTypes(tblWhere)
+	Dim listOfValues As List = GetMapValues(tblWhere)
+	'are we selecting all fields or just some
+	Dim fld1 As String = tblfields.Get(0)
+	Dim selFIelds As String = ""
+	Select Case fld1
+		Case "*"
+			selFIelds = "*"
+		Case Else
+			selFIelds = JoinFields(",", tblfields)
+	End Select
+	Dim sb As StringBuilder
+	sb.Initialize
+	sb.Append($"SELECT ${selFIelds} FROM ${EscapeField(TableName)} WHERE "$)
+	Dim i As Int
+	Dim iWhere As Int = tblWhere.Size - 1
+	For i = 0 To iWhere
+		If i > 0 Then
+			sb.Append(" AND ")
+		End If
+		Dim col As String = tblWhere.GetKeyAt(i)
+		Dim oper As String = operators.Get(i)
+		sb.Append(EscapeField(col))
+		sb.Append($" ${oper} ?"$)
+	Next
+	If orderBy.IsInitialized Then
+		'order by
+		Dim xOrder As List
+		xOrder.Initialize
+		'
+		Dim obTot As Int = orderBy.Size - 1
+		Dim obCnt As Int
+		For obCnt = 0 To obTot
+			Dim xfld As String = orderBy.Get(obCnt)
+			If AscDesc.IsInitialized Then
+				'does the field exist in sort order
+				If AscDesc.IndexOf(xfld) >= 0 Then
+					xfld = EscapeField(xfld) & " DESC"
+					xOrder.Add(xfld)
+				End If
+			Else
+				xOrder.Add(EscapeField(xfld))
+			End If
+		Next
+		Dim stro As String = Join(",", xOrder)
+		If stro.Length > 0 Then
+			sb.Append(" ORDER BY ").Append(stro)
+		End If
+	End If
+	query = sb.tostring
+	args = listOfValues
+	types = listOfTypes
+	command = "select"
+	Return Me
+End Sub
+
 
 
 'join list to mv string
@@ -1218,7 +1295,7 @@ Sub SelectAll(tblfields As List, orderBy As List) As BANanoALASQLE
 	Dim sb As StringBuilder
 	sb.Initialize
 	sb.Append($"SELECT ${selFIelds} FROM ${EscapeField(TableName)}"$)
-	If orderBy <> Null Then
+	If orderBy.IsInitialized Then
 		'order by
 		Dim stro As String = JoinFields(",", orderBy)
 		If stro.Length > 0 Then
