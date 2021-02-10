@@ -34,6 +34,6 @@ ModuleClosedNodes6=
 ModuleClosedNodes7=
 ModuleClosedNodes8=
 ModuleClosedNodes9=
-NavigationStack=VueComponent,GetElementByData,435,0,VueComponent,AddElement,464,0,VueElement,AddBtn,6509,0,VueElement,AddComponent,6519,4,VueElement,AddButtonWithIcon,6508,0,VuetifyApp,ModuleExist,1325,0,VuetifyApp,AddRoute,1369,0,VuetifyApp,AddSlot,2759,0,VuetifyApp,AddComponent,2776,1,VuetifyApp,AddAnchor,2767,0,Main,Process_Globals,11,0
+NavigationStack=VueElement,SetData,1403,0,VueElement,setDataSource,2084,0,VueElement,BindVueElement,1700,0,VueElement,setVModel,2122,0,VueElement,setRules,2822,0,VueElement,setItems,4271,0,VueElement,ClearItems,4700,0,VueElement,AddListViewTemplate,5179,0,VueElement,Class_Globals,183,0,VueElement,DesignerCreateView,957,1,Main,Process_Globals,9,0
 SelectedBuild=0
 VisibleModules=

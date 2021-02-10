@@ -3,6 +3,9 @@ function BANanoMSSQL($command, $query, $args, $types){
 	$resp = array(); 
 	header('Access-Control-Allow-Origin: *'); 
 	header('content-type: application/json; charset=utf-8'); 
+	header("Access-Control-Allow-Credentials: true"); 
+	header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS'); 
+	header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token , Authorization'); 
 	require_once './assets/mssqlconfig.php'; 
 	$serverName = DB_HOST; 
 	$uid = DB_USER; 
@@ -61,6 +64,9 @@ function BANanoMSSQLDynamic($command, $query, $args, $types, $host, $username, $
 	$resp = array(); 
 	header('Access-Control-Allow-Origin: *'); 
 	header('content-type: application/json; charset=utf-8'); 
+	header("Access-Control-Allow-Credentials: true"); 
+	header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS'); 
+	header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token , Authorization'); 
 	$conn=null; 
 	try { 
 		$conn = new PDO("sqlsrv:server=$host;database=$dbname", $username, $password); 
@@ -137,6 +143,9 @@ function BANanoMySQL($command, $query, $args, $types) {
 	$resp = array(); 
 	header('Access-Control-Allow-Origin: *'); 
 	header('content-type: application/json; charset=utf-8'); 
+	header("Access-Control-Allow-Credentials: true"); 
+	header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS'); 
+	header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token , Authorization'); 
 	require_once './assets/mysqlconfig.php'; 
     //connect To MySQL 
     $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
@@ -218,6 +227,9 @@ function BANanoMySQLDynamic($command, $query, $args, $types, $host, $username, $
 	$resp = array(); 
 	header('Access-Control-Allow-Origin: *'); 
 	header('content-type: application/json; charset=utf-8'); 
+	header("Access-Control-Allow-Credentials: true"); 
+	header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS'); 
+	header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token , Authorization'); 
 	//connect To MySQL 
     $conn = new mysqli($host, $username, $password); 
     //we cannot connect Return an error 
@@ -433,6 +445,9 @@ function BANanoSQLite($dbname,$command,$query,$args,$types) {
    	//set the header 
 	header('Access-Control-Allow-Origin: *'); 
 	header('content-type: application/json; charset=utf-8'); 
+	header("Access-Control-Allow-Credentials: true"); 
+	header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS'); 
+	header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token , Authorization'); 
    	$db = new SQLite3($dbname, SQLITE3_OPEN_CREATE | SQLITE3_OPEN_READWRITE); 
 	if(!$db) { 
   		$response = $db->lastErrorMsg(); 

@@ -25,16 +25,16 @@ Sub Initialize
 	path = fb.path
 	'
 	firebase.Initialize
-	firebase.apiKey = "(redacted)"
-	firebase.authDomain = "(redacted)"
-	firebase.databaseURL = "(redacted)"
-	firebase.projectId = "(redacted)"
-	firebase.storageBucket = "(redacted)"
-	firebase.messagingSenderId = "(redacted)"
-	firebase.appId = "(redacted)"
-	firebase.measurementId = "(redacted)"
-	firebase.vapidKey = "(redacted)"
-	firebase.ServerKey = "(redacted)"
+	firebase.apiKey = "AIzaSyCMZcx29liQ9jDzU_fiXfTcd-Rcf_d4BSc"
+	firebase.authDomain = "robtrack-51a53.firebaseapp.com"
+	firebase.databaseURL = "https://robtrack-51a53-default-rtdb.firebaseio.com"
+	firebase.projectId = "robtrack-51a53"
+	firebase.storageBucket = "robtrack-51a53.appspot.com"
+	firebase.messagingSenderId = "521955206285"
+	firebase.appId = "1:521955206285:web:4371b85c9ea07c312deec4"
+	firebase.measurementId = "G-MRMG60W701"
+	firebase.vapidKey = "BINaqB_lBD1gjcLmOIY8qnXfvpJvhHtrbVpDKst03OwunvK7N-yLeygy3C4CqCt_sWZchj2H5CxzRMTFC8Azl9I"
+	firebase.ServerKey = "AAAAeYb0ZI0:APA91bH-XsAgorTL9MSesFGaOd0UOyQTU3sTrw3SSw5f-2NGruCecku_5ftbT91WKjyUCZG_Nn1zRx1cHihTHlh52ualG90KoOinhOD3Q2B4iA7P9fw20cgLZNJpBhEA9cdpoU5DP2Wl"
 	
 	'add a container
 	Dim cont As VueElement = vuetify.AddContainer(Me, fb.Here, "fbcont", True)
@@ -143,7 +143,7 @@ Sub subscriptionsLV_leftclick(item As Map)
 	Dim response As BANanoFetchResponse
 	Dim error As BANanoObject
 	
-	Dim fetch As BANanoFetch = messaging.sendToTopic(stopic, stopic, stopic, "./assets/firebase-logo.png")
+	Dim fetch As BANanoFetch = messaging.sendToTopic(stopic, stopic, stopic, Null, "./assets/firebase-logo.png")
 	banano.Await(fetch)
 	fetch.Then(response)
 	'
@@ -338,7 +338,7 @@ Sub btnSend_click(e As BANanoEvent)
 	Dim error As BANanoObject
 	Dim data As BANanoJSONParser
 	
-	Dim fetch As BANanoFetch = messaging.sendToToken(stoken, stitle, smessage, "./assets/firebase-logo.png")
+	Dim fetch As BANanoFetch = messaging.sendToToken(stoken, stitle, smessage, Null,  "./assets/firebase-logo.png")
 	banano.Await(fetch)
 	fetch.Then(response)
 	fetch.Return(response.json)

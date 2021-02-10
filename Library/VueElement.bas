@@ -745,9 +745,6 @@ Sub getBold As Boolean
 	Return bBold
 End Sub
 
-
-
-
 Sub setFloat(varValue As String)
 	If BANano.IsNull(varValue) Then varValue = ""
 	stFloat = varValue
@@ -965,8 +962,8 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	AddAttr("v-html", stVHtml)
 	AddAttr("v-if", stVIf)
 	AddAttr("label", stLabel)
-	AddAttr("v-model", stVModel)
-	AddAttr("v-show", stVShow)
+	setVModel(stVModel)
+	setVShow(stVShow)
 	AddAttr("v-text", stVText)
 	AddStyle("background-color", stBackgroundColor)
 	AddStyle("background-image", stBackgroundImage)
@@ -1016,7 +1013,9 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	setFitScreen(bFitScreen)
 	
 	'
-	If BANano.IsNull(bBuildGrid) Or BANano.IsUndefined(bBuildGrid) Then bBuildGrid = False
+	If BANano.IsNull(bBuildGrid) Or BANano.IsUndefined(bBuildGrid) Then 
+		bBuildGrid = False
+	End If
 	If bBuildGrid = False Then
 		setOffsets(stOffSets)
 		setSizes(stSizes)
@@ -1760,9 +1759,9 @@ Public Sub AddAttr(varProp As String, varValue As String)
 				attributeList.put(varProp, varValue)
 			End If
 		End If			
-'		'
+		'
 '		Select Case varProp
-'		Case "v-model", "v-show", "v-if", "v-else-if", "required", "disabled", "readonly" 
+'		Case "v-model", "v-show", "v-if", "v-else-if", "required", "disabled", "readonly"
 '			If varValue <> "" Then
 '				bindings.Put(varValue, Null)
 '			End If
@@ -2126,6 +2125,9 @@ public Sub setVModel(varVModel As String)
 	If varVModel = "" Then Return
 	AddAttr("v-model", varVModel)
 	stVModel = varVModel
+	If stVModel.StartsWith("!") = False Then
+		SetData(stVModel, Null)
+	End If
 End Sub
 
 public Sub getVModel() As String
@@ -2152,6 +2154,9 @@ End Sub
 public Sub setVShow(varVShow As String)
 	AddAttr("v-show", varVShow)
 	stVShow = varVShow
+	If stVShow.StartsWith("!") = False Then
+		SetData(stVShow, Null)
+	End If
 End Sub
 
 public Sub getVShow() As String
@@ -2723,7 +2728,7 @@ Sub setTrueValue(tv As Object)
 	AddAttr("true-value", tv)
 End Sub
 
-Sub setAbsolute(tv As object)
+Sub setAbsolute(tv As Object)
 	AddAttr(":absolute", tv)
 End Sub
 
@@ -4271,14 +4276,18 @@ Sub setDot(b As Boolean)
 End Sub
 
 Sub setItems(s As String)
-	If BANano.IsNull(s) Or BANano.IsNull(s) Then
-		Return
-	End If
-	s = s.ToLowerCase
-	s = s.Replace(":","")
-	stItems = s
-	AddAttr(":items", stItems)
-	SetData(stItems, NewList)
+	Try
+		If BANano.IsNull(s) Or BANano.IsUndefined(s) Then
+			Return
+		End If
+		s = s.ToLowerCase
+		s = s.Replace(":","")
+		stItems = s
+		AddAttr(":items", stItems)
+		SetData(stItems, NewList)
+	Catch
+		Log(LastException)
+	End Try	
 End Sub
 
 Sub getItems As String
@@ -5385,56 +5394,56 @@ Sub AddStyleOnMouseOut(prop As String, value As String)
 	AddAttr("onMouseOut", sstyle)
 End Sub
 
-Sub setRoundedLG
+Sub SetRoundedLG
 	AddClass("rounded-lg")
 End Sub
 
-Sub setRounded0
+Sub SetRounded0
 	AddClass("rounded-0")
 End Sub
 
-Sub setRoundedSM
+Sub SetRoundedSM
 	AddClass("rounded-sm")
 End Sub
 
-Sub setRoundedXL
+Sub SetRoundedXL
 	AddClass("rounded-xl")
 End Sub
 
-Sub setRoundedPill
+Sub SetRoundedPill
 	AddClass("rounded-pill")
 End Sub
 
-Sub setRoundedCircle
+Sub SetRoundedCircle
 	AddClass("rounded-circle")
 End Sub
 
-Sub setTransitionSwing
+Sub SetTransitionSwing
 	AddClass("transition-swing")
 End Sub
 
 
-Sub setDisplayBlock()
+Sub SetDisplayBlock()
 	AddStyle("display", "block")
 End Sub
 
-Sub setResizeNone()
+Sub SetResizeNone()
 	AddStyle("resize", "none")
 End Sub
 
-Sub setCursorPointer()
+Sub SetCursorPointer()
 	AddStyle("cursor", "pointer")
 End Sub
 
-Sub setDisplayInlineBlock()
+Sub SetDisplayInlineBlock()
 	AddStyle("display", "inline-block")
 End Sub
 
-Sub setBorderNone()
+Sub SetBorderNone()
 	AddStyle("border", "none")
 End Sub
 
-Sub setFitBlock()
+Sub SetFitBlock()
 	AddStyle("width", "100%")
 End Sub
 
@@ -5563,6 +5572,18 @@ End Sub
 
 public Sub setBorderBottom(varBorder As String)
 	AddStyle("border-bottom", varBorder)
+End Sub
+
+public Sub setBorderTop(varBorder As String)
+	AddStyle("border-top", varBorder)
+End Sub
+
+public Sub setBorderLeft(varBorder As String)
+	AddStyle("border-left", varBorder)
+End Sub
+
+public Sub setBorderRight(varBorder As String)
+	AddStyle("border-right", varBorder)
 End Sub
 
 public Sub setOutlineNone()
@@ -5776,13 +5797,13 @@ Sub setLowerCase(b As Boolean)
 End Sub
 
 'set text decoration underline
-Sub setUnderLine(b As Boolean)
+Sub setUnderLine(b As Object)
 	If b = False Then Return
 	setTextDecoration("underline")
 End Sub
 
 'set text decoration line through
-Sub setLineThrough(b As Boolean)
+Sub setLineThrough(b As Object)
 	If b = False Then Return
 	setTextDecoration("line-through")
 End Sub
@@ -7602,6 +7623,71 @@ Sub setMXAuto(b As Boolean)
 	AddClass("mx-auto")
 End Sub
 
+Sub setPaddingA(v As String)
+	AddStyle("padding-top", v)
+	AddStyle("padding-bottom", v)
+	AddStyle("padding-left", v)
+	AddStyle("padding-right", v)
+End Sub
+
+Sub setPaddingX(v As String)
+	AddStyle("padding-left", v)
+	AddStyle("padding-right", v)
+End Sub
+
+Sub setPaddingY(v As String)
+	AddStyle("padding-top", v)
+	AddStyle("padding-bottom", v)
+End Sub
+
+Sub setPaddingT(v As String)
+	AddStyle("padding-top", v)
+End Sub
+
+Sub setPaddingB(v As String)
+	AddStyle("padding-bottom", v)
+End Sub
+
+Sub setPaddingR(v As String)
+	AddStyle("padding-right", v)
+End Sub
+
+Sub setPaddingL(v As String)
+	AddStyle("padding-left", v)
+End Sub
+
+Sub setMarginT(v As String)
+	AddStyle("margin-top", v)
+End Sub
+
+Sub setMarginB(v As String)
+	AddStyle("margin-bottom", v)
+End Sub
+
+Sub setMarginR(v As String)
+	AddStyle("margin-right", v)
+End Sub
+
+Sub setMarginL(v As String)
+	AddStyle("margin-left", v)
+End Sub
+
+Sub setMarginA(v As String)
+	AddStyle("margin-top", v)
+	AddStyle("margin-bottom", v)
+	AddStyle("margin-left", v)
+	AddStyle("margin-right", v)
+End Sub
+
+Sub setMarginX(v As String)
+	AddStyle("margin-left", v)
+	AddStyle("margin-right", v)
+End Sub
+
+Sub setMarginY(v As String)
+	AddStyle("margin-top", v)
+	AddStyle("margin-bottom", v)
+End Sub
 
 Sub setMarginTop(v As String)
 	AddStyle("margin-top", v)

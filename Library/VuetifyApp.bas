@@ -395,6 +395,7 @@ Sub Class_Globals
 	leftswitch As String, showleftswitches As Boolean, _
 	rightswitch As String, showrightswitches As Boolean, switchinset As Boolean)
 	Public RouterViewName As String
+	Public DatabaseName As String
 End Sub
 
 

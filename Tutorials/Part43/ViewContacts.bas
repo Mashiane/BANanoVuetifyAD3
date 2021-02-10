@@ -1,5 +1,5 @@
 ﻿B4J=true
-Group=Default Group
+Group=Default Group\Views
 ModulesStructureVersion=1
 Type=StaticCode
 Version=8.8

@@ -282,7 +282,7 @@ Sub Process_Globals
 	Public AppTitle As String = "BANanoVuetify AD3"
 	Private Publish As String = "C:\laragon\www"
 	Public Version As String = "1.00"
-	Public ServerIP As String = "http://www.localhost:8080"
+	Public ServerIP As String = "http://www.localhost:80"
 End Sub
 
 Sub AppStart (Form1 As Form, Args() As String)
@@ -305,9 +305,9 @@ Sub AppStart (Form1 As Form, Args() As String)
 	'BANano.Header.SetMaskIcon("safari-pinned-tab.svg")
 	BANano.Header.AddManifestIcon("android-chrome-192x192.png", "192x192")
 	BANano.Header.AddManifestIcon("android-chrome-512x512.png", "512x512")
-	BANano.TranspilerOptions.UseServiceWorker = True
-	BANano.TranspilerOptions.MergeAllCSSFiles = True
-	BANano.TranspilerOptions.MergeAllJavascriptFiles = True
+	BANano.TranspilerOptions.UseServiceWorker = False
+	BANano.TranspilerOptions.MergeAllCSSFiles = False
+	BANano.TranspilerOptions.MergeAllJavascriptFiles = False
 	BANano.TranspilerOptions.MinifyOnline = False
 	BANano.TranspilerOptions.RemoveDeadCode = False
 	'BANano.TranspilerOptions.SetFireReadyWhenReadyStateComplete
@@ -315,13 +315,13 @@ Sub AppStart (Form1 As Form, Args() As String)
 	#if release
 		BANano.TranspilerOptions.EnableLiveCodeSwapping = False
 	#end if
-	BANano.TranspilerOptions.RedirectOutput(File.DirApp, "log.txt")
+	'BANano.TranspilerOptions.RedirectOutput(File.DirApp, "log.txt")
 	'set php settings
 	BANano.PHP_NAME = $"${AppName}.php"$
 	#if release
 		'change to external host domain e.g http://www.google.com
 		'exclude the port address
-		ServerIP = "http://www.localhost:8080"
+		'ServerIP = "http://www.localhost:8080"
 	#end if
 	BANano.PHPHost = $"${ServerIP}/${AppName}/"$
 	BANano.PHPAddHeader("Access-Control-Allow-Origin: *")
@@ -343,14 +343,14 @@ importScripts("https://www.gstatic.com/firebasejs/8.2.1/firebase-messaging.js");
 importScripts("https://www.gstatic.com/firebasejs/8.2.1/firebase-analytics.js");
 
 var firebaseConfig = {
-    apiKey: "(redacted)",
-    authDomain: "(redacted)",
-	databaseURL: "(redacted)",
-    projectId: "(redacted)",
-    storageBucket: "(redacted)",
-    messagingSenderId: "(redacted)",
-    appId: "(redacted)",
-    measurementId: "(redacted)"
+    apiKey: "AIzaSyCMZcx29liQ9jDzU_fiXfTcd-Rcf_d4BSc",
+    authDomain: "robtrack-51a53.firebaseapp.com",
+	databaseURL: "https://robtrack-51a53-default-rtdb.firebaseio.com",
+    projectId: "robtrack-51a53",
+    storageBucket: "robtrack-51a53.appspot.com",
+    messagingSenderId: "521955206285",
+    appId: "1:521955206285:web:4371b85c9ea07c312deec4",
+    measurementId: "G-MRMG60W701"
 };
 
 firebase.initializeApp(firebaseConfig);
@@ -370,8 +370,8 @@ messaging.onBackgroundMessage(function(payload) {
 
 	'
 	Dim fx As JFX
-	Dim URL As String = File.GetUri(File.DirApp,"log.txt")
-	fx.ShowExternalDocument(URL)
+	'Dim URL As String = File.GetUri(File.DirApp,"log.txt")
+	'fx.ShowExternalDocument(URL)
 	'
 	Dim appPath As String = $"${ServerIP}/${AppName}/index.html"$
 	fx.ShowExternalDocument(appPath)

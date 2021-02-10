@@ -36,8 +36,8 @@ Sub Initialize
 	forms.BindVueElement(txtcity)
 	forms.BindVueElement(txtfirstname)
 	forms.BindVueElement(txtprovince)
-	forms.BindVueElement(txtlastname)
-	
+	forms.BindVueElement(txtlastname)	
+
 	'set on mounted
 	Dim args As List
 	forms.SetMounted(Me, "onmounted", args)
