@@ -32,7 +32,7 @@ Sub Class_Globals
 	Public Route As BANanoObject
 	Public refs As BANanoObject
 	Public RouterView As BANanoObject
-	public GoogleMapKey As String
+	Public GoogleMapKey As String
 	'
 	Public const BORDER_DEFAULT As String = ""
 	Public const BORDER_DASHED As String = "dashed"
@@ -524,6 +524,38 @@ Sub NiceTime(stime As String) As String
 	Return FormatDisplayDate(stime, "ddd, DD MMM YYYY @ HH:mm:ss")
 End Sub
 
+Sub NiceMoney(smoney As String) As String
+	Return FormatDisplayNumber(smoney, "0,0.00")
+End Sub
+
+
+Sub NiceFileSize(fsx As String) As String
+	Return FormatFileSize(fsx)
+End Sub
+
+Sub FormatFileSize(Bytes As Float) As String					'ignoredeadcode
+	If BANano.IsNull(Bytes) Or BANano.IsUndefined(Bytes) Then
+		Bytes = 0
+	End If
+	Bytes = BANano.parsefloat(Bytes)
+	Try
+		Private Unit() As String = Array As String(" Byte", " KB", " MB", " GB", " TB", " PB", " EB", " ZB", " YB")
+		If Bytes = 0 Then
+			Return "0 Bytes"
+		Else
+			Private Po, Si As Double
+			Private I As Int
+			Bytes = Abs(Bytes)
+			I = Floor(Logarithm(Bytes, 1024))
+			Po = Power(1024, I)
+			Si = Bytes / Po
+			Return NumberFormat(Si, 1, 3) & Unit(I)
+		End If
+	Catch
+		Return "0 Bytes"
+	End Try
+End Sub
+
 'initialize the snackbar
 Sub SnackBarInitialize
 	SetData("appsnackmessage", "")
@@ -841,7 +873,7 @@ Sub BANanoGetHTML(id As String) As String
 	be.Initialize($"#${id}"$)
 	Dim xTemplate As String = be.GetHTML
 	be.Empty
-	xTemplate = xTemplate.Replace("v-template", "template")
+	'xTemplate = xTemplate.Replace("v-template", "template")
 	Return xTemplate
 End Sub
 
@@ -903,7 +935,6 @@ Sub getMainNode As BANanoElement
 	Return el
 End Sub
 
-
 'initialize the app with where to render and where to .GetHTML
 Public Sub Initialize(Module As Object, myapp As String) 
 	AppName = myapp.ToLowerCase
@@ -942,6 +973,11 @@ Public Sub Initialize(Module As Object, myapp As String)
 	VuetifyOptions.Initialize
 	RouterViewName = "routerview"
 	InitDialog
+	SetMethod(Me, "nicedate", Null)
+	SetMethod(Me, "nicetime", Null)
+	SetMethod(Me, "nicemoney", Null)
+	SetMethod(Me, "NiceFileSize", Null)
+	SetMethod(Me, "Thousands", Null)
 End Sub
 
 private Sub InitDialog
@@ -1381,6 +1417,10 @@ Sub SetDestroyed(module As Object, methodName As String, args As List)
 	Dim destroyed As BANanoObject = BANano.CallBack(module, methodName, args)
 	Options.Put("destroyed", destroyed)
 	SetMethod(module, methodName, args)
+End Sub
+
+Sub Thousands(smoney As String) As String
+	Return FormatDisplayNumber(smoney, "0,0")
 End Sub
 
 
@@ -1857,6 +1897,7 @@ End Sub
 Sub Serve
 	'get the content in the template
 	Template = BANanoGetHTML("apptemplate")
+	Template = Template.Replace("v-template", "template")
 	'
 	Dim mlang As Map = CreateMap()
 	mlang.Put("current", lang)
@@ -2066,7 +2107,7 @@ Sub GetPlaceholderHTML As String
 	be.Initialize("#placeholder")
 	Dim xTemplate As String = be.GetHTML
 	be.Empty
-	xTemplate = xTemplate.Replace("v-template", "template")
+	'xTemplate = xTemplate.Replace("v-template", "template")
 	Return xTemplate
 End Sub
 
@@ -2270,30 +2311,6 @@ Sub FormatDisplayNumber(item As String, sFormat As String) As String
 	Dim bo As BANanoObject = BANano.RunJavascriptMethod("numeral", Array(item))
 	Dim sDate As String = bo.RunMethod("format", Array(sFormat)).Result
 	Return sDate
-End Sub
-
-
-Sub FormatFileSize(Bytes As Float) As String
-	If BANano.IsNull(Bytes) Or BANano.IsUndefined(Bytes) Then
-		Bytes = 0
-	End If
-	Bytes = BANano.parsefloat(Bytes)
-	Try
-		Private Unit() As String = Array As String(" Byte", " KB", " MB", " GB", " TB", " PB", " EB", " ZB", " YB")
-		If Bytes = 0 Then
-			Return "0 Bytes"
-		Else
-			Private Po, Si As Double
-			Private I As Int
-			Bytes = Abs(Bytes)
-			I = Floor(Logarithm(Bytes, 1024))
-			Po = Power(1024, I)
-			Si = Bytes / Po
-			Return NumberFormat(Si, 1, 3) & Unit(I)
-		End If
-	Catch
-		Return "0 Bytes"
-	End Try
 End Sub
 
 'add html of component to app and this binds events and states
@@ -2541,6 +2558,15 @@ Sub AddAppDrawer(Module As Object, elID As String, vmodel As String, bVisible As
 	Return elx
 End Sub
 
+Sub AddBtn(Module As Object, parentID As String, elID As String) As VueElement
+	Return AddVueElement(Module, parentID, elID, "v-btn", "", "", "", Null)
+End Sub
+
+Sub AddBtnToggle(Module As Object, parentID As String, elID As String) As VueElement
+	Return AddVueElement(Module, parentID, elID, "v-btn-toggle", "", "", "", Null)
+End Sub
+
+
 Sub AddNavigationDrawer(Module As Object, parentID As String, elID As String, vmodel As String) As VueElement
 	Return AddVueElement(Module, parentID, elID, "v-navigation-drawer", vmodel, "", "", Null)
 End Sub
@@ -2676,6 +2702,19 @@ Sub AddAppBar(Module As Object, elID As String, color As String, props As Map) A
 	Return elx
 End Sub
 
+
+Sub AddSlotAppend(Module As Object, parentID As String, elID As String) As VueElement
+	Dim elx As VueElement = AddVueElement(Module, parentID, elID, "v-template", "", "", "", Null)
+	elx.SetVSlotAppend
+	Return elx
+End Sub
+
+Sub AddSlotExtension(Module As Object, parentID As String, elID As String) As VueElement
+	Dim elx As VueElement = AddVueElement(Module, parentID, elID, "v-template", "", "", "", Null)
+	elx.SetVSlotExtension
+	Return elx
+End Sub
+
 Sub AddSlideXReverseTransition(Module As Object, parentID As String, elID As String) As VueElement
 	Dim elx As VueElement = AddVueElement(Module, parentID, elID, "v-slide-x-reverse-transition", "", "", "", Null)
 	Return elx
@@ -2732,6 +2771,13 @@ Sub AddAnchor(Module As Object, parentID As String, elID As String, href As Stri
 	Dim elx As VueElement = AddVueElement(Module, parentID, elID, "a", "", caption, "", Null)
 	elx.href = href
 	elx.target = target
+	Return elx
+End Sub
+
+
+'add custom component
+Sub AddComponent(Module As Object, parentID As String, eTag As String, elID As String) As VueElement
+	Dim elx As VueElement = AddVueElement(Module, parentID, elID, eTag, "", "", "", Null)
 	Return elx
 End Sub
 
@@ -3125,6 +3171,7 @@ Sub AddAvatarWithBadge(Module As Object, parentID As String, elID As String, img
 	Dim img As VueElement
 	img.Initialize(Module, imageid, imageid)
 	img.Src = imgURL
+	img.Alt = ""
 	'
 	Dim avatar As VueElement
 	avatar.Initialize(Module, avatarid, avatarid)
@@ -3149,6 +3196,7 @@ Sub AddAvatar1(Module As Object, parentID As String, elID As String, vmodel As S
 	img.Initialize(Module, imageid, imageid)
 	img.AddAttr(":src", vmodel)
 	img.AddAttr(":lazy-src", vmodel)
+	img.Alt = ""
 	'
 	Dim avatar As VueElement
 	avatar.Initialize(Module, elID, elID)
@@ -3194,6 +3242,7 @@ Sub AddAvatar(Module As Object, parentID As String, elID As String, imgURL As St
 	Dim img As VueElement
 	img.Initialize(Module, imageid, imageid)
 	img.Src = imgURL
+	img.Alt = ""
 	'
 	Dim avatar As VueElement
 	avatar.Initialize(Module, elID, elID)
@@ -4600,6 +4649,9 @@ Sub AddHover(Module As Object, parentID As String, elid As String, props As Map)
 	Return AddVueElement(Module, parentID, elid, "v-hover", "", "", "", props)
 End Sub
 
+Sub AddChip(Module As Object, parentID As String, elid As String) As VueElement
+	Return AddVueElement(Module, parentID, elid, "v-chip", "", "", "", Null)
+End Sub
 
 Sub AddTimePicker(Module As Object, parentID As String, elid As String, vmodel As String, defaultValue As String, props As Map) As VueElement
 	Dim elx As VueElement =  AddVueElement(Module, parentID, elid, "v-time-picker", vmodel, "", "", props)

@@ -474,7 +474,7 @@ Sub BANanoGetHTML(id As String) As String
 	be.Initialize($"#${id}"$)
 	Dim xTemplate As String = be.GetHTML
 	be.Empty
-	xTemplate = xTemplate.Replace("v-template", "template")
+	'xTemplate = xTemplate.Replace("v-template", "template")
 	Return xTemplate
 End Sub
 

@@ -2195,6 +2195,7 @@ Sub GetRecordFromJSONList(jsonValue As String, sPrimaryKey As String, sPrimaryVa
 			Return recMap
 		End If
 	Next
+	Return outList
 End Sub
 
 'extract a particular key value from a list of maps in JSON format
@@ -3109,7 +3110,7 @@ Sub BANanoGetHTML(id As String) As String
 	be.Initialize($"#${id}"$)
 	Dim xTemplate As String = be.GetHTML
 	be.Empty
-	xTemplate = xTemplate.Replace("v-template", "template")
+	'xTemplate = xTemplate.Replace("v-template", "template")
 	Return xTemplate
 End Sub
 

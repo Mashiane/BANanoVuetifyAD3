@@ -133,8 +133,15 @@ Public Sub Initialize (CallBack As Object, Name As String) As VueComponent
 	
 	getPlaceHolderNode.empty
 	getAppendHolderNode.empty
+	'
+	SetMethod(Me, "nicedate", Null)
+	SetMethod(Me, "nicetime", Null)
+	SetMethod(Me, "nicemoney", Null)
+	SetMethod(Me, "NiceFileSize", Null)
+	SetMethod(Me, "Thousands", Null)
 	Return Me
 End Sub
+
 
 Sub AddMsgBox(bPersistent As Boolean, width As Int, okColor As String, cancelColor As String) As VueElement
 	'**** this page needs to use its own dialog, lets add it
@@ -230,6 +237,53 @@ End Sub
 
 Sub NiceTime(stime As String) As String
 	Return FormatDisplayDate(stime, "ddd, DD MMM YYYY @ HH:mm:ss")
+End Sub
+
+
+Sub NiceMoney(smoney As String) As String
+	Return FormatDisplayNumber(smoney, "0,0.00")
+End Sub
+
+Sub Thousands(smoney As String) As String
+	Return FormatDisplayNumber(smoney, "0,0")
+End Sub
+
+
+Sub NiceFileSize(fsx As String) As String
+	Return FormatFileSize(fsx)
+End Sub
+
+Sub FormatFileSize(Bytes As Float) As String					'ignoredeadcode
+	If BANano.IsNull(Bytes) Or BANano.IsUndefined(Bytes) Then
+		Bytes = 0
+	End If
+	Bytes = BANano.parsefloat(Bytes)
+	Try
+		Private Unit() As String = Array As String(" Byte", " KB", " MB", " GB", " TB", " PB", " EB", " ZB", " YB")
+		If Bytes = 0 Then
+			Return "0 Bytes"
+		Else
+			Private Po, Si As Double
+			Private I As Int
+			Bytes = Abs(Bytes)
+			I = Floor(Logarithm(Bytes, 1024))
+			Po = Power(1024, I)
+			Si = Bytes / Po
+			Return NumberFormat(Si, 1, 3) & Unit(I)
+		End If
+	Catch
+		Return "0 Bytes"
+	End Try
+End Sub
+
+'format numeric display
+Sub FormatDisplayNumber(item As String, sFormat As String) As String			'ignoredeadcode
+	item = "" & item
+	If item = "" Then Return ""
+	If BANano.isnull(item) Or BANano.IsUndefined(item) Then Return ""
+	Dim bo As BANanoObject = BANano.RunJavascriptMethod("numeral", Array(item))
+	Dim sDate As String = bo.RunMethod("format", Array(sFormat)).Result
+	Return sDate
 End Sub
 
 Sub ShowAlert(process As String, title As String, Message As String, OkTitle As String)
@@ -1053,7 +1107,7 @@ Sub BANanoGetHTML(id As String) As String
 	be.Initialize($"#${id}"$)
 	Dim xTemplate As String = be.GetHTML
 	be.Empty
-	xTemplate = xTemplate.Replace("v-template", "template")
+	'xTemplate = xTemplate.Replace("v-template", "template")
 	Return xTemplate
 End Sub
 

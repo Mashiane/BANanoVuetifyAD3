@@ -1348,7 +1348,7 @@ Sub BANanoGetHTML(id As String) As String
 	be.Initialize($"#${id}"$)
 	Dim xTemplate As String = be.GetHTML
 	be.Empty
-	xTemplate = xTemplate.Replace("v-template", "template")
+	'xTemplate = xTemplate.Replace("v-template", "template")
 	Return xTemplate
 End Sub
 
@@ -1381,7 +1381,7 @@ Sub ToString As String
 	Dim iStructure As String = BANanoShared.BuildAttributes(attributeList)
 	iStructure = iStructure.trim
 	Dim stext As String = sbText.ToString
-	stext = stext.Replace("v-template", "template")
+	'stext = stext.Replace("v-template", "template")
 	Dim rslt As String = $"<${mTagName} id="${mName}" ${iStructure}>${mCaption}${stext}</${mTagName}>"$
 	Return rslt
 End Sub
@@ -1394,6 +1394,7 @@ Sub getHTML As String
 		Return ""
 	End If
 End Sub
+
 
 'bind an attribute
 Sub SetVBindAttribute(prop As String, value As String)
@@ -1883,6 +1884,29 @@ End Sub
 public Sub setAltLabels(b As Boolean)
 	AddAttr(":alt-labels", b)
 End Sub
+
+Sub AddBreadCrumbItem(bcText As String, bcTo As String, bcLink As Boolean, bcHref As String, bcExact As Boolean, bcDisabled As Boolean)
+	Dim bci As Map = CreateMap()
+	bci.Put("text", bcText)
+	If bcTo <> "" Then 
+		bci.Put("to", bcTo)
+	End If
+	bci.Put("link", bcLink)
+	If bcHref <> "" Then 
+		bci.Put("href", bcHref)
+	End If
+	bci.put("exact", bcExact)
+	bci.Put("disabled", bcDisabled)
+	SetDataPush(stItems, bci)
+End Sub
+
+'add item at end of the list
+Sub SetDataPush(listName As String, item As Object)
+	listName = listName.ToLowerCase
+	Dim dat As BANanoObject = bindings
+	dat.GetField(listName).RunMethod("push", item)
+End Sub
+
 
 public Sub setNonLinear(b As Boolean)
 	AddAttr(":non-linear", b)
@@ -2699,7 +2723,7 @@ Sub setTrueValue(tv As Object)
 	AddAttr("true-value", tv)
 End Sub
 
-Sub setAbsolute(tv As Boolean)
+Sub setAbsolute(tv As object)
 	AddAttr(":absolute", tv)
 End Sub
 
@@ -4093,6 +4117,12 @@ End Sub
 
 
 Sub AddSizes(sSizeXS As String, sSizeSmall As String, sSizeMedium As String, sSizeLarge As String, sSizeXLarge As String) As VueElement
+	sSizeXS = CStr(sSizeXS)
+	sSizeSmall = CStr(sSizeSmall)
+	sSizeXLarge = CStr(sSizeXLarge)
+	sSizeMedium = CStr(sSizeMedium)
+	sSizeLarge = CStr(sSizeLarge)
+	'	
 	sSizeXS = sSizeXS.trim
 	sSizeSmall = sSizeSmall.Trim
 	sSizeXLarge = sSizeXLarge.trim
@@ -4665,6 +4695,7 @@ End Sub
 'clear the items for this
 Sub ClearItems()
 	Records.Initialize
+	SetData(stItems, NewList)
 End Sub
 
 'add a header to the lust
@@ -5816,7 +5847,7 @@ End Sub
 Sub setTextWrap(b As Boolean)
 	If b = False Then Return
 	AddClass("text-wrap")
-end sub	
+End Sub	
 
 '<code>
 'Dim frm As VueElement = el.AddForm("frm", "frmvalid", True, Null)
@@ -5881,6 +5912,17 @@ End Sub
 '</code>
 Sub AddProgressLinear(elID As String, vmodel As String, color As String, props As Map) As VueElement
 	Return AddVueElement1(elID, "v-progress-linear", vmodel, "", color, props)
+End Sub
+
+Sub AddToolbarProgressBar(elID As String, vmodel As String, color As String) As VueElement
+	Dim elx As VueElement = AddVueElement1(elID, "v-progress-linear", "", "", "", Null)
+	elx.Indeterminate = True
+	elx.Absolute = True
+	elx.Bottom = True
+	elx.active = vmodel
+	elx.Color = color
+	elx.SetData(vmodel, False)
+	Return elx
 End Sub
 
 '<code>
@@ -5958,9 +6000,9 @@ Sub AddVueElement1(elID As String, tag As String, vModel As String, Caption As S
 	ve.SetOnEvent(mCallBack, "MouseOut", "")
 	ve.SetOnEvent(mCallBack, "KeyUp", "")
 	ve.SetOnEvent(mCallBack, "KeyPress", "")
-	ve.SetOnEvent(mCallBack,  "Click.Alt", "")
-	ve.SetOnEvent(mCallBack,  "Click.Shift", "")
-	ve.SetOnEvent(mCallBack,  "click:clear", "")
+	ve.SetOnEvent(mCallBack, "Click.Alt", "")
+	ve.SetOnEvent(mCallBack, "Click.Shift", "")
+	ve.SetOnEvent(mCallBack, "click:clear", "")
 	ve.SetOnEvent(mCallBack, "start", "")
 	ve.SetOnEvent(mCallBack, "end", "")
 	ve.SetOnEvent(mCallBack, "click:close", "")
@@ -6058,6 +6100,17 @@ Sub AddAutoComplete(elID As String, vmodel As String, sLabel As String, bRequire
 	Return vselect
 End Sub
 
+Sub AddRouterView(elID As String) As VueElement
+	elID = elID.tolowercase
+	Dim elx As VueElement = AddVueElement1(elID, "router-view", "", "", "", Null)
+	elx.Ref = elID
+	Return elx
+End Sub
+
+'add the main container
+Sub AddMain As VueElement
+	Return AddVueElement1($"${mName}main"$, "v-main", "", "", "", Null)
+End Sub
 
 Sub AddAvatar(elID As String, imgURL As String, avatarSize As Int, avatarprops As Map) As VueElement
 	Dim parentID As String = CleanID(mName)
@@ -6070,10 +6123,13 @@ Sub AddAvatar(elID As String, imgURL As String, avatarSize As Int, avatarprops A
 	Dim img As VueElement
 	img.Initialize(mCallBack, imageid, imageid)
 	img.Src = imgURL
+	img.Alt = ""
 	'
 	Dim avatar As VueElement
 	avatar.Initialize(mCallBack, elID, elID)
-	If avatarSize > 0 Then avatar.AddAttr("size", avatarSize)
+	If avatarSize > 0 Then 
+		avatar.AddAttr("size", avatarSize)
+	End If
 	avatar.AssignProps(avatarprops)
 	img.SetOnEvent(mCallBack, "click", "")
 	'
@@ -6456,7 +6512,32 @@ Sub AddButtonWithIcon(elID As String, eIcon As String, btnColor As String, btnpr
 	Return vbtnright
 End Sub
 
+'add custom component
+Sub AddComponent(eTag As String, elID As String) As VueElement
+	elID = elID.tolowercase
+	Dim parentID As String = CleanID(mName)
+	elID = elID.ToLowerCase
+	BANano.GetElement(parentID).Append($"<${eTag} id="${elID}"></${eTag}>"$)
+	'
+	Dim vbtn As VueElement
+	vbtn.Initialize(mCallBack, elID, elID)
+	Return vbtn
+End Sub
 
+Sub AddBtn(elID As String) As VueElement
+	elID = elID.tolowercase
+	Dim parentID As String = CleanID(mName)
+	elID = elID.ToLowerCase
+	BANano.GetElement(parentID).Append($"<v-btn id="${elID}"></v-btn>"$)
+	'
+	Dim vbtn As VueElement
+	vbtn.Initialize(mCallBack, elID, elID)
+	Return vbtn
+End Sub
+
+Sub AddBtnToggle(elID As String) As VueElement
+	Return AddVueElement1(elID, "v-btn-toggle", "", "", "", Null)
+End Sub
 
 Sub AddComboBox(elID As String, vmodel As String, sLabel As String, bRequired As Boolean, bMultiple As Boolean, sPlaceHolder As String, sourceTable As String, sourceField As String, displayField As String, returnObject As Boolean, sHelperText As String, props As Map) As VueElement
 	Dim parentID As String = CleanID(mName)
@@ -6618,6 +6699,7 @@ Sub AddAvatarWithBadge(elID As String, imgURL As String, avatarSize As Int, vmod
 	Dim img As VueElement
 	img.Initialize(mCallBack, imageid, imageid)
 	img.Src = imgURL
+	img.Alt = ""
 	'
 	Dim avatar As VueElement
 	avatar.Initialize(mCallBack, avatarid, avatarid)
@@ -6642,6 +6724,7 @@ Sub AddAvatar1(elID As String, vmodel As String, avatarSize As Int, avatarprops 
 	img.Initialize(mCallBack, imageid, imageid)
 	img.AddAttr(":src", vmodel)
 	img.AddAttr(":lazy-src", vmodel)
+	img.Alt = ""
 	'
 	Dim avatar As VueElement
 	avatar.Initialize(mCallBack, elID, elID)
@@ -7557,8 +7640,16 @@ Sub setMiniVariantWidth(w As String)
 	SetAttr("mini-variant-width", w)
 End Sub
 
-Sub setExpandOnHover(eoh As String)
-	SetAttr("expand-on-hover", eoh)
+Sub setMiniVariantSync(w As String)
+	SetAttr(":mini-variant.sync", w)
+End Sub
+
+Sub setFloating(w As Object)
+	SetAttr(":floating", w)
+End Sub
+
+Sub setExpandOnHover(eoh As Object)
+	SetAttr(":expand-on-hover", eoh)
 End Sub
 
 '<code>
@@ -7606,7 +7697,39 @@ Sub AddAppBar(elID As String) As VueElement
 	Return elx
 End Sub
 
+'add a master snack bar for the app
+Sub AddAppSnackBar As VueElement
+	Dim elx As VueElement = AddVueElement1("appsnack", "v-snackbar", "appsnackshow", "", "", Null)
+	elx.Bind("app", True)
+	elx.Caption = "{{ appsnackmessage }}"
+	elx.Bind("right", "appsnackright")
+	elx.Bind("top", "appsnacktop")
+	elx.Bind("color", "appsnackcolor")
+	elx.Bind("bottom", "appsnackbottom")
+	elx.Bind("centered", "appsnackcentered")
+	elx.Bind("outlined", "appsnackoutlined")
+	elx.Bind("left", "appsnackleft")
+	elx.Bind("shaped", "appsnackshaped")
+	elx.Bind("rounded", "appsnackrounded")
+	elx.SetData("appsnackmessage", "")
+	elx.SetData("appsnackshow", False)
+	elx.SetData("appsnackright", True)
+	elx.SetData("appsnacktop", True)
+	elx.SetData("appsnackcolor","")
+	elx.SetData("appsnackbottom", False)
+	elx.SetData("appsnackcentered", False)
+	elx.SetData("appsnackoutlined", False)
+	elx.SetData("appsnackleft", False)
+	elx.SetData("appsnackshaped", True)
+	elx.SetData("appsnackrounded", False)
+	Return elx
+End Sub
+
 Sub AddAppBarNavIcon(elID As String) As VueElement
+	Return AddVueElement1(elID, "v-app-bar-nav-icon", "", "", "", Null)
+End Sub
+
+Sub AddHamburger(elID As String) As VueElement
 	Return AddVueElement1(elID, "v-app-bar-nav-icon", "", "", "", Null)
 End Sub
 
@@ -7627,6 +7750,8 @@ Sub AddRow(rowpos As Int) As VueElement
 	Dim parentID As String = CleanID(mName)
 	'
 	Dim rowkey As String = $"${parentID}r${rowpos}"$
+	rowkey = rowkey.Replace("#","")
+	
 	BANano.GetElement(parentID).Append($"<v-row id="${rowkey}"></v-row>"$)
 	Dim mbutton As VueElement
 	mbutton.Initialize(mCallBack, rowkey, rowkey)
@@ -7642,7 +7767,10 @@ Sub AddCol(colpos As Int, xs As String, sm As String, md As String, lg As String
 	Dim parentID As String = CleanID(mName)
 	'
 	Dim colKey As String = $"${parentID}c${colpos}"$
+	colKey = colKey.Replace("#","")
+	
 	BANano.GetElement(parentID).Append($"<v-col id="${colKey}"></v-col>"$)
+	
 	Dim mbutton As VueElement
 	mbutton.Initialize(mCallBack, colKey, colKey)
 	mbutton.AddSizes(xs, sm, md, lg, xl)
@@ -7677,10 +7805,137 @@ Sub AddSlideXReverseTransition(elID As String) As VueElement
 	Return elx
 End Sub
 
+Sub AddSlotAppend(elID As String) As VueElement
+	Dim elx As VueElement = AddVueElement1(elID, "v-template", "", "", "", Null)
+	elx.SetVSlotAppend
+	Return elx
+End Sub
+
+Sub AddSlotExtension(elID As String) As VueElement
+	Dim elx As VueElement = AddVueElement1(elID, "v-template", "", "", "", Null)
+	elx.SetVSlotExtension
+	Return elx
+End Sub
+
+
 Sub setGroup(b As Object)
 	AddAttr("group", b)
 End Sub
 
 Sub setHideOnLeave(b As Object)
 	AddAttr("hide-on-leave", b)
+End Sub
+
+
+Sub setPermanent(b As Object)
+	AddAttr(":permanent", b)
+End Sub
+
+Sub setNav(b As Object)
+	AddAttr(":nav", b)
+End Sub
+
+Sub setLink(b As Object)
+	AddAttr(":link", b)
+End Sub
+
+Sub setWrap(b As Object)
+	AddAttr(":wrap", b)
+End Sub
+
+Sub setDivider(b As String)
+	AddAttr("divider", b)
+End Sub
+
+'add bread crumbs
+Sub AddBreadCrumbs(elid As String) As VueElement
+	elid = elid.tolowercase
+	Dim vlist As VueElement = AddVueElement1(elid, "v-breadcrumbs", "", "", "", Null)
+	vlist.setItems($"${elid}items"$)
+	Return vlist
+End Sub
+
+'add item group
+Sub AddItemGroup(elid As String) As VueElement
+	Dim vlist As VueElement = AddVueElement1(elid, "v-item-group", "", "", "", Null)
+	Return vlist
+End Sub
+
+
+'add item
+Sub AddGroupItem(elid As String) As VueElement
+	Dim vlist As VueElement = AddVueElement1(elid, "v-item", "", "", "", Null)
+	Return vlist
+End Sub
+
+Sub AddDataTable(Module As Object, parentID As String, elID As String) As VueTable
+	Dim elx As VueTable
+	elx.Initialize(Module, elID, elID)
+	elx.AddToParent(parentID)
+	Return elx
+End Sub
+
+Sub AddTabItem(elID As String, value As String) As VueElement
+	Return AddVueElement1(elID, "v-tab-item", "", "", "", CreateMap("value":value))
+End Sub
+
+Sub AddTabItems(elID As String, vmodel As String, props As Map) As VueElement
+	Return AddVueElement1(elID, "v-tab-items", vmodel, "", "", props)
+End Sub
+
+
+Sub AddTabsSlider(elID As String, color As String, props As Map) As VueElement
+	Return AddVueElement1(elID, "v-tabs-slider", "", "", color, props)
+End Sub
+
+
+Sub AddContainer(elID As String, xFluid As Boolean) As VueElement
+	Return AddVueElement1(elID, "v-container", "", "", "", CreateMap(":fluid":xFluid))
+End Sub
+
+Sub AddTabs(elID As String, vmodel As String, bCentered As Boolean, bIconsAndText As Boolean, bGrow As Boolean, bShowSlider As Boolean, props As Map) As VueElement
+	elID = elID.tolowercase
+	Dim parentID As String = CleanID(mName)
+	
+	Dim sTemplate As StringBuilder
+	sTemplate.Initialize 
+	sTemplate.Append($"<v-tabs id="${elID}">"$)
+	sTemplate.Append($"<v-tabs-slider id="${elID}slider" v-if="${bShowSlider}" ></v-tabs-slider>"$)
+	sTemplate.Append($"</v-tabs>"$)
+	'add tabs
+	BANano.GetElement(parentID).Append(sTemplate.tostring)
+	'
+	Dim vtabs As VueElement
+	vtabs.Initialize(mCallBack, elID, elID)
+	vtabs.VModel = vmodel
+	vtabs.SetData(vmodel, "")
+	vtabs.Centered = bCentered
+	vtabs.IconsAndText = bIconsAndText
+	vtabs.Grow = bGrow
+	vtabs.AssignProps(props)
+	Return vtabs
+End Sub
+
+Sub AddSheet(elID As String, Height As String, Color As String, props As Map) As VueElement
+	Dim elx As VueElement = AddVueElement1(elID, "v-sheet", "", "", Color, props)
+	elx.Height = Height
+	Return elx
+End Sub
+
+Sub AddResponsive(elID As String) As VueElement
+	Dim elx As VueElement = AddVueElement1(elID, "v-responsive", "", "", "", Null)
+	Return elx
+End Sub
+
+Sub setActive(b As Object)
+	AddAttr(":active", b)
+End Sub
+
+Sub setJustifyCenterClass(b As Boolean)
+	If b = False Then Return
+	AddClass("justify-center")
+End Sub
+
+Sub AddChip(elid As String) As VueElement
+	Return AddVueElement1(elid, "v-chip", "", "", "", Null)
 End Sub
