@@ -2835,25 +2835,7 @@ Sub AddVueElement(Module As Object, parentID As String, elID As String, tag As S
 	ve.SetData(vModel, "")
 	If color <> "" Then ve.Color = color
 	ve.AssignProps(props)
-	ve.SetOnEvent(Module, "click", "")
-	ve.SetOnEvent(Module, "click.stop", "")
-	ve.SetOnEvent(Module, "click.prevent", "")
-	ve.SetOnEvent(Module, "change", "")
-	ve.SetOnEvent(Module, "click:append", "")
-	ve.SetOnEvent(Module, "click:prepend", "")
-	ve.SetOnEvent(Module, "click:append-outer", "")
-	ve.SetOnEvent(Module, "click:prepend-inner", "")
-	ve.SetOnEvent(Module, "click:clear", "")
-	ve.SetOnEvent(Module, "dblclick", "")
-	ve.SetOnEvent(Module, "MouseMove", "")
-	ve.SetOnEvent(Module, "MouseOut", "")
-	ve.SetOnEvent(Module, "KeyUp", "")
-	ve.SetOnEvent(Module, "KeyPress", "")
-	ve.SetOnEvent(Module,  "Click.Alt", "")
-	ve.SetOnEvent(Module,  "Click.Shift", "")
-	ve.SetOnEvent(Module, "start", "")
-	ve.SetOnEvent(Module, "end", "")
-	ve.SetOnEvent(Module, "click:close", "")
+	ve.BindAllEvents
 	Return ve
 End Sub
 
@@ -2868,15 +2850,7 @@ Sub UpdateVueElement(Module As Object, elID As String, vModel As String, Caption
 	ve.VModel = vModel
 	ve.SetData(vModel, "")
 	ve.AssignProps(props)
-	ve.SetOnEvent(Module, "click", "")
-	ve.SetOnEvent(Module, "click.stop", "")
-	ve.SetOnEvent(Module, "click.prevent", "")
-	ve.SetOnEvent(Module, "change", "")
-	ve.SetOnEvent(Module, "click:append", "")
-	ve.SetOnEvent(Module, "click:prepend", "")
-	ve.SetOnEvent(Module, "click:append-outer", "")
-	ve.SetOnEvent(Module, "click:prepend-inner", "")
-	ve.SetOnEvent(Module, "click:clear", "")
+	ve.BindAllEvents
 	Return ve
 End Sub
 
@@ -2912,7 +2886,7 @@ Sub AddStepperHorizontal(Module As Object, parentID As String, elID As String, v
 	vstepper.SetData(vmodel, "")
 	vstepper.AddAttr(":alt-labels", altLabels)
 	vstepper.AddAttr(":non-linear", nonLinear)
-	vstepper.SetOnEvent(Module, "change", "")
+	vstepper.BindAllEvents
 	vstepper.AssignProps(props)
 	
 	'open the first item
@@ -2937,7 +2911,7 @@ Sub AddChipGroup(Module As Object, parentID As String, elID As String, vModel As
 	vchipgroup.Multiple = bMultiple
 	vchipgroup.AddAttr("active-class", activeClass)
 	vchipgroup.AssignProps(chipgroupprops)
-	vchipgroup.SetOnEvent(Module, "change", "")
+	vchipgroup.BindAllEvents
 	
 	If bMultiple Then
 		vchipgroup.SetData(vModel, NewList)
@@ -3006,8 +2980,7 @@ Sub AddAutoComplete(Module As Object, parentID As String, elID As String, vmodel
 	End If
 	Dim lst As List = NewList
 	vselect.SetData(sourceTable, lst)
-	vselect.SetOnEvent(Module, "change", "")
-	vselect.SetOnEvent(Module, "click:clear", "")
+	vselect.BindAllEvents
 	Return vselect
 End Sub
 
@@ -3046,8 +3019,7 @@ Sub AddComboBox(Module As Object, parentID As String, elID As String, vmodel As 
 	End If
 	Dim lst As List = NewList
 	vselect.SetData(sourceTable, lst)
-	vselect.SetOnEvent(Module, "change", "")
-	vselect.SetOnEvent(Module,  "click:clear", "")
+	vselect.BindAllEvents
 	Return vselect
 End Sub
 
@@ -3089,7 +3061,7 @@ Sub AddButtonWidthRightIcon(Module As Object, parentID As String, elID As String
 	vbtnright.AssignProps(btnprops)
 	viconright.AssignProps(iconprops)
 	'
-	vbtnright.SetOnEvent(Module, "click", "")
+	vbtnright.BindAllEvents
 	'
 	vbtnright.BindVueElement(viconright)
 	vbtnright.BindVueElement(vspanleft)
@@ -3135,7 +3107,7 @@ Sub AddButtonWithLeftIcon(Module As Object, parentID As String, elID As String, 
 	vbtnright.AssignProps(btnprops)
 	viconright.AssignProps(iconprops)
 	'
-	vbtnright.SetOnEvent(Module, "click", "")
+	vbtnright.BindAllEvents
 	'
 	vbtnright.BindVueElement(viconright)
 	vbtnright.BindVueElement(vspanleft)
@@ -3178,7 +3150,7 @@ Sub AddAvatarWithBadge(Module As Object, parentID As String, elID As String, img
 	avatar.Initialize(Module, avatarid, avatarid)
 	If avatarSize <> 0 Then avatar.AddAttr("size", avatarSize)
 	avatar.AssignProps(avatarprops)
-	img.SetOnEvent(Module, "click", "")
+	img.BindAllEvents
 	'
 	vbadge.BindVueElement(img)
 	vbadge.BindVueElement(avatar)
@@ -3203,7 +3175,7 @@ Sub AddAvatar1(Module As Object, parentID As String, elID As String, vmodel As S
 	avatar.Initialize(Module, elID, elID)
 	If avatarSize > 0 Then avatar.AddAttr("size", avatarSize)
 	avatar.AssignProps(avatarprops)
-	img.SetOnEvent(Module, "click", "")
+	img.BindAllEvents
 	'
 	avatar.BindVueElement(img)
 	Return avatar
@@ -3249,7 +3221,7 @@ Sub AddAvatar(Module As Object, parentID As String, elID As String, imgURL As St
 	avatar.Initialize(Module, elID, elID)
 	If avatarSize > 0 Then avatar.AddAttr("size", avatarSize)
 	avatar.AssignProps(avatarprops)
-	img.SetOnEvent(Module, "click", "")
+	img.BindAllEvents
 	'
 	avatar.BindVueElement(img)
 	Return avatar
@@ -3275,7 +3247,7 @@ Sub AddAvatarWithText(Module As Object, parentID As String, elID As String, Capt
 	If TextColor <> "" Then txt.TextColor = TextColor
 	If TextColorIntensity <> "" Then txt.TextColorIntensity = TextColorIntensity
 	txt.AssignProps(textProps)
-	avatar.SetOnEvent(Module, "click", "")
+	avatar.BindAllEvents
 	'
 	avatar.BindVueElement(txt)
 	Return avatar
@@ -3317,8 +3289,7 @@ Sub AddSelect(Module As Object, parentID As String, elID As String, vmodel As St
 	vselect.AssignProps(props)
 	'
 	vselect.SetData(sourceTable, NewList)
-	vselect.SetOnEvent(Module, "change", "")
-	vselect.SetOnEvent(Module, "click:clear", "")
+	vselect.BindAllEvents
 	Return vselect
 End Sub
 
@@ -3467,7 +3438,7 @@ Sub AddButton1(Module As Object, parentID As String, elID As String, sLabel As S
 		mbutton.Caption = sLabel
 		'
 		mbutton.AssignProps(props)
-		mbutton.SetOnEvent(Module, "click", "")
+		mbutton.BindAllEvents
 		Return mbutton
 	Else
 		Log($"AddButton1.${elID} could not be added to ${parentID}"$)
@@ -3496,7 +3467,7 @@ Sub AddButton(Module As Object, parentID As String, elID As String, sLabel As St
 		If eColor <> "" Then mbutton.color = eColor
 		
 		mbutton.AssignProps(props)
-		mbutton.SetOnEvent(Module, "click", "")
+		mbutton.BindAllEvents
 		Return mbutton
 	Else
 		Log($"AddButton.${elID} could not be added to ${parentID}"$)
@@ -3540,7 +3511,7 @@ Sub AddRow(Module As Object, parentID As String, rowpos As Int) As VueElement
 	BANano.GetElement(parentID).Append($"<v-row id="${rowkey}"></v-row>"$)
 	Dim mbutton As VueElement
 	mbutton.Initialize(Module, rowkey, rowkey)
-	mbutton.SetOnEvent(Module, "click", "")
+	mbutton.BindAllEvents
 	Return mbutton
 End Sub
 
@@ -3556,7 +3527,7 @@ Sub AddCol(Module As Object, parentID As String, colpos As Int, xs As String, sm
 	Dim mbutton As VueElement
 	mbutton.Initialize(Module, colKey, colKey)
 	mbutton.AddSizes(xs, sm, md, lg, xl)
-	mbutton.SetOnEvent(Module, "click", "")
+	mbutton.BindAllEvents
 	Return mbutton
 End Sub
 
@@ -3576,7 +3547,7 @@ Sub AddButtonWithBadge(Module As Object, parentID As String, elID As String, elL
 	mbadgebtn.Initialize(Module, elID, elID)
 	mbadgebtn.Caption = elLabel
 	If btnColor <> "" Then mbadgebtn.Color = btnColor
-	mbadgebtn.SetOnEvent(Module, "click", "")
+	mbadgebtn.BindAllEvents
 	'
 	mbadgebtn.AssignProps(btnproperties)
 	'
@@ -3622,8 +3593,7 @@ Sub AddExpansionPanel(Module As Object, parentID As String, elID As String, Head
 	
 	Dim pnl As VueElement
 	pnl.Initialize(Module, panelKey, panelKey)
-	pnl.SetOnEvent(Module, "change", "")
-	pnl.SetOnEvent(Module, "click", "")
+	pnl.BindAllEvents
 	'
 	Dim hdr As VueElement
 	hdr.Initialize(Module, panelHdr, panelHdr)
@@ -3655,7 +3625,7 @@ Sub AddButtonWithIconWithBadge(Module As Object, parentID As String, elID As Str
 		
 	Dim vbtnright As VueElement
 	vbtnright.Initialize(Module, elID, elID)
-	vbtnright.SetOnEvent(Module, "click", "")
+	vbtnright.BindAllEvents
 	vbtnright.AssignProps(btnprops)
 	
 	Dim viconright As VueElement
@@ -3680,7 +3650,7 @@ Sub AddIconWithBadge(Module As Object, parentID As String, elID As String, eIcon
 	mbadgebtn.Initialize(Module, elID, elID)
 	mbadgebtn.Caption = eIcon
 	If eColor <> "" Then mbadgebtn.Color = eColor
-	mbadgebtn.SetOnEvent(Module, "click", "")
+	mbadgebtn.BindAllEvents
 	'
 	mbadgebtn.AssignProps(btnproperties)
 	'
@@ -3712,7 +3682,7 @@ Sub AddButtonWithIcon(Module As Object, parentID As String, elID As String, eIco
 	viconright.Dark = True
 	If btnColor <> "" Then vbtnright.Color = btnColor
 	vbtnright.AssignProps(iconprops)
-	vbtnright.SetOnEvent(Module, "click", "")
+	vbtnright.BindAllEvents
 	vbtnright.BindVueElement(viconright)
 	Return vbtnright
 End Sub
@@ -3788,11 +3758,11 @@ Sub AddDialogAlertPrompt(Module As Object, parentID As String, elID As String, b
 	'
 	Dim vbtnc As VueElement
 	vbtnc.Initialize(Module, cancelid, cancelid)
-	vbtnc.SetOnEvent(Module, "click", "")
+	vbtnc.BindAllEvents
 	'
 	Dim vbtno As VueElement
 	vbtno.Initialize(Module, okid, okid)
-	vbtno.SetOnEvent(Module, "click", "")
+	vbtno.BindAllEvents
 	
 	vdialog.BindVueElement(vbtnc)
 	vdialog.BindVueElement(vbtno)
@@ -3913,11 +3883,11 @@ Sub AddDialogInput(Module As Object, parentID As String, elID As String, bPersis
 	'
 	Dim vbtnc As VueElement
 	vbtnc.Initialize(Module, cancelid, cancelid)
-	vbtnc.SetOnEvent(Module, "click", "")
+	vbtnc.BindAllEvents
 	'
 	Dim vbtno As VueElement
 	vbtno.Initialize(Module, okid, okid)
-	vbtno.SetOnEvent(Module, "click", "")
+	vbtno.BindAllEvents
 	
 	vdialog.BindVueElement(vbtnc)
 	vdialog.BindVueElement(vbtno)
@@ -4015,7 +3985,7 @@ Ok</v-btn>
 	Dim vtextfield As VueElement
 	vtextfield.Initialize(Module, txtid, txtid)
 	vtextfield.AssignProps(txtprops)
-	vtextfield.SetOnEvent(Module, "click:clear", "")
+	vtextfield.BindAllEvents
 	'
 	Dim vdatepicker As VueElement
 	vdatepicker.Initialize(Module, dtpicker, dtpicker)
@@ -4073,7 +4043,7 @@ Ok</v-btn>
 	Dim vtextfield As VueElement
 	vtextfield.Initialize(Module, txtid, txtid)
 	vtextfield.AssignProps(txtprops)
-	vtextfield.SetOnEvent(Module, "click:clear", "")
+	vtextfield.BindAllEvents
 	'
 	Dim vdatepicker As VueElement
 	vdatepicker.Initialize(Module, dtpicker, dtpicker)
@@ -4097,7 +4067,7 @@ Sub AddIcon(Module As Object, parentID As String, elID As String, eIcon As Strin
 	vbtnright.Caption = eIcon
 	If color <> "" Then vbtnright.Color = color
 	vbtnright.AssignProps(iconprops)
-	vbtnright.SetOnEvent(Module, "click", "")
+	vbtnright.BindAllEvents
 	Return vbtnright
 End Sub
 
@@ -4133,11 +4103,7 @@ Sub AddSearch(Module As Object, parentID As String, elID As String, vmodel As St
 	vtextfield.Clearable = True
 	vtextfield.SingleLine = True
 	vtextfield.HideDetails = True
-	vtextfield.SetOnEvent(Module, "click:append", "")
-	vtextfield.SetOnEvent(Module, "click:prepend", "")
-	vtextfield.SetOnEvent(Module, "click:append-outer", "")
-	vtextfield.SetOnEvent(Module, "click:prepend-inner", "")
-	vtextfield.SetOnEvent(Module, "click:clear", "")
+	vtextfield.BindAllEvents
 	vtextfield.Shrink
 	vtextfield.AssignProps(props)
 	Return vtextfield
@@ -4214,12 +4180,7 @@ Sub AddFileInput(Module As Object, parentID As String, elID As String, vmodel As
 	vfileinput.Hint = sHint
 	vfileinput.VModel = vmodel
 	vfileinput.AddAttrOnConditionTrue(":multiple", bMultiple, True)
-	vfileinput.SetOnEvent(Module, "change", "")
-	vfileinput.SetOnEvent(Module, "click:clear", "")
-	vfileinput.SetOnEvent(Module, "click:append", "")
-	vfileinput.SetOnEvent(Module, "click:prepend", "")
-	vfileinput.SetOnEvent(Module, "click:append-outer", "")
-	vfileinput.SetOnEvent(Module, "click:prepend-inner", "")
+	vfileinput.BindAllEvents
 	vfileinput.AssignProps(props)
 	If vmodel <> "" Then
 		If bMultiple Then
@@ -4299,11 +4260,7 @@ Sub AddSlider(Module As Object, parentID As String, elID As String, vmodel As St
 	vslider.AddAttr("min", iminvalue)
 	vslider.AddAttr("max", imaxvalue)
 	If iStep > 0 Then vslider.AddAttr("step", iStep)
-	vslider.SetOnEvent(Module, "click:append", "")
-	vslider.SetOnEvent(Module, "click:prepend", "")
-	vslider.SetOnEvent(Module, "click", "")
-	vslider.SetOnEvent(Module, "start", "")
-	vslider.SetOnEvent(Module, "end", "")
+	vslider.BindAllEvents
 	vslider.AssignProps(props)
 	Return vslider
 End Sub
@@ -4366,11 +4323,7 @@ Sub AddTextField1(Module As Object, parentID As String, elID As String, vModel A
 	vtextfield.VModel = vModel
 	vtextfield.SetData(vModel, "")
 	vtextfield.SetTypeText
-	vtextfield.SetOnEvent(Module, "click:append", "")
-	vtextfield.SetOnEvent(Module, "click:prepend", "")
-	vtextfield.SetOnEvent(Module, "click:append-outer", "")
-	vtextfield.SetOnEvent(Module, "click:prepend-inner", "")
-	vtextfield.SetOnEvent(Module, "click:clear", "")
+	vtextfield.BindAllEvents
 	vtextfield.AssignProps(props)
 	Return vtextfield
 End Sub
@@ -4398,11 +4351,7 @@ Sub AddTextField(Module As Object, parentID As String, elID As String, vmodel As
 	vtextfield.VModel = vmodel
 	vtextfield.SetData(vmodel, "")
 	vtextfield.SetTypeText
-	vtextfield.SetOnEvent(Module, "click:append", "")
-	vtextfield.SetOnEvent(Module, "click:prepend", "")
-	vtextfield.SetOnEvent(Module, "click:append-outer", "")
-	vtextfield.SetOnEvent(Module, "click:prepend-inner", "")
-	vtextfield.SetOnEvent(Module, "click:clear", "")
+	vtextfield.BindAllEvents
 	vtextfield.AssignProps(props)
 	Return vtextfield
 End Sub
@@ -4439,11 +4388,7 @@ Sub AddTextArea(Module As Object, parentID As String, elID As String, vmodel As 
 	vtextfield.VModel = vmodel
 	vtextfield.SetData(vmodel, "")
 	vtextfield.SetTypeText
-	vtextfield.SetOnEvent(Module, "click:append", "")
-	vtextfield.SetOnEvent(Module, "click:prepend", "")
-	vtextfield.SetOnEvent(Module, "click:append-outer", "")
-	vtextfield.SetOnEvent(Module, "click:prepend-inner", "")
-	vtextfield.SetOnEvent(Module, "click:clear", "")
+	vtextfield.BindAllEvents
 	vtextfield.AssignProps(props)
 	Return vtextfield
 End Sub
@@ -4471,22 +4416,13 @@ Sub AddPassword(Module As Object, parentID As String, elID As String, vmodel As 
 	vtextfield.VModel = vmodel
 	vtextfield.SetData(vmodel, "")
 	vtextfield.SetTypePassword
+	vtextfield.BindAllEvents
 	vtextfield.AddAttr(":type", $"${bshowPassword} ? 'text' : 'password'"$)
 	vtextfield.AddAttr(":append-icon", $"${bshowPassword} ? 'mdi-eye' : 'mdi-eye-off'"$)
 	vtextfield.AddAttr("v-on:click:append", $"${bshowPassword} = !${bshowPassword}"$)
 	vtextfield.AddAttr("autocomplete", "off")
 	vtextfield.AssignProps(props)
 	vtextfield.SetData(bshowPassword, False)
-	'
-	vtextfield.SetOnEvent(Module, "click", "")
-	vtextfield.SetOnEvent(Module, "click.stop", "")
-	vtextfield.SetOnEvent(Module, "click.prevent", "")
-	vtextfield.SetOnEvent(Module, "change", "")
-	vtextfield.SetOnEvent(Module, "click:prepend", "")
-	vtextfield.SetOnEvent(Module, "click:append-outer", "")
-	vtextfield.SetOnEvent(Module, "click:prepend-inner", "")
-	vtextfield.SetOnEvent(Module, "click:clear", "")
-	
 	Return vtextfield
 End Sub
 
@@ -4510,7 +4446,7 @@ Sub AddSwitch(Module As Object, parentID As String, sid As String, vmodel As Str
 	vswitch.AddAttr(":inset", bInset)
 	If color <> "" Then vswitch.Color = color
 	vswitch.AssignProps(props)
-	vswitch.SetOnEvent(Module, "change", "")
+	vswitch.BindAllEvents
 	If vmodel <> "" Then
 		vswitch.SetData(vmodel, truevalue)
 	End If
@@ -4525,13 +4461,13 @@ Sub AddRating(Module As Object, parentID As String, sid As String, vmodel As Str
 	Dim vrating As VueElement
 	vrating.Initialize(Module, sid, sid)
 	vrating.VModel = vmodel
-	vrating.SetData(vmodel, null)
+	vrating.SetData(vmodel, Null)
 	vrating.AddAttr("length", slength)
 	vrating.AddAttr("size", ssize)
 	vrating.AddAttr(":hover", bHover)
 	If color <> "" Then vrating.Color = color
 	vrating.AssignProps(props)
-	vrating.SetOnEvent(Module, "input", "")
+	vrating.BindAllEvents
 	Return vrating
 End Sub
 
@@ -4553,7 +4489,7 @@ Sub AddCheckBox(Module As Object, parentID As String, sid As String, vmodel As S
 	End If
 	If color <> "" Then vcheckbox.Color = color
 	vcheckbox.AssignProps(props)
-	vcheckbox.SetOnEvent(Module, "click", "")
+	vcheckbox.BindAllEvents
 	If vmodel <> "" Then 
 		vcheckbox.SetData(vmodel, truevalue)
 	End If
@@ -4579,7 +4515,7 @@ Sub AddImage1(Module As Object, parentID As String, elID As String, vmodel As St
 	vimg.AddAttr(":lazy-src", vmodel)
 	vimg.Alt = alt
 	'vimg.AddAttr(":aspect-ratio", "16/9")
-	vimg.SetOnEvent(Module, "click", "")
+	vimg.BindAllEvents
 	vimg.AssignProps(props)
 	Return vimg
 End Sub
@@ -4607,7 +4543,7 @@ Sub AddImage(Module As Object, parentID As String, elID As String, src As String
 		vimg.AddAttr("lazy-src", lazysrc)
 	End If
 	'vimg.AddAttr(":aspect-ratio", "16/9")
-	vimg.SetOnEvent(Module, "click", "")
+	vimg.BindAllEvents
 	vimg.AssignProps(props)
 	Return vimg
 End Sub
@@ -4701,7 +4637,7 @@ Sub AddChipWithAvatar(Module As Object, parentID As String, elID As String, src 
 	vchip.AddAttr(":close", bClose)
 	If color <> "" Then vchip.Color = color
 	vchip.AssignProps(chipprops)
-	
+	vchip.BindAllEvents
 	vchip.SetOnEvent(Module, "click", $"'${elID}'"$)
 	vchip.SetOnEvent(Module, "click:close", $"'${elID}'"$)
 	'
@@ -4740,6 +4676,7 @@ Sub AddChipWithIcon(Module As Object, parentID As String, elID As String, sicon 
 	vchip.AddAttr(":pill", bPill)
 	vchip.AddAttr(":close", bClose)
 	If color <> "" Then vchip.Color = color
+	vchip.BindAllEvents
 	vchip.SetOnEvent(Module, "click", $"'${elID}'"$)
 	vchip.SetOnEvent(Module, "click:close", $"'${elID}'"$)'
 	'
@@ -4793,6 +4730,7 @@ Sub AddRadioGroup(Module As Object, parentID As String, elID As String, vmodel A
 	End If
 	Dim lst As List = NewList
 	vradiogroup.SetData(sourceTable, lst)
+	vradiogroup.BindAllEvents
 	vradiogroup.SetOnEvent(Module, "change", $"item.${key}"$)
 	vradiogroup.BindVueElement(vradio)
 	Return vradiogroup

@@ -586,7 +586,7 @@ Sub AddTitleIcon(VC As VueComponent, elID As String, eIcon As String, btnColor A
 	viconright.Caption = eIcon
 	viconright.Dark = True
 	
-	vbtnright.SetOnEvent(mCallBack, "click", "")
+	vbtnright.BindAllEvents
 	vbtnright.BindVueElement(viconright)
 	VC.BindVueElement(vbtnright)
 End Sub
@@ -615,6 +615,7 @@ Sub AddFilter(VC As VueComponent, activeClass As String)
 	vchipgroup.Multiple = True
 	vchipgroup.Column = True
 	vchipgroup.AddAttr("active-class", activeClass)
+	vchipgroup.BindAllEvents
 	vchipgroup.SetOnEventOwn(mCallBack, $"${mName}_filterchange"$, "change", "")
 	'get the text field, there is only 1 element on the layout
 	Dim vchip As VueElement

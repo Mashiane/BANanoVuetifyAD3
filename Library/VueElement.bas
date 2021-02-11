@@ -578,8 +578,7 @@ Sub AddExpansionPanel(elID As String, HeaderCaption As String) As VueElement
 	
 	Dim pnl As VueElement
 	pnl.Initialize(mCallBack, panelKey, panelKey)
-	pnl.SetOnEvent(mCallBack, "change", "")
-	pnl.SetOnEvent(mCallBack, "click", "")
+	pnl.BindAllEvents
 	'
 	Dim hdr As VueElement
 	hdr.Initialize(mCallBack, panelHdr, panelHdr)
@@ -1055,14 +1054,12 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	'
 	'link the events, if any
 	'This activates Click the event exists on the module
+	BindAllEvents
+	
 	SetOnEvent(mCallBack, "click", eOnClick)
 	SetOnEvent(mCallBack, "click.stop", eOnClickStop)
 	SetOnEvent(mCallBack, "click.prevent", eOnClickPrevent)
 	SetOnEvent(mCallBack, "change", eOnChange)
-	SetOnEvent(mCallBack, "click:append", "")
-	SetOnEvent(mCallBack, "click:prepend", "")
-	SetOnEvent(mCallBack, "click:append-outer", "")
-	SetOnEvent(mCallBack, "click:prepend-inner", "")
 	SetOnEvent(mCallBack, "dblclick", eOnDblClick)
 	SetOnEvent(mCallBack, "MouseMove", eOnMouseMove)
 	SetOnEvent(mCallBack, "MouseOut", eOnMouseOut)
@@ -1070,7 +1067,6 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	SetOnEvent(mCallBack, "KeyPress", eOnKeyPress)
 	SetOnEvent(mCallBack,  "Click.Alt", eOnClickAlt)
 	SetOnEvent(mCallBack,  "Click.Shift", eOnClickShift)
-	SetOnEvent(mCallBack,  "click:clear", "")
 	
 	'build and get the element
 	Dim strHTML As String = ToString
@@ -6007,29 +6003,32 @@ Sub AddVueElement1(elID As String, tag As String, vModel As String, Caption As S
 	ve.SetData(vModel, "")
 	If color <> "" Then ve.Color = color
 	ve.AssignProps(props)
-	ve.SetOnEvent(mCallBack, "click", "")
-	ve.SetOnEvent(mCallBack, "click.stop", "")
-	ve.SetOnEvent(mCallBack, "click.prevent", "")
-	ve.SetOnEvent(mCallBack, "change", "")
-	ve.SetOnEvent(mCallBack, "click:append", "")
-	ve.SetOnEvent(mCallBack, "click:prepend", "")
-	ve.SetOnEvent(mCallBack, "click:append-outer", "")
-	ve.SetOnEvent(mCallBack, "click:prepend-inner", "")
-	ve.SetOnEvent(mCallBack, "click:clear", "")
-	ve.SetOnEvent(mCallBack, "dblclick", "")
-	ve.SetOnEvent(mCallBack, "MouseMove", "")
-	ve.SetOnEvent(mCallBack, "MouseOut", "")
-	ve.SetOnEvent(mCallBack, "KeyUp", "")
-	ve.SetOnEvent(mCallBack, "KeyPress", "")
-	ve.SetOnEvent(mCallBack, "Click.Alt", "")
-	ve.SetOnEvent(mCallBack, "Click.Shift", "")
-	ve.SetOnEvent(mCallBack, "click:clear", "")
-	ve.SetOnEvent(mCallBack, "start", "")
-	ve.SetOnEvent(mCallBack, "end", "")
-	ve.SetOnEvent(mCallBack, "click:close", "")
+	ve.BindAllEvents
 	Return ve
 End Sub
 
+Sub BindAllEvents
+	SetOnEvent(mCallBack, "click", "")
+	SetOnEvent(mCallBack, "click.stop", "")
+	SetOnEvent(mCallBack, "click.prevent", "")
+	SetOnEvent(mCallBack, "change", "")
+	SetOnEvent(mCallBack, "click:append", "")
+	SetOnEvent(mCallBack, "click:prepend", "")
+	SetOnEvent(mCallBack, "click:append-outer", "")
+	SetOnEvent(mCallBack, "click:prepend-inner", "")
+	SetOnEvent(mCallBack, "click:clear", "")
+	SetOnEvent(mCallBack, "dblclick", "")
+	SetOnEvent(mCallBack, "MouseMove", "")
+	SetOnEvent(mCallBack, "MouseOut", "")
+	SetOnEvent(mCallBack, "KeyUp", "")
+	SetOnEvent(mCallBack, "KeyPress", "")
+	SetOnEvent(mCallBack, "Click.Alt", "")
+	SetOnEvent(mCallBack, "Click.Shift", "")
+	SetOnEvent(mCallBack, "click:clear", "")
+	SetOnEvent(mCallBack, "start", "")
+	SetOnEvent(mCallBack, "end", "")
+	SetOnEvent(mCallBack, "click:close", "")
+End Sub
 
 Sub AddChipGroup(elID As String, vModel As String,  activeClass As String, bMultiple As Boolean, bShowArrows As Boolean, bFilter As Boolean, DataSource As String, Key As String, Value As String, chipgroupprops As Map, chipprops As Map) As VueElement
 	elID = elID.tolowercase
@@ -6047,7 +6046,7 @@ Sub AddChipGroup(elID As String, vModel As String,  activeClass As String, bMult
 	vchipgroup.Multiple = bMultiple
 	vchipgroup.AddAttr("active-class", activeClass)
 	vchipgroup.AssignProps(chipgroupprops)
-	vchipgroup.SetOnEvent(mCallBack, "change", "")
+	vchipgroup.BindAllEvents
 	
 	If bMultiple Then
 		vchipgroup.SetData(vModel, NewList)
@@ -6116,8 +6115,7 @@ Sub AddAutoComplete(elID As String, vmodel As String, sLabel As String, bRequire
 	End If
 	Dim lst As List = NewList
 	vselect.SetData(sourceTable, lst)
-	vselect.SetOnEvent(mCallBack, "change", "")
-	vselect.SetOnEvent(mCallBack, "click:clear", "")
+	vselect.BindAllEvents
 	Return vselect
 End Sub
 
@@ -6152,7 +6150,7 @@ Sub AddAvatar(elID As String, imgURL As String, avatarSize As Int, avatarprops A
 		avatar.AddAttr("size", avatarSize)
 	End If
 	avatar.AssignProps(avatarprops)
-	img.SetOnEvent(mCallBack, "click", "")
+	img.BindAllEvents
 	'
 	avatar.BindVueElement(img)
 	Return avatar
@@ -6178,7 +6176,7 @@ Sub AddAvatarWithText(elID As String, Caption As String, Color As String, avatar
 	If TextColor <> "" Then txt.TextColor = TextColor
 	If TextColorIntensity <> "" Then txt.TextColorIntensity = TextColorIntensity
 	txt.AssignProps(textProps)
-	avatar.SetOnEvent(mCallBack, "click", "")
+	avatar.BindAllEvents
 	'
 	avatar.BindVueElement(txt)
 	Return avatar
@@ -6220,8 +6218,7 @@ Sub AddSelect(elID As String, vmodel As String, sLabel As String, bRequired As B
 	vselect.AssignProps(props)
 	'
 	vselect.SetData(sourceTable, NewList)
-	vselect.SetOnEvent(mCallBack, "change", "")
-	vselect.SetOnEvent(mCallBack, "click:clear", "")
+	vselect.BindAllEvents
 	Return vselect
 End Sub
 
@@ -6362,7 +6359,7 @@ Sub AddButton1(elID As String, sLabel As String, props As Map) As VueElement
 		mbutton.Caption = sLabel
 		'
 		mbutton.AssignProps(props)
-		mbutton.SetOnEvent(mCallBack, "click", "")
+		mbutton.BindAllEvents
 		Return mbutton
 	Else
 		Log($"AddButton1.${elID} could not be added to ${parentID}"$)
@@ -6391,7 +6388,7 @@ Sub AddButton(elID As String, sLabel As String, eColor As String, bOutlined As B
 		If eColor <> "" Then mbutton.color = eColor
 		
 		mbutton.AssignProps(props)
-		mbutton.SetOnEvent(mCallBack, "click", "")
+		mbutton.BindAllEvents
 		Return mbutton
 	Else
 		Log($"AddButton.${elID} could not be added to ${parentID}"$)
@@ -6435,7 +6432,7 @@ Sub AddButtonWithBadge(elID As String, elLabel As String, btnColor As String, vm
 	mbadgebtn.Initialize(mCallBack, elID, elID)
 	mbadgebtn.Caption = elLabel
 	If btnColor <> "" Then mbadgebtn.Color = btnColor
-	mbadgebtn.SetOnEvent(mCallBack, "click", "")
+	mbadgebtn.BindAllEvents
 	'
 	mbadgebtn.AssignProps(btnproperties)
 	'
@@ -6471,7 +6468,7 @@ Sub AddButtonWithIconWithBadge(elID As String, eIcon As String, btnColor As Stri
 		
 	Dim vbtnright As VueElement
 	vbtnright.Initialize(mCallBack, elID, elID)
-	vbtnright.SetOnEvent(mCallBack, "click", "")
+	vbtnright.BindAllEvents
 	vbtnright.AssignProps(btnprops)
 	
 	Dim viconright As VueElement
@@ -6496,7 +6493,7 @@ Sub AddIconWithBadge(elID As String, eIcon As String, eColor As String, vmodel A
 	mbadgebtn.Initialize(mCallBack, elID, elID)
 	mbadgebtn.Caption = eIcon
 	If eColor <> "" Then mbadgebtn.Color = eColor
-	mbadgebtn.SetOnEvent(mCallBack, "click", "")
+	mbadgebtn.BindAllEvents
 	'
 	mbadgebtn.AssignProps(btnproperties)
 	'
@@ -6528,7 +6525,7 @@ Sub AddButtonWithIcon(elID As String, eIcon As String, btnColor As String, btnpr
 	viconright.Dark = True
 	If btnColor <> "" Then vbtnright.Color = btnColor
 	vbtnright.AssignProps(iconprops)
-	vbtnright.SetOnEvent(mCallBack, "click", "")
+	vbtnright.BindAllEvents
 	vbtnright.BindVueElement(viconright)
 	Return vbtnright
 End Sub
@@ -6594,8 +6591,7 @@ Sub AddComboBox(elID As String, vmodel As String, sLabel As String, bRequired As
 	End If
 	Dim lst As List = NewList
 	vselect.SetData(sourceTable, lst)
-	vselect.SetOnEvent(mCallBack, "change", "")
-	vselect.SetOnEvent(mCallBack,  "click:clear", "")
+	vselect.BindAllEvents
 	Return vselect
 End Sub
 
@@ -6637,7 +6633,7 @@ Sub AddButtonWidthRightIcon(elID As String, eLabel As String, eIcon As String, e
 	vbtnright.AssignProps(btnprops)
 	viconright.AssignProps(iconprops)
 	'
-	vbtnright.SetOnEvent(mCallBack, "click", "")
+	vbtnright.BindAllEvents
 	'
 	vbtnright.BindVueElement(viconright)
 	vbtnright.BindVueElement(vspanleft)
@@ -6683,7 +6679,7 @@ Sub AddButtonWithLeftIcon(elID As String, eLabel As String, eIcon As String, eCo
 	vbtnright.AssignProps(btnprops)
 	viconright.AssignProps(iconprops)
 	'
-	vbtnright.SetOnEvent(mCallBack, "click", "")
+	vbtnright.BindAllEvents
 	'
 	vbtnright.BindVueElement(viconright)
 	vbtnright.BindVueElement(vspanleft)
@@ -6726,7 +6722,7 @@ Sub AddAvatarWithBadge(elID As String, imgURL As String, avatarSize As Int, vmod
 	avatar.Initialize(mCallBack, avatarid, avatarid)
 	If avatarSize <> 0 Then avatar.AddAttr("size", avatarSize)
 	avatar.AssignProps(avatarprops)
-	img.SetOnEvent(mCallBack, "click", "")
+	img.BindAllEvents
 	'
 	vbadge.BindVueElement(img)
 	vbadge.BindVueElement(avatar)
@@ -6751,7 +6747,7 @@ Sub AddAvatar1(elID As String, vmodel As String, avatarSize As Int, avatarprops 
 	avatar.Initialize(mCallBack, elID, elID)
 	If avatarSize > 0 Then avatar.AddAttr("size", avatarSize)
 	avatar.AssignProps(avatarprops)
-	img.SetOnEvent(mCallBack, "click", "")
+	img.BindAllEvents
 	'
 	avatar.BindVueElement(img)
 	Return avatar
@@ -6816,7 +6812,7 @@ Ok</v-btn>
 	Dim vtextfield As VueElement
 	vtextfield.Initialize(mCallBack, txtid, txtid)
 	vtextfield.AssignProps(txtprops)
-	vtextfield.SetOnEvent(mCallBack, "click:clear", "")
+	vtextfield.BindAllEvents
 	'
 	Dim vdatepicker As VueElement
 	vdatepicker.Initialize(mCallBack, dtpicker, dtpicker)
@@ -6874,7 +6870,7 @@ Ok</v-btn>
 	Dim vtextfield As VueElement
 	vtextfield.Initialize(mCallBack, txtid, txtid)
 	vtextfield.AssignProps(txtprops)
-	vtextfield.SetOnEvent(mCallBack, "click:clear", "")
+	vtextfield.BindAllEvents
 	'
 	Dim vdatepicker As VueElement
 	vdatepicker.Initialize(mCallBack, dtpicker, dtpicker)
@@ -6898,7 +6894,7 @@ Sub AddIcon(elID As String, eIcon As String, color As String, iDark As Boolean, 
 	vbtnright.Caption = eIcon
 	If color <> "" Then vbtnright.Color = color
 	vbtnright.AssignProps(iconprops)
-	vbtnright.SetOnEvent(mCallBack, "click", "")
+	vbtnright.BindAllEvents
 	Return vbtnright
 End Sub
 
@@ -6934,11 +6930,7 @@ Sub AddSearch(elID As String, vmodel As String, slabel As String, bSolo As Boole
 	vtextfield.Clearable = True
 	vtextfield.SingleLine = True
 	vtextfield.HideDetails = True
-	vtextfield.SetOnEvent(mCallBack, "click:append", "")
-	vtextfield.SetOnEvent(mCallBack, "click:prepend", "")
-	vtextfield.SetOnEvent(mCallBack, "click:append-outer", "")
-	vtextfield.SetOnEvent(mCallBack, "click:prepend-inner", "")
-	vtextfield.SetOnEvent(mCallBack, "click:clear", "")
+	vtextfield.BindAllEvents
 	vtextfield.Shrink
 	vtextfield.AssignProps(props)
 	Return vtextfield
@@ -7015,12 +7007,7 @@ Sub AddFileInput(elID As String, vmodel As String, slabel As String, splaceholde
 	vfileinput.Hint = sHint
 	vfileinput.VModel = vmodel
 	vfileinput.AddAttrOnConditionTrue(":multiple", bMultiple, True)
-	vfileinput.SetOnEvent(mCallBack, "change", "")
-	vfileinput.SetOnEvent(mCallBack, "click:clear", "")
-	vfileinput.SetOnEvent(mCallBack, "click:append", "")
-	vfileinput.SetOnEvent(mCallBack, "click:prepend", "")
-	vfileinput.SetOnEvent(mCallBack, "click:append-outer", "")
-	vfileinput.SetOnEvent(mCallBack, "click:prepend-inner", "")
+	vfileinput.BindAllEvents
 	vfileinput.AssignProps(props)
 	If vmodel <> "" Then
 		If bMultiple Then
@@ -7100,11 +7087,7 @@ Sub AddSlider(elID As String, vmodel As String, slabel As String, iminvalue As O
 	vslider.AddAttr("min", iminvalue)
 	vslider.AddAttr("max", imaxvalue)
 	If iStep > 0 Then vslider.AddAttr("step", iStep)
-	vslider.SetOnEvent(mCallBack, "click:append", "")
-	vslider.SetOnEvent(mCallBack, "click:prepend", "")
-	vslider.SetOnEvent(mCallBack, "click", "")
-	vslider.SetOnEvent(mCallBack, "start", "")
-	vslider.SetOnEvent(mCallBack, "end", "")
+	vslider.BindAllEvents
 	vslider.AssignProps(props)
 	Return vslider
 End Sub
@@ -7167,11 +7150,7 @@ Sub AddTextField1(elID As String, vModel As String, sLabel As String, props As M
 	vtextfield.VModel = vModel
 	vtextfield.SetData(vModel, "")
 	vtextfield.SetTypeText
-	vtextfield.SetOnEvent(mCallBack, "click:append", "")
-	vtextfield.SetOnEvent(mCallBack, "click:prepend", "")
-	vtextfield.SetOnEvent(mCallBack, "click:append-outer", "")
-	vtextfield.SetOnEvent(mCallBack, "click:prepend-inner", "")
-	vtextfield.SetOnEvent(mCallBack, "click:clear", "")
+	vtextfield.BindAllEvents
 	vtextfield.AssignProps(props)
 	Return vtextfield
 End Sub
@@ -7199,11 +7178,7 @@ Sub AddTextField(elID As String, vmodel As String, slabel As String, splaceholde
 	vtextfield.VModel = vmodel
 	vtextfield.SetData(vmodel, "")
 	vtextfield.SetTypeText
-	vtextfield.SetOnEvent(mCallBack, "click:append", "")
-	vtextfield.SetOnEvent(mCallBack, "click:prepend", "")
-	vtextfield.SetOnEvent(mCallBack, "click:append-outer", "")
-	vtextfield.SetOnEvent(mCallBack, "click:prepend-inner", "")
-	vtextfield.SetOnEvent(mCallBack, "click:clear", "")
+	vtextfield.BindAllEvents
 	vtextfield.AssignProps(props)
 	Return vtextfield
 End Sub
@@ -7240,11 +7215,7 @@ Sub AddTextArea(elID As String, vmodel As String, slabel As String, splaceholder
 	vtextfield.VModel = vmodel
 	vtextfield.SetData(vmodel, "")
 	vtextfield.SetTypeText
-	vtextfield.SetOnEvent(mCallBack, "click:append", "")
-	vtextfield.SetOnEvent(mCallBack, "click:prepend", "")
-	vtextfield.SetOnEvent(mCallBack, "click:append-outer", "")
-	vtextfield.SetOnEvent(mCallBack, "click:prepend-inner", "")
-	vtextfield.SetOnEvent(mCallBack, "click:clear", "")
+	vtextfield.BindAllEvents
 	vtextfield.AssignProps(props)
 	Return vtextfield
 End Sub
@@ -7272,22 +7243,13 @@ Sub AddPassword(elID As String, vmodel As String, slabel As String, splaceholder
 	vtextfield.VModel = vmodel
 	vtextfield.SetData(vmodel, "")
 	vtextfield.SetTypePassword
+	vtextfield.BindAllEvents
 	vtextfield.AddAttr(":type", $"${bshowPassword} ? 'text' : 'password'"$)
 	vtextfield.AddAttr(":append-icon", $"${bshowPassword} ? 'mdi-eye' : 'mdi-eye-off'"$)
 	vtextfield.AddAttr("v-on:click:append", $"${bshowPassword} = !${bshowPassword}"$)
 	vtextfield.AddAttr("autocomplete", "off")
 	vtextfield.AssignProps(props)
 	vtextfield.SetData(bshowPassword, False)
-	'
-	vtextfield.SetOnEvent(mCallBack, "click", "")
-	vtextfield.SetOnEvent(mCallBack, "click.stop", "")
-	vtextfield.SetOnEvent(mCallBack, "click.prevent", "")
-	vtextfield.SetOnEvent(mCallBack, "change", "")
-	vtextfield.SetOnEvent(mCallBack, "click:prepend", "")
-	vtextfield.SetOnEvent(mCallBack, "click:append-outer", "")
-	vtextfield.SetOnEvent(mCallBack, "click:prepend-inner", "")
-	vtextfield.SetOnEvent(mCallBack, "click:clear", "")
-	
 	Return vtextfield
 End Sub
 
@@ -7311,7 +7273,7 @@ Sub AddSwitch(sid As String, vmodel As String, slabel As String, truevalue As Ob
 	vswitch.AddAttr(":inset", bInset)
 	If color <> "" Then vswitch.Color = color
 	vswitch.AssignProps(props)
-	vswitch.SetOnEvent(mCallBack, "change", "")
+	vswitch.BindAllEvents
 	If vmodel <> "" Then
 		vswitch.SetData(vmodel, truevalue)
 	End If
@@ -7332,7 +7294,7 @@ Sub AddRating(sid As String, vmodel As String, slength As Int, ssize As Int, bHo
 	vrating.AddAttr(":hover", bHover)
 	If color <> "" Then vrating.Color = color
 	vrating.AssignProps(props)
-	vrating.SetOnEvent(mCallBack, "input", "")
+	vrating.BindAllEvents
 	Return vrating
 End Sub
 
@@ -7354,7 +7316,7 @@ Sub AddCheckBox(sid As String, vmodel As String, slabel As String, truevalue As 
 	End If
 	If color <> "" Then vcheckbox.Color = color
 	vcheckbox.AssignProps(props)
-	vcheckbox.SetOnEvent(mCallBack, "click", "")
+	vcheckbox.BindAllEvents
 	If vmodel <> "" Then 
 		vcheckbox.SetData(vmodel, truevalue)
 	End If
@@ -7380,7 +7342,7 @@ Sub AddImage1(elID As String, vmodel As String, alt As String, sheight As String
 	vimg.AddAttr(":lazy-src", vmodel)
 	vimg.Alt = alt
 	'vimg.AddAttr(":aspect-ratio", "16/9")
-	vimg.SetOnEvent(mCallBack, "click", "")
+	vimg.BindAllEvents
 	vimg.AssignProps(props)
 	Return vimg
 End Sub
@@ -7408,7 +7370,7 @@ Sub AddImage(elID As String, src As String, lazysrc As String, alt As String, sh
 		vimg.AddAttr("lazy-src", lazysrc)
 	End If
 	'vimg.AddAttr(":aspect-ratio", "16/9")
-	vimg.SetOnEvent(mCallBack, "click", "")
+	vimg.BindAllEvents
 	vimg.AssignProps(props)
 	Return vimg
 End Sub
@@ -7499,7 +7461,7 @@ Sub AddChipWithAvatar(elID As String, src As String, label As String, bPill As B
 	vchip.AddAttr(":close", bClose)
 	If color <> "" Then vchip.Color = color
 	vchip.AssignProps(chipprops)
-	
+	vchip.BindAllEvents
 	vchip.SetOnEvent(mCallBack, "click", $"'${elID}'"$)
 	vchip.SetOnEvent(mCallBack, "click:close", $"'${elID}'"$)
 	'
@@ -7538,6 +7500,7 @@ Sub AddChipWithIcon(elID As String, sicon As String, label As String, bPill As B
 	vchip.AddAttr(":pill", bPill)
 	vchip.AddAttr(":close", bClose)
 	If color <> "" Then vchip.Color = color
+	vchip.BindAllEvents
 	vchip.SetOnEvent(mCallBack, "click", $"'${elID}'"$)
 	vchip.SetOnEvent(mCallBack, "click:close", $"'${elID}'"$)'
 	'
@@ -7591,6 +7554,7 @@ Sub AddRadioGroup(elID As String, vmodel As String, sLabel As String, bRow As Bo
 	End If
 	Dim lst As List = NewList
 	vradiogroup.SetData(sourceTable, lst)
+	vradiogroup.BindAllEvents
 	vradiogroup.SetOnEvent(mCallBack, "change", $"item.${key}"$)
 	vradiogroup.BindVueElement(vradio)
 	Return vradiogroup
@@ -7841,7 +7805,7 @@ Sub AddRow(rowpos As Int) As VueElement
 	BANano.GetElement(parentID).Append($"<v-row id="${rowkey}"></v-row>"$)
 	Dim mbutton As VueElement
 	mbutton.Initialize(mCallBack, rowkey, rowkey)
-	mbutton.SetOnEvent(mCallBack, "click", "")
+	mbutton.BindAllEvents
 	Return mbutton
 End Sub
 
@@ -7860,7 +7824,7 @@ Sub AddCol(colpos As Int, xs As String, sm As String, md As String, lg As String
 	Dim mbutton As VueElement
 	mbutton.Initialize(mCallBack, colKey, colKey)
 	mbutton.AddSizes(xs, sm, md, lg, xl)
-	mbutton.SetOnEvent(mCallBack, "click", "")
+	mbutton.BindAllEvents
 	Return mbutton
 End Sub
 

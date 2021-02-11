@@ -55,6 +55,32 @@ Sub Class_Globals
 	Public refs As BANanoObject
 End Sub
 
+Sub AddContainer(elID As String, bFluid As Boolean) As VueElement
+	Dim stag As String = "v-container"
+	Dim parentID As String = CleanID(Here)
+	elID = elID.tolowercase
+	elID = elID.Replace("#", "")
+	'
+	If BANano.Exists(parentID) = False Then
+		Log($"AddVueElement.${elID} could not be added to ${parentID}"$)
+		Return Null
+	End If
+		
+	'check if the element exists
+	If BANano.Exists($"#${elID}"$) = False Then
+		Dim parELE As BANanoElement
+		parELE.Initialize(parentID)
+		parELE.Append($"<${stag} id="${elID}"></${stag}>"$)
+	End If
+	'get the element
+	Dim ve As VueElement
+	ve.Initialize(mCallBack, elID, elID)
+	ve.Bind(":fluid",bFluid)
+	ve.BindAllEvents
+	Return ve
+End Sub
+
+
 'click a reference
 Sub Click(refID As String)
 	refID = refID.tolowercase

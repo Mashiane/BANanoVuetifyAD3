@@ -34,6 +34,6 @@ ModuleClosedNodes6=
 ModuleClosedNodes7=
 ModuleClosedNodes8=
 ModuleClosedNodes9=
-NavigationStack=VueElement,SetData,1403,0,VueElement,setDataSource,2084,0,VueElement,BindVueElement,1700,0,VueElement,setVModel,2122,0,VueElement,setRules,2822,0,VueElement,setItems,4271,0,VueElement,ClearItems,4700,0,VueElement,AddListViewTemplate,5179,0,VueElement,Class_Globals,183,0,VueElement,DesignerCreateView,957,1,Main,Process_Globals,9,0
+NavigationStack=VueElement,AddChipWithAvatar,7459,2,VueElement,AddChipWithIcon,7496,2,VueElement,AddRadioGroup,7550,2,VueTable,AddFilter,608,2,VueGMap,SetOnEvent,912,0,VueElement,DesignerCreateView,1059,0,VueElement,SetOnEvent,2842,0,VueElement,OnClickPrepend,4343,0,VueElement,OnMouseOut,4375,0,VueElement,BindAllEvents,6005,0,Main,Process_Globals,8,0
 SelectedBuild=0
 VisibleModules=
