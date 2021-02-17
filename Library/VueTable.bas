@@ -169,6 +169,7 @@ Sub Class_Globals
 	Private filterList As List
 	Private allcolumns As String
 	Private sloading As String
+	Public VC As VueComponent	
 End Sub
 
 'initialize the custom view
@@ -248,12 +249,17 @@ Sub setTitle(vTitle As String)
 	SetData(titleText, vTitle)
 End Sub
 
+'set the parent component
+Sub setParentComponent(PVC As VueComponent)
+	VC = PVC
+End Sub
+
 'update the title
-Sub UpdateTitle(VC As VueComponent, title As String)
+Sub UpdateTitle(title As String)
 	VC.SetData(titleText, title)
 End Sub
 
-Sub UpdateLoading(VC As VueComponent, b As Boolean)
+Sub UpdateLoading(b As Boolean)
 	VC.SetData(sloading, b)
 End Sub
 
@@ -265,11 +271,11 @@ Sub getHasSearch As Boolean
 	Return mHasSearch
 End Sub
 
-Sub SetHeaders(VC As VueComponent, hdrs As List)
+Sub SetHeaders(hdrs As List)
 	VC.SetData(headers, hdrs)
 End Sub
 
-Sub SetSelected(VC As VueComponent, varSortDesc As List)
+Sub SetSelected(varSortDesc As List)
 	VC.SetData(selected, varSortDesc)
 End Sub
 
@@ -279,31 +285,31 @@ Sub setNoDataText(varNoDataText As String)
 End Sub
 
 'set group-by
-Sub SetGroupBy(VC As VueComponent, varGroupBy As List)
+Sub SetGroupBy(varGroupBy As List)
 	VC.SetData(groupby, varGroupBy)
 End Sub
 
 'set sort-by
-Sub SetSortBy(VC As VueComponent, varSortBy As List)
+Sub SetSortBy(varSortBy As List)
 	VC.SetData(sortby, varSortBy)
 End Sub
 
 'clear any sort
-Sub ClearSort(VC As VueComponent)
-	SetSortBy(VC, NewList)
+Sub ClearSort
+	SetSortBy(NewList)
 End Sub
 
 'set group-desc
-Sub SetGroupDesc(VC As VueComponent, varGroupDesc As List)
+Sub SetGroupDesc(varGroupDesc As List)
 	VC.SetData(groupdesc, varGroupDesc)
 End Sub
 
-Sub SetSortDesc(vc As VueComponent, varSortDesc As List)
-	vc.SetData(sortdesc, varSortDesc)
+Sub SetSortDesc(varSortDesc As List)
+	VC.SetData(sortdesc, varSortDesc)
 End Sub
 
 'set expanded
-Sub SetExpanded(VC As VueComponent, varExpanded As List)
+Sub SetExpanded(varExpanded As List)
 	VC.SetData(expanded, varExpanded)
 End Sub
 
@@ -332,6 +338,16 @@ End Sub
 'add a new record
 Sub AddRow(rowData As Map)
 	Items.Add(rowData)
+End Sub
+
+'add a new row at the end of the items
+Sub AddRow1(rowdata As Map)
+	VC.SetDataPush(itemsname, rowdata)
+End Sub
+
+'add a row at the top of the list
+Sub AddRowTop(rowdata As Map)
+	VC.SetDataUnshift(itemsname, rowdata)
 End Sub
 
 'Create view in the designer
@@ -534,42 +550,42 @@ Sub AddDivider
 End Sub
 
 'add a column to add a new
-Sub AddNew(VC As VueComponent)
+Sub AddNew
 	Dim btnKey As String = $"${mName}_add"$
-	AddTitleIcon(VC, btnKey, "mdi-plus", "blue")
+	AddTitleIcon(btnKey, "mdi-plus", "blue")
 End Sub
 
 'add a column to clear sort
-Sub AddClearSort(VC As VueComponent)
+Sub AddClearSort
 	Dim btnKey As String = $"${mName}_clearsort"$
-	AddTitleIcon(VC, btnKey, "mdi-sort-variant-remove", "orange")
+	AddTitleIcon(btnKey, "mdi-sort-variant-remove", "orange")
 End Sub
 
 'add a column to clear filters
-Sub AddClearFilter(VC As VueComponent)
+Sub AddClearFilter
 	Dim btnKey As String = $"${mName}_clearfilter"$
-	AddTitleIcon(VC, btnKey, "mdi-filter-remove", "red")
+	AddTitleIcon(btnKey, "mdi-filter-remove", "red")
 End Sub
 
 'add a back button 
-Sub AddBack(VC As VueComponent)
+Sub AddBack
 	Dim btnKey As String = $"${mName}_back"$
-	AddTitleIcon(VC, btnKey, "mdi-chevron-left", "cyan")
+	AddTitleIcon(btnKey, "mdi-chevron-left", "cyan")
 End Sub
 
 'add a back button 
-Sub AddRefresh(VC As VueComponent)
+Sub AddRefresh
 	Dim btnKey As String = $"${mName}_refresh"$
-	AddTitleIcon(VC, btnKey, "mdi-reload", "purple")
+	AddTitleIcon(btnKey, "mdi-reload", "purple")
 End Sub
 
 'add a button to the header
-Sub AddButtonIcon(VC As VueComponent, elID As String, eIcon As String, btnColor As String)
-	AddTitleIcon(VC, elID, eIcon, btnColor)
+Sub AddButtonIcon(elID As String, eIcon As String, btnColor As String)
+	AddTitleIcon(elID, eIcon, btnColor)
 End Sub	
 
 'a button with an icon on the left
-Sub AddTitleIcon(VC As VueComponent, elID As String, eIcon As String, btnColor As String)
+Sub AddTitleIcon(elID As String, eIcon As String, btnColor As String)
 	Dim ct As BANanoElement
 	ct.Initialize($"#${titleID}"$)
 	elID = elID.ToLowerCase
@@ -592,11 +608,11 @@ Sub AddTitleIcon(VC As VueComponent, elID As String, eIcon As String, btnColor A
 End Sub
 
 'add a filter, after all columns are added
-Sub AddFilter(VC As VueComponent, activeClass As String)
+Sub AddFilter(activeClass As String)
 	'show the filter
 	SetData(filtershow, True)
 	Dim btnKey As String = $"${mName}_filter"$
-	AddTitleIcon(VC, btnKey, "mdi-filter", "green")
+	AddTitleIcon(btnKey, "mdi-filter", "green")
 	'
 	Dim filterID As String = $"${mName}filter"$
 	Dim filterChips As String = $"${mName}filterchips"$
@@ -1468,7 +1484,7 @@ Sub AddColumns(flds As Map)
 End Sub
 
 'reset everything about data-table 
-Sub Reset(VC As VueComponent)
+Sub Reset
 	VC.SetData(itemsname, NewList)
 	VC.SetData(selected, NewList)
 	VC.SetData(groupby, NewList)
@@ -1485,13 +1501,13 @@ Sub Reset(VC As VueComponent)
 End Sub
 
 'set own filter
-Sub ApplyFilter1(VC As VueComponent, fltrs As List)
+Sub ApplyFilter1(fltrs As List)
 	VC.SetData(filters, fltrs)
-	ApplyFilter(VC)
+	ApplyFilter
 End Sub
 
 'update the records
-Sub Reload(VC As VueComponent, records As List)
+Sub Reload(records As List)
 	VC.SetData(itemsname, records)
 	VC.SetData(selected, NewList)
 	VC.SetData(groupby, NewList)
@@ -1839,7 +1855,7 @@ Sub SetColumnWidth(colName As String, colWidth As Int)
 End Sub
 
 'hide columns after table creation
-Sub HideColumns(VC As VueComponent, colNames As List)
+Sub HideColumns(colNames As List)
 	hdr.Initialize 
 	'loop through each column
 	For Each k As String In columnsM.Keys
@@ -1856,7 +1872,7 @@ Sub HideColumns(VC As VueComponent, colNames As List)
 End Sub
 
 'Show columns after table creation
-Sub ShowColumns(VC As VueComponent, colNames As List)
+Sub ShowColumns(colNames As List)
 	hdr.Initialize 
 	'loop through each column
 	For Each k As String In columnsM.Keys
@@ -1872,24 +1888,36 @@ Sub ShowColumns(VC As VueComponent, colNames As List)
 End Sub
 
 'get all selected
-Sub GetSelected(VC As VueComponent) As List
+Sub GetSelected As List
 	Dim lst As List = VC.GetData(selected)
 	Return lst
 End Sub
 
 'get all the data from the table
-Sub GetData(VC As VueComponent) As List
+Sub GetData As List
 	Dim lst As List = VC.GetData(itemsname)
 	Return lst
 End Sub
 
+'remove an item where
+Sub RemoveItem(prop As String, value As String)
+	Dim m As Map = CreateMap()
+	m.Put(prop, value)
+	'find the record at a position
+	Dim mpos As Int = VC.GetDataPositionWhere(itemsname, m)
+	If mpos >= 0 Then
+		VC.SetDataSpliceRemove(itemsname, mpos, 1)
+	End If
+End Sub
+
+
 'reset the filters
-Sub ClearFilter(VC As VueComponent)
-	ResetColumns(VC)
+Sub ClearFilter
+	ResetColumns
 End Sub
 
 'apply a filters bases on fields
-Sub ApplyFilter(VC As VueComponent)
+Sub ApplyFilter
 	filterList = VC.GetData(filters)
 	Dim hdr As List
 	hdr.Initialize 
@@ -1902,7 +1930,7 @@ Sub ApplyFilter(VC As VueComponent)
 End Sub
 
 'reset the columns
-Sub ResetColumns(VC As VueComponent)
+Sub ResetColumns
 	hdr.Initialize
 	filterList.Initialize 
 	'loop through each column

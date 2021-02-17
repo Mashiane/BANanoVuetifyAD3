@@ -141,7 +141,7 @@ Sub Class_Globals
 	Public const MAPTYPE_SATELLITE As String = "satellite"
 	Public const MAPTYPE_HYBRID As String = "hybrid"
 	Public const MAPTYPE_TERRAIN As String = "terrain"
-	private gmapkey As String
+	Private gmapkey As String
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)

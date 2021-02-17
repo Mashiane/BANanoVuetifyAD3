@@ -114,7 +114,7 @@ Module9=VueGMap
 NumberOfFiles=48
 NumberOfLibraries=3
 NumberOfModules=11
-Version=8.8
+Version=8.9
 @EndOfDesignText@
 #Region Project Attributes 
 	#MainFormWidth: 600
@@ -125,7 +125,7 @@ Version=8.8
 
 Sub Process_Globals
 	Private BANano As BANano 'ignore
-	Public Version As String = "3.16"
+	Public Version As String = "3.22"
 	Public AppName As String = "BANanoVuetifyAD3"
 End Sub
 

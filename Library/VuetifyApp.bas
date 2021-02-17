@@ -3025,14 +3025,14 @@ End Sub
 
 'a button with an icon on the right
 '<code>
-'Dim btn1 As VueElement = vuetify.AddButtonWidthRightIcon(Me, "r2c1", "btn1", "Button 1", "mdi-heart", "primary", True, Null, null)
+'Dim btn1 As VueElement = vuetify.AddButtonWithRightIcon(Me, "r2c1", "btn1", "Button 1", "mdi-heart", "primary", True, Null, null)
 'vuetify.BindVueElement(btn1)
 '
 'Event
 'Sub btn1_click(e As BANanoEvent)
 'End Sub
 '</code>
-Sub AddButtonWidthRightIcon(Module As Object, parentID As String, elID As String, eLabel As String, eIcon As String, eColor As String, bOutlined As Boolean, btnprops As Map, iconprops As Map) As VueElement
+Sub AddButtonWithRightIcon(Module As Object, parentID As String, elID As String, eLabel As String, eIcon As String, eColor As String, bOutlined As Boolean, btnprops As Map, iconprops As Map) As VueElement
 	parentID = CleanID(parentID)
 	elID = elID.ToLowerCase
 	'

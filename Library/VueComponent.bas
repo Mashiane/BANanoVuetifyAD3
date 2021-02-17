@@ -75,7 +75,7 @@ Sub AddContainer(elID As String, bFluid As Boolean) As VueElement
 	'get the element
 	Dim ve As VueElement
 	ve.Initialize(mCallBack, elID, elID)
-	ve.Bind(":fluid",bFluid)
+	ve.Bind("fluid",bFluid)
 	ve.BindAllEvents
 	Return ve
 End Sub
@@ -323,6 +323,24 @@ Sub ShowAlert(process As String, title As String, Message As String, OkTitle As 
 	SetData(dialogcancelshow, False)
 	SetData(dialogpromptshow, False)
 End Sub
+
+'remove an item where
+Sub SetDataRemoveWhere(dsname As String, prop As String, value As String)
+	dsname = dsname.tolowercase
+	Dim cl As List = GetData(dsname)
+	'
+	Dim nflds As List
+	nflds.Initialize
+	For Each fldm As Map In cl
+		Dim ofldname As String = fldm.Get(prop)
+		If ofldname.EqualsIgnoreCase(value) Then
+		Else
+			nflds.Add(fldm)
+		End If
+	Next
+	SetData(dsname, nflds)
+End Sub
+
 
 'get the placeholder node
 Sub getPlaceHolderNode As BANanoElement

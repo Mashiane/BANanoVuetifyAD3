@@ -303,7 +303,6 @@ Sub Class_Globals
 	Private bCenter As Boolean = False
 	Private stFloat As String = ""
 	Private stElevation As String = ""
-	
 	'
 	Type VueGridRow(Rows As Int, Columns As List, _
 	ma As String, mx As String, my As String, mt As String, mb As String, mr As String, ml As String, _
@@ -1414,7 +1413,9 @@ End Sub
 
 'add a rule
 Sub AddRule(MethodName As String)
-	If stRules = "" Then Return
+	If stRules = "" Then 
+		setRules($"${mName}rules"$)
+	End If
 	MethodName = MethodName.ToLowerCase
 	Dim rules As List
 	If bindings.ContainsKey(stRules) Then
@@ -6597,14 +6598,14 @@ End Sub
 
 'a button with an icon on the right
 '<code>
-'Dim btn1 As VueElement = vuetify.AddButtonWidthRightIcon(Me, "r2c1", "btn1", "Button 1", "mdi-heart", "primary", True, Null, null)
+'Dim btn1 As VueElement = vuetify.AddButtonWithRightIcon(Me, "r2c1", "btn1", "Button 1", "mdi-heart", "primary", True, Null, null)
 'vuetify.BindVueElement(btn1)
 '
 'Event
 'Sub btn1_click(e As BANanoEvent)
 'End Sub
 '</code>
-Sub AddButtonWidthRightIcon(elID As String, eLabel As String, eIcon As String, eColor As String, bOutlined As Boolean, btnprops As Map, iconprops As Map) As VueElement
+Sub AddButtonWithRightIcon(elID As String, eLabel As String, eIcon As String, eColor As String, bOutlined As Boolean, btnprops As Map, iconprops As Map) As VueElement
 	Dim parentID As String = CleanID(mName)
 	elID = elID.ToLowerCase
 	'
@@ -6661,6 +6662,9 @@ Sub AddButtonWithLeftIcon(elID As String, eLabel As String, eIcon As String, eCo
 	
 	Dim vbtnright As VueElement
 	vbtnright.Initialize(mCallBack, elID, elID)
+	vbtnright.AssignProps(btnprops)
+	vbtnright.BindAllEvents
+	
 	'
 	Dim viconright As VueElement
 	viconright.Initialize(mCallBack, siconright, siconright)
@@ -6673,13 +6677,14 @@ Sub AddButtonWithLeftIcon(elID As String, eLabel As String, eIcon As String, eCo
 	viconright.Dark = True
 	viconright.AddAttr(":left", True)
 	'
-	If eColor <> "" Then vbtnright.Color = eColor
-	If bOutlined Then vbtnright.Outlined = True
+	If eColor <> "" Then 
+		vbtnright.Color = eColor
+	End If
+	If bOutlined Then 
+		vbtnright.Outlined = True
+	End If
 	'
-	vbtnright.AssignProps(btnprops)
 	viconright.AssignProps(iconprops)
-	'
-	vbtnright.BindAllEvents
 	'
 	vbtnright.BindVueElement(viconright)
 	vbtnright.BindVueElement(vspanleft)
@@ -7747,6 +7752,12 @@ Sub AddAppBar(elID As String) As VueElement
 	Return elx
 End Sub
 
+
+Sub AddApp(elID As String) As VueElement
+	Dim elx As VueElement = AddVueElement1(elID, "v-app", "", "", "", Null)
+	Return elx
+End Sub
+
 'add a master snack bar for the app
 Sub AddAppSnackBar As VueElement
 	Dim elx As VueElement = AddVueElement1("appsnack", "v-snackbar", "appsnackshow", "", "", Null)
@@ -7988,4 +7999,9 @@ End Sub
 
 Sub AddChip(elid As String) As VueElement
 	Return AddVueElement1(elid, "v-chip", "", "", "", Null)
+End Sub
+
+Sub CenterContent
+	setAlignCenter(True)
+	setJustifyCenter(True)
 End Sub
