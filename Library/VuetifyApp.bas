@@ -396,8 +396,16 @@ Sub Class_Globals
 	rightswitch As String, showrightswitches As Boolean, switchinset As Boolean)
 	Public RouterViewName As String
 	Public DatabaseName As String
+	Public ProgressLoaderName As String
 End Sub
 
+Sub ShowProgressLoader
+	SetData(ProgressLoaderName, True)
+End Sub
+
+Sub HideProgressLoader
+	SetData(ProgressLoaderName, False)
+End Sub
 
 'new listviewitemoptions
 Sub NewListViewItemOptions() As ListViewItemOptions

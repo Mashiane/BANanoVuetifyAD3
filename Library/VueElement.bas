@@ -1683,6 +1683,12 @@ Sub Bind(attr As String, value As String)
 	AddAttr($":${attr}"$, value)
 End Sub
 
+'bind to a dynamic attribute
+Sub Bind2Dynamic(attr As String, value As String)
+	Bind(attr, value)
+	bindings.Remove(attr)
+End Sub
+
 Sub BindKey(value As String)
 	AddAttr($":key"$, value)
 End Sub
