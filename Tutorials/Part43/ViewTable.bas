@@ -28,14 +28,15 @@ Sub Initialize
 	banano.LoadLayout(vuetify.PlaceHolderName, "vtables")
 	vtables.Matrix(1, 1).LoadLayout("vetable")
 	'
+	vetable.ParentComponent = tables
 	vetable.AddDivider
-	vetable.AddNew(tables)
+	vetable.AddNew
 	vetable.AddDivider
-	vetable.AddClearSort(tables)
+	vetable.AddClearSort
 	vetable.AddDivider
-	vetable.AddFilter(tables, "primary--text")
+	vetable.AddFilter("primary--text")
 	vetable.AddDivider
-	vetable.AddClearFilter(tables)
+	vetable.AddClearFilter
 	'
 	vetable.AddColumn1("name", "Dessert (100g Serving", vetable.COLUMN_TEXT, 0, True, vetable.ALIGN_LEFT)
 	vetable.AddChip("calories", "Calories", "item.color")
@@ -158,7 +159,7 @@ Sub Initialize
 	vuetify.AddRoute(tables)
 	'
 	'hide specific columns
-	vetable.HideColumns(tables, Array("fat", "carbs", "protein"))
+	vetable.HideColumns(Array("fat", "carbs", "protein"))
 	'
 	
 End Sub
@@ -183,7 +184,7 @@ End Sub
 
 Sub vetable_filter_click(e As BANanoEvent)
 	vuetify.ShowSnackBar("filter...")
-	vetable.ApplyFilter(tables)
+	vetable.ApplyFilter
 End Sub
 
 Private Sub vetable_Add_Click (e As BANanoEvent)
@@ -193,16 +194,16 @@ End Sub
 
 Private Sub vetable_ClearSort_Click (e As BANanoEvent)
 	vuetify.ShowSnackBar("Clear Sort")
-	vetable.ClearSort(tables)
+	vetable.ClearSort
 End Sub
 
 Private Sub vetable_ClearFilter_Click (e As BANanoEvent)
 	vuetify.ShowSnackBar("Clear Filter")
-	vetable.ClearFilter(tables)
+	vetable.ClearFilter
 End Sub
 
 Private Sub vetable_ItemSelected (item As Map)
-	vuetify.ShowSnackBar(BANano.ToJson(item))
+	vuetify.ShowSnackBar(banano.ToJson(item))
 End Sub
 
 

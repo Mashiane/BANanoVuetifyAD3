@@ -44,13 +44,13 @@ Sub Initialize
 	Dim btn6 As VueElement = vuetify.AddFab(Me, vbuttoncontainer.MatrixID(1,6), "btn6", "mdi-android", "purple", True, CreateMap("large":True), Null)
 	buttons.BindVueElement(btn6)
 	'
-	Dim btn7 As VueElement = vuetify.AddButtonWidthRightIcon(Me, vbuttoncontainer.MatrixID(2,1), "btn7", "Remove", "mdi-minus", "primary", False, Null,Null)
+	Dim btn7 As VueElement = vuetify.AddButtonWithRightIcon(Me, vbuttoncontainer.MatrixID(2,1), "btn7", "Remove", "mdi-minus", "primary", False, Null,Null)
 	buttons.BindVueElement(btn7)
 	'
-	Dim btn8 As VueElement = vuetify.AddButtonWidthRightIcon(Me, vbuttoncontainer.MatrixID(2,2), "btn8", "Love", "mdi-heart", "pink", False, CreateMap("large":True), Null)
+	Dim btn8 As VueElement = vuetify.AddButtonWithRightIcon(Me, vbuttoncontainer.MatrixID(2,2), "btn8", "Love", "mdi-heart", "pink", False, CreateMap("large":True), Null)
 	buttons.BindVueElement(btn8)
 	'
-	Dim btn9 As VueElement = vuetify.AddButtonWidthRightIcon(Me, vbuttoncontainer.MatrixID(2,3), "btn9", "Add", "mdi-plus", "indigo", True, Null, Null)
+	Dim btn9 As VueElement = vuetify.AddButtonWithRightIcon(Me, vbuttoncontainer.MatrixID(2,3), "btn9", "Add", "mdi-plus", "indigo", True, Null, Null)
 	buttons.BindVueElement(btn9)
 	'
 	Dim btn10 As VueElement = vuetify.AddButtonWithLeftIcon(Me, vbuttoncontainer.MatrixID(2,4), "btn10", "Love", "mdi-heart", "pink", False, CreateMap("large":True), Null)
@@ -80,7 +80,7 @@ Sub Initialize
 '	buttons.SetData("btn16badge", 2)
 '	
 	Dim r4c1 As String = vbuttoncontainer.MatrixID(4, 1)
-	Dim btnAB As VueElement = vuetify.AddButtonWidthRightIcon(Me, r4c1, "btnAB", "AB", "mdi-plus", "indigo", True, Null, Null)
+	Dim btnAB As VueElement = vuetify.AddButtonWithRightIcon(Me, r4c1, "btnAB", "AB", "mdi-plus", "indigo", True, Null, Null)
 	buttons.BindVueElement(btnAB)
 	'
 	Dim r4c2 As String = vbuttoncontainer.MatrixID(4, 2)

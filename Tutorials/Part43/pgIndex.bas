@@ -137,8 +137,7 @@ Sub Init
 	drwlist.AddItemParentChild("database", ViewMySQL.name, "", "", "MySQL PHP", ViewMySQL.path)
 	drwlist.AddItemParentChild("database", ViewMSSQL.name, "", "", "MSSQL PHP (PDO)", ViewMSSQL.path)
 	drwlist.AddItemParentChild("database", ViewBANanoSQL.name, "", "", "IndexedDB", ViewBANanoSQL.path)
-	drwlist.AddItemParentChild("database", ViewCRUDBuilder.name, "", "", "CRUD Builder", ViewCRUDBuilder.path)
-	drwlist.AddItemParentChild("database", ViewContacts.name, "", "", "Contacts Example", ViewContacts.path)
+	'drwlist.AddItemParentChild("database", ViewContacts.name, "", "", "Contacts Example", ViewContacts.path)
 	'
 	drwlist.AddItemParentChild("", "firebase", "mdi-firebase", "", "FireBase", "")
 	drwlist.AddItemParentChild("firebase", ViewFirebase.name, "", "", "Firebase Messaging", ViewFirebase.path)
@@ -164,8 +163,8 @@ Sub drwlist_click(item As String)
 End Sub
 
 Sub AddRouters
-	ViewContacts.Initialize
-	ViewCRUDBuilder.Initialize 
+	'ViewContacts.Initialize
+	'ViewCRUDBuilder.Initialize 
 	ViewFirebase.Initialize 
 	ViewBANanoSQL.Initialize 
 	ViewMSSQL.Initialize 
