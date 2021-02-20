@@ -34,6 +34,6 @@ ModuleClosedNodes6=
 ModuleClosedNodes7=
 ModuleClosedNodes8=
 ModuleClosedNodes9=
-NavigationStack=VueElement,SetVBindAttribute,1392,0,VueElement,RemoveCodeBindings,1771,0,VueElement,Bind,1677,0,VueElement,BindTo,1690,0,VueElement,Bind2Dynamic,1680,0,VuetifyApp,Class_Globals,395,3,VuetifyApp,ShowProgressLoader,396,2,VuetifyApp,HideProgressLoader,399,1,Main,Process_Globals,8,0,MySQLCRUD,Diag_AddFileInput,470,6,Main,AppStart,30,0
+NavigationStack=VueElement,TextXSRight,8075,2,VueElement,TextSMLeft,8067,0,VueElement,OverflowXHidden,8056,0,VueElement,setLength,2731,0,VueElement,AddAppBar,7776,0,VueElement,AddAppSnackBar,7825,0,VueElement,AddApp,7787,0,VueElement,AddPDFView,7788,6,Main,Process_Globals,10,0,Main,AppStart,29,0
 SelectedBuild=0
 VisibleModules=

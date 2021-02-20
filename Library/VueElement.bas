@@ -5304,38 +5304,65 @@ Sub AddVueElement(elID As String, tag As String, props As Map) As VueElement
 	Return ve
 End Sub
 
-Sub HiddenSMAndDown
-	AddClass("hidden-sm-and-down")
+Sub HiddenXSOnly
+	AddClass("hidden-xs-only")
 End Sub
 
-Sub HiddenMDAndUp
-	AddClass("hidden-md-and-up")
+Sub HiddenSMOnly
+	AddClass("hidden-sm-only")
+End Sub
+	
+Sub HiddenMDOnly
+	AddClass("hidden-md-only")
+End Sub
+	
+Sub HiddenLGOnly
+	AddClass("hidden-lg-only")
+End Sub
+	
+Sub HiddenXLOnly
+	AddClass("hidden-xl-only")
+End Sub
+'
+Sub HiddenXSAndDown
+	AddClass("hidden-xs-and-down")
+End Sub
+
+Sub HiddenSMAndDown
+	AddClass("hidden-sm-and-down")
 End Sub
 	
 Sub HiddenMDAndDown
 	AddClass("hidden-md-and-down")
 End Sub
-
+	
+Sub HiddenLGAndDown
+	AddClass("hidden-lg-and-down")
+End Sub
+	
 Sub HiddenXLAndDown
 	AddClass("hidden-xl-and-down")
+End Sub
+'
+Sub HiddenXSAndUp
+	AddClass("hidden-xs-and-up")
 End Sub
 
 Sub HiddenSMAndUp
 	AddClass("hidden-sm-and-up")
 End Sub
-
+	
+Sub HiddenMDAndUp
+	AddClass("hidden-md-and-up")
+End Sub
+	
+Sub HiddenLGAndUp
+	AddClass("hidden-lg-and-up")
+End Sub
+	
 Sub HiddenXLAndUp
 	AddClass("hidden-xl-and-up")
-End Sub
-
-Sub HiddenXSOnly
-	AddClass("hidden-xs-only")
-End Sub
-
-
-Sub HiddenXLOnly
-	AddClass("hidden-xl-only")
-End Sub
+End Sub	
 
 Sub HideOnAll
 	AddClass("d-none")
@@ -7764,6 +7791,31 @@ Sub AddApp(elID As String) As VueElement
 	Return elx
 End Sub
 
+'add a pdf viewing iframe
+Sub AddPDFView(elID As String, sourceFile As String) As VueElement
+	Dim div As VueElement = AddVueElement1(elID, "div", "", "", "", Null)
+	div.Width = "100%"
+	div.Height = "100%"
+	div.AddStyle("width", "100%")
+	div.AddStyle("height", "100%")
+	div.AddStyle("max-width", "100%")
+	div.AddStyle("max-height", "100%")
+	'
+	Dim sourcefileLink As String = $"${elID}src"$
+	Dim iframe As VueElement = div.AddVueElement(elID & "iframe", "iframe", Null)
+	iframe.Width = "100%"
+	iframe.Height = "100%"
+	iframe.AddStyle("width", "100%")
+	iframe.AddStyle("height", "100%")
+	iframe.AddStyle("max-width", "100%")
+	iframe.AddStyle("max-height", "100%")
+	iframe.AddAttr("scrolling", "no")
+	iframe.Bind("src", sourcefileLink)
+	iframe.SetData(sourcefileLink, sourceFile)
+	BindVueElement(iframe) 
+	Return iframe
+End Sub
+
 'add a master snack bar for the app
 Sub AddAppSnackBar As VueElement
 	Dim elx As VueElement = AddVueElement1("appsnack", "v-snackbar", "appsnackshow", "", "", Null)
@@ -8010,4 +8062,46 @@ End Sub
 Sub CenterContent
 	setAlignCenter(True)
 	setJustifyCenter(True)
+End Sub
+
+Sub setLazyValidation(b As Boolean)
+	SetAttr(":lazy-validation", b)
+End Sub
+
+'place the element at the bottom
+Sub PlaceAtBottom
+	AddStyle("position", "absolute")
+	AddStyle("bottom", "0")
+End Sub
+
+Sub OverflowHidden
+	AddClass("overflow-hidden")
+End Sub
+
+Sub OverflowYHidden
+	AddClass("overflow-y-hidden")
+End Sub
+
+Sub OverflowXHidden
+	AddClass("overflow-x-hidden")
+End Sub
+
+Sub TextLGRight
+	AddClass("text-lg-right")
+End Sub
+
+Sub TextMDCenter
+	AddClass("text-md-center")
+End Sub
+
+Sub TextSMLeft
+	AddClass("text-sm-left")
+End Sub
+
+Sub TextXSCenter
+	AddClass("text-xs-center")
+End Sub
+
+Sub TextXSRight
+	AddClass("text-xs-right")
 End Sub

@@ -77,6 +77,7 @@ Sub Class_Globals
 	Private FilledM As Map
 	Private ShapedM As  Map
 	Public Diag_FullScreenOnMobile As Boolean
+	Public Diag_LazyValidation As Boolean
 	Public DB_CreateTable As String
 End Sub
 
@@ -189,9 +190,9 @@ Sub Diag_SetDense(fldName As String, b As Boolean)
 End Sub
 
 'set dialog element to required
-Sub Diag_SetRequired(fldName As String, b As Boolean)
+Sub Diag_SetRequired(fldName As String, title As String, b As Boolean)
 	If b = False Then Return
-	RequiredM.Put(fldName, fldName)
+	RequiredM.Put(fldName, title)
 End Sub
 
 'set dialog element to read only
@@ -228,6 +229,7 @@ private Sub SetProperties(fldNAme As String)
 	End If
 	If RequiredM.ContainsKey(fldNAme) Then
 		dtCont.Append($"${fldNAme}.Required = ":${fldNAme}required""$).Append(CRLF)
+		dtCont.Append($"${fldNAme}.AddRule("${fldNAme.tolowercase}rule")"$)
 	End If
 	If ReadOnlyM.ContainsKey(fldNAme) Then
 		dtCont.Append($"${fldNAme}.ReadOnly = ":${fldNAme}readonly""$).Append(CRLF)
@@ -1300,8 +1302,16 @@ private Sub CreateDialogCode
 	If Diag_FullScreenOnMobile Then
 		AddCode($"${ModalName}.FullScreenOnMobile = True"$)
 	End If
+	'
+	If Diag_LazyValidation Then
+		AddCode($"${ModalName}.LazyValidation = True"$)
+		AddCode($"${ModalName}.VModel = "${ModalName}valid""$)
+	End If
 	
 	AddCode($"${ComponentName}.BindVueElement(${ModalName})"$)
+	If Diag_LazyValidation Then
+		AddCode($"${ComponentName}.SetData("${ModalName.tolowercase}valid", True)"$)
+	End If
 	'
 	AddComment("get the container")
 	AddCode($"Dim ${SingularClean}Cont As VueElement = ${ComponentName}.DialogContainer("${ModalName}")"$)
@@ -1329,19 +1339,16 @@ End Sub
 private Sub SupportCode
 	'SAVE RECORD
 	sb.Append($"Sub ${ModalName}ok_click(e As BANanoEvent)			'ignoredeadcode
-	'validate the form
-	'Dim bValid As Boolean = vuetify.FormValidate("frmAddtopic")
-	'Log(bValid)
-	
-	'If bValid = False Then Return
+	'get the current $refs
+	${ComponentName}.refs = vuetify.GetRefs
+	'validate the page
+	Dim fValid As Boolean = ${ComponentName}.FormValidate1("${SingularClean}cont")
+	If fValid = False Then 
+		vuetify.ShowSnackBarError("Please ensure that you complete all information.")
+		Return
+	End If
 	'get the topic
 	Dim ${SingularClean}M As Map = ${ComponentName}.GetData("${SingularClean.tolowercase}")
-	'Dim stopicname As String = topicm.Get("topicname")
-	'stopicname = stopicname.Trim
-	'If stopicname = "" Then
-	'	vuetify.ShowSnackBarError("The topic name should be specified!")
-	'	Return
-	'End If
 	Select Case Mode
 	Case "A"
 		${ComponentName}.RunMethod("Create${SingularClean}", ${SingularClean}M)
@@ -1518,7 +1525,18 @@ End Sub"$).append(CRLF).append(CRLF)
 
 sb.Append($"Private Sub ${dtName}_ClickRow (e As BANanoEvent)
 End Sub"$).Append(CRLF).Append(CRLF)
-
+	'
+	'add code for required
+	For Each req As String In RequiredM.Keys
+		Dim v As String = RequiredM.Get(req)
+		sb.Append($"Sub ${req}rule(v As String) As Object	'ignoredeadcode"$).Append(CRLF)
+		sb.Append($"If v = "" Then"$).Append(CRLF)
+		sb.Append($"Return "The ${v} is required!""$).Append(CRLF)
+		sb.Append("Else").Append(CRLF)
+		sb.Append("Return True").Append(CRLF)
+		sb.Append("End If").Append(CRLF)
+		sb.append("End Sub").Append(CRLF).Append(CRLF)
+	Next
 	End If
 End Sub
 
