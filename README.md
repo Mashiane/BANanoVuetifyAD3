@@ -27,7 +27,7 @@ If you already have your b4j IDE set up, then
 1. Copy the contents of BANanoVuetifyAD3\External Libraries to your external libraries folder, i.e. c:\b4x\b4j\libraries
 2. Copy the contents of BANano\Libraries to your external libraries folder, i.e. c:\b4x\b4j\libraries
 
-#START THE B4X B4J IDE.
+# START THE B4X B4J IDE.
 
 If you have not configured paths, 
 1. On the B4J IDE, click Tools
@@ -36,16 +36,16 @@ If you have not configured paths,
 4. Click and browse to the location of your shared modules, this would be c:\b4x\b4j\shared (if you just set it up)
 5. Close the IDE.
 
-#RUNNING THE TUTORIALS
+# RUNNING THE TUTORIALS
 
 Run the latest Tutorials subfolder project. This will contain all the updates dealt in the project library. Old code is not maintained.
 The latest tutorial will contain the latest updates of the library.
 All tutorials are linked to our YouTube Channel, https://www.youtube.com/playlist?list=PLXw1ldc5AxBMN6EYs1OzcQRj15t1kB2UP
 
-#JOIN OUR TELEGRAM
+# JOIN OUR TELEGRAM
 https://t.me/bananovuematerial
 
-#EXPLORE OUR "FOR DUMMIES" SERIES
+# EXPLORE OUR "FOR DUMMIES" SERIES
 https://www.b4x.com/android/forum/threads/bananovuetifyad-vuetify-websites-webapps-with-banano-for-dummies.124548/
 
 Have Fun!
