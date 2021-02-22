@@ -36,7 +36,7 @@ If you have not configured paths,
 4. Click and browse to the location of your shared modules, this would be c:\b4x\b4j\shared (if you just set it up)
 5. Close the IDE.
 
-# Running the Tutorials on YouTube
+# Watch 45+ Tutorials on YouTube
 
 Run the latest Tutorials subfolder project. This will contain all the updates dealt in the project library. Old code is not maintained.
 The latest tutorial will contain the latest updates of the library.
@@ -45,7 +45,7 @@ All tutorials are linked to our YouTube Channel, https://www.youtube.com/playlis
 # Join Our Telegram Channel
 https://t.me/bananovuematerial
 
-# Explore Our "For Dummies" Series
+# Read Our "For Dummies" Blog Series
 https://www.b4x.com/android/forum/threads/bananovuetifyad-vuetify-websites-webapps-with-banano-for-dummies.124548/
 
 Have Fun!
