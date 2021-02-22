@@ -2490,49 +2490,8 @@ Sub AddDataTable(Module As Object, parentID As String, elID As String) As VueTab
 	Return elx
 End Sub
 
-Sub AddTab(Module As Object, parentID As String, elID As String, Caption As String, props As Map) As VueElement
-	Return AddVueElement(Module, parentID, elID, "v-tab", "", Caption, "", props)
-End Sub
-
-Sub AddTabItem(Module As Object, parentID As String, elID As String, value As String) As VueElement
-	Return AddVueElement(Module, parentID, elID, "v-tab-item", "", "", "", CreateMap("value":value))
-End Sub
-
-Sub AddTabItems(Module As Object, parentID As String, elID As String, vmodel As String, props As Map) As VueElement
-	Return AddVueElement(Module, parentID, elID, "v-tab-items", vmodel, "", "", props)
-End Sub
-
-
-Sub AddTabsSlider(Module As Object, parentID As String, elID As String, color As String, props As Map) As VueElement
-	Return AddVueElement(Module, parentID, elID, "v-tabs-slider", "", "", color, props)
-End Sub
-
-
 Sub AddContainer(Module As Object, parentID As String, elID As String, bFluid As Boolean) As VueElement
 	Return AddVueElement(Module, parentID, elID, "v-container", "", "", "", CreateMap(":fluid":bFluid))
-End Sub
-
-Sub AddTabs(Module As Object, parentID As String, elID As String, vmodel As String, bCentered As Boolean, bIconsAndText As Boolean, bGrow As Boolean, bShowSlider As Boolean, props As Map) As VueElement
-	elID = elID.tolowercase
-	parentID = CleanID(parentID)
-	
-	Dim sTemplate As StringBuilder
-	sTemplate.Initialize 
-	sTemplate.Append($"<v-tabs id="${elID}">"$)
-	sTemplate.Append($"<v-tabs-slider id="${elID}slider" v-if="${bShowSlider}" ></v-tabs-slider>"$)
-	sTemplate.Append($"</v-tabs>"$)
-	'add tabs
-	BANano.GetElement(parentID).Append(sTemplate.tostring)
-	'
-	Dim vtabs As VueElement
-	vtabs.Initialize(Module, elID, elID)
-	vtabs.VModel = vmodel
-	vtabs.SetData(vmodel, "")
-	vtabs.Centered = bCentered
-	vtabs.IconsAndText = bIconsAndText
-	vtabs.Grow = bGrow
-	vtabs.AssignProps(props)
-	Return vtabs
 End Sub
 
 Sub AddSheet(Module As Object, parentID As String, elID As String, Height As String, Color As String, props As Map) As VueElement
@@ -2726,6 +2685,61 @@ End Sub
 
 Sub AddSlideXReverseTransition(Module As Object, parentID As String, elID As String) As VueElement
 	Dim elx As VueElement = AddVueElement(Module, parentID, elID, "v-slide-x-reverse-transition", "", "", "", Null)
+	Return elx
+End Sub
+
+Sub AddFabTransition(Module As Object, parentID As String, elID As String) As VueElement
+	Dim elx As VueElement = AddVueElement(Module, parentID, elID, "v-fab-transition", "", "", "", Null)
+	Return elx
+End Sub
+
+Sub AddFadeTransition(Module As Object, parentID As String, elID As String) As VueElement
+	Dim elx As VueElement = AddVueElement(Module, parentID, elID, "v-fade-transition", "", "", "", Null)
+	Return elx
+End Sub
+
+Sub AddExpandTransition(Module As Object, parentID As String, elID As String) As VueElement
+	Dim elx As VueElement = AddVueElement(Module, parentID, elID, "v-expand-transition", "", "", "", Null)
+	Return elx
+End Sub
+
+Sub AddScaleTransition(Module As Object, parentID As String, elID As String) As VueElement
+	Dim elx As VueElement = AddVueElement(Module, parentID, elID, "v-scale-transition", "", "", "", Null)
+	Return elx
+End Sub
+
+Sub AddScrollXTransition(Module As Object, parentID As String, elID As String) As VueElement
+	Dim elx As VueElement = AddVueElement(Module, parentID, elID, "v-scroll-x-transition", "", "", "", Null)
+	Return elx
+End Sub
+
+Sub AddScrollXReverseTransition(Module As Object, parentID As String, elID As String) As VueElement
+	Dim elx As VueElement = AddVueElement(Module, parentID, elID, "v-scroll-x-reverse-transition", "", "", "", Null)
+	Return elx
+End Sub
+
+Sub AddScrollYReverseTransition(Module As Object, parentID As String, elID As String) As VueElement
+	Dim elx As VueElement = AddVueElement(Module, parentID, elID, "v-scroll-y-reverse-transition", "", "", "", Null)
+	Return elx
+End Sub
+
+Sub AddScrollYTransition(Module As Object, parentID As String, elID As String) As VueElement
+	Dim elx As VueElement = AddVueElement(Module, parentID, elID, "v-scroll-y-transition", "", "", "", Null)
+	Return elx
+End Sub
+
+Sub AddSlideYTransition(Module As Object, parentID As String, elID As String) As VueElement
+	Dim elx As VueElement = AddVueElement(Module, parentID, elID, "v-slide-y-transition", "", "", "", Null)
+	Return elx
+End Sub
+
+Sub AddSlideXTransition(Module As Object, parentID As String, elID As String) As VueElement
+	Dim elx As VueElement = AddVueElement(Module, parentID, elID, "v-slide-x-transition", "", "", "", Null)
+	Return elx
+End Sub
+
+Sub AddSlideYReverseTransition(Module As Object, parentID As String, elID As String) As VueElement
+	Dim elx As VueElement = AddVueElement(Module, parentID, elID, "v-slide-y-reverse-transition", "", "", "", Null)
 	Return elx
 End Sub
 
@@ -3300,14 +3314,6 @@ Sub AddSelect(Module As Object, parentID As String, elID As String, vmodel As St
 	vselect.BindAllEvents
 	Return vselect
 End Sub
-
-
-Sub AddSlideXTransition(Module As Object, parentID As String, elID As String, Mode As String) As VueElement
-	Dim elx As VueElement = AddVueElement(Module, parentID, elID, "v-slide-x-transition", "", "", "", Null)
-	elx.AddAttr("mode", Mode)
-	Return elx
-End Sub
-
 
 Sub AddRouterView(Module As Object, parentID As String, elID As String) As VueElement
 	elID = elID.tolowercase

@@ -81,6 +81,25 @@ Sub AddContainer(elID As String, bFluid As Boolean) As VueElement
 End Sub
 
 
+'get a tab item
+Sub GetTabItem(elID As String) As VueElement
+	Dim tabID As String = $"tab${elID}"$
+	tabID = tabID.tolowercase
+	Dim ti As VueElement
+	ti.Initialize(mCallBack, tabID, tabID)
+	Return ti
+End Sub
+
+'get a tab icon
+Sub GetTabIcon(elID As String) As VueElement
+	Dim tabID As String = $"${elID}icon"$
+	tabID = tabID.tolowercase
+	Dim ti As VueElement
+	ti.Initialize(mCallBack, tabID, tabID)
+	Return ti
+End Sub
+
+
 'click a reference
 Sub Click(refID As String)
 	refID = refID.tolowercase

@@ -490,63 +490,50 @@ Sub AddStep(stepID As String, stepLabel As String, stepComplete As String, stepE
 	Return vsteppercontent
 End Sub
 
-Sub AddTab(tabID As String, Caption As String, Icon As String, iconLeft As Boolean) As VueElement
+Sub AddTab(tabID As String, Caption As String, Icon As String, IconOnLeft As Boolean) As VueElement
 	tabID = tabID.ToLowerCase
-	Dim tabkey As String = $"${mName}${tabID}"$
-	Dim tabContent As String = $"${tabkey}content"$
-	Dim parentID As String = CleanID(mName)
-	Dim tabcard As String = $"${tabkey}card"$
-	Dim cardtext As String = $"${tabkey}cardtext"$
-	Dim tabicon As String = $"${tabkey}icon"$
-	'
-	Dim tabTemplate As StringBuilder
-	tabTemplate.Initialize 
-	tabTemplate.Append($"<v-tab id="${tabkey}" href="#tab${tabkey}">"$)
+	Dim tabE As VueElement
+	Dim vIcon As VueElement
+	'add the tab 
+	tabE = AddVueElement(tabID, "v-tab", Null)
+	tabE.Href = "#tab" & tabID
+	tabE.Key = tabID
+	tabE.Value = tabID
 	If Icon <> "" Then
-		If iconLeft Then
-			tabTemplate.Append($"<v-icon id="${tabicon}" left>${Icon}</v-icon>"$)
-			tabTemplate.Append(Caption)
+		If IconOnLeft Then
+			vIcon = tabE.AddVueElement($"${tabID}icon"$, "v-icon",Null)
+			vIcon.left = True
+			vIcon.SetText(Icon)
+			tabE.Append(Caption)
 		Else
-			tabTemplate.Append(Caption)
-			tabTemplate.Append($"<v-icon id="${tabicon}">${Icon}</v-icon>"$)
+			tabE.Append(Caption)
+			vIcon = tabE.AddVueElement($"${tabID}icon"$, "v-icon",Null)
+			vIcon.SetText(Icon)
 		End If
-	Else
-		tabTemplate.Append(Caption)
+	Else	
+		tabE.SetText(Caption)
 	End If
-	tabTemplate.Append("</v-tab>")
-	'
-	'add the tab
-	BANano.GetElement(parentID).Append(tabTemplate.tostring)
-	'
-	Dim tabText As StringBuilder
-	tabText.Initialize 
-	tabText.Append($"<v-tab-item value="tab${tabkey}" id="${tabContent}" key="${tabkey}">"$)
-	tabText.Append($"<v-card id="${tabcard}"><v-card-text id="${cardtext}"></v-card-text></v-card>"$)
-	tabText.Append($"</v-tab-item>"$)
 	'add the tab item
-	BANano.GetElement(parentID).Append(tabText.tostring)
-	'
-	Dim vtab As VueElement
-	vtab.Initialize(mCallBack, tabkey, tabkey)
-	'
-	Dim vicon As VueElement
-	vicon.Initialize(mCallBack, tabicon, tabicon)
-	'
-	Dim vtabitem As VueElement
-	vtabitem.Initialize(mCallBack, tabContent, tabContent)
-	'
-	Dim itemcard As VueElement
-	itemcard.Initialize(mCallBack, tabcard, tabcard)
-	'
-	Dim itemtext As VueElement
-	itemtext.Initialize(mCallBack, cardtext, cardtext)
-	
-	'
-	itemtext.BindVueElement(vicon)
-	itemtext.BindVueElement(vtab)
-	itemtext.BindVueElement(itemcard)
-	itemtext.BindVueElement(vtabitem)
-	Return itemtext
+	Dim ti As VueElement = AddVueElement($"tab${tabID}"$, "v-tab-item", Null)
+	ti.Key = "tab" & tabID
+	Return tabE
+End Sub
+
+
+'get a tab item
+Sub GetTabItem As VueElement
+	Dim tabID As String = $"tab${mName}"$
+	Dim ti As VueElement
+	ti.Initialize(mCallBack, tabID, tabID)
+	Return ti
+End Sub
+
+'get a tab icon
+Sub GetTabIcon As VueElement
+	Dim tabID As String = $"${mName}icon"$
+	Dim ti As VueElement
+	ti.Initialize(mCallBack, tabID, tabID)
+	Return ti
 End Sub
 
 '<code>
@@ -1679,6 +1666,35 @@ Sub BindValue(value As String)
 	AddAttr(":value", value)
 End Sub
 
+Sub setValidateOnBlur(b As Boolean)
+	Bind("validate-on-blur", b)
+End Sub
+
+'create a transition group
+Sub setGroup(b As Boolean)
+	AddAttr(":group", b)
+End Sub
+
+'hide leaving element on exit
+Sub setHideOnLeave(b As Boolean)
+	AddAttr(":hide-on-leave", b)
+End Sub
+
+'set transition mode
+Sub setMode(s As Object)
+	AddAttr("mode", s)
+End Sub
+
+'set transition origin
+Sub setOrigin(s As Object)
+	AddAttr("origin", s)
+End Sub
+
+'leave absolute
+Sub setLeaveAbsolute(b As Boolean)
+	Bind("leave-absolute", b)
+End Sub
+
 Sub Bind(attr As String, value As String)
 	AddAttr($":${attr}"$, value)
 End Sub
@@ -1735,8 +1751,8 @@ Public Sub AddAttr(varProp As String, varValue As String)
 			End If
 		End If
 	Else
-		varValue = varValue.Replace("~","=")
-		varValue = varValue.Replace("#","$")
+		'varValue = varValue.Replace("~","=")
+		'varValue = varValue.Replace("#","$")
 		'we are adding a string
 		If varValue.StartsWith(":") Then
 			Dim rname As String = BANanoShared.MidS(varValue, 2)
@@ -2605,6 +2621,11 @@ public Sub setLoading(s As String)
 	AddAttr(":loading", s)
 End Sub
 
+'bind loading height
+public Sub setLoaderHeight(s As String)
+	AddAttr("loader-height", s)
+End Sub
+
 public Sub setXSmall(b As Boolean)
 	AddAttr(":x-small", b)
 End Sub
@@ -2625,6 +2646,15 @@ End Sub
 
 public Sub setSmallChips(b As Boolean)
 	AddAttr(":small-chips", b)
+End Sub
+
+
+public Sub setTruncateLength(s As Int)
+	AddAttr("truncate-length", s)
+End Sub
+
+public Sub setSuffix(b As Boolean)
+	AddAttr("suffix", b)
 End Sub
 
 public Sub setMin(s As String)
@@ -3628,6 +3658,10 @@ private Sub BuildOffsets(col As VueGridColumn) As String
 	Return sout
 End Sub
 
+
+Sub Cell(rowPos As Int, colPos As Int) As VueElement
+	Return MatrixElement(rowPos, colPos)
+End Sub
 
 'return the vueelement at row pos
 Sub MatrixElement(RowPos As Int, ColPos As Int) As VueElement
@@ -5304,6 +5338,26 @@ Sub AddVueElement(elID As String, tag As String, props As Map) As VueElement
 	Return ve
 End Sub
 
+'add a vue element on this element
+Sub AddVueElement2(parentID As String, elID As String, tag As String, props As Map) As VueElement
+	parentID = CleanID(parentID)
+	elID = elID.tolowercase
+	elID = elID.Replace("#", "")
+		
+	'check if the element exists
+	If BANano.Exists($"#${elID}"$) = False Then
+		Dim parELE As BANanoElement
+		parELE.Initialize(parentID)
+		parELE.Append($"<${tag} id="${elID}"></${tag}>"$)
+	End If
+	'get the element
+	Dim ve As VueElement
+	ve.Initialize(mCallBack, elID, elID)
+	ve.AssignProps(props)
+	BindVueElement(ve)
+	Return ve
+End Sub
+
 Sub HiddenXSOnly
 	AddClass("hidden-xs-only")
 End Sub
@@ -6042,6 +6096,7 @@ Sub AddVueElement1(elID As String, tag As String, vModel As String, Caption As S
 End Sub
 
 Sub BindAllEvents
+	SetOnEvent(mCallBack, "blur", "")
 	SetOnEvent(mCallBack, "click", "")
 	SetOnEvent(mCallBack, "click.stop", "")
 	SetOnEvent(mCallBack, "click.prevent", "")
@@ -6058,10 +6113,15 @@ Sub BindAllEvents
 	SetOnEvent(mCallBack, "KeyPress", "")
 	SetOnEvent(mCallBack, "Click.Alt", "")
 	SetOnEvent(mCallBack, "Click.Shift", "")
-	SetOnEvent(mCallBack, "click:clear", "")
 	SetOnEvent(mCallBack, "start", "")
 	SetOnEvent(mCallBack, "end", "")
 	SetOnEvent(mCallBack, "click:close", "")
+	SetOnEvent(mCallBack, "focus", "")
+	SetOnEvent(mCallBack, "input", "")
+	SetOnEvent(mCallBack, "keydown", "")
+	SetOnEvent(mCallBack, "mousedown", "")
+	SetOnEvent(mCallBack, "mouseup", "")
+	SetOnEvent(mCallBack, "submit", "")
 End Sub
 
 Sub AddChipGroup(elID As String, vModel As String,  activeClass As String, bMultiple As Boolean, bShowArrows As Boolean, bFilter As Boolean, DataSource As String, Key As String, Value As String, chipgroupprops As Map, chipprops As Map) As VueElement
@@ -7937,14 +7997,13 @@ Sub AddSlotExtension(elID As String) As VueElement
 End Sub
 
 
-Sub setGroup(b As Object)
-	AddAttr("group", b)
+Sub setCloseDelay(i As Int)
+	AddAttr("close-delay", i)
 End Sub
 
-Sub setHideOnLeave(b As Object)
-	AddAttr("hide-on-leave", b)
+Sub setOpenDelay(i As Int)
+	AddAttr("open-delay", i)
 End Sub
-
 
 Sub setPermanent(b As Object)
 	AddAttr(":permanent", b)
@@ -7994,12 +8053,9 @@ Sub AddDataTable(Module As Object, parentID As String, elID As String) As VueTab
 	Return elx
 End Sub
 
-Sub AddTabItem(elID As String, value As String) As VueElement
-	Return AddVueElement1(elID, "v-tab-item", "", "", "", CreateMap("value":value))
-End Sub
 
-Sub AddTabItems(elID As String, vmodel As String, props As Map) As VueElement
-	Return AddVueElement1(elID, "v-tab-items", vmodel, "", "", props)
+Sub AddTabItems(elID As String, vmodel As String) As VueElement
+	Return AddVueElement1(elID, "v-tab-items", vmodel, "", "", null)
 End Sub
 
 
@@ -8012,27 +8068,9 @@ Sub AddContainer(elID As String, xFluid As Boolean) As VueElement
 	Return AddVueElement1(elID, "v-container", "", "", "", CreateMap(":fluid":xFluid))
 End Sub
 
-Sub AddTabs(elID As String, vmodel As String, bCentered As Boolean, bIconsAndText As Boolean, bGrow As Boolean, bShowSlider As Boolean, props As Map) As VueElement
-	elID = elID.tolowercase
-	Dim parentID As String = CleanID(mName)
-	
-	Dim sTemplate As StringBuilder
-	sTemplate.Initialize 
-	sTemplate.Append($"<v-tabs id="${elID}">"$)
-	sTemplate.Append($"<v-tabs-slider id="${elID}slider" v-if="${bShowSlider}" ></v-tabs-slider>"$)
-	sTemplate.Append($"</v-tabs>"$)
-	'add tabs
-	BANano.GetElement(parentID).Append(sTemplate.tostring)
-	'
-	Dim vtabs As VueElement
-	vtabs.Initialize(mCallBack, elID, elID)
-	vtabs.VModel = vmodel
-	vtabs.SetData(vmodel, "")
-	vtabs.Centered = bCentered
-	vtabs.IconsAndText = bIconsAndText
-	vtabs.Grow = bGrow
-	vtabs.AssignProps(props)
-	Return vtabs
+Sub AddTabs(elID As String) As VueElement
+	Dim elx As VueElement = AddVueElement1(elID, "v-tabs", "", "", "", Null)
+	Return elx
 End Sub
 
 Sub AddSheet(elID As String, Height As String, Color As String, props As Map) As VueElement
@@ -8104,4 +8142,62 @@ End Sub
 
 Sub TextXSRight
 	AddClass("text-xs-right")
+End Sub
+
+Sub setNextIcon(ni As String)
+	AddAttr("next-icon", ni)
+End Sub
+
+Sub setPrevIcon(pi As String)
+	AddAttr("prev-icon", pi)
+End Sub
+
+Sub AddFabTransition(elID As String) As VueElement
+	Dim elx As VueElement = AddVueElement1(elID, "v-fab-transition", "", "", "", Null)
+	Return elx
+End Sub
+
+Sub AddFadeTransition(elID As String) As VueElement
+	Dim elx As VueElement = AddVueElement1(elID, "v-fade-transition", "", "", "", Null)
+	Return elx
+End Sub
+
+Sub AddExpandTransition(elID As String) As VueElement
+	Dim elx As VueElement = AddVueElement1(elID, "v-expand-transition", "", "", "", Null)
+	Return elx
+End Sub
+
+Sub AddScaleTransition(elID As String) As VueElement
+	Dim elx As VueElement = AddVueElement1(elID, "v-scale-transition", "", "", "", Null)
+	Return elx
+End Sub
+
+Sub AddScrollXTransition(elID As String) As VueElement
+	Dim elx As VueElement = AddVueElement1(elID, "v-scroll-x-transition", "", "", "", Null)
+	Return elx
+End Sub
+
+Sub AddScrollXReverseTransition(elID As String) As VueElement
+	Dim elx As VueElement = AddVueElement1(elID, "v-scroll-x-reverse-transition", "", "", "", Null)
+	Return elx
+End Sub
+
+Sub AddScrollYReverseTransition(elID As String) As VueElement
+	Dim elx As VueElement = AddVueElement1(elID, "v-scroll-y-reverse-transition", "", "", "", Null)
+	Return elx
+End Sub
+
+Sub AddScrollYTransition(elID As String) As VueElement
+	Dim elx As VueElement = AddVueElement1(elID, "v-scroll-y-transition", "", "", "", Null)
+	Return elx
+End Sub
+
+Sub AddSlideYTransition(elID As String) As VueElement
+	Dim elx As VueElement = AddVueElement1(elID, "v-slide-y-transition", "", "", "", Null)
+	Return elx
+End Sub
+
+Sub AddSlideYReverseTransition(elID As String) As VueElement
+	Dim elx As VueElement = AddVueElement1(elID, "v-slide-y-reverse-transition", "", "", "", Null)
+	Return elx
 End Sub

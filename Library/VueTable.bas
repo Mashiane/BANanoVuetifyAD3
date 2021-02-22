@@ -931,8 +931,8 @@ Public Sub AddAttr(varProp As String, varValue As String)
 			End If
 		End If
 	Else
-		varValue = varValue.Replace("~","=")
-		varValue = varValue.Replace("#","$")
+		'varValue = varValue.Replace("~","=")
+		'varValue = varValue.Replace("#","$")
 		'we are adding a string
 		If varValue.StartsWith(":") Then
 			Dim rname As String = BANanoShared.MidS(varValue, 2)
