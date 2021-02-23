@@ -135,6 +135,22 @@ Sub FormValidate(formName As String) As Boolean
 	Return b
 End Sub
 
+Sub DialogValidate(dlgID As String) As Boolean
+	Dim dialogContainerID As String = $"${dlgID}container"$
+	Return FormValidate(dialogContainerID)
+End Sub
+
+Sub DialogResetValidation(dlgID As String) As Boolean
+	Dim dialogContainerID As String = $"${dlgID}container"$
+	Return FormResetValidation(dialogContainerID)
+End Sub
+
+Sub DialogReset(dlgID As String) As Boolean
+	Dim dialogContainerID As String = $"${dlgID}container"$
+	Return FormReset(dialogContainerID)
+End Sub
+
+
 Public Sub Initialize (CallBack As Object, Name As String) As VueComponent
 	mName = Name.tolowercase
 	mCallBack = CallBack
@@ -251,11 +267,42 @@ Sub DialogUpdateTitle(dlgID As String, title As String)
 End Sub
 
 
+'return the dialog card title
+Sub DialogActions(dlgID As String) As VueElement
+	Dim dialogContainerID As String = $"${dlgID}cardactions"$
+	dialogContainerID = dialogContainerID.ToLowerCase
+	'
+	Dim elx As VueElement
+	elx.Initialize(mCallBack, dialogContainerID, dialogContainerID)
+	Return elx
+End Sub
+
+Sub DialogOK(dlgID As String) As VueElement
+	Dim dialogContainerID As String = $"${dlgID}ok"$
+	dialogContainerID = dialogContainerID.ToLowerCase
+	'
+	Dim elx As VueElement
+	elx.Initialize(mCallBack, dialogContainerID, dialogContainerID)
+	Return elx
+End Sub
+
+'return the dialog card title
+Sub DialogCancel(dlgID As String) As VueElement
+	Dim dialogContainerID As String = $"${dlgID}cancel"$
+	dialogContainerID = dialogContainerID.ToLowerCase
+	'
+	Dim elx As VueElement
+	elx.Initialize(mCallBack, dialogContainerID, dialogContainerID)
+	Return elx
+End Sub
+
+
+
 'show confirm dialog
 Sub ShowConfirm(process As String, Title As String, Message As String, ConfirmText As String, CancelText As String)
 	process = process.tolowercase
 	SetData("confirmkey", process)
-	SetData(dialogTitle, Title)
+	SetData(DialogTitle, Title)
 	SetData(dialogMessage, Message)
 	SetData(dialogoktitle, ConfirmText)
 	SetData(dialogokshow, True)

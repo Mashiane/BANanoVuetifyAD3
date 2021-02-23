@@ -2230,7 +2230,7 @@ sb.Append(temp)
 				Dim pl As VueElement
 				pl.Initialize(mCallBack, "", "")
 				pl.TagName = "v-progress-linear" 
-				pl.SetVModel($"item.${value}"$)
+				pl.VModel = $"item.${value}"$
 				pl.Reactive = True
 				pl.Rounded = True
 				If nf.progressColor <> "" Then pl.Color = nf.progressColor
@@ -2268,7 +2268,7 @@ sb.Append(temp)
 				Dim pc As VueElement
 				pc.Initialize(mCallBack, "", "")
 				pc.TagName = "v-progress-circular"
-				pc.SetVModel($"item.${value}"$)
+				pc.VModel = $"item.${value}"$
 				pc.Reactive = True
 				pc.Append($"{{ item.${value} }}"$)
 				If nf.progressRotate <> "" Then pc.Rotate = nf.progressRotate
@@ -2294,7 +2294,7 @@ sb.Append(temp)
 				rat.Initialize(mCallBack, "", "")
 				rat.TagName = "v-rating"
 				rat.Dense = True
-				rat.SetVModel($"item.${value}"$)
+				rat.VModel = $"item.${value}"$
 				If nf.Disabled Then rat.disabled = True
 				If nf.ReadOnly Then rat.readonly = True
 				If nf.iconSize <> "" Then rat.Length = nf.iconSize
@@ -2375,7 +2375,7 @@ sb.Append(temp)
 				End If
 				swt.TrueValue = "Yes"
 				swt.FalseValue = "No"
-				swt.SetVModel($"item.${value}"$)
+				swt.VModel = $"item.${value}"$
 				If nf.Disabled Then swt.Disabled = True
 				'
 '				Dim props As Map = nf.props

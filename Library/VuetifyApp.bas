@@ -889,6 +889,10 @@ End Sub
 
 'add html of component to app and this binds events and states
 Sub BindVueElement(elx As VueElement)
+	Dim mtag As String = elx.TagName
+	If mtag = "router-view" Then
+		RouterViewName = elx.ID
+	End If
 	Dim mbindings As Map = elx.bindings
 	Dim mmethods As Map = elx.methods
 	'apply the binding for the control

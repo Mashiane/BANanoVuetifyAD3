@@ -433,28 +433,36 @@ Sub AddStepHorizontal(stepID As String, stepLabel As String, stepComplete As Str
 	stepperItems = CleanID(stepperItems)
 	
 	'add child to header
-	BANano.GetElement(stepperHeader).Append($"<v-stepper-step id="${childHeaderKey}"></v-stepper-step>"$)
-	'
-	Dim vstepperstep As VueElement
-	vstepperstep.Initialize(mCallBack, childHeaderKey, childHeaderKey)
+	Dim vstepperstep As VueElement = AddVueElement2(stepperHeader, childHeaderKey, "v-stepper-step", Null)
 	vstepperstep.AddAttr("step", Steps)
-	If stepComplete <> "" Then vstepperstep.AddAttr("complete", stepComplete)
+	If stepComplete <> "" Then 
+		vstepperstep.AddAttr("complete", stepComplete)
+	End If
 	vstepperstep.Caption = stepLabel
-	If stepEditable <> "" Then vstepperstep.AddAttr("editable", stepEditable)
+	If stepEditable <> "" Then 
+		vstepperstep.AddAttr("editable", stepEditable)
+	End If
 	'
 	If bHasDivider Then
-		BANano.GetElement(stepperHeader).Append($"<v-divider></v-divider>"$)
+		GetVueElement(stepperHeader).AddDivider
 	End If
-	
-	
-	BANano.GetElement(stepperItems).Append($"<v-stepper-content id="${childContentKey}"></v-stepper-content>"$)
-	'
-	Dim vsteppercontent As VueElement
-	vsteppercontent.Initialize(mCallBack, childContentKey, childContentKey)
+		
+	Dim vsteppercontent As VueElement = AddVueElement2(stepperItems, childContentKey, "v-stepper-content", Null)
 	vsteppercontent.AddAttr("step", Steps)
 	'
 	vsteppercontent.BindVueElement(vstepperstep)
 	Return vsteppercontent
+End Sub
+
+Sub GetVueElement(elID As String) As VueElement
+	elID = CleanID(elID)
+	If BANano.Exists(elID) Then
+		Dim ve As VueElement
+		ve.Initialize(mCallBack, elID, elID)
+		Return ve
+	Else
+		Return Null
+	End If
 End Sub
 
 'add step to a vertical stepper
@@ -471,19 +479,13 @@ Sub AddStep(stepID As String, stepLabel As String, stepComplete As String, stepE
 	parentID = CleanID(parentID)
 	
 	'add child to header
-	BANano.GetElement(parentID).Append($"<v-stepper-step id="${childHeaderKey}"></v-stepper-step>"$)
-	'
-	Dim vstepperstep As VueElement
-	vstepperstep.Initialize(mCallBack, childHeaderKey, childHeaderKey)
+	Dim vstepperstep As VueElement = AddVueElement2(parentID, childHeaderKey, "v-stepper-step", Null)
 	vstepperstep.AddAttr("step", Steps)
 	If stepComplete <> "" Then vstepperstep.AddAttr("complete", stepComplete)
 	vstepperstep.Caption = stepLabel
 	If stepEditable <> "" Then vstepperstep.AddAttr("editable", stepEditable)
 		
-	BANano.GetElement(parentID).Append($"<v-stepper-content id="${childContentKey}"></v-stepper-content>"$)
-	'
-	Dim vsteppercontent As VueElement
-	vsteppercontent.Initialize(mCallBack, childContentKey, childContentKey)
+	Dim vsteppercontent As VueElement = AddVueElement2(parentID, childContentKey, "v-stepper-content", Null)
 	vsteppercontent.AddAttr("step", Steps)
 	'
 	vsteppercontent.BindVueElement(vstepperstep)
@@ -549,35 +551,43 @@ End Sub
 'End Sub
 '</code>
 Sub AddExpansionPanel(elID As String, HeaderCaption As String) As VueElement
-	Dim parentID As String = mName.Replace("#","")
-	parentID = parentID.tolowercase
 	elID = elID.Replace("#","")
 	elID = elID.ToLowerCase
 	'
-	Dim panelKey As String = $"${parentID}${elID}"$
-	Dim panelHdr As String = $"${parentID}${elID}header"$
-	Dim panelCnt As String = $"${parentID}${elID}content"$
+	Dim panelHdr As String = $"${elID}header"$
+	Dim panelCnt As String = $"${elID}content"$
 	'
-	parentID = CleanID(parentID)
-	
-	BANano.GetElement(parentID).Append($"<v-expansion-panel id="${panelKey}"><v-expansion-panel-header id="${panelHdr}"></v-expansion-panel-header><v-expansion-panel-content id="${panelCnt}"></v-expansion-panel-content></v-expansion-panel>"$)
-	
-	Dim pnl As VueElement
-	pnl.Initialize(mCallBack, panelKey, panelKey)
+	Dim pnl As VueElement = AddVueElement2(mName, elID, "v-expansion-panel", Null)
 	pnl.BindAllEvents
 	'
-	Dim hdr As VueElement
-	hdr.Initialize(mCallBack, panelHdr, panelHdr)
+	Dim hdr As VueElement = AddVueElement2(elID, panelHdr, "v-expansion-panel-header", Null)
 	hdr.caption = HeaderCaption
 	'
-	Dim cnt As VueElement
-	cnt.Initialize(mCallBack, panelCnt, panelCnt)
+	Dim cnt As VueElement = AddVueElement2(elID, panelCnt, "v-expansion-panel-content", Null)
 	'
 	BindVueElement(pnl)
 	BindVueElement(hdr)
 	BindVueElement(cnt)
 	Return cnt
 End Sub
+
+Sub GetExpansionPanel As VueElement
+	Dim elx As VueElement = GetVueElement(mName)
+	Return elx
+End Sub
+
+Sub GetExpansionPanelHeader As VueElement
+	Dim hdr As String = $"${mName}header"$
+	Dim elx As VueElement = GetVueElement(hdr)
+	Return elx
+End Sub
+
+Sub GetExpansionPanelContent As VueElement
+	Dim hdr As String = $"${mName}content"$
+	Dim elx As VueElement = GetVueElement(hdr)
+	Return elx
+End Sub
+
 
 Sub setTextCenterClass(b As Boolean)
 	If b = False Then Return
@@ -2129,6 +2139,7 @@ public Sub getVHtml() As String
 End Sub
 
 public Sub setVIf(varVIf As String)
+	varVIf = varVIf.tolowercase
 	AddAttr("v-if", varVIf)
 	stVIf = varVIf
 End Sub
@@ -2142,9 +2153,10 @@ public Sub setVModel(varVModel As String)
 		varVModel = ""
 	End If
 	If varVModel = "" Then Return
+	varVModel = varVModel.tolowercase
 	AddAttr("v-model", varVModel)
 	stVModel = varVModel
-	If stVModel.StartsWith("!") = False Then
+	If stVModel.StartsWith("!") = False Or stVModel.IndexOf(".") = -1 Then
 		SetData(stVModel, Null)
 	End If
 End Sub
@@ -2171,9 +2183,13 @@ public Sub getValue() As String
 End Sub
 
 public Sub setVShow(varVShow As String)
+	If BANano.IsNull(varVShow) Or BANano.IsUndefined(varVShow) Then
+		varVShow = ""
+	End If
+	varVShow = varVShow.tolowercase
 	AddAttr("v-show", varVShow)
 	stVShow = varVShow
-	If stVShow.StartsWith("!") = False Then
+	If stVShow.StartsWith("!") = False Or stVModel.IndexOf(".") = -1 Then 
 		SetData(stVShow, Null)
 	End If
 End Sub
@@ -3155,7 +3171,7 @@ End Sub
 
 'return the dialog card title
 Sub DialogTitle As VueElement
-	Dim dialogContainerID As String = $"${mName}title"$
+	Dim dialogContainerID As String = $"${mName}titleid"$
 	dialogContainerID = dialogContainerID.ToLowerCase
 	'
 	Dim elx As VueElement
@@ -3173,6 +3189,26 @@ Sub DialogActions As VueElement
 	elx.Initialize(mCallBack, dialogContainerID, dialogContainerID)
 	Return elx
 End Sub
+
+Sub DialogOK As VueElement
+	Dim dialogContainerID As String = $"${mName}ok"$
+	dialogContainerID = dialogContainerID.ToLowerCase
+	'
+	Dim elx As VueElement
+	elx.Initialize(mCallBack, dialogContainerID, dialogContainerID)
+	Return elx
+End Sub
+
+'return the dialog card title
+Sub DialogCancel As VueElement
+	Dim dialogContainerID As String = $"${mName}cancel"$
+	dialogContainerID = dialogContainerID.ToLowerCase
+	'
+	Dim elx As VueElement
+	elx.Initialize(mCallBack, dialogContainerID, dialogContainerID)
+	Return elx
+End Sub
+
 
 'set clear-icon
 public Sub setClearIcon(varClearIcon As String)
@@ -6122,6 +6158,11 @@ Sub BindAllEvents
 	SetOnEvent(mCallBack, "mousedown", "")
 	SetOnEvent(mCallBack, "mouseup", "")
 	SetOnEvent(mCallBack, "submit", "")
+	SetOnEvent(mCallBack, "dblclick.prevent", "")
+	SetOnEvent(mCallBack, "keydown.enter.prevent", "")
+	SetOnEvent(mCallBack, "keydown.left.prevent", "")
+	SetOnEvent(mCallBack, "keydown.right.prevent", "")
+	SetOnEvent(mCallBack, "keydown.space.prevent", "")
 End Sub
 
 Sub AddChipGroup(elID As String, vModel As String,  activeClass As String, bMultiple As Boolean, bShowArrows As Boolean, bFilter As Boolean, DataSource As String, Key As String, Value As String, chipgroupprops As Map, chipprops As Map) As VueElement
@@ -6413,6 +6454,11 @@ Sub AddLabel(elID As String, Size As String, Caption As String, iLoremIpsum As B
 	elx.LoremIpsum = iLoremIpsum
 	elx.TextColor = TextColor
 	elx.TextColorIntensity = TextColorIntensity
+	Return elx
+End Sub
+
+Sub AddDraggable(elID As String) As VueElement
+	Dim elx As VueElement = AddVueElement1(elID, "draggable", "", "", "", Null)
 	Return elx
 End Sub
 
@@ -8150,6 +8196,10 @@ End Sub
 
 Sub setPrevIcon(pi As String)
 	AddAttr("prev-icon", pi)
+End Sub
+
+Sub setAlignStart(b As Boolean)
+	Bind("align-start", b)
 End Sub
 
 Sub AddFabTransition(elID As String) As VueElement

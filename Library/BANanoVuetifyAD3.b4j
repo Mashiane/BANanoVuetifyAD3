@@ -37,13 +37,15 @@ File4=dayjs.min.js
 File40=Roboto700.ttf
 File41=Roboto900.ttf
 File42=sadface.png
-File43=upload.php
-File44=vue.min.js
-File45=vue-google-maps.js
-File46=vue-router.min.js
-File47=vuetify.min.css
-File48=vuetify.min.js
+File43=Sortable.min.js
+File44=upload.php
+File45=vue.min.js
+File46=vuedraggable.umd.min.js
+File47=vue-google-maps.js
+File48=vue-router.min.js
+File49=vuetify.min.css
 File5=fa-brands-400.eot
+File50=vuetify.min.js
 File6=fa-brands-400.svg
 File7=fa-brands-400.ttf
 File8=fa-brands-400.woff
@@ -91,7 +93,9 @@ FileGroup45=Default Group
 FileGroup46=Default Group
 FileGroup47=Default Group
 FileGroup48=Default Group
+FileGroup49=Default Group
 FileGroup5=Default Group
+FileGroup50=Default Group
 FileGroup6=Default Group
 FileGroup7=Default Group
 FileGroup8=Default Group
@@ -111,7 +115,7 @@ Module6=MySQLCRUD
 Module7=VueComponent
 Module8=VueElement
 Module9=VueGMap
-NumberOfFiles=48
+NumberOfFiles=50
 NumberOfLibraries=3
 NumberOfModules=11
 Version=8.9
@@ -125,7 +129,7 @@ Version=8.9
 
 Sub Process_Globals
 	Private BANano As BANano 'ignore
-	Public Version As String = "3.26"
+	Public Version As String = "3.30"
 	Public AppName As String = "BANanoVuetifyAD3"
 End Sub
 
@@ -142,6 +146,8 @@ Sub AppStart (Form1 As Form, Args() As String)
 '	BANano.Header.AddJavascriptFile("https://cdn.jsdelivr.net/npm/dayjs@1.10.3/dayjs.min.js")
 '	BANano.Header.AddJavascriptFile("https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js")
 '	BANano.Header.AddJavascriptFile("https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.20/lodash.min.js")
+'	BANano.Header.AddJavascriptFile("https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js")
+	
 		'
 	BANano.Header.AddCSSFile("roboto.min.css")
 	BANano.Header.AddCSSFile("materialdesignicons.min.css")
@@ -156,6 +162,8 @@ Sub AppStart (Form1 As Form, Args() As String)
 	BANano.Header.AddJavascriptFile("vue-google-maps.js")
 	BANano.Header.AddJavascriptfile("fileSaver.min.js")
 	BANano.Header.AddCSSFile("fontawesome.css")
+	BANano.Header.AddJavascriptFile("Sortable.min.js")
+	BANano.Header.AddJavascriptFile("vuedraggable.umd.min.js")
 	
 	' start the build
 	#if release

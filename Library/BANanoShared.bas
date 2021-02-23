@@ -24,7 +24,7 @@ Sub Process_Globals
         "", "Thousand", "Million", "Billion", "Trillion", _
         "Quadrillion", "Pentillion", "Sexillion", "Septillion", "Octillion" _
     )
-	Type FileObject(FileName As String, FileDate As String, FileSize As Long, FileType As String, Status As String, FullPath As String)
+	Type FileObject(FileName As String, FileDate As String, FileSize As Long, FileType As String, Status As String, FullPath As String, FileDateOnly as string)
 	Private SourceCode As StringBuilder
 	Type sequencePair(value As Int, numTimes As Int)
 End Sub
@@ -707,10 +707,10 @@ Sub GetFileDetails(fileObj As Map) As FileObject
 	minutes = PadRight(minutes, 2, "0")
 	'
 	Dim fd As String = $"${yyyy}-${mm}-${dd} ${hh}:${minutes}"$
-	'
-	
+		
 	ff.FileName = sname
 	ff.FileDate = fd
+	ff.FileDateOnly = $"${yyyy}-${mm}-${dd}"$
 	ff.FileSize = ssize
 	ff.FileType = stype
 	Return ff

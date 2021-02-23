@@ -1342,7 +1342,7 @@ private Sub SupportCode
 	'get the current $refs
 	${ComponentName}.refs = vuetify.GetRefs
 	'validate the page
-	Dim fValid As Boolean = ${ComponentName}.FormValidate1("${SingularClean}cont")
+	Dim fValid As Boolean = ${ComponentName}.DialogValidate("${ModalName}")
 	If fValid = False Then 
 		vuetify.ShowSnackBarError("Please ensure that you complete all information.")
 		Return
