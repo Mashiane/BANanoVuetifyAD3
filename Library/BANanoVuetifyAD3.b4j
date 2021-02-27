@@ -39,13 +39,14 @@ File41=Roboto900.ttf
 File42=sadface.png
 File43=Sortable.min.js
 File44=upload.php
-File45=vue.min.js
-File46=vuedraggable.umd.min.js
-File47=vue-google-maps.js
-File48=vue-router.min.js
-File49=vuetify.min.css
+File45=v-blur.min.js
+File46=vue.min.js
+File47=vuedraggable.umd.min.js
+File48=vue-google-maps.js
+File49=vue-router.min.js
 File5=fa-brands-400.eot
-File50=vuetify.min.js
+File50=vuetify.min.css
+File51=vuetify.min.js
 File6=fa-brands-400.svg
 File7=fa-brands-400.ttf
 File8=fa-brands-400.woff
@@ -96,6 +97,7 @@ FileGroup48=Default Group
 FileGroup49=Default Group
 FileGroup5=Default Group
 FileGroup50=Default Group
+FileGroup51=Default Group
 FileGroup6=Default Group
 FileGroup7=Default Group
 FileGroup8=Default Group
@@ -115,7 +117,7 @@ Module6=MySQLCRUD
 Module7=VueComponent
 Module8=VueElement
 Module9=VueGMap
-NumberOfFiles=50
+NumberOfFiles=51
 NumberOfLibraries=3
 NumberOfModules=11
 Version=8.9
@@ -129,7 +131,7 @@ Version=8.9
 
 Sub Process_Globals
 	Private BANano As BANano 'ignore
-	Public Version As String = "3.30"
+	Public Version As String = "3.34"
 	Public AppName As String = "BANanoVuetifyAD3"
 End Sub
 
@@ -148,6 +150,7 @@ Sub AppStart (Form1 As Form, Args() As String)
 '	BANano.Header.AddJavascriptFile("https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.20/lodash.min.js")
 '	BANano.Header.AddJavascriptFile("https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js")
 	
+	
 		'
 	BANano.Header.AddCSSFile("roboto.min.css")
 	BANano.Header.AddCSSFile("materialdesignicons.min.css")
@@ -164,6 +167,7 @@ Sub AppStart (Form1 As Form, Args() As String)
 	BANano.Header.AddCSSFile("fontawesome.css")
 	BANano.Header.AddJavascriptFile("Sortable.min.js")
 	BANano.Header.AddJavascriptFile("vuedraggable.umd.min.js")
+	BANano.Header.AddJavascriptFile("v-blur.min.js")
 	
 	' start the build
 	#if release

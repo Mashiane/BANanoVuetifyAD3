@@ -381,6 +381,7 @@ Sub setRouterAppend(b As Boolean)
 	mRouterAppend = b
 End Sub
 
+'add a list view item
 Sub AddItemParentChild(parent As String, key As String, iconName As String, iconColor As String, title As String, url As String)
 	parent = parent.ToLowerCase
 	key = key.ToLowerCase
@@ -404,7 +405,19 @@ Sub AddItemParentChild(parent As String, key As String, iconName As String, icon
 	Records.Add(nitem)
 End Sub
 
+'update an icon in the list
+Sub ListViewSetIcon(itemID As String, sIcon As String)
+	Dim m As Map = CreateMap()
+	m.Put("icon", sIcon)
+	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+End Sub
 
+'update an iconcolor in the list
+Sub ListViewSetIconColor(itemID As String, sIcon As String)
+	Dim m As Map = CreateMap()
+	m.Put("iconcolor", sIcon)
+	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+End Sub
 
 private Sub CleanID(v As String) As String
 	v = v.Replace("#","")
@@ -523,7 +536,7 @@ End Sub
 
 
 'get a tab item
-Sub GetTabItem As VueElement
+Sub GetTabItem() As VueElement
 	Dim tabID As String = $"tab${mName}"$
 	Dim ti As VueElement
 	ti.Initialize(mCallBack, tabID, tabID)
@@ -531,7 +544,7 @@ Sub GetTabItem As VueElement
 End Sub
 
 'get a tab icon
-Sub GetTabIcon As VueElement
+Sub GetTabIcon() As VueElement
 	Dim tabID As String = $"${mName}icon"$
 	Dim ti As VueElement
 	ti.Initialize(mCallBack, tabID, tabID)
@@ -658,7 +671,7 @@ Sub setGrow(b As Boolean)
 	AddAttr(":grow", b)
 End Sub
 
-Sub setHideSlider(b As Boolean)
+Sub setHideSlider(b As Object)
 	AddAttr(":hide-slider", b)
 End Sub
 
@@ -1651,12 +1664,16 @@ Sub SetVBindIs(t As String) As VueElement
 	Return Me
 End Sub
 
-Sub SetVSlotAppend
-	AddAttr("v-slot:append", True)
+Sub setVSlotNoData(b As Boolean)
+	AddAttr("v-slot:no-data", b)
 End Sub
 
-Sub SetVSlotExtension
-	AddAttr("v-slot:extension", True)
+Sub setVSlotAppend(b As Boolean)
+	AddAttr("v-slot:append", b)
+End Sub
+
+Sub setVSlotExtension(b As Boolean)
+	AddAttr("v-slot:extension", b)
 End Sub
 
 'change the text of the element
@@ -1935,6 +1952,12 @@ Sub SetDataPush(listName As String, item As Object)
 	dat.GetField(listName).RunMethod("push", item)
 End Sub
 
+Sub GetData(propName As String) As Object
+	propName = propName.tolowercase
+	Dim dat As BANanoObject = bindings
+	Dim res As Object = dat.getfield(propName).Result
+	Return res
+End Sub
 
 public Sub setNonLinear(b As Boolean)
 	AddAttr(":non-linear", b)
@@ -1998,6 +2021,16 @@ End Sub
 public Sub setRaised(b As Boolean)
 	AddAttr(":text", Not(b))
 	AddAttr(":raised", b)
+End Sub
+
+public Sub setVSlotItem(items As List)
+	Dim sitems As String = BANanoShared.Join(", ", items)
+	AddAttr("v-slot:item", $"{ ${sitems} }"$)
+End Sub
+
+public Sub setVSlotSelection(items As List)
+	Dim sitems As String = BANanoShared.Join(", ", items)
+	AddAttr("v-slot:selection", $"{ ${sitems} }"$)
 End Sub
 
 
@@ -2292,9 +2325,6 @@ End Sub
 public Sub setFontStretch(varFontVariant As String)
 	AddStyle("font-stretch", varFontVariant)
 End Sub
-
-
-
 
 public Sub setBackgroundImage(varBackgroundImage As String)
 	AddStyle("background-image", $"url('${varBackgroundImage}')"$)
@@ -2946,35 +2976,18 @@ End Sub
 
 
 'set direct method
-Sub SetMethod(methodName As String, args As List)
+Sub SetMethod(Module As Object, methodName As String, args As List)
 	methodName = methodName.tolowercase
 	methodName = methodName.Replace(":","")
 	methodName = methodName.Replace(".","")
 	methodName = methodName.Replace("-","")
-	methodName = methodName.tolowercase
-	If SubExists(mCallBack, methodName) Then
-		Dim cb As BANanoObject = BANano.CallBack(mCallBack, methodName, args)
+	If SubExists(Module, methodName) Then
+		Dim cb As BANanoObject = BANano.CallBack(Module, methodName, args)
 		methods.Put(methodName, cb)
 	Else
 		Log("SetMethod: " & methodName & ", callback is missing.")
 	End If
 End Sub
-
-'set direct method
-Sub SetMethod1(eventHandler As Object, methodName As String, args As List)
-	methodName = methodName.tolowercase
-	methodName = methodName.Replace(":","")
-	methodName = methodName.Replace(".","")
-	methodName = methodName.Replace("-","")
-	methodName = methodName.tolowercase
-	If SubExists(eventHandler, methodName) Then
-		Dim cb As BANanoObject = BANano.CallBack(eventHandler, methodName, args)
-		methods.Put(methodName, cb)
-	Else
-		Log("SetMethod1: " & methodName & ", callback is missing.")
-	End If
-End Sub
-
 
 'set the conver image for the container
 Sub setCoverImage(url As String)
@@ -3346,6 +3359,11 @@ End Sub
 'get flat
 public Sub getFlat() As Boolean
 	Return boFlat
+End Sub
+
+'set hide-selected
+public Sub setHideSelected(b As Boolean)
+	Bind("hide-selected", b)
 End Sub
 
 'set hide-details
@@ -4780,6 +4798,12 @@ Sub ClearItems()
 	SetData(stItems, NewList)
 End Sub
 
+'update the records
+Sub RefreshItems(VC As VueComponent)
+	Records = GetData(stItems)
+	VC.setdata(stItems, Records)
+End Sub
+
 'add a header to the lust
 Sub AddItemHeader(txt As String)
 	Dim rec As Map = CreateMap()
@@ -4798,8 +4822,6 @@ End Sub
 'add avatar
 Sub AddItemAvatar(id As String, avatar As String, title As String, subtitle As String, _
 	subtitle1 As String, righttext As String, righticon As String, righticoncolor As String, rating As Int, url As String)
-	Dim rec As Map = CreateMap()
-	rec.Put("id", id)
 	Dim rec As Map = CreateMap()
 	rec.Put("id", id)
 	If url <> "" Then rec.Put("to", url)
@@ -4822,6 +4844,72 @@ Sub AddItemAvatar(id As String, avatar As String, title As String, subtitle As S
 	End If
 	'
 	Records.Add(rec)
+End Sub
+
+Sub ListViewSetAvatar(itemID As String, sIcon As String)
+	Dim m As Map = CreateMap()
+	m.Put("avatar", sIcon)
+	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+End Sub
+
+Sub ListViewSetTitle(itemID As String, sIcon As String)
+	Dim m As Map = CreateMap()
+	m.Put("title", sIcon)
+	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+End Sub
+
+Sub ListViewSetSubTitle(itemID As String, sIcon As String)
+	Dim m As Map = CreateMap()
+	m.Put("subtitle", sIcon)
+	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+End Sub
+
+Sub ListViewSetSubTitle1(itemID As String, sIcon As String)
+	Dim m As Map = CreateMap()
+	m.Put("subtitle1", sIcon)
+	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+End Sub
+
+Sub ListViewSetRightIcon(itemID As String, sIcon As String)
+	Dim m As Map = CreateMap()
+	m.Put("righticon", sIcon)
+	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+End Sub
+
+Sub ListViewSetRightText(itemID As String, sIcon As String)
+	Dim m As Map = CreateMap()
+	m.Put("righttext", sIcon)
+	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+End Sub
+
+Sub ListViewSetRightIconColor(itemID As String, sIcon As String)
+	Dim m As Map = CreateMap()
+	m.Put("righticoncolor", sIcon)
+	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+End Sub
+
+Sub ListViewSetRightRating(itemID As String, sIcon As String)
+	Dim m As Map = CreateMap()
+	m.Put("rightrating", sIcon)
+	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+End Sub
+
+Sub ListViewSetTo(itemID As String, sIcon As String)
+	Dim m As Map = CreateMap()
+	m.Put("to", sIcon)
+	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+End Sub
+
+Sub ListViewSetLeftIcon(itemID As String, sIcon As String)
+	Dim m As Map = CreateMap()
+	m.Put("lefticon", sIcon)
+	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+End Sub
+
+Sub ListViewSetLeftIconColor(itemID As String, sIcon As String)
+	Dim m As Map = CreateMap()
+	m.Put("lefticoncolor", sIcon)
+	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
 End Sub
 
 Sub AddItemAction(id As String, lefticon As String, lefticoncolor As String, title As String, subtitle As String, _
@@ -4851,6 +4939,30 @@ Sub AddItemAction(id As String, lefticon As String, lefticoncolor As String, tit
 	Records.Add(rec)
 End Sub
 
+Sub ListViewSetLeftCheckBox(itemID As String, bChecked As Boolean)
+	Dim m As Map = CreateMap()
+	m.Put("leftcheckbox", bChecked)
+	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+End Sub
+
+Sub ListViewSetLeftSwitch(itemID As String, bChecked As Boolean)
+	Dim m As Map = CreateMap()
+	m.Put("leftswitch", bChecked)
+	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+End Sub
+
+Sub ListViewSetRightSwitch(itemID As String, bChecked As Boolean)
+	Dim m As Map = CreateMap()
+	m.Put("rightswitch", bChecked)
+	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+End Sub
+
+Sub ListViewSetRightCheckBox(itemID As String, bChecked As Boolean)
+	Dim m As Map = CreateMap()
+	m.Put("rightcheckbox", bChecked)
+	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+End Sub
+
 Sub AddItemLeftCheckBox(id As String, bChecked As Boolean, title As String, subtitle As String, _
 	subtitle1 As String, righttext As String, righticon As String, righticoncolor As String, rating As Int, url As String)
 	Dim rec As Map = CreateMap()
@@ -4876,52 +4988,6 @@ Sub AddItemLeftCheckBox(id As String, bChecked As Boolean, title As String, subt
 	'
 	Records.Add(rec)
 End Sub
-
-Sub AddItemLeftSwitch(id As String, bChecked As Boolean, title As String, subtitle As String, _
-	subtitle1 As String, righttext As String, righticon As String, righticoncolor As String, rating As Int, url As String)
-	Dim rec As Map = CreateMap()
-	rec.Put("id", id)
-	If url <> "" Then rec.Put("to", url)
-	rec.Put("leftswitch", bChecked)
-	If title <> "" Then rec.Put("title", title)
-	If subtitle <> "" Then rec.Put("subtitle", subtitle)
-	If subtitle1 <> "" Then rec.Put("subtitle1", subtitle1)
-	'
-	If righticon <> "" Then rec.Put("righticon", righticon)
-	If righttext <> "" Then rec.Put("righttext", righttext)
-	If righticoncolor <> "" Then rec.Put("righticoncolor", righticoncolor)
-	If rating >= 0 Then rec.Put("rightrating", rating)
-	'
-	If mRouterReplace Then
-		rec.put("replace", True)
-	End If
-	'
-	If mRouterAppend Then
-		rec.put("append", True)
-	End If
-	'
-	Records.Add(rec)
-End Sub
-
-Sub AddItemRightCheckBox(id As String, bChecked As Boolean, title As String, subtitle As String, subtitle1 As String, url As String)
-	Dim rec As Map = CreateMap()
-	rec.Put("id", id)
-	If url <> "" Then rec.Put("to", url)
-	rec.Put("rightcheckbox", bChecked)
-	If title <> "" Then rec.Put("title", title)
-	If subtitle <> "" Then rec.Put("subtitle", subtitle)
-	If subtitle1 <> "" Then rec.Put("subtitle1", subtitle1)
-	'
-	If mRouterReplace Then
-		rec.put("replace", True)
-	End If
-	'
-	If mRouterAppend Then
-		rec.put("append", True)
-	End If
-	Records.Add(rec)
-End Sub
-
 
 Sub AddItemRightSwitch(id As String, bChecked As Boolean, title As String, subtitle As String, subtitle1 As String, url As String)
 	Dim rec As Map = CreateMap()
@@ -5020,6 +5086,17 @@ Sub AddItemIcon(id As String, icon As String, iconcolor As String, title As Stri
 	Records.Add(rec)
 End Sub
 
+Sub ListViewSetAvatarIcon(itemID As String, bChecked As Boolean)
+	Dim m As Map = CreateMap()
+	m.Put("avataricon", bChecked)
+	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+End Sub
+
+Sub ListViewSetAvatarIconColor(itemID As String, bChecked As Boolean)
+	Dim m As Map = CreateMap()
+	m.Put("avatariconcolor", bChecked)
+	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+End Sub
 
 'add an avatar icon
 Sub AddItemAvatarIcon(id As String, avataricon As String, avatariconcolor As String, title As String, subtitle As String, _
@@ -5051,6 +5128,23 @@ Sub AddItemAvatarIcon(id As String, avataricon As String, avatariconcolor As Str
 	Records.Add(rec)
 End Sub
 
+'add an item to the listview
+Sub ListViewAddItem(id As String, title As String) As VueElement
+	Dim rec As Map = CreateMap()
+	rec.Put("id", id)
+	If title <> "" Then rec.Put("title", title)
+	'
+	If mRouterReplace Then
+		rec.put("replace", True)
+	End If
+	'
+	If mRouterAppend Then
+		rec.put("append", True)
+	End If
+	'
+	Records.Add(rec)
+	Return Me
+End Sub
 
 'add an item to the list view
 Sub AddItem(id As String, lefticon As String, lefticoncolor As String, _
@@ -5164,7 +5258,7 @@ Sub AddListViewTemplate(numLines As Int, props As ListViewItemOptions) As VueEle
 	Dim xrightswitch As String = props.rightswitch
 	Dim xshowrightswitch As Boolean = props.showrightswitches
 	Dim xswitchinset As Boolean = props.switchinset
-	
+	Dim xitemavatarclass As String = props.itemavatarclass
 	'
 	datasource = datasource.ToLowerCase
 	key = key.ToLowerCase
@@ -5180,7 +5274,7 @@ Sub AddListViewTemplate(numLines As Int, props As ListViewItemOptions) As VueEle
 <v-checkbox id="${leftcheckboxID}" v-if="${xshowleftcheckboxes}" :item="item" v-model="item.${xleftcheckbox}" :input-value="item.${xleftcheckbox}"></v-checkbox>
 <v-switch id="${leftswitchID}" v-if="${xshowleftswitch}" :inset="${xswitchinset}" :item="item" v-model="item.${xleftswitch}" :input-value="item.${xleftswitch}"></v-switch>
 </v-list-item-action>
-<v-list-item-avatar id="${avatarID}" v-if="item.${xavatar} || item.${xavataricon}">
+<v-list-item-avatar id="${avatarID}" class="${xitemavatarclass}" v-if="item.${xavatar} || item.${xavataricon}">
 <v-img id="${avatarImgID}" :src="item.${xavatar}" class="${xavatarclass}" v-if="item.${xavatar}"></v-img>
 <v-icon id="${avatarIconID}" v-if="item.${xavataricon}" :color="item.${xavatariconcolor}" class="${xavatariconclass}" v-text="item.${xavataricon}"></v-icon>
 </v-list-item-avatar>
@@ -5351,6 +5445,11 @@ End Sub
 'add a spacer to the card title
 Sub AddInsetDivider
 	mElement.Append($"<v-divider inset></v-divider>"$)
+End Sub
+
+Sub VueElementExists(elID As String) As Boolean
+	elID = CleanID(elID)
+	Return BANano.Exists(elID)
 End Sub
 
 'add a vue element on this element
@@ -5966,7 +6065,7 @@ Sub setVOnListerners(b As Boolean)
 End Sub
 
 'set the name of the element
-Sub setname(s As String)
+Sub setName(s As String)
 	AddAttr("name", s)
 End Sub
 
@@ -6163,6 +6262,7 @@ Sub BindAllEvents
 	SetOnEvent(mCallBack, "keydown.left.prevent", "")
 	SetOnEvent(mCallBack, "keydown.right.prevent", "")
 	SetOnEvent(mCallBack, "keydown.space.prevent", "")
+	SetOnEvent(mCallBack, "keyup.enter", "")
 End Sub
 
 Sub AddChipGroup(elID As String, vModel As String,  activeClass As String, bMultiple As Boolean, bShowArrows As Boolean, bFilter As Boolean, DataSource As String, Key As String, Value As String, chipgroupprops As Map, chipprops As Map) As VueElement
@@ -6170,12 +6270,10 @@ Sub AddChipGroup(elID As String, vModel As String,  activeClass As String, bMult
 	DataSource = DataSource.tolowercase
 	Dim parentID As String = CleanID(mName)
 	'
-	BANano.GetElement(parentID).Append($"<v-chip-group id="${elID}"><v-chip id="${elID}chip"></v-chip></v-chip-group>"$)
 	Dim chipid As String = $"${elID}chip"$
 	
 	'get the text field, there is only 1 element on the layout
-	Dim vchipgroup As VueElement
-	vchipgroup.Initialize(mCallBack, elID, elID)
+	Dim vchipgroup As VueElement = AddVueElement2(parentID, elID, "v-chip-group", Null)
 	vchipgroup.Bind("show-arrows", bShowArrows)
 	vchipgroup.VModel = vModel
 	vchipgroup.Multiple = bMultiple
@@ -6191,8 +6289,7 @@ Sub AddChipGroup(elID As String, vModel As String,  activeClass As String, bMult
 	vchipgroup.SetData(DataSource, NewList)
 	'
 	'get the text field, there is only 1 element on the layout
-	Dim vchip As VueElement
-	vchip.Initialize(mCallBack, chipid, chipid)
+	Dim vchip As VueElement = AddVueElement2(elID, chipid, "v-chip", Null)
 	vchip.VFor = $"item in ${DataSource}"$
 	vchip.BindKey($"item.${Key}"$)
 	vchip.Caption = vchip.ItemInMoustache(Value)
@@ -6223,10 +6320,8 @@ Sub AddAutoComplete(elID As String, vmodel As String, sLabel As String, bRequire
 	sourceTable = sourceTable.ToLowerCase
 	sourceField = sourceField.ToLowerCase
 	displayField = displayField.tolowercase
-	'
-	BANano.GetElement(parentID).Append($"<v-autocomplete id="${elID}"></v-autocomplete>"$)
-	Dim vselect As VueElement
-	vselect.Initialize(mCallBack, elID, elID)
+	
+	Dim vselect As VueElement = AddVueElement2(parentID, elID, "v-autocomplete", Null)
 	vselect.label = sLabel
 	vselect.Required = bRequired
 	vselect.Placeholder = sPlaceHolder
@@ -6261,9 +6356,21 @@ Sub AddRouterView(elID As String) As VueElement
 	Return elx
 End Sub
 
+Sub AddSlot(elID As String) As VueElement
+	elID = elID.tolowercase
+	Dim elx As VueElement = AddVueElement1(elID, "slot", "", "", "", Null)
+	Return elx
+End Sub
+
 'add the main container
 Sub AddMain As VueElement
 	Return AddVueElement1($"${mName}main"$, "v-main", "", "", "", Null)
+End Sub
+
+'get an embedded image
+Sub GetImage(elID As String) As VueElement
+	elID = $"${elID}image"$
+	Return GetVueElement(elID)
 End Sub
 
 Sub AddAvatar(elID As String, imgURL As String, avatarSize As Int, avatarprops As Map) As VueElement
@@ -6272,41 +6379,37 @@ Sub AddAvatar(elID As String, imgURL As String, avatarSize As Int, avatarprops A
 	'
 	Dim imageid As String = $"${elID}image"$
 	'
-	BANano.GetElement(parentID).Append($"<v-avatar id="${elID}"><v-img id="${imageid}"></v-img></v-avatar>"$)
-	
-	Dim img As VueElement
-	img.Initialize(mCallBack, imageid, imageid)
-	img.Src = imgURL
-	img.Alt = ""
-	'
-	Dim avatar As VueElement
-	avatar.Initialize(mCallBack, elID, elID)
+	Dim avatar As VueElement = AddVueElement2(parentID, elID, "v-avatar", Null)
 	If avatarSize > 0 Then 
 		avatar.AddAttr("size", avatarSize)
 	End If
 	avatar.AssignProps(avatarprops)
+	'
+	Dim img As VueElement = AddVueElement2(elID, imageid, "v-img", Null)
+	img.Src = imgURL
+	img.Alt = ""
 	img.BindAllEvents
 	'
 	avatar.BindVueElement(img)
 	Return avatar
 End Sub
 
+'get an embedded span
+Sub GetSpan(elID As String) As VueElement
+	Return GetVueElement($"${elID}span"$)
+End Sub
 
 Sub AddAvatarWithText(elID As String, Caption As String, Color As String, avatarSize As Int, TextColor As String, TextColorIntensity As String, avatarprops As Map, textProps As Map) As VueElement
 	Dim parentID As String = CleanID(mName)
 	elID = elID.ToLowerCase
 	Dim spaniD As String = $"${elID}span"$
 	'
-	BANano.GetElement(parentID).Append($"<v-avatar id="${elID}"><span id="${spaniD}"></span></v-avatar>"$)
-	'
-	Dim avatar As VueElement
-	avatar.Initialize(mCallBack, elID, elID)
+	Dim avatar As VueElement = AddVueElement2(parentID, elID, "v-avatar", Null)
 	If avatarSize <> 0 Then avatar.AddAttr("size", avatarSize)
 	If Color <> "" Then avatar.Color = Color
 	avatar.AssignProps(avatarprops)
 	'
-	Dim txt As VueElement
-	txt.Initialize(mCallBack, spaniD, spaniD)
+	Dim txt As VueElement = AddVueElement2(elID, spaniD, "span", Null)
 	txt.Caption = Caption
 	If TextColor <> "" Then txt.TextColor = TextColor
 	If TextColorIntensity <> "" Then txt.TextColorIntensity = TextColorIntensity
@@ -6325,10 +6428,7 @@ Sub AddSelect(elID As String, vmodel As String, sLabel As String, bRequired As B
 	sourceField = sourceField.ToLowerCase
 	displayField = displayField.tolowercase
 	
-	'
-	BANano.GetElement(parentID).Append($"<v-select id="${elID}"></v-select>"$)
-	Dim vselect As VueElement
-	vselect.Initialize(mCallBack, elID, elID)
+	Dim vselect As VueElement = AddVueElement2(parentID, elID, "v-select", Null)
 	vselect.label = sLabel
 	vselect.Required = bRequired
 	vselect.Placeholder = sPlaceHolder
@@ -6492,19 +6592,12 @@ Sub AddButton1(elID As String, sLabel As String, props As Map) As VueElement
 	Dim parentID As String = CleanID(mName)
 	elID = elID.ToLowerCase
 	'
-	If BANano.Exists(parentID) Then
-		BANano.GetElement(parentID).Append($"<v-btn id="${elID}"></v-btn>"$)
-		Dim mbutton As VueElement
-		mbutton.Initialize(mCallBack, elID, elID)
-		mbutton.Caption = sLabel
-		'
-		mbutton.AssignProps(props)
-		mbutton.BindAllEvents
-		Return mbutton
-	Else
-		Log($"AddButton1.${elID} could not be added to ${parentID}"$)
-		'ignore
-	End If
+	Dim mbutton As VueElement = AddVueElement2(parentID, elID, "v-btn", Null)
+	mbutton.Caption = sLabel
+	'
+	mbutton.AssignProps(props)
+	mbutton.BindAllEvents
+	Return mbutton
 End Sub
 
 '<code>
@@ -6519,21 +6612,14 @@ Sub AddButton(elID As String, sLabel As String, eColor As String, bOutlined As B
 	Dim parentID As String = CleanID(mName)
 	elID = elID.ToLowerCase
 	'
-	If BANano.Exists(parentID) Then
-		BANano.GetElement(parentID).Append($"<v-btn id="${elID}"></v-btn>"$)
-		Dim mbutton As VueElement
-		mbutton.Initialize(mCallBack, elID, elID)
-		mbutton.Caption = sLabel
-		If bOutlined Then mbutton.Outlined = True
-		If eColor <> "" Then mbutton.color = eColor
-		
-		mbutton.AssignProps(props)
-		mbutton.BindAllEvents
-		Return mbutton
-	Else
-		Log($"AddButton.${elID} could not be added to ${parentID}"$)
-		'ignore
-	End If
+	Dim mbutton As VueElement = AddVueElement2(parentID, elID, "v-btn", Null)
+	mbutton.Caption = sLabel
+	If bOutlined Then mbutton.Outlined = True
+	If eColor <> "" Then mbutton.color = eColor
+	
+	mbutton.AssignProps(props)
+	mbutton.BindAllEvents
+	Return mbutton
 End Sub
 
 Sub AddSubHeader(elID As String, Caption As String) As VueElement
@@ -6560,6 +6646,9 @@ Sub AddExpansionPanels(elID As String, vModel As String) As VueElement
 	Return elx
 End Sub
 
+Sub GetBadge(elID As String) As VueElement
+	Return GetVueElement($"${elID}badge"$)
+End Sub
 
 'a button with a badge
 Sub AddButtonWithBadge(elID As String, elLabel As String, btnColor As String, vmodel As String, badgeIcon As String, badgeColor As String, btnproperties As Map, badgeproperties As Map) As VueElement
@@ -6567,38 +6656,34 @@ Sub AddButtonWithBadge(elID As String, elLabel As String, btnColor As String, vm
 	elID = elID.ToLowerCase
 	Dim badgeID As String = $"${elID}badge"$
 	'
-	BANano.GetElement(parentID).Append($"<v-badge id="${badgeID}"><v-btn id="${elID}"></v-btn></v-badge>"$)
-	Dim mbadgebtn As VueElement
-	mbadgebtn.Initialize(mCallBack, elID, elID)
-	mbadgebtn.Caption = elLabel
-	If btnColor <> "" Then mbadgebtn.Color = btnColor
-	mbadgebtn.BindAllEvents
-	'
-	mbadgebtn.AssignProps(btnproperties)
-	'
-	Dim badgex As VueElement
-	badgex.Initialize(mCallBack, badgeID, badgeID)
+	Dim badgex As VueElement = AddVueElement2(parentID, badgeID, "v-badge", Null)
 	If vmodel <> "" Then badgex.Bind("content", vmodel)
 	If vmodel <> "" Then badgex.Bind("value", vmodel)
 	If badgeIcon <> "" Then badgex.SetAttr("icon", badgeIcon)
 	If badgeColor <> "" Then badgex.Color = badgeColor
-	
 	badgex.AssignProps(badgeproperties)
+	'
+	Dim mbadgebtn As VueElement = AddVueElement2(badgeID, elID, "v-btn", Null)
+	mbadgebtn.Caption = elLabel
+	If btnColor <> "" Then mbadgebtn.Color = btnColor
+	mbadgebtn.BindAllEvents
+	mbadgebtn.AssignProps(btnproperties)
 	mbadgebtn.BindVueElement(badgex)
 	Return mbadgebtn
 End Sub
 
-
+'get embedded icon
+Sub GetIcon(elID As String) As VueElement
+	Return GetVueElement($"${elID}icon"$)
+End Sub
 
 Sub AddButtonWithIconWithBadge(elID As String, eIcon As String, btnColor As String, vmodel As String, badgeIcon As String, badgeColor As String, btnprops As Map, iconprops As Map, badgeProperties As Map) As VueElement
 	Dim parentID As String = CleanID(mName)
 	elID = elID.ToLowerCase
 	Dim sicon As String = $"${elID}icon"$
 	Dim badgeID As String = $"${elID}badge"$
-	BANano.GetElement(parentID).Append($"<v-badge id="${badgeID}"><v-btn id="${elID}"><v-icon id="${sicon}"></v-icon></v-btn></v-badge>"$)
 	
-	Dim badgex As VueElement
-	badgex.Initialize(mCallBack, badgeID, badgeID)
+	Dim badgex As VueElement = AddVueElement2(parentID, badgeID, "v-badge", Null)
 	If vmodel <> "" Then badgex.Bind("content", vmodel)
 	If vmodel <> "" Then badgex.Bind("value", vmodel)
 	If badgeIcon <> "" Then badgex.SetAttr("icon", badgeIcon)
@@ -6606,13 +6691,12 @@ Sub AddButtonWithIconWithBadge(elID As String, eIcon As String, btnColor As Stri
 	badgex.Overlap = True
 	badgex.AssignProps(badgeProperties)
 		
-	Dim vbtnright As VueElement
-	vbtnright.Initialize(mCallBack, elID, elID)
+	Dim vbtnright As VueElement = AddVueElement2(badgeID, elID, "v-btn", Null)
+	vbtnright.ButtonIcon = True
 	vbtnright.BindAllEvents
 	vbtnright.AssignProps(btnprops)
 	
-	Dim viconright As VueElement
-	viconright.Initialize(mCallBack, sicon, sicon)
+	Dim viconright As VueElement = AddVueElement2(elID, sicon, "v-icon", Null)
 	viconright.Caption = eIcon
 	viconright.Dark = True
 	If btnColor <> "" Then vbtnright.Color = btnColor
@@ -6628,23 +6712,20 @@ Sub AddIconWithBadge(elID As String, eIcon As String, eColor As String, vmodel A
 	elID = elID.ToLowerCase
 	Dim badgeID As String = $"${elID}badge"$
 	'
-	BANano.GetElement(parentID).Append($"<v-badge id="${badgeID}"><v-icon id="${elID}"></v-icon></v-badge>"$)
-	Dim mbadgebtn As VueElement
-	mbadgebtn.Initialize(mCallBack, elID, elID)
-	mbadgebtn.Caption = eIcon
-	If eColor <> "" Then mbadgebtn.Color = eColor
-	mbadgebtn.BindAllEvents
-	'
-	mbadgebtn.AssignProps(btnproperties)
-	'
-	Dim badgex As VueElement
-	badgex.Initialize(mCallBack, badgeID, badgeID)
+	Dim badgex As VueElement = AddVueElement2(parentID, badgeID, "v-badge", Null) 
 	If vmodel <> "" Then badgex.Bind("content", vmodel)
 	If vmodel <> "" Then badgex.Bind("value", vmodel)
 	If badgeIcon <> "" Then badgex.SetAttr("icon", badgeIcon)
 	If badgeColor <> "" Then badgex.Color = badgeColor
 	badgex.Overlap = True
 	badgex.AssignProps(badgeproperties)
+	
+	Dim mbadgebtn As VueElement = AddVueElement2(badgeID, elID, "v-icon", Null)
+	mbadgebtn.Caption = eIcon
+	If eColor <> "" Then mbadgebtn.Color = eColor
+	mbadgebtn.BindAllEvents
+	mbadgebtn.AssignProps(btnproperties)
+		
 	badgex.BindVueElement(mbadgebtn)
 	Return badgex
 End Sub
@@ -6654,13 +6735,12 @@ Sub AddButtonWithIcon(elID As String, eIcon As String, btnColor As String, btnpr
 	Dim parentID As String = CleanID(mName)
 	elID = elID.ToLowerCase
 	Dim siconright As String = $"${elID}icon"$
-	BANano.GetElement(parentID).Append($"<v-btn icon id="${elID}"><v-icon id="${elID}icon"></v-icon></v-btn>"$)
-	Dim vbtnright As VueElement
-	vbtnright.Initialize(mCallBack, elID, elID)
+	
+	Dim vbtnright As VueElement = AddVueElement2(parentID, elID, "v-btn", Null)
+	vbtnright.buttonicon = True
 	vbtnright.AssignProps(btnprops)
 	'
-	Dim viconright As VueElement
-	viconright.Initialize(mCallBack, siconright, siconright)
+	Dim viconright As VueElement = AddVueElement2(elID, siconright, "v-icon", Null)
 	viconright.Caption = eIcon
 	viconright.Dark = True
 	If btnColor <> "" Then vbtnright.Color = btnColor
@@ -6675,10 +6755,8 @@ Sub AddComponent(eTag As String, elID As String) As VueElement
 	elID = elID.tolowercase
 	Dim parentID As String = CleanID(mName)
 	elID = elID.ToLowerCase
-	BANano.GetElement(parentID).Append($"<${eTag} id="${elID}"></${eTag}>"$)
 	'
-	Dim vbtn As VueElement
-	vbtn.Initialize(mCallBack, elID, elID)
+	Dim vbtn As VueElement = AddVueElement2(parentID, elID, eTag, Null) 
 	Return vbtn
 End Sub
 
@@ -6705,9 +6783,7 @@ Sub AddComboBox(elID As String, vmodel As String, sLabel As String, bRequired As
 	displayField = displayField.tolowercase
 	
 	'
-	BANano.GetElement(parentID).Append($"<v-combobox id="${elID}"></v-combobox>"$)
-	Dim vselect As VueElement
-	vselect.Initialize(mCallBack, elID, elID)
+	Dim vselect As VueElement = AddVueElement2(parentID, elID, "v-combobox", Null)
 	vselect.label = sLabel
 	vselect.Required = bRequired
 	vselect.Placeholder = sPlaceHolder
@@ -6751,30 +6827,22 @@ Sub AddButtonWithRightIcon(elID As String, eLabel As String, eIcon As String, eC
 	Dim siconright As String = $"${elID}icon"$
 	Dim sspanright As String = $"${elID}span"$
 	'
-	BANano.GetElement(parentID).Append($"<v-btn id="${elID}"><span id="${elID}span"></span><v-icon id="${elID}icon"></v-icon></v-btn>"$)
-	
-	Dim vbtnright As VueElement
-	vbtnright.Initialize(mCallBack, elID, elID)
+	Dim vbtnright As VueElement = AddVueElement2(parentID, elID, "v-btn", Null)
+	If eColor <> "" Then vbtnright.Color = eColor
+	If bOutlined Then vbtnright.Outlined = True
 	'
-	Dim viconright As VueElement
-	viconright.Initialize(mCallBack, siconright, siconright)
-	'
-	Dim vspanleft As VueElement
-	vspanleft.Initialize(mCallBack, sspanright, sspanright)
-	
+	Dim vspanleft As VueElement = AddVueElement2(elID, sspanright, "span", Null)
 	vspanleft.Caption = eLabel
+	
+	'
+	Dim viconright As VueElement = AddVueElement2(elID, siconright, "v-icon", Null)
 	viconright.Caption = eIcon
 	viconright.Dark = True
 	viconright.AddAttr(":right", True)
 	'
-	If eColor <> "" Then vbtnright.Color = eColor
-	If bOutlined Then vbtnright.Outlined = True
-	'
 	vbtnright.AssignProps(btnprops)
 	viconright.AssignProps(iconprops)
-	'
 	vbtnright.BindAllEvents
-	'
 	vbtnright.BindVueElement(viconright)
 	vbtnright.BindVueElement(vspanleft)
 	'
@@ -6797,34 +6865,26 @@ Sub AddButtonWithLeftIcon(elID As String, eLabel As String, eIcon As String, eCo
 	Dim siconright As String = $"${elID}icon"$
 	Dim sspanright As String = $"${elID}span"$
 	'
-	BANano.GetElement(parentID).Append($"<v-btn id="${elID}"><v-icon id="${elID}icon"></v-icon><span id="${elID}span"></span></v-btn>"$)
-	
-	Dim vbtnright As VueElement
-	vbtnright.Initialize(mCallBack, elID, elID)
+	Dim vbtnright As VueElement = AddVueElement2(parentID, elID, "v-btn", Null)
+	If eColor <> "" Then
+		vbtnright.Color = eColor
+	End If
+	If bOutlined Then
+		vbtnright.Outlined = True
+	End If
 	vbtnright.AssignProps(btnprops)
 	vbtnright.BindAllEvents
 	
 	'
-	Dim viconright As VueElement
-	viconright.Initialize(mCallBack, siconright, siconright)
-	'
-	Dim vspanleft As VueElement
-	vspanleft.Initialize(mCallBack, sspanright, sspanright)
-	
-	vspanleft.Caption = eLabel
+	Dim viconright As VueElement = AddVueElement2(elID, siconright, "v-icon", Null)
 	viconright.Caption = eIcon
 	viconright.Dark = True
 	viconright.AddAttr(":left", True)
 	'
-	If eColor <> "" Then 
-		vbtnright.Color = eColor
-	End If
-	If bOutlined Then 
-		vbtnright.Outlined = True
-	End If
+	Dim vspanleft As VueElement = AddVueElement2(elID, sspanright, "span", Null)
+	vspanleft.Caption = eLabel
 	'
 	viconright.AssignProps(iconprops)
-	'
 	vbtnright.BindVueElement(viconright)
 	vbtnright.BindVueElement(vspanleft)
 	'
@@ -6848,24 +6908,20 @@ Sub AddAvatarWithBadge(elID As String, imgURL As String, avatarSize As Int, vmod
 	Dim avatarid As String = $"${elID}avatar"$
 	Dim imageid As String = $"${elID}image"$
 	'
-	BANano.GetElement(parentID).Append($"<v-badge id="${elID}"><v-avatar id="${avatarid}"><v-img id="${imageid}"></v-img></v-avatar></v-badge>"$)
-	'
-	Dim vbadge As VueElement
-	vbadge.Initialize(mCallBack, elID, elID)
+	Dim vbadge As VueElement = AddVueElement2(parentID, elID, "v-badge", Null)
 	If badgeColor <> "" Then vbadge.Color = badgeColor
 	If vmodel <> "" Then vbadge.Bind("content", vmodel)
 	If vmodel <> "" Then vbadge.Bind("value", vmodel)
 	vbadge.AssignProps(badgeprops)
 	'
-	Dim img As VueElement
-	img.Initialize(mCallBack, imageid, imageid)
-	img.Src = imgURL
-	img.Alt = ""
-	'
-	Dim avatar As VueElement
-	avatar.Initialize(mCallBack, avatarid, avatarid)
+	Dim avatar As VueElement = AddVueElement2(elID, avatarid, "v-avatar", Null)
 	If avatarSize <> 0 Then avatar.AddAttr("size", avatarSize)
 	avatar.AssignProps(avatarprops)
+	
+	
+	Dim img As VueElement = AddVueElement2(elID, imageid, "v-img", Null)
+	img.Src = imgURL
+	img.Alt = ""
 	img.BindAllEvents
 	'
 	vbadge.BindVueElement(img)
@@ -6876,23 +6932,18 @@ End Sub
 Sub AddAvatar1(elID As String, vmodel As String, avatarSize As Int, avatarprops As Map) As VueElement
 	Dim parentID As String = CleanID(mName)
 	elID = elID.ToLowerCase
-	'
 	Dim imageid As String = $"${elID}image"$
 	'
-	BANano.GetElement(parentID).Append($"<v-avatar id="${elID}"><v-img id="${imageid}"></v-img></v-avatar>"$)
+	Dim avatar As VueElement = AddVueElement2(parentID, elID, "v-avatar", Null)
+	If avatarSize > 0 Then avatar.AddAttr("size", avatarSize)
+	avatar.AssignProps(avatarprops)
 	
-	Dim img As VueElement
-	img.Initialize(mCallBack, imageid, imageid)
+	Dim img As VueElement = AddVueElement2(elID, imageid, "v-img", Null)
 	img.AddAttr(":src", vmodel)
 	img.AddAttr(":lazy-src", vmodel)
 	img.Alt = ""
-	'
-	Dim avatar As VueElement
-	avatar.Initialize(mCallBack, elID, elID)
-	If avatarSize > 0 Then avatar.AddAttr("size", avatarSize)
-	avatar.AssignProps(avatarprops)
+		
 	img.BindAllEvents
-	'
 	avatar.BindVueElement(img)
 	Return avatar
 End Sub
@@ -6969,10 +7020,18 @@ Ok</v-btn>
 	Return vtextfield
 End Sub
 
-
 Sub AddTimePickerInput1(elID As String, vModel As String, sLabel As String, txtprops As Map, tpprops As Map) As VueElement
 	Dim tp As VueElement = AddTimePickerInput(elID, vModel, sLabel,"", False, "", "", txtprops, tpprops)
 	Return tp 
+End Sub
+
+'get embedded date time picker
+Sub GetDateTimePicker(elID As String) As VueElement
+	Return GetVueElement($"${elID}dp"$)
+End Sub
+
+Sub GetDateTimePickerText(elID As String) As VueElement
+	Return GetVueElement($"${elID}txt"$)
 End Sub
 
 'add time picker input
@@ -7031,9 +7090,7 @@ End Sub
 Sub AddIcon(elID As String, eIcon As String, color As String, iDark As Boolean, iconprops As Map) As VueElement
 	Dim parentID As String = CleanID(mName)
 	elID = elID.ToLowerCase
-	BANano.GetElement(parentID).Append($"<v-icon id="${elID}"></v-icon>"$)
-	Dim vbtnright As VueElement
-	vbtnright.Initialize(mCallBack, elID, elID)
+	Dim vbtnright As VueElement = AddVueElement2(parentID, elID, "v-icon", Null)
 	vbtnright.Dark = iDark
 	vbtnright.Caption = eIcon
 	If color <> "" Then vbtnright.Color = color
@@ -7045,9 +7102,7 @@ End Sub
 Sub AddBadge(elID As String, vmodel As String, content As String, color As String, bDot As Boolean, bOverLap As Boolean, iDark As Boolean, badgeProps As Map) As VueElement
 	Dim parentID As String  = CleanID(mName)
 	elID = elID.ToLowerCase
-	BANano.GetElement(parentID).Append($"<v-badge id="${elID}"></v-badge>"$)
-	Dim vbtnright As VueElement
-	vbtnright.Initialize(mCallBack, elID, elID)
+	Dim vbtnright As VueElement = AddVueElement2(parentID, elID, "v-badge", Null)
 	vbtnright.Dark = iDark
 	If color <> "" Then vbtnright.Color = color
 	vbtnright.Dot = bDot
@@ -7062,9 +7117,7 @@ End Sub
 Sub AddSearch(elID As String, vmodel As String, slabel As String, bSolo As Boolean, props As Map) As VueElement
 	Dim parentID As String = CleanID(mName)
 	elID = elID.ToLowerCase
-	BANano.GetElement(parentID).Append($"<v-text-field id="${elID}"></v-text-field>"$)
-	Dim vtextfield As VueElement
-	vtextfield.Initialize(mCallBack, elID, elID)
+	Dim vtextfield As VueElement = AddVueElement2(parentID, elID, "v-text-field", Null)
 	vtextfield.Label = slabel
 	vtextfield.AppendIcon = "mdi-magnify"
 	vtextfield.VModel = vmodel
@@ -7083,9 +7136,7 @@ End Sub
 Sub AddParallax(elID As String, sheight As String, src As String, alt As String, props As Map) As VueElement
 	Dim parentID As String = CleanID(mName)
 	elID = elID.ToLowerCase
-	BANano.GetElement(parentID).Append($"<v-parallax id="${elID}"></v-parallax>"$)
-	Dim vparallax As VueElement
-	vparallax.Initialize(mCallBack, elID, elID)
+	Dim vparallax As VueElement = AddVueElement2(parentID, elID, "v-parallax", Null)
 	vparallax.Src = src
 	vparallax.Height = sheight
 	vparallax.Alt = alt
@@ -7143,9 +7194,7 @@ End Sub
 Sub AddFileInput(elID As String, vmodel As String, slabel As String, splaceholder As String, bMultiple As Boolean, sHint As String, props As Map) As VueElement
 	Dim parentID As String = CleanID(mName)
 	elID = elID.ToLowerCase
-	BANano.GetElement(parentID).Append($"<v-file-input id="${elID}"></v-file-input>"$)
-	Dim vfileinput As VueElement
-	vfileinput.Initialize(mCallBack, elID, elID)
+	Dim vfileinput As VueElement = AddVueElement2(parentID, elID, "v-file-input", Null)
 	vfileinput.Label = slabel
 	vfileinput.Placeholder = splaceholder
 	vfileinput.Hint = sHint
@@ -7219,14 +7268,14 @@ End Sub
 Sub AddSlider(elID As String, vmodel As String, slabel As String, iminvalue As Object, imaxvalue As Object, iStep As Int,  bShowThumb As Boolean,  bVertical As Boolean, props As Map) As VueElement
 	Dim parentID As String = CleanID(mName)
 	elID = elID.ToLowerCase
-	BANano.GetElement(parentID).Append($"<v-slider id="${elID}"></v-slider>"$)
 	'get the text field, there is only 1 element on the layout
-	Dim vslider As VueElement
-	vslider.Initialize(mCallBack, elID, elID)
+	Dim vslider As VueElement = AddVueElement2(parentID, elID, "v-slider", Null)
 	vslider.Label = slabel
 	vslider.VModel = vmodel
 	vslider.SetData(vmodel, 0)
-	If bShowThumb Then vslider.AddAttr("thumb-label", "always")
+	If bShowThumb Then 
+		vslider.AddAttr("thumb-label", "always")
+	End If
 	vslider.AddAttr(":vertical", bVertical)
 	vslider.AddAttr("min", iminvalue)
 	vslider.AddAttr("max", imaxvalue)
@@ -7287,9 +7336,7 @@ End Sub
 Sub AddTextField1(elID As String, vModel As String, sLabel As String, props As Map) As VueElement
 	Dim parentID As String = CleanID(mName)
 	elID = elID.ToLowerCase
-	BANano.GetElement(parentID).Append($"<v-text-field id="${elID}"></v-v-text-field>"$)
-	Dim vtextfield As VueElement
-	vtextfield.Initialize(mCallBack, elID, elID)
+	Dim vtextfield As VueElement = AddVueElement2(parentID, elID, "v-text-field", Null)
 	vtextfield.Label = sLabel
 	vtextfield.VModel = vModel
 	vtextfield.SetData(vModel, "")
@@ -7308,9 +7355,7 @@ End Sub
 Sub AddTextField(elID As String, vmodel As String, slabel As String, splaceholder As String, bRequired As Boolean, sPrependIcon As String, iMaxLen As Int, sHint As String, props As Map) As VueElement
 	Dim parentID As String = CleanID(mName)
 	elID = elID.ToLowerCase
-	BANano.GetElement(parentID).Append($"<v-text-field id="${elID}"></v-v-text-field>"$)
-	Dim vtextfield As VueElement
-	vtextfield.Initialize(mCallBack, elID, elID)
+	Dim vtextfield As VueElement = AddVueElement2(parentID, elID, "v-text-field", Null)
 	vtextfield.Label = slabel
 	vtextfield.Required = bRequired
 	vtextfield.PrependIcon = sPrependIcon
@@ -7345,9 +7390,7 @@ End Sub
 Sub AddTextArea(elID As String, vmodel As String, slabel As String, splaceholder As String, bRequired As Boolean, sPrependIcon As String, iMaxLen As Int, sHint As String, props As Map) As VueElement
 	Dim parentID As String = CleanID(mName)
 	elID = elID.ToLowerCase
-	BANano.GetElement(parentID).Append($"<v-textarea id="${elID}"></v-textarea>"$)
-	Dim vtextfield As VueElement
-	vtextfield.Initialize(mCallBack, elID, elID)
+	Dim vtextfield As VueElement = AddVueElement2(parentID, elID, "v-textarea", Null)
 	vtextfield.Label = slabel
 	vtextfield.Required = bRequired
 	vtextfield.PrependIcon = sPrependIcon
@@ -7371,11 +7414,9 @@ End Sub
 Sub AddPassword(elID As String, vmodel As String, slabel As String, splaceholder As String, bRequired As Boolean, sPrependIcon As String, iMaxLen As Int, sHint As String, props As Map) As VueElement
 	Dim parentID As String = CleanID(mName)
 	elID = elID.ToLowerCase
-	BANano.GetElement(parentID).Append($"<v-text-field id="${elID}"></v-text-field>"$)
 	Dim bshowPassword As String = $"${elID}ShowPassword"$
 	bshowPassword = bshowPassword.tolowercase
-	Dim vtextfield As VueElement
-	vtextfield.Initialize(mCallBack, elID, elID)
+	Dim vtextfield As VueElement = AddVueElement2(parentID, elID, "v-text-field", Null)
 	vtextfield.Label = slabel
 	vtextfield.Required = bRequired
 	vtextfield.PrependIcon = sPrependIcon
@@ -7401,9 +7442,7 @@ End Sub
 Sub AddSwitch(sid As String, vmodel As String, slabel As String, truevalue As Object, falsevalue As Object, color As String, bInset As Boolean, props As Map) As VueElement
 	Dim parentID As String = CleanID(mName)
 	sid = sid.ToLowerCase
-	BANano.GetElement(parentID).Append($"<v-switch id="${sid}"></v-switch>"$)
-	Dim vswitch As VueElement
-	vswitch.Initialize(mCallBack, sid, sid)
+	Dim vswitch As VueElement = AddVueElement2(parentID, sid, "v-switch", Null)
 	vswitch.VModel = vmodel
 	vswitch.SetData(vmodel, "")
 	vswitch.label = slabel
@@ -7428,9 +7467,7 @@ End Sub
 Sub AddRating(sid As String, vmodel As String, slength As Int, ssize As Int, bHover As Boolean, color As String, props As Map) As VueElement
 	Dim parentID As String = CleanID(mName)
 	sid = sid.ToLowerCase
-	BANano.GetElement(parentID).Append($"<v-rating id="${sid}"></v-rating>"$)
-	Dim vrating As VueElement
-	vrating.Initialize(mCallBack, sid, sid)
+	Dim vrating As VueElement = AddVueElement2(parentID, sid, "v-rating", Null)
 	vrating.VModel = vmodel
 	vrating.SetData(vmodel, Null)
 	vrating.AddAttr("length", slength)
@@ -7445,9 +7482,7 @@ End Sub
 Sub AddCheckBox(sid As String, vmodel As String, slabel As String, truevalue As Object, falsevalue As Object, color As String, props As Map) As VueElement
 	Dim parentID As String = CleanID(mName)
 	sid = sid.ToLowerCase
-	BANano.GetElement(parentID).Append($"<v-checkbox id="${sid}"></v-checkbox>"$)
-	Dim vcheckbox As VueElement
-	vcheckbox.Initialize(mCallBack, sid, sid)
+	Dim vcheckbox As VueElement = AddVueElement2(parentID, sid, "v-checkbox", Null)
 	vcheckbox.VModel = vmodel
 	vcheckbox.SetData(vmodel, Null)
 	vcheckbox.label = slabel
@@ -7477,9 +7512,7 @@ End Sub
 Sub AddImage1(elID As String, vmodel As String, alt As String, sheight As String, swidth As String, props As Map) As VueElement
 	Dim parentID As String = CleanID(mName)
 	elID = elID.ToLowerCase
-	BANano.GetElement(parentID).Append($"<v-img id="${elID}"></v-img>"$)
-	Dim vimg As VueElement
-	vimg.Initialize(mCallBack, elID, elID)
+	Dim vimg As VueElement = AddVueElement2(parentID, elid, "v-img", Null)
 	If sheight <> "" Then vimg.MaxHeight = sheight
 	If swidth <> "" Then vimg.MaxWidth = swidth
 	vimg.AddAttr(":src", vmodel)
@@ -7501,9 +7534,7 @@ End Sub
 Sub AddImage(elID As String, src As String, lazysrc As String, alt As String, sheight As String, swidth As String, props As Map) As VueElement
 	Dim parentID As String = CleanID(mName)
 	elID = elID.ToLowerCase
-	BANano.GetElement(parentID).Append($"<v-img id="${elID}"></v-img>"$)
-	Dim vimg As VueElement
-	vimg.Initialize(mCallBack, elID, elID)
+	Dim vimg As VueElement = AddVueElement2(parentID, elid, "v-img", Null)
 	If sheight <> "" Then vimg.MaxHeight = sheight
 	If swidth <> "" Then vimg.MaxWidth = swidth
 	vimg.Src = src
@@ -7597,10 +7628,7 @@ Sub AddChipWithAvatar(elID As String, src As String, label As String, bPill As B
 	Dim avarID As String = $"${elID}avatar"$
 	Dim imgID As String = $"${elID}img"$
 	'
-	BANano.GetElement(parentID).Append($"<v-chip id="${elID}"><v-avatar id="${avarID}"><v-img id="${imgID}"></v-img></v-avatar><span id="${spanID}"></span></v-chip>"$)
-	
-	Dim vchip As VueElement
-	vchip.Initialize(mCallBack, elID, elID)
+	Dim vchip As VueElement = AddVueElement2(parentID, elID, "v-chip", Null)
 	vchip.AddAttr(":pill", bPill)
 	vchip.AddAttr(":close", bClose)
 	If color <> "" Then vchip.Color = color
@@ -7609,19 +7637,16 @@ Sub AddChipWithAvatar(elID As String, src As String, label As String, bPill As B
 	vchip.SetOnEvent(mCallBack, "click", $"'${elID}'"$)
 	vchip.SetOnEvent(mCallBack, "click:close", $"'${elID}'"$)
 	'
-	Dim vavatar As VueElement
-	vavatar.Initialize(mCallBack, avarID, avarID)
+	Dim vavatar As VueElement = AddVueElement2(elid, avarid, "v-avatar", Null)
 	vavatar.AddAttr(":left", True)
 	vavatar.AssignProps(avatarprops)
 	'
-	Dim vimg As VueElement
-	vimg.Initialize(mCallBack, imgID, imgID)
+	Dim vimg As VueElement = AddVueElement2(avarid, imgid, "v-img", Null)
 	vimg.Src = src
 	vimg.lazysrc = src
 	vimg.AssignProps(imgprops)
 	'
-	Dim span As VueElement
-	span.Initialize(mCallBack, spanID, spanID)
+	Dim span As VueElement = AddVueElement2(elID, spanID, "span", Null)
 	span.Caption = label
 	'
 	vchip.BindVueElement(span)
@@ -7637,10 +7662,8 @@ Sub AddChipWithIcon(elID As String, sicon As String, label As String, bPill As B
 	elID = elID.ToLowerCase
 	Dim iconID As String = $"${elID}icon"$
 	Dim spanID As String = $"${elID}span"$
-	BANano.GetElement(parentID).Append($"<v-chip id="${elID}"><v-icon id="${iconID}"></v-icon><span id="${spanID}"></span></v-chip>"$)
 	'
-	Dim vchip As VueElement
-	vchip.Initialize(mCallBack, elID, elID)
+	Dim vchip As VueElement = AddVueElement2(parentID, elID, "v-chip", Null)
 	vchip.AddAttr(":pill", bPill)
 	vchip.AddAttr(":close", bClose)
 	If color <> "" Then vchip.Color = color
@@ -7648,12 +7671,10 @@ Sub AddChipWithIcon(elID As String, sicon As String, label As String, bPill As B
 	vchip.SetOnEvent(mCallBack, "click", $"'${elID}'"$)
 	vchip.SetOnEvent(mCallBack, "click:close", $"'${elID}'"$)'
 	'
-	Dim vicon As VueElement
-	vicon.Initialize(mCallBack, iconID, iconID)
+	Dim vicon As VueElement = AddVueElement2(elID, iconID, "v-icon", Null)
 	vicon.caption = sicon
 	'
-	Dim span As VueElement
-	span.Initialize(mCallBack, spanID, spanID)
+	Dim span As VueElement  = AddVueElement2(elID, spanID, "span", Null)
 	span.Caption = label
 	'
 	vchip.AssignProps(chipprops)
@@ -7664,26 +7685,29 @@ Sub AddChipWithIcon(elID As String, sicon As String, label As String, bPill As B
 	Return vchip
 End Sub
 
+Sub GetRadio(elID As String) As VueElement
+	Return GetVueElement($"${elID}radio"$)
+End Sub
+
 Sub AddRadioGroup(elID As String, vmodel As String, sLabel As String, bRow As Boolean, bMultiple As Boolean, sourceTable As String, key As String, value As String, colorField As String, radiogroupprops As Map, radioprops As Map) As VueElement
 	Dim parentID As String = CleanID(mName)
 	elID = elID.ToLowerCase
 	Dim radioID As String = $"${elID}radio"$
-	BANano.GetElement(parentID).Append($"<v-radio-group id="${elID}"><v-radio id="${radioID}"></v-radio></v-radio-group>"$)
+	
 	sourceTable = sourceTable.ToLowerCase
 	key = key.ToLowerCase
 	value = value.ToLowerCase
 	
 	colorField = colorField.tolowercase
-	Dim vradiogroup As VueElement
-	vradiogroup.Initialize(mCallBack, elID, elID)
+	Dim vradiogroup As VueElement = AddVueElement2(parentID, elid, "v-radio-group", Null)
 	vradiogroup.label = sLabel
 	vradiogroup.Multiple = bMultiple
 	vradiogroup.AddAttr(":row", bRow)
 	vradiogroup.AddAttr(":column", Not(bRow))
 	vradiogroup.VModel = vmodel
 	vradiogroup.AssignProps(radiogroupprops)
-	Dim vradio As VueElement
-	vradio.Initialize(mCallBack, radioID, radioID)
+	'
+	Dim vradio As VueElement = AddVueElement2(elid, radioid, "v-radio", Null)
 	vradio.VFor = $"item in ${sourceTable}"$
 	vradio.BindKey($"item.${key}"$)
 	vradio.Bind("label", $"item.${value}"$)
@@ -7891,6 +7915,10 @@ Sub AddAppBar(elID As String) As VueElement
 	Return elx
 End Sub
 
+Sub AddTransitionGroup(elID As String) As VueElement
+	Dim elx As VueElement = AddVueElement1(elID, "transition-group", "", "", "", Null)
+	Return elx
+End Sub
 
 Sub AddApp(elID As String) As VueElement
 	Dim elx As VueElement = AddVueElement1(elID, "v-app", "", "", "", Null)
@@ -7977,9 +8005,7 @@ Sub AddRow(rowpos As Int) As VueElement
 	Dim rowkey As String = $"${parentID}r${rowpos}"$
 	rowkey = rowkey.Replace("#","")
 	
-	BANano.GetElement(parentID).Append($"<v-row id="${rowkey}"></v-row>"$)
-	Dim mbutton As VueElement
-	mbutton.Initialize(mCallBack, rowkey, rowkey)
+	Dim mbutton As VueElement = AddVueElement2(parentID, rowkey, "v-row", Null)
 	mbutton.BindAllEvents
 	Return mbutton
 End Sub
@@ -7993,11 +8019,8 @@ Sub AddCol(colpos As Int, xs As String, sm As String, md As String, lg As String
 	'
 	Dim colKey As String = $"${parentID}c${colpos}"$
 	colKey = colKey.Replace("#","")
-	
-	BANano.GetElement(parentID).Append($"<v-col id="${colKey}"></v-col>"$)
-	
-	Dim mbutton As VueElement
-	mbutton.Initialize(mCallBack, colKey, colKey)
+	'
+	Dim mbutton As VueElement = AddVueElement2(parentID, colkey, "v-col", Null)
 	mbutton.AddSizes(xs, sm, md, lg, xl)
 	mbutton.BindAllEvents
 	Return mbutton
@@ -8032,13 +8055,13 @@ End Sub
 
 Sub AddSlotAppend(elID As String) As VueElement
 	Dim elx As VueElement = AddVueElement1(elID, "v-template", "", "", "", Null)
-	elx.SetVSlotAppend
+	elx.VSlotAppend = True
 	Return elx
 End Sub
 
 Sub AddSlotExtension(elID As String) As VueElement
 	Dim elx As VueElement = AddVueElement1(elID, "v-template", "", "", "", Null)
-	elx.SetVSlotExtension
+	elx.VSlotExtension = True
 	Return elx
 End Sub
 
@@ -8092,16 +8115,16 @@ Sub AddGroupItem(elid As String) As VueElement
 	Return vlist
 End Sub
 
-Sub AddDataTable(Module As Object, parentID As String, elID As String) As VueTable
+Sub AddDataTable(parentID As String, elID As String) As VueTable
 	Dim elx As VueTable
-	elx.Initialize(Module, elID, elID)
+	elx.Initialize(mCallBack, elID, elID)
 	elx.AddToParent(parentID)
 	Return elx
 End Sub
 
 
 Sub AddTabItems(elID As String, vmodel As String) As VueElement
-	Return AddVueElement1(elID, "v-tab-items", vmodel, "", "", null)
+	Return AddVueElement1(elID, "v-tab-items", vmodel, "", "", Null)
 End Sub
 
 
@@ -8250,4 +8273,10 @@ End Sub
 Sub AddSlideYReverseTransition(elID As String) As VueElement
 	Dim elx As VueElement = AddVueElement1(elID, "v-slide-y-reverse-transition", "", "", "", Null)
 	Return elx
+End Sub
+
+Sub setBlurred(s As String)
+	s = S.tolowercase
+	AddAttr("v-blur", s)
+	SetData(s, False)
 End Sub

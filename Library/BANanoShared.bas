@@ -24,10 +24,20 @@ Sub Process_Globals
         "", "Thousand", "Million", "Billion", "Trillion", _
         "Quadrillion", "Pentillion", "Sexillion", "Septillion", "Octillion" _
     )
-	Type FileObject(FileName As String, FileDate As String, FileSize As Long, FileType As String, Status As String, FullPath As String, FileDateOnly as string)
+	Type FileObject(FileName As String, FileDate As String, FileSize As Long, FileType As String, Status As String, FullPath As String, FileDateOnly As String)
 	Private SourceCode As StringBuilder
 	Type sequencePair(value As Int, numTimes As Int)
 End Sub
+
+'set authorization for this connection
+Sub BasicAuthorization(username As String, password As String) As Map
+	Dim usernamepassword As Object = BANano.ToBase64($"${username}:${password}"$)
+	Dim basic As String = $"Basic ${usernamepassword}"$
+	Dim m As Map = CreateMap()
+	m.Put("Authorization", basic)
+	Return m
+End Sub
+
 
 Sub MapKeys2List(m As Map) As List
 	Dim mtot As Int = m.Size-1
@@ -584,16 +594,35 @@ Sub Rand_LoremIpsum(count As Int) As String
 	Return sb.tostring
 End Sub
 
+'update a record at position
+Sub ListOfMapsUpdateRecord(lst As List, k As String, v As String, m As Map)
+	'get a record map
+	Dim recPos As Int = ListOfMapsRecordPos(lst, k, v)
+	recPos = BANano.parseInt(recPos)
+	If recPos = -1 Then Return
+	'get the record at pos
+	Dim oldrec As Map = lst.Get(recPos)	
+	For Each mk As String In m.Keys
+		Dim mv As String = m.Get(mk)
+		oldrec.Put(mk, mv)
+	Next
+	lst.Set(recPos, oldrec)
+End Sub
 
 'get the record position from saved items
 Sub ListOfMapsRecordPos(lst As List, k As String, v As String) As Int
+	v = CStr(v)
+	k = CStr(k)
 	Dim lTot As Int = lst.Size - 1
 	Dim lCnt As Int
 	For lCnt = 0 To lTot
 		Dim m As Map = lst.Get(lCnt)
-		Dim sk As String = m.GetDefault(k, "")
-		If sk.EqualsIgnoreCase(v) Then
-			Return lCnt
+		If m.ContainsKey(k) Then
+			Dim sk As String = m.GetDefault(k, "")
+			sk = CStr(sk)
+			If sk.EqualsIgnoreCase(v) Then
+				Return lCnt
+			End If
 		End If
 	Next
 	Return -1

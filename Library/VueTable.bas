@@ -2247,7 +2247,7 @@ sb.Append(temp)
 				If SubExists(mCallBack, methodName) Then
 					pl.AddAttr("v-on:change", $"${methodName}(item)"$)
 					Dim args As List
-					SetMethod(methodName, args)
+					SetMethod(mcallback, methodName, args)
 				End If
 				
 				'
@@ -2315,7 +2315,7 @@ sb.Append(temp)
 				If SubExists(mCallBack, methodName) Then
 					rat.AddAttr("v-on:input", $"${methodName}(item)"$)
 					Dim args As List
-					SetMethod(methodName, args)
+					SetMethod(mcallback, methodName, args)
 				End If
 				'
 				'define template
@@ -2389,7 +2389,7 @@ sb.Append(temp)
 					swt.AddAttr("v-on:change", $"${methodName}(item)"$)
 					Dim args As List
 		
-					SetMethod(methodName, args)
+					SetMethod(mcallback, methodName, args)
 				End If
 				'
 				'define template
@@ -2509,7 +2509,7 @@ sb.Append(temp)
 					abtn.AddAttr("v-on:click", $"${mName}_${value}(item)"$)
 					Dim args As List
 		
-					SetMethod(methodName, args)
+					SetMethod(mcallback, methodName, args)
 				End If
 				'
 				'define template
@@ -2553,7 +2553,7 @@ sb.Append(temp)
 					abtn.AddAttr("v-on:click", $"${mName}_${value}(item)"$)
 					Dim args As List
 		
-					SetMethod(methodName, args)
+					SetMethod(mcallback, methodName, args)
 				End If
 				'
 				'define template
@@ -3031,16 +3031,16 @@ Sub getSingleSelect() As Boolean
 End Sub
 
 'set direct method
-Sub SetMethod(methodName As String, args As List)
+Sub SetMethod(Module As Object,methodName As String, args As List)
 	methodName = methodName.tolowercase
 	methodName = methodName.Replace(":","")
 	methodName = methodName.Replace(".","")
 	methodName = methodName.Replace("-","")
 	methodName = methodName.tolowercase
-	If SubExists(mCallBack, methodName) Then
-		Dim cb As BANanoObject = BANano.CallBack(mCallBack, methodName, args)
+	If SubExists(Module, methodName) Then
+		Dim cb As BANanoObject = BANano.CallBack(Module, methodName, args)
 		methods.Put(methodName, cb)
 	Else
-		Log("SetMethod: " & MethodName & ", callback is missing.")
+		Log("SetMethod: " & methodName & ", callback is missing.")
 	End If
 End Sub

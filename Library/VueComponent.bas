@@ -198,8 +198,8 @@ Public Sub Initialize (CallBack As Object, Name As String) As VueComponent
 	SetMethod(Me, "nicedate", Null)
 	SetMethod(Me, "nicetime", Null)
 	SetMethod(Me, "nicemoney", Null)
-	SetMethod(Me, "NiceFileSize", Null)
-	SetMethod(Me, "Thousands", Null)
+	SetMethod(Me, "nicefilesize", Null)
+	SetMethod(Me, "thousands", Null)
 	Return Me
 End Sub
 
@@ -302,7 +302,7 @@ End Sub
 Sub ShowConfirm(process As String, Title As String, Message As String, ConfirmText As String, CancelText As String)
 	process = process.tolowercase
 	SetData("confirmkey", process)
-	SetData(DialogTitle, Title)
+	SetData(dialogTitle, Title)
 	SetData(dialogMessage, Message)
 	SetData(dialogoktitle, ConfirmText)
 	SetData(dialogokshow, True)
@@ -323,29 +323,29 @@ Sub FormatDisplayDate(item As String, sFormat As String) As String			'ignoredead
 End Sub
 
 'return a date with day, month year name
-Sub NiceDate(sdate As String) As String
+Sub NiceDate(sdate As String) As String				'ignoredeadcode
 	Return FormatDisplayDate(sdate, "ddd, DD MMM YYYY")
 End Sub
 
-Sub NiceTime(stime As String) As String
+Sub NiceTime(stime As String) As String				'ignoredeadcode
 	Return FormatDisplayDate(stime, "ddd, DD MMM YYYY @ HH:mm:ss")
 End Sub
 
 
-Sub NiceMoney(smoney As String) As String
+Sub NiceMoney(smoney As String) As String				'ignoredeadcode
 	Return FormatDisplayNumber(smoney, "0,0.00")
 End Sub
 
-Sub Thousands(smoney As String) As String
+Sub Thousands(smoney As String) As String				'ignoredeadcode
 	Return FormatDisplayNumber(smoney, "0,0")
 End Sub
 
 
-Sub NiceFileSize(fsx As String) As String
+Sub NiceFileSize(fsx As String) As String				'ignoredeadcode
 	Return FormatFileSize(fsx)
 End Sub
 
-Sub FormatFileSize(Bytes As Float) As String					'ignoredeadcode
+Sub FormatFileSize(Bytes As Float) As String			'ignoredeadcode		'ignoredeadcode
 	If BANano.IsNull(Bytes) Or BANano.IsUndefined(Bytes) Then
 		Bytes = 0
 	End If
@@ -589,95 +589,95 @@ Sub AddHTML(html As String)
 End Sub
 
 'set mounted
-Sub SetMounted(module As Object, methodName As String, args As List) As VueComponent
+Sub SetMounted(Module As Object,methodName As String, args As List) As VueComponent
 	methodName = methodName.ToLowerCase
-	If SubExists(module, methodName) = False Then Return Me
-	Dim mounted As BANanoObject = BANano.CallBack(module, methodName, args)
+	If SubExists(Module, methodName) = False Then Return Me
+	Dim mounted As BANanoObject = BANano.CallBack(Module, methodName, args)
 	opt.Put("mounted", mounted)
-	SetMethod(module, methodName, args)
+	SetMethod(Module, methodName, args)
 	Return Me
 End Sub
 
 'set updated
-Sub SetUpdated(module As Object, methodName As String, args As List) As VueComponent
+Sub SetUpdated(Module As Object, methodName As String, args As List) As VueComponent
 	methodName = methodName.ToLowerCase
-	If SubExists(module, methodName) = False Then Return Me
-	Dim updated As BANanoObject = BANano.CallBack(module, methodName, args)
+	If SubExists(Module, methodName) = False Then Return Me
+	Dim updated As BANanoObject = BANano.CallBack(Module, methodName, args)
 	opt.Put("updated", updated)
-	SetMethod(module, methodName, args)
+	SetMethod(Module, methodName, args)
 	Return Me
 End Sub
 
 'set beforemount
-Sub SetBeforeMount(module As Object, methodName As String, args As List) As VueComponent
+Sub SetBeforeMount(Module As Object, methodName As String, args As List) As VueComponent
 	methodName = methodName.ToLowerCase
-	If SubExists(module, methodName) = False Then Return Me
-	Dim beforeMount As BANanoObject = BANano.CallBack(module, methodName, args)
+	If SubExists(Module, methodName) = False Then Return Me
+	Dim beforeMount As BANanoObject = BANano.CallBack(Module, methodName, args)
 	opt.Put("beforeMount", beforeMount)
-	SetMethod(module, methodName, args)
+	SetMethod(Module, methodName, args)
 	Return Me
 End Sub
 
 'set beforeupdate
-Sub SetBeforeUpdate(module As Object, methodName As String, args As List) As VueComponent
+Sub SetBeforeUpdate(Module As Object, methodName As String, args As List) As VueComponent
 	methodName = methodName.ToLowerCase
-	If SubExists(module, methodName) = False Then Return Me
-	Dim beforeUpdate As Boolean = BANano.CallBack(module, methodName, args)
+	If SubExists(Module, methodName) = False Then Return Me
+	Dim beforeUpdate As Boolean = BANano.CallBack(Module, methodName, args)
 	opt.Put("beforeUpdate", beforeUpdate)
-	SetMethod(module, methodName,args)
+	SetMethod(Module, methodName,args)
 	Return Me
 End Sub
 
 'set before destroy
-Sub SetBeforeDestroy(module As Object, methodName As String, args As List) As VueComponent
+Sub SetBeforeDestroy(Module As Object, methodName As String, args As List) As VueComponent
 	methodName = methodName.ToLowerCase
-	If SubExists(module, methodName) = False Then Return Me
-	Dim beforeDestroy As Boolean = BANano.CallBack(module, methodName, args)
+	If SubExists(Module, methodName) = False Then Return Me
+	Dim beforeDestroy As Boolean = BANano.CallBack(Module, methodName, args)
 	opt.Put("beforeDestroy", beforeDestroy)
-	SetMethod(module, methodName, args)
+	SetMethod(Module, methodName, args)
 	Return Me
 End Sub
 
 
 'set before created
-Sub SetBeforeCreate(module As Object, methodName As String, args As List) As VueComponent
+Sub SetBeforeCreate(Module As Object, methodName As String, args As List) As VueComponent
 	methodName = methodName.ToLowerCase
-	If SubExists(module, methodName) = False Then Return Me
-	Dim beforeCreate As BANanoObject = BANano.CallBack(module, methodName, args)
+	If SubExists(Module, methodName) = False Then Return Me
+	Dim beforeCreate As BANanoObject = BANano.CallBack(Module, methodName, args)
 	opt.Put("beforeCreate", beforeCreate)
-	SetMethod(module, methodName, args)
+	SetMethod(Module, methodName, args)
 	Return Me
 End Sub
 
 
 'set created
-Sub SetCreated(module As Object, methodName As String, args As List) As VueComponent
+Sub SetCreated(Module As Object, methodName As String, args As List) As VueComponent
 	methodName = methodName.ToLowerCase
-	If SubExists(module, methodName) = False Then Return Me
-	Dim created As BANanoObject = BANano.CallBack(module, methodName, args)
+	If SubExists(Module, methodName) = False Then Return Me
+	Dim created As BANanoObject = BANano.CallBack(Module, methodName, args)
 	opt.Put("created", created)
-	SetMethod(module, methodName, args)
+	SetMethod(Module, methodName, args)
 	Return Me
 End Sub
 
 'set destroyed
-Sub SetDestroyed(module As Object, methodName As String, args As List) As VueComponent
+Sub SetDestroyed(Module As Object, methodName As String, args As List) As VueComponent
 	methodName = methodName.ToLowerCase
-	If SubExists(module, methodName) = False Then Return Me
-	Dim destroyed As BANanoObject = BANano.CallBack(module, methodName, args)
+	If SubExists(Module, methodName) = False Then Return Me
+	Dim destroyed As BANanoObject = BANano.CallBack(Module, methodName, args)
 	opt.Put("destroyed", destroyed)
-	SetMethod(module, methodName, args)
+	SetMethod(Module, methodName, args)
 	Return Me
 End Sub
 
 
 'set activated
-Sub SetActivated(module As Object, methodName As String, args As List) As VueComponent
+Sub SetActivated(Module As Object, methodName As String, args As List) As VueComponent
 	methodName = methodName.ToLowerCase
-	If SubExists(module, methodName) = False Then Return Me
-	Dim activated As BANanoObject = BANano.CallBack(module, methodName, args)
+	If SubExists(Module, methodName) = False Then Return Me
+	Dim activated As BANanoObject = BANano.CallBack(Module, methodName, args)
 	opt.Put("activated", activated)
-	SetMethod(module, methodName, args)
+	SetMethod(Module, methodName, args)
 	Return Me
 End Sub
 
@@ -691,12 +691,12 @@ End Sub
 
 
 'set deactivated
-Sub SetDeActivated(module As Object, methodName As String, args As List) As VueComponent
+Sub SetDeActivated(Module As Object, methodName As String, args As List) As VueComponent
 	methodName = methodName.ToLowerCase
-	If SubExists(module, methodName) = False Then Return Me
-	Dim deactivated As BANanoObject = BANano.CallBack(module, methodName, args)
+	If SubExists(Module, methodName) = False Then Return Me
+	Dim deactivated As BANanoObject = BANano.CallBack(Module, methodName, args)
 	opt.Put("deactivated", deactivated)
-	SetMethod(module, methodName, args)
+	SetMethod(Module, methodName, args)
 	Return Me
 End Sub
 
@@ -901,11 +901,11 @@ Sub AddProperties(propsList As List)
 End Sub
 
 'set direct method
-Sub SetFilter(module As Object, methodName As String)
+Sub SetFilter(Module As Object, methodName As String)
 	methodName = methodName.ToLowerCase
-	If SubExists(module, methodName) Then
+	If SubExists(Module, methodName) Then
 		Dim value As Object
-		Dim cb As BANanoObject = BANano.CallBack(module, methodName, Array(value))
+		Dim cb As BANanoObject = BANano.CallBack(Module, methodName, Array(value))
 		filters.Put(methodName, cb)
 	Else
 		Log($"SetFilter.${methodName} could not be found!"$)
@@ -913,11 +913,11 @@ Sub SetFilter(module As Object, methodName As String)
 End Sub
 
 'set computed
-Sub SetComputed(k As String, module As Object, methodName As String, args As List)
+Sub SetComputed(k As String, Module As Object, methodName As String, args As List)
 	k = k.tolowercase
 	methodName = methodName.ToLowerCase
-	If SubExists(module, methodName) Then
-		Dim cb As BANanoObject = BANano.CallBack(module, methodName, args)
+	If SubExists(Module, methodName) Then
+		Dim cb As BANanoObject = BANano.CallBack(Module, methodName, args)
 		computed.Put(k, cb.Result)
 	End If
 End Sub
@@ -944,7 +944,6 @@ Sub SetMethod(Module As Object, methodName As String, args As List)
 	methodName = methodName.Replace(".","")
 	methodName = methodName.Replace("-","")
 	methodName = methodName.tolowercase
-	methodName = methodName.ToLowerCase
 	If SubExists(Module, methodName) Then
 		Dim cb As BANanoObject = BANano.CallBack(Module, methodName, args)
 		methods.Put(methodName, cb)
@@ -1140,7 +1139,7 @@ Sub RefreshKey(keyName As String) As VueComponent
 End Sub
 
 'add a rule
-Sub AddRule(Module As Object, ruleName As String, MethodName As String)
+Sub AddRule(ruleName As String, MethodName As String)
 	If BANano.IsNull(ruleName) Or BANano.IsUndefined(ruleName) Then ruleName = ""
 	ruleName = ruleName.ToLowerCase
 	If ruleName = "" Then Return
@@ -1153,8 +1152,8 @@ Sub AddRule(Module As Object, ruleName As String, MethodName As String)
 	End If
 	'
 	Dim v As Object
-	Dim cb As BANanoObject = BANano.CallBack(Module, MethodName, Array(v))
-	If SubExists(Module, MethodName) Then
+	Dim cb As BANanoObject = BANano.CallBack(mCallBack, MethodName, Array(v))
+	If SubExists(mCallBack, MethodName) Then
 		rules.Add(cb.Result)
 	End If
 	data.put(ruleName, rules)
@@ -1301,4 +1300,15 @@ End Sub
 Sub FormValidate1(formName As String) As Boolean
 	FormResetValidation(formName)
 	Return FormValidate(formName)
+End Sub
+
+Sub SetInterval(methodname As String, ms As Int, args As List) As Object
+	methodname = methodname.tolowercase
+	Dim cb As BANanoObject = BANano.callback(mcallback, methodname, args)
+	Dim res As Object = BANano.Window.SetInterval(cb, ms)
+	Return res
+End Sub
+
+Sub ClearInterval(interval As Object)
+	BANano.Window.ClearInterval(interval)
 End Sub

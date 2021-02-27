@@ -1124,7 +1124,7 @@ private Sub toggleInfoWindow(m As Map, i As Object)
 		VC.SetData(curMidx, i)
 	End If
 	CurrentPosition = m
-	If BANano.SubExists(mCallBack, $"${mName}_markerclick"$) Then
+	If SubExists(mCallBack, $"${mName}_markerclick"$) Then
 		BANano.CallSub(mCallBack, $"${mName}_markerclick"$, Array(m))
 	End If
 End Sub

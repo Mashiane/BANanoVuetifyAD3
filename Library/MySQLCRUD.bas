@@ -1303,18 +1303,15 @@ private Sub CreateDialogCode
 		AddCode($"${ModalName}.FullScreenOnMobile = True"$)
 	End If
 	'
-	If Diag_LazyValidation Then
-		AddCode($"${ModalName}.LazyValidation = True"$)
-		AddCode($"${ModalName}.VModel = "${ModalName}valid""$)
-	End If
-	
 	AddCode($"${ComponentName}.BindVueElement(${ModalName})"$)
-	If Diag_LazyValidation Then
-		AddCode($"${ComponentName}.SetData("${ModalName.tolowercase}valid", True)"$)
-	End If
+	
 	'
 	AddComment("get the container")
 	AddCode($"Dim ${SingularClean}Cont As VueElement = ${ComponentName}.DialogContainer("${ModalName}")"$)
+	If Diag_LazyValidation Then
+		AddCode($"${SingularClean}Cont.LazyValidation = True"$)
+		AddCode($"${SingularClean}Cont.VModel = "${ModalName}valid""$)
+	End If
 	sb.Append(BuildGrid)
 	'AddCode($"${SingularClean}Cont.AddRows1.AddColumns12"$)
 	AddCode($"${SingularClean}Cont.BuildGrid"$)
@@ -1324,6 +1321,10 @@ private Sub CreateDialogCode
 	'
 	AddCode($"${ComponentName}.BindVueElement(${SingularClean}Cont)"$)
 	AddCode($"${ComponentName}.BindVueElement(${ModalName})"$)
+	
+	If Diag_LazyValidation Then
+		AddCode($"${ComponentName}.SetData("${ModalName.tolowercase}valid", True)"$)
+	End If
 	'
 	AddComment($"initialize the ${Singular}"$)
 	AddCode($"Dim ${SingularClean.tolowercase} As Map = CreateMap()"$)
