@@ -1304,7 +1304,7 @@ End Sub
 
 Sub SetInterval(methodname As String, ms As Int, args As List) As Object
 	methodname = methodname.tolowercase
-	Dim cb As BANanoObject = BANano.callback(mcallback, methodname, args)
+	Dim cb As BANanoObject = BANano.callback(mCallBack, methodname, args)
 	Dim res As Object = BANano.Window.SetInterval(cb, ms)
 	Return res
 End Sub
@@ -1312,3 +1312,9 @@ End Sub
 Sub ClearInterval(interval As Object)
 	BANano.Window.ClearInterval(interval)
 End Sub
+
+Sub UpdateSRC(elID As String, src As String)
+	Dim key As String = $"${elID}src"$
+	SetData(key, src)
+End Sub
+

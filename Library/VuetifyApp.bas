@@ -33,6 +33,7 @@ Sub Class_Globals
 	Public refs As BANanoObject
 	Public RouterView As BANanoObject
 	Public GoogleMapKey As String
+	Public Body As BANanoElement
 	'
 	Public const BORDER_DEFAULT As String = ""
 	Public const BORDER_DASHED As String = "dashed"
@@ -156,7 +157,6 @@ Sub Class_Globals
 	'
 	Public store As BANanoObject
 	Public state As Map
-	Private body As BANanoElement
 	Public Template As String
 	'
 	Public const SIZE_H1 As String = "h1"
@@ -953,8 +953,8 @@ End Sub
 Sub Initialize(Module As Object, myapp As String) 
 	AppName = myapp.ToLowerCase
 	'get the body of the page
-	body = BANano.GetElement("#body")
-	body.Append($"<div ref="app" id="app"><div id="placeholder" v-if="placeholder"></div><div id="appendholder" v-if="appendholder"></div><v-template id="apptemplate" v-if="apptemplate"></v-template></div>"$)
+	Body = BANano.GetElement("#body")
+	Body.Append($"<div ref="app" id="app"><div id="placeholder" v-if="placeholder"></div><div id="appendholder" v-if="appendholder"></div><v-template id="apptemplate" v-if="apptemplate"></v-template></div>"$)
 	'
 	Vue.Initialize("Vue")
 	'

@@ -34,6 +34,6 @@ ModuleClosedNodes6=
 ModuleClosedNodes7=
 ModuleClosedNodes8=
 ModuleClosedNodes9=
-NavigationStack=BANanoShared,Process_Globals,24,0,BANanoShared,MapKeys2List,36,0,Main,AppStart,27,0,Main,Process_Globals,8,0
+NavigationStack=VueElement,setStyleMinHeight,2784,0,VueElement,setMax,2785,0,VueElement,setScrollable,2800,0,VueElement,setFullWidth,2810,0,VueElement,setMaxWidth,2564,0,VueElement,getStyleMaxHeight,2562,0,VueElement,setOverwriteTag,2581,0,VueElement,DesignerCreateView,1041,0,VueElement,setStyleMaxHeight,2556,0,VueElement,setMaxHeight,2548,0
 SelectedBuild=0
 VisibleModules=

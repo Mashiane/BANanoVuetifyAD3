@@ -322,7 +322,6 @@ Sub SchemaAddField(fldName As String, fldType As String)
 	Schema.Put(fldName, fldType)
 End Sub
 
-
 Sub SchemaAddBlob(bools As List) As BANanoMSSQLE
 	For Each b As String In bools
 		Schema.Put(b, DB_BLOB)

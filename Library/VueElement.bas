@@ -7,16 +7,12 @@ Version=7
 #IgnoreWarnings:12
 'Custom BANano View class
 
-#Event: Click (e As BANanoEvent)
-#Event: RightClick (e As BANanoEvent)
-#Event: LeftClick (e As BANanoEvent)
-#Event: Change (value As Object)
-#Event: ClickStop (e As BANanoEvent)
+#Event: Blur (e As BANanoEvent)
 #Event: DblClick (e As BANanoEvent)
-#Event: MouseMove (e As BANanoEvent)
-#Event: MouseOut (e As BANanoEvent)
-#Event: KeyUp (e As BANanoEvent)
-#Event: KeyPress (e As BANanoEvent)
+#Event: DblClickPrevent (e As BANanoEvent)
+#Event: Click (e As BANanoEvent)
+#Event: ClickStop (e As BANanoEvent)
+#Event: ClickPrevent (e As BANanoEvent)
 #Event: ClickAlt (e As BANanoEvent)
 #Event: ClickShift (e As BANanoEvent)
 #Event: ClickPrevent (e As BANanoEvent)
@@ -25,8 +21,30 @@ Version=7
 #Event: ClickPrepend (e As BANanoEvent)
 #Event: ClickPrependInner (e As BANanoEvent)
 #Event: ClickClear (e As BANanoEvent)
+#Event: ClickClose (e As BANanoEvent)
+#Event: Focus (e As BANanoEvent)
+#Event: Input (e As BANanoEvent)
+#Event: RightClick (e As BANanoEvent)
+#Event: LeftClick (e As BANanoEvent)
+#Event: Change (value As Object)
+#Event: MouseMove (e As BANanoEvent)
+#Event: MouseOut (e As BANanoEvent)
+#Event: MouseDown (e As BANanoEvent)
+#Event: MouseUp (e As BANanoEvent)
+#Event: KeyUp (e As BANanoEvent)
+#Event: KeyDown (e As BANanoEvent)
+#Event: KeyPress (e As BANanoEvent)
+#Event: Start (e As BANanoEvent)
+#Event: End (e As BANanoEvent)
+#Event: Submit (e As BANanoEvent)
+#Event: KeydownEnterPrevent (e As BANanoEvent)
+#Event: KeydownLeftPrevent (e As BANanoEvent)
+#Event: KeydownRightPrevent (e As BANanoEvent)
+#Event: KeydownSpacePrevent (e As BANanoEvent)
+#Event: KeyupEnter (e As BANanoEvent)
 
 #DesignerProperty: Key: AutoID, DisplayName: Auto ID/Name, FieldType: Boolean, DefaultValue: False, Description: Overrides the ID/Name with a random string.
+#DesignerProperty: Key: App, DisplayName: App, FieldType: Boolean, DefaultValue: False, Description: 
 #DesignerProperty: Key: Ref, DisplayName: Ref, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: TagName, DisplayName: Tag Name, FieldType: String, DefaultValue: div, Description: tag of the element
 #DesignerProperty: Key: OverwriteTag, DisplayName: Overwrite Tag, FieldType: String, DefaultValue: , Description: over write tag of the element with
@@ -43,7 +61,7 @@ Version=7
 #DesignerProperty: Key: Alt, DisplayName: Alt, FieldType: String, DefaultValue: , Description: Alt
 #DesignerProperty: Key: AppendIcon, DisplayName: Append Icon, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: AppendOuterIcon, DisplayName: Append Outer Icon, FieldType: String, DefaultValue:  , Description: 
-#DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String.
+#DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: Autofocus, DisplayName: Auto-focus, FieldType: Boolean, DefaultValue: False , Description: 
 #DesignerProperty: Key: BackgroundImage, DisplayName: Background Image, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: BackgroundRepeat, DisplayName: Background Repeat, FieldType: String, DefaultValue:  , Description: , List: repeat|repeat-x|repeat-y|no-repeat|initial|inherit|none
@@ -58,7 +76,7 @@ Version=7
 #DesignerProperty: Key: Rows, DisplayName: Rows, FieldType: String, DefaultValue: , Description: Rows
 #DesignerProperty: Key: Columns, DisplayName: Columns, FieldType: String, DefaultValue: , Description: Columns
 #DesignerProperty: Key: OffSets, DisplayName: OffSets XSMLX, FieldType: String, DefaultValue: xs=?; s=?; m=?; l=?; x=? , Description: OffSets SMLX
-#DesignerProperty: Key: Sizes, DisplayName: Sizes XSMLX, FieldType: String, DefaultValue: xs?=; s=?; m=?; l=?; x=?, Description: Sizes SMLX
+#DesignerProperty: Key: Sizes, DisplayName: Sizes XSMLX, FieldType: String, DefaultValue: xs=?; s=?; m=?; l=?; x=?, Description: Sizes SMLX
 #DesignerProperty: Key: MarginAXYTBLR, DisplayName: Margin AXYTBLR, FieldType: String, DefaultValue: a=?; x=?; y=?; t=?; b=?; l=?; r=? , Description: Margins AXYSMLX
 #DesignerProperty: Key: PaddingAXYTBLR, DisplayName: Padding AXYTBLR, FieldType: String, DefaultValue: a=?; x=?; y=?; t=?; b=?; l=?; r=? , Description: Padding AXYSMLX
 
@@ -66,6 +84,9 @@ Version=7
 #DesignerProperty: Key: Circle, DisplayName: Circle, FieldType: Boolean, DefaultValue: False, Description: Circle
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Clearable, DisplayName: Clearable, FieldType: Boolean, DefaultValue: False , Description: 
+#DesignerProperty: Key: Clipped, DisplayName: Clipped, FieldType: Boolean, DefaultValue: False, Description: Clipped 
+#DesignerProperty: Key: ClippedLeft, DisplayName: ClippedLeft, FieldType: Boolean, DefaultValue: False, Description: Clipped Left
+#DesignerProperty: Key: ClippedRight, DisplayName: ClippedRight, FieldType: Boolean, DefaultValue: False, Description: Clipped Right
 
 #DesignerProperty: Key: Counter, DisplayName: Counter, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: CoverImage, DisplayName: Cover Image Src, FieldType: String, DefaultValue:  , Description: CoverImage
@@ -125,8 +146,8 @@ Version=7
 #DesignerProperty: Key: Slot, DisplayName: Slot, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Solo, DisplayName: Solo, FieldType: Boolean, DefaultValue: False , Description: 
 #DesignerProperty: Key: Src, DisplayName: Src, FieldType: String, DefaultValue: , Description: Src
-#DesignerProperty: Key: States, DisplayName: States, FieldType: String, DefaultValue: , Description: Initial Binding States. Must be a json String.
-#DesignerProperty: Key: Style, DisplayName: Style, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String.
+#DesignerProperty: Key: States, DisplayName: States, FieldType: String, DefaultValue: , Description: Initial Binding States. Must be a json String, use =
+#DesignerProperty: Key: Style, DisplayName: Style, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: StyleHeight, DisplayName: Style Height, FieldType: String, DefaultValue:  , Description:
 #DesignerProperty: Key: StyleMaxHeight, DisplayName: Style Max Height, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: StyleMaxWidth, DisplayName: Style Max Width, FieldType: String, DefaultValue:  , Description: 
@@ -303,6 +324,10 @@ Sub Class_Globals
 	Private bCenter As Boolean = False
 	Private stFloat As String = ""
 	Private stElevation As String = ""
+	Private bApp As Boolean = False
+	Private bClipped As Boolean = False
+	Private bClippedLeft As Boolean = False
+	Private bClippedRight As Boolean = False
 	'
 	Type VueGridRow(Rows As Int, Columns As List, _
 	ma As String, mx As String, my As String, mt As String, mb As String, mr As String, ml As String, _
@@ -352,7 +377,9 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	'
 	If mName <> "" Then
 		Dim fKey As String = $"#${mName}"$
-		If BANano.Exists(fKey) Then mElement = BANano.GetElement(fKey)
+		If BANano.Exists(fKey) Then 
+			mElement = BANano.GetElement(fKey)
+		End If
 	End If
 	Records.Initialize
 	ntxRow = 0
@@ -404,6 +431,21 @@ Sub AddItemParentChild(parent As String, key As String, iconName As String, icon
 	
 	Records.Add(nitem)
 End Sub
+
+'the url should be replaced
+Sub ListViewSetReplace(itemID As String)
+	Dim m As Map = CreateMap()
+	m.Put("replace", True)
+	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+End Sub
+
+'the url should be appended
+Sub ListViewSetAppen(itemID As String)
+	Dim m As Map = CreateMap()
+	m.Put("append", True)
+	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+End Sub
+
 
 'update an icon in the list
 Sub ListViewSetIcon(itemID As String, sIcon As String)
@@ -805,6 +847,7 @@ End Sub
 Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	mTarget = Target
 	If Props <> Null Then
+		bApp = Props.Get("App")
 		bLoremIpsum = Props.Get("LoremIpsum")
 		bDark = Props.Get("Dark")
 		mClasses = Props.Get("Classes")
@@ -931,9 +974,16 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bSetColorByAttribute = Props.get("SetColorByAttribute")
 		stElevation = Props.Get("Elevation")
 		bNoGutter = Props.Get("NoGutter")
+		bClipped = Props.Get("Clipped")
+		bClippedLeft = Props.Get("ClippedLeft")
+		bClippedRight = Props.Get("ClippedRight")
 	End If
 	
+	setClippedRight(bClippedRight)
+	setClipped(bClipped)
+	setClippedLeft(bClippedLeft)
 	setElevation(stElevation)
+	setApp(bApp)
 	AddStyleOnConditionTrue("font-weight", "bold", bBold)
 	AddStyleOnConditionTrue("font-style",  "italic", bItalic)
 	AddStyleOnConditionTrue("border-radius", "50%", bCircle)
@@ -1377,10 +1427,14 @@ Sub ToString As String
 	End If
 	'build the 'class' attribute
 	Dim className As String = BANanoShared.JoinMapKeys(classList, " ")
-	If className <> "" Then AddAttr("class", className)
+	If className <> "" Then 
+		AddAttr("class", className)
+	End If
 	'build the 'style' attribute
 	Dim styleName As String = BANanoShared.BuildStyle(styleList)
-	If styleName <> "" Then AddAttr("style", styleName)
+	If styleName <> "" Then 
+		AddAttr("style", styleName)
+	End If
 	'build element internal structure
 	Dim iStructure As String = BANanoShared.BuildAttributes(attributeList)
 	iStructure = iStructure.trim
@@ -2382,7 +2436,9 @@ End Sub
 
 
 public Sub setApp(b As Boolean)
+	If BANano.IsNull(b) Or BANano.IsUndefined(b) Then Return
 	Bind("app", b)
+	bApp = b
 End Sub
 
 public Sub getBorderWidth() As String
@@ -2590,12 +2646,21 @@ public Sub setOffsetY(b As Boolean)
 End Sub
 
 public Sub setClipped(b As Object)
+	If BANano.IsNull(b) Or BANano.IsUndefined(b) Then Return
 	AddAttr(":clipped", b)
+	bClipped = b
 End Sub
 
+public Sub setClippedRight(b As Object)
+	If BANano.IsNull(b) Or BANano.IsUndefined(b) Then Return
+	AddAttr(":clipped-right", b)
+	bClippedRight = b
+End Sub
 
 public Sub setClippedLeft(b As Object)
+	If BANano.IsNull(b) Or BANano.IsUndefined(b) Then Return
 	AddAttr(":clipped-left", b)
+	bClippedLeft = b
 End Sub
 
 public Sub setOffsetX(b As Boolean)
@@ -2714,6 +2779,14 @@ End Sub
 
 public Sub setMinHeight(s As String)
 	AddAttr("min-height", s)
+End Sub
+
+public Sub setStyleMinWidth(s As String)
+	AddStyle("min-width", s)
+End Sub
+
+public Sub setStyleMinHeight(s As String)
+	AddStyle("min-height", s)
 End Sub
 
 public Sub setMax(s As String)
@@ -4815,7 +4888,9 @@ End Sub
 Sub AddItemDivider(binset As Boolean)
 	Dim rec As Map = CreateMap()
 	rec.Put("divider", True)
-	If binset Then rec.Put("inset", binset)
+	If binset Then 
+		rec.Put("inset", binset)
+	End If
 	Records.Add(rec)
 End Sub
 
@@ -5306,10 +5381,10 @@ Sub AddListViewTemplate(numLines As Int, props As ListViewItemOptions) As VueEle
 	Dim vlistitem As VueElement
 	vlistitem.Initialize(mCallBack, listitemID, listitemID)
 	Select Case numLines
-		Case 2
-			vlistitem.AddAttr(":two-line", True)
-		Case 3
-			vlistitem.AddAttr(":three-line", True)
+	Case 2
+		vlistitem.AddAttr(":two-line", True)
+	Case 3
+		vlistitem.AddAttr(":three-line", True)
 	End Select
 	vlistitem.SetOnEventOwn(mCallBack, $"${elID}_click"$, "click", "item")
 	'left action
@@ -7534,7 +7609,7 @@ End Sub
 Sub AddImage(elID As String, src As String, lazysrc As String, alt As String, sheight As String, swidth As String, props As Map) As VueElement
 	Dim parentID As String = CleanID(mName)
 	elID = elID.ToLowerCase
-	Dim vimg As VueElement = AddVueElement2(parentID, elid, "v-img", Null)
+	Dim vimg As VueElement = AddVueElement2(parentID, elID, "v-img", Null)
 	If sheight <> "" Then vimg.MaxHeight = sheight
 	If swidth <> "" Then vimg.MaxWidth = swidth
 	vimg.Src = src
@@ -7637,11 +7712,11 @@ Sub AddChipWithAvatar(elID As String, src As String, label As String, bPill As B
 	vchip.SetOnEvent(mCallBack, "click", $"'${elID}'"$)
 	vchip.SetOnEvent(mCallBack, "click:close", $"'${elID}'"$)
 	'
-	Dim vavatar As VueElement = AddVueElement2(elid, avarid, "v-avatar", Null)
+	Dim vavatar As VueElement = AddVueElement2(elID, avarID, "v-avatar", Null)
 	vavatar.AddAttr(":left", True)
 	vavatar.AssignProps(avatarprops)
 	'
-	Dim vimg As VueElement = AddVueElement2(avarid, imgid, "v-img", Null)
+	Dim vimg As VueElement = AddVueElement2(avarID, imgID, "v-img", Null)
 	vimg.Src = src
 	vimg.lazysrc = src
 	vimg.AssignProps(imgprops)
@@ -8279,4 +8354,16 @@ Sub setBlurred(s As String)
 	s = S.tolowercase
 	AddAttr("v-blur", s)
 	SetData(s, False)
+End Sub
+
+'add a key value pair
+Sub AddKeyValue(key As String, value As String)
+	Dim rec As Map = CreateMap()
+	rec.Put(stItemValue, key)
+	rec.Put(stItemText, value)
+	Records.Add(rec)
+End Sub
+
+Sub setNoBorder(b As Boolean)
+	AddStyle("border", "none")
 End Sub

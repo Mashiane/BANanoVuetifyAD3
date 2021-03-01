@@ -229,7 +229,7 @@ private Sub SetProperties(fldNAme As String)
 	End If
 	If RequiredM.ContainsKey(fldNAme) Then
 		dtCont.Append($"${fldNAme}.Required = ":${fldNAme}required""$).Append(CRLF)
-		dtCont.Append($"${fldNAme}.AddRule("${fldNAme.tolowercase}rule")"$)
+		dtCont.Append($"${fldNAme}.AddRule("${fldNAme.tolowercase}rule")"$).Append(CRLF)
 	End If
 	If ReadOnlyM.ContainsKey(fldNAme) Then
 		dtCont.Append($"${fldNAme}.ReadOnly = ":${fldNAme}readonly""$).Append(CRLF)
@@ -1388,6 +1388,8 @@ End Sub"$).Append(CRLF).Append(CRLF)
 	${BuildProperties}
 	'show the drawer
 	${ComponentName}.SetData("${ModalShow.tolowercase}", True)
+	'get the current $refs
+	${ComponentName}.refs = vuetify.GetRefs
 	'vuetify.SetFocus("${FocusOn}")
 End Sub"$).Append(CRLF).Append(CRLF)
 End If
@@ -1401,6 +1403,8 @@ End If
 	${ComponentName}.RunMethod("Read${SingularClean}", s${PrimaryKey})
 	${BuildVisibility}
 	${BuildProperties}
+	'get the current $refs
+	${ComponentName}.refs = vuetify.GetRefs
 	vuetify.SetFocus("${FocusOn}")
 End Sub"$).Append(CRLF).Append(CRLF)
 	End If
@@ -1412,7 +1416,9 @@ End Sub"$).Append(CRLF).Append(CRLF)
 	Dim s${DisplayField} As String = item.Get("${DisplayField}")
 	Dim s${PrimaryKey} As String = item.Get("${PrimaryKey}")
 	${ComponentName}.SetData("${PrimaryKey.tolowercase}", s${PrimaryKey})
-	${ComponentName}.ShowConfirm("delete${SingularClean.tolowercase}", ~"Confirm Delete: ~{s${DisplayField}}"~, ~"Are you sure you want to delete this ${Singular.tolowercase}?<br><br>Please note you will not be able to undo your changes. Continue?"~, "Yes", "No")
+	${ComponentName}.ShowConfirm("delete${SingularClean.tolowercase}", _
+	~"Confirm Delete: ~{s${DisplayField}}"~, _
+	~"Are you sure you want to delete this ${Singular.tolowercase}?<br><br>Please note you will not be able to undo your changes. Continue?"~, "Yes", "No")
 	End Sub"$).append(CRLF).append(CRLF)
 	
 	'CONFIRM DELETE
