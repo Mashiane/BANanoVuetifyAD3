@@ -673,6 +673,10 @@ Sub DT_SetColumnSortable(colName As String, b As Boolean)
 	dtCode.Append($"${dtName}.SetColumnSortable("${colName}", ${b})"$).Append(CRLF)
 End Sub
 
+Sub DT_SetColumnPreDisplay(colName As String, PreDisplay As String)
+	dtCode.Append($"${dtName}.SetColumnPreDisplay("${colName}", "${PreDisplay}")"$).Append(CRLF)
+End Sub
+
 'add an icon to the data-table toolbar
 Sub DT_AddTitleIcon(elID As String, eIcon As String, btnColor As String)
 	dtCode.Append($"${dtName}.AddTitleIcon(${ComponentName}, "${elID}", "${eIcon}", "${btnColor}""$).Append(CRLF)
@@ -875,6 +879,7 @@ private Sub LoadCode
 	sb.Append($"Sub Load${PluralClean}		'ignoredeadcode
 	'Show progress loader
 	${dtName}.UpdateLoading(True)
+	${dtName}.Reload(${ComponentName}.NewList)
 	Dim ${rsTB} As ${className}
 	${rsTB}.Initialize("${DatabaseName}", "${TableName}", "${PrimaryKey}", "${AutoIncrement}")
 	'add field types
@@ -885,7 +890,6 @@ private Sub LoadCode
 	Select Case ${rsTB}.OK
 	Case False
 	'clear content
-		${dtName}.Reload(${ComponentName}.NewList)
 		'hide progress loader
 		${dtName}.UpdateLoading(False)
 		Dim strError As String = ${rsTB}.Error
@@ -928,7 +932,23 @@ private Sub RelationshipsCode
 		Return
 	End Select
 	${ComponentName}.SetData("${ssource}", ${tbName}.Result)
+	For each relmap As Map in ${tbName}.Result
+		Dim s${skey} As String = relmap.GetDefault("${skey}", "")
+		Dim s${svalue} As String = relmap.GetDefault("${svalue}", "")
+		foreign${ssource}.put(s${skey}, s${svalue})
+	Next
 End Sub"$).Append(CRLF).Append(CRLF)  
+
+	AddCode($"Sub Get${ssource}(sValue As String) As String   'IgnoreDeadCode"$)
+	AddCode($"if foreign${ssource}.ContainsKey(sValue) Then"$)
+	AddCode($"Dim xValue As String = foreign${ssource}.get(sValue)"$)
+	AddCode("return xValue")
+	AddCode("else")
+	AddCode("return sValue")
+	AddCode("end if")
+	AddCode("End Sub")
+	AddCode(CRLF)
+	AddCode(CRLF)
 	Next
 End Sub
 
@@ -1155,6 +1175,14 @@ private Sub CreateTableCode()
 		sb.Append($"${dtName}.SetFilterable(Array(${arrx}))"$).Append(CRLF)
 	End If
 	'
+	If relationships.Size > 0 Then
+		For Each rec As DBRelationship In relationships
+			Dim ssource As String = rec.source
+			Dim svmodel As String = rec.vmodel
+			DT_SetColumnPreDisplay(svmodel, $"Get${ssource}"$)
+		Next
+	End If
+	
 	sb.Append(dtCode.ToString)
 	
 	If DT_HasEdit Then
@@ -1235,11 +1263,12 @@ private Sub InitilizeCode
 Public ${ComponentName} As VueComponent
 Public path As String
 Public name As String = "${ComponentName}"
-Private banano As BANano
+Private Banano As BANano
 Private ${dtName} As VueTable
 Private ${ModalName} As VueElement
 Private msgBox As VueElement
-Private Mode As String 
+Private Mode As String
+${BuildForeignLinks} 
 End Sub"$).append(CRLF).append(CRLF)
 	'
 	
@@ -1270,14 +1299,26 @@ End Sub"$).append(CRLF).append(CRLF)
 		For Each rec As DBRelationship In relationships
 			Dim ssource As String = rec.source
 			AddCode($"${ComponentName}.SetMethod(Me, "Load${ssource}", args)"$)
+			AddCode($"${ComponentName}.SetMethod(Me, "Get${ssource}", args)"$)
 		Next
-	End If
-	
+	End If	
 	
 	AddComment("'add the component as a router")
 	AddCode($"vuetify.AddRoute(${ComponentName})"$)
 	AddCode("End Sub")
 	sb.Append(CRLF).Append(CRLF)
+End Sub
+
+Sub BuildForeignLinks As String
+	Dim sbx As StringBuilder
+	sbx.Initialize
+	If relationships.Size > 0 Then
+		For Each rec As DBRelationship In relationships
+			Dim ssource As String = rec.source
+			sbx.Append($"Private foreign${ssource} As Map"$).Append(CRLF)
+		Next
+	End If
+	Return sbx.tostring
 End Sub
 
 'load relationships
@@ -1377,6 +1418,8 @@ End Sub"$).Append(CRLF).Append(CRLF)
 	
 	'ADD RECORD
 	sb.Append($"Sub Add${SingularClean}			'ignoreDeadCode
+	'get the current $refs
+	${ComponentName}.refs = vuetify.GetRefs
 	${LoadRelationships}
 	${ComponentName}.DialogUpdateTitle("${ModalName}", "Add ${Singular}")
 	Mode = "A"
@@ -1388,8 +1431,6 @@ End Sub"$).Append(CRLF).Append(CRLF)
 	${BuildProperties}
 	'show the drawer
 	${ComponentName}.SetData("${ModalShow.tolowercase}", True)
-	'get the current $refs
-	${ComponentName}.refs = vuetify.GetRefs
 	'vuetify.SetFocus("${FocusOn}")
 End Sub"$).Append(CRLF).Append(CRLF)
 End If
@@ -1397,14 +1438,14 @@ End If
 	'TABLE EDIT
 	If DT_HasEdit Then
 	sb.Append($"Private Sub ${dtName}_edit (item As Map)				'ignoredeadcode
+	'get the current $refs
+	${ComponentName}.refs = vuetify.GetRefs
 	${ComponentName}.DialogUpdateTitle("${ModalName}", "Edit ${Singular}")
 	Mode = "E"
 	Dim s${PrimaryKey} As String = item.Get("${PrimaryKey}")
 	${ComponentName}.RunMethod("Read${SingularClean}", s${PrimaryKey})
 	${BuildVisibility}
 	${BuildProperties}
-	'get the current $refs
-	${ComponentName}.refs = vuetify.GetRefs
 	vuetify.SetFocus("${FocusOn}")
 End Sub"$).Append(CRLF).Append(CRLF)
 	End If

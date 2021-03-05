@@ -3566,6 +3566,9 @@ End Sub
 
 'set required
 public Sub setRequired(varRequired As String)
+	If BANano.IsNull(varRequired) Or BANano.IsNull(varRequired) Then varRequired = ""
+	If varRequired = "" Then Return 
+	varRequired = varRequired.tolowercase
 	AddAttr("required", varRequired)
 	stRequired = varRequired
 End Sub
@@ -8365,5 +8368,14 @@ Sub AddKeyValue(key As String, value As String)
 End Sub
 
 Sub setNoBorder(b As Boolean)
+	If b = False Then Return
 	AddStyle("border", "none")
+End Sub
+
+'add a hyperlink that opens to blank
+Sub AddLink(elID As String, href As String, caption As String, target As String)
+	Dim elx As VueElement = AddVueElement(elID, "router-link", Null)
+	elx.Href = href
+	elx.Caption = caption
+	elx.Target = target
 End Sub

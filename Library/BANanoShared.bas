@@ -953,7 +953,11 @@ Sub RSAIDNumber2DateOfBirth(rsaID As String) As String
 		Dim yy As String = LeftS(yymmdd,2)
 		Dim mm As String = Mid2(yymmdd,3,2)
 		Dim dd As String = RightS(yymmdd,2)
-		yymmdd = $"19${yy}-${mm}-${dd}"$
+		Dim sprefix As String = "19"
+		If yy.StartsWith("0") Then
+			sprefix = "20"
+		End If
+		yymmdd = $"${sprefix}${yy}-${mm}-${dd}"$
 		Return yymmdd
 	Else
 		Return ""

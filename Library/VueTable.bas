@@ -146,7 +146,7 @@ Sub Class_Globals
 	Private search As String
 	Type DataTableColumn(value As String, text As String, align As String, sortable As Boolean, filterable As Boolean, divider As Boolean, _
 	className As String, width As String, filter As String, sort As String, ColType As String, extra As String, icon As String, Disabled As Boolean, imgWidth As String, imgHeight As String, avatarSize As String, iconSize As String, ReadOnly As Boolean, progressColor As String, progressRotate As String, progressSize As String, progressWidth As String, progressHeight As String, progressShowValue As Boolean, valueFormat As String, bindTotals As String, hasTotal As Boolean, depressed As Boolean, rounded As Boolean, dark As Boolean, label As String, color As String, outlined As Boolean, shaped As Boolean, target As String, prefix As String, colprops As Map, visible As Boolean, _
-	Large As Boolean, SourceTable As String, SourceField As String, DisplayField As String, ReturnObject As Boolean)
+	Large As Boolean, SourceTable As String, SourceField As String, DisplayField As String, ReturnObject As Boolean, PreDisplay As String)
 	Private hasTotals As Boolean
 	Private hasExternalPagination As Boolean
 	Private totalVisible As String
@@ -1244,6 +1244,7 @@ End Sub
 
 'add an action
 Sub AddAction(colField As String, colTitle As String, colIcon As String)
+	colField = colField.tolowercase
 	Dim dt As DataTableColumn = NewDataTableColumn(colField, colTitle)
 	dt.filterable = False
 	dt.ColType = COLUMN_ACTION
@@ -1256,6 +1257,7 @@ End Sub
 
 'add icon field
 Sub AddIconView(colField As String, colTitle As String, colColor As String)
+	colField = colField.tolowercase
 	Dim dt As DataTableColumn = NewDataTableColumn(colField, colTitle)
 	dt.filterable = False
 	dt.ColType = COLUMN_ICON
@@ -1266,6 +1268,7 @@ End Sub
 
 'add icon field
 Sub AddChip(colField As String, colTitle As String, colColor As String)
+	colField = colField.tolowercase
 	Dim dt As DataTableColumn = NewDataTableColumn(colField, colTitle)
 	dt.filterable = False
 	dt.ColType = COLUMN_CHIP
@@ -1276,6 +1279,7 @@ End Sub
 
 'add switch field
 Sub AddSwitch(colField As String, colTitle As String)
+	colField = colField.tolowercase
 	Dim dt As DataTableColumn = NewDataTableColumn(colField, colTitle)
 	dt.filterable = False
 	dt.ColType = COLUMN_SWITCH
@@ -1285,6 +1289,7 @@ End Sub
 
 'add checkbox field
 Sub AddCheckBox(colField As String, colTitle As String)
+	colField = colField.tolowercase
 	Dim dt As DataTableColumn = NewDataTableColumn(colField, colTitle)
 	dt.filterable = False
 	dt.ColType = COLUMN_CHECKBOX
@@ -1296,6 +1301,7 @@ End Sub
 'set a field as a switch
 Sub SetColumnsSwitch(colFields As List)
 	For Each col As String In colFields
+		col = col.tolowercase
 		Dim colx As DataTableColumn = columnsM.Get(col)
 		colx.ColType = COLUMN_SWITCH
 		colx.filterable = False
@@ -1307,6 +1313,7 @@ End Sub
 'set a field as a link
 Sub SetColumnsLinks(colFields As List)
 	For Each col As String In colFields
+		col = col.tolowercase
 		SetColumnType(col, COLUMN_LINK)
 	Next
 End Sub
@@ -1314,6 +1321,7 @@ End Sub
 'set column as a checkbox
 Sub SetColumnsCheckBox(colFields As List)
 	For Each col As String In colFields
+		col = col.tolowercase
 		Dim colx As DataTableColumn = columnsM.Get(col)
 		colx.ColType = COLUMN_CHECKBOX
 		colx.filterable = False
@@ -1324,6 +1332,7 @@ End Sub
 
 'add an image
 Sub AddImage(colField As String, colTitle As String)
+	colField = colField.tolowercase
 	Dim dt As DataTableColumn = NewDataTableColumn(colField, colTitle)
 	dt.filterable = False
 	dt.ColType = COLUMN_IMAGE
@@ -1333,6 +1342,7 @@ End Sub
 
 'add a link
 Sub AddLink(colField As String, colTitle As String, target As String)
+	colField = colField.tolowercase
 	Dim dt As DataTableColumn = NewDataTableColumn(colField, colTitle)
 	dt.ColType = COLUMN_LINK
 	dt.target = target
@@ -1341,6 +1351,7 @@ End Sub
 
 'add an avatar image
 Sub AddAvatarImg(colField As String, colTitle As String)
+	colField = colField.tolowercase
 	Dim dt As DataTableColumn = NewDataTableColumn(colField, colTitle)
 	dt.ColType = COLUMN_AVATARIMG
 	dt.filterable = False
@@ -1350,6 +1361,7 @@ End Sub
 
 'add a rating
 Sub AddRating(colField As String, colTitle As String)
+	colField = colField.tolowercase
 	Dim dt As DataTableColumn = NewDataTableColumn(colField, colTitle)
 	dt.ColType = COLUMN_RATING
 	columnsM.Put(colField, dt)
@@ -1357,6 +1369,7 @@ End Sub
 
 'add a progress circular
 Sub AddProgressCircular(colField As String, colTitle As String)
+	colField = colField.tolowercase
 	Dim dt As DataTableColumn = NewDataTableColumn(colField, colTitle)
 	dt.ColType = COLUMN_PROGRESS_CIRCULAR
 	columnsM.Put(colField, dt)
@@ -1364,6 +1377,7 @@ End Sub
 
 'add a progress linear
 Sub AddProgressLinear(colField As String, colTitle As String)
+	colfield = colField.tolowercase
 	Dim dt As DataTableColumn = NewDataTableColumn(colField, colTitle)
 	dt.ColType = COLUMN_PROGRESS_LINEAR
 	columnsM.Put(colField, dt)
@@ -1521,6 +1535,7 @@ End Sub
 'add a column
 'key, title, 
 Sub AddColumn1(colName As String, colTitle As String, colType As String, colWidth As Int, colSortable As Boolean, colAlign As String)
+	colName = colName.tolowercase
 	Dim nf As DataTableColumn = NewDataTableColumn(colName, colTitle)
 	nf.align = colAlign
 	nf.sortable = colSortable
@@ -1532,6 +1547,7 @@ Sub AddColumn1(colName As String, colTitle As String, colType As String, colWidt
 End Sub
 
 private Sub NewDataTableColumn(colname As String, coltitle As String) As DataTableColumn
+	colname = colname.tolowercase
 	Dim nf As DataTableColumn
 	nf.Initialize
 	nf.text = coltitle
@@ -1562,11 +1578,23 @@ private Sub NewDataTableColumn(colname As String, coltitle As String) As DataTab
 	nf.SourceField = ""
 	nf.DisplayField = ""
 	nf.ReturnObject = False
+	nf.PreDisplay = ""
 	Return nf
 End Sub
 
 'set colum properties
+Sub SetColumnPreDisplay(colName As String, PreDisplay As String)
+	colName = colName.tolowercase
+	If columnsM.ContainsKey(colName) Then
+		Dim nf As DataTableColumn = columnsM.Get(colName)
+		nf.PreDisplay = PreDisplay
+		columnsM.Put(colName, nf)
+	End If
+End Sub
+
+'set colum properties
 Sub SetColumnAttr(colName As String, attr As String, value As String)
+	colName = colName.tolowercase
 	If columnsM.ContainsKey(colName) Then
 		Dim nf As DataTableColumn = columnsM.Get(colName)
 		nf.colprops.put(attr, value)
@@ -1575,6 +1603,7 @@ Sub SetColumnAttr(colName As String, attr As String, value As String)
 End Sub		
 
 Sub SetColumnTarget(colName As String, target As String)
+	colName = colName.tolowercase
 	If columnsM.ContainsKey(colName) Then
 		Dim col As DataTableColumn = columnsM.Get(colName)
 		col.target = target
@@ -1584,6 +1613,7 @@ Sub SetColumnTarget(colName As String, target As String)
 End Sub
 
 Sub SetColumnPrefix(colName As String, prefix As String)
+	colName = colName.tolowercase
 	If columnsM.ContainsKey(colName) Then
 		Dim col As DataTableColumn = columnsM.Get(colName)
 		col.prefix = prefix
@@ -1595,6 +1625,7 @@ End Sub
 
 'define whether a column will be totalled or not
 Sub SetColumnTotal(colName As String, callBackMethod As String)
+	colName = colName.tolowercase
 	If columnsM.ContainsKey(colName) Then
 		Dim col As DataTableColumn = columnsM.Get(colName)
 		col.bindTotals = callBackMethod
@@ -1605,6 +1636,7 @@ End Sub
 
 'set image dimensions
 Sub SetImageDimensions(colName As String, imgHeight As String, imgWidth As String)
+	colName = colName.tolowercase
 	If columnsM.ContainsKey(colName) Then
 		Dim col As DataTableColumn = columnsM.Get(colName)
 		col.imgHeight = imgHeight
@@ -1616,6 +1648,7 @@ End Sub
 
 'set column sortable
 Sub SetColumnSortable(colName As String, colSortable As Boolean)
+	colName = colName.tolowercase
 	If columnsM.ContainsKey(colName) Then
 		Dim col As DataTableColumn = columnsM.Get(colName)
 		col.sortable = colSortable
@@ -1626,6 +1659,7 @@ End Sub
 
 'set column sortable
 Sub SetColumnDisabled(colName As String, colDisabled As Boolean)
+	colName = colName.tolowercase
 	If columnsM.ContainsKey(colName) Then
 		Dim col As DataTableColumn = columnsM.Get(colName)
 		col.Disabled = colDisabled
@@ -1636,6 +1670,7 @@ End Sub
 
 'set column sortable
 Sub SetColumnReadOnly(colName As String, colReadOnly As Boolean)
+	colName = colName.tolowercase
 	If columnsM.ContainsKey(colName) Then
 		Dim col As DataTableColumn = columnsM.Get(colName)
 		col.ReadOnly = colReadOnly
@@ -1646,6 +1681,7 @@ End Sub
 
 'set the column data template
 Sub SetColumnAlignment(colName As String, colAlign As String)
+	colName = colName.tolowercase
 	If columnsM.ContainsKey(colName) Then
 		Dim col As DataTableColumn = columnsM.Get(colName)
 		col.align = colAlign
@@ -1656,6 +1692,7 @@ End Sub
 
 'change column icon
 Sub SetColumnIcon(colName As String, icon As String)
+	colName = colName.tolowercase
 	If columnsM.ContainsKey(colName) Then
 		Dim col As DataTableColumn = columnsM.Get(colName)
 		col.icon = icon
@@ -1666,6 +1703,7 @@ End Sub
 
 'set icon dimension
 Sub SetIconDimensions(colName As String, iconSize As String, iconColor As String)
+	colName = colName.tolowercase
 	If columnsM.ContainsKey(colName) Then
 		Dim col As DataTableColumn = columnsM.Get(colName)
 		If iconSize <> "" Then col.iconSize = iconSize
@@ -1675,6 +1713,7 @@ Sub SetIconDimensions(colName As String, iconSize As String, iconColor As String
 End Sub
 
 Sub SetIconDimensions1(colName As String, iconSize As String, iconColor As String, columnWidth As String)
+	colName = colName.tolowercase
 	If columnsM.ContainsKey(colName) Then
 		Dim col As DataTableColumn = columnsM.Get(colName)
 		If iconSize <> "" Then col.iconSize = iconSize
@@ -1687,6 +1726,7 @@ End Sub
 
 'set progress circular dialog
 Sub SetProgressCircularDimensions(colName As String, progressColor As String, progressRotate As String, progressSize As String, progressWidth As String)
+	colName = colName.tolowercase
 	If columnsM.ContainsKey(colName) Then
 		Dim col As DataTableColumn = columnsM.Get(colName)
 		col.progressRotate = progressRotate
@@ -1699,6 +1739,7 @@ Sub SetProgressCircularDimensions(colName As String, progressColor As String, pr
 End Sub
 
 Sub SetProgressLinearDimensions(colName As String, progressColor As String, progressHeight As String, progressShowValue As Boolean)
+	colName = colName.tolowercase
 	If columnsM.ContainsKey(colName) Then
 		Dim col As DataTableColumn = columnsM.Get(colName)
 		col.progressHeight = progressHeight
@@ -1711,6 +1752,7 @@ End Sub
 
 'make the button to be depressed
 Sub SetButtonDepressed(colName As String)
+	colName = colName.tolowercase
 	If columnsM.ContainsKey(colName) Then
 		Dim col As DataTableColumn = columnsM.Get(colName)
 		col.depressed = True
@@ -1721,6 +1763,7 @@ End Sub
 
 'make the button to be round
 Sub SetButtonRounded(colName As String)
+	colName = colName.tolowercase
 	If columnsM.ContainsKey(colName) Then
 		Dim col As DataTableColumn = columnsM.Get(colName)
 		col.rounded = True
@@ -1731,6 +1774,7 @@ End Sub
 
 'make the button to be shaped
 Sub SetButtonShaped(colName As String)
+	colName = colName.tolowercase
 	If columnsM.ContainsKey(colName) Then
 		Dim col As DataTableColumn = columnsM.Get(colName)
 		col.shaped = True
@@ -1743,6 +1787,7 @@ End Sub
 
 'make the button to be round
 Sub SetButtonOutlined(colName As String)
+	colName = colName.tolowercase
 	If columnsM.ContainsKey(colName) Then
 		Dim col As DataTableColumn = columnsM.Get(colName)
 		col.outlined = True
@@ -1753,6 +1798,7 @@ End Sub
 
 'make the button to be dark
 Sub SetButtonDark(colName As String)
+	colName = colName.tolowercase
 	If columnsM.ContainsKey(colName) Then
 		Dim col As DataTableColumn = columnsM.Get(colName)
 		col.dark = True
@@ -1764,6 +1810,7 @@ End Sub
 
 'make the button to have a single label
 Sub SetButtonLabel(colName As String, label As String)
+	colName = colName.tolowercase
 	If columnsM.ContainsKey(colName) Then
 		Dim col As DataTableColumn = columnsM.Get(colName)
 		col.label = label
@@ -1774,6 +1821,7 @@ End Sub
 
 'make the button to be depressed
 Sub SetButtonColor(colName As String, color As String, intensity As String)
+	colName = colName.tolowercase
 	If columnsM.ContainsKey(colName) Then
 		Dim col As DataTableColumn = columnsM.Get(colName)
 		Dim scolor As String = $"${color} ${intensity}"$
@@ -1785,6 +1833,7 @@ End Sub
 
 'make the button to be primary
 Sub SetButtonPrimary(colName As String)
+	colName = colName.tolowercase
 	If columnsM.ContainsKey(colName) Then
 		Dim col As DataTableColumn = columnsM.Get(colName)
 		col.color = "primary"
@@ -1795,6 +1844,7 @@ End Sub
 
 'make the button to be success
 Sub SetButtonSuccess(colName As String)
+	colName = colName.tolowercase
 	If columnsM.ContainsKey(colName) Then
 		Dim col As DataTableColumn = columnsM.Get(colName)
 		col.color = "success"
@@ -1805,6 +1855,7 @@ End Sub
 
 'make the button to be success
 Sub SetButtonError(colName As String)
+	colName = colName.tolowercase
 	If columnsM.ContainsKey(colName) Then
 		Dim col As DataTableColumn = columnsM.Get(colName)
 		col.color = "error"
@@ -1815,6 +1866,7 @@ End Sub
 
 'make the button to be warning
 Sub SetButtonWarning(colName As String)
+	colName = colName.tolowercase
 	If columnsM.ContainsKey(colName) Then
 		Dim col As DataTableColumn = columnsM.Get(colName)
 		col.color = "warning"
@@ -1825,6 +1877,7 @@ End Sub
 
 'make the button to be secondary
 Sub SetButtonSecondary(colName As String)
+	colName = colName.tolowercase
 	If columnsM.ContainsKey(colName) Then
 		Dim col As DataTableColumn = columnsM.Get(colName)
 		col.color = "secondary"
@@ -1835,6 +1888,7 @@ End Sub
 
 'set rating dimensions
 Sub SetRatingDimensions(colName As String, ratLength As String, ratColor As String)
+	colName = colName.tolowercase
 	If columnsM.ContainsKey(colName) Then
 		Dim col As DataTableColumn = columnsM.Get(colName)
 		col.iconSize = ratLength
@@ -1846,6 +1900,7 @@ End Sub
 
 'set the column data template
 Sub SetColumnWidth(colName As String, colWidth As Int)
+	colName = colName.tolowercase
 	If columnsM.ContainsKey(colName) Then
 		Dim col As DataTableColumn = columnsM.Get(colName)
 		col.width = colWidth
@@ -1859,6 +1914,7 @@ Sub HideColumns(colNames As List)
 	hdr.Initialize 
 	'loop through each column
 	For Each k As String In columnsM.Keys
+		k = k.tolowercase
 		'get the header
 		Dim nf As DataTableColumn = columnsM.Get(k)
 		Dim colpos As Int = colNames.IndexOf(k)
@@ -1876,6 +1932,7 @@ Sub ShowColumns(colNames As List)
 	hdr.Initialize 
 	'loop through each column
 	For Each k As String In columnsM.Keys
+		k = k.tolowercase
 		'get the header
 		Dim nf As DataTableColumn = columnsM.Get(k)
 		Dim colpos As Int = colNames.IndexOf(k)
@@ -1955,6 +2012,7 @@ End Sub
 
 'set column filterable
 Sub SetColumnFilterable(colName As String, colFilter As Boolean)
+	colName = colName.tolowercase
 	If columnsM.ContainsKey(colName) Then
 		Dim col As DataTableColumn = columnsM.Get(colName)
 		col.filterable = colFilter
@@ -1971,6 +2029,7 @@ End Sub
 
 'set column class
 Sub SetColumnClass(colName As String, colClass As String)
+	colName = colName.tolowercase
 	If columnsM.ContainsKey(colName) Then
 		Dim col As DataTableColumn = columnsM.Get(colName)
 		col.classname = colClass
@@ -2014,6 +2073,7 @@ End Sub
 
 'set the column data template
 Sub SetColumnType(colName As String, colType As String)
+	colName = colName.tolowercase
 	If columnsM.ContainsKey(colName) Then
 		Dim col As DataTableColumn = columnsM.Get(colName)
 		col.ColType = colType
@@ -2059,7 +2119,7 @@ Sub SetColumnType(colName As String, colType As String)
 	End If
 End Sub
 
-Sub SetComboBox(colName As String, bLarge As Boolean, sourceTable As String, sourceField As String, displayField As String, returnObject As Boolean)
+Sub SetComboBox(colName As String, bLarge As Boolean, sourceTable As String, sourceField As String, displayField As String)
 	colName = colName.tolowercase
 	sourceTable = sourceTable.ToLowerCase
 	sourceField = sourceField.ToLowerCase
@@ -2069,7 +2129,6 @@ Sub SetComboBox(colName As String, bLarge As Boolean, sourceTable As String, sou
 	col.SourceTable = sourceTable
 	col.SourceField = sourceField
 	col.DisplayField = displayField
-	col.ReturnObject = returnObject
 	col.ColType = COLUMN_COMBOBOX
 	columnsM.Put(colName, col)
 End Sub
@@ -2090,7 +2149,7 @@ Sub SetTextArea(colName As String, bLarge As Boolean)
 	columnsM.Put(colName, col)
 End Sub
 
-Sub SetAutoComplete(colName As String, bLarge As Boolean, sourceTable As String, sourceField As String, displayField As String, returnObject As Boolean)
+Sub SetAutoComplete(colName As String, bLarge As Boolean, sourceTable As String, sourceField As String, displayField As String)
 	colName = colName.tolowercase
 	sourceTable = sourceTable.ToLowerCase
 	sourceField = sourceField.ToLowerCase
@@ -2100,7 +2159,6 @@ Sub SetAutoComplete(colName As String, bLarge As Boolean, sourceTable As String,
 	col.SourceTable = sourceTable
 	col.SourceField = sourceField
 	col.DisplayField = displayField
-	col.ReturnObject = returnObject
 	col.ColType = COLUMN_AUTOCOMPLETE
 	columnsM.Put(colName, col)
 End Sub
@@ -2128,6 +2186,7 @@ private Sub BuildSlots
 		Dim value As String = nf.value
 		Dim bindTotals As String = nf.bindTotals
 		Dim methodName As String = $"${mName}_${value}"$
+		Dim changeEvent As String = $"${mName}_${value}_change"$
 		'
 		'does it have a total
 		If hasTotals Then
@@ -2143,10 +2202,50 @@ private Sub BuildSlots
 		Select Case ct
 			Case COLUMN_SELECT
 				bHasEditDialog = True
+				Dim slarge As String = "large"
+				If nf.Large = False Then slarge = ""
+				
+				Dim temp As String = $"<v-template v-slot:item.${value}="props">
+<v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" @open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy> {{ props.item.${value} }}
+<v-template v-slot:input><v-select :items="${nf.SourceTable}" item-text="${nf.DisplayField}" item-value="${nf.sourcefield}" clearable v-model="props.item.${value}" :label="props.header.text" @change="${changeEvent}(props.item.${value})"></v-Select></v-template>
+</v-edit-dialog></v-template>"$
+				sb.Append(temp)
+				'
+				If SubExists(mCallBack, changeEvent) Then
+					Dim args As List
+					SetMethod(mCallBack, changeEvent, args)
+				End If
+
 			Case COLUMN_COMBOBOX
 				bHasEditDialog = True
+				Dim slarge As String = "large"
+				If nf.Large = False Then slarge = ""
+				Dim temp As String = $"<v-template v-slot:item.${value}="props">
+<v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" @open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy> {{ props.item.${value} }}
+<v-template v-slot:input><v-combobox :items="${nf.SourceTable}" item-text="${nf.DisplayField}" item-value="${nf.sourcefield}" clearable :return-object=false v-model="props.item.${value}" :label="props.header.text" @change="${changeEvent}(props.item.${value})"></v-combobox></v-template>
+</v-edit-dialog></v-template>"$
+				sb.Append(temp)
+				'
+				If SubExists(mCallBack, changeEvent) Then
+					Dim args As List
+					SetMethod(mCallBack, changeEvent, args)
+				End If
+
 			Case COLUMN_AUTOCOMPLETE
 				bHasEditDialog = True
+				Dim slarge As String = "large"
+				If nf.Large = False Then slarge = ""
+				Dim temp As String = $"<v-template v-slot:item.${value}="props">
+<v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" @open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy> {{ props.item.${value} }}
+<v-template v-slot:input><v-autocomplete :items="${nf.SourceTable}" item-text="${nf.DisplayField}" item-value="${nf.sourcefield}" clearable v-model="props.item.${value}" :label="props.header.text" @change="${changeEvent}(props.item.${value})"></v-autocomplete></v-template>
+</v-edit-dialog></v-template>"$
+				sb.Append(temp)
+				'
+				If SubExists(mCallBack, changeEvent) Then
+					Dim args As List
+					SetMethod(mCallBack, changeEvent, args)
+				End If
+
 			Case COLUMN_TEXTFIELD
 				bHasEditDialog = True
 				Dim slarge As String = "large"
@@ -2189,8 +2288,11 @@ sb.Append(temp)
 				Dim sLink As String = $"item.${value}"$
 				aLink.AddAttr(":href", "'" & nf.prefix & "' + " & sLink)
 				aLink.AddAttr("target", nf.target)
-				aLink.Append($"{{ item.${value} }}"$)
-				
+				If nf.PreDisplay = "" Then
+					aLink.Append($"{{ item.${value} }}"$)
+				Else
+					aLink.Append($"{{ ${nf.predisplay}(item.${value}) }}"$)
+				End If
 				'define template
 				Dim tmp As VueElement
 				tmp.Initialize(mCallBack, "" , "")
@@ -2247,7 +2349,7 @@ sb.Append(temp)
 				If SubExists(mCallBack, methodName) Then
 					pl.AddAttr("v-on:change", $"${methodName}(item)"$)
 					Dim args As List
-					SetMethod(mcallback, methodName, args)
+					SetMethod(mCallBack, methodName, args)
 				End If
 				
 				'
@@ -2270,7 +2372,11 @@ sb.Append(temp)
 				pc.TagName = "v-progress-circular"
 				pc.VModel = $"item.${value}"$
 				pc.Reactive = True
-				pc.Append($"{{ item.${value} }}"$)
+				If nf.PreDisplay = "" Then
+					pc.Append($"{{ item.${value} }}"$)
+				Else
+					pc.Append($"{{ ${nf.predisplay}(item.${value}) }}"$)
+				End If
 				If nf.progressRotate <> "" Then pc.Rotate = nf.progressRotate
 				If nf.progressSize <> "" Then pc.Size = nf.progressSize
 				If nf.progressWidth <> "" Then pc.Width = nf.progressWidth
@@ -2297,12 +2403,16 @@ sb.Append(temp)
 				rat.VModel = $"item.${value}"$
 				If nf.Disabled Then rat.disabled = True
 				If nf.ReadOnly Then rat.readonly = True
-				If nf.iconSize <> "" Then rat.Length = nf.iconSize
+				If nf.iconSize <> "" Then 
+					rat.Length = nf.iconSize
+				End If
 				'
 				If nf.color.StartsWith("item.") Then
 					rat.AddAttr(":color", nf.color)
 				Else
-					If nf.color <> "" Then rat.Color = nf.color
+					If nf.color <> "" Then 
+						rat.Color = nf.color
+					End If
 				End If
 '				Dim props As Map = nf.props
 '				For Each k As String In props.Keys
@@ -2315,7 +2425,7 @@ sb.Append(temp)
 				If SubExists(mCallBack, methodName) Then
 					rat.AddAttr("v-on:input", $"${methodName}(item)"$)
 					Dim args As List
-					SetMethod(mcallback, methodName, args)
+					SetMethod(mCallBack, methodName, args)
 				End If
 				'
 				'define template
@@ -2333,8 +2443,14 @@ sb.Append(temp)
 				Dim avtimg As VueElement
 				avtimg.Initialize(mCallBack, "", "")
 				avtimg.TagName = "v-img"
-				avtimg.AddAttr(":src", $"item.${value}"$)
-				avtimg.AddAttr(":lazy-src", $"item.${value}"$)
+				If nf.PreDisplay = "" Then
+					avtimg.AddAttr(":src", $"item.${value}"$)
+					avtimg.AddAttr(":lazy-src", $"item.${value}"$)
+				Else
+					avtimg.AddAttr(":src", $"${nf.predisplay}(item.${value})"$)
+					avtimg.AddAttr(":lazy-src", $"${nf.predisplay}(item.${value})"$)
+				End If
+					
 				avtimg.Alt = ""
 				If nf.imgHeight <> "" Then
 					avtimg.Height = nf.imgheight
@@ -2389,7 +2505,7 @@ sb.Append(temp)
 					swt.AddAttr("v-on:change", $"${methodName}(item)"$)
 					Dim args As List
 		
-					SetMethod(mcallback, methodName, args)
+					SetMethod(mCallBack, methodName, args)
 				End If
 				'
 				'define template
@@ -2403,7 +2519,11 @@ sb.Append(temp)
 				Dim aicon As VueElement
 				aicon.Initialize(mCallBack, "", "")
 				aicon.TagName = "v-icon"
-				aicon.Append($"{{ item.${value} }}"$)
+				If nf.PreDisplay = "" Then
+					aicon.Append($"{{ item.${value} }}"$)
+				Else
+					aicon.Append($"{{ ${nf.predisplay}(item.${value}) }}"$)
+				End If
 				If nf.Disabled Then aicon.disabled = True
 				If nf.iconSize <> "" Then aicon.Size = nf.iconSize
 				If nf.color.StartsWith("item.") Then
@@ -2429,8 +2549,13 @@ sb.Append(temp)
 				Dim avtimg As VueElement
 				avtimg.Initialize(mCallBack,"", "")
 				avtimg.TagName = "v-img"
-				avtimg.AddAttr(":src", $"item.${value}"$)
-				avtimg.AddAttr(":lazy-src", $"item.${value}"$)
+				If nf.PreDisplay = "" Then
+					avtimg.AddAttr(":src", $"item.${value}"$)
+					avtimg.AddAttr(":lazy-src", $"item.${value}"$)
+				Else
+					avtimg.AddAttr(":src", $"${nf.predisplay}(item.${value})"$)
+					avtimg.AddAttr(":lazy-src", $"${nf.predisplay}(item.${value})"$)
+				End If	
 				avtimg.Alt = ""
 				If nf.Disabled Then avtimg.disabled = True
 				If nf.imgHeight <> "" Then
@@ -2462,7 +2587,11 @@ sb.Append(temp)
 				chp.TagName = "v-chip"
 				chp.dark = True
 				chp.Elevation = "4"
-				chp.Append($"{{ item.${value} }}"$)
+				If nf.PreDisplay = "" Then
+					chp.Append($"{{ item.${value} }}"$)
+				Else
+					chp.Append($"{{ ${nf.predisplay}(item.${value}) }}"$)
+				End If	
 				If nf.Disabled Then chp.disabled = True
 				If nf.color.StartsWith("item.") Then
 					chp.AddAttr(":color", nf.color)
@@ -2509,7 +2638,7 @@ sb.Append(temp)
 					abtn.AddAttr("v-on:click", $"${mName}_${value}(item)"$)
 					Dim args As List
 		
-					SetMethod(mcallback, methodName, args)
+					SetMethod(mCallBack, methodName, args)
 				End If
 				'
 				'define template
@@ -2546,14 +2675,16 @@ sb.Append(temp)
 				aicon.TagName = "v-icon"
 				aicon.Append(nf.icon)
 				aicon.Dark = True
-				If nf.iconSize <> "" Then aicon.Size = nf.iconSize
+				If nf.iconSize <> "" Then 
+					aicon.Size = nf.iconSize
+				End If
 				abtn.Append(aicon.tostring)
 			
 				If SubExists(mCallBack, methodName) Then
 					abtn.AddAttr("v-on:click", $"${mName}_${value}(item)"$)
 					Dim args As List
 		
-					SetMethod(mcallback, methodName, args)
+					SetMethod(mCallBack, methodName, args)
 				End If
 				'
 				'define template
@@ -2563,6 +2694,20 @@ sb.Append(temp)
 				tmp.AddAttr($"v-slot:item.${value}"$, "{ item }")
 				tmp.Append(abtn.ToString)
 				sb.Append(tmp.ToString)
+			Case Else
+				If nf.PreDisplay <> "" Then
+					Dim span As VueElement
+					span.Initialize(mCallBack, "", "")
+					span.TagName = "span"
+					span.Append($"{{ ${nf.predisplay}(item.${value}) }}"$)
+					'define template
+					Dim tmp As VueElement
+					tmp.Initialize(mCallBack, "" , "")
+					tmp.TagName = "v-template"
+					tmp.AddAttr($"v-slot:item.${value}"$, "{ item }")
+					tmp.Append(span.ToString)
+					sb.Append(tmp.ToString)
+				End If
 		End Select
 	Next
 	'

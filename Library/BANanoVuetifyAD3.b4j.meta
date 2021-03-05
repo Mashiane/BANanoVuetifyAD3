@@ -34,6 +34,6 @@ ModuleClosedNodes6=
 ModuleClosedNodes7=
 ModuleClosedNodes8=
 ModuleClosedNodes9=
-NavigationStack=VueElement,setStyleMinHeight,2784,0,VueElement,setMax,2785,0,VueElement,setScrollable,2800,0,VueElement,setFullWidth,2810,0,VueElement,setMaxWidth,2564,0,VueElement,getStyleMaxHeight,2562,0,VueElement,setOverwriteTag,2581,0,VueElement,DesignerCreateView,1041,0,VueElement,setStyleMaxHeight,2556,0,VueElement,setMaxHeight,2548,0
+NavigationStack=MySQLCRUD,LoadRelationships,1310,0,MySQLCRUD,DT_AddColumn1,782,0,MySQLCRUD,DT_SetColumnPreDisplay,669,6,MySQLCRUD,CreateTableCode,1175,6,VueTable,SetColumnPreDisplay,1579,0,VueTable,BuildSlots,2186,6,VueTable,SetColumnType,2079,0,VueTable,SetComboBox,2115,0,VueTable,SetAutoComplete,2145,0,VueTable,NewDataTableColumn,1573,0,VueElement,AddSelect,6509,0
 SelectedBuild=0
 VisibleModules=
