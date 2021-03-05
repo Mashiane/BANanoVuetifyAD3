@@ -3635,7 +3635,8 @@ End Sub
 'set required
 public Sub setRequired(varRequired As String)
 	If BANano.IsNull(varRequired) Or BANano.IsNull(varRequired) Then varRequired = ""
-	If varRequired = "" Then Return 
+	If varRequired = "" Then Return
+	varRequired = CStr(varRequired)
 	varRequired = varRequired.tolowercase
 	AddAttr("required", varRequired)
 	stRequired = varRequired
@@ -5139,7 +5140,7 @@ Sub ListViewSetRightCheckBox(itemID As String, bChecked As Boolean)  As VueEleme
 	Dim m As Map = CreateMap()
 	m.Put("rightcheckbox", bChecked)
 	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
-	return me
+	Return Me
 End Sub
 
 Sub AddItemLeftCheckBox(id As String, bChecked As Boolean, title As String, subtitle As String, _
@@ -5168,6 +5169,34 @@ Sub AddItemLeftCheckBox(id As String, bChecked As Boolean, title As String, subt
 	Records.Add(rec)
 End Sub
 
+Sub AddItemLeftSwitch(id As String, bChecked As Boolean, title As String, subtitle As String, _
+	subtitle1 As String, righttext As String, righticon As String, righticoncolor As String, rating As Int, url As String)
+	Dim rec As Map = CreateMap()
+	rec.Put("id", id)
+	If url <> "" Then rec.Put("to", url)
+	rec.Put("leftswitch", bChecked)
+	If title <> "" Then rec.Put("title", title)
+	If subtitle <> "" Then rec.Put("subtitle", subtitle)
+	If subtitle1 <> "" Then rec.Put("subtitle1", subtitle1)
+	'
+	If righticon <> "" Then rec.Put("righticon", righticon)
+	If righttext <> "" Then rec.Put("righttext", righttext)
+	If righticoncolor <> "" Then rec.Put("righticoncolor", righticoncolor)
+	If rating >= 0 Then rec.Put("rightrating", rating)
+	'
+	If mRouterReplace Then
+		rec.put("replace", True)
+	End If
+	'
+	If mRouterAppend Then
+		rec.put("append", True)
+	End If
+	'
+	Records.Add(rec)
+End Sub
+
+
+
 Sub AddItemRightSwitch(id As String, bChecked As Boolean, title As String, subtitle As String, subtitle1 As String, url As String)
 	Dim rec As Map = CreateMap()
 	rec.Put("id", id)
@@ -5178,6 +5207,18 @@ Sub AddItemRightSwitch(id As String, bChecked As Boolean, title As String, subti
 	If subtitle1 <> "" Then rec.Put("subtitle1", subtitle1)
 	Records.Add(rec)
 End Sub
+
+Sub AddItemRightCheckBox(id As String, bChecked As Boolean, title As String, subtitle As String, subtitle1 As String, url As String)
+	Dim rec As Map = CreateMap()
+	rec.Put("id", id)
+	If url <> "" Then rec.Put("to", url)
+	rec.Put("rightcheckbox", bChecked)
+	If title <> "" Then rec.Put("title", title)
+	If subtitle <> "" Then rec.Put("subtitle", subtitle)
+	If subtitle1 <> "" Then rec.Put("subtitle1", subtitle1)
+	Records.Add(rec)
+End Sub
+
 
 Sub GetPreferences(VC As VueComponent) As Map
 	Dim nm As Map = CreateMap()

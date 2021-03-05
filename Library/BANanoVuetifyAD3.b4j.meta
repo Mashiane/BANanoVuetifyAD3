@@ -37,6 +37,6 @@ ModuleClosedNodes6=
 ModuleClosedNodes7=
 ModuleClosedNodes8=
 ModuleClosedNodes9=
-NavigationStack=VueElement,setCols,3800,0,VueElement,setXS,3824,0,VueElement,RemoveCols,3823,0,VueElement,AddAttr,1877,0,VueElement,BindVueElement,1862,0,VueElement,RemoveAttr,1870,0,VueElement,AddClass,1700,0,VueElement,RemoveClass,1876,6,VueElement,AddAvatarWithBadge,7128,0,VueElement,AddAvatar1,7151,0,VueElement,AddButtonWithLeftIcon,7100,0
+NavigationStack=VueElement,AddAttr,1877,0,VueElement,BindVueElement,1862,0,VueElement,RemoveAttr,1870,0,VueElement,AddClass,1700,0,VueElement,RemoveClass,1876,6,VueElement,AddItemLeftCheckBox,5160,0,VueElement,AddItemRightSwitch,5203,0,VueElement,AddItemRightCheckBox,5207,0,VueElement,AddItemLeftSwitch,5184,0,VueElement,setRequired,3638,2,VueElement,setBindPrependInnerIcon,3607,0
 SelectedBuild=0
 VisibleModules=9,12,6
