@@ -18,6 +18,7 @@ Sub Process_Globals
 	Private appmain As VueElement
 	Private apptransition As VueElement
 	Private approuterview As VueElement
+	Private interval As Int
 End Sub
 
 Sub Init
@@ -38,8 +39,33 @@ Sub Init
 	'add the drawer
 	BuildDrawer
 	
+	vuetify.SetMounted(Me, "onshow", Null)
+	vuetify.SetBeforeDestroy(Me, "clearit", Null)
 	'render the ux
 	vuetify.Serve
+End Sub
+
+'clear the interval
+Sub clearit
+	BANanoShared.ClearInterval(interval)
+End Sub
+
+Sub onshow
+	vuetify.SetData("value", 0)
+	'set an interval that will run every 1 second
+	interval = BANanoShared.SetInterval(Me, "updatepc", 1000, Null)
+End Sub
+
+'get the value and then update it by 10 each second
+Sub updatepc
+	'get value
+	Dim lvalue As Int = vuetify.GetData("value")
+	lvalue = BANano.parseInt(lvalue)
+	lvalue = lvalue + 10
+	If lvalue = 100 Then
+		lvalue = 0
+	End If
+	vuetify.SetData("value", lvalue)
 End Sub
 
 Sub BuildNavigationBar
@@ -172,7 +198,7 @@ Sub BuildDrawerBottom
 	bottomD.AtTheBottom
 	'
 	Dim user As VueElement = bottomD.Cell(1, 1).AddAvatarWithBadge("user", "./assets/sponge.png", 50, "usermsgs", vuetify.COLOR_RED, Null, Null)
-	user.MX = 2
+	user.MX = 4
 	user.Overlap = True
 	vuetify.BindVueElement(user)
 	vuetify.SetData("usermsgs", 3)
