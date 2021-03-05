@@ -4583,6 +4583,7 @@ Sub AddList(Module As Object, parentID As String, elid As String, bDense As Bool
 	vlist.Bind("rounded", bRounded)
 	vlist.Bind("flat", bFlat)
 	vlist.Bind("dense", bDense)
+	vlist.NewListViewItemOptions
 	Return vlist
 End Sub
 

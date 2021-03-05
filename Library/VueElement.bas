@@ -353,6 +353,7 @@ Sub Class_Globals
 	Private mRouterReplace As Boolean
 	Private mRouterAppend As Boolean
 	Public HasRules As Boolean
+	Public Options As ListViewItemOptions
 End Sub
 
 'initialize the custom view
@@ -385,6 +386,57 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	ntxRow = 0
 	mRouterReplace = False
 	mRouterAppend = False
+End Sub
+
+Sub NewListViewItemOptions
+	Options.Initialize
+	Options.datasource = ""
+	Options.key = "id"
+	Options.url  = "to"
+	Options.lefticon  = "lefticon"
+	Options.lefticoncolor  = "lefticoncolor"
+	Options.lefticonclass  = ""
+	'
+	Options.avatar  = "avatar"
+	Options.avatarclass  = ""
+	
+	Options.avataricon  = "avataricon"
+	Options.avatariconcolor  = "avatariconcolor"
+	Options.avatariconclass  = ""
+	
+	Options.icon  = "icon"
+	Options.iconclass  = ""
+	Options.iconcolor  = "iconcolor"
+	
+	Options.title  = "title"
+	Options.subtitle  = "subtitle"
+	Options.subtitle1  = "subtitle1"
+	'
+	Options.righticon  = "righticon"
+	Options.righticonclass  = ""
+	Options.righttext  = "righttext"
+	Options.righticoncolor  = "righticoncolor"
+	Options.activeclass = ""
+	'
+	Options.rightcheckbox = "rightcheckbox"
+	Options.leftcheckbox = "leftcheckbox"
+	Options.showleftcheckboxes = False
+	Options.showrightcheckboxes = False
+	'
+	Options.rightrating = "rightrating"
+	Options.rightratingcolor = "rightratingcolor"
+	Options.showrightrating = False
+	'
+	Options.leftswitch = "leftswitch"
+	Options.showleftswitches = False
+	'
+	Options.rightswitch = "rightswitch"
+	Options.showrightswitches = False
+	Options.switchinset = False
+	Options.itemavatarclass = ""
+	'
+	Options.rightchip = "rightchip"
+	Options.rightchipcolor = "rightchipcolor"
 End Sub
 
 'generate the next row
@@ -440,7 +492,7 @@ Sub ListViewSetReplace(itemID As String)
 End Sub
 
 'the url should be appended
-Sub ListViewSetAppen(itemID As String)
+Sub ListViewSetAppend(itemID As String)
 	Dim m As Map = CreateMap()
 	m.Put("append", True)
 	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
@@ -1812,6 +1864,22 @@ Sub BindVueElement(el As VueElement)
 		Dim cb As BANanoObject = mmethods.Get(k)
 		SetCallBack(k, cb)
 	Next
+End Sub
+
+Sub RemoveAttr(attrName As String)
+	If mElement <> Null Then
+		mElement.RemoveAttr(attrName)
+	Else
+		attributeList.Remove(attrName)	
+	End If
+End Sub
+
+Sub RemoveClass(clsName As String)
+	If mElement <> Null Then
+		mElement.RemoveClass(clsName)
+	Else
+		classList.Remove(clsName)
+	End If
 End Sub
 
 'add an attribute
@@ -3775,6 +3843,10 @@ Sub setXS(xs As String)
 	AddAttr("xs", xs)
 End Sub
 
+Sub RemoveCols
+	
+End Sub
+
 private Sub BuildOffsets(col As VueGridColumn) As String
 	Dim sb As StringBuilder
 	sb.Initialize
@@ -4994,9 +5066,9 @@ Sub ListViewSetRightRating(itemID As String, sIcon As String)  As VueElement
 	Return Me
 End Sub
 
-Sub ListViewSetTo(itemID As String, sIcon As String)  As VueElement
+Sub ListViewSetTo(itemID As String, sTo As String)  As VueElement
 	Dim m As Map = CreateMap()
-	m.Put("to", sIcon)
+	m.Put("to", sTo)
 	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
 	Return Me
 End Sub
@@ -5204,7 +5276,7 @@ Sub ListViewSetAvatarIconColor(itemID As String, bChecked As Boolean)  As VueEle
 	Dim m As Map = CreateMap()
 	m.Put("avatariconcolor", bChecked)
 	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
-	return me
+	Return Me
 End Sub
 
 'add an avatar icon
@@ -5237,6 +5309,12 @@ Sub AddItemAvatarIcon(id As String, avataricon As String, avatariconcolor As Str
 	Records.Add(rec)
 End Sub
 
+Sub CreateListItem(id As String) As BVAD3ListItem
+	Dim item As BVAD3ListItem
+	item.Initialize(id)
+	Return item
+End Sub
+
 'add an item to the listview
 Sub ListViewAddItem(id As String, title As String) As VueElement
 	Dim rec As Map = CreateMap()
@@ -5254,6 +5332,14 @@ Sub ListViewAddItem(id As String, title As String) As VueElement
 	Records.Add(rec)
 	Return Me
 End Sub
+
+'add an item to the listview
+Sub ListViewAddItem1(item As BVAD3ListItem) As VueElement
+	Dim rec As Map = item.Item
+	Records.Add(rec)
+	Return Me
+End Sub
+
 
 'add an item to the list view
 Sub AddItem(id As String, lefticon As String, lefticoncolor As String, _
@@ -5291,6 +5377,12 @@ Sub AddItem(id As String, lefticon As String, lefticoncolor As String, _
 	End If
 	'
 	Records.Add(rec)
+End Sub
+
+'add a list item template to draw item
+Sub AddListViewTemplate1(numLines As Int) As VueElement
+	AddListViewTemplate(numLines, Options)
+	Return Me
 End Sub
 
 'add a list item template to draw item
@@ -5395,7 +5487,7 @@ Sub AddListViewTemplate(numLines As Int, props As ListViewItemOptions) As VueEle
 <v-list-item-icon id="${itemiconID}" v-if="item.${xicon}">
 <v-icon id="${iconID}" :color="item.${xiconcolor}" class="${xiconclass}" v-text="item.${xicon}"></v-icon>
 </v-list-item-icon>
-<v-list-item-content id="${contentID}">
+<v-list-item-content id="${contentID}" v-if="item.${xtitle} || item.${xsubtitle} || item.${xsubtitle1}">
 <v-list-item-title id="${titleID}" v-if="item.${xtitle}" v-text="item.${xtitle}"></v-list-item-title>
 <v-list-item-subtitle id="${subtitleID}" v-if="item.${xsubtitle}" v-text="item.${xsubtitle}"></v-list-item-subtitle>
 <v-list-item-subtitle id="${subtitle1ID}" v-if="item.${xsubtitle1}" v-text="item.${xsubtitle1}"></v-list-item-subtitle>
@@ -5476,6 +5568,12 @@ Sub AddListViewTemplate(numLines As Int, props As ListViewItemOptions) As VueEle
 	'
 	BindVueElement(vlistitem)
 	Return vlistitem
+End Sub
+
+'add a list item template to draw item
+Sub AddListViewGroupTemplate1(numLines As Int, props As ListViewItemOptions) As VueElement
+	AddListViewGroupTemplate(numLines, Options)
+	Return Me
 End Sub
 
 'add a list item template to draw item
@@ -7034,7 +7132,7 @@ Sub AddAvatarWithBadge(elID As String, imgURL As String, avatarSize As Int, vmod
 	avatar.AssignProps(avatarprops)
 	
 	
-	Dim img As VueElement = AddVueElement2(elID, imageid, "v-img", Null)
+	Dim img As VueElement = AddVueElement2(avatarid, imageid, "v-img", Null)
 	img.Src = imgURL
 	img.Alt = ""
 	img.BindAllEvents
@@ -7683,9 +7781,15 @@ Sub AddList(elid As String, bDense As Boolean, bFlat As Boolean, bRounded As Boo
 	vlist.Bind("rounded", bRounded)
 	vlist.Bind("flat", bFlat)
 	vlist.Bind("dense", bDense)
+	vlist.NewListViewItemOptions
 	Return vlist
 End Sub
 
+Sub AddList1(elID As String) As VueElement
+	Dim vlist As VueElement = AddVueElement1(elID, "v-list", "", "", "", Null)
+	vlist.NewListViewItemOptions
+	Return vlist
+End Sub
 
 Sub AddListItem(elid As String, props As Map) As VueElement
 	Return AddVueElement1(elid, "v-list-item", "", "", "", props)
@@ -8291,9 +8395,22 @@ Sub setLazyValidation(b As Boolean)
 End Sub
 
 'place the element at the bottom
-Sub PlaceAtBottom
+Sub PlaceAtBottom As VueElement
 	AddStyle("position", "absolute")
 	AddStyle("bottom", "0")
+	Return Me
+End Sub
+
+'place the element at the bottom
+Sub AbsolutePosition As VueElement
+	AddStyle("position", "absolute")
+	Return Me
+End Sub
+
+'place the element at the bottom
+Sub AtTheBottom As VueElement
+	AddStyle("bottom", "0")
+	Return Me
 End Sub
 
 Sub OverflowHidden

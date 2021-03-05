@@ -107,19 +107,20 @@ Library1=banano
 Library2=jcore
 Library3=jfx
 Module1=BANanoALASQLE
-Module10=VueTable
-Module11=VuetifyApp
+Module10=VueGMap
+Module11=VueTable
+Module12=VuetifyApp
 Module2=BANanoMSSQLE
 Module3=BANanoMySQLE
 Module4=|absolute|C:\CodingWorld\B4XShared\B4J\BANanoShared
 Module5=BANanoSQLiteE
-Module6=MySQLCRUD
-Module7=VueComponent
-Module8=VueElement
-Module9=VueGMap
+Module6=BVAD3ListItem
+Module7=MySQLCRUD
+Module8=VueComponent
+Module9=VueElement
 NumberOfFiles=51
 NumberOfLibraries=3
-NumberOfModules=11
+NumberOfModules=12
 Version=8.9
 @EndOfDesignText@
 #Region Project Attributes 
