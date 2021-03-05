@@ -34,6 +34,6 @@ ModuleClosedNodes6=
 ModuleClosedNodes7=
 ModuleClosedNodes8=
 ModuleClosedNodes9=
-NavigationStack=BANanoShared,MapKeys2List,142,0,BANanoShared,MapKeys2ObjectArray,183,1,BANanoShared,MapValues2ObjectArray,175,0,BANanoShared,List2ObjectArray,159,0,VueComponent,Class_Globals,28,0,VueComponent,Initialize,166,0,VueComponent,SetDataUnshift,821,0,VueComponent,AddQuery,470,0,VueComponent,getPromptValue,468,0,BANanoALASQLE,Class_Globals,23,0
+NavigationStack=VueElement,ListViewSetAvatarIconColor,5196,2,VueElement,ListViewAddItem,5246,0,VueElement,AddItem,5277,0,VueElement,AddListViewTemplate,5290,0,VueElement,AddListViewGroupTemplate,5475,0,VuetifyApp,Class_Globals,393,0,VuetifyApp,NewListViewItemOptions,407,6,Main,Process_Globals,12,0,Main,BANano_Ready,108,0,Main,Application_Error,87,0
 SelectedBuild=0
 VisibleModules=

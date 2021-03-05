@@ -393,7 +393,9 @@ Sub Class_Globals
 	rightcheckbox As String, leftcheckbox As String, showleftcheckboxes As Boolean, showrightcheckboxes As Boolean, _
 	rightrating As String, rightratingcolor As String, showrightrating As Boolean, _
 	leftswitch As String, showleftswitches As Boolean, _
-	rightswitch As String, showrightswitches As Boolean, switchinset As Boolean, itemavatarclass As String)
+	rightswitch As String, showrightswitches As Boolean, switchinset As Boolean, itemavatarclass As String, _
+	rightchip As String, rightchipcolor As String)
+	'
 	Public RouterViewName As String
 	Public DatabaseName As String
 	Public ProgressLoaderName As String
@@ -455,6 +457,10 @@ Sub NewListViewItemOptions() As ListViewItemOptions
 	lvio.showrightswitches = False
 	lvio.switchinset = False
 	lvio.itemavatarclass = ""
+	'
+	lvio.rightchip = "rightchip"
+	lvio.rightchipcolor = "rightchipcolor"
+	
 	Return lvio
 End Sub
 

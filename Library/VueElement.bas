@@ -4924,70 +4924,95 @@ Sub AddItemAvatar(id As String, avatar As String, title As String, subtitle As S
 	Records.Add(rec)
 End Sub
 
-Sub ListViewSetAvatar(itemID As String, sIcon As String)
+Sub ListViewSetRightChip(itemID As String, sValue As String) As VueElement
+	Dim m As Map = CreateMap()
+	m.Put("rightchip", sValue)
+	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+	Return Me
+End Sub
+
+Sub ListViewSetRightChipColor(itemID As String, sColor As String) As VueElement
+	Dim m As Map = CreateMap()
+	m.Put("rightchipcolor", sColor)
+	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+	Return Me
+End Sub
+
+Sub ListViewSetAvatar(itemID As String, sIcon As String)  As VueElement
 	Dim m As Map = CreateMap()
 	m.Put("avatar", sIcon)
 	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+	Return Me
 End Sub
 
-Sub ListViewSetTitle(itemID As String, sIcon As String)
+Sub ListViewSetTitle(itemID As String, sIcon As String)  As VueElement
 	Dim m As Map = CreateMap()
 	m.Put("title", sIcon)
 	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+	Return Me
 End Sub
 
-Sub ListViewSetSubTitle(itemID As String, sIcon As String)
+Sub ListViewSetSubTitle(itemID As String, sIcon As String)  As VueElement
 	Dim m As Map = CreateMap()
 	m.Put("subtitle", sIcon)
 	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+	Return Me
 End Sub
 
-Sub ListViewSetSubTitle1(itemID As String, sIcon As String)
+Sub ListViewSetSubTitle1(itemID As String, sIcon As String)  As VueElement
 	Dim m As Map = CreateMap()
 	m.Put("subtitle1", sIcon)
 	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+	Return Me
 End Sub
 
-Sub ListViewSetRightIcon(itemID As String, sIcon As String)
+Sub ListViewSetRightIcon(itemID As String, sIcon As String)  As VueElement
 	Dim m As Map = CreateMap()
 	m.Put("righticon", sIcon)
 	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+	Return Me
 End Sub
 
-Sub ListViewSetRightText(itemID As String, sIcon As String)
+Sub ListViewSetRightText(itemID As String, sIcon As String)  As VueElement
 	Dim m As Map = CreateMap()
 	m.Put("righttext", sIcon)
 	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+	Return Me
 End Sub
 
-Sub ListViewSetRightIconColor(itemID As String, sIcon As String)
+Sub ListViewSetRightIconColor(itemID As String, sIcon As String)  As VueElement
 	Dim m As Map = CreateMap()
 	m.Put("righticoncolor", sIcon)
 	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+	Return Me
 End Sub
 
-Sub ListViewSetRightRating(itemID As String, sIcon As String)
+Sub ListViewSetRightRating(itemID As String, sIcon As String)  As VueElement
 	Dim m As Map = CreateMap()
 	m.Put("rightrating", sIcon)
 	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+	Return Me
 End Sub
 
-Sub ListViewSetTo(itemID As String, sIcon As String)
+Sub ListViewSetTo(itemID As String, sIcon As String)  As VueElement
 	Dim m As Map = CreateMap()
 	m.Put("to", sIcon)
 	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+	Return Me
 End Sub
 
-Sub ListViewSetLeftIcon(itemID As String, sIcon As String)
+Sub ListViewSetLeftIcon(itemID As String, sIcon As String)  As VueElement
 	Dim m As Map = CreateMap()
 	m.Put("lefticon", sIcon)
 	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+	Return Me
 End Sub
 
-Sub ListViewSetLeftIconColor(itemID As String, sIcon As String)
+Sub ListViewSetLeftIconColor(itemID As String, sIcon As String)  As VueElement
 	Dim m As Map = CreateMap()
 	m.Put("lefticoncolor", sIcon)
 	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+	Return Me
 End Sub
 
 Sub AddItemAction(id As String, lefticon As String, lefticoncolor As String, title As String, subtitle As String, _
@@ -5017,28 +5042,32 @@ Sub AddItemAction(id As String, lefticon As String, lefticoncolor As String, tit
 	Records.Add(rec)
 End Sub
 
-Sub ListViewSetLeftCheckBox(itemID As String, bChecked As Boolean)
+Sub ListViewSetLeftCheckBox(itemID As String, bChecked As Boolean)  As VueElement
 	Dim m As Map = CreateMap()
 	m.Put("leftcheckbox", bChecked)
 	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+	Return Me
 End Sub
 
-Sub ListViewSetLeftSwitch(itemID As String, bChecked As Boolean)
+Sub ListViewSetLeftSwitch(itemID As String, bChecked As Boolean)  As VueElement
 	Dim m As Map = CreateMap()
 	m.Put("leftswitch", bChecked)
 	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+	Return Me
 End Sub
 
-Sub ListViewSetRightSwitch(itemID As String, bChecked As Boolean)
+Sub ListViewSetRightSwitch(itemID As String, bChecked As Boolean)  As VueElement
 	Dim m As Map = CreateMap()
 	m.Put("rightswitch", bChecked)
 	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+	Return Me
 End Sub
 
-Sub ListViewSetRightCheckBox(itemID As String, bChecked As Boolean)
+Sub ListViewSetRightCheckBox(itemID As String, bChecked As Boolean)  As VueElement
 	Dim m As Map = CreateMap()
 	m.Put("rightcheckbox", bChecked)
 	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+	return me
 End Sub
 
 Sub AddItemLeftCheckBox(id As String, bChecked As Boolean, title As String, subtitle As String, _
@@ -5164,16 +5193,18 @@ Sub AddItemIcon(id As String, icon As String, iconcolor As String, title As Stri
 	Records.Add(rec)
 End Sub
 
-Sub ListViewSetAvatarIcon(itemID As String, bChecked As Boolean)
+Sub ListViewSetAvatarIcon(itemID As String, bChecked As Boolean)  As VueElement
 	Dim m As Map = CreateMap()
 	m.Put("avataricon", bChecked)
 	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+	Return Me
 End Sub
 
-Sub ListViewSetAvatarIconColor(itemID As String, bChecked As Boolean)
+Sub ListViewSetAvatarIconColor(itemID As String, bChecked As Boolean)  As VueElement
 	Dim m As Map = CreateMap()
 	m.Put("avatariconcolor", bChecked)
 	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+	return me
 End Sub
 
 'add an avatar icon
@@ -5294,6 +5325,8 @@ Sub AddListViewTemplate(numLines As Int, props As ListViewItemOptions) As VueEle
 	Dim rightratingID As String = $"${elID}rightrating"$
 	Dim leftswitchID As String = $"${elID}leftswitch"$
 	Dim rightswitchID As String = $"${elID}rightswitch"$
+	Dim rightchipID As String = $"${elID}rightchip"$
+	
 	'
 	'in case the pointers are changed
 	Dim xurl As String = props.url
@@ -5338,6 +5371,9 @@ Sub AddListViewTemplate(numLines As Int, props As ListViewItemOptions) As VueEle
 	Dim xswitchinset As Boolean = props.switchinset
 	Dim xitemavatarclass As String = props.itemavatarclass
 	'
+	Dim xrightchip As String = props.rightchip
+	Dim xrightchipcolor As String = props.rightchipcolor
+	'
 	datasource = datasource.ToLowerCase
 	key = key.ToLowerCase
 	'
@@ -5364,6 +5400,7 @@ Sub AddListViewTemplate(numLines As Int, props As ListViewItemOptions) As VueEle
 <v-list-item-subtitle id="${subtitleID}" v-if="item.${xsubtitle}" v-text="item.${xsubtitle}"></v-list-item-subtitle>
 <v-list-item-subtitle id="${subtitle1ID}" v-if="item.${xsubtitle1}" v-text="item.${xsubtitle1}"></v-list-item-subtitle>
 </v-list-item-content>
+<v-chip id="${rightchipID}" v-if="item.${xrightchip}" :color="item.${xrightchipcolor}" dark small v-text="item.${xrightchip}"></v-chip>
 <v-list-item-action id="${rightactionID}" v-if="item.${xrighticon} || item.${xrighttext} || ${xshowrightcheckboxes} || ${xshowrightrating} || ${xshowrightswitch}">
 <v-list-item-action-text id="${rightactiontextID}" v-if="item.${xrighttext}" v-text="item.${xrighttext}"></v-list-item-action-text>
 <v-btn id="${rightactionBtnID}" :icon="true" v-if="item.${xrighticon}">
