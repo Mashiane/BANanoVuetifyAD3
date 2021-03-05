@@ -971,7 +971,6 @@ Sub Initialize(Module As Object, myapp As String)
 	routes.Initialize
 	components.Initialize
 	Options.Initialize
-	Modules.Initialize
 	Themes.Initialize
 	data.Initialize5 
 	InitColors
@@ -2159,7 +2158,6 @@ Sub Goto(elID As String)
 	Vuetify.RunMethod("goTo", Array(elID))
 End Sub
 
-
 'add a rule
 Sub AddRule(ruleName As String, MethodName As String)
 	If BANano.IsNull(ruleName) Or BANano.IsUndefined(ruleName) Then ruleName = ""
@@ -2198,12 +2196,12 @@ End Sub
 '
 private Sub HideBody 
 	Dim stylem As Map = CreateMap("visibility":"hidden")
-	body.SetStyle(BANano.ToJson(stylem))
+	Body.SetStyle(BANano.ToJson(stylem))
 End Sub
 
 private Sub ShowBody
 	Dim stylem As Map = CreateMap("visibility":"visible")
-	body.SetStyle(BANano.ToJson(stylem))
+	Body.SetStyle(BANano.ToJson(stylem))
 End Sub
 
 

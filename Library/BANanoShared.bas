@@ -29,7 +29,114 @@ Sub Process_Globals
 	Type sequencePair(value As Int, numTimes As Int)
 End Sub
 
-'set authorization for this connection
+'return a date with day, month year name
+Sub NiceDate(sdate As String) As String				'ignoredeadcode
+	Return FormatDisplayDate(sdate, "ddd, DD MMM YYYY")
+End Sub
+
+'return a date time
+Sub NiceTime(stime As String) As String				'ignoredeadcode
+	Return FormatDisplayDate(stime, "ddd, DD MMM YYYY @ HH:mm:ss")
+End Sub
+
+'return money
+Sub NiceMoney(smoney As String) As String				'ignoredeadcode
+	Return FormatDisplayNumber(smoney, "0,0.00")
+End Sub
+
+'return thousands
+Sub Thousands(smoney As String) As String				'ignoredeadcode
+	Return FormatDisplayNumber(smoney, "0,0")
+End Sub
+
+'get the html part of a bananoelement and empty the element
+Sub BANanoGetHTML(id As String) As String
+	id = id.tolowercase
+	id = id.Replace("#","")
+	Dim be As BANanoElement
+	be.Initialize($"#${id}"$)
+	Dim xTemplate As String = be.GetHTML
+	be.Empty
+	Return xTemplate
+End Sub
+
+'set an interval
+Sub SetInterval(Module As Object, methodname As String, ms As Int, args As List) As Object
+	methodname = methodname.tolowercase
+	Dim cb As BANanoObject = BANano.callback(Module, methodname, args)
+	Dim res As Object = BANano.Window.SetInterval(cb, ms)
+	Return res
+End Sub
+
+'clear an interval
+Sub ClearInterval(interval As Object)
+	BANano.Window.ClearInterval(interval)
+End Sub
+
+'add anything from the appendholder to target
+Sub AppendHolderTo(target As String)
+	Dim stemplate As String = BANanoGetHTML("appendholder")
+	Dim elx As BANanoElement = BANano.GetElement(target)
+	elx.append(stemplate)
+End Sub
+
+'add anything from the appendholder
+Sub AppendPlaceHolderTo(target As String)
+	Dim stemplate As String = BANanoGetHTML("placeholder")
+	Dim elx As BANanoElement = BANano.GetElement(target)
+	elx.append(stemplate)
+End Sub
+
+'format numeric display
+Sub FormatDisplayNumber(item As String, sFormat As String) As String			'ignoredeadcode
+	item = "" & item
+	If item = "" Then Return ""
+	If BANano.isnull(item) Or BANano.IsUndefined(item) Then Return ""
+	Dim bo As BANanoObject = BANano.RunJavascriptMethod("numeral", Array(item))
+	Dim sDate As String = bo.RunMethod("format", Array(sFormat)).Result
+	Return sDate
+End Sub
+
+'return the nice file size
+Sub NiceFileSize(fsx As String) As String				'ignoredeadcode
+	Return FormatFileSize(fsx)
+End Sub
+
+'returns a nice file size
+Sub FormatFileSize(Bytes As Float) As String			'ignoredeadcode		'ignoredeadcode
+	If BANano.IsNull(Bytes) Or BANano.IsUndefined(Bytes) Then
+		Bytes = 0
+	End If
+	Bytes = BANano.parsefloat(Bytes)
+	Try
+		Private Unit() As String = Array As String(" Byte", " KB", " MB", " GB", " TB", " PB", " EB", " ZB", " YB")
+		If Bytes = 0 Then
+			Return "0 Bytes"
+		Else
+			Private Po, Si As Double
+			Private I As Int
+			Bytes = Abs(Bytes)
+			I = Floor(Logarithm(Bytes, 1024))
+			Po = Power(1024, I)
+			Si = Bytes / Po
+			Return NumberFormat(Si, 1, 3) & Unit(I)
+		End If
+	Catch
+		Return "0 Bytes"
+	End Try
+End Sub
+
+'format date to meet your needs
+Sub FormatDisplayDate(item As String, sFormat As String) As String			'ignoredeadcode
+	item = "" & item
+	If item = "" Then Return ""
+	If BANano.isnull(item) Or BANano.IsUndefined(item) Then Return ""
+	Dim bo As BANanoObject = BANano.RunJavascriptMethod("dayjs", Array(item))
+	Dim sDate As String = bo.RunMethod("format", Array(sFormat)).Result
+	Return sDate
+End Sub
+
+'set basic authorization for http request
 Sub BasicAuthorization(username As String, password As String) As Map
 	Dim usernamepassword As Object = BANano.ToBase64($"${username}:${password}"$)
 	Dim basic As String = $"Basic ${usernamepassword}"$
@@ -38,7 +145,7 @@ Sub BasicAuthorization(username As String, password As String) As Map
 	Return m
 End Sub
 
-
+'convert map keys to list
 Sub MapKeys2List(m As Map) As List
 	Dim mtot As Int = m.Size-1
 	Dim mcnt As Int
@@ -51,6 +158,7 @@ Sub MapKeys2List(m As Map) As List
 	Return nl
 End Sub
 
+'convert list to object array
 Sub List2ObjectArray(lst As List) As Object()
 	Dim rTot As Int = lst.size
 	Dim rCnt As Int = 0
@@ -61,6 +169,7 @@ Sub List2ObjectArray(lst As List) As Object()
 	Return xout
 End Sub
 
+'convert map values to object array
 Sub MapValues2ObjectArray(m As Map) As Object()
 	Dim mtot As Int = m.size
 	Dim mcnt As Int
@@ -72,7 +181,19 @@ Sub MapValues2ObjectArray(m As Map) As Object()
 	Return obj
 End Sub
 
-'double quote each item of the mv
+'convert map values to object array
+Sub MapKeys2ObjectArray(m As Map) As Object()
+	Dim mtot As Int = m.size
+	Dim mcnt As Int
+	Dim obj(mtot) As Object
+	For mcnt = 0 To mtot - 1
+		Dim v As Object = m.GetKeyAt(mcnt)
+		obj(mcnt) = v
+	Next
+	Return obj
+End Sub
+
+'double quote each item of the multi-value string
 Sub MVSingleQuoteItems(delim As String, mvstring As String) As String     
 	Dim sbOut As StringBuilder
 	sbOut.Initialize
@@ -88,30 +209,22 @@ Sub MVSingleQuoteItems(delim As String, mvstring As String) As String
 	Return sout
 End Sub
 
-Sub CreateB4xList(lst As List) As List
-	Dim nl As List
-	nl.Initialize
-	nl.AddAll(lst)
-	Return nl
-End Sub
-
-
-
 'start source code builder
 Sub SourceCodeBuilder
 	SourceCode.Initialize
 End Sub
 
-'add a new line
+'add a new line to source code builder
 Sub AddNewLine
 	SourceCode.append(CRLF)
 End Sub
 
-'add code
+'add code to source code builder
 Sub AddCode(scomment As String)
 	SourceCode.append(scomment).append(CRLF)
 End Sub
 
+'convert yes/no valyes to boolean
 Sub YesNoToBoolean(xvalue As String) As Boolean
 	Select Case xvalue
 		Case "Yes","yes"
@@ -121,18 +234,19 @@ Sub YesNoToBoolean(xvalue As String) As Boolean
 	End Select
 End Sub
 
-'add comment
+'add comment to source code builder
 Sub AddComment(sc As String)
 	SourceCode.append($"'${sc}"$).append(CRLF)
 End Sub
 
-'get the source code
+'get the source code from source code builder
 Sub GetSourceCode As String
 	Dim sout As String = SourceCode.tostring
 	sout = sout.Replace("~", "$")
 	Return SourceCode.tostring
 End Sub
 
+'create a banano element on parent
 Sub CreateElement(parent As String, tag As String, id As String,text As String) As BANanoElement
 	parent = parent.ToLowerCase
 	parent = parent.Replace("#","")
@@ -182,6 +296,7 @@ Sub CreateElement1(parentID As String, tag As String, id As String, text As Stri
 	Return el
 End Sub
 
+'set attributes to banano element
 Sub SetAttributes(targetElement As String, props As Map)
 	targetElement = targetElement.ToLowerCase
 	targetElement = targetElement.Replace("#","")
@@ -194,6 +309,7 @@ Sub SetAttributes(targetElement As String, props As Map)
 	End If
 End Sub
 
+'set styles to banano element
 Sub SetStyles(targetElement As String, styles As Map)
 	targetElement = targetElement.ToLowerCase
 	targetElement = targetElement.Replace("#","")
@@ -204,6 +320,7 @@ Sub SetStyles(targetElement As String, styles As Map)
 	End If
 End Sub
 
+'helper class for php email
 Sub GetEmailResponse(email As String) As String
 	Dim respM As Map = BANano.FromJson(email)
 	Dim response As String = respM.Get("response")
@@ -252,17 +369,7 @@ Sub UploadFileWait(fileO As Map) As FileObject
 	Return fileDet
 End Sub
 
-Sub SetInterval(module As Object, methodname As String, ms As Int, args As List) As Object
-	methodname = methodname.tolowercase
-	Dim cb As BANanoObject = BANano.callback(module, methodname, args)
-	Dim res As Object = BANano.Window.SetInterval(cb, ms)
-	Return res
-End Sub
-
-Sub ClearInterval(interval As Object)
-	BANano.Window.ClearInterval(interval)
-End Sub
-
+'shuffle a list
 Sub ShuffleList(pl As List) As List
 	For i = pl.Size - 1 To 0 Step -1
 		Dim j As Int
@@ -275,7 +382,7 @@ Sub ShuffleList(pl As List) As List
 	Return pl
 End Sub
 
-
+'explode a list
 Sub ExplodeList(lst As List, runs As Int) As List
 	Dim nList As List
 	nList.Initialize
@@ -287,20 +394,14 @@ Sub ExplodeList(lst As List, runs As Int) As List
 	Return nList
 End Sub
 
-Sub NewB4xList(items As List) As List
-	Dim nl As List
-	nl.Initialize 
-	nl.AddAll(items)
-	Return nl
-End Sub
-
+'initialize a new list
 Sub NewList As List
 	Dim elx As List
 	elx.Initialize 
 	Return elx
 End Sub
 
-
+'initialize a new list with items
 Sub NewList1(items As List) As List
 	Dim nl As List
 	nl.Initialize
@@ -329,34 +430,38 @@ Sub GetTargetValueFromEvent(e As BANanoEvent) As String
 	Return oValue
 End Sub
 
+'get target property from event
 Sub GetTargetPropertyFromEvent(e As BANanoEvent, prop As String) As String
 	Dim oValue As Object = e.OtherField("target").GetField(prop).Result
 	Return oValue
 End Sub
 
-
+'get target from event
 Sub GetTargetFromEvent(e As BANanoEvent) As BANanoObject
 	Dim oValue As BANanoObject = e.OtherField("target")
 	Return oValue
 End Sub
 
+'get event target property
 Sub GetEventTargetProperty(e As BANanoEvent, prop As String) As String
 	Dim sid As String = e.OtherField("target").GetField(prop).Result
 	Return sid
 End Sub
 
+'get file list from target
 Sub GetFileListFromTarget(e As BANanoEvent) As List
 	Dim files As List = e.OtherField("target").GetField("files").Result
 	Return files
 End Sub
 
+'get file from target
 Sub GetFileFromTarget(e As BANanoEvent) As Map
 	Dim files As List = e.OtherField("target").GetField("files").Result
 	Dim obj As Map = files.Get(0)
 	Return obj
 End Sub
 
-
+'beautify a variable, more like camelCase
 Sub BeautifyName(idName As String) As String
 	idName = idName.trim
 	If idName = "" Then Return ""
@@ -377,6 +482,7 @@ Sub BeautifyName(idName As String) As String
 	Return sname
 End Sub
 
+'return proper sub name
 Sub ProperSubName(vx As String, removePref As Boolean) As String
 	vx = vx.Replace(":", "-")
 	vx = vx.Replace(".", "-")
@@ -395,10 +501,12 @@ Sub ProperSubName(vx As String, removePref As Boolean) As String
 	Return subName1
 End Sub
 
+'capitalize a name
 Sub Capitalize(t As String) As String
 	Return ProperCase(t)
 End Sub
 
+'parse a string
 Sub StrParse(delim As String, inputString As String) As List
 	Dim nl As List
 	nl.Initialize
@@ -425,7 +533,7 @@ Sub Join(delimiter As String, lst As List) As String
 	Return sbx.ToString
 End Sub
 
-
+'correct a name
 Sub CorrectName(oldName As String) As String
 	Dim strName As String = StringBreakAtUpperCase(oldName)
 	strName = strName.replace(" ", "-")
@@ -463,6 +571,7 @@ Sub SetOnReadyChange(EventHandler As Object)
 	BANano.Window.GetField("document").AddEventListener("readystatechange", cb, True)
 End Sub
 '
+'detect if date is after
 Sub DateIsAfter(date1 As String, date2 As String) As Boolean
 	Dim d1 As Int = DateIconv(date1)
 	Dim d2 As Int = DateIconv(date2)
@@ -471,7 +580,6 @@ Sub DateIsAfter(date1 As String, date2 As String) As Boolean
 	Dim b As Boolean = BANano.IIf(d1 > d2, True, False)
 	Return b
 End Sub
-
 
 'remove the delimiter from stringbuilder
 Sub RemDelim(sValue As String, Delim As String) As String
@@ -532,6 +640,7 @@ Sub BuildStyle(styles As Map) As String
 	Return sbx.tostring
 End Sub
 
+'build attributes
 Sub BuildAttributes(properties As Map) As String
 	If properties.ContainsKey("tagname") Then
 		properties.remove("tagname")
@@ -564,6 +673,7 @@ Sub BuildAttributes(properties As Map) As String
 	Return sout
 End Sub
 
+'join map keys
 Sub JoinMapKeys(m As Map, delim As String) As String
 	If m.Size = 0 Then Return ""
 	Dim sb As StringBuilder
@@ -579,6 +689,7 @@ Sub JoinMapKeys(m As Map, delim As String) As String
 	Return sb.ToString
 End Sub
 
+'return lorem ipsum
 Sub LoremIpsum(count As String) As String
 	Return Rand_LoremIpsum(count)
 End Sub
@@ -628,6 +739,7 @@ Sub ListOfMapsRecordPos(lst As List, k As String, v As String) As Int
 	Return -1
 End Sub
 
+'get distinct values of mv
 Sub MvDistinct(delim As String, strmv As String) As String
 	Dim items As List = StrParse(delim, strmv)
 	Dim mi As Map = CreateMap()
@@ -663,6 +775,7 @@ Sub KeyValues2Map(delim As String, keys As String, values As String) As Map
 	Return optm
 End Sub
 
+'initialize a map
 Sub NewMap As Map
 	Dim nm As Map
 	nm.Initialize
@@ -675,6 +788,7 @@ Sub getElementById(sid As String) As BANanoObject
 	Return el
 End Sub
 
+'date difference
 Sub DateDiff(currentDate As String, otherDate As String) As Int
 	If BANano.IsNull(currentDate) Or BANano.IsUndefined(currentDate) Then Return 0
 	If BANano.IsNull(otherDate) Or BANano.IsUndefined(otherDate) Then Return 0
@@ -686,6 +800,7 @@ Sub DateDiff(currentDate As String, otherDate As String) As Int
 	Return rslt
 End Sub
 
+'minute difference
 Sub MinuteDiff(currentDate As String, otherDate As String) As Int
 	If BANano.IsNull(currentDate) Or BANano.IsUndefined(currentDate) Then Return 0
 	If BANano.IsNull(otherDate) Or BANano.IsUndefined(otherDate) Then Return 0
@@ -697,7 +812,7 @@ Sub MinuteDiff(currentDate As String, otherDate As String) As Int
 	Return rslt
 End Sub
 
-
+'remove duplicates from a list
 Sub ListRemoveDuplicates(lst As List) As List
 	Dim nd As Map = CreateMap()
 	For Each k As String In lst
@@ -712,7 +827,7 @@ Sub ListRemoveDuplicates(lst As List) As List
 	Return nl
 End Sub
 
-
+'get file details
 Sub GetFileDetails(fileObj As Map) As FileObject
 	Dim ff As FileObject
 	ff.Initialize
@@ -745,7 +860,7 @@ Sub GetFileDetails(fileObj As Map) As FileObject
 	Return ff
 End Sub
 
-
+'beautify source code
 Sub BeautifySourceCode(slang As String, sc As String) As String
 	Select Case slang
 	Case "js"
@@ -759,6 +874,7 @@ Sub BeautifySourceCode(slang As String, sc As String) As String
 End Sub
 
 
+'???? kept
 private Sub DoUpload(fileObj As Object) As String   'ignore
 	Dim aEvt As Object
 	Dim xhr As BANanoXMLHttpRequest
@@ -799,7 +915,7 @@ Sub HTTPUpload(fileObj As Object, module As Object, methodname As String)
 	promise.End
 End Sub
 
-
+'get alphabets
 Public Sub GetAlphabets(value As String) As String
 	value = CStr(value)
 	Try
@@ -837,6 +953,7 @@ Sub ExtractMap(source As Map, keys As List) As Map
 	Return nm
 End Sub
 
+'instr
 Sub InStr(Text As String, sFind As String) As Int
 	Return Text.tolowercase.IndexOf(sFind.tolowercase)
 End Sub
@@ -869,7 +986,7 @@ Sub JoinNonBlanks(delimiter As String, lst As List) As String
 End Sub
 
 
-'join maps
+'join list of maps
 Sub JoinMaps(lst As List) As Map
 	Dim nm As Map = CreateMap()
 	If lst.Size = 0 Then Return nm
@@ -908,7 +1025,7 @@ Sub MapProperty2List(om As List, prop As String) As List
 	Return lst
 End Sub
 
-
+'progress rag
 Public Sub ProgressRAG(dVariance As Double) As String
 	If dVariance < 0 Then
 		Return "./assets/red.png"
@@ -921,6 +1038,7 @@ Public Sub ProgressRAG(dVariance As Double) As String
 	End If
 End Sub
 
+'expenditure rag
 Public Sub ExpenditureRAG(dVariance As Double) As String
 	If dVariance > 0 Then
 		Return "./assets/green.png"
@@ -933,6 +1051,7 @@ Public Sub ExpenditureRAG(dVariance As Double) As String
 	End If
 End Sub
 
+'expected rag
 Public Sub ExpectedRAG(dValue As Double) As String
 	If dValue = 0 Then
 		Return "./assets/orange.png"
@@ -964,6 +1083,7 @@ Sub RSAIDNumber2DateOfBirth(rsaID As String) As String
 	End If
 End Sub
 
+'year now
 Public Sub YearNow() As String
 	Dim lNow As Long
 	Dim dt As String
@@ -973,6 +1093,7 @@ Public Sub YearNow() As String
 	Return dt
 End Sub
 
+'month now
 Public Sub MonthNow() As String
 	Dim lNow As Long
 	Dim dt As String
@@ -982,6 +1103,7 @@ Public Sub MonthNow() As String
 	Return dt
 End Sub
 
+'add days to date
 Sub DateAdd(mDate As String, HowManyDays As Int) As String
 	HowManyDays = BANano.parseInt(HowManyDays)
 	Dim ConvertDate, NewDateDay As Long
@@ -990,6 +1112,7 @@ Sub DateAdd(mDate As String, HowManyDays As Int) As String
 	Return DateTime.Date(NewDateDay)
 End Sub
 
+'add months to date
 Sub MonthAdd(mDate As String, HowManyMonths As Int) As String
 	HowManyMonths = BANano.parseInt(HowManyMonths)
 	Dim ConvertDate, NewDateDay As Long
@@ -1010,6 +1133,7 @@ Sub NumberOfDaysBetweenDates(CurrentDate As String, OtherDate As String) As Int
 	Return iOut
 End Sub
 
+'double
 Public Sub CDbl(value As String) As Double
 	Try
 		value = value.Trim
@@ -1022,7 +1146,7 @@ Public Sub CDbl(value As String) As Double
 	End Try
 End Sub
 
-
+'project days
 Sub ProjectDays(sDays As String) As String
 	Try
 		sDays = sDays.trim
@@ -1035,6 +1159,7 @@ Sub ProjectDays(sDays As String) As String
 	End Try
 End Sub
 
+'project date
 Sub ProjectDate(sDate As String) As String
 	If sDate.Length = 0 Then Return ""
 	Try
@@ -1047,35 +1172,12 @@ Sub ProjectDate(sDate As String) As String
 	End Try
 End Sub
 
-
-Sub FormatFileSize(Bytes As Float) As String
-	If BANano.IsNull(Bytes) Or BANano.IsUndefined(Bytes) Then
-		Bytes = 0
-	End If
-	Bytes = BANano.parsefloat(Bytes)
-	Try
-		Private Unit() As String = Array As String(" Byte", " KB", " MB", " GB", " TB", " PB", " EB", " ZB", " YB")
-		If Bytes = 0 Then
-			Return "0 Bytes"
-		Else
-			Private Po, Si As Double
-			Private I As Int
-			Bytes = Abs(Bytes)
-			I = Floor(Logarithm(Bytes, 1024))
-			Po = Power(1024, I)
-			Si = Bytes / Po
-			Return NumberFormat(Si, 1, 3) & Unit(I)
-		End If
-	Catch
-		Return "0 Bytes"
-	End Try
-End Sub
-
+'instr reverse
 Sub InStrRev(value As String, search As String) As Long
 	Return value.LastIndexOf(search) + 1
 End Sub
 
-
+'get full date
 Sub GetFullDate(v As String) As String
 	Try
 	If BANano.IsNull(v) Or BANano.IsUndefined(v) Then v = ""
@@ -1094,7 +1196,7 @@ Sub GetFullDate(v As String) As String
 	End Try
 End Sub
 
-
+'get full time
 Sub GetFullTime(v As String) As String
 	Try
 	If BANano.IsNull(v) Or BANano.IsUndefined(v) Then v = ""
@@ -1129,6 +1231,7 @@ Sub PadRight(Value As String, MaxLen As Int, PadChar As String) As String
 	Return Value
 End Sub
 
+'get list of map properties
 Sub GetListOfMapsProperty(lst As List, prop As String) As List
 	prop = prop.tolowercase
 	Dim kc As List
@@ -1193,6 +1296,7 @@ Public Sub GetNumbers(value As String) As String
 	End Try
 End Sub
 
+'get alpha
 Public Sub Alpha(value As String) As String
 	value = CStr(value)
 	Try
@@ -1251,8 +1355,7 @@ Sub ListToDataSource(keyName As String, valueName As String, lst As List) As Lis
 	Return nl
 End Sub
 
-
-
+'list to array variable
 Sub List2ArrayVariable(lst As List) As String
 	If lst.Size = 0 Then
 		Return $""""$
@@ -1272,7 +1375,7 @@ Sub List2ArrayVariable(lst As List) As String
 	Return sb.ToString
 End Sub
 
-
+'json values to lowercase
 Sub JSONValues2LowerCase(sJSON As String, props As List) As String
 	'convert json to map
 	Dim jmap As Map = Json2Map(sJSON)
@@ -1289,6 +1392,7 @@ Sub Map2Json(mp As Map) As String
 	Return JSON.ToString
 End Sub
 
+'map to pretty json
 Sub Map2JsonPretty(mp As Map) As String
 	Dim JSON As BANanoJSONGenerator
 	JSON.Initialize(mp)
@@ -1313,18 +1417,21 @@ Sub Json2Map(strJSON As String) As Map
 	End Try
 End Sub
 
+'new date
 Sub NewDate(year As Int, month As Int, day As Int) As BANanoObject
 	Dim dd As BANanoObject
 	dd.Initialize2("Date", Array(year, month, day))
 	Return dd
 End Sub
 
+'new date time
 Sub NewDateTime(year As Int, month As Int, day As Int, hour As Int, minute As Int) As BANanoObject
 	Dim dd As BANanoObject
 	dd.Initialize2("Date", Array(year, month, day, hour, minute))
 	Return dd
 End Sub
 
+'pad
 Sub Pad(Value As String, MaxLen As Int, PadChar As String, bright As Boolean) As String
 	Dim  intOrdNoLen As Int = Value.Length
 	Dim i As Int
@@ -1338,14 +1445,15 @@ Sub Pad(Value As String, MaxLen As Int, PadChar As String, bright As Boolean) As
 	Return Value
 End Sub
 
+'convert to long
 Sub CLng(o As Object) As Long
 	Return Floor(o)
 End Sub
 
+'convert to int
 Sub CInt(o As Object) As Int
 	Return Floor(o)
 End Sub
-
 
 'convert a list to json
 Sub List2Json(mp As List) As String
@@ -1382,17 +1490,18 @@ Sub MapValues2LowerCase(m As Map, props As List)
 	Next
 End Sub
 
+'nice number
 Sub NumberSuffix(N As Double) As String
 	If N < 0 Then
 		Return "-" & NumberSuffix(-N)
 	End If
 	Dim Suffix() As String = Array As String("", "k", "M", "B", "T")
-	Dim Thousands As Int = 0
-	Do While N >= 1000 And Thousands < Suffix.Length - 1
-		Thousands = Thousands + 1
+	Dim iThousands As Int = 0
+	Do While N >= 1000 And iThousands < Suffix.Length - 1
+		iThousands = iThousands + 1
 		N = N / 1000
 	Loop
-	If Thousands = 0 Then
+	If iThousands = 0 Then
 		Return NumberFormat2(N, 1, 2, 2, False)
 	End If
  
@@ -1404,10 +1513,10 @@ Sub NumberSuffix(N As Double) As String
 		End If
 		MaxDecimalPlaces = MaxDecimalPlaces + 1
 	Loop
-	Return NumberFormat2(N, 1, 0, MaxDecimalPlaces, False) & Suffix(Thousands)
+	Return NumberFormat2(N, 1, 0, MaxDecimalPlaces, False) & Suffix(iThousands)
 End Sub
 
-
+'list 2 array
 Sub List2Array (a_lstArgs As List) As String()
 	Dim arrArgs(a_lstArgs.Size) As String
 	For i = 0 To arrArgs.Length - 1
@@ -1416,7 +1525,7 @@ Sub List2Array (a_lstArgs As List) As String()
 	Return arrArgs
 End Sub
 
-
+'random string
 Sub RandomString(iLength As Int, bLowerCase As Boolean, bUpperCase As Boolean, bNumbers As Boolean, AdditionalChars As String) As String
 	Dim source As String
 	If bLowerCase = True Then
@@ -1441,6 +1550,7 @@ Sub RandomString(iLength As Int, bLowerCase As Boolean, bUpperCase As Boolean, b
 	Return SB.ToString
 End Sub
 
+'generate password
 Sub GeneratePassword(IntNum As Int) As String
 	Return RandomString(IntNum,True,True,True,"")
 End Sub
@@ -1454,7 +1564,7 @@ Sub RemDelimSB(delimiter As String, value As StringBuilder) As StringBuilder
 	Return value
 End Sub
 
-
+'space
 Sub Space(HM As Int) As String
 	Dim RS As String = ""
 	Do While Len(RS) < HM
@@ -1463,6 +1573,7 @@ Sub Space(HM As Int) As String
 	Return RS
 End Sub
 
+'make money
 Sub MakeMoney(sValue As String) As String
 	Try
 		If BANano.IsNull(sValue) Or BANano.IsUndefined(sValue) Then Return "0.00"
@@ -1477,6 +1588,7 @@ Sub MakeMoney(sValue As String) As String
 	End Try
 End Sub
 
+'percentage
 Sub Percentage(sValue As String) As String
 	Try
 		If BANano.IsNull(sValue) Or BANano.IsUndefined(sValue) Then Return "0.00"
@@ -1494,6 +1606,7 @@ Sub Percentage(sValue As String) As String
 	End Try
 End Sub
 
+'long date
 Sub LongDate(sDate As String) As String
 	If sDate.Length = 0 Then Return ""
 	Try
@@ -1506,6 +1619,7 @@ Sub LongDate(sDate As String) As String
 	End Try
 End Sub
 
+'long date time
 Sub LongDateTime(sDate As String) As String
 	If sDate.Length = 0 Then Return ""
 	Try
@@ -1518,18 +1632,22 @@ Sub LongDateTime(sDate As String) As String
 	End Try
 End Sub
 
+'trim
 Sub TrimS(strValue As String) As String
 	Return strValue.trim
 End Sub
 
+'lowecase
 Sub LCaseS(Text As String) As String
 	Return Text.ToLowerCase
 End Sub
 
+'inquotes
 Public Sub InQuotes(sValue As String) As String
 	Return QUOTE & sValue & QUOTE
 End Sub
 
+'propercase
 Sub ProperCase(myStr As String) As String
 	Try
 		If myStr.trim.length = 0 Then Return ""
@@ -1573,35 +1691,7 @@ Sub MapKeysLowerCaseList(lst As List) As List
 	Return nl
 End Sub
 
-
-'get map values to a list
-Sub GetMapValues(sourceMap As Map) As List
-	Dim listOfValues As List
-	listOfValues.Initialize
-	Dim iCnt As Int
-	Dim iTot As Int
-	iTot = sourceMap.Size - 1
-	For iCnt = 0 To iTot
-		Dim value As Object = sourceMap.GetValueAt(iCnt)
-		listOfValues.Add(value)
-	Next
-	Return listOfValues
-End Sub
-
-'get map keys to a list
-Sub GetMapKeys(sourceMap As Map) As List
-	Dim listOfValues As List
-	listOfValues.Initialize
-	Dim iCnt As Int
-	Dim iTot As Int
-	iTot = sourceMap.Size - 1
-	For iCnt = 0 To iTot
-		Dim value As Object = sourceMap.GetKeyAt(iCnt)
-		listOfValues.Add(value)
-	Next
-	Return listOfValues
-End Sub
-
+'sort a map by key
 Sub SortMap(m As Map) As Map
 	Try
 		Dim nm As Map
@@ -1623,7 +1713,7 @@ Sub SortMap(m As Map) As Map
 	End Try
 End Sub
 
-
+'merge maps
 Sub MergeMaps(oldm As Map, newm As Map) As Map
 	Dim om As Map = CreateMap()
 	For Each k As String In oldm.Keys
@@ -1638,7 +1728,7 @@ Sub MergeMaps(oldm As Map, newm As Map) As Map
 	Return om
 End Sub
 
-
+'list to map
 Sub List2MapSimple(lst As List, bSort As Boolean) As Map
 	If bSort Then lst.Sort(True)
 	Dim nm As Map = CreateMap()
@@ -1719,7 +1809,7 @@ Sub JSONSetProperty(sjson As String, updates As Map) As String
 	Return sout
 End Sub
 
-
+'equal operators
 Sub EQOperators(sm As Map) As List   'ignore
 	Dim nl As List
 	nl.initialize
@@ -1757,6 +1847,7 @@ function hexToRgba(hexCode, opacity) {
 }
 #End If
 
+'make px
 Sub MakePx(sValue As String) As String
 	sValue = sValue.trim
 	If sValue.EndsWith("%") Then
@@ -1812,6 +1903,7 @@ Sub SaveText2File(content As String, fileName As String)
 	BANano.RunJavascriptMethod("saveAs",Array(blob,fileName))
 End Sub
 
+'save binary array to file
 Sub SaveBinaryArray2File(iUint8Array As Object, dbName As String)
 	Dim fc As List
 	fc.Initialize
@@ -1822,13 +1914,13 @@ Sub SaveBinaryArray2File(iUint8Array As Object, dbName As String)
 	BANano.RunJavascriptMethod("saveAs",Array(blob, dbName))
 End Sub
 
-
+'count mv string
 Sub MvCount(strMV As String, Delimiter As String) As Int
 	Dim spValues() As String = BANano.Split(Delimiter,strMV)
 	Return spValues.Length
 End Sub
 
-
+'audit trail diff between maps
 Sub AuditTrail(oldM As Map, newM As Map) As Map
 	Dim df As Map = CreateMap()
 	For Each k As String In oldM.Keys
@@ -1854,6 +1946,7 @@ Sub AuditTrail(oldM As Map, newM As Map) As Map
 	Return df
 End Sub
 
+'time now
 Public Sub TimeNow() As String
 	Dim lNow As Long
 	Dim dt As String
@@ -1863,6 +1956,7 @@ Public Sub TimeNow() As String
 	Return dt
 End Sub
 
+'date now
 Public Sub DateNow() As String
 	Dim lNow As Long
 	Dim dt As String
@@ -1872,6 +1966,7 @@ Public Sub DateNow() As String
 	Return dt
 End Sub
 
+'date time now
 Public Sub DateTimeNow() As String
 	Dim lNow As Long
 	Dim dt As String
@@ -1881,6 +1976,7 @@ Public Sub DateTimeNow() As String
 	Return dt
 End Sub
 
+'date time seconds now
 Public Sub Now() As String
 	Dim lNow As Long
 	Dim dt As String
@@ -1890,7 +1986,7 @@ Public Sub Now() As String
 	Return dt
 End Sub
 
-
+'long date
 Sub LongDateTimeToday() As String
 	DateTime.DateFormat = "yyyy-MM-dd HH:mm"
 	Dim dt As Long = DateTime.now
@@ -1898,6 +1994,7 @@ Sub LongDateTimeToday() As String
 	Return DateTime.Date(dt)
 End Sub
 
+'copy map using keys
 Sub CopyMap(source As Map, keys As List) As Map
 	Dim nm As Map = CreateMap()
 	If keys.Get(0) = "*" Then
@@ -1914,7 +2011,7 @@ Sub CopyMap(source As Map, keys As List) As Map
 	Return nm
 End Sub
 
-
+'get file parent path
 Sub GetFileParentPath(Path As String) As String
 	Dim Path1 As String
 	Dim L As Int
@@ -1935,10 +2032,12 @@ Sub GetFileParentPath(Path As String) As String
 	Return Path1.SubString2(0,L)
 End Sub
 
+'get file extension
 Sub GetFileExt(FullPath As String) As String
 	Return FullPath.SubString(FullPath.LastIndexOf(".")+1)
 End Sub
 
+'set prefix
 Sub SetPrefix(prefix As String, target As Map) As Map
 	Dim nm As Map = CreateMap()
 	For Each mk As String In target.Keys
@@ -1977,6 +2076,7 @@ Sub FixRecords(recs As List, trimThese As List, numThese As List, boolThese As L
 	Next
 End Sub
 
+'make integers for map
 Sub MakeInteger(m As Map, xkeys As List)
 	For Each k As String In xkeys
 		If m.ContainsKey(k) Then
@@ -1990,6 +2090,7 @@ Sub MakeInteger(m As Map, xkeys As List)
 	Next
 End Sub
 
+'make double for map
 Sub MakeDouble(m As Map, xkeys As List)
 	For Each k As String In xkeys
 		If m.ContainsKey(k) Then
@@ -2003,6 +2104,7 @@ Sub MakeDouble(m As Map, xkeys As List)
 	Next
 End Sub
 
+'make yes no for map
 Sub MakeYesNo(m As Map, xkeys As List)
 	For Each k As String In xkeys
 		If m.ContainsKey(k) Then
@@ -2019,8 +2121,7 @@ Sub MakeYesNo(m As Map, xkeys As List)
 	Next
 End Sub
 
-
-
+'make boolean for map
 Sub MakeBoolean(m As Map, xkeys As List)
 	For Each k As String In xkeys
 		If m.ContainsKey(k) Then
@@ -2037,7 +2138,7 @@ Sub MakeBoolean(m As Map, xkeys As List)
 	Next
 End Sub
 
-
+'trim valyes
 Sub MakeTrim(m As Map, xkeys As List)
 	For Each k As String In xkeys
 		If m.ContainsKey(k) Then
@@ -2049,6 +2150,7 @@ Sub MakeTrim(m As Map, xkeys As List)
 	Next
 End Sub
 
+'make lowercase
 Sub MakeLowerCase(m As Map) As Map
 	Dim nm As Map = CreateMap()
 	For Each k As String In m.Keys
@@ -2059,6 +2161,7 @@ Sub MakeLowerCase(m As Map) As Map
 	Return nm
 End Sub
 
+'make date
 Sub MakeDate(m As Map, xkeys As List)
 	For Each k As String In xkeys
 		If m.ContainsKey(k) Then
@@ -2071,7 +2174,7 @@ Sub MakeDate(m As Map, xkeys As List)
 	Next
 End Sub
 
-
+'create a list
 Sub CreateList(Delimiter As String, Values As String) As List
 	Dim newLst As List
 	newLst.Initialize
@@ -2148,10 +2251,12 @@ private Sub MapKeySearch(nm As Map, s As String) As Int
 	Return mpos
 End Sub
 
+'0/1 to boolean
 Sub ToBoolean(sValue As String) As Boolean
 	Return BANano.iif(sValue = "0", False, True)
 End Sub
 
+'index of nth
 Sub IndexOfNth(occur As Int, query As String, data As String) As Int
 	Dim index As Int = data.IndexOf(query)
 	Do While index > -1 And occur > 1
@@ -2161,12 +2266,13 @@ Sub IndexOfNth(occur As Int, query As String, data As String) As Int
 	Return index
 End Sub
 
-
+'last mv value
 Sub MvLast(delim As String, value As String) As String
 	Dim tot As Int = MvCount(value,delim)
 	Return MvField(value,tot,delim)
 End Sub
 
+'remove prefix
 public Sub RemPrefix(xvalue As String, delim As String) As String
 	If xvalue.StartsWith(delim) Then
 		xvalue = MidS(xvalue,delim.Length)
@@ -2175,7 +2281,7 @@ public Sub RemPrefix(xvalue As String, delim As String) As String
 	Return xvalue
 End Sub
 
-
+'max of list
 Sub MaxOfList(lst As List) As Int
 	Dim maxcnt As Int = 0
 	Dim curCnt As Int = 0
@@ -2188,6 +2294,7 @@ Sub MaxOfList(lst As List) As Int
 	Return maxcnt
 End Sub
 
+'max of map keys
 Sub MaxOfMapKeys(lst As Map) As Int
 	Dim maxcnt As Int = 0
 	Dim curCnt As Int = 0
@@ -2200,7 +2307,7 @@ Sub MaxOfMapKeys(lst As Map) As Int
 	Return maxcnt
 End Sub
 
-
+'min of list
 Sub MinOfList(lst As List) As Int
 	'lets get the first value
 	Dim fValue As String = lst.Get(0)
@@ -2215,6 +2322,7 @@ Sub MinOfList(lst As List) As Int
 	Return maxcnt
 End Sub
 
+'get record from json
 Sub GetRecordFromJSONList(jsonValue As String, sPrimaryKey As String, sPrimaryValue As String) As Map
 	Dim outList As Map
 	outList.Initialize
@@ -2260,7 +2368,7 @@ Sub ExtraPropertyFromListOfMaps(lst As List, Property As String) As List
 	Return lstNew
 End Sub
 
-
+'add map to json
 Sub AddMap2Json(strJSON As String, m As Map) As String
 	Dim lst As List = Json2List(strJSON)
 	lst.Add(m)
@@ -2268,6 +2376,7 @@ Sub AddMap2Json(strJSON As String, m As Map) As String
 	Return sjson
 End Sub
 
+'list of maps extract keys
 Sub ListOfMapsExtractKey(lst As List, skey As String) As List
 	Dim nm As List
 	nm.Initialize
@@ -2278,7 +2387,7 @@ Sub ListOfMapsExtractKey(lst As List, skey As String) As List
 	Return nm
 End Sub
 
-
+'sum value values
 Sub SumMapValues(m As Map) As Double
 	Dim itv As Double = 0
 	For Each strKey As String In m.keys
@@ -2288,16 +2397,19 @@ Sub SumMapValues(m As Map) As Double
 	Return itv
 End Sub
 
+'list has a value
 Sub ListHas(data As String, listObj As List) As Boolean
 	Dim i As Int = listObj.IndexOf(data)
 	Return (i > -1)
 End Sub
 
+'list does not have
 Sub ListDoesNotHave(data As String, listObj As List) As Boolean
 	Dim i As Boolean = listObj.IndexOf(data)
 	Return (i = -1)
 End Sub
 
+'on the list
 Sub OnList(searchList As List, searchValue As String) As Boolean
 	'If searchList.IsInitialized = False Then Return False
 	For Each strTable As String In searchList
@@ -2341,6 +2453,7 @@ Sub MvRest(delim As String, svalue As String, startPos As String) As String
 	Return Join(delim,lst)
 End Sub
 
+'random password
 Sub GenerateRandomPassword(numChars As Int, numbers As Boolean, lowercase As Boolean, uppercase As Boolean, symbols As Boolean) As String
 	Dim uppercaseArray() As String = Array As String ("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z")
 	Dim lowercaseArray() As String = Array As String ("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z")
@@ -2364,6 +2477,7 @@ Sub GenerateRandomPassword(numChars As Int, numbers As Boolean, lowercase As Boo
 	Return newPassword
 End Sub
 
+'after today
 public Sub AfterTodayRG(dVariance As Long) As String
 	If dVariance <= 0 Then
 		Return "./assets/green.png"
@@ -2374,6 +2488,7 @@ public Sub AfterTodayRG(dVariance As Long) As String
 	End If
 End Sub
 
+'priority
 Public Sub PriorityRAG(dValue As Int) As String
 	Select Case dValue
 		Case 0
@@ -2387,6 +2502,7 @@ Public Sub PriorityRAG(dValue As Int) As String
 	End Select
 End Sub
 
+'rag
 Public Sub RAG(dValue As Int) As String
 	Select Case dValue
 		Case 0
@@ -2400,6 +2516,7 @@ Public Sub RAG(dValue As Int) As String
 	End Select
 End Sub
 
+'gar
 Public Sub GAR(dValue As Int) As String
 	Select Case dValue
 		Case 0
@@ -2413,6 +2530,7 @@ Public Sub GAR(dValue As Int) As String
 	End Select
 End Sub
 
+'status
 Public Sub StatusRAG(dValue As Int) As String
 	Select Case dValue
 		Case 0
@@ -2426,6 +2544,7 @@ Public Sub StatusRAG(dValue As Int) As String
 	End Select
 End Sub
 
+'face
 Public Sub FaceRAG(dValue As Int) As String
 	Select Case dValue
 		Case 0
@@ -2439,6 +2558,7 @@ Public Sub FaceRAG(dValue As Int) As String
 	End Select
 End Sub
 
+'face
 Public Sub FaceRG(dValue As Int) As String
 	Select Case dValue
 		Case 0
@@ -2450,6 +2570,7 @@ Public Sub FaceRG(dValue As Int) As String
 	End Select
 End Sub
 
+'face
 Public Sub FaceRG1(dValue As Int) As String
 	Select Case dValue
 		Case 1
@@ -2461,6 +2582,7 @@ Public Sub FaceRG1(dValue As Int) As String
 	End Select
 End Sub
 
+'face
 Public Sub FaceDone(dValue As Int) As String
 	Select Case dValue
 		Case 100
@@ -2470,6 +2592,7 @@ Public Sub FaceDone(dValue As Int) As String
 	End Select
 End Sub
 
+'progress
 Sub ProgressStatus(dValue As Int) As Int
 	Select Case dValue
 		Case 100
@@ -2479,6 +2602,7 @@ Sub ProgressStatus(dValue As Int) As Int
 	End Select
 End Sub
 
+'status
 Sub StatusRG(dValue As Int) As String
 	Select Case dValue
 		Case 0
@@ -2490,6 +2614,7 @@ Sub StatusRG(dValue As Int) As String
 	End Select
 End Sub
 
+'escapefield
 Sub EscapeField(f As String) As String
 	Return $"[${f}]"$
 End Sub
@@ -2532,7 +2657,7 @@ Sub JoinFields1(delimiter As String, sQuote As String, lst As List) As String
 	Return sb.ToString
 End Sub
 
-
+'get options from key value pairs
 Sub GetOptionsFromKV(delim As String, k As String, v As String) As Map
 	k = CStr(k)
 	v = CStr(v)
@@ -2599,6 +2724,7 @@ Sub Unflatten(tdata As List, childname As String) As List
 	Return tree
 End Sub
 
+'read as text
 public Sub readAsText(fr As Map) As BANanoPromise
 	Dim promise As BANanoPromise 'ignore
 		
@@ -2607,6 +2733,7 @@ public Sub readAsText(fr As Map) As BANanoPromise
 	Return promise
 End Sub
 
+'read as binary string
 Sub readAsBinaryString(fr As Map) As BANanoPromise
 	Dim promise As BANanoPromise 'ignore
 		
@@ -2615,6 +2742,7 @@ Sub readAsBinaryString(fr As Map) As BANanoPromise
 	Return promise
 End Sub
 
+'read as data url
 Sub readAsDataURL(fr As Map) As BANanoPromise
 	Dim promise As BANanoPromise 'ignore
 		
@@ -2623,6 +2751,7 @@ Sub readAsDataURL(fr As Map) As BANanoPromise
 	Return promise
 End Sub
 
+'read as array buffer
 Sub readAsArrayBuffer(fr As Map) As BANanoPromise
 	Dim promise As BANanoPromise 'ignore
 		
@@ -2631,6 +2760,7 @@ Sub readAsArrayBuffer(fr As Map) As BANanoPromise
 	Return promise
 End Sub
 
+'read file
 private Sub ReadFile(FileToRead As Object, MethodName As String)
 	' make a filereader
 	Dim FileReader As BANanoObject
@@ -2745,16 +2875,19 @@ Sub FormatText(sText As String) As String
 	Return sText
 End Sub
 '
+'hide an element
 Sub HideElement(elID As String)
 	Dim stylem As Map = CreateMap("visibility":"hidden")
 	BANano.GetElement($"#${elID}"$).SetStyle(BANano.ToJson(stylem))
 End Sub
 
+'show an element
 Sub ShowElement(elID As String)
 	Dim stylem As Map = CreateMap("visibility":"visible")
 	BANano.GetElement($"#${elID}"$).SetStyle(BANano.ToJson(stylem))
 End Sub
 
+'age
 Sub Age(sdob As String) As Long
 	DateTime.dateformat = "yyyy-MM-dd"
 	Dim ldob As Long = DateTime.DateParse(sdob)
@@ -2766,6 +2899,7 @@ Sub Age(sdob As String) As Long
 	Return p2
 End Sub
 
+'get alpga numeric
 Sub GetAlphaNumeric(value As String) As String
 	value = CStr(value)
 	Try
@@ -2787,6 +2921,7 @@ Sub GetAlphaNumeric(value As String) As String
 	End Try	
 End Sub
 
+'list of maps to strings
 Sub ListOfMap2Strings(lst As List) As List
 	Dim nl As List
 	nl = NewList
@@ -2833,7 +2968,7 @@ Sub DataType2FieldType(fldtype As String) As String
 	Return fldtype
 End Sub
 
-
+'map remove prefix
 Sub MapRemovePrefix(m As Map) As Map
 	Dim nm As Map = CreateMap()
 	For Each k As String In m.keys
@@ -2844,6 +2979,7 @@ Sub MapRemovePrefix(m As Map) As Map
 	Return nm
 End Sub
 
+'map remove keys
 Sub MapRemoveKeys(m As Map, remkeys As List)
 	For Each k As String In remkeys
 		If m.ContainsKey(k) Then
@@ -2928,6 +3064,7 @@ Sub GetSelectedFileObject(e As BANanoEvent) As FileObject
 	Return fo
 End Sub
 
+'generate nano id - found in forum
 public Sub GenerateNanoID() As String
 	' for IE
 	Dim crypto As BANanoObject
@@ -2958,6 +3095,7 @@ public Sub GenerateNanoID() As String
 	Return nanoID
 End Sub
 
+'number to words
 Sub NumberToWords(N As Long) As String
  	If N < 0 Then
 		Return "Minus " & NumberToWordsPositive(-N)
@@ -2966,6 +3104,7 @@ Sub NumberToWords(N As Long) As String
 	End If
 End Sub
 
+'number to words helper
 private Sub NumberToWordsPositive(N As Long) As String
 	If N = 0 Then
 		Return "Zero"    'that gets rid of that pesky special case
@@ -3007,6 +3146,7 @@ private Sub NumberToWordsPositive(N As Long) As String
 
 End Sub
 
+'number to words helper
 private Sub NumberToWords1000(N As Int) As String
  
 	If N < 100 Then
@@ -3024,6 +3164,7 @@ private Sub NumberToWords1000(N As Int) As String
  
 End Sub
 
+'number to words helper
 private Sub NumberToWords100(N As Int) As String 
 	If N < 20 Then
 		Return UnitWords(N)
@@ -3040,6 +3181,7 @@ private Sub NumberToWords100(N As Int) As String
  
 End Sub
 
+'custom tag
 Sub CustomTag(parentID As String, elTag As String, elID As String) As BANanoElement
 	Dim el As BANanoElement  = AddElement(parentID, elTag, elID,"")
 	Return el
@@ -3074,77 +3216,76 @@ Sub Download(parentID As String, elid As String, text As String, href As String)
 	Return el
 End Sub
 
-
+'ordered list
 Sub OL(parentID As String, elID As String) As BANanoElement
 	Dim el As BANanoElement  = AddElement(parentID, "ol", elID, "")
 	Return el
 End Sub
 
+'list item
 Sub LI(parentID As String, elID As String, text As String) As BANanoElement
 	Dim el As BANanoElement  = AddElement(parentID, "li", elID, text)
 	Return el
 End Sub
 
+'unordered list
 Sub UL(parentID As String, elID As String, text As String) As BANanoElement
 	Dim el As BANanoElement  = AddElement(parentID, "ul", elID, text)
 	Return el
 End Sub
 
+'h1
 Sub H1(parentID As String, elID As String, text As String) As BANanoElement
 	Dim el As BANanoElement  = AddElement(parentID, "h1", elID, text)
 	Return el
 End Sub
 
+'h2
 Sub H2(parentID As String, elID As String, text As String) As BANanoElement
 	Dim el As BANanoElement  = AddElement(parentID, "h2", elID,text)
 	Return el
 End Sub
 
+'h3
 Sub H3(parentID As String, elID As String,text As String) As BANanoElement
 	Dim el As BANanoElement  = AddElement(parentID, "h3", elID, text)
 	Return el
 End Sub
 
+'h4
 Sub H4(parentID As String, elID As String,text As String) As BANanoElement
 	Dim el As BANanoElement  = AddElement(parentID, "h4", elID,text)
 	Return el
 End Sub
 
+'h5
 Sub H5(parentID As String, elID As String,text As String) As BANanoElement
 	Dim el As BANanoElement  = AddElement(parentID, "h5", elID,text)
 	Return el
 End Sub
 
+'h6
 Sub H6(parentID As String, elID As String,text As String) As BANanoElement
 	Dim el As BANanoElement  = AddElement(parentID, "h6", elID,text)
 	Return el
 End Sub
 
+'paragraph
 Sub P(parentID As String, elID As String,text As String) As BANanoElement
 	Dim el As BANanoElement  = AddElement(parentID, "p", elID,text)
 	Return el
 End Sub
 
+'span
 Sub SPAN(parentID As String, elID As String, text As String) As BANanoElement
 	Dim el As BANanoElement  = AddElement(parentID, "span", elID,text)
 	Return el
 End Sub
 
+'div
 Sub DIV(parentID As String, elID As String,text As String) As BANanoElement
 	Dim el As BANanoElement  = AddElement(parentID, "div", elID,text)
 	Return el
-End Sub
-
-'get the html part of a bananoelement
-Sub BANanoGetHTML(id As String) As String
-	id = id.tolowercase
-	id = id.Replace("#","")
-	Dim be As BANanoElement
-	be.Initialize($"#${id}"$)
-	Dim xTemplate As String = be.GetHTML
-	be.Empty
-	'xTemplate = xTemplate.Replace("v-template", "template")
-	Return xTemplate
 End Sub
 
 'get html from source and append it on target
@@ -3156,6 +3297,7 @@ Sub BANanoMoveHTML(source As String, target As String)
 	BANano.GetElement($"#${target}"$).Append(ssource)
 End Sub
 
+'add html element
 Sub AddHTMLElement(Module As Object, parentID As String, elID As String, tag As String, props As Map, styleProps As Map, classNames As String, Text As String)
 	parentID = parentID.ToLowerCase
 	elID = elID.tolowercase
@@ -3193,6 +3335,7 @@ Sub BuildPHPEmail(sfrom As String, sto As String, scc As String, ssubject As Str
 	Return se
 End Sub
 
+'append element
 Sub AppendElement(parent As String, tag As String, id As String, text As String) As BANanoElement
 	parent = parent.ToLowerCase
 	parent = parent.Replace("#","")
@@ -3223,17 +3366,6 @@ Sub AppendElement1(parentID As String, tag As String, id As String, text As Stri
 	If classes <> "" Then el.AddClass(classes)
 	el.settext(text)
 	Return el
-End Sub
-
-'get the html part of a bananoelement
-Sub BANanoGetHTMLAsIs(id As String) As String
-	id = id.tolowercase
-	id = id.Replace("#","")
-	Dim be As BANanoElement
-	be.Initialize($"#${id}"$)
-	Dim xTemplate As String = be.GetHTML
-	be.Empty
-	Return xTemplate
 End Sub
 
 'get the html part of a bananoelement
@@ -3296,6 +3428,7 @@ private Sub FindSequences(srcList As List) As List
 	Return dstList
 End Sub
 
+'map 2 map
 Sub Map2Map(readFrom As Map, putIn As Map, keys As List, bLower As Boolean)
 	Dim value As Object
 	For Each strKey As String In keys
@@ -3335,7 +3468,7 @@ Sub DateNOD(CurrentDate As String, OtherDate As String) As Int
 	Return i
 End Sub
 
-
+'map lower keps
 Sub MapLowerKeys(m As Map) As Map
 	Dim nm As Map
 	nm.initialize
@@ -3347,11 +3480,12 @@ Sub MapLowerKeys(m As Map) As Map
 	Return nm
 End Sub
 
-
+'position of
 Sub At(Text As String, sInStr As String) As Int
 	Return Text.IndexOf(sInStr)
 End Sub
 
+'ltrim
 Sub LTrim(Text As String) As String
 	Do While LeftS(Text, 1) =" "
 		Text = RightS(Text, Len(Text)-1)
@@ -3359,6 +3493,7 @@ Sub LTrim(Text As String) As String
 	Return Text
 End Sub
 
+'rtrim
 Sub RTrim(Text As String) As String
 	Do While RightS(Text, 1) =" "
 		Text = LeftS(Text, Len(Text)-1)
@@ -3366,6 +3501,7 @@ Sub RTrim(Text As String) As String
 	Return Text
 End Sub
 
+'random
 Sub RndChrGen(Howmany As Int, CT As Int) As String
 	Dim a As String =""
 	Dim l As Int
@@ -3393,23 +3529,25 @@ Sub RndChrGen(Howmany As Int, CT As Int) As String
 	Return a
 End Sub
 
+'mid2
 Sub Mid2(Text As String, istart As Int, xLength As Int) As String
 	Dim x As String = Text.SubString2(istart - 1, istart + xLength - 1)
 	Return x
 End Sub
 
+'mid
 Sub MidS(Text As String, iStart As Int) As String
 	Dim x As String = Text.SubString(iStart - 1)
 	Return x
 End Sub
 
-
+'list remove item
 Sub ListRemoveItem(lst As List, item As String)
 	Dim lPos As Int = lst.IndexOf(item)
 	If lPos <> -1 Then lst.RemoveAt(lPos)
 End Sub
 
-
+'mv remove duplicates
 Sub MvRemoveDuplicates(sValue As String, Delim As String) As String
 	Dim nMap As Map
 	nMap.Initialize
@@ -3429,6 +3567,7 @@ Sub MvRemoveDuplicates(sValue As String, Delim As String) As String
 	Return strOutput
 End Sub
 
+'mv remove blanks
 Sub MvRemoveBlanks(sValue As String, Delim As String) As String
 	Dim nMap As Map
 	nMap.Initialize
@@ -3450,6 +3589,7 @@ Sub MvRemoveBlanks(sValue As String, Delim As String) As String
 	Return strOutput
 End Sub
 
+'n to zero
 Sub YesNo2ZeroOne(value As String) As String
 	If value = "N" Or value = "" Then
 		Return "0"
@@ -3458,6 +3598,7 @@ Sub YesNo2ZeroOne(value As String) As String
 	End If
 End Sub
 
+'zero to n
 Sub ZeroOne2YN(value As String) As String
 	If value = "0" Or value = "" Then
 		Return "N"
@@ -3466,16 +3607,16 @@ Sub ZeroOne2YN(value As String) As String
 	End If
 End Sub
 
-
+'left
 Sub LeftS(Text As String, xLength As Long)As String
 	If xLength > Text.Length Then 
 		xLength = Text.Length
 	End If
 	Dim x As String = Text.SubString2(0, xLength)
-	return x
+	Return x
 End Sub
 
-
+'sort string array
 Sub SortStringArray(sa() As String) As String()
 	Dim lst As List
 	Dim aTot As Int
@@ -3493,23 +3634,27 @@ Sub SortStringArray(sa() As String) As String()
 	Return sa
 End Sub
 
-
+'get extension
 Sub GetExtension(fil As String) As String
 	Return MvField(fil,-1,".")
 End Sub
 '
+'ends with
 Sub EndsWithS(svalue As String, sfind As String) As Boolean
 	Return svalue.EndsWith(sfind)
 End Sub
 
+'starts with
 Sub StartsWithS(svalue As String, sfind As String) As Boolean
 	Return svalue.StartsWith(sfind)
 End Sub
 
+'replace
 Sub ReplaceS(Text As String, sFind As String, sReplaceWith As String) As String
 	Return Text.Replace(sFind, sReplaceWith)
 End Sub
 
+'mvfrom array
 Sub MvFromArray(varArry() As String, delim As String) As String
 	Dim lTot As Int
 	Dim lCnt As Int
@@ -3522,7 +3667,7 @@ Sub MvFromArray(varArry() As String, delim As String) As String
 	Return str.tostring
 End Sub
 
-
+'map sorted keys
 Sub SortedKeys(m As Map) As List
 	Dim lst As List
 	lst.Initialize
@@ -3552,7 +3697,7 @@ Public Sub CleanValue(sValue As String) As String
 	Return sValue
 End Sub
 
-
+'mv search
 Sub MvSearch(delimiter As String, Mv As String, searchfor As String) As Boolean
 	Mv = Mv.tolowercase
 	searchfor = searchfor.ToLowerCase
@@ -3560,6 +3705,7 @@ Sub MvSearch(delimiter As String, Mv As String, searchfor As String) As Boolean
 	Return OnList(spItems,searchfor)
 End Sub
 
+'mv pos
 Sub MvPos(delimiter As String, mv As String, searchfor As String) As Int
 	mv = mv.tolowercase
 	searchfor = searchfor.ToLowerCase
@@ -3567,7 +3713,7 @@ Sub MvPos(delimiter As String, mv As String, searchfor As String) As Int
 	Return spItems.indexof(searchfor)
 End Sub
 
-
+'mv quote each
 Sub MvQuoteEach(strMV As String, delim As String) As String
 	strMV = strMV.Replace(QUOTE,"")
 	Dim sp As List = StrParse(delim,strMV)
@@ -3580,6 +3726,7 @@ Sub MvQuoteEach(strMV As String, delim As String) As String
 	Return Join(",", lst)
 End Sub
 
+'list single quote
 Sub ListSingleQuote(lst As List)
 	Dim lstTot As Int = lst.Size - 1
 	Dim lstCnt As Int
@@ -3590,6 +3737,7 @@ Sub ListSingleQuote(lst As List)
 	Next
 End Sub
 
+'mv from keys
 Sub MvFromKeys(lst As Map, Delim As String) As String
 	Dim lStr As StringBuilder
 	lStr.Initialize
@@ -3600,6 +3748,7 @@ Sub MvFromKeys(lst As Map, Delim As String) As String
 	Return lStr.tostring
 End Sub
 
+'join array
 Sub JoinArray(Delimiter As String, varArray() As String) As String
 	Dim sb As StringBuilder
 	sb.Initialize
@@ -3612,7 +3761,7 @@ Sub JoinArray(Delimiter As String, varArray() As String) As String
 	Return sb.tostring
 End Sub
 
-
+'list search
 Sub ListSearch(lst As List, searchFor As String) As Boolean
 	searchFor = LCaseS(searchFor)
 	For Each strItem As String In lst
@@ -3625,6 +3774,7 @@ Sub ListSearch(lst As List, searchFor As String) As Boolean
 	Return False
 End Sub
 
+'mvfrom list
 Sub MvFromListSingleQuote(lst As List, Delim As String) As String
 	Dim lTot As Int
 	Dim lCnt As Int
@@ -3642,7 +3792,7 @@ Sub MvFromListSingleQuote(lst As List, Delim As String) As String
 	Return lStr.tostring
 End Sub
 
-
+'right
 Sub RightS(Text As String, xLength As Long) As String
 	If xLength > Text.Length Then
 		xLength = Text.Length
@@ -3675,7 +3825,7 @@ Sub DateOconv(lDate As Long, withTime As Boolean) As String
 	Return MyDate
 End Sub
 
-
+'map property
 Sub MapProperty2ListQuote(om As List,prop As String,def As String) As List
 	Dim lst As List: lst.initialize
 	Dim mtot As Int = om.Size - 1
@@ -3705,6 +3855,7 @@ Sub IsImportValid(m As Map, fields As List) As Boolean
 	End If
 End Sub
 
+'de duplicate map
 Sub DeDuplicateMap(oldMap As Map) As Map
 	Dim nMap As Map
 	Dim strValue As Object
@@ -3717,7 +3868,7 @@ Sub DeDuplicateMap(oldMap As Map) As Map
 	Return nMap
 End Sub
 
-
+'map values 2 list
 Sub MapValues2List(m As Map) As List
 	Dim mtot As Int = m.Size-1
 	Dim mcnt As Int
@@ -3730,6 +3881,7 @@ Sub MapValues2List(m As Map) As List
 	Return nl
 End Sub
 
+'map values to mv
 Sub MapValues2MV(m As Map, delim As String, keys As List) As String
 	Dim nl As List
 	nl.Initialize
@@ -3743,6 +3895,7 @@ Sub MapValues2MV(m As Map, delim As String, keys As List) As String
 	Return sout
 End Sub
 
+'args to object array
 Sub Args2ObjectArray(m As List) As Object()
 	Dim mtot As Int = m.size
 	Dim mcnt As Int
@@ -3754,6 +3907,7 @@ Sub Args2ObjectArray(m As List) As Object()
 	Return obj
 End Sub
 
+'push if exists
 Sub PushIfExist(nl As List, item As String) As List
 	item = item.Trim
 	If item <> "" Then 

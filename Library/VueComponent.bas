@@ -472,9 +472,8 @@ Sub getPromptValue As String
 	Return sapppromptvalue
 End Sub
 
-
 'query string for router path
-Sub SetQueryString(k As String, v As String)
+Sub AddQuery(k As String, v As String)
 	query.Put(k, v)
 End Sub
 
@@ -962,7 +961,7 @@ Sub SetState(m As Map)
 	For Each k As String In m.Keys
 		Dim v As Object = m.Get(k)
 		k = k.tolowercase
-		data.Put(k, v)
+		SetData(k, v)
 	Next
 End Sub
 

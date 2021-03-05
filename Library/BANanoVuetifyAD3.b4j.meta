@@ -34,6 +34,6 @@ ModuleClosedNodes6=
 ModuleClosedNodes7=
 ModuleClosedNodes8=
 ModuleClosedNodes9=
-NavigationStack=MySQLCRUD,LoadRelationships,1310,0,MySQLCRUD,DT_AddColumn1,782,0,MySQLCRUD,DT_SetColumnPreDisplay,669,6,MySQLCRUD,CreateTableCode,1175,6,VueTable,SetColumnPreDisplay,1579,0,VueTable,BuildSlots,2186,6,VueTable,SetColumnType,2079,0,VueTable,SetComboBox,2115,0,VueTable,SetAutoComplete,2145,0,VueTable,NewDataTableColumn,1573,0,VueElement,AddSelect,6509,0
+NavigationStack=BANanoShared,MapKeys2List,142,0,BANanoShared,MapKeys2ObjectArray,183,1,BANanoShared,MapValues2ObjectArray,175,0,BANanoShared,List2ObjectArray,159,0,VueComponent,Class_Globals,28,0,VueComponent,Initialize,166,0,VueComponent,SetDataUnshift,821,0,VueComponent,AddQuery,470,0,VueComponent,getPromptValue,468,0,BANanoALASQLE,Class_Globals,23,0
 SelectedBuild=0
 VisibleModules=
