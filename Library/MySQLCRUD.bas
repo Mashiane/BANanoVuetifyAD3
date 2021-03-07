@@ -79,6 +79,9 @@ Sub Class_Globals
 	Public Diag_FullScreenOnMobile As Boolean
 	Public Diag_LazyValidation As Boolean
 	Public DB_CreateTable As String
+	Public DBType As String
+	Private DBSorts As List
+	Private FieldNames As List
 End Sub
 
 'initialize the crud class
@@ -86,6 +89,8 @@ Public Sub Initialize(clsName As String) As MySQLCRUD
 	Fields.Initialize
 	className = clsName
 	sb.Initialize
+	DBType = ""
+	FieldNames.Initialize 
 	DatabaseName = ""
 	TableName = ""
 	PrimaryKey = ""
@@ -93,6 +98,7 @@ Public Sub Initialize(clsName As String) As MySQLCRUD
 	Plural = ""
 	SortBy = ""
 	dtName = ""
+	DBSorts.Initialize 
 	ComponentName = ""
 	AutoIncrement = ""
 	Integers.Initialize
@@ -973,6 +979,8 @@ End Sub
 'loading code
 private Sub LoadCode
 	Dim sbSchemas As String = BuildSchemas
+	SortBy = BANanoShared.List2ArrayVariable(DBSorts)
+	Dim xfields As String = BANanoShared.List2ArrayVariable(FieldNames)
 	'
 	sb.Append($"Sub Load${PluralClean}		'ignoredeadcode
 	'Show progress loader
@@ -984,7 +992,7 @@ private Sub LoadCode
 	${rsTB}.Initialize("${DatabaseName}", "${TableName}", "${PrimaryKey}", "${AutoIncrement}")
 	'add field types
 	${sbSchemas}
-	${rsTB}.SelectAll(Array("*"), Array("${SortBy}"))
+	${rsTB}.SelectAll(Array(${xfields}), Array(${SortBy}))
 	${rsTB}.JSON = banano.CallInlinePHPWait(${rsTB}.MethodName, ${rsTB}.Build)
 	'${rsTB}.Result = db.ExecuteWait(${rsTB}.query, ${rsTB}.args)
 	${rsTB}.FromJSON
@@ -1155,6 +1163,94 @@ private Sub RemoveFiles As String
 	Next
 	Return sbr.tostring
 End Sub
+
+private Sub CreateDBCode
+	AddCode($"Private Sub CreateDatabase${TableName}"$)
+	Select Case DBType
+	Case "indexeddb"
+		AddCode("Private db As BANanoSQL")
+		AddComment("open the database and wait")
+		AddCode($"db.OpenWait("${DatabaseName}", "${DatabaseName}")"$)
+		AddComment("resultset variable")
+		AddCode($"Dim ${rsTB} As ${className}"$)
+		AddComment("initialize table for table creation")
+		AddCode($"${rsTB}.Initialize("${DatabaseName}", "${TableName}", "${PrimaryKey}", "${AutoIncrement}")"$)
+	Case "mysql", "mssql", "sqlite"
+		AddCode($"Dim ${rsTB} As ${className}"$)
+		AddComment("initialize table for table creation")
+		AddCode($"${rsTB}.Initialize("${DatabaseName}", "${TableName}", "${PrimaryKey}", "${AutoIncrement}")"$)
+	End Select
+	'
+	For Each fld As Map In Fields
+		Dim sfieldname As String = fld.GetDefault("fieldname","")
+		sfieldname = sfieldname.tolowercase
+		Dim sdatatype As String = fld.GetDefault("datatype","String")
+		Dim sondb As String = fld.GetDefault("ondb", "No")
+		Dim sdbsort As String = fld.GetDefault("dbsort", "No")
+		'
+		If sondb = "No" Then Continue
+		FieldNames.Add(sfieldname)
+		'
+		If sdbsort = "Yes" Then
+			DBSorts.Add(sfieldname)
+		End If
+		'
+		Select Case sdatatype
+		Case "string"
+			AddCode($"${rsTB}.SchemaAddField("${sfieldname}", ${rsTB}.DB_STRING)"$)
+		Case "double"
+			AddCode($"${rsTB}.SchemaAddField("${sfieldname}", ${rsTB}.DB_FLOAT)"$)
+		Case "int"
+			AddCode($"${rsTB}.SchemaAddField("${sfieldname}", ${rsTB}.DB_INT)"$)
+		Case "blob"
+			AddCode($"${rsTB}.SchemaAddField("${sfieldname}", ${rsTB}.DB_BLOB)"$)
+		End Select
+	Next
+	AddComment("generate & run command to create the table")
+	AddCode($"${rsTB}.SchemaCreateTable"$)
+	
+	Select Case DBType
+	Case "indexeddb"
+		AddCode($"${rsTB}.Result = db.ExecuteWait(${rsTB}.query, ${rsTB}.args)"$)
+	Case "sqlite", "mysql", "mssql"
+		AddCode($"${rsTB}.JSON = BANano.CallInlinePHPWait(${rsTB}.MethodName, ${rsTB}.Build)"$)
+	End Select
+	AddCode($"${rsTB}.FromJSON"$)
+	AddCode($"Select Case ${rsTB}.OK"$)
+	AddCode($"Case False"$)
+	AddCode($"Dim strError As String = ${rsTB}.Error"$)
+	AddCode("Log(strError)")
+	AddCode($"vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)"$)
+	AddCode("End Select")
+	AddCode("End Sub")
+End Sub
+
+Sub CreateListViewCode
+	AddCode($"Private Sub CreateListView${TableName}"$)
+	AddCode($"Dim drw${TableName} As VueElement = appdrawer.AddList1("drw${TableName}")"$)
+	AddCode($"drw${TableName}.Options.dataSource = "${TableName}""$)
+	'
+	For Each fld As Map In Fields
+		Dim sfieldname As String = fld.GetDefault("fieldname","")
+		sfieldname = sfieldname.tolowercase
+		Dim sitemtype As String = fld.GetDefault("itemtype","")
+		Dim sondb As String = fld.GetDefault("ondb", "No")
+		'
+		If sondb = "No" Then Continue
+		If sitemtype = "" Then Continue
+		'
+		AddCode($"drw${TableName}.Options.${sitemtype} = "${sfieldname}""$)
+	Next
+	AddCode($"drw${TableName}.AddListViewTemplate1(0)"$)
+	AddCode($"${ComponentName}.BindVueElement(drw${TableName})"$)
+	AddCode("End Sub")
+	AddCode("")
+	AddCode($"Sub drw${TableName}_click(item As Map)"$)
+	AddCode("Log(item)")
+	AddCode("End Sub")
+	AddCode("")
+End Sub
+
 
 'create code
 private Sub CreateCode()
@@ -1818,6 +1914,7 @@ Sub ToString As String
 	AddCode("")
 	'
 	InitilizeCode
+	CreateDBCode
 	LoadCode
 	ReadCode
 	UpdateCode
@@ -1827,6 +1924,7 @@ Sub ToString As String
 	SupportCode
 	CreateDialogCode
 	RelationshipsCode
+	CreateListViewCode
 	'
 	Dim sout As String = sb.ToString
 	sout = sout.Replace("~","$")

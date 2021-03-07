@@ -450,6 +450,8 @@ Sub NewListViewItemOptions
 	Options.rightswitchattr = ""
 	Options.rightchipattr = ""
 	Options.iconattr = ""
+	Options.hasdivider = False
+	Options.insetdivider = False
 End Sub
 
 'generate the next row
@@ -5405,6 +5407,58 @@ Sub AddListViewTemplate1(numLines As Int) As VueElement
 	Return Me
 End Sub
 
+Sub ItemTitle As VueElement
+	Return GetVueElement($"${mName}title"$)
+End Sub
+
+Sub ItemSubTitle As VueElement
+	Return GetVueElement($"${mName}subtitle"$)
+End Sub
+
+Sub ItemSubTitle1 As VueElement
+	Return GetVueElement($"${mName}subtitle1"$)
+End Sub
+
+Sub ItemRightChip As VueElement
+	Return GetVueElement($"${mName}rightchip"$)
+End Sub
+
+Sub ItemRightRating As VueElement
+	Return GetVueElement($"${mName}rightrating"$)
+End Sub
+
+Sub ItemRightText As VueElement
+	Return GetVueElement($"${mName}rightactiontext"$)
+End Sub
+
+Sub ItemLeftIcon As VueElement
+	Return GetVueElement($"${mName}leftactionicon"$)
+End Sub
+
+Sub ItemLeftCheckBox As VueElement
+	Return GetVueElement($"${mName}leftcheckbox"$)
+End Sub
+
+Sub ItemRightCheckBox As VueElement
+	Return GetVueElement($"${mName}rightcheckbox"$)
+End Sub
+
+Sub ItemIcon As VueElement
+	Return GetVueElement($"${mName}icon"$)
+End Sub
+
+Sub ItemRightIcon As VueElement
+	Return GetVueElement($"${mName}rightactionicon"$)
+End Sub
+
+Sub ItemLeftSwitch As VueElement
+	Return GetVueElement($"${mName}leftswitch"$)
+End Sub
+
+Sub ItemRightSwitch As VueElement
+	Return GetVueElement($"${mName}rightswitch"$)
+End Sub
+
 'add a list item template to draw item
 Sub AddListViewTemplate(numLines As Int, props As ListViewItemOptions) As VueElement
 	setDataSource(props.dataSource)
@@ -5422,7 +5476,7 @@ Sub AddListViewTemplate(numLines As Int, props As ListViewItemOptions) As VueEle
 	Dim leftcheckboxID As String = $"${elID}leftcheckbox"$
 	Dim rightcheckboxID As String = $"${elID}rightcheckbox"$
 	Dim avatarID As String = $"${elID}avatar"$
-	Dim avatarImgID As String = $"${elID}avatarimg"$
+	Dim avatarImgID As String = $"${elID}avatarimage"$
 	Dim avatarIconID As String = $"${elID}avataricon"$
 	Dim itemiconID As String = $"${elID}itemicon"$
 	Dim iconID As String = $"${elID}icon"$
@@ -5508,9 +5562,9 @@ Sub AddListViewTemplate(numLines As Int, props As ListViewItemOptions) As VueEle
 <v-icon id="${iconID}" ${props.iconattr} :color="item.${xiconcolor}" class="${xiconclass}" v-text="item.${xicon}"></v-icon>
 </v-list-item-icon>
 <v-list-item-content id="${contentID}" v-if="item.${xtitle} || item.${xsubtitle} || item.${xsubtitle1}">
-<v-list-item-title id="${titleID}" v-if="item.${xtitle}" v-text="item.${xtitle}"></v-list-item-title>
-<v-list-item-subtitle id="${subtitleID}" v-if="item.${xsubtitle}" v-text="item.${xsubtitle}"></v-list-item-subtitle>
-<v-list-item-subtitle id="${subtitle1ID}" v-if="item.${xsubtitle1}" v-text="item.${xsubtitle1}"></v-list-item-subtitle>
+<v-list-item-title id="${titleID}" v-if="item.${xtitle}">{{ item.${xtitle} }}</v-list-item-title>
+<v-list-item-subtitle id="${subtitleID}" v-if="item.${xsubtitle}">{{ item.${xsubtitle} }}</v-list-item-subtitle>
+<v-list-item-subtitle id="${subtitle1ID}" v-If="item.${xsubtitle1}">{{ item.${xsubtitle1} }}</v-list-item-subtitle>
 </v-list-item-content>
 <v-chip id="${rightchipID}" ${props.rightchipattr} v-if="item.${xrightchip}" :color="item.${xrightchipcolor}" dark small v-text="item.${xrightchip}"></v-chip>
 <v-list-item-action id="${rightactionID}" v-if="item.${xrighticon} || item.${xrighttext} || ${xshowrightcheckboxes} || ${xshowrightrating} || ${xshowrightswitch}">
@@ -5523,6 +5577,7 @@ Sub AddListViewTemplate(numLines As Int, props As ListViewItemOptions) As VueEle
 <v-switch id="${rightswitchID}" ${props.rightswitchattr} v-if="${xshowrightswitch}" :inset="${xswitchinset}" :item="item" v-model="item.${xrightswitch}" :input-value="item.${xrightswitch}"></v-switch>
 </v-list-item-action>
 </v-list-item>
+<v-divider v-if="${props.hasdivider}" :inset="${props.insetdivider}"></v-divider>
 </v-template>"$
 	
 	'
@@ -5717,7 +5772,8 @@ Sub AddListViewGroupTemplate(numLines As Int, props As ListViewItemOptions) As V
 <v-rating id="${rightratingID}" ${props.rightratingattr} length="1" v-if="${xshowrightrating}" v-model="child.${xrightrating}" :value="child.${xrightrating}"></v-rating>
 <v-switch id="${rightswitchID}" ${props.rightswitchattr} v-if="${xshowrightswitch}" :inset="${xswitchinset}" :item="item" v-model="child.${xrightswitch}" :input-value="child.${xrightswitch}"></v-switch>
 </v-list-item-action>
-</v-list-item>"$)
+</v-list-item>
+<v-divider v-if="${props.hasdivider}" :inset="${props.insetdivider}"></v-divider>"$)
 	sTemplate.Append($"</v-list-group>"$)
 	'
 	BANano.GetElement(parentID).Append(sTemplate.tostring)
@@ -5737,6 +5793,10 @@ Sub AddListViewGroupTemplate(numLines As Int, props As ListViewItemOptions) As V
 	vlistitem.BindVueElement(vlistitem)
 	BindVueElement(vlistitem)
 	Return vlistitem
+End Sub
+
+Sub ToAttributes(m As Map) As String
+	Return BANanoShared.BuildAttributes(m)
 End Sub
 
 'add a spacer to the card title

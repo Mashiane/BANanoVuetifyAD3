@@ -398,7 +398,7 @@ Sub Class_Globals
 	lefticonattr As String, avatarattr As String, avatariconattr As String, _
 	righticonattr As String, righttextattr As String, rightcheckboxattr As String, _
 	leftcheckboxattr As String, rightratingattr As String, leftswitchattr As String, _
-	rightswitchattr As String, rightchipattr As String, iconattr As String)
+	rightswitchattr As String, rightchipattr As String, iconattr As String, hasdivider As Boolean, insetdivider As Boolean)
 	'
 	Public RouterViewName As String
 	Public DatabaseName As String
@@ -477,6 +477,9 @@ Sub NewListViewItemOptions() As ListViewItemOptions
 	lvio.rightswitchattr = ""
 	lvio.rightchipattr = ""
 	lvio.iconattr = ""
+	'
+	lvio.hasdivider = False
+	lvio.insetdivider = false
 	Return lvio
 End Sub
 
