@@ -120,7 +120,7 @@ End Sub
 
 'add all pages
 Sub AddPages
-	ViewHome.Initialize 
+	ViewApplicants.Initialize 
 End Sub
 
 Sub BuildDrawer
@@ -166,6 +166,8 @@ Sub BuildDrawer
 	drwlist.Dense = True
 	drwlist.Nav = True
 	drwlist.Options.dataSource = "links"
+	drwlist.Options.lefticonattr = BANanoShared.BuildAttributes(CreateMap(":small":True))
+
 	'add the group template to the list
 	drwlist.AddListViewTemplate1(0)
 		
@@ -206,6 +208,7 @@ Sub BuildDrawerBottom
 	Dim btnSO As VueElement = bottomD.Cell(1, 2).AddButtonWithRightIcon("signout", "Exit","fas fa-sign-out-alt", "", False, Null, Null)
 	btnSO.MT = 2
 	btnSO.Raised = False
+	btnSO.GetIcon.Small = True
 	'
 	Dim bcard As VueElement = bottomD.Cell(1, 3).AddCard("bcard", "", Null)
 	bcard.Color = vuetify.COLOR_GREY
@@ -214,6 +217,7 @@ Sub BuildDrawerBottom
 	Dim cardlist As VueElement = bcard.AddList1("cardlist")
 	cardlist.Dense = True
 	cardlist.Options.dataSource = "cardlinks"
+	cardlist.Options.righticonattr = BANanoShared.BuildAttributes(CreateMap(":small":True))
 	cardlist.AddListViewTemplate1(0)
 	
 	cardlist.ClearItems

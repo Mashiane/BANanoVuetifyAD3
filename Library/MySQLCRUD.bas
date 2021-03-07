@@ -427,6 +427,63 @@ Sub Diag_AddDatePicker(fldName As String, row As Int, col As Int, vmodel As Stri
 	UpdateMatrix(row, col)
 End Sub
 
+'add a slider to the dialog
+Sub Diag_AddSlider(fldName As String, row As Int, col As Int, vmodel As String, title As String)
+	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddSlider(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), "${fldName}", "${SingularClean.tolowercase}.${vmodel}", "${title}", 0, 100, 1, True, False, Null)"$).Append(CRLF)
+	If Visibility.ContainsKey(fldName) Then
+		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
+	End If
+	SetProperties(fldName)
+	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
+	UpdateMatrix(row, col)
+End Sub
+
+'add a rating to the dialog
+Sub Diag_AddRating(fldName As String, row As Int, col As Int, vmodel As String, title As String)
+	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddRating(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), "${fldName}", "${SingularClean.tolowercase}.${vmodel}", 0, 0, True, "blue", Null)"$).Append(CRLF)
+	If Visibility.ContainsKey(fldName) Then
+		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
+	End If
+	SetProperties(fldName)
+	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
+	UpdateMatrix(row, col)
+End Sub
+
+'add a progress circular to the dialog
+Sub Diag_AddProgressCircular(fldName As String, row As Int, col As Int, vmodel As String, title As String)
+	Dim xvmodel As String = $"${SingularClean.tolowercase}.${vmodel}"$
+	Dim xpos As String = $"${SingularClean}Cont.MatrixID(${row}, ${col})"$
+	'
+	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddProgressCircular(Me, ${xpos}, "${fldName}", "${xvmodel}", "${title}: {{ ${xvmodel} }}", "blue", Null)"$).Append(CRLF)
+	dtCont.Append($"'${fldName}.Size = 32"$).Append(CRLF)
+	dtCont.Append($"'${fldName}.Width = 4"$).Append(CRLF)
+	'
+	If Visibility.ContainsKey(fldName) Then
+		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
+	End If
+	SetProperties(fldName)
+	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
+	UpdateMatrix(row, col)
+End Sub
+
+'add a progress linear to the dialog
+Sub Diag_AddProgressLinear(fldName As String, row As Int, col As Int, vmodel As String, title As String)
+	Dim xvmodel As String = $"${SingularClean.tolowercase}.${vmodel}"$
+	Dim xpos As String = $"${SingularClean}Cont.MatrixID(${row}, ${col})"$
+	'
+	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddProgressLinear(Me, ${xpos}, "${fldName}", "${xvmodel}", "blue", Null)"$).Append(CRLF)
+	dtCont.Append($"'${fldName}.Striped = True"$).Append(CRLF)
+	dtCont.Append($"'${fldName}.Height = 4"$).Append(CRLF)
+	dtCont.Append($"'${fldName}.Indeterminate = False"$).Append(CRLF)
+	'
+	If Visibility.ContainsKey(fldName) Then
+		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
+	End If
+	SetProperties(fldName)
+	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
+	UpdateMatrix(row, col)
+End Sub
+
 'add a file input to the dialog
 Sub Diag_AddFileInput(fldName As String, row As Int, col As Int, vmodel As String, title As String, bMultiple As Boolean)
 	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddFileInput(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), "${fldName}", "", "${title}", "", ${bMultiple}, "", Null)"$).Append(CRLF)
@@ -545,6 +602,45 @@ Sub Diag_AddSelect(fldName As String, row As Int, col As Int, vmodel As String, 
 	rel.source = DataSource
 	rel.vmodel = vmodel
 	relationships.Add(rel)
+	UpdateMatrix(row, col)
+End Sub
+
+'add a chip group
+Sub Diag_AddChipGroup(fldName As String, row As Int, col As Int, vmodel As String, Title As String, DataSource As String, Key As String, Value As String, bMultiple As Boolean)
+	Dim xvmodel As String = $"${SingularClean.tolowercase}.${vmodel}"$
+	Dim xpos As String = $"${SingularClean}Cont.MatrixID(${row}, ${col})"$
+	'
+	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddChipGroup(Me, ${xpos}, "${fldName}", "${xvmodel}", "", ${bMultiple}, True, True, "${DataSource}", "${Key}", "${Value}", Null, Null)"$).Append(CRLF)
+	If Visibility.ContainsKey(fldName) Then
+		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
+	End If
+	SetProperties(fldName)
+	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
+	dtCont.Append($"${fldName}.SetData("${DataSource}", ${ComponentName}.NewList)"$).Append(CRLF)
+	'
+	Dim rel As DBRelationship
+	rel.Initialize
+	rel.key = Key
+	rel.value = Value
+	rel.source = DataSource
+	rel.vmodel = vmodel
+	relationships.Add(rel)
+	UpdateMatrix(row, col)
+End Sub
+
+'add an chip to the dialog with binding
+Sub Diag_AddChipAvatar(fldName As String, row As Int, col As Int, vmodel As String, stitle As String, avatarSize As Int)
+	Dim xvmodel As String = $"${SingularClean.tolowercase}.${vmodel}"$
+	Dim xpos As String = $"${SingularClean}Cont.MatrixID(${row}, ${col})"$
+	'
+	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddChipWithAvatar(Me, ${xpos}, "${fldName}", ":${xvmodel}", "${stitle}", True, False, "blue", Null, Null, Null)"$).Append(CRLF)
+	dtCont.Append($"${SingularClean}Cont.GetAvatar("${fldName}").size = "${avatarSize}""$).Append(CRLF)
+	If Visibility.ContainsKey(fldName) Then
+		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
+	End If
+	SetProperties(fldName)
+	
+	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
 	UpdateMatrix(row, col)
 End Sub
 
@@ -747,11 +843,13 @@ End Sub
 'add a progress circular column to the data-table
 Sub DT_AddProgressCircular(colField As String, colTitle As String)
 	dtCode.Append($"${dtName}.AddProgressCircular("${colField}", "${colTitle}")"$).Append(CRLF)
+	dtCode.Append($"${dtName}.SetProgressCircularDimensions("${colField}", vuetify.color_blue, "-90", "32", "4")"$).Append(CRLF)
 End Sub
 
 'add a progress linear column to the data-table
 Sub DT_AddProgressLinear(colField As String, colTitle As String)
 	dtCode.Append($"${dtName}.AddProgressLinear("${colField}", "${colTitle}")"$).Append(CRLF)
+	dtCode.Append($"${dtName}.SetProgressLinearDimensions("${colField}", vuetify.COLOR_BLUE, 32, True)"$).Append(CRLF)
 End Sub
 
 'add a column to the data-table
@@ -880,12 +978,15 @@ private Sub LoadCode
 	'Show progress loader
 	${dtName}.UpdateLoading(True)
 	${dtName}.Reload(${ComponentName}.NewList)
+	'Dim db As BANanoSQL
+	'db.OpenWait("${DatabaseName}", "${DatabaseName}")
 	Dim ${rsTB} As ${className}
 	${rsTB}.Initialize("${DatabaseName}", "${TableName}", "${PrimaryKey}", "${AutoIncrement}")
 	'add field types
 	${sbSchemas}
 	${rsTB}.SelectAll(Array("*"), Array("${SortBy}"))
 	${rsTB}.JSON = banano.CallInlinePHPWait(${rsTB}.MethodName, ${rsTB}.Build)
+	'${rsTB}.Result = db.ExecuteWait(${rsTB}.query, ${rsTB}.args)
 	${rsTB}.FromJSON
 	Select Case ${rsTB}.OK
 	Case False
@@ -893,6 +994,7 @@ private Sub LoadCode
 		'hide progress loader
 		${dtName}.UpdateLoading(False)
 		Dim strError As String = ${rsTB}.Error
+		log(strError)
 		vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 		Return
 	End Select
@@ -919,20 +1021,24 @@ private Sub RelationshipsCode
 		Dim tbName As String = $"rs${ssource}"$
 		'
 		sb.Append($"Sub Load${ssource}		'ignoredeadcode
+		'Dim db As BANanoSQL
+		'db.OpenWait("${DatabaseName}", "${DatabaseName}")
 	Dim ${tbName} As ${className}
 	${tbName}.Initialize("${DatabaseName}", "${ssource}", "${skey}", "")
 	${tbName}.SelectAll(Array(${xarri}), Array("${svalue}"))
-	${tbName}.JSON = banano.CallInlinePHPWait(${tbName}.MethodName, ${tbName}.Build)
+	${tbName}.JSON = BANano.CallInlinePHPWait(${tbName}.MethodName, ${tbName}.Build)
+	'${tbName}.Result = db.ExecuteWait(${tbName}.query, ${tbName}.args)
 	${tbName}.FromJSON
 	Select Case ${tbName}.OK
 	Case False
 		${ComponentName}.SetData("${ssource}", ${ComponentName}.NewList)
 		Dim strError As String = ${tbName}.Error
+		log(strError)
 		vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 		Return
 	End Select
 	${ComponentName}.SetData("${ssource}", ${tbName}.Result)
-	For each relmap As Map in ${tbName}.Result
+	For Each relmap As Map In ${tbName}.Result
 		Dim s${skey} As String = relmap.GetDefault("${skey}", "")
 		Dim s${svalue} As String = relmap.GetDefault("${svalue}", "")
 		foreign${ssource}.put(s${skey}, s${svalue})
@@ -981,16 +1087,20 @@ private Sub ReadCode As MySQLCRUD
 	'
 	sb.Append($"Sub Read${SingularClean}(s${PrimaryKey} As String)			'ignoredeadcode
 	${LoadRelationships}
+	'Dim db As BANanoSQL
+	'db.OpenWait("${DatabaseName}", "${DatabaseName}")
 	Dim ${rsTB} As ${className}
 	${rsTB}.Initialize("${DatabaseName}", "${TableName}", "${PrimaryKey}", "${AutoIncrement}")
 	'add field types
 	${sbSchemas}
 	${rsTB}.Read(s${PrimaryKey})
 	${rsTB}.JSON = banano.CallInlinePHPWait(${rsTB}.MethodName, ${rsTB}.Build)
+	'${rsTB}.Result = db.ExecuteWait(${rsTB}.query, ${rsTB}.args)
 	${rsTB}.FromJSON
 	Select Case ${rsTB}.OK
 	Case False
 		Dim strError As String = ${rsTB}.Error
+		log(strerror)
 		vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 		Return
 	End Select
@@ -1009,6 +1119,8 @@ private Sub UpdateCode As MySQLCRUD
 	sb.Append($"Sub Update${SingularClean}(${SingularClean}M As Map)			'ignoredeadcode
 	${RemoveFiles}
 	Dim s${PrimaryKey} As String = ${SingularClean}M.Get("${PrimaryKey}")
+	'Dim db As BANanoSQL
+	'db.OpenWait("${DatabaseName}", "${DatabaseName}")
 	Dim ${rsTB} As ${className}
 	${rsTB}.Initialize("${DatabaseName}", "${TableName}", "${PrimaryKey}", "${AutoIncrement}")
 	'add field types
@@ -1016,10 +1128,12 @@ private Sub UpdateCode As MySQLCRUD
 	'insert current record
 	${rsTB}.Update1(${SingularClean}M, s${PrimaryKey})
 	${rsTB}.JSON = banano.CallInlinePHPWait(${rsTB}.MethodName, ${rsTB}.Build)
+	'${rsTB}.Result = db.ExecuteWait(${rsTB}.query, ${rsTB}.args)
 	${rsTB}.FromJSON
 	Select Case ${rsTB}.OK
 	Case False
 		Dim strError As String = ${rsTB}.Error
+		log(strerror)
 		vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 	Case Else
 		vuetify.ShowSnackBarSuccess("The ${Singular.tolowercase} has been updated successfully!")
@@ -1050,6 +1164,8 @@ private Sub CreateCode()
 	'remove the auto-increment key field
 	${SingularClean}M.Remove("${AutoIncrement}")
 	${RemoveFiles}
+	'Dim db As BANanoSQL
+	'db.OpenWait("${DatabaseName}", "${DatabaseName}")
 	Dim ${rsTB} As ${className}
 	${rsTB}.Initialize("${DatabaseName}", "${TableName}", "${PrimaryKey}", "${AutoIncrement}")
 	'add field types
@@ -1057,10 +1173,12 @@ private Sub CreateCode()
 	'insert current record
 	${rsTB}.Insert1(${SingularClean}M)
 	${rsTB}.JSON = banano.CallInlinePHPWait(${rsTB}.MethodName, ${rsTB}.Build)
+	'${rsTB}.Result = db.ExecuteWait(${rsTB}.query, ${rsTB}.args)
 	${rsTB}.FromJSON
 	Select Case ${rsTB}.OK
 	Case False
 		Dim strError As String = ${rsTB}.Error
+		log(strError)
 		vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 	Case Else
 		vuetify.ShowSnackBarSuccess("The ${Singular.tolowercase} has been added successfully!")
@@ -1077,16 +1195,20 @@ private Sub DeleteCode()
 	Dim sbSchemas As String = BuildSchemas
 	
 	sb.Append($"Sub Delete${SingularClean}(s${PrimaryKey} As String)			'ignoredeadcode
+	'Dim db As BANanoSQL
+	'db.OpenWait("${DatabaseName}", "${DatabaseName}")
 	Dim ${rsTB} As ${className}
 	${rsTB}.Initialize("${DatabaseName}", "${TableName}", "${PrimaryKey}", "${AutoIncrement}")
 	'add field types
 	${sbSchemas}
 	${rsTB}.Delete(s${PrimaryKey})
 	${rsTB}.JSON = banano.CallInlinePHPWait(${rsTB}.MethodName, ${rsTB}.Build)
+	'${rsTB}.Result = db.ExecuteWait(${rsTB}.query, ${rsTB}.args)
 	${rsTB}.FromJSON
 	Select Case ${rsTB}.OK
 	Case False
 		Dim strError As String = ${rsTB}.Error
+		log(strError)
 		vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 		Return
 	Case Else
@@ -1344,11 +1466,10 @@ private Sub CreateDialogCode
 		AddCode($"${ModalName}.FullScreenOnMobile = True"$)
 	End If
 	'
-	AddCode($"${ComponentName}.BindVueElement(${ModalName})"$)
-	
+	AddCode($"${ComponentName}.BindVueElement(${ModalName})"$)	
 	'
 	AddComment("get the container")
-	AddCode($"Dim ${SingularClean}Cont As VueElement = ${ComponentName}.DialogContainer("${ModalName}")"$)
+	AddCode($"Dim ${SingularClean}Cont As VueElement = ${ComponentName}.DialogForm("${ModalName}")"$)
 	If Diag_LazyValidation Then
 		AddCode($"${SingularClean}Cont.LazyValidation = True"$)
 		AddCode($"${SingularClean}Cont.VModel = "${ModalName}valid""$)

@@ -19,6 +19,26 @@ Sub Item As Map
 	Return options
 End Sub
 
+Sub SetParentID(v As String) As BVAD3ListItem
+	options.Put("parentid", True)
+	Return Me
+End Sub
+
+Sub SetDisabled(v As String) As BVAD3ListItem
+	options.Put("disabled", True)
+	Return Me
+End Sub
+
+Sub SetHREF(v As String) As BVAD3ListItem
+	options.Put("href", True)
+	Return Me
+End Sub
+
+Sub SetName(v As String) As BVAD3ListItem
+	options.Put("name", True)
+	Return Me
+End Sub
+
 Sub SetReplace As BVAD3ListItem
 	options.Put("replace", True)
 	Return Me
@@ -163,5 +183,3 @@ Sub SetRightChipColor(v As String) As BVAD3ListItem
 	options.put("rightchipcolor", v)
 	Return Me
 End Sub
-
-	

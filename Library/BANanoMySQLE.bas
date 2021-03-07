@@ -97,6 +97,7 @@ End Sub
 'Select Case dbConnect.OK
 'Case False
 'Dim strError As String = dbConnect.Error
+'Log(strError)
 'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
@@ -202,6 +203,7 @@ End Sub
 'Select Case dbConnect.OK
 'Case False
 'Dim strError As String = dbConnect.Error
+'Log(strError)
 'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
@@ -220,6 +222,7 @@ End Sub
 'Select Case dbConnect.OK
 'Case False
 'Dim strError As String = dbConnect.Error
+'Log(strError)
 'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
@@ -246,6 +249,7 @@ End Sub
 'Select Case dbConnect.OK
 'Case False
 'Dim strError As String = dbConnect.Error
+'Log(strError)
 'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
@@ -271,6 +275,7 @@ End Sub
 'Select Case dbConnect.OK
 'Case False
 'Dim strError As String = dbConnect.Error
+'Log(strError)
 'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
@@ -396,6 +401,7 @@ End Sub
 'Select Case dbConnect.OK
 'Case False
 'Dim strError As String = dbConnect.Error
+'Log(strError)
 'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
@@ -448,6 +454,7 @@ End Sub
 'Select Case dbConnect.OK
 'Case False
 'Dim strError As String = dbConnect.Error
+'Log(strError)
 'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
@@ -466,6 +473,7 @@ End Sub
 'Select Case dbConnect.OK
 'Case False
 'Dim strError As String = dbConnect.Error
+'Log(strError)
 'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
@@ -484,6 +492,7 @@ End Sub
 'Select Case dbConnect.OK
 'Case False
 'Dim strError As String = dbConnect.Error
+'Log(strError)
 'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
@@ -505,6 +514,7 @@ End Sub
 'Select Case dbConnect.OK
 'Case False
 'Dim strError As String = dbConnect.Error
+'Log(strError)
 'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
@@ -551,6 +561,7 @@ End Sub
 'Select Case dbConnect.OK
 'Case False
 'Dim strError As String = dbConnect.Error
+'Log(strError)
 'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 public Sub DropTable As BANanoMySQLE
@@ -660,6 +671,7 @@ End Sub
 'Select Case dbConnect.OK
 'Case False
 'Dim strError As String = dbConnect.Error
+'Log(strError)
 'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
@@ -677,6 +689,7 @@ End Sub
 'Select Case dbConnect.OK
 'Case False
 'Dim strError As String = dbConnect.Error
+'Log(strError)
 'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
@@ -775,6 +788,7 @@ End Sub
 'Select Case dbConnect.OK
 'Case False
 'Dim strError As String = dbConnect.Error
+'Log(strError)
 'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
@@ -829,6 +843,7 @@ End Sub
 'Select Case dbConnect.OK
 'Case False
 'Dim strError As String = dbConnect.Error
+'Log(strError)
 'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
@@ -851,6 +866,7 @@ End Sub
 'Select Case dbConnect.OK
 'Case False
 'Dim strError As String = dbConnect.Error
+'Log(strError)
 'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
@@ -876,6 +892,7 @@ End Sub
 'Select Case dbConnect.OK
 'Case False
 'Dim strError As String = dbConnect.Error
+'Log(strError)
 'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
@@ -935,6 +952,7 @@ End Sub
 'Select Case dbConnect.OK
 'Case False
 'Dim strError As String = dbConnect.Error
+'Log(strError)
 'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
@@ -1012,6 +1030,7 @@ End Sub
 'Select Case dbConnect.OK
 'Case False
 'Dim strError As String = dbConnect.Error
+'Log(strError)
 'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
@@ -1068,6 +1087,7 @@ End Sub
 'Select Case dbConnect.OK
 'Case False
 'Dim strError As String = dbConnect.Error
+'Log(strError)
 'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
@@ -1099,6 +1119,7 @@ End Sub
 'Select Case dbConnect.OK
 'Case False
 'Dim strError As String = dbConnect.Error
+'Log(strError)
 'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
@@ -1140,6 +1161,7 @@ End Sub
 'Select Case dbConnect.OK
 'Case False
 'Dim strError As String = dbConnect.Error
+'Log(strError)
 'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
@@ -1177,6 +1199,7 @@ End Sub
 'Select Case dbConnect.OK
 'Case False
 'Dim strError As String = dbConnect.Error
+'Log(strError)
 'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
@@ -1254,6 +1277,7 @@ End Sub
 'Select Case dbConnect.OK
 'Case False
 'Dim strError As String = dbConnect.Error
+'Log(strError)
 'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
@@ -1279,6 +1303,7 @@ End Sub
 'Select Case dbConnect.OK
 'Case False
 'Dim strError As String = dbConnect.Error
+'Log(strError)
 'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
@@ -1304,6 +1329,7 @@ End Sub
 'Select Case dbConnect.OK
 'Case False
 'Dim strError As String = dbConnect.Error
+'Log(strError)
 'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
@@ -1332,6 +1358,7 @@ End Sub
 'Select Case dbConnect.OK
 'Case False
 'Dim strError As String = dbConnect.Error
+'Log(strError)
 'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
@@ -1390,6 +1417,7 @@ End Sub
 'Select Case dbConnect.OK
 'Case False
 'Dim strError As String = dbConnect.Error
+'Log(strError)
 'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
@@ -1431,6 +1459,7 @@ End Sub
 'Select Case dbConnect.OK
 'Case False
 'Dim strError As String = dbConnect.Error
+'Log(strError)
 'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>

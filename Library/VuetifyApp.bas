@@ -394,7 +394,11 @@ Sub Class_Globals
 	rightrating As String, rightratingcolor As String, showrightrating As Boolean, _
 	leftswitch As String, showleftswitches As Boolean, _
 	rightswitch As String, showrightswitches As Boolean, switchinset As Boolean, itemavatarclass As String, _
-	rightchip As String, rightchipcolor As String)
+	rightchip As String, rightchipcolor As String, _
+	lefticonattr As String, avatarattr As String, avatariconattr As String, _
+	righticonattr As String, righttextattr As String, rightcheckboxattr As String, _
+	leftcheckboxattr As String, rightratingattr As String, leftswitchattr As String, _
+	rightswitchattr As String, rightchipattr As String, iconattr As String)
 	'
 	Public RouterViewName As String
 	Public DatabaseName As String
@@ -460,7 +464,19 @@ Sub NewListViewItemOptions() As ListViewItemOptions
 	'
 	lvio.rightchip = "rightchip"
 	lvio.rightchipcolor = "rightchipcolor"
-	
+	'
+	lvio.lefticonattr = ""
+	lvio.avatarattr = ""
+	lvio.avatariconattr = ""
+	lvio.righticonattr = ""
+	lvio.righttextattr = ""
+	lvio.rightcheckboxattr = ""
+	lvio.leftcheckboxattr = ""
+	lvio.rightratingattr = ""
+	lvio.leftswitchattr = ""
+	lvio.rightswitchattr = ""
+	lvio.rightchipattr = ""
+	lvio.iconattr = ""
 	Return lvio
 End Sub
 
@@ -589,7 +605,7 @@ End Sub
 
 'add a master snack bar for the app
 Sub AddAppSnackBar As VueElement
-	Dim elx As VueElement = AddVueElement(EventHandler, AppName, "appsnack", "v-snackbar", "appsnackshow", "", "", Null)
+	Dim elx As VueElement = AddVueElement(EventHandler, $"${AppName}app"$, "appsnack", "v-snackbar", "appsnackshow", "", "", Null)
 	elx.Bind("app", True)
 	elx.Caption = "{{ appsnackmessage }}"
 	elx.Bind("right", "appsnackright")
@@ -960,7 +976,7 @@ Sub Initialize(Module As Object, myapp As String)
 	AppName = myapp.ToLowerCase
 	'get the body of the page
 	Body = BANano.GetElement("#body")
-	Body.Append($"<div ref="app" id="app"><div id="placeholder" v-if="placeholder"></div><div id="appendholder" v-if="appendholder"></div><v-template id="apptemplate" v-if="apptemplate"></v-template></div>"$)
+	Body.Append($"<div ref="app" id="app"><div id="placeholder" v-show="placeholder"></div><div id="appendholder" v-show="appendholder"></div><v-template id="apptemplate" v-show="apptemplate"></v-template></div>"$)
 	'
 	Vue.Initialize("Vue")
 	'
@@ -2513,7 +2529,7 @@ End Sub
 'vuetify.BindVueElement(drw)
 '</code>
 Sub AddAppDrawer(Module As Object, elID As String, vmodel As String, bVisible As Boolean, Color As String, bRight As Boolean, props As Map) As VueElement
-	Dim elx As VueElement = AddVueElement(Module, AppName, elID, "v-navigation-drawer", vmodel, "", Color, props)
+	Dim elx As VueElement = AddVueElement(Module, $"${appname}app"$, elID, "v-navigation-drawer", vmodel, "", Color, props)
 	elx.Right = bRight
 	elx.SetData(vmodel, bVisible)
 	Return elx
@@ -2546,7 +2562,7 @@ End Sub
 
 'add the vapp
 Sub AddApp As VueElement
-	Return AddVueElement(EventHandler, "apptemplate", AppName, "v-app", "", "", "", Null)
+	Return AddVueElement(EventHandler, "apptemplate", $"${AppName}app"$, "v-app", "", "", "", Null)
 End Sub
 
 'add the main container
@@ -2658,7 +2674,7 @@ Sub AddToolbar(Module As Object, parentID As String, elID As String, color As St
 End Sub
 
 Sub AddAppBar(Module As Object, elID As String, color As String, props As Map) As VueElement
-	Dim elx As VueElement = AddVueElement(Module, AppName, elID, "v-app-bar", "", "", color, props)
+	Dim elx As VueElement = AddVueElement(Module, $"${appname}app"$, elID, "v-app-bar", "", "", color, props)
 	elx.Bind("app", True)
 	Return elx
 End Sub
@@ -3708,7 +3724,7 @@ Sub AddDialogAlertPrompt(Module As Object, parentID As String, elID As String, b
 	elID = elID.ToLowerCase
 	'
 	Dim dialogShow As String = $"${elID}show"$
-	Dim dialogTitle As String = $"${elID}title"$
+	Dim xDialogTitle As String = $"${elID}caption"$
 	Dim dialogMessage As String = $"${elID}message"$
 	Dim dialogcanceltitle As String = $"${elID}canceltitle"$
 	Dim dialogoktitle As String = $"${elID}oktitle"$
@@ -3720,26 +3736,25 @@ Sub AddDialogAlertPrompt(Module As Object, parentID As String, elID As String, b
 	Dim dialogpromptshow As String = $"${elID}promptshow"$
 	Dim dialogwidth As String = $"${elID}width"$
 	Dim dialogCardID As String = $"${elID}cardid"$
-	Dim dialogTitleID As String = $"${elID}titleid"$
-	Dim dialogtextID As String = $"${elID}textid"$
+	Dim dialogTitleID As String = $"${elID}title"$
+	Dim dialogtextID As String = $"${elID}text"$
 	Dim dialogpromptID As String = $"${elID}promptid"$
 	Dim dialogpromptlabel As String = $"${elID}promptlabel"$
 	Dim dialogpromptvalue As String = $"${elID}promptvalue"$
 	Dim dialogprompthint As String = $"${elID}prompthint"$
 	Dim dialogpromptplaceholder As String = $"${elID}promptplaceholder"$
 	Dim divider As String = $"${elID}divider"$
-	Dim cardactionsid As String = $"${elID}cardactions"$
+	Dim cardactionsid As String = $"${elID}actions"$
 	Dim cardspacer As String = $"${elID}spacer"$
 	Dim cancelid As String = $"${elID}cancel"$
 	Dim okid As String = $"${elID}ok"$
 	Dim texttype As String = $"${elID}type"$
-	Dim dialogID As String = $"${elID}diag"$
 	'
 	Dim sbTemplate As StringBuilder
 	sbTemplate.Initialize
-	sbTemplate.Append($"<v-dialog id="${dialogID}" v-model="${dialogShow}" :width="${dialogwidth}" :persistent="${dialogpersistent}">"$)
+	sbTemplate.Append($"<v-dialog id="${elID}" v-model="${dialogShow}" :width="${dialogwidth}" :persistent="${dialogpersistent}">"$)
 	sbTemplate.Append($"<v-card id="${dialogCardID}">"$)
-	sbTemplate.Append($"<v-card-title id="${dialogTitleID}" v-html="${dialogTitle}"></v-card-title>"$)
+	sbTemplate.Append($"<v-card-title id="${dialogTitleID}" v-html="${xDialogTitle}"></v-card-title>"$)
 	sbTemplate.Append($"<v-card-text id="${dialogtextID}">"$)
 	sbTemplate.Append($"<p v-html="${dialogMessage}"></p>"$)
 	sbTemplate.Append($"<v-text-field id="${dialogpromptID}" v-if="${dialogpromptshow}" "$)
@@ -3761,7 +3776,7 @@ Sub AddDialogAlertPrompt(Module As Object, parentID As String, elID As String, b
 	BANano.GetElement(parentID).Append(sbTemplate.tostring)
 	'
 	Dim vdialog As VueElement
-	vdialog.Initialize(Module, dialogID, dialogID)
+	vdialog.Initialize(Module, elID, elID)
 	'
 	Dim vbtnc As VueElement
 	vbtnc.Initialize(Module, cancelid, cancelid)
@@ -3780,7 +3795,7 @@ Sub AddDialogAlertPrompt(Module As Object, parentID As String, elID As String, b
 	vdialog.SetData(dialogShow, False)
 	'set persistence
 	vdialog.SetData(dialogpersistent, bPersistent)
-	vdialog.SetData(dialogTitle, "")
+	vdialog.SetData(xDialogTitle, "")
 	vdialog.SetData(dialogMessage, "")
 	vdialog.SetData(dialogpromptshow, False)
 	vdialog.SetData(dialogpromptlabel, "")
@@ -3808,12 +3823,22 @@ Sub DialogOkShowHide(elID As String, b As Boolean)
 End Sub
 
 'return the dialog card title
-Sub DialogCardTitle(Module As Object, dlgID As String) As VueElement
-	Dim dialogTitleID As String = $"${dlgID}titleid"$
+Sub DialogTitle(Module As Object, dlgID As String) As VueElement
+	Dim dialogTitleID As String = $"${dlgID}title"$
 	dialogTitleID = dialogTitleID.ToLowerCase
 	'
 	Dim elx As VueElement
 	elx.Initialize(Module, dialogTitleID, dialogTitleID)
+	Return elx
+End Sub
+
+'return the dialog card container
+Sub DialogForm(Module As Object, dlgID As String) As VueElement
+	Dim dialogContainerID As String = $"${dlgID}form"$
+	dialogContainerID = dialogContainerID.ToLowerCase
+	'
+	Dim elx As VueElement
+	elx.Initialize(Module, dialogContainerID, dialogContainerID)
 	Return elx
 End Sub
 
@@ -3827,9 +3852,10 @@ Sub DialogContainer(Module As Object, dlgID As String) As VueElement
 	Return elx
 End Sub
 
+
 Sub DialogUpdateTitle(dlgID As String, title As String)
-	Dim dialogTitle As String = $"${dlgID}title"$
-	SetData(dialogTitle, title)
+	Dim xDialogTitle As String = $"${dlgID}caption"$
+	SetData(xDialogTitle, title)
 End Sub
 
 'open an input dialog
@@ -3853,7 +3879,7 @@ Sub AddDialogInput(Module As Object, parentID As String, elID As String, bPersis
 	elID = elID.ToLowerCase
 	'
 	Dim dialogShow As String = $"${elID}show"$
-	Dim dialogTitle As String = $"${elID}title"$
+	Dim xdialogTitle As String = $"${elID}caption"$
 	Dim dialogcanceltitle As String = $"${elID}canceltitle"$
 	Dim dialogoktitle As String = $"${elID}oktitle"$
 	Dim dialogokcolor As String = $"${elID}okcolor"$
@@ -3863,24 +3889,26 @@ Sub AddDialogInput(Module As Object, parentID As String, elID As String, bPersis
 	Dim dialogpersistent As String = $"${elID}persistent"$
 	Dim dialogwidth As String = $"${elID}width"$
 	Dim dialogCardID As String = $"${elID}cardid"$
-	Dim dialogTitleID As String = $"${elID}titleid"$
-	Dim dialogtextID As String = $"${elID}textid"$
+	Dim dialogTitleID As String = $"${elID}title"$
+	Dim dialogtextID As String = $"${elID}text"$
 	Dim divider As String = $"${elID}divider"$
-	Dim cardactionsid As String = $"${elID}cardactions"$
+	Dim cardactionsid As String = $"${elID}actions"$
 	Dim cardspacer As String = $"${elID}spacer"$
 	Dim cancelid As String = $"${elID}cancel"$
 	Dim okid As String = $"${elID}ok"$
+	Dim dialogFormID As String = $"${elID}form"$
 	Dim dialogContainerID As String = $"${elID}container"$
-	Dim diagID As String = $"${elID}diag"$
 	'
 	Dim sbTemplate As StringBuilder
 	sbTemplate.Initialize
-	sbTemplate.Append($"<v-dialog id="${diagID}" v-model="${dialogShow}" :width="${dialogwidth}" :persistent="${dialogpersistent}">"$)
+	sbTemplate.Append($"<v-dialog id="${elID}" v-model="${dialogShow}" :width="${dialogwidth}" :persistent="${dialogpersistent}">"$)
 	sbTemplate.Append($"<v-card id="${dialogCardID}">"$)
-	sbTemplate.Append($"<v-card-title id="${dialogTitleID}">{{ ${dialogTitle} }}</v-card-title>"$)
+	sbTemplate.Append($"<v-card-title id="${dialogTitleID}">{{ ${xdialogTitle} }}</v-card-title>"$)
 	sbTemplate.Append($"<v-card-text id="${dialogtextID}">"$)
-	sbTemplate.Append($"<v-form id="${dialogContainerID}" ref="${dialogContainerID}">"$)
+	sbTemplate.Append($"<v-container id="${dialogContainerID}" ref="${dialogContainerID}">"$)
+	sbTemplate.Append($"<v-form id="${dialogFormID}" ref="${dialogFormID}">"$)
 	sbTemplate.Append($"</v-form>"$)
+	sbTemplate.Append($"</v-container>"$)
 	sbTemplate.Append($"</v-card-text>"$)
 	sbTemplate.Append($"<v-divider id="${divider}" class="mx-2"></v-divider>"$)
 	sbTemplate.Append($"<v-card-actions id="${cardactionsid}">"$)
@@ -3896,7 +3924,7 @@ Sub AddDialogInput(Module As Object, parentID As String, elID As String, bPersis
 	BANano.GetElement(parentID).Append(sbTemplate.tostring)
 	'
 	Dim vdialog As VueElement
-	vdialog.Initialize(Module, diagID, diagID)
+	vdialog.Initialize(Module, elID, elID)
 	'
 	Dim vbtnc As VueElement
 	vbtnc.Initialize(Module, cancelid, cancelid)
@@ -3915,7 +3943,7 @@ Sub AddDialogInput(Module As Object, parentID As String, elID As String, bPersis
 	vdialog.SetData(dialogShow, False)
 	'set persistence
 	vdialog.SetData(dialogpersistent, bPersistent)
-	vdialog.SetData(dialogTitle, Title)
+	vdialog.SetData(xdialogTitle, Title)
 	vdialog.SetData(dialogcanceltitle, CancelTitle)
 	vdialog.SetData(dialogcancelshow, True)
 	vdialog.SetData(dialogcancelcolor, CancelColor)
@@ -3926,8 +3954,8 @@ Sub AddDialogInput(Module As Object, parentID As String, elID As String, bPersis
 End Sub
 
 'get the date picker text field
-Sub getDatePickerText(Module As Object, dpID As String) As VueElement
-	Dim txtid As String = $"${dpID}txt"$
+Sub GetDatePickerText(Module As Object, dpID As String) As VueElement
+	Dim txtid As String = $"${dpID}text"$
 	txtid = txtid.ToLowerCase
 	Dim vtextfield As VueElement
 	vtextfield.Initialize(Module, txtid, txtid)
@@ -3935,7 +3963,7 @@ Sub getDatePickerText(Module As Object, dpID As String) As VueElement
 End Sub
 
 'get actual date picker
-Sub getDatePicker(Module As Object, dpID As String) As VueElement
+Sub GetDateTimePicker(Module As Object, dpID As String) As VueElement
 	Dim dtpicker As String = $"${dpID}dp"$
 	dtpicker = dtpicker.tolowercase
 	Dim vdatepicker As VueElement
@@ -3969,7 +3997,7 @@ Sub AddDatePickerInput(Module As Object, parentID As String, elID As String, vmo
 	parentID = CleanID(parentID)
 	elID = elID.ToLowerCase
 	Dim menuref As String = $"${elID}menu"$
-	Dim txtid As String = $"${elID}txt"$
+	Dim txtid As String = $"${elID}text"$
 	Dim btnok As String = $"${elID}ok"$
 	Dim btncancel As String = $"${elID}cancel"$
 	Dim dtpicker As String = $"${elID}dp"$
@@ -3981,7 +4009,7 @@ Dim sbTemplate As String = $"<v-menu id="${menuref}" :close-on-content-click="fa
 ref="${menuref}" :return-value.sync="${vmodel}" v-model="${menuref}" min-width="460px" max-width="460px" :nudge-right="40">
 <v-template id="${tempID}" v-slot:activator="{ on, attrs }">
 <v-text-field id="${txtid}" v-on="on" v-bind="attrs" label="${slabel}" v-model="${vmodel}" prepend-icon="${sPrependIcon}"
-:required="${bRequired}" hint="${sHint}" ref="${vmodel}" autocomplete="off" splaceholder="${splaceholder}"></v-text-field>
+:required="${bRequired}" hint="${sHint}" ref="${vmodel}" autocomplete="off" placeholder="${splaceholder}"></v-text-field>
 </v-template>
 <v-date-picker id="${dtpicker}" :scrollable="true" v-model="${vmodel}" :landscape="true">
 <v-btn id="${btnclear}" color="error" :text="true" v-on:click="${vmodel} = ''" :outlined="true">Clear</v-btn>
@@ -4026,7 +4054,7 @@ Sub AddTimePickerInput(Module As Object, parentID As String, elID As String, vmo
 	parentID = CleanID(parentID)
 	elID = elID.ToLowerCase
 	Dim menuref As String = $"${elID}menu"$
-	Dim txtid As String = $"${elID}txt"$
+	Dim txtid As String = $"${elID}text"$
 	Dim btnok As String = $"${elID}ok"$
 	Dim btncancel As String = $"${elID}cancel"$
 	Dim dtpicker As String = $"${elID}dp"$
@@ -4038,7 +4066,7 @@ Dim sbTemplate As String = $"<v-menu id="${menuref}" :close-on-content-click="fa
 ref="${menuref}" :return-value.sync="${vmodel}" v-model="${menuref}" min-width="460px" max-width="460px" :nudge-right="40">
 <v-template id="${tempID}" v-slot:activator="{ on, attrs }">
 <v-text-field id="${txtid}" v-on="on" v-bind="attrs" label="${slabel}" v-model="${vmodel}" prepend-icon="${sPrependIcon}"
-:required="${bRequired}" hint="${sHint}" ref="${vmodel}" autocomplete="off" splaceholder="${splaceholder}"></v-text-field>
+:required="${bRequired}" hint="${sHint}" ref="${vmodel}" autocomplete="off" placeholder="${splaceholder}"></v-text-field>
 </v-template>
 <v-time-picker id="${dtpicker}" :scrollable="true" v-model="${vmodel}" :landscape="true">
 <v-btn id="${btnclear}" color="error" :text="true" v-on:click="${vmodel} = ''" :outlined="true">Clear</v-btn>
@@ -4479,10 +4507,16 @@ Sub AddRating(Module As Object, parentID As String, sid As String, vmodel As Str
 	vrating.Initialize(Module, sid, sid)
 	vrating.VModel = vmodel
 	vrating.SetData(vmodel, Null)
-	vrating.AddAttr("length", slength)
-	vrating.AddAttr("size", ssize)
+	If slength <> 0 Then 
+		vrating.AddAttr("length", slength)
+	End If
+	If ssize <> 0 Then 
+		vrating.AddAttr("size", ssize)
+	End If
 	vrating.AddAttr(":hover", bHover)
-	If color <> "" Then vrating.Color = color
+	If color <> "" Then 
+		vrating.Color = color
+	End If
 	vrating.AssignProps(props)
 	vrating.BindAllEvents
 	Return vrating
@@ -4645,7 +4679,7 @@ Sub AddChipWithAvatar(Module As Object, parentID As String, elID As String, src 
 	elID = elID.ToLowerCase
 	Dim spanID As String = $"${elID}span"$
 	Dim avarID As String = $"${elID}avatar"$
-	Dim imgID As String = $"${elID}img"$
+	Dim imgID As String = $"${elID}image"$
 	'
 	BANano.GetElement(parentID).Append($"<v-chip id="${elID}"><v-avatar id="${avarID}"><v-img id="${imgID}"></v-img></v-avatar><span id="${spanID}"></span></v-chip>"$)
 	

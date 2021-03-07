@@ -437,6 +437,19 @@ Sub NewListViewItemOptions
 	'
 	Options.rightchip = "rightchip"
 	Options.rightchipcolor = "rightchipcolor"
+	
+	Options.lefticonattr = ""
+	Options.avatarattr = ""
+	Options.avatariconattr = ""
+	Options.righticonattr = ""
+	Options.righttextattr = ""
+	Options.rightcheckboxattr = ""
+	Options.leftcheckboxattr = ""
+	Options.rightratingattr = ""
+	Options.leftswitchattr = ""
+	Options.rightswitchattr = ""
+	Options.rightchipattr = ""
+	Options.iconattr = ""
 End Sub
 
 'generate the next row
@@ -520,6 +533,18 @@ private Sub CleanID(v As String) As String
 	Return v
 End Sub
 
+'get an embedded avatar
+Sub GetStepperHeaders As VueElement
+	Dim avarID As String = $"${mName}headers"$
+	Return GetVueElement(avarID)
+End Sub
+
+'get an embedded avatar
+Sub GetStepperItems As VueElement
+	Dim avarID As String = $"${mName}items"$
+	Dim elx As VueElement = GetVueElement(avarID)
+	Return elx
+End Sub
 
 'add step to a horizontal stepper
 Sub AddStepHorizontal(stepID As String, stepLabel As String, stepComplete As String, stepEditable As String, bHasDivider As Boolean) As VueElement
@@ -632,17 +657,13 @@ End Sub
 'get a tab item
 Sub GetTabItem() As VueElement
 	Dim tabID As String = $"tab${mName}"$
-	Dim ti As VueElement
-	ti.Initialize(mCallBack, tabID, tabID)
-	Return ti
+	Return GetVueElement(tabID)
 End Sub
 
 'get a tab icon
 Sub GetTabIcon() As VueElement
 	Dim tabID As String = $"${mName}icon"$
-	Dim ti As VueElement
-	ti.Initialize(mCallBack, tabID, tabID)
-	Return ti
+	Return GetVueElement(tabID)
 End Sub
 
 '<code>
@@ -2131,7 +2152,6 @@ public Sub setOpenOnFocus(b As Boolean)
 	AddAttr(":open-on-focus", b)
 End Sub
 
-
 public Sub setOpenOnHover(b As Boolean)
 	AddAttr(":open-on-hover", b)
 End Sub
@@ -3283,86 +3303,46 @@ Sub setFullScreenOnMobile(varFullScreen As Boolean)
 	AddAttr(":fullscreen", "$vuetify.breakpoint.mobile")
 End Sub
 
-
-Sub getDialogTitleID As String
-	Return $"${mName}title"$
-End Sub
-
-Sub getDialogTextID As String
-	Return $"${mName}textid"$
-End Sub
-
-Sub getDialogContainerID As String
-	Return $"${mName}container"$
-End Sub
-
-Sub getDialogActionsID As String
-	Return  $"${mName}cardactions"$
-End Sub
-
-Sub getDialogOkButtonID As String
-	Return $"${mName}ok"$
-End Sub
-
-Sub getDialogCancelButtonID As String
-	Return  $"${mName}cancel"$
-End Sub
-
 public Sub getFullScreen() As Boolean
 	Return bFullScreen
 End Sub
 
+'return the dialog card container
+Sub DialogForm As VueElement
+	Dim dialogContainerID As String = $"${mName}form"$
+	Return GetVueElement(dialogContainerID)
+End Sub
 
 'return the dialog card container
 Sub DialogContainer As VueElement
 	Dim dialogContainerID As String = $"${mName}container"$
-	dialogContainerID = dialogContainerID.ToLowerCase
-	'
-	Dim elx As VueElement
-	elx.Initialize(mCallBack, dialogContainerID, dialogContainerID)
-	Return elx
+	Return GetVueElement(dialogContainerID)
 End Sub
+
 
 'return the dialog card title
 Sub DialogTitle As VueElement
-	Dim dialogContainerID As String = $"${mName}titleid"$
-	dialogContainerID = dialogContainerID.ToLowerCase
-	'
-	Dim elx As VueElement
-	elx.Initialize(mCallBack, dialogContainerID, dialogContainerID)
-	Return elx
+	Dim dialogContainerID As String = $"${mName}title"$
+	Return GetVueElement(dialogContainerID)
 End Sub
 
 
 'return the dialog card title
 Sub DialogActions As VueElement
-	Dim dialogContainerID As String = $"${mName}cardactions"$
-	dialogContainerID = dialogContainerID.ToLowerCase
-	'
-	Dim elx As VueElement
-	elx.Initialize(mCallBack, dialogContainerID, dialogContainerID)
-	Return elx
+	Dim dialogContainerID As String = $"${mName}actions"$
+	Return GetVueElement(dialogContainerID)
 End Sub
 
 Sub DialogOK As VueElement
 	Dim dialogContainerID As String = $"${mName}ok"$
-	dialogContainerID = dialogContainerID.ToLowerCase
-	'
-	Dim elx As VueElement
-	elx.Initialize(mCallBack, dialogContainerID, dialogContainerID)
-	Return elx
+	Return GetVueElement(dialogContainerID)
 End Sub
 
 'return the dialog card title
 Sub DialogCancel As VueElement
 	Dim dialogContainerID As String = $"${mName}cancel"$
-	dialogContainerID = dialogContainerID.ToLowerCase
-	'
-	Dim elx As VueElement
-	elx.Initialize(mCallBack, dialogContainerID, dialogContainerID)
-	Return elx
+	Return GetVueElement(dialogContainerID)
 End Sub
-
 
 'set clear-icon
 public Sub setClearIcon(varClearIcon As String)
@@ -5196,7 +5176,6 @@ Sub AddItemLeftSwitch(id As String, bChecked As Boolean, title As String, subtit
 End Sub
 
 
-
 Sub AddItemRightSwitch(id As String, bChecked As Boolean, title As String, subtitle As String, subtitle1 As String, url As String)
 	Dim rec As Map = CreateMap()
 	rec.Put("id", id)
@@ -5516,32 +5495,32 @@ Sub AddListViewTemplate(numLines As Int, props As ListViewItemOptions) As VueEle
 <v-list-item id="${listitemID}" v-else="true" :key="item.${key}" :to="item.${xurl}" active-class="${xactiveclass}">
 <v-list-item-action id="${leftactionID}" v-if="item.${xlefticon} || ${xshowleftcheckboxes} || ${xshowleftswitch}">
 <v-btn id="${leftactionBtnID}" :icon="true" v-if="item.${xlefticon}">
-<v-icon id="${leftactionIconID}" :color="item.${xlefticoncolor}" v-text="item.${xlefticon}" class="${xlefticonclass}"></v-icon>
+<v-icon id="${leftactionIconID}" ${props.lefticonattr} :color="item.${xlefticoncolor}" v-text="item.${xlefticon}" class="${xlefticonclass}"></v-icon>
 </v-btn>
-<v-checkbox id="${leftcheckboxID}" v-if="${xshowleftcheckboxes}" :item="item" v-model="item.${xleftcheckbox}" :input-value="item.${xleftcheckbox}"></v-checkbox>
-<v-switch id="${leftswitchID}" v-if="${xshowleftswitch}" :inset="${xswitchinset}" :item="item" v-model="item.${xleftswitch}" :input-value="item.${xleftswitch}"></v-switch>
+<v-checkbox id="${leftcheckboxID}" ${props.leftcheckboxattr} v-if="${xshowleftcheckboxes}" :item="item" v-model="item.${xleftcheckbox}" :input-value="item.${xleftcheckbox}"></v-checkbox>
+<v-switch id="${leftswitchID}" ${props.leftswitchattr} v-if="${xshowleftswitch}" :inset="${xswitchinset}" :item="item" v-model="item.${xleftswitch}" :input-value="item.${xleftswitch}"></v-switch>
 </v-list-item-action>
 <v-list-item-avatar id="${avatarID}" class="${xitemavatarclass}" v-if="item.${xavatar} || item.${xavataricon}">
-<v-img id="${avatarImgID}" :src="item.${xavatar}" class="${xavatarclass}" v-if="item.${xavatar}"></v-img>
-<v-icon id="${avatarIconID}" v-if="item.${xavataricon}" :color="item.${xavatariconcolor}" class="${xavatariconclass}" v-text="item.${xavataricon}"></v-icon>
+<v-img id="${avatarImgID}" ${props.avatarattr} :src="item.${xavatar}" class="${xavatarclass}" v-if="item.${xavatar}"></v-img>
+<v-icon id="${avatarIconID}" ${props.avatariconattr} v-if="item.${xavataricon}" :color="item.${xavatariconcolor}" class="${xavatariconclass}" v-text="item.${xavataricon}"></v-icon>
 </v-list-item-avatar>
 <v-list-item-icon id="${itemiconID}" v-if="item.${xicon}">
-<v-icon id="${iconID}" :color="item.${xiconcolor}" class="${xiconclass}" v-text="item.${xicon}"></v-icon>
+<v-icon id="${iconID}" ${props.iconattr} :color="item.${xiconcolor}" class="${xiconclass}" v-text="item.${xicon}"></v-icon>
 </v-list-item-icon>
 <v-list-item-content id="${contentID}" v-if="item.${xtitle} || item.${xsubtitle} || item.${xsubtitle1}">
 <v-list-item-title id="${titleID}" v-if="item.${xtitle}" v-text="item.${xtitle}"></v-list-item-title>
 <v-list-item-subtitle id="${subtitleID}" v-if="item.${xsubtitle}" v-text="item.${xsubtitle}"></v-list-item-subtitle>
 <v-list-item-subtitle id="${subtitle1ID}" v-if="item.${xsubtitle1}" v-text="item.${xsubtitle1}"></v-list-item-subtitle>
 </v-list-item-content>
-<v-chip id="${rightchipID}" v-if="item.${xrightchip}" :color="item.${xrightchipcolor}" dark small v-text="item.${xrightchip}"></v-chip>
+<v-chip id="${rightchipID}" ${props.rightchipattr} v-if="item.${xrightchip}" :color="item.${xrightchipcolor}" dark small v-text="item.${xrightchip}"></v-chip>
 <v-list-item-action id="${rightactionID}" v-if="item.${xrighticon} || item.${xrighttext} || ${xshowrightcheckboxes} || ${xshowrightrating} || ${xshowrightswitch}">
-<v-list-item-action-text id="${rightactiontextID}" v-if="item.${xrighttext}" v-text="item.${xrighttext}"></v-list-item-action-text>
+<v-list-item-action-text ${props.righttextattr} id="${rightactiontextID}" v-if="item.${xrighttext}" v-text="item.${xrighttext}"></v-list-item-action-text>
 <v-btn id="${rightactionBtnID}" :icon="true" v-if="item.${xrighticon}">
-<v-icon id="${rightactionIconID}" v-text="item.${xrighticon}" class="${xrighticonclass}" :color="item.${xrighticoncolor}"></v-icon>
+<v-icon id="${rightactionIconID}" ${props.righticonattr} v-text="item.${xrighticon}" class="${xrighticonclass}" :color="item.${xrighticoncolor}"></v-icon>
 </v-btn>
-<v-checkbox id="${rightcheckboxID}" v-if="${xshowrightcheckboxes}" :item="item" v-model="item.${xrightcheckbox}" :input-value="item.${xrightcheckbox}"></v-checkbox>
-<v-rating id="${rightratingID}" length="1" v-if="${xshowrightrating}" v-model="item.${xrightrating}" :value="item.${xrightrating}"></v-rating>
-<v-switch id="${rightswitchID}" v-if="${xshowrightswitch}" :inset="${xswitchinset}" :item="item" v-model="item.${xrightswitch}" :input-value="item.${xrightswitch}"></v-switch>
+<v-checkbox id="${rightcheckboxID}" ${props.rightcheckboxattr} v-if="${xshowrightcheckboxes}" :item="item" v-model="item.${xrightcheckbox}" :input-value="item.${xrightcheckbox}"></v-checkbox>
+<v-rating id="${rightratingID}" ${props.rightratingattr} length="1" v-if="${xshowrightrating}" v-model="item.${xrightrating}" :value="item.${xrightrating}"></v-rating>
+<v-switch id="${rightswitchID}" ${props.rightswitchattr} v-if="${xshowrightswitch}" :inset="${xswitchinset}" :item="item" v-model="item.${xrightswitch}" :input-value="item.${xrightswitch}"></v-switch>
 </v-list-item-action>
 </v-list-item>
 </v-template>"$
@@ -5622,10 +5601,46 @@ Sub AddListViewGroupTemplate(numLines As Int, props As ListViewItemOptions) As V
 	Dim elID As String = mName.ToLowerCase
 	Dim parentID As String = CleanID(mName)
 	'
+	Dim templateID As String = $"${elID}template"$
+	Dim headerID As String = $"${elID}header"$
+	Dim dividerID As String = $"${elID}divider"$
 	Dim listitemID As String = $"${elID}listitem"$
-	
+	Dim leftactionID As String = $"${elID}leftaction"$
+	Dim leftactionBtnID As String = $"${elID}leftactionbtn"$
+	Dim leftactionIconID As String = $"${elID}leftactionicon"$
+	Dim leftcheckboxID As String = $"${elID}leftcheckbox"$
+	Dim rightcheckboxID As String = $"${elID}rightcheckbox"$
+	Dim avatarID As String = $"${elID}avatar"$
+	Dim avatarImgID As String = $"${elID}avatarimg"$
+	Dim avatarIconID As String = $"${elID}avataricon"$
+	Dim itemiconID As String = $"${elID}itemicon"$
+	Dim iconID As String = $"${elID}icon"$
+	Dim contentID As String = $"${elID}content"$
+	Dim titleID As String = $"${elID}title"$
+	Dim subtitleID As String = $"${elID}subtitle"$
+	Dim subtitle1ID As String = $"${elID}subtitle1"$
+	Dim rightactionID As String = $"${elID}rightaction"$
+	Dim rightactiontextID As String = $"${elID}rightactiontext"$
+	Dim rightactionBtnID As String = $"${elID}rightactionbtn"$
+	Dim rightactionIconID As String = $"${elID}rightactionicon"$
+	Dim rightratingID As String = $"${elID}rightrating"$
+	Dim leftswitchID As String = $"${elID}leftswitch"$
+	Dim rightswitchID As String = $"${elID}rightswitch"$
+	Dim rightchipID As String = $"${elID}rightchip"$
+	'
 	'in case the pointers are changed
 	Dim xurl As String = props.url
+	Dim xlefticon As String = props.lefticon
+	Dim xlefticoncolor As String = props.lefticoncolor
+	Dim xlefticonclass As String = props.lefticonclass
+	'
+	Dim xavatar As String = props.avatar
+	Dim xavatarclass As String = props.avatarclass
+	
+	Dim xavataricon As String = props.avataricon
+	Dim xavatariconcolor As String = props.avatariconcolor
+	Dim xavatariconclass As String = props.avatariconclass
+	
 	Dim xicon As String = props.icon
 	Dim xiconclass As String = props.iconclass
 	Dim xiconcolor As String = props.iconcolor
@@ -5634,32 +5649,75 @@ Sub AddListViewGroupTemplate(numLines As Int, props As ListViewItemOptions) As V
 	Dim xsubtitle As String = props.subtitle
 	Dim xsubtitle1 As String = props.subtitle1
 	'
+	Dim xrighticon As String = props.righticon
+	Dim xrighticonclass As String = props.righticonclass
+	Dim xrighttext As String = props.righttext
+	Dim xrighticoncolor As String = props.righticoncolor
 	Dim datasource As String = props.dataSource
 	Dim key As String = props.key
 	
 	Dim xactiveclass As String = props.activeclass
+	Dim xleftcheckbox As String = props.leftcheckbox
+	Dim xrightcheckbox As String = props.rightcheckbox
+	Dim xshowleftcheckboxes As Boolean = props.showleftcheckboxes
+	Dim xshowrightcheckboxes As Boolean = props.showrightcheckboxes
+	Dim xshowrightrating As Boolean = props.showrightrating
+	Dim xrightrating As String = props.rightrating
+	'
+	Dim xleftswitch As String = props.leftswitch
+	Dim xshowleftswitch As Boolean = props.showleftswitches
+	Dim xrightswitch As String = props.rightswitch
+	Dim xshowrightswitch As Boolean = props.showrightswitches
+	Dim xswitchinset As Boolean = props.switchinset
+	Dim xitemavatarclass As String = props.itemavatarclass
+	'
+	Dim xrightchip As String = props.rightchip
+	Dim xrightchipcolor As String = props.rightchipcolor
+	'
 	datasource = datasource.ToLowerCase
 	key = key.ToLowerCase
-	'
+	
 	Dim sTemplate As StringBuilder
 	sTemplate.Initialize
 	sTemplate.Append($"<v-list-group v-for="item in ${datasource}" :key="item.${key}" v-model="item.${key}" no-action>"$)
-	sTemplate.Append($"<v-icon slot="prependIcon" :color="item.${xiconcolor}" v-text="item.${xicon}"></v-icon>"$)
+	sTemplate.Append($"<v-icon slot="prependIcon" ${props.lefticonattr} :color="item.${xiconcolor}" v-text="item.${xicon}"></v-icon>"$)
 	sTemplate.Append($"<v-template v-slot:activator>"$)
 	sTemplate.Append($"<v-list-item-content>"$)
 	sTemplate.Append($"<v-list-item-title v-text="item.${xtitle}"></v-list-item-title>"$)
 	sTemplate.Append($"</v-list-item-content>"$)
 	sTemplate.Append($"</v-template>"$)
-	sTemplate.Append($"<v-list-item id="${listitemID}" v-for="child in item.items" :key="child.${key}" :to="child.${xurl}" active-class="${xactiveclass}">"$)
-	sTemplate.Append($"<v-list-item-icon v-if="child.${xicon}">"$)
-	sTemplate.append($"<v-icon :color="child.${xiconcolor}" class="${xiconclass}" v-text="child.${xicon}"></v-icon>"$)
-	sTemplate.Append($"</v-list-item-icon>"$)
-	sTemplate.Append($"<v-list-item-content>"$)
-	sTemplate.Append($"<v-list-item-title v-text="child.${xtitle}"></v-list-item-title>"$)
-	sTemplate.Append($"<v-list-item-subtitle v-if="child.${xsubtitle}" v-text="child.${xsubtitle}"></v-list-item-subtitle>"$)
-	sTemplate.Append($"<v-list-item-subtitle v-if="child.${xsubtitle1}" v-text="child.${xsubtitle1}"></v-list-item-subtitle>"$)
-	sTemplate.Append($"</v-list-item-content>"$)
-	sTemplate.Append($"</v-list-item>"$)
+	
+	sTemplate.Append($"<v-list-item id="${listitemID}" v-for="child in item.items" :key="child.${key}" :to="child.${xurl}" active-class="${xactiveclass}">
+<v-list-item-action id="${leftactionID}" v-if="child.${xlefticon} || ${xshowleftcheckboxes} || ${xshowleftswitch}">
+<v-btn id="${leftactionBtnID}" :icon="true" v-if="child.${xlefticon}">
+<v-icon id="${leftactionIconID}" ${props.lefticonattr} :color="child.${xlefticoncolor}" v-text="child.${xlefticon}" class="${xlefticonclass}"></v-icon>
+</v-btn>
+<v-checkbox id="${leftcheckboxID}" ${props.leftcheckboxattr} v-if="${xshowleftcheckboxes}" :item="item" v-model="child.${xleftcheckbox}" :input-value="child.${xleftcheckbox}"></v-checkbox>
+<v-switch id="${leftswitchID}" ${props.leftswitchattr} v-if="${xshowleftswitch}" :inset="${xswitchinset}" :item="item" v-model="child.${xleftswitch}" :input-value="child.${xleftswitch}"></v-switch>
+</v-list-item-action>
+<v-list-item-avatar id="${avatarID}" class="${xitemavatarclass}" v-if="child.${xavatar} || child.${xavataricon}">
+<v-img id="${avatarImgID}" ${props.avatarattr} :src="child.${xavatar}" class="${xavatarclass}" v-if="child.${xavatar}"></v-img>
+<v-icon id="${avatarIconID}" ${props.avatariconattr} v-if="child.${xavataricon}" :color="child.${xavatariconcolor}" class="${xavatariconclass}" v-text="child.${xavataricon}"></v-icon>
+</v-list-item-avatar>
+<v-list-item-icon id="${itemiconID}" v-if="child.${xicon}">
+<v-icon id="${iconID}" ${props.iconattr} :color="child.${xiconcolor}" class="${xiconclass}" v-text="child.${xicon}"></v-icon>
+</v-list-item-icon>
+<v-list-item-content id="${contentID}" v-if="child.${xtitle} || child.${xsubtitle} || child.${xsubtitle1}">
+<v-list-item-title id="${titleID}" v-if="child.${xtitle}" v-text="child.${xtitle}"></v-list-item-title>
+<v-list-item-subtitle id="${subtitleID}" v-if="child.${xsubtitle}" v-text="child.${xsubtitle}"></v-list-item-subtitle>
+<v-list-item-subtitle id="${subtitle1ID}" v-if="child.${xsubtitle1}" v-text="child.${xsubtitle1}"></v-list-item-subtitle>
+</v-list-item-content>
+<v-chip id="${rightchipID}" ${props.rightchipattr} v-if="child.${xrightchip}" :color="child.${xrightchipcolor}" dark small v-text="child.${xrightchip}"></v-chip>
+<v-list-item-action id="${rightactionID}" v-if="child.${xrighticon} || child.${xrighttext} || ${xshowrightcheckboxes} || ${xshowrightrating} || ${xshowrightswitch}">
+<v-list-item-action-text ${props.righttextattr} id="${rightactiontextID}" v-if="child.${xrighttext}" v-text="child.${xrighttext}"></v-list-item-action-text>
+<v-btn id="${rightactionBtnID}" :icon="true" v-if="child.${xrighticon}">
+<v-icon id="${rightactionIconID}" ${props.righticonattr} v-text="child.${xrighticon}" class="${xrighticonclass}" :color="child.${xrighticoncolor}"></v-icon>
+</v-btn>
+<v-checkbox id="${rightcheckboxID}" ${props.rightcheckboxattr} v-if="${xshowrightcheckboxes}" :item="item" v-model="child.${xrightcheckbox}" :input-value="child.${xrightcheckbox}"></v-checkbox>
+<v-rating id="${rightratingID}" ${props.rightratingattr} length="1" v-if="${xshowrightrating}" v-model="child.${xrightrating}" :value="child.${xrightrating}"></v-rating>
+<v-switch id="${rightswitchID}" ${props.rightswitchattr} v-if="${xshowrightswitch}" :inset="${xswitchinset}" :item="item" v-model="child.${xrightswitch}" :input-value="child.${xrightswitch}"></v-switch>
+</v-list-item-action>
+</v-list-item>"$)
 	sTemplate.Append($"</v-list-group>"$)
 	'
 	BANano.GetElement(parentID).Append(sTemplate.tostring)
@@ -6519,6 +6577,13 @@ Sub BindAllEvents
 	SetOnEvent(mCallBack, "keyup.enter", "")
 End Sub
 
+'get the chip ref from the chip group
+Sub GetChip As VueElement
+	Dim elKey As String = $"${mName}chip"$
+	Dim elx As VueElement = GetVueElement(elKey)
+	Return elx
+End Sub
+
 Sub AddChipGroup(elID As String, vModel As String,  activeClass As String, bMultiple As Boolean, bShowArrows As Boolean, bFilter As Boolean, DataSource As String, Key As String, Value As String, chipgroupprops As Map, chipprops As Map) As VueElement
 	elID = elID.tolowercase
 	DataSource = DataSource.tolowercase
@@ -6622,8 +6687,8 @@ Sub AddMain As VueElement
 End Sub
 
 'get an embedded image
-Sub GetImage(elID As String) As VueElement
-	elID = $"${elID}image"$
+Sub GetImage As VueElement
+	Dim elID As String = $"${mName}image"$
 	Return GetVueElement(elID)
 End Sub
 
@@ -6649,8 +6714,8 @@ Sub AddAvatar(elID As String, imgURL As String, avatarSize As Int, avatarprops A
 End Sub
 
 'get an embedded span
-Sub GetSpan(elID As String) As VueElement
-	Return GetVueElement($"${elID}span"$)
+Sub GetSpan As VueElement
+	Return GetVueElement($"${mName}span"$)
 End Sub
 
 Sub AddAvatarWithText(elID As String, Caption As String, Color As String, avatarSize As Int, TextColor As String, TextColorIntensity As String, avatarprops As Map, textProps As Map) As VueElement
@@ -6900,8 +6965,8 @@ Sub AddExpansionPanels(elID As String, vModel As String) As VueElement
 	Return elx
 End Sub
 
-Sub GetBadge(elID As String) As VueElement
-	Return GetVueElement($"${elID}badge"$)
+Sub GetBadge As VueElement
+	Return GetVueElement($"${mName}badge"$)
 End Sub
 
 'a button with a badge
@@ -6927,8 +6992,8 @@ Sub AddButtonWithBadge(elID As String, elLabel As String, btnColor As String, vm
 End Sub
 
 'get embedded icon
-Sub GetIcon(elID As String) As VueElement
-	Return GetVueElement($"${elID}icon"$)
+Sub GetIcon As VueElement
+	Return GetVueElement($"${mName}icon"$)
 End Sub
 
 Sub AddButtonWithIconWithBadge(elID As String, eIcon As String, btnColor As String, vmodel As String, badgeIcon As String, badgeColor As String, btnprops As Map, iconprops As Map, badgeProperties As Map) As VueElement
@@ -7183,6 +7248,13 @@ Sub AddAvatarWithBadge(elID As String, imgURL As String, avatarSize As Int, vmod
 	Return vbadge
 End Sub
 
+'get the chip ref from the chip group
+Sub GetAvatar As VueElement
+	Dim elKey As String = $"${mName}avatar"$
+	Dim elx As VueElement = GetVueElement(elKey)
+	Return elx
+End Sub
+
 Sub AddAvatar1(elID As String, vmodel As String, avatarSize As Int, avatarprops As Map) As VueElement
 	Dim parentID As String = CleanID(mName)
 	elID = elID.ToLowerCase
@@ -7228,7 +7300,7 @@ Sub AddDatePickerInput(elID As String, vmodel As String, slabel As String, splac
 	Dim parentID As String = CleanID(mName)
 	elID = elID.ToLowerCase
 	Dim menuref As String = $"${elID}menu"$
-	Dim txtid As String = $"${elID}txt"$
+	Dim txtid As String = $"${elID}text"$
 	Dim btnok As String = $"${elID}ok"$
 	Dim btncancel As String = $"${elID}cancel"$
 	Dim dtpicker As String = $"${elID}dp"$
@@ -7240,7 +7312,7 @@ Dim sbTemplate As String = $"<v-menu id="${menuref}" :close-on-content-click="fa
 ref="${menuref}" :return-value.sync="${vmodel}" v-model="${menuref}" min-width="460px" max-width="460px" :nudge-right="40">
 <v-template id="${tempID}" v-slot:activator="{ on, attrs }">
 <v-text-field id="${txtid}" v-on="on" v-bind="attrs" label="${slabel}" v-model="${vmodel}" prepend-icon="${sPrependIcon}"
-:required="${bRequired}" hint="${sHint}" ref="${vmodel}" autocomplete="off" splaceholder="${splaceholder}"></v-text-field>
+:required="${bRequired}" hint="${sHint}" ref="${vmodel}" autocomplete="off" placeholder="${splaceholder}"></v-text-field>
 </v-template>
 <v-date-picker id="${dtpicker}" :scrollable="true" v-model="${vmodel}" :landscape="true">
 <v-btn id="${btnclear}" color="error" :text="true" v-on:click="${vmodel} = ''" :outlined="true">Clear</v-btn>
@@ -7274,18 +7346,49 @@ Ok</v-btn>
 	Return vtextfield
 End Sub
 
+Sub GetClear(elID As String) As VueElement
+	Dim elKey As String = $"${elID}clear"$
+	Dim elx As VueElement = GetVueElement(elKey)
+	Return elx
+End Sub
+
+Sub GetMenu(elID As String) As VueElement
+	Dim elKey As String = $"${elID}menu"$
+	Dim elx As VueElement = GetVueElement(elKey)
+	Return elx
+End Sub
+
+Sub GetDateTimePicker(elID As String) As VueElement
+	Dim elKey As String = $"${elID}dp"$
+	Dim elx As VueElement = GetVueElement(elKey)
+	Return elx
+End Sub
+
+Sub GetOK(elID As String) As VueElement
+	Dim elKey As String = $"${elID}ok"$
+	Dim elx As VueElement = GetVueElement(elKey)
+	Return elx
+End Sub
+
+Sub GetCancel(elID As String) As VueElement
+	Dim elKey As String = $"${elID}cancel"$
+	Dim elx As VueElement = GetVueElement(elKey)
+	Return elx
+End Sub
+
+Sub GetRadio As VueElement
+	Dim elKey As String = $"${mName}radio"$
+	Dim elx As VueElement = GetVueElement(elKey)
+	Return elx
+End Sub
+
 Sub AddTimePickerInput1(elID As String, vModel As String, sLabel As String, txtprops As Map, tpprops As Map) As VueElement
 	Dim tp As VueElement = AddTimePickerInput(elID, vModel, sLabel,"", False, "", "", txtprops, tpprops)
 	Return tp 
 End Sub
 
-'get embedded date time picker
-Sub GetDateTimePicker(elID As String) As VueElement
-	Return GetVueElement($"${elID}dp"$)
-End Sub
-
-Sub GetDateTimePickerText(elID As String) As VueElement
-	Return GetVueElement($"${elID}txt"$)
+Sub GetDateTimePickerText As VueElement
+	Return GetVueElement($"${mName}text"$)
 End Sub
 
 'add time picker input
@@ -7293,7 +7396,7 @@ Sub AddTimePickerInput(elID As String, vmodel As String, slabel As String, splac
 	Dim parentID As String = CleanID(mName)
 	elID = elID.ToLowerCase
 	Dim menuref As String = $"${elID}menu"$
-	Dim txtid As String = $"${elID}txt"$
+	Dim txtid As String = $"${elID}text"$
 	Dim btnok As String = $"${elID}ok"$
 	Dim btncancel As String = $"${elID}cancel"$
 	Dim dtpicker As String = $"${elID}dp"$
@@ -7305,7 +7408,7 @@ Dim sbTemplate As String = $"<v-menu id="${menuref}" :close-on-content-click="fa
 ref="${menuref}" :return-value.sync="${vmodel}" v-model="${menuref}" min-width="460px" max-width="460px" :nudge-right="40">
 <v-template id="${tempID}" v-slot:activator="{ on, attrs }">
 <v-text-field id="${txtid}" v-on="on" v-bind="attrs" label="${slabel}" v-model="${vmodel}" prepend-icon="${sPrependIcon}"
-:required="${bRequired}" hint="${sHint}" ref="${vmodel}" autocomplete="off" splaceholder="${splaceholder}"></v-text-field>
+:required="${bRequired}" hint="${sHint}" ref="${vmodel}" autocomplete="off" placeholder="${splaceholder}"></v-text-field>
 </v-template>
 <v-time-picker id="${dtpicker}" :scrollable="true" v-model="${vmodel}" :landscape="true">
 <v-btn id="${btnclear}" color="error" :text="true" v-on:click="${vmodel} = ''" :outlined="true">Clear</v-btn>
@@ -7717,17 +7820,22 @@ Sub AddSwitch(sid As String, vmodel As String, slabel As String, truevalue As Ob
 	Return vswitch
 End Sub
 
-
 Sub AddRating(sid As String, vmodel As String, slength As Int, ssize As Int, bHover As Boolean, color As String, props As Map) As VueElement
 	Dim parentID As String = CleanID(mName)
 	sid = sid.ToLowerCase
 	Dim vrating As VueElement = AddVueElement2(parentID, sid, "v-rating", Null)
 	vrating.VModel = vmodel
 	vrating.SetData(vmodel, Null)
-	vrating.AddAttr("length", slength)
-	vrating.AddAttr("size", ssize)
+	If slength <> 0 Then 
+		vrating.AddAttr("length", slength)
+	End If
+	If ssize <> 0 Then 
+		vrating.AddAttr("size", ssize)
+	End If
 	vrating.AddAttr(":hover", bHover)
-	If color <> "" Then vrating.Color = color
+	If color <> "" Then 
+		vrating.Color = color
+	End If
 	vrating.AssignProps(props)
 	vrating.BindAllEvents
 	Return vrating
@@ -7766,7 +7874,7 @@ End Sub
 Sub AddImage1(elID As String, vmodel As String, alt As String, sheight As String, swidth As String, props As Map) As VueElement
 	Dim parentID As String = CleanID(mName)
 	elID = elID.ToLowerCase
-	Dim vimg As VueElement = AddVueElement2(parentID, elid, "v-img", Null)
+	Dim vimg As VueElement = AddVueElement2(parentID, elID, "v-img", Null)
 	If sheight <> "" Then vimg.MaxHeight = sheight
 	If swidth <> "" Then vimg.MaxWidth = swidth
 	vimg.AddAttr(":src", vmodel)
@@ -7880,13 +7988,12 @@ Sub AddDialog(elid As String, vmodel As String, bPersistent As Boolean, width As
 	Return elx
 End Sub
 
-
 Sub AddChipWithAvatar(elID As String, src As String, label As String, bPill As Boolean, bClose As Boolean, color As String, chipprops As Map, avatarprops As Map, imgprops As Map) As VueElement
 	Dim parentID As String = CleanID(mName)
 	elID = elID.ToLowerCase
 	Dim spanID As String = $"${elID}span"$
 	Dim avarID As String = $"${elID}avatar"$
-	Dim imgID As String = $"${elID}img"$
+	Dim imgID As String = $"${elID}image"$
 	'
 	Dim vchip As VueElement = AddVueElement2(parentID, elID, "v-chip", Null)
 	vchip.AddAttr(":pill", bPill)
@@ -7945,10 +8052,6 @@ Sub AddChipWithIcon(elID As String, sicon As String, label As String, bPill As B
 	Return vchip
 End Sub
 
-Sub GetRadio(elID As String) As VueElement
-	Return GetVueElement($"${elID}radio"$)
-End Sub
-
 Sub AddRadioGroup(elID As String, vmodel As String, sLabel As String, bRow As Boolean, bMultiple As Boolean, sourceTable As String, key As String, value As String, colorField As String, radiogroupprops As Map, radioprops As Map) As VueElement
 	Dim parentID As String = CleanID(mName)
 	elID = elID.ToLowerCase
@@ -7959,7 +8062,7 @@ Sub AddRadioGroup(elID As String, vmodel As String, sLabel As String, bRow As Bo
 	value = value.ToLowerCase
 	
 	colorField = colorField.tolowercase
-	Dim vradiogroup As VueElement = AddVueElement2(parentID, elid, "v-radio-group", Null)
+	Dim vradiogroup As VueElement = AddVueElement2(parentID, elID, "v-radio-group", Null)
 	vradiogroup.label = sLabel
 	vradiogroup.Multiple = bMultiple
 	vradiogroup.AddAttr(":row", bRow)
@@ -7967,12 +8070,14 @@ Sub AddRadioGroup(elID As String, vmodel As String, sLabel As String, bRow As Bo
 	vradiogroup.VModel = vmodel
 	vradiogroup.AssignProps(radiogroupprops)
 	'
-	Dim vradio As VueElement = AddVueElement2(elid, radioid, "v-radio", Null)
+	Dim vradio As VueElement = AddVueElement2(elID, radioID, "v-radio", Null)
 	vradio.VFor = $"item in ${sourceTable}"$
 	vradio.BindKey($"item.${key}"$)
 	vradio.Bind("label", $"item.${value}"$)
 	vradio.Bind("value", $"item.${key}"$)
-	If colorField <> "" Then vradio.Bind("color", $"item.${colorField}"$)
+	If colorField <> "" Then 
+		vradio.Bind("color", $"item.${colorField}"$)
+	End If
 	vradio.AssignProps(radioprops)
 	If bMultiple Then
 		Dim lst As List = NewList
@@ -8280,7 +8385,7 @@ Sub AddCol(colpos As Int, xs As String, sm As String, md As String, lg As String
 	Dim colKey As String = $"${parentID}c${colpos}"$
 	colKey = colKey.Replace("#","")
 	'
-	Dim mbutton As VueElement = AddVueElement2(parentID, colkey, "v-col", Null)
+	Dim mbutton As VueElement = AddVueElement2(parentID, colKey, "v-col", Null)
 	mbutton.AddSizes(xs, sm, md, lg, xl)
 	mbutton.BindAllEvents
 	Return mbutton
@@ -8340,6 +8445,10 @@ End Sub
 
 Sub setNav(b As Object)
 	AddAttr(":nav", b)
+End Sub
+
+Sub setAttach(b As Object)
+	AddAttr(":attach", b)
 End Sub
 
 Sub setLink(b As Object)
