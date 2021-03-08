@@ -398,7 +398,10 @@ Sub Class_Globals
 	lefticonattr As String, avatarattr As String, avatariconattr As String, _
 	righticonattr As String, righttextattr As String, rightcheckboxattr As String, _
 	leftcheckboxattr As String, rightratingattr As String, leftswitchattr As String, _
-	rightswitchattr As String, rightchipattr As String, iconattr As String, hasdivider As Boolean, insetdivider As Boolean)
+	rightswitchattr As String, rightchipattr As String, iconattr As String, hasdivider As Boolean, insetdivider As Boolean, _
+	rightavatar As String, rightavatarclass As String, rightavataricon As String, _
+	rightavatariconcolor As String, rightavatariconclass As String, rightavatarattr As String, rightavatariconattr As String, _
+	rightitemavatarclass As String)
 	'
 	Public RouterViewName As String
 	Public DatabaseName As String
@@ -479,7 +482,16 @@ Sub NewListViewItemOptions() As ListViewItemOptions
 	lvio.iconattr = ""
 	'
 	lvio.hasdivider = False
-	lvio.insetdivider = false
+	lvio.insetdivider = False
+	'
+	lvio.rightavatar = "rightavatar"
+	lvio.rightavatarclass = ""
+	lvio.rightavataricon = "rightavataricon"
+	lvio.rightavatariconcolor = "rightavatariconcolor"
+	lvio.rightavatariconclass = ""
+	lvio.rightavatarattr = ""
+	lvio.rightavatariconattr = ""
+	lvio.rightitemavatarclass = ""
 	Return lvio
 End Sub
 
@@ -2532,7 +2544,7 @@ End Sub
 'vuetify.BindVueElement(drw)
 '</code>
 Sub AddAppDrawer(Module As Object, elID As String, vmodel As String, bVisible As Boolean, Color As String, bRight As Boolean, props As Map) As VueElement
-	Dim elx As VueElement = AddVueElement(Module, $"${appname}app"$, elID, "v-navigation-drawer", vmodel, "", Color, props)
+	Dim elx As VueElement = AddVueElement(Module, $"${AppName}app"$, elID, "v-navigation-drawer", vmodel, "", Color, props)
 	elx.Right = bRight
 	elx.SetData(vmodel, bVisible)
 	Return elx
@@ -2540,6 +2552,10 @@ End Sub
 
 Sub AddBtn(Module As Object, parentID As String, elID As String) As VueElement
 	Return AddVueElement(Module, parentID, elID, "v-btn", "", "", "", Null)
+End Sub
+
+Sub AddSparkLine(Module As Object, parentID As String, elID As String) As VueElement
+	Return AddVueElement(Module, parentID, elID, "v-sparkline", "", "", "", Null)
 End Sub
 
 Sub AddBtnToggle(Module As Object, parentID As String, elID As String) As VueElement

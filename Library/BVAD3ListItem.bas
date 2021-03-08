@@ -183,3 +183,19 @@ Sub SetRightChipColor(v As String) As BVAD3ListItem
 	options.put("rightchipcolor", v)
 	Return Me
 End Sub
+
+''''
+Sub SetRightAvatar(v As String) As BVAD3ListItem
+	options.put("rightavatar", v)
+	Return Me
+End Sub
+
+Sub SetRightAvatarIcon(v As String) As BVAD3ListItem
+	options.put("rightavataricon", v)
+	Return Me
+End Sub
+
+Sub SetRightAvatarIconColor(v As String) As BVAD3ListItem
+	options.put("rightavatariconcolor", v)
+	Return Me
+End Sub

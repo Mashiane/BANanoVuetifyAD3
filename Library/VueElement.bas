@@ -452,6 +452,16 @@ Sub NewListViewItemOptions
 	Options.iconattr = ""
 	Options.hasdivider = False
 	Options.insetdivider = False
+	'
+	Options.rightavatar = "rightavatar"
+	Options.rightavatarclass = ""
+	Options.rightavataricon = "rightavataricon"
+	Options.rightavatariconcolor = "rightavatariconcolor"
+	Options.rightavatariconclass = ""
+	Options.rightavatarattr = ""
+	Options.rightavatariconattr = ""
+	Options.rightitemavatarclass = ""
+	
 End Sub
 
 'generate the next row
@@ -2974,6 +2984,64 @@ Sub setAbsolute(tv As Object)
 	AddAttr(":absolute", tv)
 End Sub
 
+'auto-draw
+Sub setAutoDraw(tv As Object)
+	AddAttr(":auto-draw", tv)
+End Sub
+
+'auto-draw-duration
+Sub setAutoDrawDuration(tv As Object)
+	AddAttr("auto-draw-duration", tv)
+End Sub
+
+Sub setAutoLineWidth(tv As Object)
+	AddAttr(":auto-line-width", tv)
+End Sub
+
+Sub setStrokeLineCap(tv As Object)
+	AddAttr(":stroke-linecap", tv)
+End Sub
+
+Sub setFill(tv As Object)
+	AddAttr(":fill", tv)
+End Sub
+
+Sub setSparkType(tv As Object)
+	AddAttr(":type", tv)
+End Sub
+
+Sub setGradient(tv As Object)
+	AddAttr(":gradient", tv)
+End Sub
+
+Sub setLabels(tv As Object)
+	AddAttr(":labels", tv)
+End Sub
+
+Sub setPadding(tv As Object)
+	AddAttr(":padding", tv)
+End Sub
+
+Sub setLabelSize(tv As Object)
+	AddAttr(":label-size", tv)
+End Sub
+
+Sub setLineWidth(tv As Object)
+	AddAttr(":line-width", tv)
+End Sub
+
+Sub setGradientDirection(tv As Object)
+	AddAttr(":gradient-direction", tv)
+End Sub
+
+Sub setSmooth(tv As Object)
+	AddAttr(":smooth", tv)
+End Sub
+
+Sub setShowLabels(tv As Object)
+	AddAttr(":show-labels", tv)
+End Sub
+
 public Sub setLength(s As String)
 	AddAttr("length", s)
 End Sub
@@ -5407,56 +5475,100 @@ Sub AddListViewTemplate1(numLines As Int) As VueElement
 	Return Me
 End Sub
 
-Sub ItemTitle As VueElement
+Sub ListItemTitle As VueElement
 	Return GetVueElement($"${mName}title"$)
 End Sub
 
-Sub ItemSubTitle As VueElement
+Sub ListItemSubTitle As VueElement
 	Return GetVueElement($"${mName}subtitle"$)
 End Sub
 
-Sub ItemSubTitle1 As VueElement
+Sub ListItemSubTitle1 As VueElement
 	Return GetVueElement($"${mName}subtitle1"$)
 End Sub
 
-Sub ItemRightChip As VueElement
+Sub ListItemRightChip As VueElement
 	Return GetVueElement($"${mName}rightchip"$)
 End Sub
 
-Sub ItemRightRating As VueElement
+Sub ListItemRightRating As VueElement
 	Return GetVueElement($"${mName}rightrating"$)
 End Sub
 
-Sub ItemRightText As VueElement
+Sub ListItemRightText As VueElement
 	Return GetVueElement($"${mName}rightactiontext"$)
 End Sub
 
-Sub ItemLeftIcon As VueElement
+Sub ListItemLeftIcon As VueElement
 	Return GetVueElement($"${mName}leftactionicon"$)
 End Sub
 
-Sub ItemLeftCheckBox As VueElement
+Sub ListItemLeftCheckBox As VueElement
 	Return GetVueElement($"${mName}leftcheckbox"$)
 End Sub
 
-Sub ItemRightCheckBox As VueElement
+Sub ListItemRightCheckBox As VueElement
 	Return GetVueElement($"${mName}rightcheckbox"$)
 End Sub
 
-Sub ItemIcon As VueElement
+Sub ListItemIcon As VueElement
 	Return GetVueElement($"${mName}icon"$)
 End Sub
 
-Sub ItemRightIcon As VueElement
+Sub ListItemRightIcon As VueElement
 	Return GetVueElement($"${mName}rightactionicon"$)
 End Sub
 
-Sub ItemLeftSwitch As VueElement
+Sub ListItemLeftSwitch As VueElement
 	Return GetVueElement($"${mName}leftswitch"$)
 End Sub
 
-Sub ItemRightSwitch As VueElement
+Sub ListItemRightSwitch As VueElement
 	Return GetVueElement($"${mName}rightswitch"$)
+End Sub
+
+Sub ListItem As VueElement
+	Return GetVueElement($"${mName}listitem"$)
+End Sub
+
+Sub ListItemLeftAction As VueElement
+	Return GetVueElement($"${mName}leftaction"$)
+End Sub
+
+Sub ListItemRightAction As VueElement
+	Return GetVueElement($"${mName}rightaction"$)
+End Sub
+
+Sub ListItemAvatar As VueElement
+	Return GetVueElement($"${mName}avatar"$)
+End Sub
+
+Sub ListItemAvatarImage As VueElement
+	Return GetVueElement($"${mName}avatarimage"$)
+End Sub
+
+Sub ListItemAvatarIcon As VueElement
+	Return GetVueElement($"${mName}avataricon"$)
+End Sub
+
+Sub ListItemIcon1 As VueElement
+	Return GetVueElement($"${mName}itemicon"$)
+End Sub
+
+Sub ListItemContent As VueElement
+	Return GetVueElement($"${mName}content"$)
+End Sub
+
+Sub ListItemRightAvatar As VueElement
+	Return GetVueElement($"${mName}rightavatar"$)
+End Sub
+
+Sub ListItemRightAvatarImage As VueElement
+	Return GetVueElement($"${mName}rightavatarimage"$)
+End Sub
+
+Sub ListItemRightAvatarIcon As VueElement
+	Return GetVueElement($"${mName}rightavataricon"$)
 End Sub
 
 'add a list item template to draw item
@@ -5492,8 +5604,13 @@ Sub AddListViewTemplate(numLines As Int, props As ListViewItemOptions) As VueEle
 	Dim leftswitchID As String = $"${elID}leftswitch"$
 	Dim rightswitchID As String = $"${elID}rightswitch"$
 	Dim rightchipID As String = $"${elID}rightchip"$
+	'
+	Dim rightavatarID As String = $"${elID}rightavatar"$
+	Dim rightavatarImgID As String = $"${elID}rightavatarimage"$
+	Dim rightavatarIconID As String = $"${elID}rightavataricon"$
 	
 	'
+	
 	'in case the pointers are changed
 	Dim xurl As String = props.url
 	Dim xlefticon As String = props.lefticon
@@ -5542,6 +5659,8 @@ Sub AddListViewTemplate(numLines As Int, props As ListViewItemOptions) As VueEle
 	'
 	datasource = datasource.ToLowerCase
 	key = key.ToLowerCase
+	Dim xrightitemavatarclass As String = props.rightitemavatarclass
+	
 	'
 	Dim sTemplate As String = $"<v-template id="${templateID}" v-for="(item, index) in ${datasource}" :key="item.${key}">
 <v-subheader id="${headerID}" v-if="item.header" :key="item.header">{{ item.header }}</v-subheader>
@@ -5566,6 +5685,10 @@ Sub AddListViewTemplate(numLines As Int, props As ListViewItemOptions) As VueEle
 <v-list-item-subtitle id="${subtitleID}" v-if="item.${xsubtitle}">{{ item.${xsubtitle} }}</v-list-item-subtitle>
 <v-list-item-subtitle id="${subtitle1ID}" v-If="item.${xsubtitle1}">{{ item.${xsubtitle1} }}</v-list-item-subtitle>
 </v-list-item-content>
+<v-list-item-avatar id="${rightavatarID}" class="${xrightitemavatarclass}" v-if="item.${props.rightavatar} || item.${props.rightavataricon}">
+<v-img id="${rightavatarImgID}" ${props.rightavatarattr} :src="item.${props.rightavatar}" class="${props.rightavatarclass}" v-if="item.${props.rightavatar}"></v-img>
+<v-icon id="${rightavatarIconID}" ${props.rightavatariconattr} v-if="item.${props.rightavataricon}" :color="item.${props.rightavatariconcolor}" class="${props.rightavatariconclass}" v-text="item.${props.rightavataricon}"></v-icon>
+</v-list-item-avatar>
 <v-chip id="${rightchipID}" ${props.rightchipattr} v-if="item.${xrightchip}" :color="item.${xrightchipcolor}" dark small v-text="item.${xrightchip}"></v-chip>
 <v-list-item-action id="${rightactionID}" v-if="item.${xrighticon} || item.${xrighttext} || ${xshowrightcheckboxes} || ${xshowrightrating} || ${xshowrightswitch}">
 <v-list-item-action-text ${props.righttextattr} id="${rightactiontextID}" v-if="item.${xrighttext}" v-text="item.${xrighttext}"></v-list-item-action-text>
@@ -7978,6 +8101,13 @@ Sub AddSpacer1(elid As String, props As Map) As VueElement
 	Return vlist
 End Sub
 
+'add sparkline
+Sub AddSparkLine(elid As String) As VueElement
+	Dim vlist As VueElement = AddVueElement1(elid, "v-sparkline", "", "", "", Null)
+	Return vlist
+End Sub
+
+
 'add divider
 Sub AddDivider1(elid As String, props As Map) As VueElement
 	Dim vlist As VueElement = AddVueElement1(elid, "v-divider", "", "", "", props)
@@ -8285,6 +8415,10 @@ End Sub
 
 Sub setMiniVariantSync(w As String)
 	SetAttr(":mini-variant.sync", w)
+End Sub
+
+Sub setMiniVariant(b As Object)
+	SetAttr(":mini-variant", b)
 End Sub
 
 Sub setFloating(w As Object)

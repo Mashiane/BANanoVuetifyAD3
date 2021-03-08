@@ -78,13 +78,13 @@ Private Sub CreateListViewapplicants
 	drwapplicants.Options.hasdivider = True
 	drwapplicants.AddListViewTemplate1(0)
 	'get each value and prefix it with a formatted date
-	drwapplicants.ItemSubTitle.SetText("Applied On: {{ nicedate(item.applied) }}")
+	drwapplicants.ListItemSubTitle.SetText("Applied On: {{ nicedate(item.applied) }}")
 	'also progress should show %
-	drwapplicants.ItemSubTitle1.SetText("Progress: {{ item.progress }}%")
+	drwapplicants.ListItemSubTitle1.SetText("Progress: {{ item.progress }}%")
 	'change the text color to be orange for all applicants
-	drwapplicants.ItemSubTitle1.TextColor = vuetify.COLOR_ORANGE
+	drwapplicants.ListItemSubTitle1.TextColor = vuetify.COLOR_ORANGE
 	'determine each rating and change the color of the chip
-	drwapplicants.ItemRightChip.AddAttr(":color", "getchipcolor(item)")
+	drwapplicants.ListItemRightChip.AddAttr(":color", "getchipcolor(item)")
 	listing.BindVueElement(drwapplicants)
 End Sub
 
