@@ -591,6 +591,17 @@ Sub Diag_AddComboBox(fldName As String, row As Int, col As Int, vmodel As String
 	UpdateMatrix(row, col)
 End Sub
 
+Sub AddRelationship(key As String, value As String, datasource As String, vmodel As String)
+	If value = "" Or key = "" Then Return
+	Dim rel As DBRelationship
+	rel.Initialize
+	rel.key = key
+	rel.value = value
+	rel.source = datasource
+	rel.vmodel = vmodel
+	relationships.Add(rel)
+End Sub
+
 'add a select to the dialog
 Sub Diag_AddSelect(fldName As String, row As Int, col As Int, vmodel As String, Title As String, DataSource As String, Key As String, Value As String, bReturnObject As Boolean, bMultiple As Boolean)
 	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddSelect(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), "${fldName}", "${SingularClean.tolowercase}.${vmodel}", "${Title}", False, ${bMultiple}, "", "${DataSource}", "${Key}", "${Value}", ${bReturnObject}, "", Null)"$).Append(CRLF)
@@ -833,7 +844,7 @@ End Sub
 
 'add a link column to the data-table
 Sub DT_AddLink(colField As String, colTitle As String, target As String)
-	dtCode.Append($"${dtName}.AddLink("${colField}", "${colTitle}", "${target}")"$).Append(CRLF)
+	dtCode.Append($"${dtName}.AddLink1("${colField}", "${colTitle}", "${colField}", "${target}")"$).Append(CRLF)
 End Sub
 
 'add an avatar column to the data-table
@@ -1396,8 +1407,8 @@ private Sub CreateTableCode()
 	If relationships.Size > 0 Then
 		For Each rec As DBRelationship In relationships
 			Dim ssource As String = rec.source
-			Dim svmodel As String = rec.vmodel
-			DT_SetColumnPreDisplay(svmodel, $"Get${ssource}"$)
+			Dim svmodel As String = rec.key
+			AddCode($"${dtName}.SetColumnPreDisplay("${svmodel}", "${ssource}")"$)
 		Next
 	End If
 	

@@ -125,6 +125,7 @@ Sub Class_Globals
 	Public COLUMN_AVATARIMG As String = "avatarimg"
 	Public COLUMN_RATING As String = "rating"
 	Public COLUMN_LINK As String = "link"
+	Public COLUMN_LINK1 As String = "link1"
 	Public COLUMN_PROGRESS_CIRCULAR As String = "progresscircular"
 	Public COLUMN_PROGRESS_LINEAR As String = "progresslinear"
 	Public COLUMN_SAVE As String = "save"
@@ -146,7 +147,7 @@ Sub Class_Globals
 	Private search As String
 	Type DataTableColumn(value As String, text As String, align As String, sortable As Boolean, filterable As Boolean, divider As Boolean, _
 	className As String, width As String, filter As String, sort As String, ColType As String, extra As String, icon As String, Disabled As Boolean, imgWidth As String, imgHeight As String, avatarSize As String, iconSize As String, ReadOnly As Boolean, progressColor As String, progressRotate As String, progressSize As String, progressWidth As String, progressHeight As String, progressShowValue As Boolean, valueFormat As String, bindTotals As String, hasTotal As Boolean, depressed As Boolean, rounded As Boolean, dark As Boolean, label As String, color As String, outlined As Boolean, shaped As Boolean, target As String, prefix As String, colprops As Map, visible As Boolean, _
-	Large As Boolean, SourceTable As String, SourceField As String, DisplayField As String, ReturnObject As Boolean, PreDisplay As String)
+	Large As Boolean, SourceTable As String, SourceField As String, DisplayField As String, ReturnObject As Boolean, PreDisplay As String, href As String)
 	Private hasTotals As Boolean
 	Private hasExternalPagination As Boolean
 	Private totalVisible As String
@@ -1255,6 +1256,21 @@ Sub AddAction(colField As String, colTitle As String, colIcon As String)
 	columnsM.Put(colField, dt)
 End Sub
 
+'add an action
+Sub AddAction1(colField As String, colTitle As String, colIcon As String, iconSize As String, iconColor As String)
+	colField = colField.tolowercase
+	Dim dt As DataTableColumn = NewDataTableColumn(colField, colTitle)
+	dt.filterable = False
+	dt.ColType = COLUMN_ACTION
+	dt.sortable = False
+	dt.align = ALIGN_CENTER
+	dt.icon = colIcon
+	dt.width = 80
+	If iconSize <> "" Then dt.iconSize = iconSize
+	If iconColor <> "" Then dt.color = iconColor
+	columnsM.Put(colField, dt)
+End Sub
+
 'add icon field
 Sub AddIconView(colField As String, colTitle As String, colColor As String)
 	colField = colField.tolowercase
@@ -1318,6 +1334,14 @@ Sub SetColumnsLinks(colFields As List)
 	Next
 End Sub
 
+'set a field as a link
+Sub SetColumnsLinks1(colFields As List)
+	For Each col As String In colFields
+		col = col.tolowercase
+		SetColumnType(col, COLUMN_LINK1)
+	Next
+End Sub
+
 'set column as a checkbox
 Sub SetColumnsCheckBox(colFields As List)
 	For Each col As String In colFields
@@ -1348,6 +1372,17 @@ Sub AddLink(colField As String, colTitle As String, target As String)
 	dt.target = target
 	columnsM.Put(colField, dt)
 End Sub
+
+'add a link
+Sub AddLink1(colField As String, colTitle As String, href As String, target As String)
+	colField = colField.tolowercase
+	Dim dt As DataTableColumn = NewDataTableColumn(colField, colTitle)
+	dt.ColType = COLUMN_LINK1
+	dt.target = target
+	dt.href = href
+	columnsM.Put(colField, dt)
+End Sub
+
 
 'add an avatar image
 Sub AddAvatarImg(colField As String, colTitle As String)
@@ -1480,9 +1515,18 @@ Sub AddButtonColumn(colName As String, colTitle As String)
 End Sub
 
 'add link column
-'<code>.AddLinkColumn("emailaddress", "Add 1 Day")
+'<code>.AddLinkColumn("emailaddress", "Add 1 Day", "_blank")
 '</code>
 Sub AddLinkColumn(colName As String, colTitle As String, target As String)
+	AddColumn(colName, colTitle)
+	SetColumnType(colName, COLUMN_LINK)
+	SetColumnTarget(colName, target)
+End Sub
+
+'add link column
+'<code>.AddLinkColumn1("emailaddress", "Add 1 Day", "emailaddress", "_blank)
+'</code>
+Sub AddLinkColumn1(colName As String, colTitle As String, hrefColumn As String, target As String)
 	AddColumn(colName, colTitle)
 	SetColumnType(colName, COLUMN_LINK)
 	SetColumnTarget(colName, target)
@@ -1585,6 +1629,7 @@ End Sub
 'set colum properties
 Sub SetColumnPreDisplay(colName As String, PreDisplay As String)
 	colName = colName.tolowercase
+	PreDisplay = PreDisplay.tolowercase
 	If columnsM.ContainsKey(colName) Then
 		Dim nf As DataTableColumn = columnsM.Get(colName)
 		nf.PreDisplay = PreDisplay
@@ -1611,6 +1656,16 @@ Sub SetColumnTarget(colName As String, target As String)
 	End If
 	
 End Sub
+
+Sub SetColumnHREF(colName As String, target As String)
+	colName = colName.tolowercase
+	If columnsM.ContainsKey(colName) Then
+		Dim col As DataTableColumn = columnsM.Get(colName)
+		col.href = target
+		columnsM.Put(colName,col)
+	End If
+End Sub
+
 
 Sub SetColumnPrefix(colName As String, prefix As String)
 	colName = colName.tolowercase
@@ -2280,6 +2335,25 @@ sb.Append(temp)
 				tmp.AddAttr($"v-slot:item.${value}"$, "{ item }")
 		
 				tmp.Append(span.ToString)
+				sb.Append(tmp.ToString)
+			Case COLUMN_LINK1
+				Dim aLink As VueElement
+				aLink.Initialize(mCallBack, "", "")
+				aLink.TagName = "a"
+				Dim sLink As String = $"item.${nf.href}"$
+				aLink.AddAttr(":href", "'" & nf.prefix & "' + " & sLink)
+				aLink.AddAttr("target", nf.target)
+				If nf.PreDisplay = "" Then
+					aLink.Append($"{{ item.${value} }}"$)
+				Else
+					aLink.Append($"{{ ${nf.predisplay}(item.${value}) }}"$)
+				End If
+				'define template
+				Dim tmp As VueElement
+				tmp.Initialize(mCallBack, "" , "")
+				tmp.TagName = "v-template"
+				tmp.AddAttr($"v-slot:item.${value}"$, "{ item }")
+				tmp.Append(aLink.ToString)
 				sb.Append(tmp.ToString)
 			Case COLUMN_LINK
 				Dim aLink As VueElement
@@ -3181,7 +3255,6 @@ Sub SetMethod(Module As Object,methodName As String, args As List)
 	methodName = methodName.Replace(":","")
 	methodName = methodName.Replace(".","")
 	methodName = methodName.Replace("-","")
-	methodName = methodName.tolowercase
 	If SubExists(Module, methodName) Then
 		Dim cb As BANanoObject = BANano.CallBack(Module, methodName, args)
 		methods.Put(methodName, cb)

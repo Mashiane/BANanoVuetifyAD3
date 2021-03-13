@@ -1814,7 +1814,6 @@ Sub SetMethod(Module As Object, methodName As String, args As List)
 	methodName = methodName.Replace(":","")
 	methodName = methodName.Replace(".","")
 	methodName = methodName.Replace("-","")
-	methodName = methodName.tolowercase
 	If SubExists(Module, methodName) Then
 		Dim cb As BANanoObject = BANano.CallBack(Module, methodName, args)
 		methods.Put(methodName, cb)
@@ -3451,13 +3450,13 @@ End Sub
 'Dim avue as VueElement = Vuetify.AddAlert(Me, "r1c1", "avue", False, "This is my alert", False, True, Vuetify.ALERT_TYPE_SUCCESS, Vuetify.ALERT_BORDER_LEFT, Null)
 'vuetify.BindVueElement(avue)
 '</code>
-Sub AddAlert(Module As Object, parentID As String, elID As String, vmodel As String, bVisible As Boolean, Caption As String, bLoremIpsum As Boolean, bDismissible As Boolean, aType As String,  Border As String, props As Map) As VueElement
+Sub AddAlert(Module As Object, parentID As String, elID As String, vmodel As String, bVisible As Boolean, Caption As String, bLoremIpsum As Boolean, bDismissible As Boolean, aType As String,  BorderPosition As String, props As Map) As VueElement
 	Dim elx As VueElement = AddVueElement(Module, parentID, elID, "v-alert", vmodel, Caption, "", props)
 	elx.LoremIpsum = bLoremIpsum
 	elx.Bind("dismissible", bDismissible)
 	elx.SetData(vmodel, bVisible)
 	elx.AlertType = aType
-	elx.Border = Border
+	elx.Border = BorderPosition
 	Return elx
 End Sub
 

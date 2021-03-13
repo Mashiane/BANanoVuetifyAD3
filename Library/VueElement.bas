@@ -25,12 +25,16 @@ Version=7
 #Event: Focus (e As BANanoEvent)
 #Event: Input (e As BANanoEvent)
 #Event: RightClick (e As BANanoEvent)
+#Event: TouchStartStop (e As BANanoEvent)
 #Event: LeftClick (e As BANanoEvent)
 #Event: Change (value As Object)
 #Event: MouseMove (e As BANanoEvent)
 #Event: MouseOut (e As BANanoEvent)
 #Event: MouseDown (e As BANanoEvent)
+#Event: MouseDownStop (e As BANanoEvent)
 #Event: MouseUp (e As BANanoEvent)
+#Event: MouseOver (event As BANanoEvent)
+#Event: MouseOut (event As BANanoEvent)
 #Event: KeyUp (e As BANanoEvent)
 #Event: KeyDown (e As BANanoEvent)
 #Event: KeyPress (e As BANanoEvent)
@@ -1825,6 +1829,10 @@ Sub Append(varText As String)
 End Sub
 
 Sub BindEnabled(value As String)
+	AddAttr(":disabled", value)
+End Sub
+
+Sub BindDisabled(value As String)
 	AddAttr(":disabled", value)
 End Sub
 
@@ -5268,6 +5276,59 @@ Sub AddItemRightCheckBox(id As String, bChecked As Boolean, title As String, sub
 	Records.Add(rec)
 End Sub
 
+'get checked / unchecked preferences
+Sub GetPreferencesChecked(VC As VueComponent, bShouldBe As Boolean) As List
+	Dim nl As List
+	nl.Initialize 
+	Dim ds As String = getDataSource
+	Dim rs1 As List = VC.GetData(ds)
+	For Each rsm As Map In rs1
+		Dim sid As String = rsm.Get("id")
+		Dim brs As Boolean = False
+		If rsm.ContainsKey("leftcheckbox") Then
+			brs = rsm.Get("leftcheckbox")
+			If brs = bShouldBe Then nl.Add(sid)
+		End If
+		If rsm.ContainsKey("rightcheckbox") Then
+			brs = rsm.Get("rightcheckbox")
+			If brs = bShouldBe Then nl.Add(sid)
+		End If
+		If rsm.ContainsKey("rightswitch") Then
+			brs = rsm.Get("rightswitch")
+			If brs = bShouldBe Then nl.Add(sid)
+		End If
+		If rsm.ContainsKey("leftswitch") Then
+			brs = rsm.Get("leftswitch")
+			If brs = bShouldBe Then nl.Add(sid)
+		End If
+	Next
+	Return nl
+End Sub
+
+'Check/Uncheck preferences
+Sub SetPreferencesChecked(VC As VueComponent, bShouldBe As Boolean)
+	Dim ds As String = getDataSource
+	Dim rs1 As List = VC.GetData(ds)
+	Dim rsTot As Int = rs1.Size - 1
+	Dim rsCnt As Int
+	For rsCnt = 0 To rsTot
+		Dim rsm As Map = rs1.Get(rsCnt)
+		If rsm.ContainsKey("leftcheckbox") Then
+			rsm.put("leftcheckbox", bShouldBe)
+		End If
+		If rsm.ContainsKey("rightcheckbox") Then
+			rsm.put("rightcheckbox", bShouldBe)
+		End If
+		If rsm.ContainsKey("rightswitch") Then
+			rsm.put("rightswitch", bShouldBe)
+		End If
+		If rsm.ContainsKey("leftswitch") Then
+			rsm.put("leftswitch", bShouldBe)
+		End If
+		rs1.Set(rsCnt, rsm)
+	Next
+	VC.SetData(ds, rs1)
+End Sub
 
 Sub GetPreferences(VC As VueComponent) As Map
 	Dim nm As Map = CreateMap()
@@ -6750,7 +6811,10 @@ Sub BindAllEvents
 	SetOnEvent(mCallBack, "input", "")
 	SetOnEvent(mCallBack, "keydown", "")
 	SetOnEvent(mCallBack, "mousedown", "")
+	SetOnEvent(mCallBack, "mousedown.stop", "")
 	SetOnEvent(mCallBack, "mouseup", "")
+	SetOnEvent(mCallBack, "mouseover", "")
+	SetOnEvent(mCallBack, "mouseout", "")
 	SetOnEvent(mCallBack, "submit", "")
 	SetOnEvent(mCallBack, "dblclick.prevent", "")
 	SetOnEvent(mCallBack, "keydown.enter.prevent", "")
@@ -6758,6 +6822,7 @@ Sub BindAllEvents
 	SetOnEvent(mCallBack, "keydown.right.prevent", "")
 	SetOnEvent(mCallBack, "keydown.space.prevent", "")
 	SetOnEvent(mCallBack, "keyup.enter", "")
+	SetOnEvent(mCallBack, "touchstart.stop", "")
 End Sub
 
 'get the chip ref from the chip group
@@ -6959,6 +7024,11 @@ Sub AddSelect(elID As String, vmodel As String, sLabel As String, bRequired As B
 	Return vselect
 End Sub
 
+Sub setSlideXTransition(b As Boolean)
+	If b = False Then Return
+	AddAttr("transition", "slide-x-transition")
+End Sub
+
 
 Sub AddSlideXTransition(elID As String, Mode As String) As VueElement
 	Dim elx As VueElement = AddVueElement1(elID, "v-slide-x-transition", "", "", "", Null)
@@ -7072,13 +7142,13 @@ End Sub
 'Dim avue as VueElement = Vuetify.AddAlert(Me, "r1c1", "avue", False, "This is my alert", False, True, Vuetify.ALERT_TYPE_SUCCESS, Vuetify.ALERT_BORDER_LEFT, Null)
 'vuetify.BindVueElement(avue)
 '</code>
-Sub AddAlert(elID As String, vmodel As String, bVisible As Boolean, Caption As String, iLoremIpsum As Boolean, bDismissible As Boolean, aType As String,  Border As String, props As Map) As VueElement
+Sub AddAlert(elID As String, vmodel As String, bVisible As Boolean, Caption As String, iLoremIpsum As Boolean, bDismissible As Boolean, aType As String,  BorderPosition As String, props As Map) As VueElement
 	Dim elx As VueElement = AddVueElement1(elID, "v-alert", vmodel, Caption, "", props)
 	elx.LoremIpsum = iLoremIpsum
 	elx.Bind("dismissible", bDismissible)
 	elx.SetData(vmodel, bVisible)
 	elx.AlertType = aType
-	elx.Border = Border
+	elx.Border = BorderPosition
 	Return elx
 End Sub
 
@@ -8607,6 +8677,17 @@ Sub setHideDot(b As Object)
 	AddAttr(":hide-dot", b)
 End Sub
 
+'transition="scroll-x-reverse-transition"
+Sub setScrollXReverseTransition(b As Boolean)
+	If b = False Then Return 
+	AddAttr("transition", "scroll-x-reverse-transition")
+End Sub
+
+Sub setSlideXReverseTransition(b As Boolean)
+	If b = False Then Return 
+	AddAttr("transition", "slide-x-reverse-transition")
+End Sub
+
 Sub AddSlideXReverseTransition(elID As String) As VueElement
 	Dim elx As VueElement = AddVueElement1(elID, "v-slide-x-reverse-transition", "", "", "", Null)
 	Return elx
@@ -8801,14 +8882,31 @@ Sub setAlignStart(b As Boolean)
 	Bind("align-start", b)
 End Sub
 
+Sub setFabTransition(b As Boolean)
+	If b = False Then Return 
+	AddAttr("transition", "fab-transition")
+End Sub
+
+
 Sub AddFabTransition(elID As String) As VueElement
 	Dim elx As VueElement = AddVueElement1(elID, "v-fab-transition", "", "", "", Null)
 	Return elx
 End Sub
 
+Sub setFadeTransition(b As Boolean)
+	If b = False Then Return 
+	AddAttr("transition", "fade-transition")
+End Sub
+
+
 Sub AddFadeTransition(elID As String) As VueElement
 	Dim elx As VueElement = AddVueElement1(elID, "v-fade-transition", "", "", "", Null)
 	Return elx
+End Sub
+
+Sub setExpandTransition(b As Boolean)
+	If b = False Then Return 
+	AddAttr("transition", "expand-transition")
 End Sub
 
 Sub AddExpandTransition(elID As String) As VueElement
@@ -8816,10 +8914,22 @@ Sub AddExpandTransition(elID As String) As VueElement
 	Return elx
 End Sub
 
+Sub setScaleTransition(b As Boolean)
+	If b = False Then Return 
+	AddAttr("transition", "scale-transition")
+End Sub
+
+
 Sub AddScaleTransition(elID As String) As VueElement
 	Dim elx As VueElement = AddVueElement1(elID, "v-scale-transition", "", "", "", Null)
 	Return elx
 End Sub
+
+Sub setScrollXTransition(b As Boolean)
+	If b = False Then Return 
+	AddAttr("transition", "scroll-x-transition")
+End Sub
+
 
 Sub AddScrollXTransition(elID As String) As VueElement
 	Dim elx As VueElement = AddVueElement1(elID, "v-scroll-x-transition", "", "", "", Null)
@@ -8831,9 +8941,20 @@ Sub AddScrollXReverseTransition(elID As String) As VueElement
 	Return elx
 End Sub
 
+Sub setScrollYReverseTransition(b As Boolean)
+	If b = False Then Return 
+	AddAttr("transition", "scroll-y-reverse-transition")
+End Sub
+
+
 Sub AddScrollYReverseTransition(elID As String) As VueElement
 	Dim elx As VueElement = AddVueElement1(elID, "v-scroll-y-reverse-transition", "", "", "", Null)
 	Return elx
+End Sub
+
+Sub setScrollYTransition(b As Boolean)
+	If b = False Then Return 
+	AddAttr("transition", "scroll-y-transition")
 End Sub
 
 Sub AddScrollYTransition(elID As String) As VueElement
@@ -8841,9 +8962,19 @@ Sub AddScrollYTransition(elID As String) As VueElement
 	Return elx
 End Sub
 
+Sub setSlideYTransition(b As Boolean)
+	If b = False Then Return 
+	AddAttr("transition", "slide-y-transition")
+End Sub
+
 Sub AddSlideYTransition(elID As String) As VueElement
 	Dim elx As VueElement = AddVueElement1(elID, "v-slide-y-transition", "", "", "", Null)
 	Return elx
+End Sub
+
+Sub setSlideYReverseTransition(b As Boolean)
+	If b = False Then Return 
+	AddAttr("transition", "slide-y-reverse-transition")
 End Sub
 
 Sub AddSlideYReverseTransition(elID As String) As VueElement
@@ -8876,4 +9007,59 @@ Sub AddLink(elID As String, href As String, caption As String, target As String)
 	elx.Href = href
 	elx.Caption = caption
 	elx.Target = target
+End Sub
+
+'fade-img-on-scroll
+Sub setFadeImgOnScroll(b As Boolean)
+	AddAttr(":fade-img-on-scroll", b)
+End Sub
+
+'scroll-target
+Sub setScrollTarget(v As String)
+	AddAttr("scroll-target", v)
+End Sub
+
+'scroll-threshold
+Sub setScrollThreshold(v As Object)
+	AddAttr(":scroll-threshold", v)
+End Sub
+
+'shrink-on-scroll
+Sub setShrinkOnScroll(v As Boolean)
+	AddAttr(":shrink-on-scroll", v)
+End Sub
+
+'overflow-y-auto
+Sub setOverFlowYAuto(b As Boolean)
+	If b = False Then Return
+	AddClass("overflow-y-auto")
+End Sub
+
+'content-class
+Sub setContentClass(v As String)
+	AddAttr("content-class", v)
+End Sub
+
+
+'aspect-ratio
+Sub setAspectRation(v As Object)
+	AddAttr("aspect-ratio", v)
+End Sub
+
+'hide-overflow
+Sub setHideOverFlow(b As Boolean)
+	If b = False Then Return
+	AddClass("hide-overflow")
+End Sub
+
+'float-left
+Sub setFloatLeft(b As Boolean)
+	If b = False Then Return
+	AddClass("float-left")
+End Sub
+
+'float-right
+Sub setFloatRight(b As Boolean)
+	If b = False Then Return
+	AddClass("float-right")
 End Sub

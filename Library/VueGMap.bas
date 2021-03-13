@@ -1036,7 +1036,6 @@ Sub SetMethod(methodName As String, args As List)
 	methodName = methodName.Replace(":","")
 	methodName = methodName.Replace(".","")
 	methodName = methodName.Replace("-","")
-	methodName = methodName.tolowercase
 	If SubExists(mCallBack, methodName) Then
 		Dim cb As BANanoObject = BANano.CallBack(mCallBack, methodName, args)
 		methods.Put(methodName, cb)

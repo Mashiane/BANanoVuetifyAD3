@@ -985,6 +985,16 @@ Sub JoinNonBlanks(delimiter As String, lst As List) As String
 	Return sb.ToString
 End Sub
 
+'extract particular keys from a map and generate a new map
+Sub MapExtractKeys(m As Map, mkeys As List) As Map
+	Dim nm As Map = CreateMap()
+	For Each k As String In mkeys
+		Dim v As Object = m.Get(k)
+		nm.Put(k, v)
+	Next
+	Return nm
+End Sub
+
 
 'join list of maps
 Sub JoinMaps(lst As List) As Map
@@ -3914,4 +3924,61 @@ Sub PushIfExist(nl As List, item As String) As List
 		nl.Add(item)
 	End If
 	Return nl
+End Sub
+
+Sub ListOfMapsSortBy(lst As List, sortby As List) As List
+	'will store the sort order as key and each records
+	Dim mkeys As Map = CreateMap()
+	For Each item As Map In lst
+		'build the sort key
+		Dim mkey As StringBuilder
+		mkey.Initialize 
+		For Each fld As String In sortby
+			Dim v As String = item.Get(fld)
+			mkey.Append(v)
+		Next
+		Dim thisKey As String = mkey.ToString
+		thisKey = thisKey.ToUpperCase
+		'store each record in its sort order key
+		Dim items As List
+		items.Initialize 
+		If mkeys.ContainsKey(thisKey) Then
+			items = mkeys.Get(thisKey)
+		End If
+		items.Add(item)
+		mkeys.Put(thisKey, items)
+	Next
+	'we need to sort the keys
+	Dim sortKeys As List
+	sortKeys.Initialize 
+	For Each k As String In mkeys.Keys
+		sortKeys.Add(k)
+	Next
+	sortKeys.Sort(True)
+	'we need to rebuild the lists
+	Dim newlst As List
+	newlst.Initialize 
+	For Each k As String In sortKeys
+		Dim oxl As List = mkeys.Get(k)
+		For Each oxlm As Map In oxl
+			newlst.Add(oxlm)
+		Next
+	Next
+	Return newlst
+End Sub
+
+Sub MapCopy(sourceM As Map, sourceKeys As List) As Map
+	Dim nm As Map = CreateMap()
+	If sourceKeys.Get(0) = "*" Then
+		For Each k As String In sourceM.Keys
+			Dim v As Object = sourceM.Get(k)
+			nm.Put(k, v)
+		Next
+	Else
+		For Each k As String In sourceKeys
+			Dim v As Object = sourceM.Get(k)
+			nm.Put(k, v)
+		Next
+	End If
+	Return nm
 End Sub

@@ -83,7 +83,6 @@ Sub GetTabIcon(elID As String) As VueElement
 	Return ti
 End Sub
 
-
 'click a reference
 Sub Click(refID As String)
 	refID = refID.tolowercase
@@ -921,7 +920,6 @@ Sub SetMethod(Module As Object, methodName As String, args As List)
 	methodName = methodName.Replace(":","")
 	methodName = methodName.Replace(".","")
 	methodName = methodName.Replace("-","")
-	methodName = methodName.tolowercase
 	If SubExists(Module, methodName) Then
 		Dim cb As BANanoObject = BANano.CallBack(Module, methodName, args)
 		methods.Put(methodName, cb)
@@ -1085,6 +1083,10 @@ End Sub
 'show an element using v-show
 Sub Show(elID As String)
 	SetStateSingle($"${elID}show"$, True)
+End Sub
+
+Sub SetMessage(elID As String, msg As String)
+	SetStateSingle($"${elID}message"$, msg)
 End Sub
 
 'nullify the file select
