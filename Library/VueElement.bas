@@ -5830,6 +5830,201 @@ Sub AddListViewTemplate(numLines As Int, props As ListViewItemOptions) As VueEle
 End Sub
 
 'add a list item template to draw item
+Sub AddListItemGroupTemplate(numLines As Int) As VueElement
+	Dim props As ListViewItemOptions = Options
+	setDataSource(props.dataSource)
+	'
+	Dim elID As String = mName.ToLowerCase
+	Dim parentID As String = CleanID(mName)
+	'
+	Dim templateID As String = $"${elID}template"$
+	Dim headerID As String = $"${elID}header"$
+	Dim dividerID As String = $"${elID}divider"$
+	Dim listitemID As String = $"${elID}listitem"$
+	Dim leftactionID As String = $"${elID}leftaction"$
+	Dim leftactionBtnID As String = $"${elID}leftactionbtn"$
+	Dim leftactionIconID As String = $"${elID}leftactionicon"$
+	Dim leftcheckboxID As String = $"${elID}leftcheckbox"$
+	Dim rightcheckboxID As String = $"${elID}rightcheckbox"$
+	Dim avatarID As String = $"${elID}avatar"$
+	Dim avatarImgID As String = $"${elID}avatarimage"$
+	Dim avatarIconID As String = $"${elID}avataricon"$
+	Dim itemiconID As String = $"${elID}itemicon"$
+	Dim iconID As String = $"${elID}icon"$
+	Dim contentID As String = $"${elID}content"$
+	Dim titleID As String = $"${elID}title"$
+	Dim subtitleID As String = $"${elID}subtitle"$
+	Dim subtitle1ID As String = $"${elID}subtitle1"$
+	Dim rightactionID As String = $"${elID}rightaction"$
+	Dim rightactiontextID As String = $"${elID}rightactiontext"$
+	Dim rightactionBtnID As String = $"${elID}rightactionbtn"$
+	Dim rightactionIconID As String = $"${elID}rightactionicon"$
+	Dim rightratingID As String = $"${elID}rightrating"$
+	Dim leftswitchID As String = $"${elID}leftswitch"$
+	Dim rightswitchID As String = $"${elID}rightswitch"$
+	Dim rightchipID As String = $"${elID}rightchip"$
+	'
+	Dim rightavatarID As String = $"${elID}rightavatar"$
+	Dim rightavatarImgID As String = $"${elID}rightavatarimage"$
+	Dim rightavatarIconID As String = $"${elID}rightavataricon"$
+		
+	'in case the pointers are changed
+	Dim xurl As String = props.url
+	Dim xlefticon As String = props.lefticon
+	Dim xlefticoncolor As String = props.lefticoncolor
+	Dim xlefticonclass As String = props.lefticonclass
+	'
+	Dim xavatar As String = props.avatar
+	Dim xavatarclass As String = props.avatarclass
+	
+	Dim xavataricon As String = props.avataricon
+	Dim xavatariconcolor As String = props.avatariconcolor
+	Dim xavatariconclass As String = props.avatariconclass
+	
+	Dim xicon As String = props.icon
+	Dim xiconclass As String = props.iconclass
+	Dim xiconcolor As String = props.iconcolor
+	
+	Dim xtitle As String = props.title
+	Dim xsubtitle As String = props.subtitle
+	Dim xsubtitle1 As String = props.subtitle1
+	'
+	Dim xrighticon As String = props.righticon
+	Dim xrighticonclass As String = props.righticonclass
+	Dim xrighttext As String = props.righttext
+	Dim xrighticoncolor As String = props.righticoncolor
+	Dim datasource As String = props.dataSource
+	Dim key As String = props.key
+	
+	Dim xactiveclass As String = props.activeclass
+	Dim xleftcheckbox As String = props.leftcheckbox
+	Dim xrightcheckbox As String = props.rightcheckbox
+	Dim xshowleftcheckboxes As Boolean = props.showleftcheckboxes
+	Dim xshowrightcheckboxes As Boolean = props.showrightcheckboxes
+	Dim xshowrightrating As Boolean = props.showrightrating
+	Dim xrightrating As String = props.rightrating
+	'
+	Dim xleftswitch As String = props.leftswitch
+	Dim xshowleftswitch As Boolean = props.showleftswitches
+	Dim xrightswitch As String = props.rightswitch
+	Dim xshowrightswitch As Boolean = props.showrightswitches
+	Dim xswitchinset As Boolean = props.switchinset
+	Dim xitemavatarclass As String = props.itemavatarclass
+	'
+	Dim xrightchip As String = props.rightchip
+	Dim xrightchipcolor As String = props.rightchipcolor
+	'
+	datasource = datasource.ToLowerCase
+	key = key.ToLowerCase
+	Dim xrightitemavatarclass As String = props.rightitemavatarclass
+	
+	Dim sTemplate As String = $"<v-list-item-group id="${templateID}">
+<v-list-item id="${listitemID}" v-for="(item, index) in ${datasource}" :key="item.${key}" :to="item.${xurl}" active-class="${xactiveclass}">
+<v-list-item-action id="${leftactionID}" v-if="item.${xlefticon} || ${xshowleftcheckboxes} || ${xshowleftswitch}">
+<v-btn id="${leftactionBtnID}" :icon="true" v-if="item.${xlefticon}">
+<v-icon id="${leftactionIconID}" ${props.lefticonattr} :color="item.${xlefticoncolor}" v-text="item.${xlefticon}" class="${xlefticonclass}"></v-icon>
+</v-btn>
+<v-checkbox id="${leftcheckboxID}" ${props.leftcheckboxattr} v-if="${xshowleftcheckboxes}" :item="item" v-model="item.${xleftcheckbox}" :input-value="item.${xleftcheckbox}"></v-checkbox>
+<v-switch id="${leftswitchID}" ${props.leftswitchattr} v-if="${xshowleftswitch}" :inset="${xswitchinset}" :item="item" v-model="item.${xleftswitch}" :input-value="item.${xleftswitch}"></v-switch>
+</v-list-item-action>
+<v-list-item-avatar id="${avatarID}" class="${xitemavatarclass}" v-if="item.${xavatar} || item.${xavataricon}">
+<v-img id="${avatarImgID}" ${props.avatarattr} :src="item.${xavatar}" class="${xavatarclass}" v-if="item.${xavatar}"></v-img>
+<v-icon id="${avatarIconID}" ${props.avatariconattr} v-if="item.${xavataricon}" :color="item.${xavatariconcolor}" class="${xavatariconclass}" v-text="item.${xavataricon}"></v-icon>
+</v-list-item-avatar>
+<v-list-item-icon id="${itemiconID}" v-if="item.${xicon}">
+<v-icon id="${iconID}" ${props.iconattr} :color="item.${xiconcolor}" class="${xiconclass}" v-text="item.${xicon}"></v-icon>
+</v-list-item-icon>
+<v-list-item-content id="${contentID}" v-if="item.${xtitle} || item.${xsubtitle} || item.${xsubtitle1}">
+<v-list-item-title id="${titleID}" v-if="item.${xtitle}">{{ item.${xtitle} }}</v-list-item-title>
+<v-list-item-subtitle id="${subtitleID}" v-if="item.${xsubtitle}">{{ item.${xsubtitle} }}</v-list-item-subtitle>
+<v-list-item-subtitle id="${subtitle1ID}" v-If="item.${xsubtitle1}">{{ item.${xsubtitle1} }}</v-list-item-subtitle>
+</v-list-item-content>
+<v-list-item-avatar id="${rightavatarID}" class="${xrightitemavatarclass}" v-if="item.${props.rightavatar} || item.${props.rightavataricon}">
+<v-img id="${rightavatarImgID}" ${props.rightavatarattr} :src="item.${props.rightavatar}" class="${props.rightavatarclass}" v-if="item.${props.rightavatar}"></v-img>
+<v-icon id="${rightavatarIconID}" ${props.rightavatariconattr} v-if="item.${props.rightavataricon}" :color="item.${props.rightavatariconcolor}" class="${props.rightavatariconclass}" v-text="item.${props.rightavataricon}"></v-icon>
+</v-list-item-avatar>
+<v-chip id="${rightchipID}" ${props.rightchipattr} v-if="item.${xrightchip}" :color="item.${xrightchipcolor}" dark small v-text="item.${xrightchip}"></v-chip>
+<v-list-item-action id="${rightactionID}" v-if="item.${xrighticon} || item.${xrighttext} || ${xshowrightcheckboxes} || ${xshowrightrating} || ${xshowrightswitch}">
+<v-list-item-action-text ${props.righttextattr} id="${rightactiontextID}" v-if="item.${xrighttext}" v-text="item.${xrighttext}"></v-list-item-action-text>
+<v-btn id="${rightactionBtnID}" :icon="true" v-if="item.${xrighticon}">
+<v-icon id="${rightactionIconID}" ${props.righticonattr} v-text="item.${xrighticon}" class="${xrighticonclass}" :color="item.${xrighticoncolor}"></v-icon>
+</v-btn>
+<v-checkbox id="${rightcheckboxID}" ${props.rightcheckboxattr} v-if="${xshowrightcheckboxes}" :item="item" v-model="item.${xrightcheckbox}" :input-value="item.${xrightcheckbox}"></v-checkbox>
+<v-rating id="${rightratingID}" ${props.rightratingattr} length="1" v-if="${xshowrightrating}" v-model="item.${xrightrating}" :value="item.${xrightrating}"></v-rating>
+<v-switch id="${rightswitchID}" ${props.rightswitchattr} v-if="${xshowrightswitch}" :inset="${xswitchinset}" :item="item" v-model="item.${xrightswitch}" :input-value="item.${xrightswitch}"></v-switch>
+</v-list-item-action>
+</v-list-item>
+<v-divider v-if="${props.hasdivider}" :inset="${props.insetdivider}"></v-divider>
+</v-list-item-group>"$
+	
+	'
+	sTemplate = sTemplate.Replace("~","$")
+	
+	BANano.GetElement(parentID).Append(sTemplate)
+	'
+	Dim vlistitem As VueElement
+	vlistitem.Initialize(mCallBack, listitemID, listitemID)
+	Select Case numLines
+	Case 2
+		vlistitem.AddAttr(":two-line", True)
+	Case 3
+		vlistitem.AddAttr(":three-line", True)
+	End Select
+	vlistitem.SetOnEventOwn(mCallBack, $"${elID}_click"$, "click", "item")
+	'left action
+	'
+'	Dim vleftcheckbox As VueElement
+'	vleftcheckbox.Initialize(mCallBack, leftcheckboxID, leftcheckboxID)
+'	If xshowleftcheckboxes Then
+'		vleftcheckbox.SetOnEventOwn(mCallBack, $"${elID}_leftclick"$, "click.stop", "item")
+'	End If
+	'
+'	Dim vrightcheckbox As VueElement
+'	vrightcheckbox.Initialize(mCallBack, rightcheckboxID, rightcheckboxID)
+'	If xshowrightcheckboxes Then
+'		vrightcheckbox.SetOnEventOwn(mCallBack, $"${elID}_rightclick"$, "click.stop", "item")
+'	End If
+	
+	Dim vleftlistitemaction As VueElement
+	vleftlistitemaction.Initialize(mCallBack, leftactionID, leftactionID)
+	'If xshowleftcheckboxes = False And xshowleftswitch = False Then
+		vleftlistitemaction.SetOnEventOwn(mCallBack, $"${elID}_leftclick"$, "click.stop", "item")
+	'End If
+	'
+	Dim vrightlistitemaction As VueElement
+	vrightlistitemaction.Initialize(mCallBack, rightactionID, rightactionID)
+	'If xshowrightcheckboxes = False And xshowrightswitch = False Then
+		vrightlistitemaction.SetOnEventOwn(mCallBack, $"${elID}_rightclick"$, "click.stop", "item")
+	'End If
+	'
+'	Dim vleftswitch As VueElement
+'	vleftswitch.Initialize(mCallBack, leftswitchID, leftswitchID)
+'	'If xshowleftswitch Then 
+	'	vleftswitch.SetOnEventOwn(mCallBack, $"${elID}_leftclick"$, "change.stop", "item")
+	'End If
+	'
+'	Dim vrightswitch As VueElement
+'	vrightswitch.Initialize(mCallBack, rightswitchID, rightswitchID)
+	'If xshowrightswitch Then
+	'	vrightswitch.SetOnEventOwn(mCallBack, $"${elID}_rightclick"$, "change.stop", "item")
+	'End If
+	
+	vlistitem.SetData(datasource, NewList)
+	vlistitem.BindVueElement(vlistitem)
+	vlistitem.BindVueElement(vleftlistitemaction)
+	vlistitem.BindVueElement(vrightlistitemaction)
+'	vlistitem.BindVueElement(vleftcheckbox)
+'	vlistitem.BindVueElement(vrightcheckbox)
+'	vlistitem.BindVueElement(vrightswitch)
+'	vlistitem.BindVueElement(vleftswitch)
+	'
+	BindVueElement(vlistitem)
+	Return vlistitem
+End Sub
+
+
+
+'add a list item template to draw item
 Sub AddListViewGroupTemplate1(numLines As Int, props As ListViewItemOptions) As VueElement
 	AddListViewGroupTemplate(numLines, Options)
 	Return Me
@@ -6966,6 +7161,45 @@ Sub GetSpan As VueElement
 	Return GetVueElement($"${mName}span"$)
 End Sub
 
+Sub AddAvatarGroup(elID As String, avatarSize As Int, DataSource As String, Key As String, Src As String, Alt As String, Text As String) As VueElement
+	If DataSource <> "" Then DataSource = DataSource.ToLowerCase
+	If Key <> "" Then Key = Key.ToLowerCase
+	If Src <> "" Then Src = Src.ToLowerCase
+	If Alt <> "" Then Alt = Alt.ToLowerCase
+	If Text <> "" Then Text = Text.ToLowerCase
+	
+	Dim parentID As String = CleanID(mName)
+	elID = elID.ToLowerCase
+	'
+	Dim imageid As String = $"${elID}image"$
+	Dim spaniD As String = $"${elID}span"$
+	'
+	Dim avatar As VueElement = AddVueElement2(parentID, elID, "v-avatar", Null)
+	If avatarSize > 0 Then 
+		avatar.AddAttr("size", avatarSize)
+	End If
+	avatar.VFor = $"(item, index) in ${DataSource}"$
+	avatar.Bind("id", $"item.${Key}"$)
+	avatar.Bind("key", $"item.${Key}"$)
+	avatar.BindAllEvents
+	'
+	Dim img As VueElement = AddVueElement2(elID, imageid, "v-img", Null)
+	img.VIf = $"item.${Src}"$
+	img.Bind("src", $"item.${Src}"$)
+	If Alt <> "" Then 
+		img.Bind("alt", $"item.${Alt}"$)
+	End If
+	img.BindAllEvents
+	'
+	Dim txt As VueElement = AddVueElement2(elID, spaniD, "span", Null)
+	txt.VIf = $"item.${Text}"$
+	txt.Caption = $"{{ item.${Text} }}"$
+	
+	avatar.BindVueElement(img)
+	avatar.BindVueElement(txt)
+	Return avatar
+End Sub
+
 Sub AddAvatarWithText(elID As String, Caption As String, Color As String, avatarSize As Int, TextColor As String, TextColorIntensity As String, avatarprops As Map, textProps As Map) As VueElement
 	Dim parentID As String = CleanID(mName)
 	elID = elID.ToLowerCase
@@ -7247,6 +7481,11 @@ End Sub
 'get embedded icon
 Sub GetIcon As VueElement
 	Return GetVueElement($"${mName}icon"$)
+End Sub
+
+'get embedded template
+Sub GetTemplate As VueElement
+	Return GetVueElement($"${mName}template"$)
 End Sub
 
 Sub AddButtonWithIconWithBadge(elID As String, eIcon As String, btnColor As String, vmodel As String, badgeIcon As String, badgeColor As String, btnprops As Map, iconprops As Map, badgeProperties As Map) As VueElement
@@ -9062,4 +9301,12 @@ End Sub
 Sub setFloatRight(b As Boolean)
 	If b = False Then Return
 	AddClass("float-right")
+End Sub
+
+Sub setSecondary(b As Boolean)
+	AddClass("secondary")
+End Sub
+
+Sub setTextNoWrap(b As Boolean)
+	AddClass("text-no-wrap")
 End Sub
