@@ -5918,8 +5918,9 @@ Sub AddListItemGroupTemplate(numLines As Int) As VueElement
 	key = key.ToLowerCase
 	Dim xrightitemavatarclass As String = props.rightitemavatarclass
 	
-	Dim sTemplate As String = $"<v-list-item-group id="${templateID}">
-<v-list-item id="${listitemID}" v-for="(item, index) in ${datasource}" :key="item.${key}" :to="item.${xurl}" active-class="${xactiveclass}">
+	Dim sTemplate As String = $"<v-list-item-group id="${templateID}" active-class="${xactiveclass}">
+	<v-template v-for="(item, index) in ${datasource}">
+<v-list-item id="${listitemID}" :key="item.${key}" :to="item.${xurl}">
 <v-list-item-action id="${leftactionID}" v-if="item.${xlefticon} || ${xshowleftcheckboxes} || ${xshowleftswitch}">
 <v-btn id="${leftactionBtnID}" :icon="true" v-if="item.${xlefticon}">
 <v-icon id="${leftactionIconID}" ${props.lefticonattr} :color="item.${xlefticoncolor}" v-text="item.${xlefticon}" class="${xlefticonclass}"></v-icon>
@@ -5955,6 +5956,7 @@ Sub AddListItemGroupTemplate(numLines As Int) As VueElement
 </v-list-item-action>
 </v-list-item>
 <v-divider v-if="${props.hasdivider}" :inset="${props.insetdivider}"></v-divider>
+</v-template>
 </v-list-item-group>"$
 	
 	'

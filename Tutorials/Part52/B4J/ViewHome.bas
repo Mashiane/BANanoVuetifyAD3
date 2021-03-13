@@ -36,14 +36,97 @@ Sub Initialize
 	maindiv1.MT = "n3"
 	
 	maincontainer = maindiv1.AddContainer("maincontainer", True)
-	maincontainer.AddRows1.AddColumns4
+	maincontainer.AddRows1.AddColumns4.AddColumns4.AddColumns4.AddColumns4.AddColumns4
 	maincontainer.BuildGrid
 	
 	BuildCard1
 	
+	BuildCard2
+	
+	BuildCard3
+	
+	BuildCard4
+	
+	BuildCard5
+	
 	home.SetMethod(Me, "getAvatarClass", Null)
 	'add the component as a router
 	vuetify.AddRoute(home)
+End Sub
+
+Sub BuildCard5
+	Dim card5 As VueElement = maincontainer.Cell(1, 5).AddCard("card5", "", Null)
+	card5.Color = vuetify.COLOR_GREY
+	card5.ColorIntensity = vuetify.INTENSITY_DARKEN3
+	card5.Dark = True
+	card5.AlignCenter = True
+	card5.PB = 6
+	'
+	Dim appbar5 As VueElement = card5.AddAppBar("appbar5")
+	appbar5.Flat = True
+	appbar5.color = "rgba(0, 0, 0, 0)"
+	'
+	Dim tt As VueElement = appbar5.AddToolbarTitle("tt1", "Messages", "", Null)
+	tt.TextColor = vuetify.COLOR_WHITE
+	tt.PL = 0
+	tt.ML = 2
+	tt.AddClass("title")
+	'
+	Dim list5 As VueElement = card5.AddList("list5", False, False, True, Null)
+	list5.Color = vuetify.COLOR_GREY
+	list5.ColorIntensity = vuetify.INTENSITY_DARKEN3
+	list5.Options.dataSource = "chats"
+	list5.Options.hasdivider = True
+	list5.AddListItemGroupTemplate(0)
+	list5.GetTemplate.VModel = "selected2"
+	list5.GetTemplate.ActiveClass = "yellow--text"
+	'
+	list5.ClearItems
+	list5.ListViewAddItem1(list5.CreateListItem("chat1").SetTitle("User 1").SetRightIcon("mdi-message-outline").SetAvatar("./assets/img1.png"))
+	list5.ListViewAddItem1(list5.CreateListItem("chat2").SetTitle("User 2").SetRightIcon("mdi-message-outline").SetAvatar("./assets/img2.png"))
+	list5.ListViewAddItem1(list5.CreateListItem("chat3").SetTitle("User 3").SetRightIcon("mdi-message-outline").SetAvatar("./assets/img3.png"))
+	list5.ListViewAddItem1(list5.CreateListItem("chat4").SetTitle("User 4").SetRightIcon("mdi-message-outline").SetAvatar("./assets/img4.png"))
+	home.BindVueElement(list5)
+	
+	home.SetData("chats", list5.Records)
+	home.SetData("selected2", "2")
+End Sub
+
+Sub BuildCard4
+	Dim card4 As VueElement = maincontainer.Cell(1, 4).AddCard("card4", "", Null)
+	card4.Color = vuetify.COLOR_GREY
+	card4.ColorIntensity = vuetify.INTENSITY_DARKEN3
+	card4.Dark = True
+	card4.AlignCenter = True
+	card4.PB = 6
+	'
+	Dim appbar4 As VueElement = card4.AddAppBar("appbar4")
+	appbar4.Flat = True
+	appbar4.color = "rgba(0, 0, 0, 0)"
+	'
+	Dim tt As VueElement = appbar4.AddToolbarTitle("tt", "Google", "", Null)
+	tt.TextColor = vuetify.COLOR_WHITE
+	tt.PL = 0
+	tt.ML = 2
+	tt.AddClass("title")
+	'
+	Dim list4 As VueElement = card4.AddList("list4", False, False, False, Null)
+	list4.Color = vuetify.COLOR_GREY
+	list4.ColorIntensity = vuetify.INTENSITY_DARKEN3
+	list4.Options.dataSource = "articles"
+	list4.Options.hasdivider = True
+	list4.AddListItemGroupTemplate(0)
+	list4.GetTemplate.VModel = "selected1"
+	list4.GetTemplate.ActiveClass = "red--text"
+	list4.GetTemplate.Multiple = True
+	'
+	list4.ClearItems
+	list4.ListViewAddItem1(list4.CreateListItem("art1").SetTitle("01 Create wireframe").SetLeftIcon("mdi-rewind").SetRightIcon("mdi-fast-forward"))
+	list4.ListViewAddItem1(list4.CreateListItem("art2").SetTitle("02 Slack Logo Design").SetLeftIcon("mdi-rewind").SetRightIcon("mdi-fast-forward"))
+	home.BindVueElement(list4)
+	
+	home.SetData("articles", list4.Records)
+	home.SetData("selected1", Array("1"))
 End Sub
 
 Sub AddNavBar
@@ -71,6 +154,60 @@ Sub AddNavBar
 	appbar.AddButtonWithIcon("btnbell", "mdi-bell", "", Null, Null)
 	'
 	appbar.AddAvatar("user", "./assets/bvad31.png", 0, Null)
+End Sub
+
+Sub BuildCard3
+	Dim card3 As VueElement = maincontainer.Cell(1, 3).AddCard("card3", "", Null)
+	card3.Color = vuetify.COLOR_GREY
+	card3.ColorIntensity = vuetify.INTENSITY_DARKEN3
+	card3.Dark = True
+	card3.AlignCenter = True
+	
+	Dim dp As VueElement = card3.AddDatePicker("datepicker1", "date2", "", Null)
+	dp.NoTitle = True
+	home.BindVueElement(dp)
+	home.SetData("date2", BANanoShared.DateNow)
+End Sub
+
+Sub BuildCard2
+	Dim card2 As VueElement = maincontainer.Cell(1, 2).AddCard("card2", "", Null)
+	card2.Color = vuetify.COLOR_GREY
+	card2.ColorIntensity = vuetify.INTENSITY_DARKEN3
+	card2.Dark = True
+	card2.AlignCenter = True
+	'
+	Dim card2appbar As VueElement = card2.AddAppBar("card2appbar")
+	card2appbar.Flat = True
+	card2appbar.Color = "rgba(0, 0, 0, 0)"
+	'
+	Dim appbartitle As VueElement = card2appbar.AddToolbarTitle("card2title", "My Tasks (05)", "", Null)
+	appbartitle.AddClass("title")
+	appbartitle.TextColor = vuetify.color_white
+	appbartitle.PL = 0
+	appbartitle.ML = 2
+	'
+	Dim tasklist As VueElement = card2.AddList("tasklist", False, False, False, Null)
+	tasklist.Color = vuetify.COLOR_GREY
+	tasklist.ColorIntensity = vuetify.INTENSITY_DARKEN3
+	tasklist.MT = 4
+	tasklist.Options.dataSource = "tasks"
+	tasklist.Options.hasdivider = True
+	tasklist.AddListItemGroupTemplate(0)
+	'
+	tasklist.GetTemplate.ActiveClass = "red--text"
+	tasklist.GetTemplate.VModel = "selected"
+	tasklist.GetTemplate.Multiple = True
+	
+	'add the tasks
+	tasklist.clearitems
+	tasklist.ListViewAddItem1(tasklist.CreateListItem("task1").SetTitle("01 Create wireframe").SetRightIcon("mdi-star-outline"))
+	tasklist.ListViewAddItem1(tasklist.CreateListItem("task2").SetTitle("02 Slack Logo Design").SetRightIcon("mdi-star-outline"))
+	tasklist.ListViewAddItem1(tasklist.CreateListItem("task3").SetTitle("03 Dashboard Design").SetRightIcon("mdi-star-outline"))
+	tasklist.ListViewAddItem1(tasklist.CreateListItem("task4").SetTitle("04 Create wireframe").SetRightIcon("mdi-star"))
+	
+	home.BindVueElement(tasklist)
+	home.SetData("tasks", tasklist.Records)
+	home.SetData("selected", Array("1"))
 End Sub
 
 
