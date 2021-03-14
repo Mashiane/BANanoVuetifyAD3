@@ -110,23 +110,23 @@ Sub Class_Globals
 	Public const COLOR_WARNING_TEXT As String = "warning--text"
 	
 	'
-	Public CONST BREAKPOINT_XS As String = "xs"
-	Public CONST BREAKPOINT_SM As String = "sm"
-	Public CONST BREAKPOINT_MD As String = "md"
-	Public CONST BREAKPOINT_LG As String = "lg"
-	Public CONST BREAKPOINT_XL As String = "xl"
-	
-	Public CONST BREAKPOINT_xsOnly As String = "xsOnly"
-	Public CONST BREAKPOINT_smOnly As String = "smOnly"
-	Public CONST BREAKPOINT_smAndDown As String = "smAndDown"
-	Public CONST BREAKPOINT_smAndUp As String = "smAndUp"
-	Public CONST BREAKPOINT_mdOnly As String = "mdOnly"
-	Public CONST BREAKPOINT_mdAndDown As String = "mdAndDown"
-	Public CONST BREAKPOINT_mdAndUp As String = "mdAndUp"
-	Public CONST BREAKPOINT_lgOnly As String = "lgOnly"
-	Public CONST BREAKPOINT_lgAndDown As String = "lgAndDown"
-	Public CONST BREAKPOINT_lgAndUp As String = "lgAndUp"
-	Public CONST BREAKPOINT_xlOnly As String = "xlOnly"
+'	Public CONST BREAKPOINT_XS As String = "xs"
+'	Public CONST BREAKPOINT_SM As String = "sm"
+'	Public CONST BREAKPOINT_MD As String = "md"
+'	Public CONST BREAKPOINT_LG As String = "lg"
+'	Public CONST BREAKPOINT_XL As String = "xl"
+'	
+'	Public CONST BREAKPOINT_xsOnly As String = "xsOnly"
+'	Public CONST BREAKPOINT_smOnly As String = "smOnly"
+'	Public CONST BREAKPOINT_smAndDown As String = "smAndDown"
+'	Public CONST BREAKPOINT_smAndUp As String = "smAndUp"
+'	Public CONST BREAKPOINT_mdOnly As String = "mdOnly"
+'	Public CONST BREAKPOINT_mdAndDown As String = "mdAndDown"
+'	Public CONST BREAKPOINT_mdAndUp As String = "mdAndUp"
+'	Public CONST BREAKPOINT_lgOnly As String = "lgOnly"
+'	Public CONST BREAKPOINT_lgAndDown As String = "lgAndDown"
+'	Public CONST BREAKPOINT_lgAndUp As String = "lgAndUp"
+'	Public CONST BREAKPOINT_xlOnly As String = "xlOnly"
 	
 	Public const INTENSITY_NORMAL As String = ""
 	Public const INTENSITY_LIGHTEN5 As String = "lighten-5"
@@ -338,6 +338,23 @@ Sub Class_Globals
 	Private dlgtexttype As String
 	Public BreakPointLGAndUp As String = "$vuetify.breakpoint.lgAndUp"
 	Public BreakPointLGAndUpNot As String = "!$vuetify.breakpoint.lgAndUp"
+	
+	Public CONST BREAKPOINT_XS As String = "$vuetify.breakpoint.xs"
+	Public CONST BREAKPOINT_SM As String = "$vuetify.breakpoint.sm"
+	Public CONST BREAKPOINT_MD As String = "$vuetify.breakpoint.md"
+	Public CONST BREAKPOINT_LG As String = "$vuetify.breakpoint.lg"
+	Public CONST BREAKPOINT_XL As String = "$vuetify.breakpoint.xl"
+	Public CONST BREAKPOINT_xsOnly As String = "$vuetify.breakpoint.xsOnly"
+	Public CONST BREAKPOINT_smOnly As String = "$vuetify.breakpoint.smOnly"
+	Public CONST BREAKPOINT_smAndDown As String = "$vuetify.breakpoint.smAndDown"
+	Public CONST BREAKPOINT_smAndUp As String = "$vuetify.breakpoint.smAndUp"
+	Public CONST BREAKPOINT_mdOnly As String = "$vuetify.breakpoint.mdOnly"
+	Public CONST BREAKPOINT_mdAndDown As String = "$vuetify.breakpoint.mdAndDown"
+	Public CONST BREAKPOINT_mdAndUp As String = "$vuetify.breakpoint.mdAndUp"
+	Public CONST BREAKPOINT_lgOnly As String = "$vuetify.breakpoint.lgOnly"
+	Public CONST BREAKPOINT_lgAndDown As String = "$vuetify.breakpoint.lgAndDown"
+	Public CONST BREAKPOINT_lgAndUp As String = "$vuetify.breakpoint.lgAndUp"
+	Public CONST BREAKPOINT_xlOnly As String = "$vuetify.breakpoint.xlOnly"
 	'
 	Public const LIST_STYLE_CIRCLE As String = "circle"
 	Public const LIST_STYLE_SQUARE As String = "square"
@@ -401,7 +418,7 @@ Sub Class_Globals
 	rightswitchattr As String, rightchipattr As String, iconattr As String, hasdivider As Boolean, insetdivider As Boolean, _
 	rightavatar As String, rightavatarclass As String, rightavataricon As String, _
 	rightavatariconcolor As String, rightavatariconclass As String, rightavatarattr As String, rightavatariconattr As String, _
-	rightitemavatarclass As String)
+	rightitemavatarclass As String, avatartext As String, rightavatartext As String, avatartextcolor As String, rightavatartextcolor As String, avatartextclass As String, rightavatartextclass As String)
 	'
 	Public RouterViewName As String
 	Public DatabaseName As String
@@ -492,6 +509,13 @@ Sub NewListViewItemOptions() As ListViewItemOptions
 	lvio.rightavatarattr = ""
 	lvio.rightavatariconattr = ""
 	lvio.rightitemavatarclass = ""
+	'
+	lvio.avatartext = "avatartext"
+	lvio.rightavatartext = "rightavatartext"
+	lvio.avatartextcolor = "avatartextcolor"
+	lvio.rightavatartextcolor = "rightavatartextcolor"
+	lvio.avatartextclass = ""
+	lvio.rightavatartextclass = ""
 	Return lvio
 End Sub
 
@@ -4844,6 +4868,15 @@ End Sub
 Sub IsVisible(ve As VueElement, bShow As Boolean)
 	Dim vkey As String = ve.VShow
 	SetData(vkey, bShow)
+End Sub
+
+Sub UseGoogleCharts
+	If ModuleExist("googlecharts") = False Then
+		Dim VueGoogleCharts As BANanoObject
+		VueGoogleCharts.Initialize("VueGoogleCharts")
+		Use(VueGoogleCharts)
+		AddModule("googlecharts")
+	End If
 End Sub
 
 Sub UseGoogleMaps(gk As String)

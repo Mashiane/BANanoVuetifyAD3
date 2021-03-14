@@ -42,11 +42,12 @@ File44=upload.php
 File45=v-blur.min.js
 File46=vue.min.js
 File47=vuedraggable.umd.min.js
-File48=vue-google-maps.js
-File49=vue-router.min.js
+File48=vue-google-charts.browser.js
+File49=vue-google-maps.js
 File5=fa-brands-400.eot
-File50=vuetify.min.css
-File51=vuetify.min.js
+File50=vue-router.min.js
+File51=vuetify.min.css
+File52=vuetify.min.js
 File6=fa-brands-400.svg
 File7=fa-brands-400.ttf
 File8=fa-brands-400.woff
@@ -98,6 +99,7 @@ FileGroup49=Default Group
 FileGroup5=Default Group
 FileGroup50=Default Group
 FileGroup51=Default Group
+FileGroup52=Default Group
 FileGroup6=Default Group
 FileGroup7=Default Group
 FileGroup8=Default Group
@@ -107,9 +109,10 @@ Library1=banano
 Library2=jcore
 Library3=jfx
 Module1=BANanoALASQLE
-Module10=VueGMap
-Module11=VueTable
-Module12=VuetifyApp
+Module10=VueGCharts
+Module11=VueGMap
+Module12=VueTable
+Module13=VuetifyApp
 Module2=BANanoMSSQLE
 Module3=BANanoMySQLE
 Module4=|absolute|C:\CodingWorld\B4XShared\B4J\BANanoShared
@@ -118,9 +121,9 @@ Module6=BVAD3ListItem
 Module7=MySQLCRUD
 Module8=VueComponent
 Module9=VueElement
-NumberOfFiles=51
+NumberOfFiles=52
 NumberOfLibraries=3
-NumberOfModules=12
+NumberOfModules=13
 Version=8.9
 @EndOfDesignText@
 #Region Project Attributes 
@@ -132,7 +135,7 @@ Version=8.9
 
 Sub Process_Globals
 	Private BANano As BANano 'ignore
-	Public Version As String = "3.56"
+	Public Version As String = "3.60"
 	Public AppName As String = "BANanoVuetifyAD3"
 End Sub
 
@@ -169,6 +172,7 @@ Sub AppStart (Form1 As Form, Args() As String)
 	BANano.Header.AddJavascriptFile("Sortable.min.js")
 	BANano.Header.AddJavascriptFile("vuedraggable.umd.min.js")
 	BANano.Header.AddJavascriptFile("v-blur.min.js")
+	BANano.Header.AddJavascriptFile("vue-google-charts.browser.js")
 	
 	' start the build
 	#if release

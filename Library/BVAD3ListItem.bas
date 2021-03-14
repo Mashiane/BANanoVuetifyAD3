@@ -199,3 +199,23 @@ Sub SetRightAvatarIconColor(v As String) As BVAD3ListItem
 	options.put("rightavatariconcolor", v)
 	Return Me
 End Sub
+
+Sub SetAvatarText(v As String) As BVAD3ListItem
+	options.put("avatartext", v)
+	Return Me
+End Sub
+
+Sub SetAvatarTextColor(v As String) As BVAD3ListItem
+	options.put("avatartextcolor", v)
+	Return Me
+End Sub
+
+Sub SetRightAvatarText(v As String) As BVAD3ListItem
+	options.put("rightavatartext", v)
+	Return Me
+End Sub
+
+Sub SetRightAvatarTextColor(v As String) As BVAD3ListItem
+	options.put("rightavatartextcolor", v)
+	Return Me
+End Sub

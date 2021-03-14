@@ -358,6 +358,7 @@ Sub Class_Globals
 	Private mRouterAppend As Boolean
 	Public HasRules As Boolean
 	Public Options As ListViewItemOptions
+	Public Gradients As List
 End Sub
 
 'initialize the custom view
@@ -375,6 +376,7 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	methods.Initialize
 	Steps = 0
 	HasRules = False
+	Gradients.Initialize 
 	'
 	LastRow = 0
 	GridRows.Initialize
@@ -390,6 +392,14 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	ntxRow = 0
 	mRouterReplace = False
 	mRouterAppend = False
+End Sub
+
+Sub AddGradient(lst As List)
+	Gradients.Add(lst)
+End Sub
+
+Sub ClearGradients
+	Gradients.Initialize 
 End Sub
 
 Sub NewListViewItemOptions
@@ -465,7 +475,13 @@ Sub NewListViewItemOptions
 	Options.rightavatarattr = ""
 	Options.rightavatariconattr = ""
 	Options.rightitemavatarclass = ""
-	
+	'
+	Options.avatartext = "avatartext"
+	Options.rightavatartext = "rightavatartext"
+	Options.avatartextcolor = "avatartextcolor"
+	Options.rightavatartextcolor = "rightavatartextcolor"
+	Options.avatartextclass = ""
+	Options.rightavatartextclass = ""
 End Sub
 
 'generate the next row
@@ -733,68 +749,60 @@ Sub GetExpansionPanelContent As VueElement
 End Sub
 
 
-Sub setTextCenterClass(b As Boolean)
-	If b = False Then Return
+Sub setTextCenter(b As Boolean)
 	AddClass("text-center")
 End Sub
 
-Sub setDisplay2Class(b As Boolean)
-	If b = False Then Return
+Sub setDisplay2(b As Boolean)
 	AddClass("display-2")
 End Sub
 
-Sub setDisplay1Class(b As Boolean)
-	If b = False Then Return
+Sub setDisplay1(b As Boolean)
 	AddClass("display-1")
 End Sub
 
-Sub setDisplay3Class(b As Boolean)
-	If b = False Then Return
+Sub setDisplay3(b As Boolean)
 	AddClass("display-3")
 End Sub
 
-Sub setDisplay4Class(b As Boolean)
-	If b = False Then Return
+Sub setDisplay4(b As Boolean)
 	AddClass("display-4")
 End Sub
 
-Sub setHeadLineClass(b As Boolean)
-	If b = False Then Return
+Sub setHeading(b As Boolean)
+	AddClass("heading")
+End Sub
+
+Sub setSubHeading(b As Boolean)
+	AddClass("subheading")
+End Sub
+
+Sub setHeadLine(b As Boolean)
 	AddClass("headline")
 End Sub
 
-Sub setTitleClass(b As Boolean)
-	If b = False Then Return
+Sub setTitle(b As Boolean)
 	AddClass("title")
 End Sub
 
-Sub setOverlineClass(b As Boolean)
-	If b = False Then Return
-	AddClass("overline")
-End Sub
 
-Sub setBody1Class(b As Boolean)
-	If b = False Then Return
+Sub setBody1(b As Boolean)
 	AddClass("body-1")
 End Sub
 
-Sub setBody2Class(b As Boolean)
-	If b = False Then Return
+Sub setBody2(b As Boolean)
 	AddClass("body-2")
 End Sub
 
-Sub setSubTitle1Class(b As Boolean)
-	If b = False Then Return
+Sub setSubTitle1(b As Boolean)
 	AddClass("subtitle-1")
 End Sub
 
-Sub setSubTitle2Class(b As Boolean)
-	If b = False Then Return
+Sub setSubTitle2(b As Boolean)
 	AddClass("subtitle-2")
 End Sub
 
 Sub setCaptionClass(b As Boolean)
-	If b = False Then Return
 	AddClass("caption")
 End Sub
 
@@ -1946,9 +1954,10 @@ Public Sub AddAttr(varProp As String, varValue As String)
 		'we are adding a string
 		If varValue.StartsWith(":") Then
 			Dim rname As String = BANanoShared.MidS(varValue, 2)
-			If rname.Contains(".") = False Or rname.Contains("(") = False Then
+			If rname.Contains(".") = False Or rname.Contains("(") = False Or varValue.Contains("||") = False Then
 				bindings.Put(rname, Null)
 			End If
+			varProp = varProp.Replace(":", "")
 			If mElement <> Null Then
 				mElement.SetAttr($":${varProp}"$, rname)
 			Else
@@ -1957,7 +1966,7 @@ Public Sub AddAttr(varProp As String, varValue As String)
 		Else
 			'we have a binding on the property
 			If varProp.StartsWith(":") Then
-				If varValue.Contains(".") = False Or varValue.Contains("(") = False Then
+				If varValue.Contains(".") = False Or varValue.Contains("(") = False Or varValue.Contains("||") = False Then
 					bindings.Put(varValue, Null)
 				End If
 			End If
@@ -2599,7 +2608,6 @@ public Sub setDismissible(b As Boolean)
 End Sub
 
 Sub setFontWeightLight(b As Boolean)
-	If b = False Then Return
 	AddClass("font-weight-light")
 End Sub
 
@@ -3018,6 +3026,7 @@ Sub setSparkType(tv As Object)
 	AddAttr(":type", tv)
 End Sub
 
+'bind the gradient
 Sub setGradient(tv As Object)
 	AddAttr(":gradient", tv)
 End Sub
@@ -3026,6 +3035,7 @@ Sub setLabels(tv As Object)
 	AddAttr(":labels", tv)
 End Sub
 
+'bind padding
 Sub setPadding(tv As Object)
 	AddAttr(":padding", tv)
 End Sub
@@ -3034,6 +3044,7 @@ Sub setLabelSize(tv As Object)
 	AddAttr(":label-size", tv)
 End Sub
 
+'bind line width
 Sub setLineWidth(tv As Object)
 	AddAttr(":line-width", tv)
 End Sub
@@ -3042,6 +3053,7 @@ Sub setGradientDirection(tv As Object)
 	AddAttr(":gradient-direction", tv)
 End Sub
 
+'bind smooth
 Sub setSmooth(tv As Object)
 	AddAttr(":smooth", tv)
 End Sub
@@ -3966,6 +3978,11 @@ Sub MatrixID(xRow As Int, col As Int) As String
 	Return Matrix(xRow, col).name
 End Sub
 
+'return the matrix name
+Sub CellID(xRow As Int, col As Int) As String
+	Return Matrix(xRow, col).name
+End Sub
+
 'build a single row
 private Sub BuildRow(xRow As VueGridRow) As String
 	'how many rows do we have to render
@@ -4752,24 +4769,24 @@ Sub BindType(s As String)
 	AddAttr(":type", s)
 End Sub
 
-Sub setInfo(b As Boolean)
-	If b = False Then Return
+Sub SetTypeInfo
 	AddAttr("type", "info")
 End Sub
 
-Sub setWarning(b As Boolean)
-	If b = False Then Return
+Sub SetTypeWarning
 	AddAttr("type", "warning")
 End Sub
 
-Sub setError(b As Boolean)
-	If b = False Then Return
+Sub SetTypeError
 	AddAttr("type", "error")
 End Sub
 
-Sub setSuccess(b As Boolean)
-	If b = False Then Return
+Sub SetTypeSuccess
 	AddAttr("type", "success")
+End Sub
+
+Sub setSuccess(b As Boolean)
+	AddAttr(":success", b)
 End Sub
 
 Sub setIsTex(b As Boolean)
@@ -5632,6 +5649,14 @@ Sub ListItemRightAvatarIcon As VueElement
 	Return GetVueElement($"${mName}rightavataricon"$)
 End Sub
 
+Sub ListItemAvatarText As VueElement
+	Return GetVueElement($"${mName}avatartext"$)
+End Sub
+
+Sub ListItemRightAvatarText As VueElement
+	Return GetVueElement($"${mName}rightavatartext"$)
+End Sub
+
 'add a list item template to draw item
 Sub AddListViewTemplate(numLines As Int, props As ListViewItemOptions) As VueElement
 	setDataSource(props.dataSource)
@@ -5669,8 +5694,8 @@ Sub AddListViewTemplate(numLines As Int, props As ListViewItemOptions) As VueEle
 	Dim rightavatarID As String = $"${elID}rightavatar"$
 	Dim rightavatarImgID As String = $"${elID}rightavatarimage"$
 	Dim rightavatarIconID As String = $"${elID}rightavataricon"$
-	
-	'
+	Dim rightavatarTextID As String = $"${elID}rightavatartext"$
+	Dim avatarTextID As String = $"${elID}avatartext"$
 	
 	'in case the pointers are changed
 	Dim xurl As String = props.url
@@ -5734,9 +5759,10 @@ Sub AddListViewTemplate(numLines As Int, props As ListViewItemOptions) As VueEle
 <v-checkbox id="${leftcheckboxID}" ${props.leftcheckboxattr} v-if="${xshowleftcheckboxes}" :item="item" v-model="item.${xleftcheckbox}" :input-value="item.${xleftcheckbox}"></v-checkbox>
 <v-switch id="${leftswitchID}" ${props.leftswitchattr} v-if="${xshowleftswitch}" :inset="${xswitchinset}" :item="item" v-model="item.${xleftswitch}" :input-value="item.${xleftswitch}"></v-switch>
 </v-list-item-action>
-<v-list-item-avatar id="${avatarID}" class="${xitemavatarclass}" v-if="item.${xavatar} || item.${xavataricon}">
+<v-list-item-avatar id="${avatarID}" class="${xitemavatarclass}" v-if="item.${xavatar} || item.${xavataricon} || item.${props.avatartext}">
 <v-img id="${avatarImgID}" ${props.avatarattr} :src="item.${xavatar}" class="${xavatarclass}" v-if="item.${xavatar}"></v-img>
 <v-icon id="${avatarIconID}" ${props.avatariconattr} v-if="item.${xavataricon}" :color="item.${xavatariconcolor}" class="${xavatariconclass}" v-text="item.${xavataricon}"></v-icon>
+<span id="${avatarTextID}" v-if="item.${props.avatartext}" :color="item.${props.avatartextcolor}" class="${props.avatartextclass}" v-text="item.${props.avatartext}"></span>
 </v-list-item-avatar>
 <v-list-item-icon id="${itemiconID}" v-if="item.${xicon}">
 <v-icon id="${iconID}" ${props.iconattr} :color="item.${xiconcolor}" class="${xiconclass}" v-text="item.${xicon}"></v-icon>
@@ -5746,9 +5772,10 @@ Sub AddListViewTemplate(numLines As Int, props As ListViewItemOptions) As VueEle
 <v-list-item-subtitle id="${subtitleID}" v-if="item.${xsubtitle}">{{ item.${xsubtitle} }}</v-list-item-subtitle>
 <v-list-item-subtitle id="${subtitle1ID}" v-If="item.${xsubtitle1}">{{ item.${xsubtitle1} }}</v-list-item-subtitle>
 </v-list-item-content>
-<v-list-item-avatar id="${rightavatarID}" class="${xrightitemavatarclass}" v-if="item.${props.rightavatar} || item.${props.rightavataricon}">
+<v-list-item-avatar id="${rightavatarID}" class="${xrightitemavatarclass}" v-if="item.${props.rightavatar} || item.${props.rightavataricon} || item.${props.rightavatartext}">
 <v-img id="${rightavatarImgID}" ${props.rightavatarattr} :src="item.${props.rightavatar}" class="${props.rightavatarclass}" v-if="item.${props.rightavatar}"></v-img>
 <v-icon id="${rightavatarIconID}" ${props.rightavatariconattr} v-if="item.${props.rightavataricon}" :color="item.${props.rightavatariconcolor}" class="${props.rightavatariconclass}" v-text="item.${props.rightavataricon}"></v-icon>
+<span id="${rightavatarTextID}" v-if="item.${props.rightavatartext}" :color="item.${props.rightavatartextcolor}" class="${props.rightavatartextclass}" v-text="item.${props.rightavatartext}"></span>
 </v-list-item-avatar>
 <v-chip id="${rightchipID}" ${props.rightchipattr} v-if="item.${xrightchip}" :color="item.${xrightchipcolor}" dark small v-text="item.${xrightchip}"></v-chip>
 <v-list-item-action id="${rightactionID}" v-if="item.${xrighticon} || item.${xrighttext} || ${xshowrightcheckboxes} || ${xshowrightrating} || ${xshowrightswitch}">
@@ -5867,7 +5894,9 @@ Sub AddListItemGroupTemplate(numLines As Int) As VueElement
 	Dim rightavatarID As String = $"${elID}rightavatar"$
 	Dim rightavatarImgID As String = $"${elID}rightavatarimage"$
 	Dim rightavatarIconID As String = $"${elID}rightavataricon"$
-		
+	Dim rightavatarTextID As String = $"${elID}rightavatartext"$
+	Dim avatarTextID As String = $"${elID}avatartext"$
+	
 	'in case the pointers are changed
 	Dim xurl As String = props.url
 	Dim xlefticon As String = props.lefticon
@@ -5928,21 +5957,23 @@ Sub AddListItemGroupTemplate(numLines As Int) As VueElement
 <v-checkbox id="${leftcheckboxID}" ${props.leftcheckboxattr} v-if="${xshowleftcheckboxes}" :item="item" v-model="item.${xleftcheckbox}" :input-value="item.${xleftcheckbox}"></v-checkbox>
 <v-switch id="${leftswitchID}" ${props.leftswitchattr} v-if="${xshowleftswitch}" :inset="${xswitchinset}" :item="item" v-model="item.${xleftswitch}" :input-value="item.${xleftswitch}"></v-switch>
 </v-list-item-action>
-<v-list-item-avatar id="${avatarID}" class="${xitemavatarclass}" v-if="item.${xavatar} || item.${xavataricon}">
+<v-list-item-avatar id="${avatarID}" class="${xitemavatarclass}" v-if="item.${xavatar} || item.${xavataricon} || item.${props.avatartext}">
 <v-img id="${avatarImgID}" ${props.avatarattr} :src="item.${xavatar}" class="${xavatarclass}" v-if="item.${xavatar}"></v-img>
 <v-icon id="${avatarIconID}" ${props.avatariconattr} v-if="item.${xavataricon}" :color="item.${xavatariconcolor}" class="${xavatariconclass}" v-text="item.${xavataricon}"></v-icon>
 </v-list-item-avatar>
 <v-list-item-icon id="${itemiconID}" v-if="item.${xicon}">
 <v-icon id="${iconID}" ${props.iconattr} :color="item.${xiconcolor}" class="${xiconclass}" v-text="item.${xicon}"></v-icon>
+<span id="${avatarTextID}" v-if="item.${props.avatartext}" :color="item.${props.avatartextcolor}" class="${props.avatartextclass}" v-text="item.${props.avatartext}"></span>
 </v-list-item-icon>
 <v-list-item-content id="${contentID}" v-if="item.${xtitle} || item.${xsubtitle} || item.${xsubtitle1}">
 <v-list-item-title id="${titleID}" v-if="item.${xtitle}">{{ item.${xtitle} }}</v-list-item-title>
 <v-list-item-subtitle id="${subtitleID}" v-if="item.${xsubtitle}">{{ item.${xsubtitle} }}</v-list-item-subtitle>
 <v-list-item-subtitle id="${subtitle1ID}" v-If="item.${xsubtitle1}">{{ item.${xsubtitle1} }}</v-list-item-subtitle>
 </v-list-item-content>
-<v-list-item-avatar id="${rightavatarID}" class="${xrightitemavatarclass}" v-if="item.${props.rightavatar} || item.${props.rightavataricon}">
+<v-list-item-avatar id="${rightavatarID}" class="${xrightitemavatarclass}" v-if="item.${props.rightavatar} || item.${props.rightavataricon} || item.${props.rightavatartext}">
 <v-img id="${rightavatarImgID}" ${props.rightavatarattr} :src="item.${props.rightavatar}" class="${props.rightavatarclass}" v-if="item.${props.rightavatar}"></v-img>
 <v-icon id="${rightavatarIconID}" ${props.rightavatariconattr} v-if="item.${props.rightavataricon}" :color="item.${props.rightavatariconcolor}" class="${props.rightavatariconclass}" v-text="item.${props.rightavataricon}"></v-icon>
+<span id="${rightavatarTextID}" v-if="item.${props.rightavatartext}" :color="item.${props.rightavatartextcolor}" class="${props.rightavatartextclass}" v-text="item.${props.rightavatartext}"></span>
 </v-list-item-avatar>
 <v-chip id="${rightchipID}" ${props.rightchipattr} v-if="item.${xrightchip}" :color="item.${xrightchipcolor}" dark small v-text="item.${xrightchip}"></v-chip>
 <v-list-item-action id="${rightactionID}" v-if="item.${xrighticon} || item.${xrighttext} || ${xshowrightcheckboxes} || ${xshowrightrating} || ${xshowrightswitch}">
@@ -6063,6 +6094,13 @@ Sub AddListViewGroupTemplate(numLines As Int, props As ListViewItemOptions) As V
 	Dim leftswitchID As String = $"${elID}leftswitch"$
 	Dim rightswitchID As String = $"${elID}rightswitch"$
 	Dim rightchipID As String = $"${elID}rightchip"$
+	Dim rightavatarTextID As String = $"${elID}rightavatartext"$
+	Dim avatarTextID As String = $"${elID}avatartext"$
+	'
+	Dim rightavatarID As String = $"${elID}rightavatar"$
+	Dim rightavatarImgID As String = $"${elID}rightavatarimage"$
+	Dim rightavatarIconID As String = $"${elID}rightavataricon"$
+	
 	'
 	'in case the pointers are changed
 	Dim xurl As String = props.url
@@ -6115,7 +6153,7 @@ Sub AddListViewGroupTemplate(numLines As Int, props As ListViewItemOptions) As V
 	
 	Dim sTemplate As StringBuilder
 	sTemplate.Initialize
-	sTemplate.Append($"<v-list-group v-for="item in ${datasource}" :key="item.${key}" v-model="item.${key}" no-action>"$)
+	sTemplate.Append($"<v-list-group v-for="item in ${datasource}" :key="item.${key}" v-model="item.${key}" no-action active-class="${xactiveclass}">"$)
 	sTemplate.Append($"<v-icon slot="prependIcon" ${props.lefticonattr} :color="item.${xiconcolor}" v-text="item.${xicon}"></v-icon>"$)
 	sTemplate.Append($"<v-template v-slot:activator>"$)
 	sTemplate.Append($"<v-list-item-content>"$)
@@ -6123,7 +6161,7 @@ Sub AddListViewGroupTemplate(numLines As Int, props As ListViewItemOptions) As V
 	sTemplate.Append($"</v-list-item-content>"$)
 	sTemplate.Append($"</v-template>"$)
 	
-	sTemplate.Append($"<v-list-item id="${listitemID}" v-for="child in item.items" :key="child.${key}" :to="child.${xurl}" active-class="${xactiveclass}">
+	sTemplate.Append($"<v-list-item id="${listitemID}" v-for="child in item.items" :key="child.${key}" :to="child.${xurl}">
 <v-list-item-action id="${leftactionID}" v-if="child.${xlefticon} || ${xshowleftcheckboxes} || ${xshowleftswitch}">
 <v-btn id="${leftactionBtnID}" :icon="true" v-if="child.${xlefticon}">
 <v-icon id="${leftactionIconID}" ${props.lefticonattr} :color="child.${xlefticoncolor}" v-text="child.${xlefticon}" class="${xlefticonclass}"></v-icon>
@@ -6134,6 +6172,7 @@ Sub AddListViewGroupTemplate(numLines As Int, props As ListViewItemOptions) As V
 <v-list-item-avatar id="${avatarID}" class="${xitemavatarclass}" v-if="child.${xavatar} || child.${xavataricon}">
 <v-img id="${avatarImgID}" ${props.avatarattr} :src="child.${xavatar}" class="${xavatarclass}" v-if="child.${xavatar}"></v-img>
 <v-icon id="${avatarIconID}" ${props.avatariconattr} v-if="child.${xavataricon}" :color="child.${xavatariconcolor}" class="${xavatariconclass}" v-text="child.${xavataricon}"></v-icon>
+<span id="${avatarTextID}" v-if="item.${props.avatartext}" :color="item.${props.avatartextcolor}" class="${props.avatartextclass}" v-text="item.${props.avatartext}"></span>
 </v-list-item-avatar>
 <v-list-item-icon id="${itemiconID}" v-if="child.${xicon}">
 <v-icon id="${iconID}" ${props.iconattr} :color="child.${xiconcolor}" class="${xiconclass}" v-text="child.${xicon}"></v-icon>
@@ -6143,6 +6182,11 @@ Sub AddListViewGroupTemplate(numLines As Int, props As ListViewItemOptions) As V
 <v-list-item-subtitle id="${subtitleID}" v-if="child.${xsubtitle}" v-text="child.${xsubtitle}"></v-list-item-subtitle>
 <v-list-item-subtitle id="${subtitle1ID}" v-if="child.${xsubtitle1}" v-text="child.${xsubtitle1}"></v-list-item-subtitle>
 </v-list-item-content>
+<v-list-item-avatar id="${rightavatarID}" class="${props.rightitemavatarclass}" v-if="item.${props.rightavatar} || item.${props.rightavataricon} || item.${props.rightavatartext}">
+<v-img id="${rightavatarImgID}" ${props.rightavatarattr} :src="item.${props.rightavatar}" class="${props.rightavatarclass}" v-if="item.${props.rightavatar}"></v-img>
+<v-icon id="${rightavatarIconID}" ${props.rightavatariconattr} v-if="item.${props.rightavataricon}" :color="item.${props.rightavatariconcolor}" class="${props.rightavatariconclass}" v-text="item.${props.rightavataricon}"></v-icon>
+<span id="${rightavatarTextID}" v-if="item.${props.rightavatartext}" :color="item.${props.rightavatartextcolor}" class="${props.rightavatartextclass}" v-text="item.${props.rightavatartext}"></span>
+</v-list-item-avatar>
 <v-chip id="${rightchipID}" ${props.rightchipattr} v-if="child.${xrightchip}" :color="child.${xrightchipcolor}" dark small v-text="child.${xrightchip}"></v-chip>
 <v-list-item-action id="${rightactionID}" v-if="child.${xrighticon} || child.${xrighttext} || ${xshowrightcheckboxes} || ${xshowrightrating} || ${xshowrightswitch}">
 <v-list-item-action-text ${props.righttextattr} id="${rightactiontextID}" v-if="child.${xrighttext}" v-text="child.${xrighttext}"></v-list-item-action-text>
@@ -6366,56 +6410,55 @@ Sub AddStyleOnMouseOut(prop As String, value As String)
 	AddAttr("onMouseOut", sstyle)
 End Sub
 
-Sub SetRoundedLG
+Sub RoundedLG
 	AddClass("rounded-lg")
 End Sub
 
-Sub SetRounded0
+Sub Rounded0
 	AddClass("rounded-0")
 End Sub
 
-Sub SetRoundedSM
+Sub RoundedSM
 	AddClass("rounded-sm")
 End Sub
 
-Sub SetRoundedXL
+Sub RoundedXL
 	AddClass("rounded-xl")
 End Sub
 
-Sub SetRoundedPill
+Sub RoundedPill
 	AddClass("rounded-pill")
 End Sub
 
-Sub SetRoundedCircle
+Sub RoundedCircle
 	AddClass("rounded-circle")
 End Sub
 
-Sub SetTransitionSwing
+Sub TransitionSwing
 	AddClass("transition-swing")
 End Sub
 
-
-Sub SetDisplayBlock()
+Sub DisplayBlock()
 	AddStyle("display", "block")
 End Sub
 
-Sub SetResizeNone()
+Sub ResizeNone()
 	AddStyle("resize", "none")
 End Sub
 
-Sub SetCursorPointer()
+Sub CursorPointer()
 	AddStyle("cursor", "pointer")
 End Sub
 
-Sub SetDisplayInlineBlock()
+Sub DisplayInlineBlock()
 	AddStyle("display", "inline-block")
 End Sub
 
-Sub SetBorderNone()
+Sub BorderNone()
 	AddStyle("border", "none")
 End Sub
 
-Sub SetFitBlock()
+Sub FitBlock()
 	AddStyle("width", "100%")
 End Sub
 
@@ -6924,6 +6967,18 @@ End Sub
 '</code>
 Sub AddProgressCircular(elID As String, vmodel As String, caption As String, color As String, props As Map) As VueElement
 	Return AddVueElement1(elID, "v-progress-circular", vmodel, caption, color, props)
+End Sub
+
+Sub AddProgressCircular1(elID As String, vmodel As String, value As String, caption As String, width As String, size As String, color As String, colorintensity As String) As VueElement
+	Dim elx As VueElement = AddVueElement1(elID, "v-progress-circular", vmodel, caption, "", Null)
+	If color <> "" Then elx.Color = color
+	If colorintensity <> "" Then elx.ColorIntensity = colorintensity
+	If size <> "" Then elx.Size = size
+	If width <> "" Then elx.width = width
+	If value <> "" Then 
+		elx.SetData(vmodel, value)
+	End If
+	Return elx
 End Sub
 
 Sub AddCard(elID As String, color As String, props As Map) As VueElement
@@ -9079,35 +9134,31 @@ Sub AtTheBottom As VueElement
 	Return Me
 End Sub
 
-Sub OverflowHidden
+Sub setOverflowHidden(b As Boolean)
 	AddClass("overflow-hidden")
 End Sub
 
-Sub OverflowYHidden
+Sub setOverflowYHidden(b As Boolean)
 	AddClass("overflow-y-hidden")
 End Sub
 
-Sub OverflowXHidden
+Sub setOverflowXHidden(b As Boolean)
 	AddClass("overflow-x-hidden")
 End Sub
 
-Sub TextLGRight
+Sub setTextLGRight(b As Boolean)
 	AddClass("text-lg-right")
 End Sub
 
-Sub TextMDCenter
+Sub setTextMDCenter(b As Boolean)
 	AddClass("text-md-center")
 End Sub
 
-Sub TextSMLeft
+Sub setTextSMLeft(b As Boolean)
 	AddClass("text-sm-left")
 End Sub
 
-Sub TextXSCenter
-	AddClass("text-xs-center")
-End Sub
-
-Sub TextXSRight
+Sub setTextXSRight(b As Boolean)
 	AddClass("text-xs-right")
 End Sub
 
@@ -9167,7 +9218,6 @@ Sub AddScaleTransition(elID As String) As VueElement
 End Sub
 
 Sub setScrollXTransition(b As Boolean)
-	If b = False Then Return 
 	AddAttr("transition", "scroll-x-transition")
 End Sub
 
@@ -9183,7 +9233,6 @@ Sub AddScrollXReverseTransition(elID As String) As VueElement
 End Sub
 
 Sub setScrollYReverseTransition(b As Boolean)
-	If b = False Then Return 
 	AddAttr("transition", "scroll-y-reverse-transition")
 End Sub
 
@@ -9194,7 +9243,6 @@ Sub AddScrollYReverseTransition(elID As String) As VueElement
 End Sub
 
 Sub setScrollYTransition(b As Boolean)
-	If b = False Then Return 
 	AddAttr("transition", "scroll-y-transition")
 End Sub
 
@@ -9204,7 +9252,6 @@ Sub AddScrollYTransition(elID As String) As VueElement
 End Sub
 
 Sub setSlideYTransition(b As Boolean)
-	If b = False Then Return 
 	AddAttr("transition", "slide-y-transition")
 End Sub
 
@@ -9214,7 +9261,6 @@ Sub AddSlideYTransition(elID As String) As VueElement
 End Sub
 
 Sub setSlideYReverseTransition(b As Boolean)
-	If b = False Then Return 
 	AddAttr("transition", "slide-y-reverse-transition")
 End Sub
 
@@ -9238,7 +9284,10 @@ Sub AddKeyValue(key As String, value As String)
 End Sub
 
 Sub setNoBorder(b As Boolean)
-	If b = False Then Return
+	AddStyle("border", "none")
+End Sub
+
+Sub setBorderNone(b As Boolean)
 	AddStyle("border", "none")
 End Sub
 
@@ -9271,8 +9320,7 @@ Sub setShrinkOnScroll(v As Boolean)
 End Sub
 
 'overflow-y-auto
-Sub setOverFlowYAuto(b As Boolean)
-	If b = False Then Return
+Sub setOverFlowYAuto(b as Boolean)
 	AddClass("overflow-y-auto")
 End Sub
 
@@ -9289,19 +9337,16 @@ End Sub
 
 'hide-overflow
 Sub setHideOverFlow(b As Boolean)
-	If b = False Then Return
 	AddClass("hide-overflow")
 End Sub
 
 'float-left
 Sub setFloatLeft(b As Boolean)
-	If b = False Then Return
 	AddClass("float-left")
 End Sub
 
 'float-right
 Sub setFloatRight(b As Boolean)
-	If b = False Then Return
 	AddClass("float-right")
 End Sub
 

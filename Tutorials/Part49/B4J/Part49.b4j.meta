@@ -1,12 +1,15 @@
 ﻿ModuleBookmarks0=
 ModuleBookmarks1=
 ModuleBookmarks2=
+ModuleBookmarks3=
 ModuleBreakpoints0=
 ModuleBreakpoints1=
 ModuleBreakpoints2=
+ModuleBreakpoints3=
 ModuleClosedNodes0=
 ModuleClosedNodes1=
 ModuleClosedNodes2=
-NavigationStack=ViewApplicants,ReadApplicant,142,0,ViewApplicants,dtApplicants_edit,347,0,ViewApplicants,AddApplicant,323,0,ViewApplicants,BuildSide,101,4,ViewApplicants,dtApplicants_clearfilter_click,393,0,ViewApplicants,dtApplicants_delete,357,0,ViewApplicants,Initialize,30,0,ViewApplicants,ratingrule,455,0,ViewApplicants,appliedrule,435,0,ViewApplicants,CreateDialog,489,6
+ModuleClosedNodes3=
+NavigationStack=ViewListing,Process_Globals,1,2,pgIndex,BuildDrawerBottom,191,0,pgIndex,BuildDrawer,161,0,ViewApplicants,Initialize,14,1,ViewListing,Initialize,23,6,ViewListing,LoadApplicants,51,6,ViewListing,getchipcolor,95,6,ViewListing,drwapplicants_click,106,6,ViewListing,CreateListViewapplicants,81,6
 SelectedBuild=0
-VisibleModules=2
+VisibleModules=2,1,3

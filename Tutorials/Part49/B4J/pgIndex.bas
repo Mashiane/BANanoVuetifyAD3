@@ -121,6 +121,7 @@ End Sub
 'add all pages
 Sub AddPages
 	ViewApplicants.Initialize 
+	ViewListing.Initialize 
 End Sub
 
 Sub BuildDrawer
@@ -173,7 +174,7 @@ Sub BuildDrawer
 		
 	drwlist.ClearItems
 	drwlist.ListViewAddItem1(drwlist.CreateListItem("dash").SetTitle("Dashboard").SetLeftIcon("fas fa-tachometer-alt").SetTo("/"))
-	drwlist.ListViewAddItem1(drwlist.CreateListItem("apps").SetTitle("Applicants").SetLeftIcon("fas fa-users").SetTo("/applications").SetRightChip("3").SetRightChipColor(vuetify.COLOR_CYAN))
+	drwlist.ListViewAddItem1(drwlist.CreateListItem("apps").SetTitle("Applicants").SetLeftIcon("fas fa-users").SetTo("/listing").SetRightChip("3").SetRightChipColor(vuetify.COLOR_CYAN))
 	drwlist.ListViewAddItem1(drwlist.CreateListItem("jobs").SetTitle("Jobs").SetLeftIcon("fas fa-briefcase").SetTo("/jobs"))
 	drwlist.ListViewAddItem1(drwlist.CreateListItem("cal").SetTitle("Calendar").SetLeftIcon("fas fa-calendar-alt").SetTo("/calendar"))
 	drwlist.ListViewAddItem1(drwlist.CreateListItem("reps").SetTitle("Reports").SetLeftIcon("fas fa-clipboard-list").SetTo("/reports"))

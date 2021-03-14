@@ -134,13 +134,13 @@ Sub AddNavBar
 	navbardiv.MA = 5
 	navbardiv.Secondary = True
 	navbardiv.TextNoWrap = True
-	navbardiv.SetRoundedLG
+	navbardiv.RoundedLG
 	'
 	Dim appbar As VueElement = navbardiv.AddAppBar("navappbar")
 	appbar.Color = vuetify.COLOR_GREY
 	appbar.ColorIntensity = vuetify.INTENSITY_DARKEN3
 	appbar.Dark = True
-	appbar.SetRoundedLG 
+	appbar.RoundedLG 
 	'
 	Dim txtsearch As VueElement = appbar.AddTextField1("txtsearch", "", "Search", Null)
 	txtsearch.PrependIcon = "mdi-magnify"
@@ -227,7 +227,7 @@ Sub BuildCard1
 	card1google.ColorIntensity = vuetify.INTENSITY_DARKEN2
 	'
 	Dim card1title As VueElement = card1appbar.AddToolbarTitle("card1title", "Google", "", Null)
-	card1title.TitleClass = True
+	card1title.Title = True
 	card1title.TextColor = vuetify.COLOR_WHITE
 	card1title.PL = 0
 	card1title.ML = 2
