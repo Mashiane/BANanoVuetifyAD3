@@ -5905,6 +5905,85 @@ Sub AddListViewTemplate(numLines As Int, props As ListViewItemOptions) As VueEle
 	Return vlistitem
 End Sub
 
+Sub GetListItem As VueElement
+	Return GetVueElement($"${mName}listitem"$)
+End Sub
+
+Sub GetListItemAvatar As VueElement
+	Return GetVueElement($"${mName}listitemavatar"$)
+End Sub
+
+Sub GetSheet As VueElement
+	Return GetVueElement($"${mName}sheet"$)
+End Sub
+
+Sub GetListItemContent As VueElement
+	Return GetVueElement($"${mName}listitemcontent"$)
+End Sub
+
+Sub GetTitle As VueElement
+	Return GetVueElement($"${mName}title"$)
+End Sub
+
+Sub GetListItemTitle As VueElement
+	Return GetVueElement($"${mName}listitemtitle"$)
+End Sub
+
+Sub GetCardActions As VueElement
+	Return GetVueElement($"${mName}cardactions"$)
+End Sub
+
+
+Sub AddMaterialCard(elID As String, sheetColor As String, elIcon As String, elTitle As String, elValue As String) As VueElement
+	elID = elID.tolowercase
+	Dim elID As String = mName.ToLowerCase
+	Dim parentID As String = CleanID(mName)
+	
+	Dim sTemplate As String = $"<v-card id="${elID}">
+            <v-list-item id="${elID}listitem">
+              <v-list-item-avatar id="${elID}listitemavatar">
+                <v-sheet id="${elID}sheet" color="${sheetColor}" width="100" height="100">
+                  <v-icon id="${elID}icon" dark size="60">${elIcon}</v-icon>
+                </v-sheet>
+              </v-list-item-avatar>
+              <v-list-item-content id="${elID}listitemcontent">
+                <div id="${elID}title" class="overline text-right">${elTitle}</div>
+                <v-list-item-title id="${elID}listitemtitle" class="headline text-right">${elValue}</v-list-item-title>
+                <div>
+                  <v-divider></v-divider>
+                </div>
+              </v-list-item-content>
+            </v-list-item>
+            <v-card-actions id="${elID}cardactions">
+            </v-card-actions>
+          </v-card>"$
+		  
+	sTemplate = sTemplate.Replace("~","$")
+	
+	BANano.GetElement(parentID).Append(sTemplate)
+	'
+	Dim vcard As VueElement = GetVueElement(elID)
+	vcard.MT = 3
+	
+	Dim avat As VueElement = vcard.GetListItemAvatar
+	avat.MT = "n10"
+	avat.Width = "100"
+	avat.Height = "100"
+	avat.BorderRadius = "5px"
+	avat.Elevation = "10"
+	'
+	'Dim sht As VueElement = vcard.GetSheet
+	'sht.Elevation = "10"
+	'sht.rounded = True
+	'
+	Dim lt As VueElement = vcard.GetListItemTitle
+	lt.MB = 1
+	
+	vcard.BindAllEvents
+	Return vcard
+End Sub
+
+
 'add a list item template to draw item
 Sub AddListItemGroupTemplate(numLines As Int) As VueElement
 	Dim props As ListViewItemOptions = Options
