@@ -359,6 +359,7 @@ Sub Class_Globals
 	Public HasRules As Boolean
 	Public Options As ListViewItemOptions
 	Public Gradients As List
+	Private Loose As List
 End Sub
 
 'initialize the custom view
@@ -377,6 +378,7 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	Steps = 0
 	HasRules = False
 	Gradients.Initialize 
+	Loose.Initialize 
 	'
 	LastRow = 0
 	GridRows.Initialize
@@ -679,6 +681,28 @@ Sub AddTab(tabID As String, Caption As String, Icon As String, IconOnLeft As Boo
 	Else	
 		tabE.SetText(Caption)
 	End If
+	'add the tab item
+	Dim ti As VueElement = AddVueElement($"tab${tabID}"$, "v-tab-item", Null)
+	ti.Key = "tab" & tabID
+	Return tabE
+End Sub
+
+
+Sub AddTabButtonIcon(tabID As String, Icon As String) As VueElement
+	tabID = tabID.ToLowerCase
+	Dim tabE As VueElement
+	Dim vBtn As VueElement
+	Dim vIcon As VueElement
+	'add the tab 
+	tabE = AddVueElement(tabID, "v-tab", Null)
+	tabE.Href = "#tab" & tabID
+	tabE.Key = tabID
+	tabE.Value = tabID
+	'
+	vBtn = tabE.AddVueElement2(tabID, $"${tabID}button"$, "v-btn", Null)
+	vIcon = vBtn.AddVueElement2($"${tabID}button"$, $"${tabID}icon"$, "v-icon", Null)
+	vIcon.SetText(Icon)
+	
 	'add the tab item
 	Dim ti As VueElement = AddVueElement($"tab${tabID}"$, "v-tab-item", Null)
 	ti.Key = "tab" & tabID
@@ -1536,8 +1560,9 @@ Sub ToString As String
 	Dim iStructure As String = BANanoShared.BuildAttributes(attributeList)
 	iStructure = iStructure.trim
 	Dim stext As String = sbText.ToString
+	Dim strLoose As String = BANanoShared.Join(" ", Loose)
 	'stext = stext.Replace("v-template", "template")
-	Dim rslt As String = $"<${mTagName} id="${mName}" ${iStructure}>${mCaption}${stext}</${mTagName}>"$
+	Dim rslt As String = $"<${mTagName} id="${mName}" ${strLoose} ${iStructure}>${mCaption}${stext}</${mTagName}>"$
 	Return rslt
 End Sub
 
@@ -1663,16 +1688,20 @@ Sub AddHR
 	Append("<hr>")
 End Sub
 
+Sub AddLoose(attr As String)
+	Loose.Add(attr)
+End Sub
+
 'add an element to the text
-Sub AddElement(elID As String, tag As String, props As Map, styleProps As Map, classNames As List, loose As List, Text As String)
+Sub AddElement(elID As String, tag As String, props As Map, styleProps As Map, classNames As List, loosex As List, Text As String)
 	elID = elID.tolowercase
 	elID = elID.Replace("#","")
 	Dim elIT As VueElement
 	elIT.Initialize(mCallBack, elID, tag)
 	elIT.Append(Text)
-	If loose <> Null Then
-		For Each k As String In loose
-			elIT.SetAttr(k, True)
+	If Loose <> Null Then
+		For Each k As String In loosex
+			elIT.AddLoose(k)
 		Next
 	End If
 	If props <> Null Then
@@ -1815,16 +1844,20 @@ Sub SetVBindIs(t As String) As VueElement
 	Return Me
 End Sub
 
+Sub setVSlotHover(b As Boolean)
+	AddAttr("v-slot", "{ hover }")
+End Sub
+
 Sub setVSlotNoData(b As Boolean)
-	AddAttr("v-slot:no-data", b)
+	Loose.Add("v-slot:no-data")
 End Sub
 
 Sub setVSlotAppend(b As Boolean)
-	AddAttr("v-slot:append", b)
+	Loose.Add("v-slot:append")
 End Sub
 
 Sub setVSlotExtension(b As Boolean)
-	AddAttr("v-slot:extension", b)
+	Loose.Add("v-slot:extension")
 End Sub
 
 'change the text of the element
@@ -3095,6 +3128,14 @@ End Sub
 public Sub setJustifyCenter(varJustifyCenter As Boolean)
 	AddAttrOnConditionTrue("justify", "center", varJustifyCenter)
 	bJustifyCenter = varJustifyCenter
+End Sub
+
+public Sub setJustifyEnd(varJustifyEnd As Boolean)
+	AddAttrOnConditionTrue("justify", "end", varJustifyEnd)
+End Sub
+
+public Sub setJustifyEndClass(varJustifyEnd As Boolean)
+	AddClass("justify-end")
 End Sub
 
 public Sub getJustifyCenter() As Boolean
@@ -5657,6 +5698,14 @@ Sub ListItemRightAvatarText As VueElement
 	Return GetVueElement($"${mName}rightavatartext"$)
 End Sub
 
+Sub ListItemLeftButton As VueElement
+	Return GetVueElement($"${mName}leftactionbtn"$)
+End Sub
+
+Sub ListItemRightButton As VueElement
+	Return GetVueElement($"${mName}rightactionbtn"$)
+End Sub
+
 'add a list item template to draw item
 Sub AddListViewTemplate(numLines As Int, props As ListViewItemOptions) As VueElement
 	setDataSource(props.dataSource)
@@ -7029,10 +7078,16 @@ Sub AddVueElement1(elID As String, tag As String, vModel As String, Caption As S
 	'get the element
 	Dim ve As VueElement
 	ve.Initialize(mCallBack, elID, elID)
-	If Caption <> "" Then ve.Caption = Caption
-	ve.VModel = vModel
-	ve.SetData(vModel, "")
-	If color <> "" Then ve.Color = color
+	If Caption <> "" Then 
+		ve.Caption = Caption
+	End If
+	If vModel <> "" Then
+		ve.VModel = vModel
+		ve.SetData(vModel, "")
+	End If
+	If color <> "" Then 
+		ve.Color = color
+	End If
 	ve.AssignProps(props)
 	ve.BindAllEvents
 	Return ve
@@ -7800,6 +7855,12 @@ End Sub
 'get the chip ref from the chip group
 Sub GetAvatar As VueElement
 	Dim elKey As String = $"${mName}avatar"$
+	Dim elx As VueElement = GetVueElement(elKey)
+	Return elx
+End Sub
+
+Sub GetButton As VueElement
+	Dim elKey As String = $"${mName}button"$
 	Dim elx As VueElement = GetVueElement(elKey)
 	Return elx
 End Sub
@@ -9356,4 +9417,29 @@ End Sub
 
 Sub setTextNoWrap(b As Boolean)
 	AddClass("text-no-wrap")
+End Sub
+
+Sub AddVueGCharts(elID As String) As VueGCharts
+	elID = elID.tolowercase
+	Dim gc As VueGCharts
+	gc.Initialize(mCallBack, elID, elID)
+	gc.AddToParent(mName)
+	Return gc
+End Sub
+
+Sub setTextCapitalize(b As Boolean)
+	AddClass("text-capitalize")
+End Sub
+
+Sub setBordered(b As Boolean)
+	AddAttr(":bordered", b)
+End Sub
+
+
+Sub setThreeLine(b As Boolean)
+	AddAttr(":three-line", b)
+End Sub
+
+Sub setTwoLine(b As Boolean)
+	AddAttr(":two-line", b)
 End Sub

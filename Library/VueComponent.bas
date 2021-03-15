@@ -516,6 +516,10 @@ Sub BindVueGMap(el As VueGMap)
 	Next
 End Sub
 
+Sub BindVueGCharts(el As VueGCharts)
+	BindVueElement(el.GChart)
+End Sub
+
 Sub NewList As List
 	Dim elx As List
 	elx.Initialize

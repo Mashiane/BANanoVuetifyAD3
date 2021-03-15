@@ -2716,7 +2716,7 @@ Sub AddToolbar(Module As Object, parentID As String, elID As String, color As St
 End Sub
 
 Sub AddAppBar(Module As Object, elID As String, color As String, props As Map) As VueElement
-	Dim elx As VueElement = AddVueElement(Module, $"${appname}app"$, elID, "v-app-bar", "", "", color, props)
+	Dim elx As VueElement = AddVueElement(Module, $"${AppName}app"$, elID, "v-app-bar", "", "", color, props)
 	elx.Bind("app", True)
 	Return elx
 End Sub
