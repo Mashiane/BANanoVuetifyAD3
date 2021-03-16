@@ -7,6 +7,6 @@ ModuleBreakpoints2=
 ModuleClosedNodes0=
 ModuleClosedNodes1=
 ModuleClosedNodes2=
-NavigationStack=pgIndex,apphamburger_ClickStop,133,0,pgIndex,drwlist_click,132,0,pgIndex,Init,30,6,Main,Process_Globals,15,2,Main,AppStart,54,0,ViewHome,Process_Globals,4,3,ViewHome,Initialize,22,6,ViewHome,BuildChart1,48,6,ViewHome,BuildChart3,52,6,ViewHome,BuildChart2,69,6
+NavigationStack=pgIndex,apphamburger_ClickStop,133,0,pgIndex,drwlist_click,132,0,pgIndex,Init,30,6,Main,Process_Globals,15,2,Main,AppStart,54,0,ViewHome,Process_Globals,4,3,ViewHome,Initialize,22,6,ViewHome,BuildChart1,48,6,ViewHome,BuildChart3,52,6,ViewHome,BuildChart2,76,6
 SelectedBuild=0
 VisibleModules=1,2

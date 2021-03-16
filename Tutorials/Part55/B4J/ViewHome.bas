@@ -159,7 +159,7 @@ Sub BuildActivity(p As VueElement)
 	'
 	'
 	Dim aba1t As VueElement = aba1.AddToolbarTitle("aba1t", "Activity", "", Null)
-	aba1t.Title = True
+	aba1t.AddClassTitle
 	aba1t.PL = 0
 	aba1t.ML = 2
 	aba1t.TextColor = vuetify.color_black
@@ -176,7 +176,7 @@ Sub BuildActivity(p As VueElement)
 	'
 	Dim txx As VueElement = aba2.AddToolbarTitle("txx", "Send MashCoin", "", Null)
 	txx.TextColor = vuetify.COLOR_BLACK
-	txx.Title = True
+	txx.AddClassTitle
 	txx.ML = 2
 	'
 	aba2.AddSpacer
@@ -200,7 +200,7 @@ Sub BuildActivity(p As VueElement)
 	'
 	Dim txx As VueElement = aba3.AddToolbarTitle("txx3", "Receive MashCoin", "", Null)
 	txx.TextColor = vuetify.COLOR_BLACK
-	txx.Title = True
+	txx.AddClassTitle
 	txx.ML = 2
 	'
 	aba3.AddSpacer
@@ -224,7 +224,7 @@ Sub BuildImpression(p As VueElement)
 	Dim ttx As VueElement = cc1bar.AddToolbarTitle("ttx", "Impression", "", Null)
 	ttx.PL = 0
 	ttx.ML = 2
-	ttx.Title = True
+	ttx.AddClassTitle
 	ttx.TextColor = vuetify.COLOR_BLACK
 	'
 	cc1bar.AddSpacer

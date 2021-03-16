@@ -284,7 +284,7 @@ Sub Process_Globals
 	Public AppTitle As String = "BANanoVuetify AD3"
 	Private Publish As String = "C:\laragon\www"
 	Public Version As String = "1.00"
-	Public ServerIP As String = "http://www.localhost:8080"
+	Public ServerIP As String = "https:localhost"
 End Sub
 
 Sub AppStart (Form1 As Form, Args() As String)
@@ -308,15 +308,13 @@ Sub AppStart (Form1 As Form, Args() As String)
 	BANano.Header.AddManifestIcon("android-chrome-192x192.png", "192x192")
 	BANano.Header.AddManifestIcon("android-chrome-512x512.png", "512x512")
 	BANano.TranspilerOptions.UseServiceWorker = False
-	BANano.TranspilerOptions.MergeAllCSSFiles = False
-	BANano.TranspilerOptions.MergeAllJavascriptFiles = False
+	BANano.TranspilerOptions.MergeAllCSSFiles = True
+	BANano.TranspilerOptions.MergeAllJavascriptFiles = True
 	BANano.TranspilerOptions.MinifyOnline = False
 	BANano.TranspilerOptions.RemoveDeadCode = False
 	'BANano.TranspilerOptions.SetFireReadyWhenReadyStateComplete
 	'BANano.TranspilerOptions.GZipGeneratedWebsite(10)
-	#if release
-		BANano.TranspilerOptions.EnableLiveCodeSwapping = False
-	#end if
+	BANano.TranspilerOptions.EnableLiveCodeSwapping = False
 	'BANano.TranspilerOptions.RedirectOutput(File.DirApp, "log.txt")
 	'set php settings
 	BANano.PHP_NAME = $"${AppName}.php"$

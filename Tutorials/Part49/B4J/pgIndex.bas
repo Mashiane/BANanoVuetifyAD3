@@ -121,7 +121,6 @@ End Sub
 'add all pages
 Sub AddPages
 	ViewApplicants.Initialize 
-	ViewListing.Initialize 
 End Sub
 
 Sub BuildDrawer

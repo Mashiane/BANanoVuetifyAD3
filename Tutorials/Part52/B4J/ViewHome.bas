@@ -227,7 +227,7 @@ Sub BuildCard1
 	card1google.ColorIntensity = vuetify.INTENSITY_DARKEN2
 	'
 	Dim card1title As VueElement = card1appbar.AddToolbarTitle("card1title", "Google", "", Null)
-	card1title.Title = True
+	card1title.AddClassTitle
 	card1title.TextColor = vuetify.COLOR_WHITE
 	card1title.PL = 0
 	card1title.ML = 2

@@ -7,6 +7,5 @@ ModuleBreakpoints2=
 ModuleClosedNodes0=
 ModuleClosedNodes1=
 ModuleClosedNodes2=
-NavigationStack=pgIndex,BuildDrawerBottom,191,0,ViewApplicants,Initialize,14,1,pgIndex,AddPages,117,0,pgIndex,BuildSnackBar,113,0,pgIndex,BuildDrawer,159,0
 SelectedBuild=0
-VisibleModules=
+VisibleModules=1,2

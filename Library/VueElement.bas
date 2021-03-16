@@ -2215,8 +2215,10 @@ public Sub getAttributes() As String
 	Return mAttributes
 End Sub
 
-'sets the caption
+'sets the caption, , remove v-html and v-text
 public Sub setCaption(varCaption As String)
+	RemoveAttr("v-html")
+	RemoveAttr("v-text")
 	If mElement <> Null Then
 		mElement.SetText(varCaption)
 	End If
@@ -4599,8 +4601,10 @@ Sub IsValidID(idName As String) As Boolean
 	Return True
 End Sub
 
-'set banano text value
+'set banano text value, remove v-html and v-text
 Sub SetText(txt As String)
+	RemoveAttr("v-html")
+	RemoveAttr("v-text")
 	If mElement <> Null Then
 		mElement.SetText(txt)
 	Else

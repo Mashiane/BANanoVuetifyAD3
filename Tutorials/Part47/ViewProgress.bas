@@ -23,28 +23,23 @@ Sub Initialize
 	'load the template
 	banano.LoadLayout(vuetify.PlaceHolderName, "vprogresscontainer")
 	'
-	Dim prg1 As VueElement = vuetify.AddProgressCircular(Me, progresscontainer.MatrixID(1,1), _
-	"prg1", "prg1value", "{{ prg1value }}", "green", Null)
+	Dim prg1 As VueElement = vuetify.AddProgressCircular(Me, progresscontainer.MatrixID(1,1), "prg1", "prg1value", "{{ prg1value }}", "green", Null)
 	prg1.Size = 70
 	progressindicators.BindVueElement(prg1)
 	'
-	Dim prg2 As VueElement = vuetify.AddProgressCircular(Me, progresscontainer.MatrixID(1,2), _
-	"prg2", "prg2value", "{{ prg2value }}", "teal", Null)
+	Dim prg2 As VueElement = vuetify.AddProgressCircular(Me, progresscontainer.MatrixID(1,2), "prg2", "prg2value", "{{ prg2value }}", "teal", Null)
 	prg2.Size = 80
 	progressindicators.BindVueElement(prg2)
 	'
-	Dim prg3 As VueElement = vuetify.AddProgressCircular(Me, progresscontainer.MatrixID(2,1), _
-	"prg3", "prg3value", "{{ prg3value }}", "orange", Null)
+	Dim prg3 As VueElement = vuetify.AddProgressCircular(Me, progresscontainer.MatrixID(2,1), "prg3", "prg3value", "{{ prg3value }}", "orange", Null)
 	prg3.Size = 90
 	progressindicators.BindVueElement(prg3)
 	'
-	Dim prg4 As VueElement = vuetify.AddProgressLinear(Me, progresscontainer.MatrixID(2,2), _
-	"prg4", "prg4value", "red", Null)
+	Dim prg4 As VueElement = vuetify.AddProgressLinear(Me, progresscontainer.MatrixID(2,2), "prg4", "prg4value", "red", Null)
 	prg4.Indeterminate = True
 	progressindicators.BindVueElement(prg4)
 	'
-	Dim prg5 As VueElement = vuetify.AddProgressLinear(Me, progresscontainer.MatrixID(3,1), _
-	"prg5", "prg5value", "light-blue", Null)
+	Dim prg5 As VueElement = vuetify.AddProgressLinear(Me, progresscontainer.MatrixID(3,1), "prg5", "prg5value", "light-blue", Null)
 	prg5.Striped = True
 	progressindicators.BindVueElement(prg5)
 	'
