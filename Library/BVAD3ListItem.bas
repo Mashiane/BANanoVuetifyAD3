@@ -219,3 +219,8 @@ Sub SetRightAvatarTextColor(v As String) As BVAD3ListItem
 	options.put("rightavatartextcolor", v)
 	Return Me
 End Sub
+
+Sub SetAttr(attr As String, v As String) As BVAD3ListItem
+	options.put(attr, v)
+	Return Me
+End Sub

@@ -40,6 +40,6 @@ ModuleClosedNodes6=
 ModuleClosedNodes7=
 ModuleClosedNodes8=
 ModuleClosedNodes9=
-NavigationStack=VueElement,GetListItemAvatar,5905,0,VueElement,GetListItemContent,5921,0,VueElement,GetTitle,5921,0,VueElement,GetCardActions,5927,0,VueElement,GetListItemTitle,5923,0,VueElement,AddListItemGroupTemplate,5977,0,VueElement,AddMaterialCard,5965,6,VueElement,AddCol,9075,0,VueElement,AddAvatar,7322,0,VueElement,GetImage,7318,0,Main,Process_Globals,7,0
+NavigationStack=VueElement,AddCardText,7317,0,VueElement,AddCardActions,7328,0,VueElement,AddCardText1,7320,3,VueElement,AddCardActions1,7329,3,VueElement,AddCardSubTitle1,7311,2,VueElement,AddCardTitle1,7303,3,VueElement,AddWindowItem,7298,0,VueElement,AddCard1,7288,0,VueElement,AddAvatar2,7544,0,VueElement,AddAvatar,7538,0
 SelectedBuild=0
 VisibleModules=

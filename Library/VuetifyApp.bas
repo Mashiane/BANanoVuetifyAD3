@@ -2599,7 +2599,11 @@ Sub AddNav(Module As Object, parentID As String, elID As String) As VueElement
 End Sub
 
 Sub AddToolbarTitle(Module As Object, parentID As String, elID As String, Caption As String, Color As String, props As Map) As VueElement
-	Return AddVueElement(Module, parentID, elID, "v-toolbar-title", "", Caption, Color, props)
+	Dim elx As VueElement = AddVueElement(Module, parentID, elID, "v-toolbar-title", "", Caption, "", props)
+	If Color <> "" Then 
+		elx.TextColor = Color
+	End If
+	Return elx
 End Sub
 
 'add the vapp
