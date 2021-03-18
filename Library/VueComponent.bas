@@ -89,6 +89,17 @@ Sub Click(refID As String)
 	refs.GetField(refID).RunMethod("click", Null)
 End Sub
 
+'click a reference
+Sub ClickFile(refID As String)
+	refID = refID.tolowercase
+	Dim fileRefs As BANanoObject = refs.GetField(refID)
+	'get refs
+	Dim xref As String = "$refs"
+	Dim fr As BANanoObject = fileRefs.GetField(xref)
+	Dim input As BANanoObject = fr.GetField("input")
+	input.RunMethod("click", Null)
+End Sub
+
 'focus on a ref
 Sub SetFocus(refID As String)
 	Try
@@ -815,6 +826,13 @@ End Sub
 'add a meta tag to the property
 Sub AddMeta(prop As String, value As String)
 	meta.Put(prop, value)
+End Sub
+
+'change the loading status of an element
+Sub SetLoading(elID As String, b As Boolean)
+	elID = elID.ToLowerCase
+	Dim loadid As String = $"${elID}loading"$
+	SetData(loadid, b)
 End Sub
 
 'return the component

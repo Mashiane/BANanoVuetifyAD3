@@ -4223,7 +4223,7 @@ End Sub
 'fileDet = BANanoShared.GetFileDetails(fileObj)
 'Dim fn As String = fileDet.FileName
 ''you can check the size here
-'start uploading the file
+''start uploading the file
 'fileDet = BANanoShared.UploadFileWait(fileObj)
 'Dim sstatus As String = fileDet.Status
 'Select Case sstatus
@@ -4240,7 +4240,7 @@ End Sub
 'Sub fi1_change(fileList As List)
 'If banano.IsNull(fileList) Or banano.IsUndefined(fileList) Then Return
 'Dim uploads As List = vc.NewList
-''for each fileObj As Map in fileList
+'for each fileObj As Map in fileList
 ''get file details
 'Dim fileDet As FileObject
 'fileDet = BANanoShared.GetFileDetails(fileObj)
@@ -4311,7 +4311,7 @@ End Sub
 'Sub fi1_change(fileList As List)
 'If banano.IsNull(fileList) Or banano.IsUndefined(fileList) Then Return
 'Dim uploads As List = vc.NewList
-''for each fileObj As Map in fileList
+'for each fileObj As Map in fileList
 ''get file details
 'Dim fileDet As FileObject
 'fileDet = BANanoShared.GetFileDetails(fileObj)
