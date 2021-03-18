@@ -17,37 +17,41 @@ File21=fontawesome.css
 File22=gray.png
 File23=green.png
 File24=happyface.png
-File25=lodash.min.js
-File26=materialdesignicons.min.css
-File27=materialdesignicons-webfont.eot
-File28=materialdesignicons-webfont.ttf
-File29=materialdesignicons-webfont.woff
+File25=html2canvas.js
+File26=jspdf.min.js
+File27=jspdf.plugin.autotable.min.js
+File28=lodash.min.js
+File29=materialdesignicons.min.css
 File3=avatar.png
-File30=materialdesignicons-webfont.woff2
-File31=neutralface.png
-File32=numeral.min.js
-File33=orange.png
-File34=red.png
-File35=roboto.min.css
-File36=Roboto100.ttf
-File37=Roboto300.ttf
-File38=Roboto400.ttf
-File39=Roboto500.ttf
+File30=materialdesignicons-webfont.eot
+File31=materialdesignicons-webfont.ttf
+File32=materialdesignicons-webfont.woff
+File33=materialdesignicons-webfont.woff2
+File34=neutralface.png
+File35=numeral.min.js
+File36=orange.png
+File37=qrcode.min.js
+File38=red.png
+File39=roboto.min.css
 File4=dayjs.min.js
-File40=Roboto700.ttf
-File41=Roboto900.ttf
-File42=sadface.png
-File43=Sortable.min.js
-File44=upload.php
-File45=v-blur.min.js
-File46=vue.min.js
-File47=vuedraggable.umd.min.js
-File48=vue-google-charts.browser.js
-File49=vue-google-maps.js
+File40=Roboto100.ttf
+File41=Roboto300.ttf
+File42=Roboto400.ttf
+File43=Roboto500.ttf
+File44=Roboto700.ttf
+File45=Roboto900.ttf
+File46=sadface.png
+File47=Sortable.min.js
+File48=upload.php
+File49=v-blur.min.js
 File5=fa-brands-400.eot
-File50=vue-router.min.js
-File51=vuetify.min.css
-File52=vuetify.min.js
+File50=vue.min.js
+File51=vuedraggable.umd.min.js
+File52=vue-google-charts.browser.js
+File53=vue-google-maps.js
+File54=vue-router.min.js
+File55=vuetify.min.css
+File56=vuetify.min.js
 File6=fa-brands-400.svg
 File7=fa-brands-400.ttf
 File8=fa-brands-400.woff
@@ -100,6 +104,10 @@ FileGroup5=Default Group
 FileGroup50=Default Group
 FileGroup51=Default Group
 FileGroup52=Default Group
+FileGroup53=Default Group
+FileGroup54=Default Group
+FileGroup55=Default Group
+FileGroup56=Default Group
 FileGroup6=Default Group
 FileGroup7=Default Group
 FileGroup8=Default Group
@@ -109,21 +117,23 @@ Library1=banano
 Library2=jcore
 Library3=jfx
 Module1=BANanoALASQLE
-Module10=VueGCharts
-Module11=VueGMap
-Module12=VueTable
-Module13=VuetifyApp
-Module2=BANanoMSSQLE
-Module3=BANanoMySQLE
-Module4=|absolute|C:\CodingWorld\B4XShared\B4J\BANanoShared
-Module5=BANanoSQLiteE
-Module6=BVAD3ListItem
-Module7=MySQLCRUD
-Module8=VueComponent
-Module9=VueElement
-NumberOfFiles=52
+Module10=VueComponent
+Module11=VueElement
+Module12=VueGCharts
+Module13=VueGMap
+Module14=VueTable
+Module15=VuetifyApp
+Module2=BANanoJSPDF
+Module3=BANanoJSPDFTable
+Module4=BANanoMSSQLE
+Module5=BANanoMySQLE
+Module6=|absolute|C:\CodingWorld\B4XShared\B4J\BANanoShared
+Module7=BANanoSQLiteE
+Module8=BVAD3ListItem
+Module9=MySQLCRUD
+NumberOfFiles=56
 NumberOfLibraries=3
-NumberOfModules=13
+NumberOfModules=15
 Version=8.9
 @EndOfDesignText@
 #Region Project Attributes 
@@ -135,7 +145,7 @@ Version=8.9
 
 Sub Process_Globals
 	Private BANano As BANano 'ignore
-	Public Version As String = "3.65"
+	Public Version As String = "3.68"
 	Public AppName As String = "BANanoVuetifyAD3"
 End Sub
 
@@ -153,7 +163,6 @@ Sub AppStart (Form1 As Form, Args() As String)
 '	BANano.Header.AddJavascriptFile("https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js")
 '	BANano.Header.AddJavascriptFile("https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.20/lodash.min.js")
 '	BANano.Header.AddJavascriptFile("https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js")
-	
 	
 		'
 	BANano.Header.AddCSSFile("roboto.min.css")
@@ -173,6 +182,10 @@ Sub AppStart (Form1 As Form, Args() As String)
 	BANano.Header.AddJavascriptFile("vuedraggable.umd.min.js")
 	BANano.Header.AddJavascriptFile("v-blur.min.js")
 	BANano.Header.AddJavascriptFile("vue-google-charts.browser.js")
+	BANano.Header.AddJavascriptFile("html2canvas.js")
+	BANano.Header.AddJavascriptFile("jspdf.min.js")
+	BANano.Header.AddJavascriptFile("jspdf.plugin.autotable.min.js")	
+	BANano.Header.AddJavascriptFile("qrcode.min.js")
 	
 	' start the build
 	#if release

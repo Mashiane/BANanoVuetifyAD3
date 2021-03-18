@@ -3411,7 +3411,7 @@ Sub setCoverImage(url As String)
 	If BANano.IsUndefined(url) Or BANano.IsNull(url) Then Return
 	url = url.trim
 	If url = "" Then Return
-	Dim sm As String = $"background-image=url('${url}');background-size=cover;width=100%;height=100%"$
+	Dim sm As String = $"background-image=url('${url}');background-size=cover;width=100%;height=100%;background-position=center"$
 	setStyles(sm)
 End Sub
 
@@ -9375,6 +9375,68 @@ Sub AddApp(elID As String) As VueElement
 	Return elx
 End Sub
 
+Sub GetTHead As VueElement
+	Return GetVueElement($"${mName}thead"$)
+End Sub
+
+Sub GetTBody As VueElement
+	Return GetVueElement($"${mName}tbody"$)
+End Sub
+
+'get the table heading
+Sub GetSimpleTableHeading(colID As String) As VueElement
+	colID = colID.tolowercase
+	Return GetVueElement($"${mName}th${colID}"$)
+End Sub
+
+'get the column element on the table
+Sub GetSimpleTableColumn(colID As String) As VueElement
+	colID = colID.tolowercase
+	Return GetVueElement($"${mName}td${colID}"$)
+End Sub
+
+'add a simple table
+Sub AddSimpleTable(elID As String, DataSource As String, KeyFld As String, Columns As Map) As VueElement
+	elID = elID.ToLowerCase
+	DataSource = DataSource.tolowercase
+	KeyFld = KeyFld.tolowercase
+	'
+	Dim parentID As String = CleanID(mName)
+	'
+	'build the headings
+	Dim sbHDR As StringBuilder
+	sbHDR.Initialize 
+	Dim sbDAT As StringBuilder
+	sbDAT.Initialize 
+	For Each k As String In Columns.Keys
+		Dim v As String = Columns.Get(k)
+		Dim sline As String = $"<th id="${mName}th${k}">${v}</th>"$
+		sbHDR.Append(sline).Append(CRLF)
+		Dim sline1 As String = $"<td id="${mName}td${k}">{{ item.${k} }}</td>"$
+		sbDAT.Append(sline1).Append(CRLF)
+	Next		
+	
+	Dim sTemplate As String = $"<v-simple-table id="${elID}">
+	<v-template v-slot:default>
+	<thead id="${elID}thead">
+	<tr>
+	${sbHDR.tostring}
+	</tr>
+	</thead>
+	<tbody id="${elID}tbody">
+	<tr v-for="item in ${DataSource}" :key="item.${KeyFld}">
+	${sbDAT.tostring}
+	</tr>
+	</tbody>
+	</v-simple-table>"$
+	sTemplate = sTemplate.Replace("~","$")
+	
+	BANano.GetElement(parentID).Append(sTemplate)
+	Dim elx As VueElement = GetVueElement(elID)
+	Return elx	
+End Sub
+
+
 'add a pdf viewing iframe
 Sub AddPDFView(elID As String, sourceFile As String) As VueElement
 	Dim div As VueElement = AddVueElement1(elID, "div", "", "", "", Null)
@@ -9910,4 +9972,37 @@ End Sub
 
 Sub RGBA(r As Int, g As Int, b As Int, a As String) As String
 	Return $"rgba(${r},${g},${b},${a})"$
+End Sub
+
+Sub setVBindCSS(b As Boolean)
+	AddAttr("v-bind:css", b)
+End Sub
+
+
+'create a QR code and put it on the div
+Sub AddQRCode(elID As String, Text As String, Width As Int, Height As Int, ColorDark As String, ColorLight As String, CorrectLevel As Object) As VueElement
+	'add a div to host the QR code
+	Dim parentID As String = CleanID(mName)
+	Dim elx As VueElement = AddVueElement2(parentID, elID, "div", Null)
+	
+	Dim opts As Map = CreateMap()
+	opts.Put("text", Text)
+	opts.Put("width", Width)
+	opts.Put("height", Height)
+	opts.Put("colorDark", ColorDark)
+	opts.Put("colorLight", ColorLight)
+	opts.Put("correctLevel", CorrectLevel)
+	'render the qu code
+	Dim qrcode As BANanoObject
+	qrcode.Initialize2("QRCode", Array(elID, opts))
+	'
+	Return elx
+End Sub
+
+'get this from an image / qrcode
+Sub GetBase64Image As String
+	Dim elx As VueElement = GetVueElement(mName)
+	Dim elxb As BANanoElement = elx.Element
+	Dim obj As Object = elxb.GetAttr("src")
+	Return obj
 End Sub

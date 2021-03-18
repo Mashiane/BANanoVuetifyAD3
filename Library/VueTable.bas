@@ -17,8 +17,10 @@ Version=8.5
 #Event: Download (item As Map)
 #Event: Menu (item As Map)
 #Event: Clone (item As Map)
+#Event: Refresh_Click (e As BANanoEvent)
 #Event: Input (items As List)
-#Event: Clone (item As Map)
+#Event: PDF_Click (e As BANanoEvent)
+#Event: ItemSelected (item As Map)
 #Event: SaveItem (item As Map)
 #Event: CancelItem (item As Map) 
 #Event: OpenItem (item As Map)
@@ -29,6 +31,7 @@ Version=8.5
 #Event: ClearFilter_Click (e As BANanoEvent)
 #Event: FilterChange(e As BANanoEvent)
 #Event: Filter_Click(e As BANanoEvent)
+#Event: Back_Click (e As BANanoEvent)
 
 #DesignerProperty: Key: Title, DisplayName: Title, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: AutoID, DisplayName: Auto ID/Name, FieldType: Boolean, DefaultValue: False, Description: Overrides the ID/Name with a random string.
@@ -243,6 +246,23 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	filterList.Initialize 
 End Sub
 
+'get the original columns
+Sub GetColumns As List
+	Dim nl As List
+	nl.initialize
+	'get the sort order of the columns
+	Dim lst As List = GetHeaders
+	Dim colCnt As Int
+	Dim colTot As Int = lst.Size - 1
+	For colCnt = 0 To colTot
+		Dim hdrx As Map = lst.Get(colCnt)
+		Dim k As String = hdrx.Get("value")
+		Dim dt As DataTableColumn = columnsM.Get(k)
+		nl.Add(dt)
+	Next
+	Return nl
+End Sub
+
 'update the title of the table
 Sub setTitle(vTitle As String)
 	If BANano.IsNull(vTitle) Or BANano.IsUndefined(vTitle) Then vTitle = ""
@@ -433,69 +453,6 @@ Sub getShowGroupBy As Boolean
 	Return bShowGroupBy
 End Sub
 
-'add anything from the appendholder
-Sub AppendHolder
-	Dim stemplate As String = BANanoGetHTMLAsIs("appendholder")
-	mElement = BANano.GetElement($"#${mName}"$)
-	If mElement <> Null Then
-		mElement.Append(stemplate)
-	End If
-End Sub
-
-'get element by data
-Sub GetElementByData(dataattr As String, value As String) As BANanoElement
-	dataattr = dataattr.tolowercase
-	Dim skey As String = $"[data-${dataattr}='${value}']"$
-	Dim dataId As BANanoElement
-	dataId.Initialize(skey)
-	Return dataId
-End Sub
-
-'add anything from the appendholder
-Sub AppendHolderTo(target As String)
-	Dim stemplate As String = BANanoGetHTMLAsIs("appendholder")
-	Dim elx As BANanoElement = BANano.GetElement(target)
-	elx.append(stemplate)
-End Sub
-
-'add anything from the appendholder
-Sub AppendPlaceHolderTo(target As String)
-	Dim stemplate As String = BANanoGetHTMLAsIs("placeholder")
-	Dim elx As BANanoElement = BANano.GetElement(target)
-	elx.append(stemplate)
-End Sub
-
-'add anything from the appendholder
-Sub AppendPlaceHolder
-	Dim stemplate As String = BANanoGetHTMLAsIs("placeholder")
-	mElement = BANano.GetElement($"#${mName}"$)
-	If mElement <> Null Then
-		mElement.Append(stemplate)
-	End If
-End Sub
-
-'get the html part of a bananoelement
-private Sub BANanoGetHTMLAsIs(id As String) As String
-	id = id.tolowercase
-	Dim be As BANanoElement
-	be.Initialize($"#${id}"$)
-	Dim xTemplate As String = be.GetHTML
-	be.Empty
-	Return xTemplate
-End Sub
-
-'get the html part of a bananoelement
-Sub BANanoGetHTML(id As String) As String
-	id = id.tolowercase
-	Dim be As BANanoElement
-	be.Initialize($"#${id}"$)
-	Dim xTemplate As String = be.GetHTML
-	be.Empty
-	'xTemplate = xTemplate.Replace("v-template", "template")
-	Return xTemplate
-End Sub
-
-
 'return the generated html
 Sub ToString As String
 	'build the 'class' attribute
@@ -584,6 +541,12 @@ End Sub
 Sub AddButtonIcon(elID As String, eIcon As String, btnColor As String)
 	AddTitleIcon(elID, eIcon, btnColor)
 End Sub	
+
+'add export to pdf
+Sub AddPDF
+	Dim btnKey As String = $"${mName}_pdf"$
+	AddTitleIcon(btnKey, "mdi-file-pdf-outline", "brown")
+End Sub
 
 'a button with an icon on the left
 Sub AddTitleIcon(elID As String, eIcon As String, btnColor As String)
@@ -2008,6 +1971,12 @@ End Sub
 'get all the data from the table
 Sub GetData As List
 	Dim lst As List = VC.GetData(itemsname)
+	Return lst
+End Sub
+
+'get headers
+Sub GetHeaders As List
+	Dim lst As List = VC.GetData(headers)
 	Return lst
 End Sub
 
