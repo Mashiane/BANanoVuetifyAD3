@@ -90,6 +90,8 @@ Sub Init
 	drwlist.AddListViewGroupTemplate(0, drwlistOptions)
 	'
 	drwlist.ClearItems
+	drwlist.AddItemParentChild("", "bvad3", "", "", "BVAD3", "")
+	drwlist.ListViewSetAvatar("bvad3", "./assets/bvad31.png")
 	drwlist.AddItemParentChild("", "home", "mdi-home", "", "Home", "/")
 	drwlist.AddItemParentChild("home", ViewPDFView.name, "",  "", "PDF View", ViewPDFView.path)
 	
@@ -148,6 +150,9 @@ Sub Init
 	
 	'convert items to a tree structure
 	Dim listTree As List = drwlist.ListViewToTree
+	'
+	Log(listTree)
+	'
 	drwlist.SetData("links", listTree)
 		
 	'bind the template

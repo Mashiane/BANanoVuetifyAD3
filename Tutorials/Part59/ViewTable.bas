@@ -16,6 +16,7 @@ Sub Process_Globals
 	Private vetable1 As VueTable
 	Private dtusers As VueTable
 	Private dtimages As VueTable
+	Private jsPDF As BANanoJSPDF
 End Sub
 
 Sub Initialize
@@ -37,6 +38,8 @@ Sub Initialize
 	vetable.AddFilter("primary--text")
 	vetable.AddDivider
 	vetable.AddClearFilter
+	vetable.AddDivider
+	vetable.AddPDF
 	'
 	vetable.AddColumn1("name", "Dessert (100g Serving", vetable.COLUMN_TEXT, 0, True, vetable.ALIGN_LEFT)
 	vetable.AddChip("calories", "Calories", "item.color")
@@ -159,11 +162,51 @@ Sub Initialize
 	vuetify.AddRoute(tables)
 	'
 	'hide specific columns
-	vetable.HideColumns(Array("fat", "carbs", "protein"))
+	'vetable.HideColumns(Array("fat", "carbs", "protein"))
 	'
 	
 End Sub
 
+Sub vetable_pdf_click(e As BANanoEvent)
+	jsPDF.Initialize(Me, "foodstuff.pdf")
+	'
+	Dim tblA As BANanoJSPDFTable
+	tblA.Initialize(Me)
+	tblA.SetColumnsFromDataTable(vetable.GetColumns)
+	tblA.SetRowsFromDataTable(vetable.GetData)
+	'tblA.theme = tblA.THEME_GRID
+	tblA.Margin.Top = 60
+	'tblA.styles.font = "Meta"
+	'tblA.styles.lineWidth = 0.55
+	'tblA.setLineColor(tblA.styles, 44, 62, 80)
+		'
+	'tblA.setFillColor(tblA.headerStyles, 0, 0, 0)
+	'tblA.headerStyles.fontSize = 11
+	'
+	'tblA.setFillColor(tblA.alternateRowStyles, 250, 250, 250)
+	
+	'jsPDF.Orientation = jsPDF.ORIENTATION_LANDSCAPE 
+	'
+	Dim data As Object
+	tblA.beforePageContent("beforePageContent", data)
+	
+	'tblA.setTableLineColor(189, 195, 199)
+	'
+	jsPDF.Start
+	jsPDF.autoTable(tblA)
+	
+'	jsPDF.addPage
+'	jsPDF.setText(20, 20, "Hello world!")
+'	jsPDF.setText(20, 40, "This is client-side Javascript to generate a PDF.")
+'	jsPDF.setText(20, 60, "Visit https://github.com/Mashiane/BANanoVuetifyAD3")
+
+	jsPDF.Save
+	'Log(jsPDF.ToBase64)
+End Sub
+
+Sub beforePageContent
+	jsPDF.SetText(40, 30, "Food Stuff")
+End Sub
 
 
 

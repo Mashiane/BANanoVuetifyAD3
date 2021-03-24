@@ -10,6 +10,6 @@ ModuleClosedNodes0=
 ModuleClosedNodes1=
 ModuleClosedNodes2=
 ModuleClosedNodes3=
-NavigationStack=ViewApplicants,CreateTable,263,0,ViewApplicants,beforePageContent,322,0,ViewApplicants,dlgApplicantsok_click,326,0,ViewApplicants,dtApplicants_pdf_click,313,0
+NavigationStack=ViewApplicants,CreateTable,263,0,ViewApplicants,beforePageContent,322,0,ViewApplicants,dlgApplicantsok_click,326,0,ViewApplicants,dtApplicants_pdf_click,289,0
 SelectedBuild=0
 VisibleModules=2
