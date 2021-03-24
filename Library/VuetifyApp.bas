@@ -4883,6 +4883,15 @@ Sub UseGoogleCharts
 	End If
 End Sub
 
+Sub UseCarousel3D
+	If ModuleExist("carousel3d") = False Then
+		Dim Carousel3d As BANanoObject
+		Carousel3d.Initialize("Carousel3d")
+		Use(Carousel3d)
+		AddModule("carousel3d")
+	End If
+End Sub
+
 Sub UseGoogleMaps(gk As String)
 	GoogleMapKey = gk
 	'ensure that the module is loaded

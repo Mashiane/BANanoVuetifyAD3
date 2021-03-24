@@ -82,6 +82,7 @@ Sub Class_Globals
 	Public DBType As String
 	Private DBSorts As List
 	Private FieldNames As List
+	Private dates As List
 End Sub
 
 'initialize the crud class
@@ -156,6 +157,7 @@ Public Sub Initialize(clsName As String) As MySQLCRUD
 	DT_MultiSort = False
 	Diag_FullScreenOnMobile = False
 	DB_CreateTable = ""
+	dates.Initialize 
 	Return Me
 End Sub
 
@@ -424,11 +426,13 @@ End Sub
 
 'add a date picker to the dialog
 Sub Diag_AddDatePicker(fldName As String, row As Int, col As Int, vmodel As String, title As String)
+	dates.Add(vmodel)
 	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddDatePickerInput1(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), "${fldName}", "${SingularClean.tolowercase}.${vmodel}", "${title}", Null, Null)"$).Append(CRLF)
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
 	SetProperties(fldName)
+	dtCont.Append($"${fldName}.VModel = "${vmodel}fmt""$).Append(CRLF)
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
 	UpdateMatrix(row, col)
 End Sub
@@ -1531,11 +1535,29 @@ End Sub"$).append(CRLF).append(CRLF)
 			AddCode($"${ComponentName}.SetMethod(Me, "Get${ssource}", args)"$)
 		Next
 	End If	
-	
+	'
+	If dates.Size > 0 Then
+		For Each dt As String In dates
+			AddCode($"${ComponentName}.SetWatch("${SingularClean.tolowercase}.${dt}", True, True, Me, "${dt}changed", Null)"$)
+		Next
+	End If
+		
 	AddComment("'add the component as a router")
 	AddCode($"vuetify.AddRoute(${ComponentName})"$)
 	AddCode("End Sub")
 	sb.Append(CRLF).Append(CRLF)
+	
+	
+	If dates.Size > 0 Then
+		For Each dt As String In dates
+			AddCode($"Sub ${dt}changed"$)
+			AddCode($"Dim s${dt} As String = ${ComponentName}.GetData("${SingularClean.tolowercase}.${dt}")"$)
+			AddCode($"If s${dt} = "" Then Return"$)
+			AddCode($"Dim x${dt} As String = ${ComponentName}.NiceDate(s${dt})"$)
+			AddCode($"${ComponentName}.SetData("${dt}fmt", x${dt})"$)
+			AddCode("End Sub")
+		Next
+	End If
 End Sub
 
 Sub BuildForeignLinks As String

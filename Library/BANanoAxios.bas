@@ -56,6 +56,7 @@ Sub SetCORS(b As Boolean) As BANanoAxios
 	Else
 		SetMode("no-cors")
 	End If
+	return me
 End Sub
 
 'set origin

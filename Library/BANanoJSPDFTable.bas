@@ -292,22 +292,7 @@ Sub BuildOptions
 		options.Put("columnStyles", ColumnStylesM)
 	End If
 	'
-	If Margin.top <> 0 Then 
-		MarginM.Put("top", Margin.top)
-	End If
-	If Margin.left <> 0 Then 
-		MarginM.Put("left", Margin.left)
-	End If
-	If Margin.right <> 0 Then 
-		MarginM.Put("right", Margin.right)
-	End If
-	If Margin.bottom <> 0 Then 
-		MarginM.Put("bottom", Margin.bottom)
-	End If
-	If Margin.width <> 0 Then 
-		MarginM.Put("width", Margin.width)
-	End If
-	
+	CopyMargin(Margin, MarginM)
 	If MarginM.Size > 0 Then
 		options.put("margin", MarginM)
 	End If
@@ -315,4 +300,22 @@ Sub BuildOptions
 	options.Put("startY", StartY)
 	options.Put("pageBreak", PageBreak)
 	options.Put("tableWidth", TableWidth)
+End Sub
+
+private Sub CopyMargin(source As MarginObj, target As Map)
+	If source.top <> 0 Then 
+		target.Put("top", source.top)
+	End If
+	If source.left <> 0 Then 
+		target.Put("left", source.left)
+	End If
+	If source.right <> 0 Then 
+		target.Put("right", source.right)
+	End If
+	If source.bottom <> 0 Then 
+		target.Put("bottom", source.bottom)
+	End If
+	If source.width <> 0 Then 
+		target.Put("width", source.width)
+	End If
 End Sub

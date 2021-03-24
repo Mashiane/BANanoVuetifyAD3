@@ -63,6 +63,8 @@ Sub Class_Globals
 	Private userPermissions As List
 	Private mpageSize As String
 	Private pdfOptions As Map
+	Private marginM As Map
+	Public Margin As MarginObj
 End Sub
 
 'Initializes the object. You can add parameters to this method if needed.
@@ -75,6 +77,13 @@ Public Sub Initialize(eventHandler As Object, fileName As String)
 	mUnits = UNIT_PT
 	mpageSize = PAGE_A4
 	mOrientation = ORIENTATION_POTRAIT
+	marginM.Initialize
+	Margin.Initialize
+	Margin.top = 0
+	Margin.left = 0
+	Margin.width = 0
+	Margin.bottom = 0
+	Margin.right = 0  
 End Sub
 
 Sub setPageSize(ps As String)
@@ -108,14 +117,6 @@ End Sub
 Sub setUnit(u As String)
 	mUnits = u
 End Sub
-
-sub setcellPadding(cp as Int)
-	
-End Sub
-
-'Sub setFloatPrecision(fp As Double)
-'	pdfOptions.Put("floatPrecision", fp)
-'End Sub
 
 Sub setOrientation(o As String)
 	mOrientation = o
@@ -205,12 +206,34 @@ Sub setFont(fs As String)
 	jsPDF.runmethod("setFont", Array(fs))
 End Sub
 
+Sub CopyMargin(source As MarginObj, target As Map)
+	If source.top <> 0 Then 
+		target.Put("top", source.top)
+	End If
+	If source.left <> 0 Then 
+		target.Put("left", source.left)
+	End If
+	If source.right <> 0 Then 
+		target.Put("right", source.right)
+	End If
+	If source.bottom <> 0 Then 
+		target.Put("bottom", source.bottom)
+	End If
+	If source.width <> 0 Then 
+		target.Put("width", source.width)
+	End If
+End Sub
+
 Sub Start
 	If encryption.Size > 0 Then
 		If userPermissions.Size > 0 Then
 			encryption.Put("userPermissions", userPermissions)
 		End If
 		pdfOptions.Put("encryption", encryption)
+	End If
+	CopyMargin(Margin, marginM)
+	If marginM.Size > 0 Then
+		pdfOptions.put("margin", marginM)
 	End If
 	jsPDF.Initialize2("jsPDF", Array(mOrientation, mUnits, mpageSize, pdfOptions))
 End Sub
@@ -265,3 +288,21 @@ End Sub
 '		jsPDF.RunMethod("html", Array(elbo))
 '	End If	
 'End Sub
+
+'get number of pages
+Sub getNumberOfPages As Int
+	Dim noOfPages As Int = jsPDF.GetField("internal").RunMethod("getNumberOfPages", Null).Result
+	Return noOfPages
+End Sub
+
+'get current page width
+Sub getPageWidth As Int
+	Dim pw As Int = jsPDF.GetField("internal").GetField("pageSize").RunMethod("getWidth", Null).result
+	Return pw
+End Sub
+
+'get current page height
+Sub getPageHeight As Int
+	Dim pw As Int = jsPDF.GetField("internal").GetField("pageSize").RunMethod("getHeight", Null).result
+	Return pw
+End Sub

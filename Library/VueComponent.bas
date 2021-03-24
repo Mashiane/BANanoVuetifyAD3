@@ -194,6 +194,9 @@ Public Sub Initialize (CallBack As Object, Name As String) As VueComponent
 	SetMethod(Me, "nicemoney", Null)
 	SetMethod(Me, "nicefilesize", Null)
 	SetMethod(Me, "thousands", Null)
+	Dim x As Object
+	Dim y As Object
+	SetMethod(Me, "FormatDisplayDate", Array(x, y))
 	Return Me
 End Sub
 
@@ -305,11 +308,25 @@ End Sub
 Sub FormatDisplayDate(item As String, sFormat As String) As String			'ignoredeadcode
 	item = "" & item
 	If item = "" Then Return ""
+	If sFormat = "" Then sFormat = "YYYY-MM-DD"
 	If BANano.isnull(item) Or BANano.IsUndefined(item) Then Return ""
 	Dim bo As BANanoObject = BANano.RunJavascriptMethod("dayjs", Array(item))
 	Dim sDate As String = bo.RunMethod("format", Array(sFormat)).Result
 	Return sDate
 End Sub
+
+Sub DateDisplayFormat(vmodel As String, sformat As String) As String   'IgnoreDeadCode
+	Try
+		'get the saved model
+		Dim rdate As String = GetData(vmodel)
+		If rdate = "" Then Return ""
+		Dim str As String = RunMethod("FormatDisplayDate", Array(rdate, sformat)).Result
+		Return str
+	Catch
+		Return ""
+	End Try
+End Sub
+
 
 'return a date with day, month year name
 Sub NiceDate(sdate As String) As String				'ignoredeadcode
@@ -1275,10 +1292,10 @@ Sub CallMethod(methodName As String)
 	bo.GetField("methods").RunMethod(methodName, Null)
 End Sub
 
-Sub RunMethod(methodName As String, args As Object)
+Sub RunMethod(methodName As String, args As Object) As BANanoObject
 	methodName = methodName.tolowercase
 	Dim bo As BANanoObject = Component
-	bo.GetField("methods").RunMethod(methodName, args)
+	Return bo.GetField("methods").RunMethod(methodName, args)
 End Sub
 
 Sub getHTML As String

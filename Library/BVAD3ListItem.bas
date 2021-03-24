@@ -20,22 +20,22 @@ Sub Item As Map
 End Sub
 
 Sub SetParentID(v As String) As BVAD3ListItem
-	options.Put("parentid", True)
+	options.Put("parentid", v)
 	Return Me
 End Sub
 
 Sub SetDisabled(v As String) As BVAD3ListItem
-	options.Put("disabled", True)
+	options.Put("disabled", v)
 	Return Me
 End Sub
 
 Sub SetHREF(v As String) As BVAD3ListItem
-	options.Put("href", True)
+	options.Put("href", v)
 	Return Me
 End Sub
 
 Sub SetName(v As String) As BVAD3ListItem
-	options.Put("name", True)
+	options.Put("name", v)
 	Return Me
 End Sub
 

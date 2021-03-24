@@ -203,7 +203,7 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	expanded = $"${mName}expanded"$
 	itemsname = $"${mName}items"$
 	search = $"${mName}search"$
-	titleID = $"${mName}title"$
+	titleID = $"${mName}cardtitle"$
 	titleText = $"${mName}titletext"$
 	searchID = $"${mName}searchid"$
 	filtershow = $"${mName}filtershow"$
@@ -473,21 +473,42 @@ Sub ToString As String
 	sb.Append($"{{ ${titleText} }}"$)
 	sb.Append($"</v-card-title>"$)
 	sb.Append($"<v-divider v-show="${filtershow}"></v-divider>"$)
-	sb.Append($"<v-card-text v-show="${filtershow}"><p>Choose Filter Columns</p><div id="${mName}filter"></div></v-card-text>"$)
+	sb.Append($"<v-card-text id="${mName}cardtext" v-show="${filtershow}"><p>Choose Filter Columns</p><div id="${mName}filter"></div></v-card-text>"$)
 	sb.Append(rslt)
 	sb.Append($"</v-card>"$)
 	Return sb.tostring
 End Sub
 
+Sub GetCardText As VueElement
+	Dim sFilter As String = $"${mName}cardtext"$
+	Dim elx As VueElement
+	elx.Initialize(mCallBack, sFilter, sFilter)
+	Return elx
+End Sub
+
+
+Sub GetFilter As VueElement
+	Dim sFilter As String = $"${mName}filter"$
+	Dim elx As VueElement
+	elx.Initialize(mCallBack, sFilter, sFilter)
+	Return elx
+End Sub
+
 'return the table title
-Sub getTableTitle As VueElement
+Sub GetTableTitle As VueElement
+	Dim elx As VueElement
+	elx.Initialize(mCallBack, titleID, titleID)
+	Return elx
+End Sub
+
+Sub GetCardTitle As VueElement
 	Dim elx As VueElement
 	elx.Initialize(mCallBack, titleID, titleID)
 	Return elx
 End Sub
 
 'return the search text
-Sub getSearchText As VueElement
+Sub GetSearchText As VueElement
 	Dim elx As VueElement
 	elx.Initialize(mCallBack, searchID, searchID)
 	Return elx
@@ -1375,7 +1396,7 @@ End Sub
 
 'add a progress linear
 Sub AddProgressLinear(colField As String, colTitle As String)
-	colfield = colField.tolowercase
+	colField = colField.tolowercase
 	Dim dt As DataTableColumn = NewDataTableColumn(colField, colTitle)
 	dt.ColType = COLUMN_PROGRESS_LINEAR
 	columnsM.Put(colField, dt)
@@ -1493,6 +1514,7 @@ Sub AddLinkColumn1(colName As String, colTitle As String, hrefColumn As String, 
 	AddColumn(colName, colTitle)
 	SetColumnType(colName, COLUMN_LINK)
 	SetColumnTarget(colName, target)
+	SetColumnHREF(colName, hrefColumn)
 End Sub
 
 
