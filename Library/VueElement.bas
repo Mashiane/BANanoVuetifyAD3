@@ -5111,6 +5111,8 @@ Sub FormatDisplayNumber(item As String, sFormat As String) As String			'ignorede
 	item = "" & item
 	If item = "" Then Return ""
 	If BANano.isnull(item) Or BANano.IsUndefined(item) Then Return ""
+	item = BANanoShared.Val(item)
+	item = BANano.parseFloat(item)
 	Dim bo As BANanoObject = BANano.RunJavascriptMethod("numeral", Array(item))
 	Dim sDate As String = bo.RunMethod("format", Array(sFormat)).Result
 	Return sDate
@@ -6692,22 +6694,26 @@ End Sub
 
 'add a spacer to the card title
 Sub AddSpacer
-	mElement.Append("<v-spacer></v-spacer>")
+	Dim parentID As String = CleanID(mName)
+	BANano.GetElement(parentID).Append("<v-spacer></v-spacer>")
 End Sub
 
 'add a spacer to the card title
 Sub AddVerticalDivider
-	mElement.Append($"<v-divider vertical class="mx-2"></v-divider>"$)
+	Dim parentID As String = CleanID(mName)
+	BANano.GetElement(parentID).Append($"<v-divider vertical class="mx-2"></v-divider>"$)
 End Sub
 
 'add a spacer to the card title
 Sub AddDivider
-	mElement.Append($"<v-divider></v-divider>"$)
+	Dim parentID As String = CleanID(mName)
+	BANano.GetElement(parentID).Append($"<v-divider></v-divider>"$)
 End Sub
 
 'add a spacer to the card title
 Sub AddInsetDivider
-	mElement.Append($"<v-divider inset></v-divider>"$)
+	Dim parentID As String = CleanID(mName)
+	BANano.GetElement(parentID).Append($"<v-divider inset></v-divider>"$)
 End Sub
 
 Sub VueElementExists(elID As String) As Boolean
@@ -10427,3 +10433,32 @@ Sub CalendarNext(VC As VueComponent, elID As String)
 	refs.GetField(elID).RunMethod("next", Null)
 End Sub
 
+Sub setIsLoading(b As Boolean)
+	Dim lkey As String = $"${mName}loading"$
+	setLoading(lkey)
+	SetData(lkey, b)
+End Sub
+
+Sub setIsReadOnly(b As Boolean)
+	Dim lkey As String = $"${mName}readonly"$
+	setReadOnly(lkey)
+	SetData(lkey, b)
+End Sub
+
+Sub setIsDisabled(b As Boolean)
+	Dim lkey As String = $"${mName}disabled"$
+	setDisabled(lkey)
+	SetData(lkey, b)
+End Sub
+
+Sub setIsRequired(b As Boolean)
+	Dim lkey As String = $"${mName}required"$
+	setRequired(lkey)
+	SetData(lkey, b)
+End Sub
+
+Sub setIsVisible(b As Boolean)
+	Dim lkey As String = $"${mName}show"$
+	setVShow(lkey)
+	SetData(lkey, b)
+End Sub

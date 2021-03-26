@@ -65,6 +65,41 @@ Sub Class_Globals
 	Private pdfOptions As Map
 	Private marginM As Map
 	Public Margin As MarginObj
+	
+	Public const BASELINE_ALPHABETIC As String = "alphabetic"
+	Public const BASELINE_IDEOGRAPHIC As String = "ideographic"
+	Public const BASELINE_BOTTOM As String = "bottom"
+	Public const BASELINE_TOP As String = "top"
+	Public const BASELINE_MIDDLE As String = "middle"
+	Public const BASELINE_HANGING As String = "hanging"
+	'
+	Public Const ROTATION_CLOCKWISE As String = "0"
+	Public const ROTATION_COUNTERCLOCKWISE As String = "1"
+	
+	Public const TEXT_FILL As String = "fill"
+	Public const TEXT_STROKE As String = "stroke"
+	Public const TEXT_FILLTHENSTROKE As String = "fillThenStroke"
+	Public const TEXT_INVISIBLE As String = "invisible"
+	Public const TEXT_FILLANDADDFORCLIPPING As String = "fillAndAddForClipping"
+	Public const TEXT_STROKEANDADDPATHFORCLIPPING As String = "strokeAndAddPathForClipping"
+	Public const TEXT_FILLTHENSTROKEANDADDTOPATHFORCLIPPING As String = "fillThenStrokeAndAddToPathForClipping"
+	Public const TEXT_ADDTOPATHFORCLIPPING As String = "addToPathForClipping"
+	
+	Type TextOptions(align As String, baseline As String, rotationDirection As String, charSpace As String, lineHeightFactor As String, maxWidth As String, renderingMode As String, angle As String)
+End Sub
+
+Sub NewTextOptions As TextOptions
+	Dim nt As TextOptions
+	nt.Initialize 
+	nt.align = ALIGN_LEFT
+	nt.baseline = BASELINE_ALPHABETIC
+	nt.angle = "0"
+	nt.rotationDirection = ROTATION_COUNTERCLOCKWISE
+	nt.charSpace = "0"
+	nt.lineHeightFactor = "1.15"
+	nt.maxWidth = "0"
+	nt.renderingMode = TEXT_FILL
+	Return nt
 End Sub
 
 'Initializes the object. You can add parameters to this method if needed.
@@ -174,12 +209,31 @@ Sub setText(X As Int, Y As Int, txt As String)
 	jsPDF.RunMethod("text", Array(txt, x, y))
 End Sub
 
+Sub setTextXY(X As Int, Y As Int, txt As String)
+	jsPDF.RunMethod("text", Array(x, y, txt))
+End Sub
+
 Sub setTextColor(c As Int)
 	jsPDF.RunMethod("setTextColor", Array(c))
 End Sub
 
-Sub setText1(txt As String, x As Int, y As Int, opt As Map)
-	jsPDF.RunMethod("text", Array(txt, x, y, opt ))
+Sub setTextOptions(txt As String, x As Int, y As Int, opt As TextOptions)
+	Dim options As Map = CreateMap()
+	options.Put("align", opt.align)
+	options.Put("baseline", opt.baseline)
+	options.Put("angle", opt.angle)
+	options.Put("rotationDirection", opt.rotationDirection)
+	options.Put("charSpace", opt.charSpace)
+	options.Put("lineHeightFactor", opt.lineHeightFactor)
+	options.Put("maxWidth", opt.maxWidth)
+	options.Put("renderingMode", opt.renderingMode)
+	jsPDF.RunMethod("text", Array(txt, x, y, options))
+End Sub
+
+Sub setTextRightAlign(txt As String, x As Int, y As Int)
+	Dim ot As TextOptions = NewTextOptions
+	ot.align = ALIGN_RIGHT
+	setTextOptions(txt, x, y, ot)
 End Sub
 
 Sub setTextColor1(r As Int, g As Int, b As Int)

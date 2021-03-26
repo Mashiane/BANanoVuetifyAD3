@@ -212,7 +212,7 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	sloading = $"${mName}loading"$
 	'
 	AddAttr(":loading", sloading)
-	AddAttr(":items.sync", itemsname)
+	AddAttr(":items", itemsname)
 	AddAttr(":headers", headers)
 	AddAttr(":value", selected)
 	AddAttr(":group-by", groupby)
@@ -3273,6 +3273,8 @@ Sub FormatDisplayNumber(item As String, sFormat As String) As String			'ignorede
 	item = "" & item
 	If item = "" Then Return ""
 	If BANano.isnull(item) Or BANano.IsUndefined(item) Then Return ""
+	item = BANanoShared.Val(item)
+	item = BANano.parseFloat(item)
 	Dim bo As BANanoObject = BANano.RunJavascriptMethod("numeral", Array(item))
 	Dim sDate As String = bo.RunMethod("format", Array(sFormat)).Result
 	Return sDate

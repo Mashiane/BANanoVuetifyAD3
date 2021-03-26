@@ -194,6 +194,8 @@ Public Sub Initialize (CallBack As Object, Name As String) As VueComponent
 	SetMethod(Me, "nicemoney", Null)
 	SetMethod(Me, "nicefilesize", Null)
 	SetMethod(Me, "thousands", Null)
+	SetMethod(Me, "nicemonth", Null)
+	SetMethod(Me, "niceyear", Null)
 	Dim x As Object
 	Dim y As Object
 	SetMethod(Me, "FormatDisplayDate", Array(x, y))
@@ -327,6 +329,13 @@ Sub DateDisplayFormat(vmodel As String, sformat As String) As String   'IgnoreDe
 	End Try
 End Sub
 
+Sub NiceMonth(sdate As String) As String			'ignoredeadcode
+	Return FormatDisplayDate(sdate, "MMMM, YYYY")
+End Sub
+
+Sub NiceYear(sdate As String) As String			'ignoredeadcode
+	Return FormatDisplayDate(sdate, "YYYY")
+End Sub
 
 'return a date with day, month year name
 Sub NiceDate(sdate As String) As String				'ignoredeadcode
@@ -379,6 +388,8 @@ Sub FormatDisplayNumber(item As String, sFormat As String) As String			'ignorede
 	item = "" & item
 	If item = "" Then Return ""
 	If BANano.isnull(item) Or BANano.IsUndefined(item) Then Return ""
+	item = BANanoShared.Val(item)
+	item = BANano.parseFloat(item)
 	Dim bo As BANanoObject = BANano.RunJavascriptMethod("numeral", Array(item))
 	Dim sDate As String = bo.RunMethod("format", Array(sFormat)).Result
 	Return sDate
@@ -1337,7 +1348,7 @@ Sub CStr(o As Object) As String
 	Return "" & o
 End Sub
 
-Sub IsVisible(ve As VueElement, bShow As Boolean)
+Sub IsVisible1(ve As VueElement, bShow As Boolean)
 	Dim vkey As String = ve.VShow
 	SetData(vkey, bShow)
 End Sub
@@ -1418,4 +1429,61 @@ Sub RealTimeFindItem(lstName As String, whereMap As Map) As Map
 	Dim recs As List = GetData(lstName)
 	Dim rec As Map = recs.Get(recpos)
 	Return rec
+End Sub
+
+Sub IsLoading(elID As String, b As Boolean)
+	Dim lkey As String = $"${elID}loading"$
+	SetData(lkey, b)
+End Sub
+
+Sub IsReadOnly(elID As String, b As Boolean)
+	Dim lkey As String = $"${elID}readonly"$
+	SetData(lkey, b)
+End Sub
+
+Sub IsDisabled(elID As String, b As Boolean)
+	Dim lkey As String = $"${elID}disabled"$
+	SetData(lkey, b)
+End Sub
+
+Sub IsRequired(elID As String, b As Boolean)
+	Dim lkey As String = $"${elID}required"$
+	SetData(lkey, b)
+End Sub
+
+Sub IsVisible(elID As String, b As Boolean)
+	Dim lkey As String = $"${elID}show"$
+	SetData(lkey, b)
+End Sub
+
+Sub MapNiceDates(m As Map, flds As List)
+	For Each k As String In flds
+		Dim v As String = m.Get(k)
+		v = NiceDate(v)
+		m.Put(k, v)
+	Next
+End Sub
+
+Sub MapNiceMoney(m As Map, flds As List)
+	For Each k As String In flds
+		Dim v As String = m.Get(k)
+		v = NiceMoney(v)
+		m.Put(k, v)
+	Next
+End Sub
+
+Sub MapThousands(m As Map, flds As List)
+	For Each k As String In flds
+		Dim v As String = m.Get(k)
+		v = Thousands(v)
+		m.Put(k, v)
+	Next
+End Sub
+
+Sub MapNiceMonths(m As Map, flds As List)
+	For Each k As String In flds
+		Dim v As String = m.Get(k)
+		v = NiceMonth(v)
+		m.Put(k, v)
+	Next
 End Sub

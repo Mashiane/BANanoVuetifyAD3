@@ -34,6 +34,15 @@ Sub NiceDate(sdate As String) As String				'ignoredeadcode
 	Return FormatDisplayDate(sdate, "ddd, DD MMM YYYY")
 End Sub
 
+Sub NiceMonth(sdate As String) As String			'ignoredeadcode
+	Return FormatDisplayDate(sdate, "MMMM, YYYY")
+End Sub
+
+Sub NiceYear(sdate As String) As String			'ignoredeadcode
+	Return FormatDisplayDate(sdate, "YYYY")
+End Sub
+
+
 'return a date time
 Sub NiceTime(stime As String) As String				'ignoredeadcode
 	Return FormatDisplayDate(stime, "ddd, DD MMM YYYY @ HH:mm:ss")
@@ -92,6 +101,8 @@ Sub FormatDisplayNumber(item As String, sFormat As String) As String			'ignorede
 	item = "" & item
 	If item = "" Then Return ""
 	If BANano.isnull(item) Or BANano.IsUndefined(item) Then Return ""
+	item = Val(item)
+	item = BANano.parseFloat(item)
 	Dim bo As BANanoObject = BANano.RunJavascriptMethod("numeral", Array(item))
 	Dim sDate As String = bo.RunMethod("format", Array(sFormat)).Result
 	Return sDate
