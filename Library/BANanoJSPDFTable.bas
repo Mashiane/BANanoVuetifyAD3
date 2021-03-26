@@ -163,6 +163,12 @@ Sub SetColumnsFromDataTable(xcolumns As List)
 	columns = xcols
 End Sub
 
+'event on didDrawPage
+Sub didDrawPage(methodName As String, data As Object)
+	Dim cb As BANanoObject = BANano.CallBack(mCallBack, methodName, Array(data))
+	options.Put("didDrawPage", cb)
+End Sub
+
 'event on createdHeaderCell 
 Sub createdHeaderCell(methodName As String, cell As Object, data As Object)
 	Dim cb As BANanoObject = BANano.CallBack(mCallBack, methodName, Array(cell, data))

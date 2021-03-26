@@ -289,6 +289,7 @@ End Sub
 '	End If	
 'End Sub
 
+
 'get number of pages
 Sub getNumberOfPages As Int
 	Dim noOfPages As Int = jsPDF.GetField("internal").RunMethod("getNumberOfPages", Null).Result
@@ -305,4 +306,10 @@ End Sub
 Sub getPageHeight As Int
 	Dim pw As Int = jsPDF.GetField("internal").GetField("pageSize").RunMethod("getHeight", Null).result
 	Return pw
+End Sub
+
+'doc.previousAutoTable.finalY
+Sub PreviousAutoTableFinalY As Int
+	Dim res As Int = jsPDF.GetField("previousAutoTable").GetField("finalY").Result
+	Return res
 End Sub

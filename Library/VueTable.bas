@@ -212,7 +212,7 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	sloading = $"${mName}loading"$
 	'
 	AddAttr(":loading", sloading)
-	AddAttr(":items", itemsname)
+	AddAttr(":items.sync", itemsname)
 	AddAttr(":headers", headers)
 	AddAttr(":value", selected)
 	AddAttr(":group-by", groupby)
@@ -366,6 +366,14 @@ Sub AddRow1(rowdata As Map)
 	VC.SetDataPush(itemsname, rowdata)
 End Sub
 
+'realtime removal of item
+Sub RemoveRow(whereMap As Map)
+	'find the item
+	Dim recpos As Int = VC.GetDataPositionWhere(itemsname, whereMap)
+	If recpos = -1 Then Return
+	VC.SetDataSpliceRemove(itemsname, recpos, 1)
+End Sub
+
 'add a row at the top of the list
 Sub AddRowTop(rowdata As Map)
 	VC.SetDataUnshift(itemsname, rowdata)
@@ -501,9 +509,23 @@ Sub GetTableTitle As VueElement
 	Return elx
 End Sub
 
+'return the table title
+Sub TableTitle As VueElement
+	Dim elx As VueElement
+	elx.Initialize(mCallBack, titleID, titleID)
+	Return elx
+End Sub
+
 Sub GetCardTitle As VueElement
 	Dim elx As VueElement
 	elx.Initialize(mCallBack, titleID, titleID)
+	Return elx
+End Sub
+
+Sub GetCard As VueElement
+	Dim sFilter As String = $"${mName}card"$
+	Dim elx As VueElement
+	elx.Initialize(mCallBack, sFilter, sFilter)
 	Return elx
 End Sub
 
@@ -2002,6 +2024,16 @@ Sub GetHeaders As List
 	Return lst
 End Sub
 
+Sub AddItem(rowData As Map)
+	VC.SetDataPush(itemsname, rowData)
+End Sub
+
+Sub RemoveItemAtPosition(pos As Int)
+	If pos >= 0 Then
+		VC.SetDataSpliceRemove(itemsname, pos, 1)
+	End If
+End Sub
+
 'remove an item where
 Sub RemoveItem(prop As String, value As String)
 	Dim m As Map = CreateMap()
@@ -2013,6 +2045,39 @@ Sub RemoveItem(prop As String, value As String)
 	End If
 End Sub
 
+'update item where
+Sub UpdateItem(prop As String, value As String, item As Map)
+	Dim m As Map = CreateMap()
+	m.Put(prop, value)
+	'find the record at a position
+	Dim mpos As Int = VC.GetDataPositionWhere(itemsname, m)
+	If mpos >= 0 Then
+		VC.SetDataSplice(itemsname, mpos, 1, item)
+	End If
+End Sub
+
+'update item where
+Sub UpdateItemAtPosition(pos As Int, item As Map)
+	If pos >= 0 Then
+		VC.SetDataSplice(itemsname, pos, 1, item)
+	End If
+End Sub
+
+'get data where
+Sub FindItem(whereMap As Map) As Map
+	Dim rm As Map = CreateMap()
+	'find the item
+	Dim recpos As Int = VC.GetDataPositionWhere(itemsname, whereMap)
+	If recpos = -1 Then Return rm
+	Dim recs As List = VC.GetData(itemsname)
+	Dim rec As Map = recs.Get(recpos)
+	Return rec
+End Sub
+
+Sub FindItemPosition(whereMap As Map) As Int
+	Dim mpos As Int = VC.GetDataPositionWhere(itemsname, whereMap)
+	Return mpos
+End Sub
 
 'reset the filters
 Sub ClearFilter
@@ -2250,9 +2315,16 @@ private Sub BuildSlots
 				bHasEditDialog = True
 				Dim slarge As String = "large"
 				If nf.Large = False Then slarge = ""
+				Dim itemValue As String
+				If nf.PreDisplay = "" Then
+					itemValue = $"props.item.${value}"$
+				Else
+					itemValue = $"props.item.${value}"$
+					itemValue = $"${nf.predisplay}(${itemValue})"$
+				End If
 				
 				Dim temp As String = $"<v-template v-slot:item.${value}="props">
-<v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" @open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy> {{ props.item.${value} }}
+<v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" @open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy> {{ ${itemValue} }}
 <v-template v-slot:input><v-select :items="${nf.SourceTable}" item-text="${nf.DisplayField}" item-value="${nf.sourcefield}" clearable v-model="props.item.${value}" :label="props.header.text" @change="${changeEvent}(props.item.${value})"></v-Select></v-template>
 </v-edit-dialog></v-template>"$
 				sb.Append(temp)
@@ -2266,8 +2338,15 @@ private Sub BuildSlots
 				bHasEditDialog = True
 				Dim slarge As String = "large"
 				If nf.Large = False Then slarge = ""
+				Dim itemValue As String
+				If nf.PreDisplay = "" Then
+					itemValue = $"props.item.${value}"$
+				Else
+					itemValue = $"props.item.${value}"$
+					itemValue = $"${nf.predisplay}(${itemValue})"$
+				End If
 				Dim temp As String = $"<v-template v-slot:item.${value}="props">
-<v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" @open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy> {{ props.item.${value} }}
+<v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" @open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy> {{ ${itemValue} }}
 <v-template v-slot:input><v-combobox :items="${nf.SourceTable}" item-text="${nf.DisplayField}" item-value="${nf.sourcefield}" clearable :return-object=false v-model="props.item.${value}" :label="props.header.text" @change="${changeEvent}(props.item.${value})"></v-combobox></v-template>
 </v-edit-dialog></v-template>"$
 				sb.Append(temp)
@@ -2281,8 +2360,16 @@ private Sub BuildSlots
 				bHasEditDialog = True
 				Dim slarge As String = "large"
 				If nf.Large = False Then slarge = ""
+				Dim itemValue As String
+				If nf.PreDisplay = "" Then
+					itemValue = $"props.item.${value}"$
+				Else
+					itemValue = $"props.item.${value}"$
+					itemValue = $"${nf.predisplay}(${itemValue})"$
+				End If
+				
 				Dim temp As String = $"<v-template v-slot:item.${value}="props">
-<v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" @open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy> {{ props.item.${value} }}
+<v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" @open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy> {{ ${itemValue} }}
 <v-template v-slot:input><v-autocomplete :items="${nf.SourceTable}" item-text="${nf.DisplayField}" item-value="${nf.sourcefield}" clearable v-model="props.item.${value}" :label="props.header.text" @change="${changeEvent}(props.item.${value})"></v-autocomplete></v-template>
 </v-edit-dialog></v-template>"$
 				sb.Append(temp)
@@ -2296,17 +2383,34 @@ private Sub BuildSlots
 				bHasEditDialog = True
 				Dim slarge As String = "large"
 				If nf.Large = False Then slarge = ""
+				Dim itemValue As String
+				If nf.PreDisplay = "" Then
+					itemValue = $"props.item.${value}"$
+				Else
+					itemValue = $"props.item.${value}"$
+					itemValue = $"${nf.predisplay}(${itemValue})"$
+				End If				
+				
 Dim temp As String = $"<v-template v-slot:item.${value}="props">
 <v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" 
-@open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy> {{ props.item.${value} }}
+@open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy> {{ ${itemValue} }}
 <v-template v-slot:input><v-text-field v-model="props.item.${value}" :label="props.header.text" counter></v-text-field></v-template></v-edit-dialog></v-template>"$
 sb.Append(temp)
 			Case COLUMN_TEXTAREA
 				bHasEditDialog = True
 				Dim slarge As String = "large"
 				If nf.Large = False Then slarge = ""
+				'
+				Dim itemValue As String
+				If nf.PreDisplay = "" Then
+					itemValue = $"props.item.${value}"$
+				Else
+					itemValue = $"props.item.${value}"$
+					itemValue = $"${nf.predisplay}(${itemValue})"$
+				End If				
+				
 				Dim temp As String = $"<v-template v-slot:item.${value}="props">
-<v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" @open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy> {{ props.item.${value} }}
+<v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" @open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy> {{ ${itemValue} }}
 <v-template v-slot:input><v-textarea v-model="props.item.${value}" :label="props.header.text" counter></v-textarea></v-template>
 </v-edit-dialog></v-template>"$
 				sb.Append(temp)

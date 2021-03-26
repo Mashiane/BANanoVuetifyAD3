@@ -4336,6 +4336,105 @@ Sub AddFileInput1(Module As Object, parentID As String, fldName As String, vmode
 	Return elx
 End Sub
 
+
+'<code>
+'Sub fibutton_click(e As BANanoEvent)
+'	component.refs = vuetify.GetRefs
+'	component.SetLoading("fi", False)
+'	component.ClickFile("fi")
+'End Sub
+
+'Dim fi As VueElement = vuetify.AddFileInputImage(Me, "parentID", "fi")
+'vuetify.BindVueElement(fi)
+'Sub fifile_change(fileObj As Map)
+'component.SetLoading("fi", False)
+'If banano.IsNull(fileObj) Or banano.IsUndefined(fileObj) Then Return
+''get file details
+'component.SetLoading("fi", True)
+'Dim fileDet As FileObject
+'fileDet = BANanoShared.GetFileDetails(fileObj)
+'Dim fn As String = fileDet.FileName
+''you can check the size here
+''start uploading the file
+'fileDet = BANanoShared.UploadFileWait(fileObj)
+'Dim sstatus As String = fileDet.Status
+'Select Case sstatus
+'Case "error"
+'vuetify.ShowSnackBarError($"The file '${fn}' was not uploaded successfully!"$)
+'Case "success"
+'vuetify.ShowSnackBarSuccess($"The file '${fn}' was uploaded successfully!"$)
+'End Select
+'component.SetLoading("fi", False)
+'Dim fp As String = fileDet.FullPath
+''update state of some element
+''VC.SetData("vmodel, fp)
+'End Sub
+''****for multiple files
+'Sub fifile_change(fileList As List)
+'component.SetLoading("fi", False)
+'If banano.IsNull(fileList) Or banano.IsUndefined(fileList) Then Return
+'component.SetLoading("fi", True)
+'Dim uploads As List = vc.NewList
+'for each fileObj As Map in fileList
+''get file details
+'Dim fileDet As FileObject
+'fileDet = BANanoShared.GetFileDetails(fileObj)
+'Dim fn As String = fileDet.FileName
+''you can check the size here
+''start uploading the file
+'fileDet = BANanoShared.UploadFileWait(fileObj)
+'Dim sstatus As String = fileDet.Status
+'Select Case sstatus
+'Case "error"
+'vuetify.ShowSnackBarError($"The file '${fn}' was not uploaded successfully!"$)
+'Case "success"
+'vuetify.ShowSnackBarSuccess($"The file '${fn}' was uploaded successfully!"$)
+'End Select
+'Dim fp As String = fileDet.FullPath
+''uploads.Add(fp)
+'next
+'component.SetLoading("fi", False)
+'End Sub
+'</code>
+Sub AddFileInputImage(Module As Object, parentID As String, elID As String) As VueElement
+	parentID = CleanID(parentID)
+	elID = elID.tolowercase
+	Dim elID As String = elID.ToLowerCase
+	'
+	Dim btnid As String = $"${elID}button"$
+	Dim iconid As String = $"${elID}icon"$
+	Dim fileid As String = $"${elID}file"$
+	Dim loadid As String = $"${elID}loading"$
+	Dim progid As String = $"${elID}progress"$
+		
+Dim sTemplate As String = $"<div id="${elID}" class="text-center">
+<v-btn id="${btnid}" icon class="grey lighten-2 mb-4" style="height: 104px;width: 104px;" v-show="!${loadid}">
+<v-icon id="${iconid}" x-large class="grey--text text--darken-1">mdi-upload</v-icon>
+</v-btn>
+<v-file-input id="${fileid}" v-show="${elID}filehidden" ref="${elID}"></v-file-input>
+<v-progress-circular id="${progid}" v-if="${loadid}" :rotate="360" :indeterminate=true :size="100" :width="5" color="teal"></v-progress-circular>
+</div>"$
+		  
+	sTemplate = sTemplate.Replace("~","$")
+	BANano.GetElement(parentID).Append(sTemplate)
+	'
+	Dim div As VueElement = GetVueElement(Module, elID)
+	
+	Dim btn As VueElement = GetVueElement(Module, btnid)
+	btn.SetData($"${elID}filehidden"$, False)
+	btn.SetData(loadid, False)
+	btn.BindAllEvents
+	
+	'change event
+	Dim filex As VueElement = GetVueElement(Module, fileid)
+	filex.BindAllEvents
+	'
+	div.BindVueElement(btn)
+	div.bindVueElement(filex)
+	Return div
+End Sub
+
+
 Sub AddSlider(Module As Object, parentID As String, elID As String, vmodel As String, slabel As String, iminvalue As Object, imaxvalue As Object, iStep As Int,  bShowThumb As Boolean,  bVertical As Boolean, props As Map) As VueElement
 	parentID = CleanID(parentID)
 	elID = elID.ToLowerCase

@@ -83,6 +83,8 @@ Sub Class_Globals
 	Private DBSorts As List
 	Private FieldNames As List
 	Private dates As List
+	Private money As List
+	Private thousands As List
 End Sub
 
 'initialize the crud class
@@ -92,6 +94,7 @@ Public Sub Initialize(clsName As String) As MySQLCRUD
 	sb.Initialize
 	DBType = ""
 	FieldNames.Initialize 
+	thousands.Initialize
 	DatabaseName = ""
 	TableName = ""
 	PrimaryKey = ""
@@ -99,6 +102,7 @@ Public Sub Initialize(clsName As String) As MySQLCRUD
 	Plural = ""
 	SortBy = ""
 	dtName = ""
+	money.Initialize 
 	DBSorts.Initialize 
 	ComponentName = ""
 	AutoIncrement = ""
@@ -228,7 +232,7 @@ Sub Diag_SetRounded(fldName As String, b As Boolean)
 End Sub
 
 'set properties
-private Sub SetProperties(fldNAme As String)
+private Sub SetProperties(fldNAme As String, vmodel As String)
 	If HideDetailsM.ContainsKey(fldNAme) Then
 		dtCont.Append($"${fldNAme}.HideDetails = True"$).Append(CRLF)
 	End If
@@ -263,6 +267,9 @@ private Sub SetProperties(fldNAme As String)
 	If ShapedM.ContainsKey(fldNAme) Then
 		dtCont.Append($"${fldNAme}.Shaped = True"$).Append(CRLF)
 	End If
+	If FocusOn = fldNAme Then
+		dtCont.Append($"${fldNAme}.Ref = "${vmodel}""$).Append(CRLF)
+	End If
 End Sub
 
 'build properties
@@ -293,7 +300,7 @@ Sub Diag_AddParagraph(fldName As String, row As Int, col As Int, vmodel As Strin
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
-	SetProperties(fldName)
+	SetProperties(fldName,vmodel)
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
 	dtCont.Append($"${ComponentName}.Setdata("${SingularClean.tolowercase}.${vmodel}", "${Caption}")"$).Append(CRLF)
 	UpdateMatrix(row, col)
@@ -313,7 +320,7 @@ Sub Diag_AddH6(fldName As String, row As Int, col As Int, vmodel As String, Capt
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
-	SetProperties(fldName)
+	SetProperties(fldName,vmodel)
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
 	dtCont.Append($"${ComponentName}.Setdata("${SingularClean.tolowercase}.${vmodel}", "${Caption}")"$).Append(CRLF)
 	UpdateMatrix(row, col)
@@ -325,7 +332,7 @@ Sub Diag_AddH5(fldName As String, row As Int, col As Int, vmodel As String, Capt
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
-	SetProperties(fldName)
+	SetProperties(fldName,vmodel)
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
 	dtCont.Append($"${ComponentName}.Setdata("${SingularClean.tolowercase}.${vmodel}", "${Caption}")"$).Append(CRLF)
 	UpdateMatrix(row, col)
@@ -337,7 +344,7 @@ Sub Diag_AddH4(fldName As String, row As Int, col As Int, vmodel As String, Capt
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
-	SetProperties(fldName)
+	SetProperties(fldName,vmodel)
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
 	dtCont.Append($"${ComponentName}.Setdata("${SingularClean.tolowercase}.${vmodel}", "${Caption}")"$).Append(CRLF)
 	UpdateMatrix(row, col)
@@ -349,7 +356,7 @@ Sub Diag_AddH3(fldName As String, row As Int, col As Int, vmodel As String, Capt
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
-	SetProperties(fldName)
+	SetProperties(fldName,vmodel)
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
 	dtCont.Append($"${ComponentName}.SetData("${SingularClean.tolowercase}.${vmodel}", "${Caption}")"$).Append(CRLF)
 	UpdateMatrix(row, col)
@@ -361,7 +368,7 @@ Sub Diag_AddH2(fldName As String, row As Int, col As Int, vmodel As String, Capt
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
-	SetProperties(fldName)
+	SetProperties(fldName,vmodel)
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
 	dtCont.Append($"${ComponentName}.SetData("${SingularClean.tolowercase}.${vmodel}", "${Caption}")"$).Append(CRLF)
 	UpdateMatrix(row, col)
@@ -373,7 +380,7 @@ Sub Diag_AddH1(fldName As String, row As Int, col As Int, vmodel As String, Capt
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
-	SetProperties(fldName)
+	SetProperties(fldName,vmodel)
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
 	dtCont.Append($"${ComponentName}.SetData("${SingularClean.tolowercase}.${vmodel}", "${Caption}")"$).Append(CRLF)
 	UpdateMatrix(row, col)
@@ -385,7 +392,7 @@ Sub Diag_AddTextField(fldName As String, row As Int, col As Int, vmodel As Strin
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
-	SetProperties(fldName)
+	SetProperties(fldName, vmodel)
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
 	UpdateMatrix(row, col)
 End Sub
@@ -396,11 +403,33 @@ Sub Diag_AddTelephone(fldName As String, row As Int, col As Int, vmodel As Strin
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
-	SetProperties(fldName)
+	SetProperties(fldName,vmodel)
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
 	UpdateMatrix(row, col)
 End Sub
 
+'add a money field to the dialog
+Sub Diag_AddMoney(fldName As String, row As Int, col As Int, vmodel As String, title As String)
+	money.Add(vmodel)
+	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddTelephone1(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), "${fldName}", "${SingularClean.tolowercase}.${vmodel}", "${title}", Null)"$).Append(CRLF)
+	If Visibility.ContainsKey(fldName) Then
+		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
+	End If
+	SetProperties(fldName,vmodel)
+	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
+	UpdateMatrix(row, col)
+End Sub
+
+Sub Diag_AddThousands(fldName As String, row As Int, col As Int, vmodel As String, title As String)
+	thousands.Add(vmodel)
+	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddTelephone1(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), "${fldName}", "${SingularClean.tolowercase}.${vmodel}", "${title}", Null)"$).Append(CRLF)
+	If Visibility.ContainsKey(fldName) Then
+		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
+	End If
+	SetProperties(fldName,vmodel)
+	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
+	UpdateMatrix(row, col)
+End Sub
 
 'add a text area to the dialog
 Sub Diag_AddTextArea(fldName As String, row As Int, col As Int, vmodel As String, title As String)
@@ -408,7 +437,8 @@ Sub Diag_AddTextArea(fldName As String, row As Int, col As Int, vmodel As String
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
-	SetProperties(fldName)
+	SetProperties(fldName,vmodel)
+	dtCont.Append($"${fldName}.AutoGrow = True"$).Append(CRLF)
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
 	UpdateMatrix(row, col)
 End Sub
@@ -419,7 +449,7 @@ Sub Diag_AddTimePicker(fldName As String, row As Int, col As Int, vmodel As Stri
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
-	SetProperties(fldName)
+	SetProperties(fldName,vmodel)
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
 	UpdateMatrix(row, col)
 End Sub
@@ -431,7 +461,7 @@ Sub Diag_AddDatePicker(fldName As String, row As Int, col As Int, vmodel As Stri
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
-	SetProperties(fldName)
+	SetProperties(fldName,vmodel)
 	dtCont.Append($"${fldName}.VModel = "${vmodel}fmt""$).Append(CRLF)
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
 	UpdateMatrix(row, col)
@@ -443,7 +473,7 @@ Sub Diag_AddSlider(fldName As String, row As Int, col As Int, vmodel As String, 
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
-	SetProperties(fldName)
+	SetProperties(fldName,vmodel)
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
 	UpdateMatrix(row, col)
 End Sub
@@ -454,7 +484,7 @@ Sub Diag_AddRating(fldName As String, row As Int, col As Int, vmodel As String, 
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
-	SetProperties(fldName)
+	SetProperties(fldName,vmodel)
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
 	UpdateMatrix(row, col)
 End Sub
@@ -471,7 +501,7 @@ Sub Diag_AddProgressCircular(fldName As String, row As Int, col As Int, vmodel A
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
-	SetProperties(fldName)
+	SetProperties(fldName,vmodel)
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
 	UpdateMatrix(row, col)
 End Sub
@@ -489,7 +519,7 @@ Sub Diag_AddProgressLinear(fldName As String, row As Int, col As Int, vmodel As 
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
-	SetProperties(fldName)
+	SetProperties(fldName,vmodel)
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
 	UpdateMatrix(row, col)
 End Sub
@@ -500,7 +530,9 @@ Sub Diag_AddFileInput(fldName As String, row As Int, col As Int, vmodel As Strin
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
-	SetProperties(fldName)
+	SetProperties(fldName,vmodel)
+	dtCont.Append($"${fldName}.Loading = ":${fldName}loading""$).Append(CRLF)
+	dtCont.Append($"${fldName}.SetData("${fldName}loading", False)"$).Append(CRLF)
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
 	'to remove from adding
 	'addedFiles.Add(vmodel)
@@ -510,7 +542,7 @@ Sub Diag_AddFileInput(fldName As String, row As Int, col As Int, vmodel As Strin
 	Case True
 		AddCode($"Sub ${fldName}_change(fileList As List)"$)
 		AddCode($"If banano.IsNull(fileList) Or banano.IsUndefined(fileList) Then Return"$)
-		AddCode("vuetify.ShowProgressLoader")
+		AddCode($"${ComponentName}.SetData("${fldName}loading", True)"$)
 		AddCode($"Dim uploads As List = ${ComponentName}.NewList"$)
 		AddCode("for each fileObj As Map in fileList")
 		AddComment("get file details")
@@ -530,12 +562,12 @@ Sub Diag_AddFileInput(fldName As String, row As Int, col As Int, vmodel As Strin
 		AddCode($"Dim fp As String = fileDet.FullPath"$)
 		AddCode($"uploads.Add(fp)"$)
 		AddCode("next")
-		AddCode("vuetify.HideProgressLoader")
+		AddCode($"${ComponentName}.SetData("${fldName}loading", False)"$)
 		AddCode($"End Sub"$)
 	Case False	
 		AddCode($"Sub ${fldName}_change(fileObj As Map)"$)
 		AddCode($"If banano.IsNull(fileObj) Or banano.IsUndefined(fileObj) Then Return"$)
-		AddCode("vuetify.ShowProgressLoader")
+		AddCode($"${ComponentName}.SetData("${fldName}loading", True)"$)
 		AddComment("get file details")
 		AddCode($"Dim fileDet As FileObject"$)
 		AddCode($"fileDet = BANanoShared.GetFileDetails(fileObj)"$)
@@ -546,7 +578,7 @@ Sub Diag_AddFileInput(fldName As String, row As Int, col As Int, vmodel As Strin
 		AddCode($"Dim sstatus As String = fileDet.Status"$)
 		AddCode($"Select Case sstatus"$)
 		AddCode($"Case "error""$)
-		AddCode("vuetify.HideProgressLoader")
+		AddCode($"${ComponentName}.SetData("${fldName}loading", False)"$)
 		AddCode($"vuetify.ShowSnackBarError(~"The file '~{fn}' was not uploaded successfully!"~)"$)
 		AddCode($"${ComponentName}.SetData("${SingularClean.tolowercase}.${vmodel}", "")"$)
 		AddCode("Return")
@@ -558,9 +590,92 @@ Sub Diag_AddFileInput(fldName As String, row As Int, col As Int, vmodel As Strin
 		AddCode("Dim fs As String = fileDet.FileSize")
 		AddComment("update state of some element")
 		AddCode($"${ComponentName}.SetData("${SingularClean.tolowercase}.${vmodel}", fp)"$)
-		AddCode("vuetify.HideProgressLoader")
+		AddCode($"${ComponentName}.SetData("${fldName}loading", False)"$)
 		AddCode($"End Sub"$)
 	End Select
+	UpdateMatrix(row, col)
+End Sub
+
+'add a file input to the dialog
+Sub Diag_AddFileInputImage(fldName As String, row As Int, col As Int, vmodel As String, bMultiple As Boolean)
+	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddFileInputImage(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), "${fldName}")"$).Append(CRLF)
+	If Visibility.ContainsKey(fldName) Then
+		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
+	End If
+	SetProperties(fldName,"")
+	If bMultiple Then
+		dtCont.Append($"${fldName}.GetFile.Multiple = True"$).Append(CRLF)
+	End If
+	dtCont.Append($"${fldName}.GetButton.StyleHeight = "104px""$).Append(CRLF)
+	dtCont.Append($"${fldName}.GetButton.StyleWidth = "104px""$).Append(CRLF)
+	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
+	'to remove from adding
+	'addedFiles.Add(vmodel)
+	
+	'file upload code
+	Select Case bMultiple
+	Case True
+		AddCode($"Sub ${fldName}file_change(fileList As List)"$)
+		AddCode($"If banano.IsNull(fileList) Or banano.IsUndefined(fileList) Then Return"$)
+		AddCode($"${ComponentName}.SetLoading("${fldName}", True)"$)
+		AddCode($"Dim uploads As List = ${ComponentName}.NewList"$)
+		AddCode("for each fileObj As Map in fileList")
+		AddComment("get file details")
+		AddCode($"Dim fileDet As FileObject"$)
+		AddCode($"fileDet = BANanoShared.GetFileDetails(fileObj)"$)
+		AddCode($"Dim fn As String = fileDet.FileName"$)
+		AddComment("you can check the size here")
+		AddComment("start uploading the file")
+		AddCode($"fileDet = BANanoShared.UploadFileWait(fileObj)"$)
+		AddCode($"Dim sstatus As String = fileDet.Status"$)
+		AddCode($"Select Case sstatus"$)
+		AddCode($"Case "error""$)
+		AddCode($"vuetify.ShowSnackBarError(~"The file '~{fn}' was not uploaded successfully!"~)"$)
+		AddCode($"Case "success""$)
+		AddCode($"vuetify.ShowSnackBarSuccess(~"The file '~{fn}' was uploaded successfully!"~)"$)
+		AddCode($"End Select"$)
+		AddCode($"Dim fp As String = fileDet.FullPath"$)
+		AddCode($"uploads.Add(fp)"$)
+		AddCode("next")
+		AddCode($"${ComponentName}.SetLoading("${fldName}", False)"$)
+		AddCode($"End Sub"$)
+	Case False	
+		AddCode($"Sub ${fldName}file_change(fileObj As Map)"$)
+		AddCode($"If banano.IsNull(fileObj) Or banano.IsUndefined(fileObj) Then Return"$)
+		AddCode($"${ComponentName}.SetLoading("${fldName}", True)"$)
+		AddComment("get file details")
+		AddCode($"Dim fileDet As FileObject"$)
+		AddCode($"fileDet = BANanoShared.GetFileDetails(fileObj)"$)
+		AddCode($"Dim fn As String = fileDet.FileName"$)
+		AddComment("you can check the size here")
+		AddComment("start uploading the file")
+		AddCode($"fileDet = BANanoShared.UploadFileWait(fileObj)"$)
+		AddCode($"Dim sstatus As String = fileDet.Status"$)
+		AddCode($"Select Case sstatus"$)
+		AddCode($"Case "error""$)
+		AddCode($"${ComponentName}.SetLoading("${fldName}", False)"$)
+		AddCode($"vuetify.ShowSnackBarError(~"The file '~{fn}' was not uploaded successfully!"~)"$)
+		AddCode($"${ComponentName}.SetData("${SingularClean.tolowercase}.${vmodel}", "")"$)
+		AddCode("Return")
+		AddCode($"Case "success""$)
+		AddCode($"vuetify.ShowSnackBarSuccess(~"The file '~{fn}' was uploaded successfully!"~)"$)
+		AddCode($"End Select"$)
+		AddCode($"Dim fp As String = fileDet.FullPath"$)
+		AddCode("Dim fd As String = fileDet.FileDate")
+		AddCode("Dim fs As String = fileDet.FileSize")
+		AddComment("update state of some element")
+		AddCode($"${ComponentName}.SetData("${SingularClean.tolowercase}.${vmodel}", fp)"$)
+		AddCode($"${ComponentName}.SetLoading("${fldName}", False)"$)
+		AddCode($"End Sub"$)
+	End Select
+	'
+	AddComment("file input image clicked")
+	AddCode($"Sub ${fldName}button_click(e As BANanoEvent)"$)
+	AddCode($"${ComponentName}.refs = vuetify.GetRefs"$)
+	AddCode($"${ComponentName}.SetLoading("${fldName}", False)"$)
+	AddCode($"${ComponentName}.ClickFile("${fldName}")"$)
+	AddCode("End Sub")
+
 	UpdateMatrix(row, col)
 End Sub
 
@@ -570,7 +685,7 @@ Sub Diag_AddPassword(fldName As String, row As Int, col As Int, vmodel As String
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
-	SetProperties(fldName)
+	SetProperties(fldName,vmodel)
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
 	UpdateMatrix(row, col)
 End Sub
@@ -581,9 +696,9 @@ Sub Diag_AddComboBox(fldName As String, row As Int, col As Int, vmodel As String
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
-	SetProperties(fldName)
+	SetProperties(fldName,vmodel)
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
-	dtCont.Append($"${fldName}.SetData("${DataSource}", ${ComponentName}.NewList)"$).Append(CRLF)
+	dtCont.Append($"${ComponentName}.SetData("${DataSource}", ${ComponentName}.NewList)"$).Append(CRLF)
 	'
 	Dim rel As DBRelationship
 	rel.Initialize 
@@ -612,9 +727,9 @@ Sub Diag_AddSelect(fldName As String, row As Int, col As Int, vmodel As String, 
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
-	SetProperties(fldName)
+	SetProperties(fldName,vmodel)
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
-	dtCont.Append($"${fldName}.SetData("${DataSource}", ${ComponentName}.NewList)"$).Append(CRLF)
+	dtCont.Append($"${ComponentName}.SetData("${DataSource}", ${ComponentName}.NewList)"$).Append(CRLF)
 	'
 	Dim rel As DBRelationship
 	rel.Initialize
@@ -635,9 +750,9 @@ Sub Diag_AddChipGroup(fldName As String, row As Int, col As Int, vmodel As Strin
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
-	SetProperties(fldName)
+	SetProperties(fldName,vmodel)
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
-	dtCont.Append($"${fldName}.SetData("${DataSource}", ${ComponentName}.NewList)"$).Append(CRLF)
+	dtCont.Append($"${ComponentName}.SetData("${DataSource}", ${ComponentName}.NewList)"$).Append(CRLF)
 	'
 	Dim rel As DBRelationship
 	rel.Initialize
@@ -659,7 +774,7 @@ Sub Diag_AddChipAvatar(fldName As String, row As Int, col As Int, vmodel As Stri
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
-	SetProperties(fldName)
+	SetProperties(fldName,vmodel)
 	
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
 	UpdateMatrix(row, col)
@@ -671,18 +786,18 @@ Sub Diag_AddAvatar(fldName As String, row As Int, col As Int, url As String, ava
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
-	SetProperties(fldName)
+	SetProperties(fldName,"")
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
 	UpdateMatrix(row, col)
 End Sub
 
 'add an avatar to the dialog with binding
 Sub Diag_AddAvatar1(fldName As String, row As Int, col As Int, vmodel As String, avatarSize As Int)
-	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddAvatar1(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), "${fldName}", "${vmodel}", ${avatarSize}, Null)"$).Append(CRLF)
+	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddAvatar1(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), "${fldName}", "${SingularClean.tolowercase}.${vmodel}", ${avatarSize}, Null)"$).Append(CRLF)
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
-	SetProperties(fldName)
+	SetProperties(fldName,vmodel)
 	
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
 	UpdateMatrix(row, col)
@@ -695,9 +810,9 @@ Sub Diag_AddAutoComplete(fldName As String, row As Int, col As Int, vmodel As St
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
-	SetProperties(fldName)
+	SetProperties(fldName,vmodel)
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
-	dtCont.Append($"${fldName}.SetData("${DataSource}", ${ComponentName}.NewList)"$).Append(CRLF)
+	dtCont.Append($"${ComponentName}.SetData("${DataSource}", ${ComponentName}.NewList)"$).Append(CRLF)
 	'
 	Dim rel As DBRelationship
 	rel.Initialize
@@ -715,7 +830,7 @@ Sub Diag_AddCheckBox(fldName As String, row As Int, col As Int, vmodel As String
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
-	SetProperties(fldName)
+	SetProperties(fldName,vmodel)
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
 	UpdateMatrix(row, col)
 End Sub
@@ -726,7 +841,7 @@ Sub Diag_AddSwitch(fldName As String, row As Int, col As Int, vmodel As String, 
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
-	SetProperties(fldName)
+	SetProperties(fldName,vmodel)
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
 	UpdateMatrix(row, col)
 End Sub
@@ -737,9 +852,9 @@ Sub Diag_AddRadioGroup(fldName As String, row As Int, col As Int, vmodel As Stri
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
-	SetProperties(fldName)
+	SetProperties(fldName,vmodel)
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
-	dtCont.Append($"${fldName}.SetData("${DataSource}", ${ComponentName}.NewList)"$).Append(CRLF)
+	dtCont.Append($"${ComponentName}.SetData("${DataSource}", ${ComponentName}.NewList)"$).Append(CRLF)
 	
 	Dim rel As DBRelationship
 	rel.Initialize
@@ -753,22 +868,26 @@ End Sub
 
 'add an image to the dialog
 Sub Diag_AddImage(fldName As String, row As Int, col As Int, url As String, lazysrc As String,  alt As String, width As String, height As String)
+	If width = "" Then width = "80px"
+	If height = "" Then height = "80px"
 	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddImage(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), "${fldName}", "${url}", "${lazysrc}", "${alt}", "${height}", "${width}", Null)"$).Append(CRLF)
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
-	SetProperties(fldName)
+	SetProperties(fldName,"")
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
 	UpdateMatrix(row, col)
 End Sub
 
 'add an image to the dialog with binding
 Sub Diag_AddImage1(fldName As String, row As Int, col As Int, vmodel As String, alt As String, width As String, height As String)
-	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddImage1(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), "${fldName}", "${vmodel}", "${alt}", "${height}", "${width}", Null)"$).Append(CRLF)
+	If width = "" Then width = "80px"
+	If height = "" Then height = "80px"
+	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddImage1(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), "${fldName}", "${SingularClean.tolowercase}.${vmodel}", "${alt}", "${height}", "${width}", Null)"$).Append(CRLF)
 	If Visibility.ContainsKey(fldName) Then
 		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
 	End If
-	SetProperties(fldName)
+	SetProperties(fldName, vmodel)
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
 	UpdateMatrix(row, col)
 End Sub
@@ -827,6 +946,7 @@ End Sub
 'add an image column to the data-table
 Sub DT_AddImage(colField As String, colTitle As String)
 	dtCode.Append($"${dtName}.AddImage("${colField}", "${colTitle}")"$).Append(CRLF)
+	dtCode.Append($"${dtName}.SetImageDimensions("${colField}", "80px", "80px")"$).Append(CRLF)
 End Sub
 
 'add a file size column to the data-table
@@ -1104,6 +1224,27 @@ private Sub BuildSchemas As String
 	Return sbSchemas.tostring
 End Sub
 
+Sub MoneyCodeRead As String
+	Dim sbmoola As StringBuilder
+	sbmoola.Initialize 
+	For Each mola As String In thousands
+		mola = mola.tolowercase
+		sbmoola.Append($"Dim s${mola} As String = ${SingularClean}M.GetDefault("${mola}", "0")"$).Append(CRLF)
+		sbmoola.Append($"s${mola} = BANanoShared.Val(s${mola})"$).Append(CRLF)
+		sbmoola.Append($"s${mola} = ${ComponentName}.Thousands(s${mola})"$).Append(CRLF)
+		sbmoola.Append($"${SingularClean}M.Put("${mola}", s${mola})"$).Append(CRLF)
+	Next
+	
+	For Each mola As String In money
+		mola = mola.tolowercase
+		sbmoola.Append($"Dim s${mola} As String = ${SingularClean}M.GetDefault("${mola}", "0")"$).Append(CRLF)
+		sbmoola.Append($"s${mola} = BANanoShared.Val(s${mola})"$).Append(CRLF)
+		sbmoola.Append($"s${mola} = ${ComponentName}.NiceMoney(s${mola})"$).Append(CRLF)
+		sbmoola.Append($"${SingularClean}M.Put("${mola}", s${mola})"$).Append(CRLF)
+	Next
+	Return sbmoola.tostring
+End Sub
+
 'read code
 private Sub ReadCode As MySQLCRUD
 	Dim sbSchemas As String = BuildSchemas
@@ -1128,6 +1269,7 @@ private Sub ReadCode As MySQLCRUD
 		Return
 	End Select
 	Dim ${SingularClean}M As Map = ${rsTB}.result.Get(0)
+	${MoneyCodeRead}
 	'show the drawer
 	${ComponentName}.SetData("${ModalShow.tolowercase}", True)
 	${ComponentName}.SetData("${SingularClean.tolowercase}", ${SingularClean}M)
@@ -1627,6 +1769,37 @@ private Sub CreateDialogCode
 	sb.Append(CRLF).Append(CRLF)
 End Sub
 
+Sub MoneyCodeSave As String
+	Dim sbmoola As StringBuilder
+	sbmoola.Initialize
+		 
+	For Each mola As String In Integers
+		mola = mola.ToLowerCase
+		If money.IndexOf(mola) = -1 Then
+			sbmoola.Append($"Dim s${mola} As String = ${SingularClean}M.Get("${mola}")"$).Append(CRLF)
+			sbmoola.Append($"s${mola} = BANanoShared.Val(s${mola})"$).Append(CRLF)
+			sbmoola.Append($"${SingularClean}M.Put("${mola}", s${mola})"$).Append(CRLF)
+		End If
+	Next
+	'
+	For Each mola As String In Doubles
+		mola = mola.ToLowerCase
+		If money.IndexOf(mola) = -1 Then
+			sbmoola.Append($"Dim s${mola} As String = ${SingularClean}M.Get("${mola}")"$).Append(CRLF)
+			sbmoola.Append($"s${mola} = BANanoShared.Val(s${mola})"$).Append(CRLF)
+			sbmoola.Append($"${SingularClean}M.Put("${mola}", s${mola})"$).Append(CRLF)
+		End If
+	Next
+	
+	For Each mola As String In money
+		mola = mola.tolowercase
+		sbmoola.Append($"Dim s${mola} As String = ${SingularClean}M.Get("${mola}")"$).Append(CRLF)
+		sbmoola.Append($"s${mola} = BANanoShared.Val(s${mola})"$).Append(CRLF)
+		sbmoola.Append($"${SingularClean}M.Put("${mola}", s${mola})"$).Append(CRLF)
+	Next
+	Return sbmoola.tostring
+End Sub
+
 'support code
 private Sub SupportCode
 	'SAVE RECORD
@@ -1641,6 +1814,7 @@ private Sub SupportCode
 	End If
 	'get the topic
 	Dim ${SingularClean}M As Map = ${ComponentName}.GetData("${SingularClean.tolowercase}")
+	${MoneyCodeSave}
 	Select Case Mode
 	Case "A"
 		${ComponentName}.RunMethod("Create${SingularClean}", ${SingularClean}M)
@@ -1681,7 +1855,7 @@ End Sub"$).Append(CRLF).Append(CRLF)
 	${BuildProperties}
 	'show the drawer
 	${ComponentName}.SetData("${ModalShow.tolowercase}", True)
-	'vuetify.SetFocus("${FocusOn}")
+	${ComponentName}.SetFocus("${FocusOn}")
 End Sub"$).Append(CRLF).Append(CRLF)
 End If
 	'
@@ -1696,7 +1870,7 @@ End If
 	${ComponentName}.RunMethod("Read${SingularClean}", s${PrimaryKey})
 	${BuildVisibility}
 	${BuildProperties}
-	vuetify.SetFocus("${FocusOn}")
+	${ComponentName}.SetFocus("${FocusOn}")
 End Sub"$).Append(CRLF).Append(CRLF)
 	End If
 	

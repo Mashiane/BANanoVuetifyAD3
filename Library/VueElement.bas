@@ -2043,14 +2043,6 @@ Sub Append(varText As String)
 	End If
 End Sub
 
-Sub BindEnabled(value As String)
-	AddAttr(":disabled", value)
-End Sub
-
-Sub BindDisabled(value As String)
-	AddAttr(":disabled", value)
-End Sub
-
 Sub BindValue(value As String)
 	AddAttr(":value", value)
 End Sub
@@ -3763,7 +3755,13 @@ End Sub
 
 'set disabled
 public Sub setDisabled(varDisabled As String)
-	AddAttr("disabled", varDisabled)
+	If BANano.IsNull(varDisabled) Or BANano.IsUndefined(varDisabled) Then 
+		varDisabled = ""
+	End If
+	if varDisabled = "" then return
+	varDisabled = CStr(varDisabled)
+	varDisabled = varDisabled.tolowercase
+	AddAttr(":disabled", varDisabled)
 	stDisabled = varDisabled
 End Sub
 
@@ -3915,13 +3913,17 @@ public Sub getPrependInnerIcon() As String
 End Sub
 
 'set readonly
-public Sub setReadonly(varReadonly As String)
-	AddAttr("readonly", varReadonly)
+public Sub setReadOnly(varReadonly As String)
+	If BANano.IsNull(varReadonly) Or BANano.IsNull(varReadonly) Then varReadonly = ""
+	If varReadonly = "" Then Return
+	varReadonly = CStr(varReadonly)
+	varReadonly = varReadonly.tolowercase
+	AddAttr(":readonly", varReadonly)
 	stReadonly = varReadonly
 End Sub
 
 'get readonly
-public Sub getReadonly() As String
+public Sub getReadOnly() As String
 	Return stReadonly
 End Sub
 
@@ -3931,7 +3933,7 @@ public Sub setRequired(varRequired As String)
 	If varRequired = "" Then Return
 	varRequired = CStr(varRequired)
 	varRequired = varRequired.tolowercase
-	AddAttr("required", varRequired)
+	AddAttr(":required", varRequired)
 	stRequired = varRequired
 End Sub
 
@@ -6174,7 +6176,7 @@ End Sub
 
 Sub AddMaterialCard(elID As String, sheetColor As String, elIcon As String, elTitle As String, elValue As String) As VueElement
 	elID = elID.tolowercase
-	Dim elID As String = mName.ToLowerCase
+	Dim elID As String = elID.ToLowerCase
 	Dim parentID As String = CleanID(mName)
 	
 	Dim sTemplate As String = $"<v-card id="${elID}">
@@ -6205,6 +6207,65 @@ Sub AddMaterialCard(elID As String, sheetColor As String, elIcon As String, elTi
 	
 	Dim avat As VueElement = vcard.GetListItemAvatar
 	avat.MT = "n10"
+	avat.Width = "100"
+	avat.Height = "100"
+	avat.BorderRadius = "5px"
+	avat.Elevation = "10"
+	'
+	'Dim sht As VueElement = vcard.GetSheet
+	'sht.Elevation = "10"
+	'sht.rounded = True
+	'
+	Dim lt As VueElement = vcard.GetListItemTitle
+	lt.MB = 1
+	
+	vcard.BindAllEvents
+	Return vcard
+End Sub
+
+Sub AddMaterialCard3(elID As String, sheetColor As String, elIcon As String, elTitle As String, elValue As String, elTitle1 As String, elValue1 As String, elTitle2 As String, elValue2 As String) As VueElement
+	elID = elID.tolowercase
+	Dim elID As String = elID.ToLowerCase
+	Dim parentID As String = CleanID(mName)
+	
+	Dim sTemplate As String = $"<v-card id="${elID}">
+            <v-list-item id="${elID}listitem">
+              <v-list-item-avatar id="${elID}listitemavatar">
+                <v-sheet id="${elID}sheet" color="${sheetColor}" width="100" height="100">
+                  <v-icon id="${elID}icon" dark size="60">${elIcon}</v-icon>
+                </v-sheet>
+              </v-list-item-avatar>
+              <v-list-item-content id="${elID}listitemcontent">
+                <div id="${elID}title" class="overline text-right">${elTitle}</div>
+                <v-list-item-title id="${elID}listitemtitle" class="headline text-right">${elValue}</v-list-item-title>
+                <div>
+                  <v-divider></v-divider>
+                </div>
+                <div id="${elID}title1" class="overline text-right">${elTitle1}</div>
+                <v-list-item-title id="${elID}listitemtitle1" class="headline text-right">${elValue1}</v-list-item-title>
+                <div>
+                  <v-divider></v-divider>
+                </div>
+                <div id="${elID}title2" class="overline text-right">${elTitle2}</div>
+                <v-list-item-title id="${elID}listitemtitle2" class="headline text-right">${elValue2}</v-list-item-title>
+                <div>
+                  <v-divider></v-divider>
+                </div>
+        	  </v-list-item-content>
+            </v-list-item>
+            <v-card-actions id="${elID}cardactions">
+            </v-card-actions>
+          </v-card>"$
+		  
+	sTemplate = sTemplate.Replace("~","$")
+	
+	BANano.GetElement(parentID).Append(sTemplate)
+	'
+	Dim vcard As VueElement = GetVueElement(elID)
+	vcard.MT = 3
+	
+	Dim avat As VueElement = vcard.GetListItemAvatar
+	avat.MarginTop = "-200px"
 	avat.Width = "100"
 	avat.Height = "100"
 	avat.BorderRadius = "5px"
@@ -10365,3 +10426,4 @@ Sub CalendarNext(VC As VueComponent, elID As String)
 	Dim refs As BANanoObject = VC.refs
 	refs.GetField(elID).RunMethod("next", Null)
 End Sub
+

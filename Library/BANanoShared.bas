@@ -1258,6 +1258,17 @@ Sub SumListOfMapsProperty(lst As List, prop As String) As Double
 	Dim tsum As Double = 0
 	For Each rec As Map In lst
 		Dim propv As String = rec.GetDefault(prop,"0")
+		propv = Val(propv)
+		tsum = tsum + BANano.parseFloat(propv)
+	Next
+	Return tsum
+End Sub
+
+Sub ListSumProperty(lst As List, prop As String) As Double
+	Dim tsum As Double = 0
+	For Each rec As Map In lst
+		Dim propv As String = rec.GetDefault(prop,"0")
+		propv = Val(propv)
 		tsum = tsum + BANano.parseFloat(propv)
 	Next
 	Return tsum

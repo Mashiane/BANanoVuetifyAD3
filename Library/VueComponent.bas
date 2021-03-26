@@ -396,8 +396,8 @@ Sub ShowAlert(process As String, title As String, Message As String, OkTitle As 
 	SetData(dialogpromptshow, False)
 End Sub
 
-'remove an item where
-Sub SetDataRemoveWhere(dsname As String, prop As String, value As String)
+''remove an item where ignoringCase
+Sub SetDataRemoveWhere1(dsname As String, prop As String, value As String)
 	dsname = dsname.tolowercase
 	Dim cl As List = GetData(dsname)
 	'
@@ -756,6 +756,34 @@ Sub SetDataPush(listName As String, item As Object)
 	listName = listName.ToLowerCase
 	Dim dat As BANanoObject = data
 	dat.GetField(listName).RunMethod("push", item)
+End Sub
+
+'remove an item with
+Sub SetDataRemoveWhere(listname As String, whereMap As Map)
+	'find the item
+	Dim recpos As Int = GetDataPositionWhere(listname, whereMap)
+	If recpos = -1 Then Return
+	SetDataSpliceRemove(listname, recpos, 1)
+End Sub
+
+'get data where
+Sub GetDataWhere(lstName As String, whereMap As Map) As Map
+	Dim rm As Map = CreateMap()
+	'find the item
+	Dim recpos As Int = GetDataPositionWhere(lstName, whereMap)
+	If recpos = -1 Then Return rm
+	Dim recs As List = GetData(lstName)
+	Dim rec As Map = recs.Get(recpos)
+	Return rec
+End Sub
+
+Sub SetDataRemoveAtPosition(lstName As String, pos As Int)
+	SetDataSpliceRemove(lstName, pos, 1)
+End Sub
+
+'insert an item at a position
+Sub SetDataInsert(lstname As String, pos As Int, obj As Object)
+	SetDataSplice(lstname, pos, 0, obj)
 End Sub
 
 'splice an array, add item at a position
@@ -1337,3 +1365,57 @@ Sub UpdateSRC(elID As String, src As String)
 	SetData(key, src)
 End Sub
 
+'update item where
+Sub RealTimeUpdateItemAtPosition(lstName As String, pos As Int, item As Map)
+	If pos >= 0 Then
+		SetDataSplice(lstName, pos, 1, item)
+	End If
+End Sub
+
+Sub RealTimeRemoveItemAtPosition(lstName As String, pos As Int)
+	If pos >= 0 Then
+		SetDataSpliceRemove(lstName, pos, 1)
+	End If
+End Sub
+
+Sub RealTimeFindItemPosition(lstName As String, whereMap As Map) As Int
+	Dim mpos As Int = GetDataPositionWhere(lstName, whereMap)
+	Return mpos
+End Sub
+
+Sub RealTimeAddItem(lstName As String, rowData As Map)
+	SetDataPush(lstName, rowData)
+End Sub
+
+'remove an item where
+Sub RealTimeRemoveItem(lstName As String, prop As String, value As String)
+	Dim m As Map = CreateMap()
+	m.Put(prop, value)
+	'find the record at a position
+	Dim mpos As Int = GetDataPositionWhere(lstName, m)
+	If mpos >= 0 Then
+		SetDataSpliceRemove(lstName, mpos, 1)
+	End If
+End Sub
+
+'update item where
+Sub RealTimeUpdateItem(lstName As String, prop As String, value As String, item As Map)
+	Dim m As Map = CreateMap()
+	m.Put(prop, value)
+	'find the record at a position
+	Dim mpos As Int = GetDataPositionWhere(lstName, m)
+	If mpos >= 0 Then
+		SetDataSplice(lstName, mpos, 1, item)
+	End If
+End Sub
+
+'get data where
+Sub RealTimeFindItem(lstName As String, whereMap As Map) As Map
+	Dim rm As Map = CreateMap()
+	'find the item
+	Dim recpos As Int = GetDataPositionWhere(lstName, whereMap)
+	If recpos = -1 Then Return rm
+	Dim recs As List = GetData(lstName)
+	Dim rec As Map = recs.Get(recpos)
+	Return rec
+End Sub
