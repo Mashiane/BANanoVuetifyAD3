@@ -7,8 +7,8 @@ Version=8.9
 Sub Class_Globals
 	Private fname As String
 	Private jsPDF As BANanoObject
-	Private mCallBack As Object
 	Private BANano As BANano
+	Private mCallBack As Object
 	Public const ORIENTATION_LANDSCAPE As String = "landscape"
 	Public const ORIENTATION_POTRAIT As String = "potrait"
 	Public const IMAGE_JPEG As String = "JPEG"
@@ -28,7 +28,15 @@ Sub Class_Globals
 	Public const OVERFLOW_ELLIPSIZE As String = "ellipsize"
 	Public const OVERFLOW_VISIBLE As String = "visible"
 	Public const OVERFLOW_HIDDEN As String = "hidden"
-	Public const OVERFLOW_LINEBREAK As String = "ellipsize"
+	Public const OVERFLOW_LINEBREAK As String = "linebreak"
+	Public const CELL_WIDTH_AUTO As String = "auto"
+	Public const CELL_WIDTH_WRAP As String = "wrap"
+	Public const CELL_WIDTH_AUTO As String = "auto"
+	Public CONST OVERFLOW_NORMAL As String = "normal"
+	'
+	Public const HALIGN_TOP As String = "top"
+	Public const HALIGN_MIDDLE As String = "middle"
+	Public const HALIGN_BOTTOM As String = "bottom"
 	'
 	Public const PAGE_A0 As String = "a0"
 	Public const PAGE_A2 As String = "a2"
@@ -88,6 +96,7 @@ Sub Class_Globals
 	Type TextOptions(align As String, baseline As String, rotationDirection As String, charSpace As String, lineHeightFactor As String, maxWidth As String, renderingMode As String, angle As String)
 End Sub
 
+'new text options
 Sub NewTextOptions As TextOptions
 	Dim nt As TextOptions
 	nt.Initialize 
@@ -103,7 +112,7 @@ Sub NewTextOptions As TextOptions
 End Sub
 
 'Initializes the object. You can add parameters to this method if needed.
-Public Sub Initialize(eventHandler As Object, fileName As String)
+Public Sub Initialize(eventHandler As Object, fileName As String) As BANanoJSPDF
 	mCallBack = eventHandler
 	fname = fileName	
 	encryption.Initialize 
@@ -119,105 +128,158 @@ Public Sub Initialize(eventHandler As Object, fileName As String)
 	Margin.width = 0
 	Margin.bottom = 0
 	Margin.right = 0  
+	Return Me
 End Sub
 
+'set page size
 Sub setPageSize(ps As String)
 	mpageSize = ps
 End Sub
 
-Sub CanPrint
+'can print
+Sub CanPrint As BANanoJSPDF
 	userPermissions.Add("print")
+	Return Me
 End Sub
 
-Sub CanModify
+'can modify
+Sub CanModify As BANanoJSPDF
 	userPermissions.Add("modify")
+	Return Me
 End Sub
 
-Sub CanCopy
+'can copy
+Sub CanCopy As BANanoJSPDF
 	userPermissions.Add("copy")
+	Return Me
 End Sub
 
-Sub CanAnnotForms
+'can annotate forms
+Sub CanAnnotForms As BANanoJSPDF
 	userPermissions.Add("annot-forms")
+	Return Me
 End Sub
 
-Sub setUserPassword(pwd As String)
+'set user password
+Sub SetUserPassword(pwd As String) As BANanoJSPDF
 	encryption.put("userPassword", pwd)
+	Return Me
 End Sub
 
-Sub SetOwnerPassword(pwd As String)
+'set owner password
+Sub SetOwnerPassword(pwd As String) As BANanoJSPDF
 	encryption.Put("ownerPassword", pwd)
+	Return Me
 End Sub
 
-Sub setUnit(u As String)
+'set the unit
+Sub setUnit(u As String) 
 	mUnits = u
 End Sub
 
+'set orientation
 Sub setOrientation(o As String)
 	mOrientation = o
 End Sub
 
-Sub moveTo(x As Int, y As Int)
+'move to
+Sub moveTo(x As Int, y As Int) As BANanoJSPDF
 	jsPDF.RunMethod("moveTo", Array(x, y))
+	Return Me
 End Sub
 
-Sub lineTo(x As Int, y As Int)
+'draw a line to
+Sub lineTo(x As Int, y As Int) As BANanoJSPDF
 	jsPDF.RunMethod("lineTo", Array(x, y))
+	Return Me
 End Sub
 
-Sub addPage
+'add a page
+Sub addPage As BANanoJSPDF
 	jsPDF.RunMethod("addPage", Null)
+	Return Me
 End Sub
 
-Sub rect(x As Int, y As Int, w As Int, h As Int, style As String)
+'draw a rect
+Sub rect(x As Int, y As Int, w As Int, h As Int, style As String) As BANanoJSPDF
 	jsPDF.RunMethod("rect", Array(x, y, w, h, style))
+	Return Me
 End Sub
 
-Sub roundedRect(x As Int, y As Int, w As Int, h As Int, rx As Int, ry As Int, style As String)
+'draw a rounded rect
+Sub roundedRect(x As Int, y As Int, w As Int, h As Int, rx As Int, ry As Int, style As String) As BANanoJSPDF
 	jsPDF.RunMethod("roundedRect", Array(x, y, w, h, rx, ry, style))
+	Return Me
 End Sub	
 
-Sub line(x1 As Int, y1 As Int, x2 As Int, y2 As Int, style As String)
+'draw a line
+Sub line(x1 As Int, y1 As Int, x2 As Int, y2 As Int, style As String) As BANanoJSPDF
 	jsPDF.RunMethod("line", Array(x1, y1, x2, y2, style))
+	Return Me
 End Sub
 
-Sub ellipse(x As Int, y As Int, rx As Int, ry As Int, style As String)
+'draw an ellipse
+Sub ellipse(x As Int, y As Int, rx As Int, ry As Int, style As String) As BANanoJSPDF
 	jsPDF.RunMethod("ellipse", Array(x, y, rx, ry, style))
+	Return Me
 End Sub
 
-Sub curveTo(x1 As Int, y1 As Int, x2 As Int, y2 As Int, x3 As Int, y3 As Int)
+'draw a curve
+Sub curveTo(x1 As Int, y1 As Int, x2 As Int, y2 As Int, x3 As Int, y3 As Int) As BANanoJSPDF
 	jsPDF.RunMethod("curveTo", Array(x1, y1, x2, y2, x3, y3))
+	Return Me
 End Sub
 
-Sub setFillColor(r As Int, g As Int, b As Int)
+'set fill color
+Sub SetFillColor(r As Int, g As Int, b As Int) As BANanoJSPDF
 	jsPDF.RunMethod("setFillColor", Array(r, g, b))
+	Return Me
 End Sub
 
-Sub setLineWidth(l As Int)
+'set line width
+Sub SetLineWidth(l As Int) As BANanoJSPDF
 	jsPDF.RunMethod("setLineWidth", Array(l))
+	Return Me
 End Sub
 
-Sub setDrawColor(c As Int)
+'set draw color
+Sub SetDrawColor(c As Int) As BANanoJSPDF
 	jsPDF.RunMethod("setDrawColor", Array(c))
+	Return Me
 End Sub
 
-Sub circle(x As Int, y As Int, r As Int, style As String)
+'draw a circle
+Sub circle(x As Int, y As Int, r As Int, style As String) As BANanoJSPDF
 	jsPDF.runmethod("circle", Array(x, y, r, style))
+	Return Me
 End Sub	
 
-Sub setText(X As Int, Y As Int, txt As String)
-	jsPDF.RunMethod("text", Array(txt, x, y))
-End Sub
-
-Sub setTextXY(X As Int, Y As Int, txt As String)
+'set text
+Sub SetText(X As Int, Y As Int, txt As String) As BANanoJSPDF
 	jsPDF.RunMethod("text", Array(x, y, txt))
+	Return Me
 End Sub
 
-Sub setTextColor(c As Int)
+'set text with alignment
+Sub SetTextAlignRight(X As Int, Y As Int, txt As String) As BANanoJSPDF
+	jsPDF.RunMethod("text", Array(x, y, txt, "right"))
+	Return Me
+End Sub
+
+'set text with alignment
+Sub SetTextAlignCenter(X As Int, Y As Int, txt As String) As BANanoJSPDF
+	jsPDF.RunMethod("text", Array(x, y, txt, "center"))
+	Return Me
+End Sub
+
+'set the text color
+Sub SetTextColor(c As Int) As BANanoJSPDF
 	jsPDF.RunMethod("setTextColor", Array(c))
+	Return Me
 End Sub
 
-Sub setTextOptions(txt As String, x As Int, y As Int, opt As TextOptions)
+'set text with options
+Sub SetTextOptions(txt As String, x As Int, y As Int, opt As TextOptions) As BANanoJSPDF
 	Dim options As Map = CreateMap()
 	options.Put("align", opt.align)
 	options.Put("baseline", opt.baseline)
@@ -228,39 +290,47 @@ Sub setTextOptions(txt As String, x As Int, y As Int, opt As TextOptions)
 	options.Put("maxWidth", opt.maxWidth)
 	options.Put("renderingMode", opt.renderingMode)
 	jsPDF.RunMethod("text", Array(txt, x, y, options))
+	Return Me
 End Sub
 
-Sub setTextRightAlign(txt As String, x As Int, y As Int)
-	Dim ot As TextOptions = NewTextOptions
-	ot.align = ALIGN_RIGHT
-	setTextOptions(txt, x, y, ot)
-End Sub
-
-Sub setTextColor1(r As Int, g As Int, b As Int)
+'set the text color
+Sub SetTextColor1(r As Int, g As Int, b As Int) As BANanoJSPDF
 	jsPDF.RunMethod("setTextColor", Array(r, g, b))
+	Return Me
 End Sub
 
-Sub triangle(x1 As Int, y1 As Int, x2 As Int, y2 As Int, x3 As Int, y3 As Int, style As String)
+'draw a triangle
+Sub triangle(x1 As Int, y1 As Int, x2 As Int, y2 As Int, x3 As Int, y3 As Int, style As String) As BANanoJSPDF
 	jsPDF.RunMethod("triangle", Array(x1, y1, x2, y2, x3, y3, style))
+	Return Me
 End Sub
 
-Sub setFontType(fs As String)
+'set the font type
+Sub SetFontType(fs As String) As BANanoJSPDF
 	jsPDF.RunMethod("setFontType", Array(fs))
+	Return Me
 End Sub
 
-Sub setFontStyle(fs As String)
+'set the font style
+Sub SetFontStyle(fs As String) As BANanoJSPDF
 	jsPDF.RunMethod("setFontStyle", Array(fs))
+	Return Me
 End Sub
 
-Sub setFontSize(fs As Int)
+'set the font size
+Sub SetFontSize(fs As Int) As BANanoJSPDF
 	jsPDF.runmethod("setFontSize", Array(fs))
+	Return Me
 End Sub
 
-Sub setFont(fs As String)
+'set the font
+Sub SetFont(fs As String) As BANanoJSPDF
 	jsPDF.runmethod("setFont", Array(fs))
+	Return Me
 End Sub
 
-Sub CopyMargin(source As MarginObj, target As Map)
+'copy margins
+private Sub CopyMargin(source As MarginObj, target As Map)
 	If source.top <> 0 Then 
 		target.Put("top", source.top)
 	End If
@@ -278,7 +348,8 @@ Sub CopyMargin(source As MarginObj, target As Map)
 	End If
 End Sub
 
-Sub Start
+'initialize the pdf engine
+Sub Start As BANanoJSPDF
 	If encryption.Size > 0 Then
 		If userPermissions.Size > 0 Then
 			encryption.Put("userPermissions", userPermissions)
@@ -290,30 +361,43 @@ Sub Start
 		pdfOptions.put("margin", marginM)
 	End If
 	jsPDF.Initialize2("jsPDF", Array(mOrientation, mUnits, mpageSize, pdfOptions))
+	autoTableSetDefaults
+	Return Me
 End Sub
 
-'print table via javascript
-Sub autoTable(tbl As BANanoJSPDFTable)
+Sub autoTableSetDefaults
+	jsPDF.RunMethod("autoTableSetDefaults", Null)
+End Sub
+
+'add table from BANanoJSPDFTable
+Sub autoTable(tbl As BANanoJSPDFTable) As BANanoJSPDF
 	tbl.buildoptions
-	jsPDF.RunMethod("autoTable", Array(tbl.columns, tbl.rows, tbl.options))
+	'jsPDF.RunMethod("autoTable", Array(tbl.columns, tbl.rows, tbl.options))
+	jsPDF.RunMethod("autoTable", Array(tbl.options))
+	Return Me
 End Sub
 
-'print the table directly
-Sub autoTable1(tableID As String)
+'add table from html element
+Sub autoTable1(tableID As String) As BANanoJSPDF
 	tableID = tableID.ToLowerCase
 	Dim opt As Map = CreateMap()
 	opt.Put("html", $"#${tableID}"$)
 	jsPDF.RunMethod("autoTable", Array(opt))
+	Return Me
 End Sub
 
+'save the pdf document
 Sub Save
 	jsPDF.RunMethod("save", Array(fname))
 End Sub
 
-Sub addImage(imgData As String, imgType As String, X As Int, Y As Int, iWidth As Int, iHeight As Int)
+'add base 64 image
+Sub addImage(imgData As String, imgType As String, X As Int, Y As Int, iWidth As Int, iHeight As Int) As BANanoJSPDF
 	jsPDF.RunMethod("addImage", Array(imgData, imgType, X, Y, iWidth, iHeight))
+	Return Me
 End Sub
 
+'return convert pdf to base 64
 Sub ToBase64 As String
 	'get the output
 	Dim out As Object = jsPDF.RunMethod("output", Null)
@@ -322,16 +406,21 @@ Sub ToBase64 As String
 	Return res
 End Sub
 
+'autoprint
 Sub autoPrint
 	jsPDF.RunMethod("autoPrint", Null)
 End Sub
 
-Sub addFont(url As String, fontName As String, fontType As String)
+'add a font
+Sub addFont(url As String, fontName As String, fontType As String) As BANanoJSPDF
 	jsPDF.RunMethod("addFont", Array(url, fontName, fontType))
+	Return Me
 End Sub
 
-Sub setPage(pg As Int)
+'set active page
+Sub SetPage(pg As Int) As BANanoJSPDF
 	jsPDF.RunMethod("setPage", Array(pg))
+	Return Me
 End Sub
 
 'Sub fromHTML(elID As String)
@@ -345,25 +434,42 @@ End Sub
 
 
 'get number of pages
-Sub getNumberOfPages As Int
+Sub GetNumberOfPages As Int
 	Dim noOfPages As Int = jsPDF.GetField("internal").RunMethod("getNumberOfPages", Null).Result
 	Return noOfPages
 End Sub
 
 'get current page width
-Sub getPageWidth As Int
-	Dim pw As Int = jsPDF.GetField("internal").GetField("pageSize").RunMethod("getWidth", Null).result
+Sub GetPageWidth As Int
+	Dim pw As Int = jsPDF.GetField("internal").GetField("pageSize").getfield("width").result
 	Return pw
 End Sub
 
 'get current page height
-Sub getPageHeight As Int
-	Dim pw As Int = jsPDF.GetField("internal").GetField("pageSize").RunMethod("getHeight", Null).result
+Sub GetPageHeight As Int
+	Dim pw As Int = jsPDF.GetField("internal").GetField("pageSize").Getfield("height").result
 	Return pw
 End Sub
 
-'doc.previousAutoTable.finalY
-Sub PreviousAutoTableFinalY As Int
+'get finalY after table insert
+Sub GetPreviousAutoTableFinalY As Int
 	Dim res As Int = jsPDF.GetField("previousAutoTable").GetField("finalY").Result
 	Return res
+End Sub
+
+'set the footer page numbers
+Sub SetPageNumbers As BANanoJSPDF
+	Dim pageCount As Int = GetNumberOfPages
+	SetFontSize(8)
+	Dim pgCnt As Int 
+	For pgCnt = 1 To pageCount
+		SetPage(pgCnt)
+		Dim halfWidth As Int = GetPageWidth / 2
+		Dim halfHeight As Int = GetPageHeight
+		Dim txtOpt As TextOptions
+		txtOpt = NewTextOptions
+		txtOpt.align = ALIGN_CENTER
+		SetTextOptions($"Page ${pgCnt} of ${pageCount}"$, halfWidth, halfHeight - 15, txtOpt)	
+	Next
+	Return Me
 End Sub

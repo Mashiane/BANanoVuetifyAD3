@@ -1124,6 +1124,57 @@ Sub SelectWhere(tblfields As List, tblWhere As Map, operators As List, orderBy A
 	Return Me
 End Sub
 
+'return a sql to select record of table where one exists
+'<code>
+''select where
+'Dim sw As Map = CreateMap()
+'sw.put("id", 10)
+'sw.put("age", 20)
+'dbConnect.SelectMaxWhere("field", sw, array(">=", "<"))
+'dbConnect.result = db.ExecuteWait(dbConnect.query, dbConnect.args)
+'dbConnect.FromJSON
+'Select Case dbConnect.OK
+'Case False
+'Dim strError As String = dbConnect.Error
+'Log(strError)
+'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
+'End Select
+'</code>
+Sub SelectMaxWhere(fld As String, tblWhere As Map, operators As List) As BANanoALASQLE
+	If Schema.Size = 0 Then
+		Log($"BANanoAlaSQLE.SelectMaxWhere: '${TableName}' schema is not set!"$)
+	End If
+	If operators = Null Then operators = EQOperators(tblWhere)
+	Dim listOfTypes As List = GetMapTypes(tblWhere)
+	Dim listOfValues As List = GetMapValues(tblWhere)
+	'are we selecting all fields or just some
+	Dim sb As StringBuilder
+	sb.Initialize
+	sb.Append($"SELECT MAX(${fld}) As [${fld}] FROM ${EscapeField(TableName)} WHERE "$)
+	Dim i As Int
+	Dim iWhere As Int = tblWhere.Size - 1
+	For i = 0 To iWhere
+		If i > 0 Then
+			sb.Append(" AND ")
+		End If
+		Dim col As String = tblWhere.GetKeyAt(i)
+		sb.Append(col)
+		Dim opr As String = operators.Get(i)
+		sb.Append($" ${opr} ?"$)
+	Next
+	query = sb.tostring
+	args = listOfValues
+	types = listOfTypes
+	command = "select"
+	response = ""
+	error = ""
+	result = NewList
+	json = ""
+	affectedRows = 0
+	Return Me
+End Sub
+
+
 Sub AndOrOperators(sm As Map) As List    'ignore
 	Dim nl As List
 	nl.initialize

@@ -3789,8 +3789,8 @@ Sub AddDialogAlertPrompt(Module As Object, parentID As String, elID As String, b
 	Dim dialogoktitle As String = $"${elID}oktitle"$
 	Dim dialogokcolor As String = $"${elID}okcolor"$
 	Dim dialogcancelcolor As String = $"${elID}cancelcolor"$
-	Dim dialogokshow As String = $"${elID}okshow"$
-	Dim dialogcancelshow As String = $"${elID}cancelshow"$
+	Dim DialogOkShow As String = $"${elID}okshow"$
+	Dim DialogCancelShow As String = $"${elID}cancelshow"$
 	Dim dialogpersistent As String = $"${elID}persistent"$
 	Dim dialogpromptshow As String = $"${elID}promptshow"$
 	Dim dialogwidth As String = $"${elID}width"$
@@ -3824,9 +3824,9 @@ Sub AddDialogAlertPrompt(Module As Object, parentID As String, elID As String, b
 	sbTemplate.Append($"<v-divider id="${divider}" class="mx-2"></v-divider>"$)
 	sbTemplate.Append($"<v-card-actions id="${cardactionsid}">"$)
 	sbTemplate.Append($"<v-spacer id="${cardspacer}"></v-spacer>"$)
-	sbTemplate.Append($"<v-btn id="${cancelid}" v-show="${dialogcancelshow}" :color="${dialogcancelcolor}" "$)
+	sbTemplate.Append($"<v-btn id="${cancelid}" v-show="${DialogCancelShow}" :color="${dialogcancelcolor}" "$)
 	sbTemplate.Append($"class="mx-2">{{ ${dialogcanceltitle} }}</v-btn>"$)
-	sbTemplate.Append($"<v-btn id="${okid}" v-show="${dialogokshow}" :color="${dialogokcolor}" v-on:click="${okid}_click" class="mx-2">"$)
+	sbTemplate.Append($"<v-btn id="${okid}" v-show="${DialogOkShow}" :color="${dialogokcolor}" v-on:click="${okid}_click" class="mx-2">"$)
 	sbTemplate.Append($"{{ ${dialogoktitle} }}</v-btn>"$)
 	sbTemplate.Append($"</v-card-actions>"$)
 	sbTemplate.Append($"</v-card>"$)
@@ -3862,9 +3862,9 @@ Sub AddDialogAlertPrompt(Module As Object, parentID As String, elID As String, b
 	vdialog.SetData(dialogpromptvalue, "")
 	vdialog.SetData(dialogpromptplaceholder, "")
 	vdialog.SetData(dialogcanceltitle, "Cancel")
-	vdialog.SetData(dialogcancelshow, True)
+	vdialog.SetData(DialogCancelShow, True)
 	vdialog.SetData(dialogcancelcolor, CancelColor)
-	vdialog.SetData(dialogokshow, True)
+	vdialog.SetData(DialogOkShow, True)
 	vdialog.SetData(dialogokcolor, OkColor)
 	vdialog.SetData(dialogoktitle, "Ok")
 	vdialog.SetData(texttype, "text")
@@ -3872,13 +3872,15 @@ Sub AddDialogAlertPrompt(Module As Object, parentID As String, elID As String, b
 End Sub
 
 Sub DialogCancelShowHide(eliD As String, b As Boolean)
-	Dim dialogcancelshow As String = $"${eliD}cancelshow"$
-	SetData(dialogcancelshow, b)
+	Dim DialogCancelShowx As String = $"${eliD}cancelshow"$
+	SetData(DialogCancelShowx, b)
+	SetData($"${eliD}key"$, DateTime.now)
 End Sub
 
 Sub DialogOkShowHide(elID As String, b As Boolean)
-	Dim dialogokshow As String = $"${elID}okshow"$
-	SetData(dialogokshow, b)
+	Dim DialogOkShowx As String = $"${elID}okshow"$
+	SetData(DialogOkShowx, b)
+	SetData($"${elID}key"$, DateTime.now)
 End Sub
 
 'return the dialog card title
@@ -3957,6 +3959,8 @@ Sub AddDialogInput(Module As Object, parentID As String, elID As String, bPersis
 	Dim okid As String = $"${elID}ok"$
 	Dim dialogFormID As String = $"${elID}form"$
 	Dim dialogContainerID As String = $"${elID}container"$
+	dim okKey as string = $"${elid}key"$
+	dim cancelKey as string = $"${elid}key"$
 	'
 	Dim sbTemplate As StringBuilder
 	sbTemplate.Initialize
@@ -3972,9 +3976,9 @@ Sub AddDialogInput(Module As Object, parentID As String, elID As String, bPersis
 	sbTemplate.Append($"<v-divider id="${divider}" class="mx-2"></v-divider>"$)
 	sbTemplate.Append($"<v-card-actions id="${cardactionsid}">"$)
 	sbTemplate.Append($"<v-spacer id="${cardspacer}"></v-spacer>"$)
-	sbTemplate.Append($"<v-btn id="${cancelid}" v-show="${dialogcancelshow}" :color="${dialogcancelcolor}" "$)
+	sbTemplate.Append($"<v-btn :key="${cancelKey}" id="${cancelid}" v-show="${dialogcancelshow}" :color="${dialogcancelcolor}" "$)
 	sbTemplate.Append($"class="mx-2">{{ ${dialogcanceltitle} }}</v-btn>"$)
-	sbTemplate.Append($"<v-btn id="${okid}" v-show="${dialogokshow}" :color="${dialogokcolor}" v-on:click="${okid}_click" class="mx-2">"$)
+	sbTemplate.Append($"<v-btn :key="${okKey}" id="${okid}" v-show="${dialogokshow}" :color="${dialogokcolor}" v-on:click="${okid}_click" class="mx-2">"$)
 	sbTemplate.Append($"{{ ${dialogoktitle} }}</v-btn>"$)
 	sbTemplate.Append($"</v-card-actions>"$)
 	sbTemplate.Append($"</v-card>"$)
@@ -3987,10 +3991,14 @@ Sub AddDialogInput(Module As Object, parentID As String, elID As String, bPersis
 	'
 	Dim vbtnc As VueElement
 	vbtnc.Initialize(Module, cancelid, cancelid)
+	vbtnc.VShow = dialogcancelshow
+	vbtnc.Bind("color", dialogcancelcolor)
 	vbtnc.BindAllEvents
 	'
 	Dim vbtno As VueElement
 	vbtno.Initialize(Module, okid, okid)
+	vbtno.VShow = dialogokshow
+	vbtno.Bind("color", dialogokcolor)
 	vbtno.BindAllEvents
 	
 	vdialog.BindVueElement(vbtnc)
@@ -4009,6 +4017,8 @@ Sub AddDialogInput(Module As Object, parentID As String, elID As String, bPersis
 	vdialog.SetData(dialogokshow, True)
 	vdialog.SetData(dialogokcolor, OkColor)
 	vdialog.SetData(dialogoktitle, OkTitle)
+	vdialog.SetData(okKey, DateTime.now)
+	vdialog.SetData(cancelKey, DateTime.Now)
 	Return vdialog
 End Sub
 

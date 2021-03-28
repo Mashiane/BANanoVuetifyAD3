@@ -3608,6 +3608,14 @@ Sub setFullScreenOnMobile(varFullScreen As Boolean)
 	AddAttr(":fullscreen", "$vuetify.breakpoint.mobile")
 End Sub
 
+'set full screen
+Sub setFullScreen(varFullScreen As Boolean)
+	bFullScreen = varFullScreen
+	If BANano.IsUndefined(varFullScreen) Or BANano.IsNull(varFullScreen) Then Return
+	If varFullScreen = False Then Return
+	AddAttr(":fullscreen", varFullScreen)
+End Sub
+
 public Sub getFullScreen() As Boolean
 	Return bFullScreen
 End Sub

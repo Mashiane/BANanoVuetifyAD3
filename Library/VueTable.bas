@@ -10,6 +10,7 @@ Version=8.5
 #Event: Add_Click (e As BANanoEvent)
 #Event: Save (item As Map)
 #Event: Edit (item As Map)
+#Event: Pdf (item As Map)
 #Event: Delete (item As Map)
 #Event: Print (item As Map)
 #Event: Cancel (item As Map)
@@ -1238,6 +1239,9 @@ Sub AddCancel()
 	columnsM.Put(colField, dt)
 End Sub
 
+Sub AddPDFColumn()
+	AddAction("pdf","PDF","mdi-file-pdf-outline")
+End Sub
 
 'add edit icon
 Sub AddEdit()

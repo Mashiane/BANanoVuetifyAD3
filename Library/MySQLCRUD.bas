@@ -1120,6 +1120,7 @@ private Sub LoadCode
 	sb.Append($"Sub Load${PluralClean}		'ignoredeadcode
 	'Show progress loader
 	${dtName}.UpdateLoading(True)
+	${LoadRelationships}
 	${dtName}.Reload(${ComponentName}.NewList)
 	'Dim db As BANanoSQL
 	'db.OpenWait("${DatabaseName}", "${DatabaseName}")
@@ -1549,16 +1550,16 @@ private Sub CreateTableCode()
 		Dim arrx As String = BANanoShared.List2ArrayVariable(Filters)
 		sb.Append($"${dtName}.SetFilterable(Array(${arrx}))"$).Append(CRLF)
 	End If
-	'
+	'	
+	sb.Append(dtCode.ToString)
+	
 	If relationships.Size > 0 Then
 		For Each rec As DBRelationship In relationships
 			Dim ssource As String = rec.source
 			Dim svmodel As String = rec.key
-			AddCode($"${dtName}.SetColumnPreDisplay("${svmodel}", "${ssource}")"$)
+			AddCode($"${dtName}.SetColumnPreDisplay("${svmodel}", "get${ssource}")"$)
 		Next
 	End If
-	
-	sb.Append(dtCode.ToString)
 	
 	If DT_HasEdit Then
 		AddCode($"${dtName}.AddEdit"$)

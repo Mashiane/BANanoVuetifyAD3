@@ -316,6 +316,50 @@ Sub SelectWhereAscDesc(tblfields As List, tblWhere As Map, operators As List, or
 	Return Me
 End Sub
 
+'return a sql to select record of table where one exists
+'<code>
+''select where
+'Dim sw As Map = CreateMap()
+'sw.put("id", 10)
+'sw.put("age", 20)
+'dbConnect.SelectMaxWhere("field1", sw, array(">=", "<"))
+'dbConnect.JSON = BANano.CallInlinePHPWait(dbConnect.MethodName, dbConnect.Build)
+'dbConnect.FromJSON
+'Select Case dbConnect.OK
+'Case False
+'Dim strError As String = dbConnect.Error
+'Log(strError)
+'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
+'End Select
+'</code>
+Sub SelectMaxWhere(fld As String, tblWhere As Map, operators As List) As BANanoSQLiteE
+	If Schema.Size = 0 Then
+		Log($"BANanoMySQL.SelectMaxWhere: '${TableName}' schema is not set!"$)
+	End If
+	If operators = Null Then operators = EQOperators(tblWhere)
+	Dim listOfTypes As List = GetMapTypes(tblWhere)
+	Dim listOfValues As List = GetMapValues(tblWhere)
+	Dim sb As StringBuilder
+	sb.Initialize
+	sb.Append($"SELECT MAX(${fld}) As ${fld} FROM ${EscapeField(TableName)} WHERE "$)
+	Dim i As Int
+	Dim iWhere As Int = tblWhere.Size - 1
+	For i = 0 To iWhere
+		If i > 0 Then
+			sb.Append(" AND ")
+		End If
+		Dim col As String = tblWhere.GetKeyAt(i)
+		Dim oper As String = operators.Get(i)
+		sb.Append(EscapeField(col))
+		sb.Append($" ${oper} ?"$)
+	Next
+	query = sb.tostring
+	args = listOfValues
+	types = listOfTypes
+	command = "select"
+	Return Me
+End Sub
+
 'initialize a list
 Sub NewList As List
 	Dim lst As List

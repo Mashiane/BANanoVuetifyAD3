@@ -266,11 +266,13 @@ End Sub
 Sub DialogCancelShowHide(eliD As String, b As Boolean)
 	Dim dialogcancelshow As String = $"${eliD}cancelshow"$
 	SetData(dialogcancelshow, b)
+	SetData($"${eliD}key"$, DateTime.now)
 End Sub
 
 Sub DialogOkShowHide(elID As String, b As Boolean)
 	Dim dialogokshow As String = $"${elID}okshow"$
 	SetData(dialogokshow, b)
+	SetData($"${elID}key"$, DateTime.now)
 End Sub
 
 'return the dialog card title
@@ -1484,6 +1486,15 @@ Sub MapNiceMonths(m As Map, flds As List)
 	For Each k As String In flds
 		Dim v As String = m.Get(k)
 		v = NiceMonth(v)
+		m.Put(k, v)
+	Next
+End Sub
+
+'convert map values to vals
+Sub MapVal(m As Map, flds As List)
+	For Each k As String In flds
+		Dim v As String = m.Get(k)
+		v = BANanoShared.Val(v)
 		m.Put(k, v)
 	Next
 End Sub
