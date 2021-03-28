@@ -1498,3 +1498,33 @@ Sub MapVal(m As Map, flds As List)
 		m.Put(k, v)
 	Next
 End Sub
+
+Sub getVJSFVModel(elID As String) As Map
+	elID = elID.tolowercase
+	Dim jsFvmodel As String = $"${elID}vmodel"$
+	Dim res As Map = GetData(jsFvmodel)
+	Return res
+End Sub
+
+Sub getVJSFSchema(elID As String) As Map
+	elID = elID.tolowercase
+	Dim jsFvmodel As String = $"${elID}schema"$
+	Dim res As Map = GetData(jsFvmodel)
+	Return res
+End Sub
+
+Sub getVJSFProperties(elID As String) As Map
+	elID = elID.tolowercase
+	Dim jsFvmodel As String = $"${elID}schema"$
+	Dim res As Map = GetData(jsFvmodel)
+	Dim jopt As Map = res.Get("properties")
+	Return jopt
+End Sub
+
+Sub getVJSFOptions(elID As String) As Map
+	elID = elID.tolowercase
+	Dim jsFvmodel As String = $"${elID}options"$
+	Dim res As Map = GetData(jsFvmodel)
+	Return res
+End Sub
+

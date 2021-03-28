@@ -4922,6 +4922,7 @@ Sub OnClick(args As String)
 	SetOnEvent(mCallBack, "click", args)
 End Sub
 
+
 Sub OnChange(args As String)
 	SetOnEvent(mCallBack, "change", args)
 End Sub
@@ -9557,8 +9558,30 @@ Sub AddAppBar(elID As String) As VueElement
 	Return elx
 End Sub
 
+Sub AddFormWizard(elID As String, title As String, subtitle As String) As VueElement
+	elID = elID.tolowercase
+	Dim elx As VueElement = AddVueElement1(elID, "form-wizard", "", "", "", Null)
+	elx.Ref = elID
+	elx.AddAttr("title", title)
+	elx.AddAttr("subtitle", subtitle)
+	Return elx
+End Sub
+
+Sub AddTabContent(elID As String, icon As String, title As String) As VueElement
+	Dim elx As VueElement = AddVueElement1(elID, "tab-content", "", "", "", Null)
+	elx.AddAttr("title", title)
+	elx.AddAttr("icon", icon)
+	Return elx
+End Sub
+
 Sub AddTransitionGroup(elID As String) As VueElement
 	Dim elx As VueElement = AddVueElement1(elID, "transition-group", "", "", "", Null)
+	Return elx
+End Sub
+
+
+Sub AddTransition(elID As String) As VueElement
+	Dim elx As VueElement = AddVueElement1(elID, "transition", "", "", "", Null)
 	Return elx
 End Sub
 
@@ -10469,4 +10492,104 @@ Sub setIsVisible(b As Boolean)
 	Dim lkey As String = $"${mName}show"$
 	setVShow(lkey)
 	SetData(lkey, b)
+End Sub
+
+Sub SquareShape
+	setShape("square")
+End Sub
+
+Sub CircleShape
+	setShape("circle")
+End Sub
+
+Sub TabShape
+	setShape("tab")
+End Sub
+
+Sub setShape(s As String)
+	AddAttr("shape", s)
+End Sub
+
+Sub setStartIndex(idx As Int)
+	AddAttr(":start-index", idx)
+End Sub
+
+Sub setBackButtonText(t As String)
+	AddAttr("back-button-text", t)
+End Sub
+
+Sub setNextButtonText(t As String)
+	AddAttr("next-button-text", t)
+End Sub
+
+Sub setFinishButtonText(t As String)
+	AddAttr("finish-button-text", t)
+End Sub
+
+Sub OnBeforeChange
+	Dim methodName As String = $"${mName}_beforechange"$
+	AddAttr(":before-change", methodName)
+	bindings.Remove(methodName)
+	SetMethod(mCallBack, methodName, Null)
+End Sub
+
+Sub OnComplete(args As String)
+	SetOnEvent(mCallBack, "on-complete", args)
+End Sub
+
+Sub OnLoading(args As String)
+	SetOnEvent(mCallBack, "on-loading", args)
+End Sub
+
+Sub OnValidate(args As String)
+	SetOnEvent(mCallBack, "on-validate", args)
+End Sub
+
+Sub setOnError(args As String)
+	SetOnEvent(mCallBack, "on-error", args)
+End Sub
+
+Sub setErrorColor(c As String)
+	AddAttr("error-color", c)
+End Sub
+
+Sub setRouteTo(r As String)
+	AddAttr("route", r)
+End Sub
+
+Sub setModeOutIn(b As Boolean)
+	AddAttr("mode", "out-in")
+End Sub
+
+Sub setValidateOnBack(b As Boolean)
+	AddAttr(":validate-on-back", b)
+End Sub
+
+Sub setLazy(b As Boolean)
+	AddAttr(":lazy", b)
+End Sub
+
+Sub AddVJSF(elID As String) As VueElement
+	elID = elID.tolowercase
+	Dim jsFvmodel As String = $"${elID}vmodel"$
+	Dim jsFschema As String = $"${elID}schema"$
+	Dim jsfOptions As String = $"${elID}options"$
+	'
+	Dim elx As VueElement =  AddVueElement1(elID, "v-jsf", jsFvmodel, "", "", Null)
+	elx.Bind("schema", jsFschema)
+	elx.Bind("options", jsfOptions)
+	'
+	Dim m1 As Map = CreateMap()
+	Dim m3 As Map = CreateMap()
+	
+	SetData(jsFvmodel, m1)
+	SetData(jsfOptions, m3)
+	'
+	Dim schema As Map = CreateMap()
+	Dim properties As Map = CreateMap()
+	schema.Put("type", "object")
+	schema.Put("properties", properties)
+	SetData(jsFschema, schema)
+	
+	Return elx
 End Sub

@@ -5103,3 +5103,22 @@ End Sub
 Sub OnAuthenticated As String
 	Return "authenticated"
 End Sub
+
+
+Sub UseVueFormWizard
+	If ModuleExist("VueFormWizard") = False Then
+		Dim VueFormWizard As BANanoObject
+		VueFormWizard.Initialize("VueFormWizard")
+		Use(VueFormWizard)
+		AddModule("VueFormWizard")
+	End If
+End Sub
+
+Sub UseVJsf
+	If ModuleExist("VJsf") = False Then
+		Dim VJsf As BANanoObject
+		VJsf.Initialize("VJsf")
+		Use(VJsf)
+		AddModule("VJsf")
+	End If
+End Sub
