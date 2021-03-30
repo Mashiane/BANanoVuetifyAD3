@@ -22,10 +22,6 @@ Sub Class_Globals
 	Public const DB_DATE As String = "DATE"
 	Public const DB_INTEGER As String = "INTEGER"
 	Public const DB_TEXT As String = "TEXT"
-	'Public const DB_TINYINT As String = "TINYINT"
-	'Public const DB_SMALLINT As String = "SMALLINT"
-	'Public const DB_MEDIUMINT As String = "MEDIUMINT"
-	'Public const DB_BIGINT As String = "BIGINT"
 	Private BANano As BANano   'ignore
 	Public MethodName As String
 	Public MethodNameDynamic As String

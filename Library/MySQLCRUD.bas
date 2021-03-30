@@ -54,6 +54,7 @@ Sub Class_Globals
 	Public DT_Dense As Boolean
 	Public DT_MustSort As Boolean
 	Public DT_MultiSort As Boolean
+	Public DT_HasPDF As Boolean
 	Public Diag_Width As String
 	Private dtCont As StringBuilder
 	Private SingularClean As String
@@ -78,6 +79,7 @@ Sub Class_Globals
 	Private ShapedM As  Map
 	Public Diag_FullScreenOnMobile As Boolean
 	Public Diag_LazyValidation As Boolean
+	Public Diag_FullScreen As Boolean
 	Public DB_CreateTable As String
 	Public DBType As String
 	Private DBSorts As List
@@ -159,7 +161,9 @@ Public Sub Initialize(clsName As String) As MySQLCRUD
 	DT_Dense = False
 	DT_MustSort = False
 	DT_MultiSort = False
+	DT_HasPDF = False
 	Diag_FullScreenOnMobile = False
+	Diag_FullScreen = False
 	DB_CreateTable = ""
 	dates.Initialize 
 	Return Me
@@ -965,6 +969,20 @@ Sub DT_AddMoney(colField As String, colTitle As String)
 	dtCode.Append($"${dtName}.AddMoneyColumn("${colField}", "${colTitle}")"$).Append(CRLF)
 End Sub
 
+Sub DT_AddAutoComplete(colField As String, colTitle As String, dataSource As String, keyFld As String, valueFld As String)
+	dtCode.Append($"${dtName}.AddColumn("${colField}", "${colTitle}")"$).Append(CRLF)
+	dtCode.Append($"${dtName}.SetAutoComplete("${colField}", True, "${dataSource}", "${keyFld}", "${valueFld}")"$).Append(CRLF)
+End Sub
+
+Sub DT_AddComboBox(colField As String, colTitle As String, dataSource As String, keyFld As String, valueFld As String)
+	dtCode.Append($"${dtName}.AddColumn("${colField}", "${colTitle}")"$).Append(CRLF)
+	dtCode.Append($"${dtName}.SetComboBox("${colField}", True, "${dataSource}", "${keyFld}", "${valueFld}")"$).Append(CRLF)
+End Sub
+
+Sub DT_AddSelect(colField As String, colTitle As String, dataSource As String, keyFld As String, valueFld As String)
+	dtCode.Append($"${dtName}.AddColumn("${colField}", "${colTitle}")"$).Append(CRLF)
+	dtCode.Append($"${dtName}.SetSelect("${colField}", True, "${dataSource}", "${keyFld}", "${valueFld}")"$).Append(CRLF)
+End Sub
 
 'add a link column to the data-table
 Sub DT_AddLink(colField As String, colTitle As String, target As String)
@@ -1182,6 +1200,7 @@ private Sub RelationshipsCode
 		Return
 	End Select
 	${ComponentName}.SetData("${ssource}", ${tbName}.Result)
+	foreign${ssource}.Initialize
 	For Each relmap As Map In ${tbName}.Result
 		Dim s${skey} As String = relmap.GetDefault("${skey}", "")
 		Dim s${svalue} As String = relmap.GetDefault("${svalue}", "")
@@ -1525,14 +1544,22 @@ private Sub CreateTableCode()
 	End If
 	
 	If DT_HasClearSort Then
+		AddComment("sorting...")
 		AddCode($"${dtName}.AddClearSort"$)
 		AddCode($"${dtName}.AddDivider"$)
 	End If
 	
 	If DT_HasFilter Then
+		AddComment("filtering...")
 		AddCode($"${dtName}.AddFilter("primary--text")"$)
 		AddCode($"${dtName}.AddDivider"$)
 		AddCode($"${dtName}.AddClearFilter"$)
+		AddCode($"${dtName}.AddDivider"$)
+	End If
+	
+	If DT_HasPDF Then
+		AddComment("print to pdf...")
+		AddCode($"${dtName}.AddPDF"$)
 		AddCode($"${dtName}.AddDivider"$)
 	End If
 	
@@ -1556,7 +1583,7 @@ private Sub CreateTableCode()
 	If relationships.Size > 0 Then
 		For Each rec As DBRelationship In relationships
 			Dim ssource As String = rec.source
-			Dim svmodel As String = rec.key
+			Dim svmodel As String = rec.vmodel			
 			AddCode($"${dtName}.SetColumnPreDisplay("${svmodel}", "get${ssource}")"$)
 		Next
 	End If
@@ -1736,6 +1763,9 @@ private Sub CreateDialogCode
 	'
 	If Diag_FullScreenOnMobile Then
 		AddCode($"${ModalName}.FullScreenOnMobile = True"$)
+	End If
+	If Diag_FullScreen Then
+		AddCode($"${ModalName}.FullScreen = True"$)
 	End If
 	'
 	AddCode($"${ComponentName}.BindVueElement(${ModalName})"$)	

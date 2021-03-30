@@ -740,7 +740,7 @@ Sub setID(varText As String) As VueComponent
 End Sub
 
 'update the state
-Sub SetData(prop As String, value As Object) As VueComponent
+Sub SetData(prop As String, xvalue As Object) As VueComponent
 	If BANano.IsNull(prop) Or BANano.IsUndefined(prop) Then
 		prop = ""
 	End If
@@ -756,10 +756,10 @@ Sub SetData(prop As String, value As Object) As VueComponent
 		Else
 			oEL.Initialize
 		End If	
-		oEL.Put(cEL, value)
+		oEL.Put(cEL, xvalue)
 		data.Put(pEL, oEL) 
 	Else
-		data.put(prop, value)
+		data.put(prop, xvalue)
 	End If
 	Return Me
 End Sub
@@ -1306,8 +1306,6 @@ Sub AppendPlaceHolder
 	Template.Append(stemplate)
 End Sub
 
-
-
 #End Region
 
 #Region Internal Events
@@ -1498,33 +1496,3 @@ Sub MapVal(m As Map, flds As List)
 		m.Put(k, v)
 	Next
 End Sub
-
-Sub getVJSFVModel(elID As String) As Map
-	elID = elID.tolowercase
-	Dim jsFvmodel As String = $"${elID}vmodel"$
-	Dim res As Map = GetData(jsFvmodel)
-	Return res
-End Sub
-
-Sub getVJSFSchema(elID As String) As Map
-	elID = elID.tolowercase
-	Dim jsFvmodel As String = $"${elID}schema"$
-	Dim res As Map = GetData(jsFvmodel)
-	Return res
-End Sub
-
-Sub getVJSFProperties(elID As String) As Map
-	elID = elID.tolowercase
-	Dim jsFvmodel As String = $"${elID}schema"$
-	Dim res As Map = GetData(jsFvmodel)
-	Dim jopt As Map = res.Get("properties")
-	Return jopt
-End Sub
-
-Sub getVJSFOptions(elID As String) As Map
-	elID = elID.tolowercase
-	Dim jsFvmodel As String = $"${elID}options"$
-	Dim res As Map = GetData(jsFvmodel)
-	Return res
-End Sub
-

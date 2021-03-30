@@ -425,11 +425,25 @@ Sub Class_Globals
 	Public ProgressLoaderName As String
 End Sub
 
+Sub PagePause
+	SetData(ProgressLoaderName, True)
+End Sub
+
+Sub PageResume
+	SetData(ProgressLoaderName, False)
+End Sub
+
 Sub ShowProgressLoader
 	SetData(ProgressLoaderName, True)
 End Sub
 
 Sub HideProgressLoader
+	SetData(ProgressLoaderName, False)
+End Sub
+
+Sub BindAppProgressBar(pb As VueElement)
+	BindVueElement(pb)
+	ProgressLoaderName = pb.VShow
 	SetData(ProgressLoaderName, False)
 End Sub
 
@@ -1451,6 +1465,7 @@ Sub AddRoute(comp As VueComponent)
 	comp.AppendPlaceHolder
 	
 	Dim compx As BANanoObject = Vue.RunMethod("component", Array(comp.mname, comp.component))
+	
 	Dim eachroute As Map = CreateMap()
 	eachroute.Put("path", comp.path)
 	eachroute.Put("name", comp.mname)
@@ -5115,10 +5130,19 @@ Sub UseVueFormWizard
 End Sub
 
 Sub UseVJsf
-	If ModuleExist("VJsf") = False Then
+	If components.ContainsKey("VJsf") = False Then
 		Dim VJsf As BANanoObject
 		VJsf.Initialize("VJsf")
-		Use(VJsf)
-		AddModule("VJsf")
+		Dim defv As BANanoObject = VJsf.GetField("default")
+		Vue.RunMethod("component", Array(defv))
 	End If
 End Sub
+'
+Sub UseVuetifyFormBase
+	If ModuleExist("formbase") = False Then
+		Dim vFormBase As BANanoObject
+		vFormBase.Initialize("vFormBase")
+		Use(vFormBase)
+		AddModule("formbase")
+	End If
+End Sub	

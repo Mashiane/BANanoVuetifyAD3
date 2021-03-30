@@ -1740,13 +1740,35 @@ Sub ToString As String
 	Return rslt
 End Sub
 
+Sub getinnerHTML As String
+	If BANano.Exists($"#${mName}"$) Then
+		mElement = BANano.GetElement($"#${mName}"$)
+		Dim str As String = mElement.GetField("innerHTML").Result
+		Return str
+	Else
+		Return ""
+	End If	
+	
+End Sub
+
+Sub getouterHTML As String
+	If BANano.Exists($"#${mName}"$) Then
+		mElement = BANano.GetElement($"#${mName}"$)
+		Dim str As String = mElement.GetField("ounterHTML").Result
+		Return str
+	Else
+		Return ""
+	End If		
+End Sub
+
 'return html of the element
 Sub getHTML As String
-	If mElement <> Null Then
+	If BANano.Exists($"#${mName}"$) Then
+		mElement = BANano.GetElement($"#${mName}"$)
 		Return mElement.GetHTML
 	Else
 		Return ""
-	End If
+	End If	
 End Sub
 
 
@@ -2076,8 +2098,9 @@ Sub setLeaveAbsolute(b As Boolean)
 	Bind("leave-absolute", b)
 End Sub
 
-Sub Bind(attr As String, value As String)
-	AddAttr($":${attr}"$, value)
+Sub Bind(attr As String, xvalue As String)
+	xvalue = CStr(xvalue)
+	AddAttr($":${attr}"$, xvalue)
 End Sub
 
 'bind to a dynamic attribute
@@ -2170,6 +2193,7 @@ Public Sub AddAttr(varProp As String, varValue As String)
 				End If
 			End If
 			
+					
 			If mElement <> Null Then 
 				mElement.SetAttr(varProp, varValue)
 			Else
@@ -7441,6 +7465,7 @@ Sub AddToolbarProgressBar(elID As String, vmodel As String, color As String) As 
 	elx.Absolute = True
 	elx.Bottom = True
 	elx.active = vmodel
+	elx.VShow = vmodel
 	elx.Color = color
 	elx.SetData(vmodel, False)
 	Return elx
@@ -9590,6 +9615,20 @@ Sub AddApp(elID As String) As VueElement
 	Return elx
 End Sub
 
+Sub AddAppProgress(color As String) As VueElement
+	Dim appprogress As String = $"${mName}progress"$
+	Dim vmodel As String = $"${mName}progressvalue"$
+	Dim elx As VueElement = AddVueElement1(appprogress, "v-progress-linear", "", "", "", Null)
+	elx.Indeterminate = True
+	elx.Absolute = True
+	elx.Bottom = True
+	elx.active = vmodel
+	elx.vshow = vmodel
+	elx.Color = color
+	elx.SetData(vmodel, False)
+	Return elx
+End Sub
+
 Sub GetTHead As VueElement
 	Return GetVueElement($"${mName}thead"$)
 End Sub
@@ -10569,27 +10608,7 @@ Sub setLazy(b As Boolean)
 	AddAttr(":lazy", b)
 End Sub
 
-Sub AddVJSF(elID As String) As VueElement
-	elID = elID.tolowercase
-	Dim jsFvmodel As String = $"${elID}vmodel"$
-	Dim jsFschema As String = $"${elID}schema"$
-	Dim jsfOptions As String = $"${elID}options"$
-	'
-	Dim elx As VueElement =  AddVueElement1(elID, "v-jsf", jsFvmodel, "", "", Null)
-	elx.Bind("schema", jsFschema)
-	elx.Bind("options", jsfOptions)
-	'
-	Dim m1 As Map = CreateMap()
-	Dim m3 As Map = CreateMap()
-	
-	SetData(jsFvmodel, m1)
-	SetData(jsfOptions, m3)
-	'
-	Dim schema As Map = CreateMap()
-	Dim properties As Map = CreateMap()
-	schema.Put("type", "object")
-	schema.Put("properties", properties)
-	SetData(jsFschema, schema)
-	
-	Return elx
+Sub RemoveBinding(v As String)
+	v = v.ToLowerCase
+	bindings.Remove(v)
 End Sub
