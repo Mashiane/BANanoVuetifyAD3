@@ -331,6 +331,14 @@ Sub DateDisplayFormat(vmodel As String, sformat As String) As String   'IgnoreDe
 	End Try
 End Sub
 
+Sub YYYYMMDD(sdate As String) As String
+	Return FormatDisplayDate(sdate, "YYYY-MM-DD")
+End Sub
+
+Sub YYYYMM(sdate As String) As String
+	Return FormatDisplayDate(sdate, "YYYY-MM")
+End Sub
+
 Sub NiceMonth(sdate As String) As String			'ignoredeadcode
 	Return FormatDisplayDate(sdate, "MMMM, YYYY")
 End Sub
@@ -879,6 +887,10 @@ Sub SetDataUnshift(lstname As String, obj As Object)
 	lstname = lstname.tolowercase
 	Dim dat As BANanoObject = data
 	dat.GetField(lstname).RunMethod("unshift", obj)
+End Sub
+
+Sub RequiresAuthentication(b As Boolean)
+	AddMeta("authrequired", b)
 End Sub
 
 'add a meta tag to the property

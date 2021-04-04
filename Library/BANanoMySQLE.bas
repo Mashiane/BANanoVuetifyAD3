@@ -232,7 +232,7 @@ End Sub
 'get table names
 Sub GetDatabases As BANanoMySQLE
 	query = $"SHOW DATABASES"$
-	command = "select"
+	command = "databases"
 	Return Me
 End Sub
 
@@ -251,7 +251,7 @@ End Sub
 '</code>
 Sub GetTableNames As BANanoMySQLE
 	query = $"select table_name from information_schema.tables where table_schema = '${DBase}' order by table_name"$
-	command = "select"
+	command = "admin"
 	Return Me
 End Sub
 

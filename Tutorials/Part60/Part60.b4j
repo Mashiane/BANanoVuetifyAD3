@@ -285,7 +285,7 @@ Sub Process_Globals
 	Public AppTitle As String = "BANanoVuetify AD3"
 	Private Publish As String = "C:\laragon\www"
 	Public Version As String = "1.00"
-	Public ServerIP As String = "https:localhost"
+	Public ServerIP As String = "https://localhost"
 End Sub
 
 Sub AppStart (Form1 As Form, Args() As String)
@@ -319,11 +319,6 @@ Sub AppStart (Form1 As Form, Args() As String)
 	'BANano.TranspilerOptions.RedirectOutput(File.DirApp, "log.txt")
 	'set php settings
 	BANano.PHP_NAME = $"${AppName}.php"$
-	#if release
-		'change to external host domain e.g http://www.google.com
-		'exclude the port address
-		'ServerIP = "http://www.localhost:8080"
-	#end if
 	BANano.PHPHost = $"${ServerIP}/${AppName}/"$
 	BANano.PHPAddHeader("Access-Control-Allow-Origin: *")
 	

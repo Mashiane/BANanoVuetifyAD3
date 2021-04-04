@@ -1324,8 +1324,11 @@ private Sub UpdateCode As MySQLCRUD
 		vuetify.ShowSnackBarSuccess("The ${Singular.tolowercase} has been updated successfully!")
 		'hide modal form
 		${ComponentName}.SetData("${ModalShow.tolowercase}", False)
-		'load records
-		${ComponentName}.RunMethod("Load${PluralClean}", Null)
+		Dim bReload As Boolean = ${ComponentName}.GetData("reload")
+		If bReload Then
+			'load records
+			${ComponentName}.RunMethod("Load${PluralClean}", Null)
+		End If	
 	End Select
 End Sub"$).Append(CRLF).Append(CRLF)
 	Return Me
@@ -1955,6 +1958,7 @@ End Sub"$).Append(CRLF).Append(CRLF)
 	
 	If DT_HasRefresh Then
 sb.Append($"Private Sub ${dtName}_refresh_click (e As BANanoEvent)			'ignoredeadcode
+${ComponentName}.SetData("reload", True)
 ${ComponentName}.RunMethod("Load${PluralClean}", Null)
 End Sub"$).Append(CRLF).Append(CRLF)
 	End If
@@ -1967,6 +1971,7 @@ End Sub"$).Append(CRLF).Append(CRLF)
 	
 	'
 	sb.Append($"Private Sub ${dtName}_change (item As Map)				'ignoredeadcode
+	${ComponentName}.SetData("reload", False)
 	${ComponentName}.RunMethod("Update${SingularClean}", item)
 End Sub"$).Append(CRLF).Append(CRLF)
 	'
@@ -1978,6 +1983,7 @@ End Sub"$).Append(CRLF).Append(CRLF)
 	'
 	If DT_HasSave Then
 sb.Append($"Sub ${dtName}_save (item As Map)
+${ComponentName}.SetData("reload", False)
 ${ComponentName}.RunMethod("Update${SingularClean}", item)
 End Sub"$).append(CRLF).append(CRLF)
 	End If

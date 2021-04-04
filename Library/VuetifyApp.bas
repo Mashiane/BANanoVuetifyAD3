@@ -22,7 +22,6 @@ Sub Class_Globals
 	Private routes As List
 	Private components As Map
 	Private Options As Map
-	Public Vue As BANanoObject
 	Public Themes As Map
 	Private ColorMap As Map
 	Public Vuetify As BANanoObject
@@ -34,6 +33,7 @@ Sub Class_Globals
 	Public RouterView As BANanoObject
 	Public GoogleMapKey As String
 	Public Body As BANanoElement
+	Public Vue As BANanoObject
 	'
 	Public const BORDER_DEFAULT As String = ""
 	Public const BORDER_DASHED As String = "dashed"
@@ -76,8 +76,7 @@ Sub Class_Globals
 	Public const COLOR_ERROR As String = "error"
 	Public const COLOR_INFO As String = "info"
 	Public const COLOR_SUCCESS As String = "success"
-	Public const COLOR_WARNING As String = "warning"
-	
+	Public const COLOR_WARNING As String = "warning"	
 	'
 	Public const COLOR_AMBER_TEXT As String = "amber--text"
 	Public const COLOR_BLACK_TEXT As String = "black--text"
@@ -108,7 +107,6 @@ Sub Class_Globals
 	Public const COLOR_INFO_TEXT As String = "info--text"
 	Public const COLOR_SUCCESS_TEXT As String = "success--text"
 	Public const COLOR_WARNING_TEXT As String = "warning--text"
-	
 	'
 '	Public CONST BREAKPOINT_XS As String = "xs"
 '	Public CONST BREAKPOINT_SM As String = "sm"
@@ -2005,12 +2003,11 @@ Sub Serve
 	'
 	If routes.Size > 0 Then
 		Dim ropt As Map = CreateMap()
-		'ropt.Put("mode", "history")
 		ropt.Put("routes", routes)
 		ropt.Put("base", BasePath)
 		ropt.Put("path", "*")
 		ropt.Put("redirect", BasePath)
-		'Dim vrouter As BANanoObject
+		'ropt.Put("mode", "history")
 		VueRouter.Initialize2("VueRouter", Array(ropt))
 		Options.Put("router", VueRouter)
 	End If
@@ -2099,8 +2096,12 @@ End Sub
 Sub getCurrentPath As String
 	Dim sroute As String = "$route"
 	Route = Vue.GetField(sroute)
-	Dim cr As String = Route.GetField("path").result
-	Return cr
+	If BANano.IsUndefined(Route) Or BANano.IsNull(Route) Then
+		Return ""
+	Else
+		Dim cr As String = Route.GetField("path").result
+		Return cr
+	End If	
 End Sub
 
 'Use router To navigate
@@ -5129,20 +5130,41 @@ Sub UseVueFormWizard
 	End If
 End Sub
 
-Sub UseVJsf
-	If components.ContainsKey("VJsf") = False Then
-		Dim VJsf As BANanoObject
-		VJsf.Initialize("VJsf")
-		Dim defv As BANanoObject = VJsf.GetField("default")
-		Vue.RunMethod("component", Array(defv))
-	End If
+
+Sub BindVJSF(vf As VueVJSF)
+	Dim el As VueElement = vf.Element
+	BindVueElement(el)
 End Sub
-'
-Sub UseVuetifyFormBase
-	If ModuleExist("formbase") = False Then
+
+Sub nextTick
+	Vue.RunMethod("nextTick", Null)
+End Sub
+
+Sub UseVJSF
+	If components.ContainsKey("v-jsf") = False Then
+		Dim boVJsf As BANanoObject
+		boVJsf.Initialize("VJsf")
+		Dim boVJsf As BANanoObject = boVJsf.GetField("default")
+		components.Put("v-jsf", boVJsf)
+	End If	
+End Sub	
+
+Sub UseVFormBase
+	If components.ContainsKey("v-form-base") = False Then
 		Dim vFormBase As BANanoObject
 		vFormBase.Initialize("vFormBase")
-		Use(vFormBase)
-		AddModule("formbase")
+		components.Put("v-form-base", vFormBase)
 	End If
-End Sub	
+End Sub
+
+'get data where
+Sub GetDataWhere(lstName As String, whereMap As Map) As Map
+	Dim rm As Map = CreateMap()
+	'find the item
+	Dim recpos As Int = GetDataPositionWhere(lstName, whereMap)
+	If recpos = -1 Then Return rm
+	Dim recs As List = GetData(lstName)
+	Dim rec As Map = recs.Get(recpos)
+	Return rec
+End Sub
+

@@ -29,6 +29,14 @@ Sub Process_Globals
 	Type sequencePair(value As Int, numTimes As Int)
 End Sub
 
+Sub YYYYMMDD(sdate As String) As String
+	Return FormatDisplayDate(sdate, "YYYY-MM-DD")
+End Sub
+
+Sub YYYYMM(sdate As String) As String
+	Return FormatDisplayDate(sdate, "YYYY-MM")
+End Sub
+
 'return a date with day, month year name
 Sub NiceDate(sdate As String) As String				'ignoredeadcode
 	Return FormatDisplayDate(sdate, "ddd, DD MMM YYYY")
@@ -1210,8 +1218,8 @@ Sub GetFullDate(v As String) As String
 	smonth = BANano.parseInt(smonth) + 1
 	smonth = PadRight(smonth, 2, "0")
 	sday = PadRight(sday, 2, "0")
-	Dim yyyymmdd As String = $"${syear}-${smonth}-${sday}"$
-	Return yyyymmdd
+	Dim syyyymmdd As String = $"${syear}-${smonth}-${sday}"$
+	Return syyyymmdd
 	Catch
 		Return v
 	End Try

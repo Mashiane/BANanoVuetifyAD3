@@ -48,17 +48,21 @@ File5=dayjs.min.js
 File50=themify.ttf
 File51=themify.woff
 File52=themify-icons.css
-File53=upload.php
-File54=v-blur.min.js
-File55=vue.min.js
-File56=vue-form-wizard.js
-File57=vue-form-wizard.min.css
-File58=vue-google-charts.browser.js
-File59=vue-google-maps.js
+File53=third-party.js
+File54=upload.php
+File55=v-blur.min.js
+File56=vjsf.css
+File57=vjsf.js
+File58=vue.min.js
+File59=vue-form-wizard.js
 File6=fa-brands-400.eot
-File60=vue-router.min.js
-File61=vuetify.min.css
-File62=vuetify.min.js
+File60=vue-form-wizard.min.css
+File61=vue-google-charts.browser.js
+File62=vue-google-maps.js
+File63=vue-router.min.js
+File64=vuetify.min.css
+File65=vuetify.min.js
+File66=vuetify-form-base.js
 File7=fa-brands-400.svg
 File8=fa-brands-400.ttf
 File9=fa-brands-400.woff
@@ -121,6 +125,10 @@ FileGroup6=Default Group
 FileGroup60=Default Group
 FileGroup61=Default Group
 FileGroup62=Default Group
+FileGroup63=Default Group
+FileGroup64=Default Group
+FileGroup65=Default Group
+FileGroup66=Default Group
 FileGroup7=Default Group
 FileGroup8=Default Group
 FileGroup9=Default Group
@@ -145,7 +153,7 @@ Module6=BANanoMySQLE
 Module7=|absolute|C:\CodingWorld\B4XShared\B4J\BANanoShared
 Module8=BANanoSQLiteE
 Module9=BVAD3ListItem
-NumberOfFiles=62
+NumberOfFiles=66
 NumberOfLibraries=3
 NumberOfModules=17
 Version=8.9
@@ -159,7 +167,7 @@ Version=8.9
 
 Sub Process_Globals
 	Private BANano As BANano 'ignore
-	Public Version As String = "3.83"
+	Public Version As String = "3.85"
 	Public AppName As String = "BANanoVuetifyAD3"
 End Sub
 
@@ -208,10 +216,12 @@ Sub AppStart (Form1 As Form, Args() As String)
 	BANano.Header.AddCSSFile("vue-form-wizard.min.css")
 	BANano.Header.AddJavascriptFile("vue-form-wizard.js")
 	BANano.Header.AddCSSFile("themify-icons.css")
-	'BANano.Header.AddJavascriptFile("vjsfmain.js")
-	'BANano.Header.AddJavascriptFile("vjsfthird-party.js")
-	'BANano.Header.AddCSSFile("vjsfmain.css")
-	'BANano.Header.AddJavascriptFile("vuetify-form-base.js")
+	BANano.Header.AddJavascriptFile("third-party.js")
+	BANano.Header.AddJavascriptFile("vjsf.js")
+	BANano.Header.AddCSSFile("vjsf.css")
+	BANano.Header.AddJavascriptFile("vuetify-form-base.js")
+	'BANano.Header.AddJavascriptFile("v-mask.min.js")
+	'BANano.Header.AddJavaScriptfile("VueTheMask.umd.js")
 	
 	' start the build
 	#if release

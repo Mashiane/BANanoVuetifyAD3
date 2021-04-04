@@ -13,13 +13,14 @@ Sub Class_Globals
 	Private options As Map
 	Public modelname As String
 	Public schemaname As String
-	Private mVC As VueComponent
-	Private keyName As String
+	Public optionsname As String
+	Private mVA As VuetifyApp
+	Public ID As String
 End Sub
 
-Public Sub Initialize(VC As VueComponent, parentID As String, elID As String)
-	mCallBack = VC.mcallback
-	mVC = VC
+Public Sub Initialize(VA As VuetifyApp, parentID As String, elID As String)
+	mCallBack = VA.EventHandler
+	mVA = VA
 	'
 	model.Initialize 
 	properties.Initialize 
@@ -29,48 +30,93 @@ Public Sub Initialize(VC As VueComponent, parentID As String, elID As String)
 	elID = elID.tolowercase
 	modelname = $"${elID}model"$
 	schemaname = $"${elID}schema"$
-	keyName = $"${elID}key"$
+	optionsname = $"${elID}options"$
+	ID = elID
 	'
-	Dim p As VueElement = VC.GetVueElement(mCallBack, parentID)
+	Dim p As VueElement = VA.GetVueElement(mCallBack, parentID)
 	Element = p.AddVueElement(elID, "v-jsf", Null)
 	Element.VModel = modelname
-	Element.Bind("schema", schemaname)
-	Element.Bind("key", keyName)
+	Element.AddAttr(":schema", schemaname)
+	Element.AddAttr(":options", optionsname)
+End Sub
+
+'clear the schema
+Sub Clear
+	properties.Initialize
+	model.Initialize  
 End Sub
 
 'build the model
 Sub Build()
-	schema.Initialize 
-	'schema.Put("type", "object")
+	schema.Put("type", "object")
 	schema.Put("properties", properties)
-	mVC.SetData(schemaname, schema)
-	mVC.SetData(modelname, model)
-	mVC.SetData(keyName, DateTime.Now)
+	
+	mVA.SetData(schemaname, schema)
+	mVA.SetData(modelname, model)
+	mVA.SetData(optionsname, options)
 End Sub
 
-Sub Refresh
-	mVC.SetData(keyName, DateTime.Now)
-End Sub
-
-Sub GetSchema As Map
-	Return mVC.GetData(schemaname)
-End Sub
-
-Sub GetModel As Map
-	Return mVC.GetData(modelname)
-End Sub
-
-Sub AddTextField(elID As String, vModel As String, sLabel As String, vDescription As String) As VueVJSF
+Sub AddTextField(elID As String, vModel As String, sLabel As String, defValue As String) As VueVJSF
 	vModel = vModel.tolowercase
 	elID = elID.tolowercase
 	'
 	Dim fld As Map = CreateMap()
 	fld.Put("type", "string")
 	fld.Put("title", sLabel)
-	If vDescription <> "" Then
-		fld.Put("description", vDescription)
-	End If
-	model.Put(vModel, Null)
+	model.Put(vModel, defValue)
+	properties.Put(vModel, fld)
+	Return Me
+End Sub
+
+Sub AddTextArea(elID As String, vModel As String, sLabel As String, defValue As String) As VueVJSF
+	vModel = vModel.tolowercase
+	elID = elID.tolowercase
+	'
+	Dim fld As Map = CreateMap()
+	fld.Put("type", "string")
+	fld.Put("title", sLabel)
+	fld.Put("x-display", "textarea")
+	model.Put(vModel, defValue)
+	properties.Put(vModel, fld)
+	Return Me
+End Sub
+
+Sub AddCheckBox(elID As String, vModel As String, sLabel As String) As VueVJSF
+	vModel = vModel.tolowercase
+	elID = elID.tolowercase
+	'
+	Dim fld As Map = CreateMap()
+	fld.Put("type", "boolean")
+	fld.Put("title", sLabel)
+	model.Put(vModel, False)
+	properties.Put(vModel, fld)
+	Return Me
+End Sub
+
+Sub AddSwitch(elID As String, vModel As String, sLabel As String) As VueVJSF
+	vModel = vModel.tolowercase
+	elID = elID.tolowercase
+	'
+	Dim fld As Map = CreateMap()
+	fld.Put("type", "boolean")
+	fld.Put("title", sLabel)
+	fld.Put("x-display", "switch")
+	model.Put(vModel, False)
+	properties.Put(vModel, fld)
+	Return Me
+End Sub
+
+Sub AddSlider(elID As String, vModel As String, sLabel As String,MinValue As String, MaxValue As String) As VueVJSF
+	vModel = vModel.tolowercase
+	elID = elID.tolowercase
+	'
+	Dim fld As Map = CreateMap()
+	fld.Put("type", "integer")
+	fld.Put("title", sLabel)
+	fld.Put("x-display", "slider")
+	fld.put("minimum", MinValue)
+	fld.Put("maximum", MaxValue) 
+	model.Put(vModel, 0)
 	properties.Put(vModel, fld)
 	Return Me
 End Sub
@@ -81,12 +127,12 @@ Sub SetData(fldName As String, fldValue As Object) As VueVJSF
 	Return Me
 End Sub
 
-Sub SetDescription(fldName As String, fldDescription As String) As VueVJSF
-	fldName = fldName.ToLowerCase
-	If properties.ContainsKey(fldName) Then
-		Dim fld As Map = properties.Get(fldName)
+Sub SetDescription(vModel As String, fldDescription As String) As VueVJSF
+	vModel = vModel.ToLowerCase
+	If properties.ContainsKey(vModel) Then
+		Dim fld As Map = properties.Get(vModel)
 		fld.Put("description", fldDescription)
-		properties.Put(fldName, fld)
+		properties.Put(vModel, fld)
 	End If
 	Return Me
 End Sub

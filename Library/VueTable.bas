@@ -1587,6 +1587,10 @@ Sub Reload(records As List)
 	'VC.SetData(keyID, DateTime.Now)
 End Sub
 
+Sub SetRows(records As List)
+	VC.SetData(itemsname, records)
+End Sub
+
 'add a column
 'key, title, 
 Sub AddColumn1(colName As String, colTitle As String, colType As String, colWidth As Int, colSortable As Boolean, colAlign As String)
@@ -2125,6 +2129,23 @@ Sub ResetColumns
 	'VC.SetData(keyID, DateTime.Now)
 End Sub
 
+Sub UpdateHeaders
+	hdr.Initialize
+	filterList.Initialize 
+	'loop through each column
+	For Each k As String In columnsM.Keys
+		'get the header
+		Dim nf As DataTableColumn = columnsM.Get(k)
+		Dim header As Map = BuildHeader(nf)
+		hdr.Add(header)
+		filterList.Add(k)
+	Next
+	VC.SetData(headers, hdr)
+	VC.SetData(allcolumns, hdr)
+	VC.SetData(filters, filterList)
+End Sub
+
+
 'set column filterable
 Sub SetColumnFilterable(colName As String, colFilter As Boolean)
 	colName = colName.tolowercase
@@ -2476,18 +2497,28 @@ sb.Append(temp)
 			Case COLUMN_MONEY, COLUMN_NUMBER
 				'get the date format
 				Dim mf As String = nf.valueFormat
-				Dim span As VueElement
-				span.Initialize(mCallBack, "", "")
-				span.TagName = "span"
-				span.Append($"{{ getmoneyformat(item.${value}, "${mf}") }}"$)
-				
+				'*** OPEN OLD CODE
+				'Dim span As VueElement
+				'span.Initialize(mCallBack, "", "")
+				'span.TagName = "span"
+				'span.Append($"{{ getmoneyformat(props.item.${value}, "${mf}") }}"$)
 				'define template
-				Dim tmp As VueElement
-				tmp.Initialize(mCallBack, "", "")
-				tmp.TagName = "v-template"
-				tmp.AddAttr($"v-slot:item.${value}"$, "{ item }")
-				tmp.Append(span.ToString)
-				sb.Append(tmp.ToString)
+				'Dim tmp As VueElement
+				'tmp.Initialize(mCallBack, "", "")
+				'tmp.TagName = "v-template"
+				'tmp.AddAttr($"v-slot:item.${value}"$, "{ item }")
+				'tmp.Append(span.ToString)
+				'sb.Append(tmp.ToString)
+				'*** CLOSE OLD CODE
+				'
+				Dim itemValue As String = $"{{ getmoneyformat(item.${value}, "${mf}") }}"$
+				
+				Dim temp As String = $"<v-template v-slot:item.${value}="props">
+<v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" 
+@open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy> {{ ${itemValue} }}
+<v-template v-slot:input><v-text-field v-model="props.item.${value}" :label="props.header.text" counter></v-text-field></v-template></v-edit-dialog></v-template>"$
+sb.Append(temp)
+
 			Case COLUMN_FILESIZE
 				Dim span As VueElement
 				span.Initialize(mCallBack, "", "")
@@ -2868,19 +2899,35 @@ sb.Append(temp)
 				tmp.Append(abtn.ToString)
 				sb.Append(tmp.ToString)
 			Case Else
-				If nf.PreDisplay <> "" Then
-					Dim span As VueElement
-					span.Initialize(mCallBack, "", "")
-					span.TagName = "span"
-					span.Append($"{{ ${nf.predisplay}(item.${value}) }}"$)
+				'*** OPEN OLD CODE
+				'If nf.PreDisplay <> "" Then
+					'Dim span As VueElement
+					'span.Initialize(mCallBack, "", "")
+					'span.TagName = "span"
+					'span.Append($"{{ ${nf.predisplay}(item.${value}) }}"$)
 					'define template
-					Dim tmp As VueElement
-					tmp.Initialize(mCallBack, "" , "")
-					tmp.TagName = "v-template"
-					tmp.AddAttr($"v-slot:item.${value}"$, "{ item }")
-					tmp.Append(span.ToString)
-					sb.Append(tmp.ToString)
-				End If
+					'Dim tmp As VueElement
+					'tmp.Initialize(mCallBack, "" , "")
+					'tmp.TagName = "v-template"
+					'tmp.AddAttr($"v-slot:item.${value}"$, "{ item }")
+					'tmp.Append(span.ToString)
+					'sb.Append(tmp.ToString)
+				'End If
+				'*** CLOSE OLD CODE
+				'
+				Dim itemValue As String
+				If nf.PreDisplay = "" Then
+					itemValue = $"props.item.${value}"$
+				Else
+					itemValue = $"props.item.${value}"$
+					itemValue = $"${nf.predisplay}(${itemValue})"$
+				End If				
+				
+				Dim temp As String = $"<v-template v-slot:item.${value}="props">
+		<v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" 
+		@open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy> {{ ${itemValue} }}
+		<v-template v-slot:input><v-text-field v-model="props.item.${value}" :label="props.header.text" counter></v-text-field></v-template></v-edit-dialog></v-template>"$
+		sb.Append(temp)
 		End Select
 	Next
 	'

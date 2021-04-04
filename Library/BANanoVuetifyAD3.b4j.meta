@@ -52,6 +52,6 @@ ModuleClosedNodes6=
 ModuleClosedNodes7=
 ModuleClosedNodes8=
 ModuleClosedNodes9=
-NavigationStack=VueTable,SetAutoComplete,2260,0,MySQLCRUD,Diag_AddComboBox,691,0,MySQLCRUD,Diag_AddMoney,409,0,MySQLCRUD,DT_AddMoney,965,0,MySQLCRUD,DT_AddAutoComplete,970,6,MySQLCRUD,DT_AddTime,958,0,MySQLCRUD,DT_AddComboBox,972,0,VueTable,SetComboBox,2230,0,Main,Process_Globals,9,0,Main,AppStart,13,0,BANanoShared,ListSearch,3800,0
+NavigationStack=VueComponent,SetDataRemoveWhere,783,0,VuetifyApp,UseVFormBase,5151,0,VuetifyApp,GetDataWhere,5157,0,VuetifyApp,GetDataPositionWhere,5056,0,VuetifyApp,UseVBlur,5092,0,VueComponent,GetDataPositionWhere,840,0,VueComponent,SetDataPop,872,0,MySQLCRUD,SupportCode,1950,5,MySQLCRUD,UpdateCode,1326,5,MySQLCRUD,CreateDBCode,1347,0
 SelectedBuild=0
 VisibleModules=
