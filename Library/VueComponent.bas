@@ -1508,3 +1508,34 @@ Sub MapVal(m As Map, flds As List)
 		m.Put(k, v)
 	Next
 End Sub
+
+'set the active items for the treeview
+Sub SetActiveItems(elID As String, lst As List)
+	Dim ai As String = $"${elID}active"$
+	SetData(ai, lst)
+End Sub
+
+Sub SetOpenItems(elID As String, lst As List)
+	Dim ai As String = $"${elID}open"$
+	SetData(ai, lst)
+End Sub
+
+'get all items that are open in the treeview
+Sub GetOpen(elID As String) As List
+	Dim ai As String = $"${elID}open"$
+	Dim lst As List = GetData(ai)
+	Return lst
+End Sub
+
+'get all items that are active from the treeview
+Sub GetActive(elID As String) As List
+	Dim ai As String = $"${elID}active"$
+	Dim lst As List = GetData(ai)
+	Return lst
+End Sub
+
+'get selected item from a treeview using the vmodel
+Sub GetSelected(vmodel As String) As List
+	Dim lst As List = GetData(vmodel)
+	Return lst
+End Sub

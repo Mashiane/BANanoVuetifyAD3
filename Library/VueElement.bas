@@ -332,6 +332,8 @@ Sub Class_Globals
 	Private bClipped As Boolean = False
 	Private bClippedLeft As Boolean = False
 	Private bClippedRight As Boolean = False
+	Private extm As Map
+	
 	'
 	Type VueGridRow(Rows As Int, Columns As List, _
 	ma As String, mx As String, my As String, mt As String, mb As String, mr As String, ml As String, _
@@ -381,6 +383,24 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	Gradients.Initialize 
 	Loose.Initialize 
 	computed.Initialize 
+	extm.Initialize
+	extm.Put("html", "mdi-language-html5")
+	extm.Put("js", "mdi-nodejs")
+	extm.Put("json", "mdi-code-json")
+	extm.Put("md", "mdi-markdown")
+	extm.Put("pdf", "mdi-file-pdf")
+	extm.Put("png", "mdi-file-image")
+	extm.Put("txt", "mdi-file-document-outline")
+	extm.Put("xls", "mdi-file-excel")
+	extm.Put("csv", "mdi-file-delimited-outline")
+	extm.Put("pre", "mdi-file-code-outline")
+	extm.Put("code", "mdi-file-code-outline")
+	extm.Put("doc", "mdi-file-word-box-outline")
+	extm.Put("mp3", "mdi-file-music-outline")
+	extm.Put("folder", "mdi-folder")
+	extm.Put("woff", "marketweb-webfont.woff")
+	extm.Put("css", "mdi-language-css3")
+	 
 	'
 	LastRow = 0
 	GridRows.Initialize
@@ -2397,6 +2417,17 @@ public Sub setNoTitle(b As Boolean)
 	AddAttr(":no-title", b)
 End Sub
 
+Sub setSelectableColor(sc As String)
+	AddAttr("selected-color", sc)
+End Sub
+
+Sub setSelectionType(st As String)
+	AddAttr("selection-type", st)
+End Sub
+
+Sub setSelectable(b As Boolean)
+	AddAttr(":selectable", b)
+End Sub
 
 public Sub setOpenOnClick(b As Boolean)
 	AddAttr(":open-on-click", b)
@@ -4828,46 +4859,14 @@ Sub Map2List(moptions As Map, sourcefield As String, displayfield As String) As 
 End Sub
 
 
-'generate a treeitem for v-tree
-Sub NewTreeItem(parentID As String, key As String, text As String, mhref As String, mIcon As String, mDisabled As Boolean) As Map
-	parentID = parentID.tolowercase
-	key = key.tolowercase
-	Dim mitem As Map = CreateMap()
-	mitem.Put("id", key)
-	mitem.Put("name", text)
-	mitem.Put("href", mhref)
-	mitem.Put("icon", mIcon)
-	mitem.Put("disabled", mDisabled)
-	mitem.Put("parentid", parentID)
-	Return mitem
-End Sub
-
 'return the icon for the file
 Sub FileIcon(ext As String) As String
-	Dim extm As Map = CreateMap()
-	extm.Put("html", "mdi-language-html5")
-	extm.Put("js", "mdi-nodejs")
-	extm.Put("json", "mdi-code-json")
-	extm.Put("md", "mdi-markdown")
-	extm.Put("pdf", "mdi-file-pdf")
-	extm.Put("png", "mdi-file-image")
-	extm.Put("txt", "mdi-file-document-outline")
-	extm.Put("xls", "mdi-file-excel")
-	extm.Put("csv", "mdi-file-delimited-outline")
-	extm.Put("pre", "mdi-file-code-outline")
-	extm.Put("code", "mdi-file-code-outline")
-	extm.Put("doc", "mdi-file-word-box-outline")
-	extm.Put("mp3", "mdi-file-music-outline")
-	extm.Put("folder", "mdi-folder")
-	extm.Put("woff", "marketweb-webfont.woff")
-	extm.Put("css", "mdi-language-css3")
-	'
 	ext = ext.ToLowerCase
 	If extm.ContainsKey(ext) Then
 		Dim res As String = extm.Get(ext)
 		Return res
 	Else
-		Return "mdi-file-document-outline"
+		Return ext
 	End If
 End Sub
 
@@ -7597,6 +7596,8 @@ Sub BindAllEvents
 	SetOnEvent(mCallBack, "start", "")
 	SetOnEvent(mCallBack, "end", "")
 	SetOnEvent(mCallBack, "click:close", "")
+	SetOnEvent(mCallBack, "update:active", "")
+	SetOnEvent(mCallBack, "update:open", "")
 	SetOnEvent(mCallBack, "focus", "")
 	SetOnEvent(mCallBack, "input", "")
 	SetOnEvent(mCallBack, "keydown", "")
@@ -10612,3 +10613,103 @@ Sub RemoveBinding(v As String)
 	v = v.ToLowerCase
 	bindings.Remove(v)
 End Sub
+
+'items in the treeview can be selectable
+Sub setActivatable(b As Boolean)
+	AddAttr(":activatable", b)
+End Sub
+
+'set the active items for the treeview
+Sub SetActiveItems(lst As List)
+	Dim ai As String = $"${mName}active"$
+	AddAttr(":active.sync", ai)
+	SetData(ai, lst)
+End Sub
+
+Sub SetOpenItems(lst As List)
+	Dim oi As String = $"${mName}open"$
+	AddAttr(":open.sync", oi)
+	SetData(oi, lst)
+End Sub
+
+Sub setHoverable(b As Boolean)
+	AddAttr(":hoverable", b)
+End Sub
+
+Sub setItemChildren(ic As String)
+	AddAttr("item-children", ic)
+End Sub
+
+Sub setItemDisabled(id As String)
+	AddAttr("item-disabled", id)
+End Sub
+
+Sub setItemKey(ik As String)
+	AddAttr("item-key", ik)
+End Sub
+
+Sub setMultipleActive(b As Boolean)
+	AddAttr(":multiple-active", b)
+End Sub
+
+Sub setExpandIcon(ei As String)
+	AddAttr("expand-icon", ei)
+End Sub
+
+Sub setOpenAll(b As Boolean)
+	AddAttr(":open-all", b)
+End Sub
+
+'add a treeview
+Sub AddTreeView(elID As String, vmodel As String, DataSource As String, bMultiple As Boolean , ReturnObject As Boolean) As VueElement
+	Dim elx As VueElement = AddVueElement1(elID, "v-treeview", vmodel ,"", "", Null)
+	elx.MultipleActive = bMultiple
+	elx.ItemKey = "id"
+	elx.ItemText = "name"
+	elx.Items = DataSource
+	elx.ReturnObject = ReturnObject
+	elx.VModel = vmodel
+	If bMultiple Then
+		Dim lst As List
+		lst.Initialize 
+		SetData(vmodel, lst)
+	Else
+		SetData(vmodel, Null)	
+	End If
+	elx.SetActiveItems(NewList)
+	elx.SetOpenItems(NewList)
+	elx.ExpandIcon = "mdi-chevron-down"
+	'
+elx.Append($"<v-template v-slot:prepend="{ item }">
+<v-icon v-if="item.icon" v-text="item.icon"></v-icon>
+</v-template>"$)
+	Return elx
+End Sub
+
+'add item to treeview
+Sub AddTreeViewItem(parentID As String, key As String, text As String, mhref As String, mIcon As String, mDisabled As Boolean)
+	parentID = parentID.tolowercase
+	key = key.tolowercase
+	mIcon = FileIcon(mIcon)
+	'
+	Dim mitem As Map = CreateMap()
+	mitem.Put("id", key)
+	mitem.Put("name", text)
+	If mhref <> "" Then 
+		mitem.Put("href", mhref)
+	End If
+	If mIcon <> "" Then 
+		mitem.Put("icon", mIcon)
+	End If
+	mitem.Put("disabled", mDisabled)
+	mitem.Put("parentid", parentID)
+	Records.Add(mitem)
+End Sub
+
+Sub RefreshTreeView(VC As VueComponent)
+	'unflatten the data
+	Dim unflat As List = BANanoShared.Unflatten(Records, "children")
+	VC.SetData(stItems, unflat)
+End Sub
+
+	
