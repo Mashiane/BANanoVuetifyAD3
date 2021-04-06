@@ -1136,10 +1136,24 @@ private Sub LoadCode
 	Dim xfields As String = BANanoShared.List2ArrayVariable(FieldNames)
 	'
 	sb.Append($"Sub Load${PluralClean}		'ignoredeadcode
+	'If vuetify.Authenticated = False Then
+	'	vuetify.NavigateTo("/")
+	'	Return
+	'End If
+	${ComponentName}.SetData("${Plural.tolowercase}", ${ComponentName}.NewMap)
+	Dim spermissions As String = vuetify.GetData("permissions")
+	Dim perma As List = BANanoShared.StrParse(",", spermissions)
+	For Each strp As String In perma
+		${ComponentName}.SetData(strp, True)
+	Next
+	${dtName}.Reload(${ComponentName}.NewList)
+	If ${ComponentName}.GetData("${Plural.tolowercase}.see") = False Then
+		vuetify.ShowSnackBarError("You do not have permission to see these ${Plural.tolowercase}")
+		Return
+	End If
 	'Show progress loader
 	${dtName}.UpdateLoading(True)
 	${LoadRelationships}
-	${dtName}.Reload(${ComponentName}.NewList)
 	'Dim db As BANanoSQL
 	'db.OpenWait("${DatabaseName}", "${DatabaseName}")
 	Dim ${rsTB} As ${className}
@@ -1499,6 +1513,7 @@ private Sub CreateTableCode()
 	sb.Append("Sub CreateTable").Append(CRLF)
 	sb.Append($"'add a container to hold the ${Plural.tolowercase}
 	Dim cont${SingularClean} As VueElement = vuetify.AddContainer(Me, ${ComponentName}.Here, "cont${SingularClean}", True)
+	cont${SingularClean}.Blurred = "!${Plural.tolowercase}.see"
 	cont${SingularClean}.AddRows1.AddColumns12
 	cont${SingularClean}.BuildGrid
 	'
@@ -1686,6 +1701,8 @@ End Sub"$).append(CRLF).append(CRLF)
 	AddCode($"${ComponentName}.vuetify = vuetify"$)
 	AddCode($"path = ${ComponentName}.path"$)
 	AddComment("")
+	AddComment("setting up permissions")
+	AddCode($"${ComponentName}.SetData("${Plural.tolowercase}", ${ComponentName}.NewMap)"$)
 	AddComment("'add a msgbox dialog for this page")
 	AddCode($"msgBox = ${ComponentName}.AddMsgBox(True, 500, "success", "error")"$)
 	AddComment("")
@@ -1869,6 +1886,10 @@ End Sub"$).Append(CRLF).Append(CRLF)
 	'TABLE ADD
 	If DT_HasAddNew Then
 	sb.Append($"Sub ${dtName}_add_click(e As BANanoEvent)				'ignoredeadcode
+	If ${ComponentName}.GetData("${Plural.tolowercase}.add") = False Then
+		vuetify.ShowSnackBarError("You do not have permission to add a ${Singular.tolowercase}!")
+		Return 
+	End If
 	Add${SingularClean}
 End Sub"$).Append(CRLF).Append(CRLF)
 	'
@@ -1896,6 +1917,10 @@ End If
 	'TABLE EDIT
 	If DT_HasEdit Then
 	sb.Append($"Private Sub ${dtName}_edit (item As Map)				'ignoredeadcode
+	If ${ComponentName}.GetData("${Plural.tolowercase}.update") = False Then
+		vuetify.ShowSnackBarError("You do not have permission to update a ${Singular.tolowercase}!")
+		Return 
+	End If
 	'get the current $refs
 	${ComponentName}.refs = vuetify.GetRefs
 	${ComponentName}.DialogUpdateTitle("${ModalName}", "Edit ${Singular}")
@@ -1912,6 +1937,10 @@ End Sub"$).Append(CRLF).Append(CRLF)
 	'TABLE DELETE
 	If DT_HasDelete Then
 	sb.Append($"Private Sub ${dtName}_delete (item As Map)				'ignoredeadcode
+	If ${ComponentName}.GetData("${Plural.tolowercase}.delete") = False Then
+		vuetify.ShowSnackBarError("You do not have permission to delete a ${Singular.tolowercase}!")
+		Return 
+	End If
 	Dim s${DisplayField} As String = item.Get("${DisplayField}")
 	Dim s${PrimaryKey} As String = item.Get("${PrimaryKey}")
 	${ComponentName}.SetData("${PrimaryKey.tolowercase}", s${PrimaryKey})
@@ -1971,6 +2000,10 @@ End Sub"$).Append(CRLF).Append(CRLF)
 	
 	'
 	sb.Append($"Private Sub ${dtName}_change (item As Map)				'ignoredeadcode
+	If ${ComponentName}.GetData("${Plural.tolowercase}.update") = False Then
+		vuetify.ShowSnackBarError("You do not have permission to update a ${Singular.tolowercase}!")
+		Return 
+	End If
 	${ComponentName}.SetData("reload", False)
 	${ComponentName}.RunMethod("Update${SingularClean}", item)
 End Sub"$).Append(CRLF).Append(CRLF)
@@ -1983,6 +2016,10 @@ End Sub"$).Append(CRLF).Append(CRLF)
 	'
 	If DT_HasSave Then
 sb.Append($"Sub ${dtName}_save (item As Map)
+If ${ComponentName}.GetData("${Plural.tolowercase}.update") = False Then
+		vuetify.ShowSnackBarError("You do not have permission to update a ${Singular.tolowercase}!")
+		Return 
+	End If
 ${ComponentName}.SetData("reload", False)
 ${ComponentName}.RunMethod("Update${SingularClean}", item)
 End Sub"$).append(CRLF).append(CRLF)
@@ -2010,6 +2047,10 @@ End Sub"$).Append(CRLF).Append(CRLF)
 	'
 	If DT_HasClone Then
 sb.Append($"Sub ${dtName}_clone (item As Map)
+If ${ComponentName}.GetData("${Plural.tolowercase}.add") = False Then
+		vuetify.ShowSnackBarError("You do not have permission to add a ${Singular.tolowercase}!")
+		Return 
+	End If
 Dim rec As Map = BANanoShared.CopyMap(item, array("*"))
 ${ComponentName}.RunMethod("Create${SingularClean}", rec)
 End Sub"$).Append(CRLF).Append(CRLF)
@@ -2017,6 +2058,10 @@ End Sub"$).Append(CRLF).Append(CRLF)
 
 	If DT_HasEditDialog Then
 		sb.Append($"Sub ${dtName}_SaveItem (item As Map)
+		If ${ComponentName}.GetData("${Plural.tolowercase}.update") = False Then
+		vuetify.ShowSnackBarError("You do not have permission to update a ${Singular.tolowercase}!")
+		Return 
+	End If
 	${ComponentName}.RunMethod("Update${SingularClean}", item)
 End Sub"$).append(CRLF).append(CRLF)
 		'

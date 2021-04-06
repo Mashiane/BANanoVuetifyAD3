@@ -604,6 +604,8 @@ Sub AddTitleIcon(elID As String, eIcon As String, btnColor As String)
 	'vbtnright.Small = True
 	If btnColor <> "" Then vbtnright.Color = btnColor
 	vbtnright.Elevation = 4
+	vbtnright.VShow = $"${elID}show"$
+	vbtnright.SetData($"${elID}show"$, True)
 	'
 	Dim viconright As VueElement
 	viconright.Initialize(mCallBack, siconright, siconright)
@@ -2350,7 +2352,7 @@ private Sub BuildSlots
 				
 				Dim temp As String = $"<v-template v-slot:item.${value}="props">
 <v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" @open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy> {{ ${itemValue} }}
-<v-template v-slot:input><v-select :items="${nf.SourceTable}" item-text="${nf.DisplayField}" item-value="${nf.sourcefield}" clearable v-model="props.item.${value}" :label="props.header.text" @change="${changeEvent}(props.item.${value})"></v-Select></v-template>
+<v-template v-slot:input><v-select :items="${nf.sourceTable}" item-text="${nf.displayField}" item-value="${nf.sourcefield}" clearable v-model="props.item.${value}" :label="props.header.text" @change="${changeEvent}(props.item.${value})"></v-Select></v-template>
 </v-edit-dialog></v-template>"$
 				sb.Append(temp)
 				'
@@ -2440,11 +2442,12 @@ sb.Append(temp)
 </v-edit-dialog></v-template>"$
 				sb.Append(temp)
 			Case COLUMN_DATE, COLUMN_DATETIME, COLUMN_TIME
+				Dim akey As String = $"${mName}_${value}"$
 				'get the date format
 				Dim df As String = nf.valueFormat
 				'
 				Dim span As VueElement
-				span.Initialize(mCallBack, "", "")
+				span.Initialize(mCallBack, akey, akey)
 				span.TagName = "span"
 				span.Append($"{{ getdateformat(item.${value}, "${df}") }}"$)
 				
@@ -2457,8 +2460,9 @@ sb.Append(temp)
 				tmp.Append(span.ToString)
 				sb.Append(tmp.ToString)
 			Case COLUMN_LINK1
+				Dim akey As String = $"${mName}_${value}"$
 				Dim aLink As VueElement
-				aLink.Initialize(mCallBack, "", "")
+				aLink.Initialize(mCallBack, akey, akey)
 				aLink.TagName = "a"
 				Dim sLink As String = $"item.${nf.href}"$
 				aLink.AddAttr(":href", "'" & nf.prefix & "' + " & sLink)
@@ -2476,8 +2480,9 @@ sb.Append(temp)
 				tmp.Append(aLink.ToString)
 				sb.Append(tmp.ToString)
 			Case COLUMN_LINK
+				Dim akey As String = $"${mName}_${value}"$
 				Dim aLink As VueElement
-				aLink.Initialize(mCallBack, "", "")
+				aLink.Initialize(mCallBack, akey, akey)
 				aLink.TagName = "a"
 				Dim sLink As String = $"item.${value}"$
 				aLink.AddAttr(":href", "'" & nf.prefix & "' + " & sLink)
@@ -2495,33 +2500,35 @@ sb.Append(temp)
 				tmp.Append(aLink.ToString)
 				sb.Append(tmp.ToString)
 			Case COLUMN_MONEY, COLUMN_NUMBER
+				Dim akey As String = $"${mName}_${value}"$
 				'get the date format
 				Dim mf As String = nf.valueFormat
 				'*** OPEN OLD CODE
-				'Dim span As VueElement
-				'span.Initialize(mCallBack, "", "")
-				'span.TagName = "span"
-				'span.Append($"{{ getmoneyformat(props.item.${value}, "${mf}") }}"$)
+				Dim span As VueElement
+				span.Initialize(mCallBack, akey, akey)
+				span.TagName = "span"
+				span.Append($"{{ getmoneyformat(item.${value}, "${mf}") }}"$)
 				'define template
-				'Dim tmp As VueElement
-				'tmp.Initialize(mCallBack, "", "")
-				'tmp.TagName = "v-template"
-				'tmp.AddAttr($"v-slot:item.${value}"$, "{ item }")
-				'tmp.Append(span.ToString)
-				'sb.Append(tmp.ToString)
+				Dim tmp As VueElement
+				tmp.Initialize(mCallBack, "", "")
+				tmp.TagName = "v-template"
+				tmp.AddAttr($"v-slot:item.${value}"$, "{ item }")
+				tmp.Append(span.ToString)
+				sb.Append(tmp.ToString)
 				'*** CLOSE OLD CODE
 				'
-				Dim itemValue As String = $"{{ getmoneyformat(item.${value}, "${mf}") }}"$
-				
-				Dim temp As String = $"<v-template v-slot:item.${value}="props">
-<v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" 
-@open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy> {{ ${itemValue} }}
-<v-template v-slot:input><v-text-field v-model="props.item.${value}" :label="props.header.text" counter></v-text-field></v-template></v-edit-dialog></v-template>"$
-sb.Append(temp)
+'				Dim itemValue As String = $"{{ getmoneyformat(item.${value}, "${mf}") }}"$
+'				
+'				Dim temp As String = $"<v-template v-slot:item.${value}="props">
+'<v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" 
+'@open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy> {{ ${itemValue} }}
+'<v-template v-slot:input><v-text-field v-model="props.item.${value}" :label="props.header.text" counter></v-text-field></v-template></v-edit-dialog></v-template>"$
+'sb.Append(temp)
 
 			Case COLUMN_FILESIZE
+				Dim akey As String = $"${mName}_${value}"$
 				Dim span As VueElement
-				span.Initialize(mCallBack, "", "")
+				span.Initialize(mCallBack, akey, akey)
 				span.TagName = "span"
 				span.Append($"{{ getfilesize(item.${value}) }}"$)
 				
@@ -2533,8 +2540,9 @@ sb.Append(temp)
 				tmp.Append(span.ToString)
 				sb.Append(tmp.ToString)		
 			Case COLUMN_PROGRESS_LINEAR
+				Dim akey As String = $"${mName}_${value}"$
 				Dim pl As VueElement
-				pl.Initialize(mCallBack, "", "")
+				pl.Initialize(mCallBack, akey, akey)
 				pl.TagName = "v-progress-linear" 
 				pl.VModel = $"item.${value}"$
 				pl.Reactive = True
@@ -2571,8 +2579,9 @@ sb.Append(temp)
 				tmp.Append(pl.ToString)
 				sb.Append(tmp.ToString)
 			Case COLUMN_PROGRESS_CIRCULAR
+				Dim akey As String = $"${mName}_${value}"$
 				Dim pc As VueElement
-				pc.Initialize(mCallBack, "", "")
+				pc.Initialize(mCallBack, akey, akey)
 				pc.TagName = "v-progress-circular"
 				pc.VModel = $"item.${value}"$
 				pc.Reactive = True
@@ -2600,8 +2609,9 @@ sb.Append(temp)
 				tmp.Append(pc.ToString)
 				sb.Append(tmp.ToString)
 			Case COLUMN_RATING
+				Dim akey As String = $"${mName}_${value}"$
 				Dim rat As VueElement
-				rat.Initialize(mCallBack, "", "")
+				rat.Initialize(mCallBack, akey, akey)
 				rat.TagName = "v-rating"
 				rat.Dense = True
 				rat.VModel = $"item.${value}"$
@@ -2640,8 +2650,9 @@ sb.Append(temp)
 				tmp.Append(rat.ToString)
 				sb.Append(tmp.ToString)
 			Case COLUMN_AVATARIMG
+				Dim akey As String = $"${mName}_${value}"$
 				Dim avt As VueElement
-				avt.Initialize(mCallBack, "", "")
+				avt.Initialize(mCallBack, akey, akey)
 				avt.TagName = "v-avatar"
 				'
 				Dim avtimg As VueElement
@@ -2682,8 +2693,9 @@ sb.Append(temp)
 				tmp.Append(avt.ToString)
 				sb.Append(tmp.ToString)
 			Case COLUMN_SWITCH, COLUMN_CHECKBOX
+				Dim akey As String = $"${mName}_${value}"$
 				Dim swt As VueElement
-				swt.Initialize(mCallBack, "", "")
+				swt.Initialize(mCallBack, akey, akey)
 				swt.TagName = "v-checkbox"
 				swt.MA = 0
 				swt.HideDetails = True
@@ -2720,8 +2732,9 @@ sb.Append(temp)
 				tmp.Append(swt.ToString)
 				sb.Append(tmp.ToString)
 			Case COLUMN_ICON
+				Dim akey As String = $"${mName}_${value}"$
 				Dim aicon As VueElement
-				aicon.Initialize(mCallBack, "", "")
+				aicon.Initialize(mCallBack, akey, akey)
 				aicon.TagName = "v-icon"
 				If nf.PreDisplay = "" Then
 					aicon.Append($"{{ item.${value} }}"$)
@@ -2751,7 +2764,8 @@ sb.Append(temp)
 				sb.Append(tmp.ToString)
 			Case COLUMN_IMAGE
 				Dim avtimg As VueElement
-				avtimg.Initialize(mCallBack,"", "")
+				Dim akey As String = $"${mName}_${value}"$
+				avtimg.Initialize(mCallBack,akey, akey)
 				avtimg.TagName = "v-img"
 				If nf.PreDisplay = "" Then
 					avtimg.AddAttr(":src", $"item.${value}"$)
@@ -2787,7 +2801,8 @@ sb.Append(temp)
 				sb.Append(tmp.ToString)
 			Case COLUMN_CHIP
 				Dim chp As VueElement
-				chp.Initialize(mCallBack, "", "")
+				Dim akey As String = $"${mName}_${value}"$
+				chp.Initialize(mCallBack, akey, akey)
 				chp.TagName = "v-chip"
 				chp.dark = True
 				chp.Elevation = "4"
@@ -2821,7 +2836,8 @@ sb.Append(temp)
 				sb.Append(tmp.ToString)
 			Case COLUMN_BUTTON
 				Dim abtn As VueElement
-				abtn.Initialize(mCallBack, "", "")
+				Dim akey As String = $"${mName}_${value}"$
+				abtn.Initialize(mCallBack, akey, akey)
 				abtn.TagName = "v-btn"
 				abtn.AddClass("mr-2")
 				abtn.Depressed = nf.depressed
@@ -2854,7 +2870,9 @@ sb.Append(temp)
 				sb.Append(tmp.tostring)
 			Case COLUMN_ACTION, COLUMN_EDIT, COLUMN_DELETE, COLUMN_SAVE, COLUMN_CANCEL
 				Dim abtn As VueElement
-				abtn.Initialize(mCallBack, "", "")
+				Dim akey As String = $"${mName}_${value}"$
+				Log(akey)
+				abtn.Initialize(mCallBack, akey, akey)
 				abtn.TagName = "v-btn"
 				abtn.Elevation = "4"
 				'abtn.Small = True
@@ -2900,34 +2918,35 @@ sb.Append(temp)
 				sb.Append(tmp.ToString)
 			Case Else
 				'*** OPEN OLD CODE
-				'If nf.PreDisplay <> "" Then
-					'Dim span As VueElement
-					'span.Initialize(mCallBack, "", "")
-					'span.TagName = "span"
-					'span.Append($"{{ ${nf.predisplay}(item.${value}) }}"$)
+				If nf.PreDisplay <> "" Then
+					Dim akey As String = $"${mName}_${value}"$
+					Dim span As VueElement
+					span.Initialize(mCallBack, akey, akey)
+					span.TagName = "span"
+					span.Append($"{{ ${nf.predisplay}(item.${value}) }}"$)
 					'define template
-					'Dim tmp As VueElement
-					'tmp.Initialize(mCallBack, "" , "")
-					'tmp.TagName = "v-template"
-					'tmp.AddAttr($"v-slot:item.${value}"$, "{ item }")
-					'tmp.Append(span.ToString)
-					'sb.Append(tmp.ToString)
-				'End If
+					Dim tmp As VueElement
+					tmp.Initialize(mCallBack, "" , "")
+					tmp.TagName = "v-template"
+					tmp.AddAttr($"v-slot:item.${value}"$, "{ item }")
+					tmp.Append(span.ToString)
+					sb.Append(tmp.ToString)
+				End If
 				'*** CLOSE OLD CODE
 				'
-				Dim itemValue As String
-				If nf.PreDisplay = "" Then
-					itemValue = $"props.item.${value}"$
-				Else
-					itemValue = $"props.item.${value}"$
-					itemValue = $"${nf.predisplay}(${itemValue})"$
-				End If				
-				
-				Dim temp As String = $"<v-template v-slot:item.${value}="props">
-		<v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" 
-		@open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy> {{ ${itemValue} }}
-		<v-template v-slot:input><v-text-field v-model="props.item.${value}" :label="props.header.text" counter></v-text-field></v-template></v-edit-dialog></v-template>"$
-		sb.Append(temp)
+'				Dim itemValue As String
+'				If nf.PreDisplay = "" Then
+'					itemValue = $"item.${value}"$
+'				Else
+'					itemValue = $"item.${value}"$
+'					itemValue = $"${nf.predisplay}(${itemValue})"$
+'				End If				
+'				
+'				Dim temp As String = $"<v-template v-slot:item.${value}="props">
+'		<v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" 
+'		@open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy> {{ ${itemValue} }}
+'		<v-template v-slot:input><v-text-field v-model="props.item.${value}" :label="props.header.text" counter></v-text-field></v-template></v-edit-dialog></v-template>"$
+'		sb.Append(temp)
 		End Select
 	Next
 	'
