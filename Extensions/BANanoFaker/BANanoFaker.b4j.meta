@@ -4,6 +4,6 @@ ModuleBreakpoints0=
 ModuleBreakpoints1=
 ModuleClosedNodes0=
 ModuleClosedNodes1=
-NavigationStack=Main,Process_Globals,13,0,Main,AppStart,16,0,BANanoFakeIT,Class_Globals,85,0
+NavigationStack=BANanoFakeIT,Rand_Money,645,0,BANanoFakeIT,Rand_Country_Name,751,0,BANanoFakeIT,MakeMoney,2937,0,BANanoFakeIT,Val,2950,0,BANanoFakeIT,Rand_Job_Title,2924,0,BANanoFakeIT,Rand_Home_Address,2635,0,BANanoFakeIT,Rand_Company_Name,2661,0,Main,Process_Globals,13,0,BANanoFakeIT,Rand_Occupation,2728,2,BANanoFakeIT,Rand_Capital_City,2730,0
 SelectedBuild=0
 VisibleModules=1

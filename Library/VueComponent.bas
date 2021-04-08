@@ -575,6 +575,13 @@ Sub NewList As List
 	Return elx
 End Sub
 
+Sub NewList1(itms As List) As List
+	Dim elx As List
+	elx.Initialize
+	elx.AddAll(itms)
+	Return elx
+End Sub
+
 'get element by data
 Sub GetElementByData(dataattr As String, value As String) As BANanoElement
 	dataattr = dataattr.tolowercase
@@ -606,6 +613,15 @@ Sub ImportBO(compName As String, comp As BANanoObject)
 	If components.ContainsKey(compName) = True Then Return
 	components.Put(compName, comp)
 End Sub
+
+Sub ImportVJSF
+	If components.ContainsKey("v-jsf") = False Then
+		Dim boVJsf As BANanoObject
+		boVJsf.Initialize("VJsf")
+		Dim boVJsf As BANanoObject = boVJsf.GetField("default")
+		components.Put("v-jsf", boVJsf)
+	End If	
+End Sub	
 
 'add an element inside the placeholder
 Sub AddElement(ve As VueElement)
@@ -1538,4 +1554,19 @@ End Sub
 Sub GetSelected(vmodel As String) As List
 	Dim lst As List = GetData(vmodel)
 	Return lst
+End Sub
+
+Sub VJSFAdd(parent As Map, vmodel As String, eType As String, eTitle As String, eDescription As String, props As Map)
+	Dim el As Map = CreateMap()
+	el.Put("type", eType)
+	el.Put("title", eTitle)
+	el.Put("description", eDescription)
+	If BANano.IsNull(props) Or BANano.IsUndefined(props) Then
+	Else	
+		For Each k As String In props.Keys
+			Dim v As Object = props.Get(k)
+			el.Put(k, v)
+		Next
+	End If
+	parent.Put(vmodel, el)
 End Sub

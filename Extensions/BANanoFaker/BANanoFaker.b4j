@@ -8,7 +8,7 @@ Module1=BANanoFakeIT
 NumberOfFiles=0
 NumberOfLibraries=3
 NumberOfModules=1
-Version=8.5
+Version=8.9
 @EndOfDesignText@
 'https://www.b4x.com/android/forum/threads/bananohashes-4-types-4-algorithm-plus-1.112222/#content
 #IgnoreWarnings: 12, 15
@@ -22,7 +22,7 @@ Version=8.5
 Sub Process_Globals
 	Public BANano As BANano 'ignore
 	Public AppName As String = "BANanoFaker"
-	Public Version As String = "1.01"
+	Public Version As String = "1.02"
 End Sub
 
 Sub AppStart (Form1 As Form, Args() As String)

@@ -2427,6 +2427,24 @@ Sub ListOfMapsExtractKey(lst As List, skey As String) As List
 	Return nm
 End Sub
 
+'list of maps extract property
+Sub ListOfMapsGetProperty(lst As List, skey As String, bDuplicates As Boolean) As List
+	Dim nm As List
+	nm.Initialize
+	For Each oldm As Map In lst
+		Dim svalue As Object = oldm.Get(skey.tolowercase)
+		If bDuplicates Then
+			nm.Add(svalue)
+		Else
+			Dim oldPos As Int = nm.IndexOf(svalue)
+			If oldPos = -1 Then
+				nm.Add(svalue)
+			End If
+		End If	
+	Next
+	Return nm
+End Sub
+
 'sum value values
 Sub SumMapValues(m As Map) As Double
 	Dim itv As Double = 0

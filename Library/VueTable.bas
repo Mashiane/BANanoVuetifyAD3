@@ -592,6 +592,11 @@ Sub AddPDF
 	AddTitleIcon(btnKey, "mdi-file-pdf-outline", "brown")
 End Sub
 
+Sub AddExcel
+	Dim btnKey As String = $"${mName}_excel"$
+	AddTitleIcon(btnKey, "mdi-file-excel-box-outline", "cyan")
+End Sub
+
 'a button with an icon on the left
 Sub AddTitleIcon(elID As String, eIcon As String, btnColor As String)
 	Dim ct As BANanoElement

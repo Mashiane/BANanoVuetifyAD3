@@ -9584,6 +9584,21 @@ Sub AddAppBar(elID As String) As VueElement
 	Return elx
 End Sub
 
+Sub AddVJSF(elID As String, jschema As String, jmodel As String, joptions As String) As VueElement
+	Dim elx As VueElement = AddVueElement1(elID, "v-jsf", jmodel, "", "", Null)
+	elx.SetAttr(":schema", jschema)
+	elx.SetAttr(":options", joptions)
+	elx.SetData(jschema, NewMap)
+	elx.SetData(jmodel, NewMap)
+	elx.SetData(joptions, NewMap)
+	Return elx
+End Sub
+
+Sub NewMap As Map
+	Dim m As Map = CreateMap()
+	Return m
+End Sub
+
 Sub AddFormWizard(elID As String, title As String, subtitle As String) As VueElement
 	elID = elID.tolowercase
 	Dim elx As VueElement = AddVueElement1(elID, "form-wizard", "", "", "", Null)
