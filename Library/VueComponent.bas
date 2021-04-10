@@ -1570,3 +1570,14 @@ Sub VJSFAdd(parent As Map, vmodel As String, eType As String, eTitle As String, 
 	End If
 	parent.Put(vmodel, el)
 End Sub
+
+Sub TreeViewRefresh(tv As VueElement)
+	'unflatten the data
+	Dim unflat As List = BANanoShared.Unflatten(tv.Records, "children")
+	Dim itmName As String = tv.Items
+	SetData(itmName, unflat)
+	Dim openitems As List = tv.openitems
+	If openitems.Size > 0 Then
+		SetOpenItems(tv.id, openitems)
+	End If
+End Sub

@@ -17,6 +17,7 @@ Sub Class_Globals
 	Public const DB_INT As String = "INT"
 	Public const DB_FLOAT As String = "FLOAT"
 	Public const DB_BLOB As String = "BLOB"
+	Public const DB_DOUBLE As String = "DOUBLE"
 	Public const DB_BOOL As String = "BOOL"
 	Public const DB_REAL As String = "REAL"
 	Public const DB_DATE As String = "DATE"
@@ -391,6 +392,14 @@ End Sub
 Sub SchemaAddDate(bools As List) As BANanoMSSQLE
 	For Each b As String In bools
 		Schema.Put(b, DB_DATE)
+	Next
+	Return Me
+End Sub
+
+'add double fields
+Sub SchemaAddDouble(bools As List) As BANanoMSSQLE
+	For Each b As String In bools
+		Schema.Put(b, DB_DOUBLE)
 	Next
 	Return Me
 End Sub

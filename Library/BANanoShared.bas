@@ -29,6 +29,15 @@ Sub Process_Globals
 	Type sequencePair(value As Int, numTimes As Int)
 End Sub
 
+Sub EQOperators(sm As Map) As List  'ignore
+	Dim nl As List
+	nl.initialize
+	For Each k As String In sm.Keys
+		nl.Add("=")
+	Next
+	Return nl
+End Sub
+
 Sub YYYYMMDD(sdate As String) As String
 	Return FormatDisplayDate(sdate, "YYYY-MM-DD")
 End Sub
@@ -1849,17 +1858,6 @@ Sub JSONSetProperty(sjson As String, updates As Map) As String
 	Return sout
 End Sub
 
-'equal operators
-Sub EQOperators(sm As Map) As List   'ignore
-	Dim nl As List
-	nl.initialize
-	For Each k As String In sm.Keys
-		nl.Add("=")
-	Next
-	Return nl
-End Sub
-
-
 'add break
 Sub BR As String
 	Return "<br>"
@@ -3007,20 +3005,26 @@ End Sub
 'convert data type to field type
 Sub DataType2FieldType(fldtype As String) As String
 	fldtype = fldtype.ToUpperCase
-	If fldtype.EqualsIgnoreCase("double") Then fldtype = "FLOAT"
+	If fldtype.EqualsIgnoreCase("double") Then fldtype = "DOUBLE"
 	If fldtype.EqualsIgnoreCase("integer") Then fldtype = "INT"
 	If fldtype.EqualsIgnoreCase("long") Then fldtype = "INT"
 	If fldtype.EqualsIgnoreCase("short") Then fldtype = "INT"
+	If fldtype.EqualsIgnoreCase("longtext") Then fldtype = "TEXT"
+	If fldtype.EqualsIgnoreCase("longblob") Then fldtype = "BLOB"
+	If fldtype.EqualsIgnoreCase("tinyint") Then fldtype = "INT"
+	If fldtype.EqualsIgnoreCase("datetime") Then fldtype = "TEXT"
+	If fldtype.EqualsIgnoreCase("decimal") Then fldtype = "DOUBLE"
+	
 	If fldtype.endswith("INT") Then fldtype = "INT"
 	If fldtype.endswith("CHAR") Then fldtype = "TEXT"
 	If fldtype.endswith("TEXT") Then fldtype = "TEXT"
-	If fldtype.endswith("REAL") Then fldtype = "FLOAT"
+	If fldtype.endswith("REAL") Then fldtype = "DOUBLE"
 	If fldtype.endswith("BIT") Then fldtype = "INT"
+	If fldtype.endswith("BLOB") Then fldtype = "BLOB"
 	'
 	fldtype = fldtype.tolowercase
 	fldtype = fldtype.replace("text", "string")
-	fldtype = fldtype.replace("float", "dbl")
-	fldtype = fldtype.replace("blob", "string")
+	fldtype = fldtype.replace("float", "double")
 	fldtype = fldtype.replace("none", "string")
 	fldtype = fldtype.replace("varchar", "string")
 	Return fldtype

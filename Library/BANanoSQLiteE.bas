@@ -15,6 +15,7 @@ Sub Class_Globals
 	Public const DB_INTEGER As String = "INTEGER"
 	Public const DB_TEXT As String = "TEXT"
 	Public const DB_FLOAT As String = "FLOAT"
+	Public const DB_DOUBLE As String = "DOUBLE"
 	Private BANano As BANano   'ignore
 	Public MethodName As String
 	Private Schema As Map
@@ -460,6 +461,14 @@ End Sub
 Sub SchemaAddFloat(bools As List) As BANanoSQLiteE
 	For Each b As String In bools
 		Schema.Put(b, DB_FLOAT)
+	Next
+	Return Me
+End Sub
+
+'add double fields
+Sub SchemaAddDouble(bools As List) As BANanoSQLiteE
+	For Each b As String In bools
+		Schema.Put(b, DB_DOUBLE)
 	Next
 	Return Me
 End Sub

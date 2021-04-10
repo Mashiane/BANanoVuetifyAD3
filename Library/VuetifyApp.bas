@@ -1080,7 +1080,7 @@ End Sub
 
 private Sub InitDialog
 	dlgShow = $"${AppName}show"$
-	dlgTitle = $"${AppName}title"$
+	dlgTitle = $"${AppName}caption"$
 	dlgMessage = $"${AppName}message"$
 	dlgcanceltitle = $"${AppName}canceltitle"$
 	dlgoktitle = $"${AppName}oktitle"$
@@ -2112,6 +2112,32 @@ Sub NavigateTo(sPath As String)
 	If sPath.EqualsIgnoreCase(sprev) = False Then
 		Dim namem As Map = CreateMap()
 		namem.put("path", sPath)
+		VueRouter.RunMethod("push", Array(namem))
+	End If
+End Sub
+
+'navigate to a page with parameters
+Sub NavigateToWithParams(sPath As String, params As Map)
+	'get the current path
+	sPath = sPath.tolowercase
+	Dim sprev As String = getCurrentPath
+	If sPath.EqualsIgnoreCase(sprev) = False Then
+		Dim namem As Map = CreateMap()
+		namem.put("name", sPath)
+		namem.Put("params", params)
+		VueRouter.RunMethod("push", Array(namem))
+	End If
+End Sub
+
+'navigate to a page with parameters
+Sub NavigateToWithQuery(sPath As String, params As Map)
+	'get the current path
+	sPath = sPath.tolowercase
+	Dim sprev As String = getCurrentPath
+	If sPath.EqualsIgnoreCase(sprev) = False Then
+		Dim namem As Map = CreateMap()
+		namem.put("name", sPath)
+		namem.Put("query", params)
 		VueRouter.RunMethod("push", Array(namem))
 	End If
 End Sub
@@ -3788,7 +3814,7 @@ End Sub
 
 Sub AddMsgBox(Module As Object, bPersistent As Boolean, width As Int, okColor As String, cancelColor As String) As VueElement
 	'**** this page needs to use its own dialog, lets add it
-	Dim fbDialog As VueElement = AddDialogAlertPrompt(Module, Here, AppName, bPersistent, width, okColor, cancelColor)
+	Dim fbDialog As VueElement = AddDialogAlertPrompt(Module, $"${AppName}app"$, AppName, bPersistent, width, okColor, cancelColor)
 	BindVueElement(fbDialog)
 	Return fbDialog
 End Sub
@@ -3919,6 +3945,11 @@ Sub DialogForm(Module As Object, dlgID As String) As VueElement
 	Return elx
 End Sub
 
+Sub DialogValidate(dlgID As String) As Boolean
+	Dim dialogContainerID As String = $"${dlgID}form"$
+	Return FormValidate(dialogContainerID)
+End Sub
+
 'return the dialog card container
 Sub DialogContainer(Module As Object, dlgID As String) As VueElement
 	Dim dialogContainerID As String = $"${dlgID}container"$
@@ -3975,8 +4006,8 @@ Sub AddDialogInput(Module As Object, parentID As String, elID As String, bPersis
 	Dim okid As String = $"${elID}ok"$
 	Dim dialogFormID As String = $"${elID}form"$
 	Dim dialogContainerID As String = $"${elID}container"$
-	dim okKey as string = $"${elid}key"$
-	dim cancelKey as string = $"${elid}key"$
+	Dim okKey As String = $"${elID}key"$
+	Dim cancelKey As String = $"${elID}key"$
 	'
 	Dim sbTemplate As StringBuilder
 	sbTemplate.Initialize
@@ -5168,3 +5199,24 @@ Sub GetDataWhere(lstName As String, whereMap As Map) As Map
 	Return rec
 End Sub
 
+Sub TreeViewRefresh(tv As VueElement)
+	'unflatten the data
+	Dim unflat As List = BANanoShared.Unflatten(tv.Records, "children")
+	Dim itmName As String = tv.Items
+	SetData(itmName, unflat)
+	Dim openitems As List = tv.openitems
+	If openitems.Size > 0 Then
+		SetOpenItems(tv.id, openitems)
+	End If
+End Sub
+
+'set the active items for the treeview
+Sub SetActiveItems(elID As String, lst As List)
+	Dim ai As String = $"${elID}active"$
+	SetData(ai, lst)
+End Sub
+
+Sub SetOpenItems(elID As String, lst As List)
+	Dim ai As String = $"${elID}open"$
+	SetData(ai, lst)
+End Sub

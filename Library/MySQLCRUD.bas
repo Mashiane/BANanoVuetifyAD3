@@ -55,6 +55,7 @@ Sub Class_Globals
 	Public DT_MustSort As Boolean
 	Public DT_MultiSort As Boolean
 	Public DT_HasPDF As Boolean
+	public DT_HasExcel as boolean
 	Public Diag_Width As String
 	Private dtCont As StringBuilder
 	Private SingularClean As String
@@ -162,6 +163,7 @@ Public Sub Initialize(clsName As String) As MySQLCRUD
 	DT_MustSort = False
 	DT_MultiSort = False
 	DT_HasPDF = False
+	DT_HasExcel = false
 	Diag_FullScreenOnMobile = False
 	Diag_FullScreen = False
 	DB_CreateTable = ""
@@ -244,14 +246,14 @@ private Sub SetProperties(fldNAme As String, vmodel As String)
 		dtCont.Append($"${fldNAme}.Dense = True"$).Append(CRLF)
 	End If
 	If RequiredM.ContainsKey(fldNAme) Then
-		dtCont.Append($"${fldNAme}.Required = ":${fldNAme}required""$).Append(CRLF)
-		dtCont.Append($"${fldNAme}.AddRule("${fldNAme.tolowercase}rule")"$).Append(CRLF)
+		dtCont.Append($"${fldNAme}.Required = ":${fldNAme}Required""$).Append(CRLF)
+		dtCont.Append($"${fldNAme}.AddRule("${fldNAme.tolowercase}Rule")"$).Append(CRLF)
 	End If
 	If ReadOnlyM.ContainsKey(fldNAme) Then
-		dtCont.Append($"${fldNAme}.ReadOnly = ":${fldNAme}readonly""$).Append(CRLF)
+		dtCont.Append($"${fldNAme}.ReadOnly = ":${fldNAme}ReadOnly""$).Append(CRLF)
 	End If
 	If DisabledM.ContainsKey(fldNAme) Then
-		dtCont.Append($"${fldNAme}.Disabled = ":${fldNAme}disabled""$).Append(CRLF)
+		dtCont.Append($"${fldNAme}.Disabled = ":${fldNAme}Disabled""$).Append(CRLF)
 	End If
 	If OutlinedM.ContainsKey(fldNAme) Then
 		dtCont.Append($"${fldNAme}.Outlined = True"$).Append(CRLF)
@@ -281,17 +283,17 @@ private Sub BuildProperties As String
 	Dim xb As StringBuilder
 	xb.Initialize
 	For Each k As String In RequiredM.keys
-		Dim ks As String = $"${k}required"$
+		Dim ks As String = $"${k}Required"$
 		ks = ks.tolowercase
 		xb.Append($"${ComponentName}.SetData("${ks}", True)"$).Append(CRLF)
 	Next
 	For Each k As String In ReadOnlyM.keys
-		Dim ks As String = $"${k}readonly"$
+		Dim ks As String = $"${k}ReadOnly"$
 		ks = ks.tolowercase
 		xb.Append($"${ComponentName}.SetData("${ks}", True)"$).Append(CRLF)
 	Next
 	For Each k As String In DisabledM.keys
-		Dim ks As String = $"${k}disabled"$
+		Dim ks As String = $"${k}Disabled"$
 		ks = ks.tolowercase
 		xb.Append($"${ComponentName}.SetData("${ks}", True)"$).Append(CRLF)
 	Next
@@ -302,7 +304,7 @@ End Sub
 Sub Diag_AddParagraph(fldName As String, row As Int, col As Int, vmodel As String, Caption As String)
 	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddParagraph(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), "${fldName}", "{{ ${SingularClean.tolowercase}.${vmodel} }}", "", "")"$).Append(CRLF)
 	If Visibility.ContainsKey(fldName) Then
-		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
+		dtCont.Append($"${fldName}.VShow = "${fldName}Show""$).Append(CRLF)
 	End If
 	SetProperties(fldName,vmodel)
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
@@ -532,11 +534,11 @@ End Sub
 Sub Diag_AddFileInput(fldName As String, row As Int, col As Int, vmodel As String, title As String, bMultiple As Boolean)
 	dtCont.Append($"Dim ${fldName} As VueElement = vuetify.AddFileInput(Me, ${SingularClean}Cont.MatrixID(${row}, ${col}), "${fldName}", "", "${title}", "", ${bMultiple}, "", Null)"$).Append(CRLF)
 	If Visibility.ContainsKey(fldName) Then
-		dtCont.Append($"${fldName}.VShow = "${fldName}show""$).Append(CRLF)
+		dtCont.Append($"${fldName}.VShow = "${fldName}Show""$).Append(CRLF)
 	End If
 	SetProperties(fldName,vmodel)
-	dtCont.Append($"${fldName}.Loading = ":${fldName}loading""$).Append(CRLF)
-	dtCont.Append($"${fldName}.SetData("${fldName}loading", False)"$).Append(CRLF)
+	dtCont.Append($"${fldName}.Loading = ":${fldName}Loading""$).Append(CRLF)
+	dtCont.Append($"${fldName}.SetData("${fldName}Loading", False)"$).Append(CRLF)
 	dtCont.Append($"${ComponentName}.BindVueElement(${fldName})"$).Append(CRLF)
 	'to remove from adding
 	'addedFiles.Add(vmodel)
@@ -1058,15 +1060,18 @@ End Sub
 
 'prepare for execution
 Sub Prepare
+	SingularClean = BANanoShared.BeautifyName(SingularClean)
 	SingularClean = Singular.Replace(" ", "")
 	SingularClean = SingularClean.trim
+	
+	PluralClean = BANanoShared.BeautifyName(PluralClean)
 	PluralClean = Plural.Replace(" ", "")
 	PluralClean = PluralClean.trim
 	'
 	rsTB = $"rs${PluralClean}"$
 	dtName = $"dt${PluralClean}"$
 	ModalName = $"dlg${PluralClean}"$
-	ModalShow = $"${ModalName}show"$
+	ModalShow = $"${ModalName}Show"$
 End Sub
 
 'add a blob field
@@ -1393,7 +1398,7 @@ private Sub CreateDBCode
 		Case "string"
 			AddCode($"${rsTB}.SchemaAddField("${sfieldname}", ${rsTB}.DB_STRING)"$)
 		Case "double"
-			AddCode($"${rsTB}.SchemaAddField("${sfieldname}", ${rsTB}.DB_FLOAT)"$)
+			AddCode($"${rsTB}.SchemaAddField("${sfieldname}", ${rsTB}.DB_DOUBLE)"$)
 		Case "int"
 			AddCode($"${rsTB}.SchemaAddField("${sfieldname}", ${rsTB}.DB_INT)"$)
 		Case "blob"
@@ -1578,6 +1583,12 @@ private Sub CreateTableCode()
 	If DT_HasPDF Then
 		AddComment("print to pdf...")
 		AddCode($"${dtName}.AddPDF"$)
+		AddCode($"${dtName}.AddDivider"$)
+	End If
+	'
+	If DT_HasExcel Then
+		AddComment("print to excel...")
+		AddCode($"${dtName}.AddExcel"$)
 		AddCode($"${dtName}.AddDivider"$)
 	End If
 	

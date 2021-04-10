@@ -333,6 +333,7 @@ Sub Class_Globals
 	Private bClippedLeft As Boolean = False
 	Private bClippedRight As Boolean = False
 	Private extm As Map
+	public OpenItems as list
 	
 	'
 	Type VueGridRow(Rows As Int, Columns As List, _
@@ -378,6 +379,7 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	sbText.Initialize
 	bindings.Initialize
 	methods.Initialize
+	OpenItems.Initialize 
 	Steps = 0
 	HasRules = False
 	Gradients.Initialize 
@@ -5310,7 +5312,9 @@ End Sub
 'clear the items for this
 Sub ClearItems()
 	Records.Initialize
+	OpenItems.Initialize 
 	SetData(stItems, NewList)
+	SetOpenItems(NewList)
 End Sub
 
 'update the records
@@ -10684,6 +10688,7 @@ Sub AddTreeView(elID As String, vmodel As String, DataSource As String, bMultipl
 	elx.Items = DataSource
 	elx.ReturnObject = ReturnObject
 	elx.VModel = vmodel
+	elx.OpenItems.Initialize 
 	If bMultiple Then
 		Dim lst As List
 		lst.Initialize 
@@ -10705,6 +10710,7 @@ End Sub
 Sub AddTreeViewItem(parentID As String, key As String, text As String, mhref As String, mIcon As String, mDisabled As Boolean)
 	parentID = parentID.tolowercase
 	key = key.tolowercase
+	If key = "" Then Return
 	mIcon = FileIcon(mIcon)
 	'
 	Dim mitem As Map = CreateMap()
@@ -10721,10 +10727,44 @@ Sub AddTreeViewItem(parentID As String, key As String, text As String, mhref As 
 	Records.Add(mitem)
 End Sub
 
+Sub AddTreeViewItemOpen(parentID As String, key As String, text As String, mhref As String, mIcon As String, mDisabled As Boolean, mOpen As Boolean)
+	parentID = parentID.tolowercase
+	key = key.tolowercase
+	If key = "" Then Return
+	mIcon = FileIcon(mIcon)
+	'
+	Dim mitem As Map = CreateMap()
+	mitem.Put("id", key)
+	mitem.Put("name", text)
+	If mhref <> "" Then 
+		mitem.Put("href", mhref)
+	End If
+	If mIcon <> "" Then 
+		mitem.Put("icon", mIcon)
+	End If
+	mitem.Put("disabled", mDisabled)
+	mitem.Put("parentid", parentID)
+	Records.Add(mitem)
+	If mOpen Then
+		OpenItems.Add(key)
+	End If	
+End Sub
+
 Sub RefreshTreeView(VC As VueComponent)
 	'unflatten the data
 	Dim unflat As List = BANanoShared.Unflatten(Records, "children")
 	VC.SetData(stItems, unflat)
+	If OpenItems.Size > 0 Then
+		VC.SetOpenItems(mName, OpenItems)
+	End If
+End Sub
+
+Sub AddTreeViewOpen(itemKey As String)
+	itemKey = itemKey.Trim
+	If itemKey = "" Then Return
+	If OpenItems.IndexOf(itemKey) = -1 Then
+		OpenItems.Add(itemKey)
+	End If
 End Sub
 
 	
