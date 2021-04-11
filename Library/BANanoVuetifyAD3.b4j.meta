@@ -52,6 +52,6 @@ ModuleClosedNodes6=
 ModuleClosedNodes7=
 ModuleClosedNodes8=
 ModuleClosedNodes9=
-NavigationStack=BANanoMySQLE,GetMapTypes,593,0,BANanoMySQLE,GetMapValues,647,0,BANanoMySQLE,GetMapKeys,675,0,BANanoMySQLE,Insert1,729,0,BANanoMySQLE,Delete,798,0,BANanoMySQLE,Join,844,0,BANanoMySQLE,SelectWhere,902,0,BANanoMySQLE,EQOperators,1145,0,BANanoShared,JSONSetProperty,1854,0,BANanoShared,EQOperators,25,0
+NavigationStack=BANanoSQLiteE,SelectWhere1,217,0,BANanoSQLiteE,SelectWhereAscDesc,291,1,BANanoSQLiteE,SelectWhere,1020,0,BANanoSQLiteE,SelectDistinctWhere,1088,0,BANanoSQLiteE,SelectAll,1232,0,BANanoSQLiteE,SelectDistinctAll,1279,0,BANanoSQLiteE,SelectAllAscDesc,1525,1,BANanoShared,OnList,2475,0,BANanoShared,MapRemovePrefix,3053,0,BANanoShared,DataType2FieldType,3031,6
 SelectedBuild=0
 VisibleModules=7

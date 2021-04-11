@@ -140,7 +140,7 @@ Sub SelectWhere1(tblfields As List, tblWhere As Map, operators As List, AndOr As
 		Dim opr As String = operators.Get(i)
 		sb.Append($" ${opr} ?"$)
 	Next
-	If orderBy.IsInitialized Then
+	If orderBy.IsInitialized And orderBy.Size > 0 Then
 		'order by
 		Dim stro As String = JoinFields(",", orderBy)
 		If stro.Length > 0 Then
@@ -205,7 +205,7 @@ Sub SelectWhereAscDesc(tblfields As List, tblWhere As Map, operators As List, or
 		sb.Append(EscapeField(col))
 		sb.Append($" ${oper} ?"$)
 	Next
-	If orderBy.IsInitialized Then
+	If orderBy.IsInitialized And orderBy.Size > 0 Then
 		'order by
 		Dim xOrder As List
 		xOrder.Initialize
@@ -214,7 +214,7 @@ Sub SelectWhereAscDesc(tblfields As List, tblWhere As Map, operators As List, or
 		Dim obCnt As Int
 		For obCnt = 0 To obTot
 			Dim xfld As String = orderBy.Get(obCnt)
-			If AscDesc.IsInitialized Then
+			If AscDesc.IsInitialized And AscDesc.Size > 0 Then
 				'does the field exist in sort order
 				If AscDesc.IndexOf(xfld) >= 0 Then
 					xfld = EscapeField(xfld) & " DESC"
@@ -1043,7 +1043,7 @@ Sub SelectWhere(tblfields As List, tblWhere As Map, operators As List, orderBy A
 		Dim opr As String = operators.Get(i)
 		sb.Append($" ${opr} ?"$)
 	Next
-	If orderBy.IsInitialized Then
+	If orderBy.IsInitialized And orderBy.Size > 0 Then
 		'order by
 		Dim stro As String = JoinFields(",", orderBy)
 		If stro.Length > 0 Then
@@ -1102,7 +1102,7 @@ Sub SelectDistinctWhere(tblfields As List, tblWhere As Map, operators As List, o
 		sb.Append(EscapeField(col))
 		sb.Append($" ${oper} ?"$)
 	Next
-	If orderBy.IsInitialized Then
+	If orderBy.IsInitialized And orderBy.Size > 0 Then
 		'order by
 		Dim stro As String = JoinFields(",", orderBy)
 		If stro.Length > 0 Then
@@ -1186,7 +1186,7 @@ Sub SelectAll(tblfields As List, orderBy As List) As BANanoMSSQLE
 	Dim sb As StringBuilder
 	sb.Initialize
 	sb.Append($"SELECT ${selFIelds} FROM ${EscapeField(TableName)}"$)
-	If orderBy.IsInitialized Then
+	If orderBy.IsInitialized And orderBy.Size > 0 Then
 		'order by
 		Dim stro As String = JoinFields(",", orderBy)
 		If stro.Length > 0 Then
@@ -1224,7 +1224,7 @@ Sub SelectDistinctAll(tblfields As List, orderBy As List) As BANanoMSSQLE
 	Dim sb As StringBuilder
 	sb.Initialize
 	sb.Append($"SELECT DISTINCT ${selFIelds} FROM ${EscapeField(TableName)}"$)
-	If orderBy.IsInitialized Then
+	If orderBy.IsInitialized And orderBy.Size > 0 Then
 		'order by
 		Dim stro As String = JoinFields(",", orderBy)
 		If stro.Length > 0 Then
@@ -1404,7 +1404,7 @@ Sub SelectAllAscDesc(tblfields As List, orderBy As List, AscDesc As List)
 	Dim sb As StringBuilder
 	sb.Initialize
 	sb.Append($"SELECT ${selFIelds} FROM ${EscapeField(TableName)}"$)
-	If orderBy.IsInitialized Then
+	If orderBy.IsInitialized And orderBy.Size > 0 Then
 		'order by
 		Dim xOrder As List
 		xOrder.Initialize
@@ -1413,7 +1413,7 @@ Sub SelectAllAscDesc(tblfields As List, orderBy As List, AscDesc As List)
 		Dim obCnt As Int
 		For obCnt = 0 To obTot
 			Dim xfld As String = orderBy.Get(obCnt)
-			If AscDesc.IsInitialized Then
+			If AscDesc.IsInitialized And AscDesc.Size > 0 Then
 				'does the field exist in sort order
 				If AscDesc.IndexOf(xfld) >= 0 Then
 					xfld = EscapeField(xfld) & " DESC"

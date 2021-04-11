@@ -255,7 +255,7 @@ End Sub
 'convert yes/no valyes to boolean
 Sub YesNoToBoolean(xvalue As String) As Boolean
 	Select Case xvalue
-		Case "Yes","yes"
+		Case "Yes","yes", "y", "1", "YES"
 			Return True
 		Case Else
 			Return False
@@ -733,7 +733,18 @@ Sub Rand_LoremIpsum(count As Int) As String
 	Return sb.tostring
 End Sub
 
-'update a record at position
+'make the keys of the maps to lowercase
+Sub ListOfMapsKeysToLowerCase(lst As List)
+	Dim recTot As Int = lst.Size - 1
+	Dim recCnt As Int
+	For recCnt = 0 To recTot
+		Dim m As Map = lst.Get(recCnt)
+		m = MakeLowerCase(m)
+		lst.Set(recCnt, m)
+	Next
+End Sub
+
+'update a record at position using a particular property and value
 Sub ListOfMapsUpdateRecord(lst As List, k As String, v As String, m As Map)
 	'get a record map
 	Dim recPos As Int = ListOfMapsRecordPos(lst, k, v)
@@ -2150,9 +2161,9 @@ Sub MakeYesNo(m As Map, xkeys As List)
 			v = CStr(v)
 			v = v.trim
 			Select Case v
-				Case "","0", "false", "False",False,0,"no","No"
+				Case "","0", "false", "False",False,0,"no","No", "n", "NO"
 					m.Put(k, "No")
-				Case "1", "true", "True",True,1,"yes","Yes"
+				Case "1", "true", "True",True,1,"yes","Yes", "y", "YES"
 					m.Put(k, "Yes")
 			End Select
 		End If
@@ -3005,28 +3016,42 @@ End Sub
 'convert data type to field type
 Sub DataType2FieldType(fldtype As String) As String
 	fldtype = fldtype.ToUpperCase
-	If fldtype.EqualsIgnoreCase("double") Then fldtype = "DOUBLE"
 	If fldtype.EqualsIgnoreCase("integer") Then fldtype = "INT"
 	If fldtype.EqualsIgnoreCase("long") Then fldtype = "INT"
 	If fldtype.EqualsIgnoreCase("short") Then fldtype = "INT"
-	If fldtype.EqualsIgnoreCase("longtext") Then fldtype = "TEXT"
-	If fldtype.EqualsIgnoreCase("longblob") Then fldtype = "BLOB"
-	If fldtype.EqualsIgnoreCase("tinyint") Then fldtype = "INT"
 	If fldtype.EqualsIgnoreCase("datetime") Then fldtype = "TEXT"
 	If fldtype.EqualsIgnoreCase("decimal") Then fldtype = "DOUBLE"
-	
+	If fldtype.EqualsIgnoreCase("float") Then fldtype = "DOUBLE"
+	If fldtype.EqualsIgnoreCase("enumyn") Then fldtype = "TEXT"
+	If fldtype.EqualsIgnoreCase("set") Then fldtype = "TEXT"
+	If fldtype.EqualsIgnoreCase("bool") Then fldtype = "INT"
+	If fldtype.EqualsIgnoreCase("fixed") Then fldtype = "DOUBLE"
+	If fldtype.EqualsIgnoreCase("numeric") Then fldtype = "DOUBLE"
+	If fldtype.EqualsIgnoreCase("dec") Then fldtype = "DOUBLE"
+	If fldtype.EqualsIgnoreCase("boolean") Then fldtype = "INT"	
+	If fldtype.EqualsIgnoreCase("bit") Then fldtype = "INT"	
+	If fldtype.EqualsIgnoreCase("interval") Then fldtype = "TEXT"
+	'
 	If fldtype.endswith("INT") Then fldtype = "INT"
 	If fldtype.endswith("CHAR") Then fldtype = "TEXT"
 	If fldtype.endswith("TEXT") Then fldtype = "TEXT"
 	If fldtype.endswith("REAL") Then fldtype = "DOUBLE"
 	If fldtype.endswith("BIT") Then fldtype = "INT"
 	If fldtype.endswith("BLOB") Then fldtype = "BLOB"
+	If fldtype.EndsWith("BINARY") Then fldtype = "BLOB"
+	If fldtype.EndsWith("SIGNED") Then fldtype = "INT"
+	If fldtype.EndsWith("DOUBLE") Then fldtype = "DOUBLE"
+	If fldtype.EndsWith("SERIAL") Then fldtype = "INT"	
+	'
+	If fldtype.StartsWith("YEAR") Then fldtype = "TEXT"
+	If fldtype.StartsWith("DATE") Then fldtype = "TEXT"
+	If fldtype.StartsWith("TIME") Then fldtype = "TEXT"
+	If fldtype.StartsWith("YEAR") Then fldtype = "TEXT"
+	If fldtype.StartsWith("CHARACTER") Then fldtype = "TEXT"
 	'
 	fldtype = fldtype.tolowercase
 	fldtype = fldtype.replace("text", "string")
-	fldtype = fldtype.replace("float", "double")
 	fldtype = fldtype.replace("none", "string")
-	fldtype = fldtype.replace("varchar", "string")
 	Return fldtype
 End Sub
 
@@ -4033,4 +4058,19 @@ Sub MapCopy(sourceM As Map, sourceKeys As List) As Map
 		Next
 	End If
 	Return nm
+End Sub
+
+'set default values to a map if they dont exist
+Sub MapSetDefaults(orig As Map, defvalues As Map)
+	For Each k As String In defvalues.keys
+		Dim v As Object = defvalues.Get(k)
+		If orig.ContainsKey(k) Then
+			Dim o As Object = orig.Get(k)
+			If BANano.IsNull(o) Or BANano.IsUndefined(o) Then
+				orig.Put(k, v)
+			End If
+		Else
+			orig.Put(k, v)
+		End If
+	Next
 End Sub

@@ -1335,11 +1335,13 @@ End Sub
 Sub SetColumnsSwitch(colFields As List)
 	For Each col As String In colFields
 		col = col.tolowercase
-		Dim colx As DataTableColumn = columnsM.Get(col)
-		colx.ColType = COLUMN_SWITCH
-		colx.filterable = False
-		colx.sortable = False
-		columnsM.Put(col, colx)
+		If columnsM.ContainsKey(col) Then
+			Dim colx As DataTableColumn = columnsM.Get(col)
+			colx.ColType = COLUMN_SWITCH
+			colx.filterable = False
+			colx.sortable = False
+			columnsM.Put(col, colx)
+		End If
 	Next
 End Sub
 
@@ -1363,11 +1365,13 @@ End Sub
 Sub SetColumnsCheckBox(colFields As List)
 	For Each col As String In colFields
 		col = col.tolowercase
-		Dim colx As DataTableColumn = columnsM.Get(col)
-		colx.ColType = COLUMN_CHECKBOX
-		colx.filterable = False
-		colx.sortable = False
-		columnsM.Put(col, colx)
+		If columnsM.ContainsKey(col) Then
+			Dim colx As DataTableColumn = columnsM.Get(col)
+			colx.ColType = COLUMN_CHECKBOX
+			colx.filterable = False
+			colx.sortable = False
+			columnsM.Put(col, colx)
+		End If
 	Next
 End Sub
 
@@ -2105,9 +2109,11 @@ Sub ApplyFilter
 	Dim hdr As List
 	hdr.Initialize 
 	For Each strF As String In filterList
-		Dim nf As DataTableColumn = columnsM.Get(strF)
-		Dim header As Map = BuildHeader(nf)
-		hdr.Add(header)
+		If columnsM.ContainsKey(strF) Then
+			Dim nf As DataTableColumn = columnsM.Get(strF)
+			Dim header As Map = BuildHeader(nf)
+			hdr.Add(header)
+		End If
 	Next
 	VC.SetData(headers, hdr)
 End Sub

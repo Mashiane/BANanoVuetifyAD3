@@ -1151,7 +1151,7 @@ private Sub LoadCode
 	For Each strp As String In perma
 		${ComponentName}.SetData(strp, True)
 	Next
-	${dtName}.Reload(${ComponentName}.NewList)
+	${dtName}.SetRows(${ComponentName}.NewList)
 	If ${ComponentName}.GetData("${Plural.tolowercase}.see") = False Then
 		vuetify.ShowSnackBarError("You do not have permission to see these ${Plural.tolowercase}")
 		Return
@@ -1179,7 +1179,7 @@ private Sub LoadCode
 		vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 		Return
 	End Select
-	${dtName}.Reload(${rsTB}.Result)
+	${dtName}.SetRows(${rsTB}.Result)
 	'hide progress loader
 	${dtName}.UpdateLoading(False)
 End Sub"$).Append(CRLF).Append(CRLF)
@@ -1932,6 +1932,7 @@ End If
 		vuetify.ShowSnackBarError("You do not have permission to update a ${Singular.tolowercase}!")
 		Return 
 	End If
+	${ComponentName}.SetData("reload", true)
 	'get the current $refs
 	${ComponentName}.refs = vuetify.GetRefs
 	${ComponentName}.DialogUpdateTitle("${ModalName}", "Edit ${Singular}")
