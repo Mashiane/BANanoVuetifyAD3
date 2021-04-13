@@ -226,6 +226,13 @@ Sub SelectWhere1(tblfields As List, tblWhere As Map, operators As List, AndOr As
 		End If
 		Dim col As String = tblWhere.GetKeyAt(i)
 		sb.Append(col)
+		If Schema.ContainsKey(col) Then
+			Dim colType As String = Schema.Get(col)
+			Select Case colType
+			Case DB_TEXT, DB_STRING
+				sb.Append(" COLLATE NOCASE")
+			End Select
+		End If
 		Dim opr As String = operators.Get(i)
 		sb.Append($" ${opr} ?"$)
 	Next
@@ -292,6 +299,13 @@ Sub SelectWhereAscDesc(tblfields As List, tblWhere As Map, operators As List, or
 		Dim col As String = tblWhere.GetKeyAt(i)
 		Dim oper As String = operators.Get(i)
 		sb.Append(EscapeField(col))
+		If Schema.ContainsKey(col) Then
+			Dim colType As String = Schema.Get(col)
+			Select Case colType
+				Case DB_TEXT, DB_STRING
+					sb.Append(" COLLATE NOCASE")
+			End Select
+		End If
 		sb.Append($" ${oper} ?"$)
 	Next
 	If orderBy.IsInitialized And orderBy.Size > 0 Then
@@ -360,6 +374,13 @@ Sub SelectMaxWhere(fld As String, tblWhere As Map, operators As List) As BANanoS
 		Dim col As String = tblWhere.GetKeyAt(i)
 		Dim oper As String = operators.Get(i)
 		sb.Append(EscapeField(col))
+		If Schema.ContainsKey(col) Then
+			Dim colType As String = Schema.Get(col)
+			Select Case colType
+				Case DB_TEXT, DB_STRING
+					sb.Append(" COLLATE NOCASE")
+			End Select
+		End If
 		sb.Append($" ${oper} ?"$)
 	Next
 	query = sb.tostring
@@ -1034,6 +1055,13 @@ Sub SelectWhere(tblfields As List, tblWhere As Map, operators As List, orderBy A
 		Dim col As String = tblWhere.GetKeyAt(i)
 		Dim oper As String = operators.Get(i)
 		sb.Append(EscapeField(col))
+		If Schema.ContainsKey(col) Then
+			Dim colType As String = Schema.Get(col)
+			Select Case colType
+			Case DB_TEXT, DB_STRING
+				sb.Append(" COLLATE NOCASE")
+			End Select
+		End If
 		sb.Append($" ${oper} ?"$)
 	Next
 	If orderBy.IsInitialized And orderBy.Size > 0 Then
@@ -1093,6 +1121,13 @@ Sub SelectDistinctWhere(tblfields As List, tblWhere As Map, operators As List, o
 		Dim col As String = tblWhere.GetKeyAt(i)
 		Dim oper As String = operators.Get(i)
 		sb.Append(EscapeField(col))
+		If Schema.ContainsKey(col) Then
+			Dim colType As String = Schema.Get(col)
+			Select Case colType
+				Case DB_TEXT, DB_STRING
+					sb.Append(" COLLATE NOCASE")
+			End Select
+		End If
 		sb.Append($" ${oper} ?"$)
 	Next
 	If orderBy.IsInitialized And orderBy.Size > 0 Then

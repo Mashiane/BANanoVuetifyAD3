@@ -6106,7 +6106,7 @@ Sub AddListViewTemplate(numLines As Int, props As ListViewItemOptions) As VueEle
 <v-list-item-content id="${contentID}" v-if="item.${xtitle} || item.${xsubtitle} || item.${xsubtitle1}">
 <v-list-item-title id="${titleID}" v-if="item.${xtitle}" v-html="item.${xtitle}"></v-list-item-title>
 <v-list-item-subtitle id="${subtitleID}" v-if="item.${xsubtitle}" v-html="item.${xsubtitle}"></v-list-item-subtitle>
-<v-list-item-subtitle id="${subtitle1ID}" v-if="item.${xsubtitle1}" v-html="item.${xsubtitle}"></v-list-item-subtitle>
+<v-list-item-subtitle id="${subtitle1ID}" v-if="item.${xsubtitle1}" v-html="item.${xsubtitle1}"></v-list-item-subtitle>
 </v-list-item-content>
 <v-list-item-avatar id="${rightavatarID}" class="${xrightitemavatarclass}" v-if="item.${props.rightavatar} || item.${props.rightavataricon} || item.${props.rightavatartext}">
 <v-img id="${rightavatarImgID}" ${props.rightavatarattr} :src="item.${props.rightavatar}" class="${props.rightavatarclass}" v-if="item.${props.rightavatar}"></v-img>
