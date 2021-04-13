@@ -38,6 +38,11 @@ Sub Class_Globals
 End Sub
 
 
+Sub GetCount As BANanoSQLiteE
+	query = $"select count(*) as records from ${TableName}"$
+	command = "select"
+End Sub
+
 'initialize the class, a field named "id" is assumed to be an integer
 '<code>
 ''initialize the class

@@ -51,6 +51,11 @@ Sub Class_Globals
 	Public NoResult As Boolean
 End Sub
 
+
+Sub GetCount As BANanoSQLiteE
+	query = $"select count(*) as records from ${TableName}"$
+	command = "select"
+End Sub
 'set database connection settings
 Sub SetConnection(shost As String, susername As String, spassword As String) As BANanoMSSQLE
 	host = shost

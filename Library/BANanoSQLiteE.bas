@@ -908,6 +908,10 @@ Sub Delete(primaryValue As String) As BANanoSQLiteE
 	Return Me
 End Sub
 
+Sub GetCount As BANanoSQLiteE
+	query = $"select count(*) as records from ${TableName}"$
+	command = "select"
+End Sub
 
 'join list to multi value string
 private Sub JoinFields(delimiter As String, lst As List) As String

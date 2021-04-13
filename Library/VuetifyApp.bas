@@ -4851,7 +4851,11 @@ End Sub
 
 
 Sub AddHover(Module As Object, parentID As String, elid As String, props As Map) As VueElement
-	Return AddVueElement(Module, parentID, elid, "v-hover", "", "", "", props)
+	elid = elid.tolowercase
+	Dim elx As VueElement = AddVueElement(Module, parentID, elid, "v-hover", "", "", "", props)
+	Dim hoverID As String = $"${elid}hover"$
+	elx.AddAttr("v-slot", $"{ ${hoverID} }"$)
+	Return elx
 End Sub
 
 Sub AddChip(Module As Object, parentID As String, elid As String) As VueElement

@@ -4984,6 +4984,18 @@ Sub OnDblClick(args As String)
 	SetOnEvent(mCallBack, "dblclick", args)
 End Sub
 
+Sub OnMouseEnter(args As String)
+	SetOnEvent(mCallBack, "MouseEnter", args)
+End Sub
+
+Sub OnMouseOver(args As String)
+	SetOnEvent(mCallBack, "MouseOver", args)
+End Sub
+
+Sub OnMouseLeave(args As String)
+	SetOnEvent(mCallBack, "MouseLeave", args)
+End Sub
+
 Sub OnMouseMove(args As String)
 	SetOnEvent(mCallBack, "MouseMove", args)
 End Sub
@@ -9245,7 +9257,11 @@ End Sub
 
 
 Sub AddHover(elid As String, props As Map) As VueElement
-	Return AddVueElement1(elid, "v-hover", "", "", "", props)
+	elid = elid.tolowercase
+	Dim elx As VueElement = AddVueElement1(elid, "v-hover", "", "", "", props)
+	Dim hoverID As String = $"${elid}hover"$
+	elx.AddAttr("v-slot", $"{ ${hoverID} }"$)
+	Return elx
 End Sub
 
 
