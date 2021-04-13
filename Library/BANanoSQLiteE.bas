@@ -107,6 +107,32 @@ Sub ColumnNames As BANanoSQLiteE
 	Return Me
 End Sub
 
+
+Sub DescribeTable As BANanoSQLiteE
+	query = $"PRAGMA table_info('${TableName}')"$
+	command = "select"
+	Return Me
+End Sub
+
+Sub IndexList As BANanoSQLiteE
+	query = $"PRAGMA index_list('${TableName}')"$
+	command = "select"
+	Return Me
+End Sub
+
+Sub IndexInfo(idxName As String) As BANanoSQLiteE
+	query = $"PRAGMA index_info('${idxName}')"$
+	command = "select"
+	Return Me
+End Sub
+
+
+Sub ForeignKeyList As BANanoSQLiteE
+	query = $"PRAGMA foreign_key_list('${TableName}')"$
+	command = "select"
+	Return Me
+End Sub
+
 'get the table names
 '<code>
 ''table names
@@ -141,26 +167,8 @@ End Sub
 'End Select
 '</code>
 Sub GetTableNames As BANanoSQLiteE
-	query = $"select table_name from information_schema.tables where table_schema = '${DBase}' order by table_name"$
-	command = "select"
-	Return Me
-End Sub
-
-'get table structure
-'<code>
-''describe table
-'dbConnect.DescribeTable
-'dbConnect.JSON = BANano.CallInlinePHPWait(dbConnect.MethodName, dbConnect.Build)
-'dbConnect.FromJSON
-'Select Case dbConnect.OK
-'Case False
-'Dim strError As String = dbConnect.Error
-'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
-'End Select
-'</code>
-Sub DescribeTable As BANanoSQLiteE
-	query = $"describe ${EscapeField(TableName)}"$
+	'get the last part of the database
+	query = "SELECT name FROM sqlite_master WHERE type='table' AND name Not LIKE 'sqlite_%' ORDER BY name"
 	command = "select"
 	Return Me
 End Sub

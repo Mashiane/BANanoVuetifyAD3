@@ -4833,6 +4833,7 @@ Sub AddList(Module As Object, parentID As String, elid As String, bDense As Bool
 	vlist.Bind("flat", bFlat)
 	vlist.Bind("dense", bDense)
 	vlist.NewListViewItemOptions
+	vlist.SetOpenItems(NewList)
 	Return vlist
 End Sub
 
@@ -4981,6 +4982,7 @@ Sub AddRadioGroup(Module As Object, parentID As String, elID As String, vmodel A
 	vradiogroup.AddAttr(":column", Not(bRow))
 	vradiogroup.VModel = vmodel
 	vradiogroup.AssignProps(radiogroupprops)
+	'
 	Dim vradio As VueElement
 	vradio.Initialize(Module, radioID, radioID)
 	vradio.VFor = $"item in ${sourceTable}"$
@@ -5219,4 +5221,22 @@ End Sub
 Sub SetOpenItems(elID As String, lst As List)
 	Dim ai As String = $"${elID}open"$
 	SetData(ai, lst)
+End Sub
+
+'change the loading status of an element
+Sub SetLoading(elID As String, b As Boolean)
+	elID = elID.ToLowerCase
+	Dim loadid As String = $"${elID}loading"$
+	SetData(loadid, b)
+End Sub
+
+'click a reference
+Sub ClickFile(refID As String)
+	refID = refID.tolowercase
+	Dim fileRefs As BANanoObject = refs.GetField(refID)
+	'get refs
+	Dim xref As String = "$refs"
+	Dim fr As BANanoObject = fileRefs.GetField(xref)
+	Dim input As BANanoObject = fr.GetField("input")
+	input.RunMethod("click", Null)
 End Sub

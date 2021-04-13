@@ -3016,6 +3016,11 @@ End Sub
 'convert data type to field type
 Sub DataType2FieldType(fldtype As String) As String
 	fldtype = fldtype.ToUpperCase
+	If fldtype.Endswith(" UNSIGNED") Then
+    	fldtype = fldtype.replace(" UNSIGNED", "")
+		fldtype = fldtype.trim
+	End If		
+					
 	If fldtype.EqualsIgnoreCase("integer") Then fldtype = "INT"
 	If fldtype.EqualsIgnoreCase("long") Then fldtype = "INT"
 	If fldtype.EqualsIgnoreCase("short") Then fldtype = "INT"
@@ -3029,14 +3034,14 @@ Sub DataType2FieldType(fldtype As String) As String
 	If fldtype.EqualsIgnoreCase("numeric") Then fldtype = "DOUBLE"
 	If fldtype.EqualsIgnoreCase("dec") Then fldtype = "DOUBLE"
 	If fldtype.EqualsIgnoreCase("boolean") Then fldtype = "INT"	
-	If fldtype.EqualsIgnoreCase("bit") Then fldtype = "INT"	
+	If fldtype.EqualsIgnoreCase("bit") Then fldtype = "BLOB"	
 	If fldtype.EqualsIgnoreCase("interval") Then fldtype = "TEXT"
 	'
 	If fldtype.endswith("INT") Then fldtype = "INT"
 	If fldtype.endswith("CHAR") Then fldtype = "TEXT"
 	If fldtype.endswith("TEXT") Then fldtype = "TEXT"
 	If fldtype.endswith("REAL") Then fldtype = "DOUBLE"
-	If fldtype.endswith("BIT") Then fldtype = "INT"
+	If fldtype.endswith("BIT") Then fldtype = "BLOB"
 	If fldtype.endswith("BLOB") Then fldtype = "BLOB"
 	If fldtype.EndsWith("BINARY") Then fldtype = "BLOB"
 	If fldtype.EndsWith("SIGNED") Then fldtype = "INT"

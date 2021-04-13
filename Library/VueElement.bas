@@ -9221,12 +9221,14 @@ Sub AddList(elid As String, bDense As Boolean, bFlat As Boolean, bRounded As Boo
 	vlist.Bind("flat", bFlat)
 	vlist.Bind("dense", bDense)
 	vlist.NewListViewItemOptions
+	vlist.SetOpenItems(NewList)
 	Return vlist
 End Sub
 
 Sub AddList1(elID As String) As VueElement
 	Dim vlist As VueElement = AddVueElement1(elID, "v-list", "", "", "", Null)
 	vlist.NewListViewItemOptions
+	vlist.SetOpenItems(NewList)
 	Return vlist
 End Sub
 
