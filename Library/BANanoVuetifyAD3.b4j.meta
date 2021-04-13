@@ -52,6 +52,6 @@ ModuleClosedNodes6=
 ModuleClosedNodes7=
 ModuleClosedNodes8=
 ModuleClosedNodes9=
-NavigationStack=BANanoSQLiteE,Class_Globals,33,4,BANanoSQLiteE,Build,1304,6,BANanoMySQLE,GetCount,48,0,BANanoSQLiteE,Initialize,432,1,BANanoSQLiteE,NewRecord,442,0,BANanoSQLiteE,SelectWhere1,222,6,BANanoSQLiteE,SelectMaxWhere,363,0,BANanoSQLiteE,SelectWhere,1044,0,BANanoSQLiteE,SelectDistinctWhere,1110,0,BANanoSQLiteE,SelectWhereAscDesc,314,0,Main,Process_Globals,9,0
+NavigationStack=BANanoSQLiteE,SelectMaxWhere,363,0,BANanoSQLiteE,SelectWhere,1044,0,BANanoSQLiteE,SelectDistinctWhere,1110,0,BANanoSQLiteE,SelectWhereAscDesc,314,0,Main,Process_Globals,8,0,VueElement,AddColumns3x4,4529,0,VueElement,AddTransition,9643,0,VueElement,AddVCol,9655,0,VueElement,AddApp,9648,0,VueElement,AddVRow,9653,0
 SelectedBuild=0
 VisibleModules=6,11,16,12,8,7,1,5,10

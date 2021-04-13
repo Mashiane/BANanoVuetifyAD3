@@ -9653,6 +9653,17 @@ Sub AddApp(elID As String) As VueElement
 	Return elx
 End Sub
 
+Sub AddVRow(elID As String) As VueElement
+	Dim elx As VueElement = AddVueElement1(elID, "v-row", "", "", "", Null)
+	Return elx
+End Sub
+
+Sub AddVCol(elID As String) As VueElement
+	Dim elx As VueElement = AddVueElement1(elID, "v-col", "", "", "", Null)
+	Return elx
+End Sub
+
+
 Sub AddAppProgress(color As String) As VueElement
 	Dim appprogress As String = $"${mName}progress"$
 	Dim vmodel As String = $"${mName}progressvalue"$
