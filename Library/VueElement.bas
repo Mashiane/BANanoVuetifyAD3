@@ -2641,6 +2641,14 @@ public Sub setInputValue(varValue As String)
 	AddAttr("input-value", varValue)
 End Sub
 
+public Sub setInputValueSync(varValue As Boolean)
+	AddAttr(":input-value.sync", varValue)
+End Sub
+
+public Sub setShift(varValue As Boolean)
+	AddAttr(":shift", varValue)
+End Sub
+
 public Sub getValue() As String
 	Return stValue
 End Sub
@@ -2668,6 +2676,10 @@ End Sub
 
 public Sub getVText() As String
 	Return stVText
+End Sub
+
+public Sub AddAttrBackgroundColor(varBackgroundColor As String)
+	AddAttr("background-color", varBackgroundColor)
 End Sub
 
 public Sub setBackgroundColorAttr(varBackgroundColor As String)
@@ -8724,6 +8736,7 @@ Sub SetComputed(k As String, Module As Object, methodName As String, args As Lis
 	If SubExists(Module, methodName) Then
 		Dim cb As BANanoObject = BANano.CallBack(Module, methodName, args)
 		computed.Put(k, cb.Result)
+		methods.Put(methodName, cb)
 	End If
 End Sub
 
@@ -9652,6 +9665,46 @@ Sub AddApp(elID As String) As VueElement
 	Dim elx As VueElement = AddVueElement1(elID, "v-app", "", "", "", Null)
 	Return elx
 End Sub
+
+Sub AddBottomNavigation(elID As String, vmodel As String, color As String, grow As Boolean, shift As Boolean) As VueElement
+	Dim elx As VueElement = AddVueElement1(elID, "v-bottom-navigation", vmodel, "", color, Null)
+	elx.setdata(vmodel, "")
+	If grow Then
+		elx.Grow = grow
+	End If
+	If shift Then
+		elx.Shift = shift
+	End If
+	Return elx
+End Sub
+
+Sub AddBottomNavigationItem(elID As String, value As String, caption As String, iconName As String) As VueElement
+	Dim parentID As String = CleanID(mName)
+	elID = elID.tolowercase
+	
+	Dim sicon As String = $"${elID}icon"$
+	Dim sspan As String = $"${elID}span"$
+	
+	Dim sTemplate As String = $"<v-btn id="${elID}">
+      <span id="${sspan}">${caption}</span>
+      <v-icon id="${sicon}">${iconName}</v-icon>
+    </v-btn>"$
+	
+	GetVueElement(parentID).Append(sTemplate)
+	
+	Dim btn As VueElement = GetVueElement(elID)
+	If value <> "" Then
+		btn.AddAttr("value", value)
+	End If
+	Dim icon As VueElement = GetVueElement(sicon)
+	Dim span As VueElement = GetVueElement(sspan)
+	
+	btn.BindVueElement(icon)
+	btn.BindVueElement(span)
+	btn.BindAllEvents
+	Return btn
+End Sub
+
 
 Sub AddVRow(elID As String) As VueElement
 	Dim elx As VueElement = AddVueElement1(elID, "v-row", "", "", "", Null)
@@ -10706,6 +10759,14 @@ End Sub
 
 Sub setOpenAll(b As Boolean)
 	AddAttr(":open-all", b)
+End Sub
+
+Sub setHideOnScroll(b As Boolean)
+	AddAttr(":hide-on-scroll", b)
+End Sub
+
+Sub setHorizontal(b As Boolean)
+	AddAttr(":horizontal", b)
 End Sub
 
 'add a treeview

@@ -1825,7 +1825,7 @@ Sub SetComputed(k As String, methodName As String, args As List)
 	methodName = methodName.ToLowerCase
 	If SubExists(EventHandler, methodName) Then
 		Dim cb As BANanoObject = BANano.CallBack(EventHandler, methodName, args)
-		computed.Put(k, cb.Result)
+		computed.Put(k, cb.RESULT)
 		methods.Put(methodName, cb)
 	End If
 End Sub

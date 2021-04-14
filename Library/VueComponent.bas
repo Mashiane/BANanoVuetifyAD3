@@ -1004,6 +1004,7 @@ Sub SetComputed(k As String, Module As Object, methodName As String, args As Lis
 	If SubExists(Module, methodName) Then
 		Dim cb As BANanoObject = BANano.CallBack(Module, methodName, args)
 		computed.Put(k, cb.Result)
+		methods.Put(methodName, cb)
 	End If
 End Sub
 

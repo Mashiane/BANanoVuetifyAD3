@@ -52,6 +52,6 @@ ModuleClosedNodes6=
 ModuleClosedNodes7=
 ModuleClosedNodes8=
 ModuleClosedNodes9=
-NavigationStack=BANanoSQLiteE,SelectMaxWhere,363,0,BANanoSQLiteE,SelectWhere,1044,0,BANanoSQLiteE,SelectDistinctWhere,1110,0,BANanoSQLiteE,SelectWhereAscDesc,314,0,Main,Process_Globals,8,0,VueElement,AddColumns3x4,4529,0,VueElement,AddTransition,9643,0,VueElement,AddVCol,9655,0,VueElement,AddApp,9648,0,VueElement,AddVRow,9653,0
+NavigationStack=VueElement,Initialize,380,0,VueComponent,Component,924,0,VuetifyApp,Serve,2015,0,VuetifyApp,SetStore,1645,0,VuetifyApp,SetWatch,1826,0,VueComponent,SetWatch,1014,0,VueComponent,SetComputed,999,1,VuetifyApp,SetComputed,1821,1,VueElement,SetComputed,8731,0,VueElement,AddTimePickerInput,8717,0
 SelectedBuild=0
 VisibleModules=6,11,16,12,8,7,1,5,10
