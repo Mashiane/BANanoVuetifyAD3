@@ -774,6 +774,12 @@ Sub GetTabIcon() As VueElement
 	Return GetVueElement(tabID)
 End Sub
 
+Sub GetSheet() As VueElement
+	Dim tabID As String = $"${mName}sheet"$
+	Return GetVueElement(tabID)
+End Sub
+
+
 '<code>
 'Dim panel1 As VueElement = Vuetify.AddExpansionPanel("panel1", "Panel 1")
 'vuetify.BindVueElement(panel1)
@@ -1046,6 +1052,9 @@ Sub setPopOut(b As Boolean)
 	AddAttr(":popout",b)
 End Sub
 
+Sub setNoClickAnimation(b As Boolean)
+	AddAttr("no-click-animation",b)
+End Sub
 
 Sub setTile(b As Boolean)
 	AddAttr(":tile",b)
@@ -3925,6 +3934,9 @@ public Sub setReturnValue(rv As Object)
 	SetAttr("return-value", rv)
 End Sub
 
+public Sub setRetainFocus(rv As Object)
+	SetAttr("retain-focus", rv)
+End Sub
 
 'get outlined
 public Sub getOutlined() As Boolean
@@ -6212,10 +6224,6 @@ Sub GetListItemAvatar As VueElement
 	Return GetVueElement($"${mName}listitemavatar"$)
 End Sub
 
-Sub GetSheet As VueElement
-	Return GetVueElement($"${mName}sheet"$)
-End Sub
-
 Sub GetListItemContent As VueElement
 	Return GetVueElement($"${mName}listitemcontent"$)
 End Sub
@@ -8100,6 +8108,11 @@ Sub AddButton(elID As String, sLabel As String, eColor As String, bOutlined As B
 	Return mbutton
 End Sub
 
+Sub AddVirtualScroller(elID As String) As VueElement
+	Dim elx As VueElement = AddVueElement1(elID, "v-virtual-scroll", "", "", "", Null)
+	Return elx
+End Sub
+
 Sub AddSubHeader(elID As String, Caption As String) As VueElement
 	Dim elx As VueElement = AddVueElement1(elID, "v-subheader", "", Caption, "", Null)
 	Return elx
@@ -9678,6 +9691,15 @@ Sub AddBottomNavigation(elID As String, vmodel As String, color As String, grow 
 	Return elx
 End Sub
 
+Sub AddBottomSheet(elID As String, vmodel As String, height As String, color As String) As VueElement
+	Dim elx As VueElement = AddVueElement1(elID, "v-bottom-sheet", vmodel, "", "", Null)
+	elx.setdata(vmodel, False)
+	If height <> "" Then
+		elx.AddSheet($"${elID}sheet"$, height, color, Null)
+	End If
+	Return elx
+End Sub
+
 Sub AddBottomNavigationItem(elID As String, value As String, caption As String, iconName As String) As VueElement
 	Dim parentID As String = CleanID(mName)
 	elID = elID.tolowercase
@@ -10031,6 +10053,14 @@ Sub AddSheet(elID As String, Height As String, Color As String, props As Map) As
 	Return elx
 End Sub
 
+Sub AddSheet1(elID As String, Height As String, Width As String, Color As String) As VueElement
+	Dim elx As VueElement = AddVueElement1(elID, "v-sheet", "", "", Color, Null)
+	elx.Height = Height
+	elx.Width = Width
+	Return elx
+End Sub
+
+
 Sub AddResponsive(elID As String) As VueElement
 	Dim elx As VueElement = AddVueElement1(elID, "v-responsive", "", "", "", Null)
 	Return elx
@@ -10263,7 +10293,7 @@ Sub setShrinkOnScroll(v As Boolean)
 End Sub
 
 'overflow-y-auto
-Sub setOverFlowYAuto(b as Boolean)
+Sub setOverFlowYAuto(b As Boolean)
 	AddClass("overflow-y-auto")
 End Sub
 
@@ -10739,6 +10769,14 @@ End Sub
 
 Sub setItemChildren(ic As String)
 	AddAttr("item-children", ic)
+End Sub
+
+Sub setBench(bench As String)
+	AddAttr("bench", bench)
+End Sub
+
+Sub setItemHeight(ih As String)
+	AddAttr("item-height", ih)
 End Sub
 
 Sub setItemDisabled(id As String)
