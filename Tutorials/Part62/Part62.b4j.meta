@@ -136,6 +136,6 @@ ModuleClosedNodes6=
 ModuleClosedNodes7=
 ModuleClosedNodes8=
 ModuleClosedNodes9=
-NavigationStack=ViewBottomNavigation,BN1,34,6,ViewBottomNavigation,BN2,42,1,ViewBottomNavigation,BN3,29,2,ViewBottomNavigation,Process_Globals,5,0,ViewBottomNavigation,BN4,80,5,ViewBottomNavigation,Initialize,27,6,ViewBottomNavigation,BN5,58,6,ViewBottomNavigation,getcolor,46,6,Visual Designer,vbaseline.bjl,-100,3,pgIndex,Init,35,6
+NavigationStack=ViewBottomNavigation,BN2,42,1,Visual Designer,vbaseline.bjl,-100,3,pgIndex,Init,35,6,ViewBottomNavigation,Process_Globals,4,0,ViewBottomNavigation,Initialize,28,6,ViewBottomNavigation,BN1,129,6,ViewBottomNavigation,getcolor,35,6,ViewBottomNavigation,BN5,70,6,ViewBottomNavigation,BN4,77,5,ViewBottomNavigation,BN3,94,2
 SelectedBuild=0
 VisibleModules=8,1

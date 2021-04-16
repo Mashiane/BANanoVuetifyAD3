@@ -30,7 +30,8 @@ Sub Initialize
 	BN3
 	BN4
 	BN5
-	
+	'
+	'watch when the selected color changes
 	bottomnav.SetWatch("bnav5select", True, True, Me, "getcolor", Null)
 	'add the component as a router
 	vuetify.AddRoute(bottomnav)
