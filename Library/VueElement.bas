@@ -9631,6 +9631,39 @@ Sub AddAppBar(elID As String) As VueElement
 	Return elx
 End Sub
 
+Sub AddSpeedDial(elID As String, mainIcon As String, closeIcon As String, vmodel As String, mainColor As String) As VueElement
+	Dim parentID As String = CleanID(mName)
+	'
+	elID = elID.tolowercase
+	Dim sTemplate As String = $"<v-speed-dial id="${elID}" v-model="${vmodel}">
+      <v-template v-slot:activator>
+        <v-btn id="${elID}mainbutton" v-model="${vmodel}" color="${mainColor}" dark fab>
+          <v-icon id="${elID}closeicon" v-if="${vmodel}">${closeIcon}</v-icon>
+          <v-icon id="${elID}mainicon" v-else>${mainIcon}</v-icon>
+        </v-btn>
+      </c-template>
+	  </v-speed-dial>"$
+	GetVueElement(parentID).Append(sTemplate)
+	'
+	Dim elx As VueElement
+	elx.Initialize(mCallBack, elID, elID)
+	elx.SetData(vmodel, False)
+	Return elx
+End Sub
+
+Sub AddSpeedDialItem(elID As String, elIcon As String, elColor As String) As VueElement
+	Dim parentID As String = CleanID(mName)
+	elID = elID.tolowercase
+	Dim sTemplate As String = $"<v-btn id="${elID}" fab dark small color="${elColor}"><v-icon>${elIcon}</v-icon></v-btn>"$
+	GetVueElement(parentID).Append(sTemplate)
+	'
+	Dim elx As VueElement
+	elx.Initialize(mCallBack, elID, elID)
+	elx.BindAllEvents
+	Return elx
+End Sub
+
+
 Sub AddVJSF(elID As String, jschema As String, jmodel As String, joptions As String) As VueElement
 	Dim elx As VueElement = AddVueElement1(elID, "v-jsf", jmodel, "", "", Null)
 	elx.SetAttr(":schema", jschema)
