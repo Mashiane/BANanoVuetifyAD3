@@ -21,48 +21,50 @@ File25=happyface.png
 File26=html2canvas.js
 File27=jspdf.min.js
 File28=jspdf.plugin.autotable.min.js
-File29=lodash.min.js
+File29=jszip.min.js
 File3=avatar.png
-File30=materialdesignicons.min.css
-File31=materialdesignicons-webfont.eot
-File32=materialdesignicons-webfont.ttf
-File33=materialdesignicons-webfont.woff
-File34=materialdesignicons-webfont.woff2
-File35=neutralface.png
-File36=numeral.min.js
-File37=orange.png
-File38=qrcode.min.js
-File39=red.png
+File30=lodash.min.js
+File31=materialdesignicons.min.css
+File32=materialdesignicons-webfont.eot
+File33=materialdesignicons-webfont.ttf
+File34=materialdesignicons-webfont.woff
+File35=materialdesignicons-webfont.woff2
+File36=neutralface.png
+File37=numeral.min.js
+File38=orange.png
+File39=oxml.min.js
 File4=axios.min.js
-File40=roboto.min.css
-File41=Roboto100.ttf
-File42=Roboto300.ttf
-File43=Roboto400.ttf
-File44=Roboto500.ttf
-File45=Roboto700.ttf
-File46=Roboto900.ttf
-File47=sadface.png
-File48=themify.eot
-File49=themify.svg
+File40=qrcode.min.js
+File41=red.png
+File42=roboto.min.css
+File43=Roboto100.ttf
+File44=Roboto300.ttf
+File45=Roboto400.ttf
+File46=Roboto500.ttf
+File47=Roboto700.ttf
+File48=Roboto900.ttf
+File49=sadface.png
 File5=dayjs.min.js
-File50=themify.ttf
-File51=themify.woff
-File52=themify-icons.css
-File53=third-party.js
-File54=upload.php
-File55=v-blur.min.js
-File56=vjsf.css
-File57=vjsf.js
-File58=vue.min.js
-File59=vue-form-wizard.js
+File50=themify.eot
+File51=themify.svg
+File52=themify.ttf
+File53=themify.woff
+File54=themify-icons.css
+File55=third-party.js
+File56=upload.php
+File57=v-blur.min.js
+File58=vjsf.css
+File59=vjsf.js
 File6=fa-brands-400.eot
-File60=vue-form-wizard.min.css
-File61=vue-google-charts.browser.js
-File62=vue-google-maps.js
-File63=vue-router.min.js
-File64=vuetify.min.css
-File65=vuetify.min.js
-File66=vuetify-form-base.js
+File60=vue.min.js
+File61=vue-form-wizard.js
+File62=vue-form-wizard.min.css
+File63=vue-google-charts.browser.js
+File64=vue-google-maps.js
+File65=vue-router.min.js
+File66=vuetify.min.css
+File67=vuetify.min.js
+File68=xlsx.full.min.js
 File7=fa-brands-400.svg
 File8=fa-brands-400.ttf
 File9=fa-brands-400.woff
@@ -129,6 +131,8 @@ FileGroup63=Default Group
 FileGroup64=Default Group
 FileGroup65=Default Group
 FileGroup66=Default Group
+FileGroup67=Default Group
+FileGroup68=Default Group
 FileGroup7=Default Group
 FileGroup8=Default Group
 FileGroup9=Default Group
@@ -137,37 +141,41 @@ Library1=banano
 Library2=jcore
 Library3=jfx
 Module1=BANanoALASQLE
-Module10=MySQLCRUD
-Module11=VueComponent
-Module12=VueElement
-Module13=VueGCharts
-Module14=VueGMap
-Module15=VueTable
-Module16=VuetifyApp
-Module17=VueVJSF
+Module10=BVAD3ListItem
+Module11=MySQLCRUD
+Module12=VueComponent
+Module13=VueElement
+Module14=VueGCharts
+Module15=VueGMap
+Module16=VueSocial
+Module17=VueTable
+Module18=VuetifyApp
+Module19=VueVJSF
 Module2=BANanoAxios
 Module3=BANanoJSPDF
 Module4=BANanoJSPDFTable
 Module5=BANanoMSSQLE
 Module6=BANanoMySQLE
-Module7=|absolute|C:\CodingWorld\B4XShared\B4J\BANanoShared
-Module8=BANanoSQLiteE
-Module9=BVAD3ListItem
-NumberOfFiles=66
+Module7=BANanoOXML
+Module8=|absolute|C:\CodingWorld\B4XShared\B4J\BANanoShared
+Module9=BANanoSQLiteE
+NumberOfFiles=68
 NumberOfLibraries=3
-NumberOfModules=17
+NumberOfModules=19
 Version=8.9
 @EndOfDesignText@
 #Region Project Attributes 
 	#MainFormWidth: 600
 	#MainFormHeight: 600 
 	#LibraryAuthor: Anele Mbanga (Mashiane)
+	#IgnoreWarnings:15
+	#IgnoreWarnings:12
 #End Region
 
 
 Sub Process_Globals
 	Private BANano As BANano 'ignore
-	Public Version As String = "3.103"
+	Public Version As String = "4.00"
 	Public AppName As String = "BANanoVuetifyAD3"
 End Sub
 
@@ -198,9 +206,10 @@ Sub AppStart (Form1 As Form, Args() As String)
 	BANano.Header.AddJavascriptFile("dayjs.min.js")
 	BANano.Header.AddJavascriptFile("numeral.min.js")
 	BANano.Header.AddJavascriptFile("lodash.min.js")
+	'BANano.Header.AddJavascriptFile("vue-focus-loop.min.js")
+	'BANano.Header.AddJavascriptFile("vue-social-chat.min.js")
 	
 	BANano.Header.AddJavascriptFile("vue-google-maps.js")
-	BANano.Header.AddJavascriptfile("fileSaver.min.js")
 	BANano.Header.AddCSSFile("fontawesome.css")
 	'BANano.Header.AddJavascriptFile("Sortable.min.js")
 	'BANano.Header.AddJavascriptFile("vuedraggable.umd.min.js")
@@ -219,10 +228,13 @@ Sub AppStart (Form1 As Form, Args() As String)
 	BANano.Header.AddJavascriptFile("vjsf.js")
 	BANano.Header.AddCSSFile("vjsf.css")
 	BANano.Header.AddJavascriptFile("third-party.js")
-	BANano.Header.AddJavascriptFile("vuetify-form-base.js")
+	'BANano.Header.AddJavascriptFile("vuetify-form-base.js")
 	'BANano.Header.AddJavascriptFile("v-mask.min.js")
 	'BANano.Header.AddJavaScriptfile("VueTheMask.umd.js")
-	
+	BANano.Header.AddJavascriptFile("FileSaver.min.js")
+	BANano.Header.AddJavascriptFile("jszip.min.js")
+	BANano.Header.AddJavascriptFile("oxml.min.js")
+	BANano.Header.AddJavascriptFile("xlsx.full.min.js")
 	' start the build
 	#if release
 		BANano.BuildAsB4Xlib(Version)

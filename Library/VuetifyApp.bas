@@ -34,6 +34,7 @@ Sub Class_Globals
 	Public GoogleMapKey As String
 	Public Body As BANanoElement
 	Public Vue As BANanoObject
+	public Theme as bananoobject
 	'
 	Public const BORDER_DEFAULT As String = ""
 	Public const BORDER_DASHED As String = "dashed"
@@ -1987,10 +1988,10 @@ Sub Serve
 	Dim mlang As Map = CreateMap()
 	mlang.Put("current", lang)
 	'
-	Dim theme As Map = CreateMap()
-	theme.Put("dark", Dark)
+	Dim mTheme As Map = CreateMap()
+	mTheme.Put("dark", Dark)
 	VuetifyOptions.Put("rtl", RTL)
-	VuetifyOptions.Put("theme", theme)
+	VuetifyOptions.Put("theme", mTheme)
 	VuetifyOptions.Put("lang", mlang)
 	VuetifyOptions.Put("breakpoint", CreateMap("scrollBarWidth": 6))
 	
@@ -2041,8 +2042,13 @@ Sub Serve
 	Dim rKey As String = "$refs"
 	refs = Vue.GetField(rKey)
 	RouterView = refs.GetField(RouterViewName)
+	Dim svuetify As String = "$vuetify"
+	Vuetify = Vue.GetField(svuetify)
 End Sub
 
+Sub SetDarkTheme(b As Boolean)
+	Vuetify.GetField("theme").SetField("isDark", b)
+End Sub
 
 'reset a form
 Sub FormReset(formName As String)
@@ -2445,6 +2451,7 @@ Sub BindVueTable(el As VueTable)
 	Next
 End Sub
 
+
 Sub BindVueGMap(el As VueGMap)
 	Dim mbindings As Map = el.bindings
 	Dim mmethods As Map = el.methods
@@ -2593,7 +2600,11 @@ Sub AddDataTable(Module As Object, parentID As String, elID As String) As VueTab
 End Sub
 
 Sub AddContainer(Module As Object, parentID As String, elID As String, bFluid As Boolean) As VueElement
-	Return AddVueElement(Module, parentID, elID, "v-container", "", "", "", CreateMap(":fluid":bFluid))
+	Dim elx As VueElement = AddVueElement(Module, parentID, elID, "v-container", "", "", "", Null)
+	If bFluid Then
+		elx.Fluid = bFluid
+	End If
+	Return elx
 End Sub
 
 Sub AddSheet(Module As Object, parentID As String, elID As String, Height As String, Color As String, props As Map) As VueElement
@@ -4691,24 +4702,27 @@ Sub AddSwitch(Module As Object, parentID As String, sid As String, vmodel As Str
 	parentID = CleanID(parentID)
 	sid = sid.ToLowerCase
 	BANano.GetElement(parentID).Append($"<v-switch id="${sid}"></v-switch>"$)
+	'
 	Dim vswitch As VueElement
 	vswitch.Initialize(Module, sid, sid)
 	vswitch.VModel = vmodel
-	vswitch.SetData(vmodel, "")
 	vswitch.label = slabel
 	If BANano.IsNull(truevalue) = False Or BANano.IsUndefined(truevalue) = False Then 
-		vswitch.Value = truevalue
 		vswitch.AddAttr("true-value", truevalue)
 	End If
 	If BANano.IsNull(falsevalue) = False Or BANano.IsUndefined(truevalue) = False Then 
 		vswitch.AddAttr("false-value", falsevalue)
 	End If
-	vswitch.AddAttr(":inset", bInset)
-	If color <> "" Then vswitch.Color = color
+	If bInset Then
+		vswitch.AddAttr(":inset", bInset)
+	End If
+	If color <> "" Then 
+		vswitch.Color = color
+	End If
 	vswitch.AssignProps(props)
 	vswitch.BindAllEvents
 	If vmodel <> "" Then
-		vswitch.SetData(vmodel, truevalue)
+		vswitch.SetData(vmodel, falsevalue)
 	End If
 	Return vswitch
 End Sub
@@ -5010,24 +5024,23 @@ Sub AddRadioGroup(Module As Object, parentID As String, elID As String, vmodel A
 End Sub
 
 Sub AddFab(Module As Object, parentID As String, elID As String, eIcon As String, eColor As String, bOutlined As Boolean, btnprops As Map, iconprops As Map) As VueElement
-	Dim np As Map = CreateMap()
-	np.Put(":fab", True)
-	np.Put(":outlined", bOutlined)
-	If BANano.IsNull(btnprops) = False Then
-		For Each k As String In btnprops.Keys
-			Dim v As String = btnprops.Get(k)
-			np.Put(k, v)
-		Next
-	End If
-	Dim ip As Map = CreateMap()
-	ip.Put(":fab", True)
-	If BANano.IsNull(iconprops) = False Then
-		For Each k As String In iconprops.Keys
-			Dim v As String = iconprops.Get(k)
-			ip.Put(k, v)
-		Next
-	End If
-	Dim btn As VueElement = AddButtonWithIcon(Module, parentID, elID, eIcon, eColor, np, ip)
+	elID = elID.ToLowerCase
+	Dim siconright As String = $"${elID}icon"$
+	
+	Dim vbtnright As VueElement = AddVueElement(Module, parentID, elID, "v-btn", "", "", eColor, btnprops)
+	vbtnright.Outlined = bOutlined
+    vbtnright.Fab = True
+	vbtnright.Dark = True
+	'
+	Dim viconright As VueElement = AddVueElement(Module, elID, siconright, "v-icon", "", eIcon, "", iconprops)
+	'
+	vbtnright.BindAllEvents
+	vbtnright.BindVueElement(viconright)
+	Return vbtnright
+End Sub
+
+Sub AddFab1(Module As Object, parentID As String, elID As String, eIcon As String, eColor As String) As VueElement
+	Dim btn As VueElement = AddFab(Module, parentID, elID, eIcon, eColor, False, Null, Null)
 	Return btn
 End Sub
 
@@ -5179,12 +5192,25 @@ End Sub
 
 Sub UseVJSF
 	If components.ContainsKey("v-jsf") = False Then
-		Dim boVJsf As BANanoObject
-		boVJsf.Initialize("VJsf")
-		Dim boVJsf As BANanoObject = boVJsf.GetField("default")
+		Dim VJsf As BANanoObject
+		VJsf.Initialize("VJsf")
+		Dim boVJsf As BANanoObject = VJsf.GetField("default")
 		components.Put("v-jsf", boVJsf)
 	End If	
 End Sub	
+
+Sub UseVueSocialChat
+	If components.ContainsKey("vue-social-chat") = False Then
+		Dim VueSocialChat As BANanoObject
+		VueSocialChat.Initialize("VueSocialChat")
+		components.Put("vue-social-chat", VueSocialChat)
+	End If
+	If components.ContainsKey("FocusLoop") = False Then
+		Dim VueFocusLoop As BANanoObject
+		VueFocusLoop.Initialize("VueFocusLoop")
+		components.Put("FocusLoop", VueFocusLoop)
+	End If
+End Sub
 
 Sub UseVFormBase
 	If components.ContainsKey("v-form-base") = False Then

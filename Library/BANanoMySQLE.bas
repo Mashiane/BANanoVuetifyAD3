@@ -51,11 +51,13 @@ Sub Class_Globals
 	Public NoResult As Boolean
 End Sub
 
-
-Sub GetCount As BANanoSQLiteE
+'get a count of all records
+Sub GetCount As BANanoMySQLE
 	query = $"select count(*) as records from ${TableName}"$
 	command = "select"
+	Return Me
 End Sub
+
 'set database connection settings
 Sub SetConnection(shost As String, susername As String, spassword As String) As BANanoMySQLE
 	host = shost
@@ -64,7 +66,7 @@ Sub SetConnection(shost As String, susername As String, spassword As String) As 
 	Return Me
 End Sub
 
-
+'set callback for BANanoServer
 Sub SetCallBack(v As String, a As String)
 	view = v
 	action = a
@@ -88,9 +90,8 @@ private Sub AndOrOperators(sm As Map) As List    'ignore
 	Return nl
 End Sub
 
-'return a sql to select record of table where one exists
+'select where
 '<code>
-''select where
 'dim sw As Map = CreateMap()
 'sw.put("name", "Anele")
 'dbConnect.SelectWhere1(array("id", "firstname", "lastname"), sw, array("="), array("and", "or"), array("name"))
@@ -100,8 +101,10 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
+'Dim res As List = dbConnect.Result
+'For Each rec As Map in res
+'Next
 '</code>
 Sub SelectWhere1(tblfields As List, tblWhere As Map, operators As List, AndOr As List, orderBy As List) As BANanoMySQLE
 	If Schema.Size = 0 Then
@@ -154,6 +157,7 @@ Sub SelectWhere1(tblfields As List, tblWhere As Map, operators As List, AndOr As
 	Return Me
 End Sub
 
+'define a new list
 Sub NewList As List
 	Dim lst As List
 	lst.Initialize
@@ -196,9 +200,8 @@ Sub SchemaAddField(fldName As String, fldType As String)
 End Sub
 
 
-'return a sql to delete record of table where one exists
+'get maximum
 '<code>
-''get maximum
 'dbConnect.GetMax
 'dbConnect.JSON = BANano.CallInlinePHPWait(dbConnect.MethodName, dbConnect.Build)
 'dbConnect.FromJSON
@@ -206,7 +209,6 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
 Sub GetMax As BANanoMySQLE
@@ -215,9 +217,8 @@ Sub GetMax As BANanoMySQLE
 	Return Me
 End Sub
 
-'return a sql to delete record of table where one exists
+'get minimum
 '<code>
-''get minimum
 'dbConnect.GetMin
 'dbConnect.JSON = BANano.CallInlinePHPWait(dbConnect.MethodName, dbConnect.Build)
 'dbConnect.FromJSON
@@ -225,7 +226,6 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
 Sub GetMin As BANanoMySQLE
@@ -235,7 +235,7 @@ Sub GetMin As BANanoMySQLE
 End Sub
 
 
-'get table names
+'get databases
 Sub GetDatabases As BANanoMySQLE
 	query = $"SHOW DATABASES"$
 	command = "databases"
@@ -244,7 +244,6 @@ End Sub
 
 'get table names
 '<code>
-''get table names
 'dbConnect.GetTableNames
 'dbConnect.JSON = BANano.CallInlinePHPWait(dbConnect.MethodName, dbConnect.Build)
 'dbConnect.FromJSON
@@ -252,7 +251,6 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
 Sub GetTableNames As BANanoMySQLE
@@ -261,11 +259,13 @@ Sub GetTableNames As BANanoMySQLE
 	Return Me
 End Sub
 
+'show indexes
 Sub ShowIndexes
 	query = $"SELECT INDEX_NAME AS `idxname`, IF (NON_UNIQUE = 0 AND INDEX_NAME = 'PRIMARY', 1, 0) AS `idxprimary`, IF (NON_UNIQUE = 0 AND INDEX_NAME <> 'PRIMARY', 1, 0) AS `idxunique`, GROUP_CONCAT(COLUMN_NAME ORDER BY SEQ_IN_INDEX) AS `idxcolumns` FROM information_schema.STATISTICS WHERE TABLE_SCHEMA = '${DBase}' AND TABLE_NAME = '${TableName}' GROUP BY INDEX_NAME, NON_UNIQUE"$
 	command = "select"
 End Sub
 
+'show foreign keys
 Sub ShowForeignKeys
 	query = $"SELECT i.CONSTRAINT_NAME as `fkname`, k.COLUMN_NAME AS `column`, k.REFERENCED_TABLE_NAME AS `reftable`, k.REFERENCED_COLUMN_NAME AS `refcolumn`, c.UPDATE_RULE AS `onupdate`, c.DELETE_RULE AS `ondelete` FROM information_schema.TABLE_CONSTRAINTS AS i JOIN information_schema.KEY_COLUMN_USAGE AS k ON i.CONSTRAINT_NAME = k.CONSTRAINT_NAME JOIN information_schema.REFERENTIAL_CONSTRAINTS AS c ON c.CONSTRAINT_NAME = i.CONSTRAINT_NAME WHERE i.TABLE_SCHEMA = '${DBase}' AND i.TABLE_NAME = '${TableName}' AND i.CONSTRAINT_TYPE = 'FOREIGN KEY' GROUP BY i.CONSTRAINT_NAME, k.COLUMN_NAME, k.REFERENCED_TABLE_NAME, k.REFERENCED_COLUMN_NAME, c.UPDATE_RULE, c.DELETE_RULE"$
 	command = "select"
@@ -278,9 +278,8 @@ Sub ShowColumns As BANanoMySQLE
 	Return Me
 End Sub
 
-'get table structure
+'describe table
 '<code>
-''describe table
 'dbConnect.DescribeTable
 'dbConnect.JSON = BANano.CallInlinePHPWait(dbConnect.MethodName, dbConnect.Build)
 'dbConnect.FromJSON
@@ -288,7 +287,6 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
 Sub DescribeTable As BANanoMySQLE
@@ -297,7 +295,7 @@ Sub DescribeTable As BANanoMySQLE
 	Return Me
 End Sub
 
-'return id of record
+'get next available id using pk
 '<code>
 'dim nid As Int = dbConnect.GetNextID
 '</code>
@@ -318,6 +316,7 @@ Sub GetNextID As String
 	Return strid
 End Sub
 
+'convert to string
 Sub CStr(o As Object) As String
 	Return "" & o
 End Sub
@@ -363,6 +362,7 @@ Sub SchemaClear As BANanoMySQLE
 	Return Me
 End Sub
 
+'set record field
 Sub SetField(fldName As String, fldValue As Object) As BANanoMySQLE
 	Record.Put(fldName, fldValue)
 	Return Me
@@ -376,6 +376,7 @@ Sub SchemaAddBoolean(bools As List) As BANanoMySQLE
 	Return Me
 End Sub
 
+'add int to the schema
 Sub SchemaAddInt(bools As List) As BANanoMySQLE
 	For Each b As String In bools
 		Schema.Put(b, DB_INT)
@@ -392,6 +393,7 @@ Sub SchemaAddDouble(bools As List) As BANanoMySQLE
 End Sub
 
 
+'add float to the schema
 Sub SchemaAddFloat(bools As List) As BANanoMySQLE
 	For Each b As String In bools
 		Schema.Put(b, DB_FLOAT)
@@ -399,6 +401,7 @@ Sub SchemaAddFloat(bools As List) As BANanoMySQLE
 	Return Me
 End Sub
 
+'add blob to the schema
 Sub SchemaAddBlob(bools As List) As BANanoMySQLE
 	For Each b As String In bools
 		Schema.Put(b, DB_BLOB)
@@ -406,6 +409,7 @@ Sub SchemaAddBlob(bools As List) As BANanoMySQLE
 	Return Me
 End Sub
 
+'add text to the schema
 Sub SchemaAddText(bools As List) As BANanoMySQLE
 	For Each b As String In bools
 		Schema.Put(b, DB_STRING)
@@ -423,7 +427,6 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
 Sub SchemaCreateTable As BANanoMySQLE
@@ -466,7 +469,7 @@ Sub Connection As BANanoMySQLE
 	Return Me
 End Sub
 
-' return string to create database
+'create a database
 '<code>
 ''create a database
 'dbConnect.CreateDatabase
@@ -476,7 +479,6 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
 Sub CreateDatabase As BANanoMySQLE
@@ -495,7 +497,6 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
 Sub DropDataBase As BANanoMySQLE
@@ -514,7 +515,6 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
 Sub Execute(strSQL As String) As BANanoMySQLE
@@ -523,7 +523,7 @@ Sub Execute(strSQL As String) As BANanoMySQLE
 	Return Me
 End Sub
 
-'return a sql command to create the table
+'create table
 '<code>
 ''create table
 'Dim schema As Map = CreateMap()
@@ -536,7 +536,6 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
 public Sub CreateTable(tblFields As Map) As BANanoMySQLE
@@ -573,7 +572,7 @@ public Sub CreateTable(tblFields As Map) As BANanoMySQLE
 	Return Me
 End Sub
 
-'return sql command to drop a table
+'drop a table
 '<code>
 ''drop a table
 'dbConnect.DropTable
@@ -583,7 +582,6 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 public Sub DropTable As BANanoMySQLE
 	'define the qry to execute
@@ -683,7 +681,7 @@ private Sub GetMapKeys(sourceMap As Map) As List
 End Sub
 
 
-'return a sql insert statement to insert current record
+'insert current record
 '<code>
 ''insert current record
 'dbConnect.Insert
@@ -693,7 +691,6 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
 Sub Insert As BANanoMySQLE
@@ -701,7 +698,7 @@ Sub Insert As BANanoMySQLE
 	Return Me
 End Sub
 
-'return a sql insert statement
+'insert a record using own record
 '<code>
 ''insert a record using own record
 'dbConnect.Insert1(Record)
@@ -711,7 +708,6 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
 Sub Insert1(Rec As Map) As BANanoMySQLE
@@ -752,7 +748,7 @@ End Sub
 
 
 
-'return a sql insert statement
+'insert replace a record
 '<code>
 ''insert replace a record
 'dbConnect.InsertReplace
@@ -761,7 +757,6 @@ End Sub
 'Select Case dbConnect.OK
 'Case False
 'Dim strError As String = dbConnect.Error
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
 Sub InsertReplace As BANanoMySQLE
@@ -800,7 +795,7 @@ Sub InsertReplace As BANanoMySQLE
 	Return Me
 End Sub
 
-'delete a single value based on the primary key
+'delete a record using primary key
 '<code>
 ''delete a record using primary key
 'dbConnect.Delete(10)
@@ -810,7 +805,6 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
 Sub Delete(primaryValue As String) As BANanoMySQLE
@@ -856,6 +850,7 @@ private Sub Join(delimiter As String, lst As List) As String
 	Return sb.ToString
 End Sub
 
+'read a record
 '<code>
 ''read a record
 'dbConnect.Read(10)
@@ -865,8 +860,10 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
+'Dim res As List = dbConnect.Result
+'For Each rec As Map in Res
+'Next
 '</code>
 Sub Read(primaryValue As String) As BANanoMySQLE
 	If Schema.Size = 0 Then
@@ -878,7 +875,7 @@ Sub Read(primaryValue As String) As BANanoMySQLE
 	Return Me
 End Sub
 
-'exists
+'check existence of a record
 '<code>
 ''check existence of a record
 'dbConnect.Exists(10)
@@ -888,8 +885,10 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
+'Dim res As List = dbConnect.Result
+'For Each rec As Map in Res
+'Next
 '</code>
 Sub Exists(primaryValue As String) As BANanoMySQLE
 	If Schema.Size = 0 Then
@@ -901,7 +900,7 @@ Sub Exists(primaryValue As String) As BANanoMySQLE
 	Return Me
 End Sub
 
-'return a sql to select record of table where one exists
+'select where
 '<code>
 ''select where
 'Dim sw As Map = CreateMap()
@@ -914,8 +913,10 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
+'Dim res As List = dbConnect.Result
+'For Each rec As Map in Res
+'Next
 '</code>
 Sub SelectWhere(tblfields As List, tblWhere As Map, operators As List, orderBy As List) As BANanoMySQLE
 	If Schema.Size = 0 Then
@@ -962,9 +963,9 @@ Sub SelectWhere(tblfields As List, tblWhere As Map, operators As List, orderBy A
 End Sub
 
 
-'return a sql to select record of table where one exists
+'select max where
 '<code>
-''select where
+''select max where
 'Dim sw As Map = CreateMap()
 'sw.put("id", 10)
 'sw.put("age", 20)
@@ -975,8 +976,10 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
+'Dim res As List = dbConnect.Result
+'For Each rec As Map in Res
+'Next
 '</code>
 Sub SelectMaxWhere(fld As String, tblWhere As Map, operators As List) As BANanoMySQLE
 	If Schema.Size = 0 Then
@@ -1007,9 +1010,9 @@ Sub SelectMaxWhere(fld As String, tblWhere As Map, operators As List) As BANanoM
 End Sub
 
 
-'return a sql to select record of table where one exists
+'select where asc/desc
 '<code>
-''select where
+''select where asc/desc
 'Dim sw As Map = CreateMap()
 'sw.put("id", 10)
 'sw.put("age", 20)
@@ -1020,8 +1023,10 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
+'Dim res As List = dbConnect.Result
+'For Each rec As Map in Res
+'Next
 '</code>
 Sub SelectWhereAscDesc(tblfields As List, tblWhere As Map, operators As List, orderBy As List, AscDesc As List) As BANanoMySQLE
 	If Schema.Size = 0 Then
@@ -1086,7 +1091,7 @@ End Sub
 
 
 
-'return a sql to select record of table where one exists
+'select distinct where
 '<code>
 ''select distinct where
 'Dim sw As Map = CreateMap()
@@ -1098,8 +1103,10 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
+'Dim res As List = dbConnect.Result
+'For Each rec As Map in Res
+'Next
 '</code>
 Sub SelectDistinctWhere(tblfields As List, tblWhere As Map, operators As List, orderBy As List) As BANanoMySQLE
 	If Schema.Size = 0 Then
@@ -1145,7 +1152,7 @@ Sub SelectDistinctWhere(tblfields As List, tblWhere As Map, operators As List, o
 	Return Me
 End Sub
 
-'return a sql to delete record of table where one exists
+'delete all records
 '<code>
 ''delete all records
 'dbConnect.DeleteAll
@@ -1155,7 +1162,6 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
 Sub DeleteAll As BANanoMySQLE
@@ -1163,6 +1169,7 @@ Sub DeleteAll As BANanoMySQLE
 	command = "delete"
 	Return Me
 End Sub
+
 
 private Sub EQOperators(sm As Map) As List  'ignore
 	Dim nl As List
@@ -1175,7 +1182,7 @@ End Sub
 
 
 
-'return a sql to delete record of table where one exists
+'delete records where
 '<code>
 ''delete records where
 'Dim uw As Map = CreateMap()
@@ -1187,7 +1194,6 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
 Sub DeleteWhere(tblWhere As Map, operators As List) As BANanoMySQLE
@@ -1219,7 +1225,7 @@ Sub DeleteWhere(tblWhere As Map, operators As List) As BANanoMySQLE
 End Sub
 
 
-'return a sql to select record of table where one exists
+'select all records
 '<code>
 ''select all records
 'dbConnect.SelectAll(array("*"), array("name"))
@@ -1229,8 +1235,10 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
+'Dim res As List = dbConnect.Result
+'For Each rec As Map in Res
+'Next
 '</code>
 Sub SelectAll(tblfields As List, orderBy As List) As BANanoMySQLE
 	'are we selecting all fields or just some
@@ -1257,9 +1265,8 @@ Sub SelectAll(tblfields As List, orderBy As List) As BANanoMySQLE
 	Return Me
 End Sub
 
-'return a sql to select record of table where one exists
+'select distinct all order by
 '<code>
-''select distinct all order by
 'dbConnect.SelectDistinctAll(array("name"), array("name"))
 'dbConnect.JSON = BANano.CallInlinePHPWait(dbConnect.MethodName, dbConnect.Build)
 'dbConnect.FromJSON
@@ -1267,8 +1274,10 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
+'Dim res As List = dbConnect.Result
+'For Each rec As Map in Res
+'Next
 '</code>
 Sub SelectDistinctAll(tblfields As List, orderBy As List) As BANanoMySQLE
 	'are we selecting all fields or just some
@@ -1295,6 +1304,7 @@ Sub SelectDistinctAll(tblfields As List, orderBy As List) As BANanoMySQLE
 	Return Me
 End Sub
 
+'build qry
 Sub Build As Map
 	Dim b As Map = CreateMap()
 	b.Put("command", command)
@@ -1304,7 +1314,7 @@ Sub Build As Map
 	Return b
 End Sub
 
-
+'build qry
 Sub Build1 As Map
 	Dim b As Map = CreateMap()
 	b.Put("command", command)
@@ -1317,7 +1327,7 @@ Sub Build1 As Map
 	Return b
 End Sub
 
-'build with connection settings
+'build qry for dynamic connection
 Sub BuildDynamic(isPHP As Boolean) As Map
 	Dim b As Map = CreateMap()
 	b.Put("command", command)
@@ -1335,9 +1345,8 @@ Sub BuildDynamic(isPHP As Boolean) As Map
 	Return b
 End Sub
 
-'return a sql to truncate table
+'delete all records and reset auto increment
 '<code>
-''delete all records and reset auto increment
 'dbConnect.Truncate
 'dbConnect.JSON = BANano.CallInlinePHPWait(dbConnect.MethodName, dbConnect.Build)
 'dbConnect.FromJSON
@@ -1345,7 +1354,6 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
 Sub Truncate As BANanoMySQLE
@@ -1355,7 +1363,7 @@ Sub Truncate As BANanoMySQLE
 End Sub
 
 
-
+'get the first record
 Sub FirstRecord As Map
 	Dim rec As Map = result.Get(0)
 	Return rec
@@ -1371,7 +1379,6 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
 Sub Update(priValue As String) As BANanoMySQLE
@@ -1384,7 +1391,7 @@ Sub Update(priValue As String) As BANanoMySQLE
 	Return Me
 End Sub
 
-'update using primary key
+'update record using primary key
 '<code>
 ''update record using primary key
 'Dim rec as Map = CreateMap()
@@ -1397,7 +1404,6 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
 Sub Update1(Rec As Map, priValue As String) As BANanoMySQLE
@@ -1411,9 +1417,8 @@ Sub Update1(Rec As Map, priValue As String) As BANanoMySQLE
 	Return Me
 End Sub
 
-'return a sql to update records of table where one exists
+'update where using map...
 '<code>
-''update where using map...
 'dim rec As Map = CreateMap()
 ''define where clause
 'rec.put("name", "Anele")
@@ -1426,7 +1431,6 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
 Sub UpdateWhere(tblfields As Map, tblWhere As Map, operators As List) As BANanoMySQLE
@@ -1474,7 +1478,6 @@ Sub UpdateWhere(tblfields As Map, tblWhere As Map, operators As List) As BANanoM
 End Sub
 
 
-'return a sql to update all records of table
 'update all records
 '<code>
 ''update all records with new field details
@@ -1485,7 +1488,6 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
 Sub UpdateAll(tblFields As Map) As BANanoMySQLE
@@ -1517,18 +1519,20 @@ Sub UpdateAll(tblFields As Map) As BANanoMySQLE
 	Return Me
 End Sub
 
-'return a sql to select record of table where one exists
+'select all records asc/desc
 '<code>
 ''select all records
-'dbConnect.SelectAllDesc(array("*"), array("name"), array("name"))
+'dbConnect.SelectAllAscDesc(array("*"), array("name"), array("name"))
 'dbConnect.JSON = BANano.CallInlinePHPWait(dbConnect.MethodName, dbConnect.Build)
 'dbConnect.FromJSON
 'Select Case dbConnect.OK
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
+'Dim res As List = dbConnect.Result
+'For Each rec As Map in res
+'Next
 '</code>
 Sub SelectAllAscDesc(tblfields As List, orderBy As List, AscDesc As List)
 	'are we selecting all fields or just some

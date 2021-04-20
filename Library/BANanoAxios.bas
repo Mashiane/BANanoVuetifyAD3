@@ -4,6 +4,7 @@ ModulesStructureVersion=1
 Type=Class
 Version=8.45
 @EndOfDesignText@
+#IgnoreWarnings:12
 Sub Class_Globals
 	Private Axios As BANanoObject
 	Private AxiosPromise As BANanoPromise
@@ -56,7 +57,7 @@ Sub SetCORS(b As Boolean) As BANanoAxios
 	Else
 		SetMode("no-cors")
 	End If
-	return me
+	Return Me
 End Sub
 
 'set origin

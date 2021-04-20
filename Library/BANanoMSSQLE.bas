@@ -52,10 +52,12 @@ Sub Class_Globals
 End Sub
 
 
-Sub GetCount As BANanoSQLiteE
+Sub GetCount As BANanoMSSQLE
 	query = $"select count(*) as records from ${TableName}"$
 	command = "select"
+	Return Me
 End Sub
+
 'set database connection settings
 Sub SetConnection(shost As String, susername As String, spassword As String) As BANanoMSSQLE
 	host = shost
@@ -74,7 +76,6 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
 Sub Truncate As BANanoMSSQLE
@@ -110,8 +111,10 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
+'Dim res As List = dbConnect.Result
+'For Each rec As Map in res
+'Next
 '</code>
 Sub SelectWhere1(tblfields As List, tblWhere As Map, operators As List, AndOr As List, orderBy As List) As BANanoMSSQLE
 	If Schema.Size = 0 Then
@@ -177,8 +180,10 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
+'Dim res As List = dbConnect.Result
+'For Each rec As Map in res
+'Next
 '</code>
 Sub SelectWhereAscDesc(tblfields As List, tblWhere As Map, operators As List, orderBy As List, AscDesc As List) As BANanoMSSQLE
 	If Schema.Size = 0 Then
@@ -254,8 +259,10 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
+'Dim res As List = dbConnect.Result
+'For Each rec As Map in res
+'Next
 '</code>
 Sub SelectMaxWhere(fld As String, tblWhere As Map, operators As List) As BANanoMSSQLE
 	If Schema.Size = 0 Then
@@ -295,7 +302,6 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
 Sub GetTableNames As BANanoMSSQLE
@@ -314,7 +320,6 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
 Sub DescribeTable As BANanoMSSQLE
@@ -363,7 +368,6 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
 Sub DeleteAll As BANanoMSSQLE
@@ -443,7 +447,6 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
 Sub Update(priValue As String) As BANanoMSSQLE
@@ -469,7 +472,6 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
 Sub Update1(Rec As Map, priValue As String) As BANanoMSSQLE
@@ -523,7 +525,6 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
 Sub SchemaCreateTable As BANanoMSSQLE
@@ -544,7 +545,6 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
 public Sub CreateTable(tblFields As Map) As BANanoMSSQLE
@@ -591,7 +591,6 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
 Sub GetMax As BANanoMSSQLE
@@ -611,7 +610,6 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
 Sub GetMin As BANanoMSSQLE
@@ -728,7 +726,6 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
 Sub Execute(strSQL As String) As BANanoMSSQLE
@@ -839,7 +836,6 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
 Sub Insert As BANanoMSSQLE
@@ -860,7 +856,6 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
 Sub Insert1(Rec As Map) As BANanoMSSQLE
@@ -942,7 +937,6 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
 Sub Read(primaryValue As String) As BANanoMSSQLE
@@ -965,7 +959,6 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
 Sub Delete(primaryValue As String) As BANanoMSSQLE
@@ -989,7 +982,6 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
 Sub Exists(primaryValue As String) As BANanoMSSQLE
@@ -1015,8 +1007,10 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
+'Dim res As List = dbConnect.Result
+'For Each rec As Map in res
+'Next
 '</code>
 Sub SelectWhere(tblfields As List, tblWhere As Map, operators As List, orderBy As List) As BANanoMSSQLE
 	If Schema.Size = 0 Then
@@ -1074,8 +1068,10 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
+'Dim res As List = dbConnect.Result
+'For Each rec As Map in res
+'Next
 '</code>
 Sub SelectDistinctWhere(tblfields As List, tblWhere As Map, operators As List, orderBy As List) As BANanoMSSQLE
 	If Schema.Size = 0 Then
@@ -1133,7 +1129,6 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
 Sub DeleteWhere(tblWhere As Map, operators As List) As BANanoMSSQLE
@@ -1175,8 +1170,10 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
+'Dim res As List = dbConnect.Result
+'For Each rec As Map in res
+'Next
 '</code>
 Sub SelectAll(tblfields As List, orderBy As List) As BANanoMSSQLE
 	'are we selecting all fields or just some
@@ -1213,8 +1210,10 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
+'Dim res As List = dbConnect.Result
+'For Each rec As Map in res
+'Next
 '</code>
 Sub SelectDistinctAll(tblfields As List, orderBy As List) As BANanoMSSQLE
 	'are we selecting all fields or just some
@@ -1293,7 +1292,6 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
 Sub UpdateWhere(tblfields As Map, tblWhere As Map, operators As List) As BANanoMSSQLE
@@ -1351,7 +1349,6 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
 '</code>
 Sub UpdateAll(tblFields As Map) As BANanoMSSQLE
@@ -1393,8 +1390,10 @@ End Sub
 'Case False
 'Dim strError As String = dbConnect.Error
 'Log(strError)
-'vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
 'End Select
+'Dim res As List = dbConnect.Result
+'For Each rec As Map in res
+'Next
 '</code>
 Sub SelectAllAscDesc(tblfields As List, orderBy As List, AscDesc As List)
 	'are we selecting all fields or just some

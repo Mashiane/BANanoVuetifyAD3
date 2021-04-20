@@ -9122,21 +9122,23 @@ Sub AddSwitch(sid As String, vmodel As String, slabel As String, truevalue As Ob
 	sid = sid.ToLowerCase
 	Dim vswitch As VueElement = AddVueElement2(parentID, sid, "v-switch", Null)
 	vswitch.VModel = vmodel
-	vswitch.SetData(vmodel, "")
 	vswitch.label = slabel
 	If BANano.IsNull(truevalue) = False Or BANano.IsUndefined(truevalue) = False Then 
-		vswitch.Value = truevalue
 		vswitch.AddAttr("true-value", truevalue)
 	End If
 	If BANano.IsNull(falsevalue) = False Or BANano.IsUndefined(truevalue) = False Then 
 		vswitch.AddAttr("false-value", falsevalue)
 	End If
-	vswitch.AddAttr(":inset", bInset)
-	If color <> "" Then vswitch.Color = color
+	If bInset Then
+		vswitch.AddAttr(":inset", bInset)
+	End If
+	If color <> "" Then 
+		vswitch.Color = color
+	End If
 	vswitch.AssignProps(props)
 	vswitch.BindAllEvents
 	If vmodel <> "" Then
-		vswitch.SetData(vmodel, truevalue)
+		vswitch.SetData(vmodel, falsevalue)
 	End If
 	Return vswitch
 End Sub
@@ -9428,31 +9430,28 @@ Sub AddRadioGroup(elID As String, vmodel As String, sLabel As String, bRow As Bo
 End Sub
 
 Sub AddFab(elID As String, eIcon As String, eColor As String, bOutlined As Boolean, btnprops As Map, iconprops As Map) As VueElement
-	Dim np As Map = CreateMap()
-	np.Put(":fab", True)
-	np.Put(":outlined", bOutlined)
-	If BANano.IsNull(btnprops) = False Then
-		For Each k As String In btnprops.Keys
-			Dim v As String = btnprops.Get(k)
-			np.Put(k, v)
-		Next
-	End If
-	Dim ip As Map = CreateMap()
-	ip.Put(":fab", True)
-	If BANano.IsNull(iconprops) = False Then
-		For Each k As String In iconprops.Keys
-			Dim v As String = iconprops.Get(k)
-			ip.Put(k, v)
-		Next
-	End If
-	Dim btn As VueElement = AddButtonWithIcon(elID, eIcon, eColor, np, ip)
-	Return btn
+	Dim parentID As String = CleanID(mName)
+	elID = elID.ToLowerCase
+	Dim siconright As String = $"${elID}icon"$
+	
+	Dim vbtnright As VueElement = AddVueElement2(parentID, elID, "v-btn", Null)
+	vbtnright.color = eColor
+	vbtnright.Outlined = bOutlined
+    vbtnright.Fab = True
+	vbtnright.Dark = True
+	vbtnright.AssignProps(btnprops)
+	'
+	Dim viconright As VueElement = AddVueElement2(elID, siconright, "v-icon", Null)
+	viconright.Caption = eIcon
+	vbtnright.AssignProps(iconprops)
+	'
+	vbtnright.BindAllEvents
+	vbtnright.BindVueElement(viconright)
+	Return vbtnright
 End Sub
 
 Sub AddFab1(elID As String, eIcon As String, eColor As String) As VueElement
-	Dim btn As VueElement = AddButtonWithIcon(elID, eIcon, eColor, Null, Null)
-	btn.Fab = True
-	btn.GetIcon.Fab = True
+	Dim btn As VueElement = AddFab(elID, eIcon, eColor, False, Null, Null)
 	Return btn
 End Sub
 
@@ -10039,7 +10038,11 @@ End Sub
 
 
 Sub AddContainer(elID As String, xFluid As Boolean) As VueElement
-	Return AddVueElement1(elID, "v-container", "", "", "", CreateMap(":fluid":xFluid))
+	Dim elx As VueElement = AddVueElement1(elID, "v-container", "", "", "", Null)
+	If xFluid = True Then
+		elx.setFluid(True)
+	End If
+	Return elx
 End Sub
 
 Sub AddTabs(elID As String) As VueElement
@@ -10895,4 +10898,27 @@ Sub AddTreeViewOpen(itemKey As String)
 	End If
 End Sub
 
-	
+Sub TopRight
+	setTop(True)
+	setRight(True)	
+End Sub
+
+Sub BottomRight
+	setBottom(True)
+	setRight(True)
+End Sub
+
+Sub BottomLeft
+	setBottom(True)
+	setLeft(True)	
+End Sub
+
+Sub TopLeft
+	setTop(True)
+	setLeft(True)	
+End Sub
+
+Sub setFluid(b As Boolean)
+	AddAttrOnCondition(":fluid", b, True)
+	bFluid = b
+End Sub

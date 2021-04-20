@@ -4,6 +4,7 @@ ModulesStructureVersion=1
 Type=Class
 Version=8.9
 @EndOfDesignText@
+#IgnoreWarnings:12
 Sub Class_Globals
 	Private mCallBack As Object
 	Public Element As VueElement
