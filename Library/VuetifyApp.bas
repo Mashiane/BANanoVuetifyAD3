@@ -34,7 +34,7 @@ Sub Class_Globals
 	Public GoogleMapKey As String
 	Public Body As BANanoElement
 	Public Vue As BANanoObject
-	public Theme as bananoobject
+	Public Theme As BANanoObject
 	'
 	Public const BORDER_DEFAULT As String = ""
 	Public const BORDER_DASHED As String = "dashed"
@@ -1006,6 +1006,13 @@ End Sub
 Sub getAppNode As BANanoElement
 	Dim el As BANanoElement = BANano.GetElement("#app")
 	Return el
+End Sub
+
+'set the master html for the app
+Sub SetTemplate(str As String)
+	Dim elx As BANanoElement = getTemplateNode
+	elx.Empty
+	elx.Append(str)
 End Sub
 
 'get the template node
@@ -1984,6 +1991,7 @@ Sub Serve
 	'get the content in the template
 	Template = BANanoGetHTML("apptemplate")
 	Template = Template.Replace("v-template", "template")
+	GetElementByID("apptemplate").Empty
 	'
 	Dim mlang As Map = CreateMap()
 	mlang.Put("current", lang)

@@ -333,7 +333,7 @@ Sub Class_Globals
 	Private bClippedLeft As Boolean = False
 	Private bClippedRight As Boolean = False
 	Private extm As Map
-	public OpenItems as list
+	Public OpenItems As List
 	
 	'
 	Type VueGridRow(Rows As Int, Columns As List, _
@@ -419,6 +419,14 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	mRouterReplace = False
 	mRouterAppend = False
 End Sub
+
+
+'set the master html for the app
+Sub SetTemplate(str As String)
+	mElement.Empty
+	mElement.Append(str)
+End Sub
+
 
 Sub AddGradient(lst As List)
 	Gradients.Add(lst)
@@ -10954,4 +10962,9 @@ End Sub
 Sub setFluid(b As Boolean)
 	AddAttrOnCondition(":fluid", b, True)
 	bFluid = b
+End Sub
+
+Sub getTarget As String
+	Dim s As String = $"#${mName}"$
+	Return s
 End Sub
