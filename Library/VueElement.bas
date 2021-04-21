@@ -2192,6 +2192,7 @@ Sub RemoveClass(clsName As String)
 	End If
 End Sub
 
+
 'add an attribute
 Public Sub AddAttr(varProp As String, varValue As String)
 	If BANano.IsUndefined(varValue) Or BANano.IsNull(varValue) Then Return
