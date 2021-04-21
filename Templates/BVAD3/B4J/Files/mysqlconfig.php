@@ -1,6 +1,6 @@
 <?php
-const DB_HOST = '165.73.80.252';
-const DB_NAME = 'agritrax';
-const DB_USER = 'anele';
-const DB_PASS = 'usioloeso';
+const DB_HOST = 'localhost';
+const DB_NAME = 'test';
+const DB_USER = 'root';
+const DB_PASS = '';
 ?>

@@ -1,39 +1,41 @@
 ﻿AppType=JavaFX
 Build1=Default,b4j.example
 File1=1.png
-File10=happyface.png
-File11=mssqlconfig.php
-File12=mysqlconfig.php
-File13=neutralface.png
-File14=orange.png
-File15=red.png
-File16=sadface.png
-File17=sponge.png
-File18=upload.php
+File10=green.png
+File11=happyface.png
+File12=mssqlconfig.php
+File13=mysqlconfig.php
+File14=neutralface.png
+File15=orange.png
+File16=red.png
+File17=sadface.png
+File18=sponge.png
+File19=upload.php
 File2=2.png
 File3=android-chrome-192x192.png
 File4=android-chrome-512x512.png
 File5=apple-touch-icon.png
 File6=bvad31.png
-File7=favicon.ico
-File8=gray.png
-File9=green.png
+File7=config.properties
+File8=favicon.ico
+File9=gray.png
 FileGroup1=Default Group\Images
 FileGroup10=Default Group\Images
-FileGroup11=Default Group
+FileGroup11=Default Group\Images
 FileGroup12=Default Group
-FileGroup13=Default Group\Images
+FileGroup13=Default Group
 FileGroup14=Default Group\Images
 FileGroup15=Default Group\Images
 FileGroup16=Default Group\Images
 FileGroup17=Default Group\Images
-FileGroup18=Default Group\PHP
+FileGroup18=Default Group\Images
+FileGroup19=Default Group\PHP
 FileGroup2=Default Group\Images
 FileGroup3=Default Group\Images
 FileGroup4=Default Group\Images
 FileGroup5=Default Group\Images
 FileGroup6=Default Group
-FileGroup7=Default Group\Images
+FileGroup7=Default Group
 FileGroup8=Default Group\Images
 FileGroup9=Default Group\Images
 Group=Default Group
@@ -43,7 +45,7 @@ Library3=jcore
 Library4=jfx
 Module1=pgIndex
 Module2=ViewHome
-NumberOfFiles=18
+NumberOfFiles=19
 NumberOfLibraries=4
 NumberOfModules=2
 Version=8.9
@@ -66,6 +68,9 @@ Sub Process_Globals
 End Sub
 
 Sub AppStart (Form1 As Form, Args() As String)
+	Dim config As Map = File.ReadMap(File.DirAssets, "config.properties")
+	ServerIP = config.Get("ServerIP")
+	
 	'initialize banano for first use
 	BANano.Initialize("BANano", AppName, DateTime.now)
 	BANano.HTML_NAME = "index.html"
