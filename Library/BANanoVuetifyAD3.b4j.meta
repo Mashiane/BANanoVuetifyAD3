@@ -58,6 +58,6 @@ ModuleClosedNodes6=
 ModuleClosedNodes7=
 ModuleClosedNodes8=
 ModuleClosedNodes9=
-NavigationStack=VueComponent,Class_Globals,48,0,VueElement,AddAlert,8052,0,VueElement,AddAttr,2216,0,VueElement,getClasses,2252,0,VueElement,GetCardActions,6232,0,VueElement,AddNav,9620,0,VueElement,AddAppBar,9627,0,VueElement,AddVJSF,9655,0,VueElement,AddSpeedDial,9642,6,VueElement,AddSpeedDialItem,9654,6
+NavigationStack=VueElement,AddAppBar,9627,0,VueElement,AddVJSF,9655,0,VueElement,AddSpeedDial,9642,6,VueElement,AddSpeedDialItem,9654,6,VueElement,Append,2084,0,VueElement,GetStepperHeaders,590,0,VueElement,AddStepHorizontal,630,0,VuetifyApp,GetVueElement,560,0,VueComponent,GetVueElement,213,0,VueElement,GetVueElement,640,0,Main,AppStart,19,0
 SelectedBuild=0
 VisibleModules=
