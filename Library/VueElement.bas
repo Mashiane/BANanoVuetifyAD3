@@ -50,6 +50,7 @@ Version=7
 #DesignerProperty: Key: AutoID, DisplayName: Auto ID/Name, FieldType: Boolean, DefaultValue: False, Description: Overrides the ID/Name with a random string.
 #DesignerProperty: Key: App, DisplayName: App, FieldType: Boolean, DefaultValue: False, Description: 
 #DesignerProperty: Key: Ref, DisplayName: Ref, FieldType: String, DefaultValue:  , Description: 
+#DesignerProperty: Key: SetName, DisplayName: Set the Name, FieldType: Boolean, DefaultValue: False, Description:
 #DesignerProperty: Key: TagName, DisplayName: Tag Name, FieldType: String, DefaultValue: div, Description: tag of the element
 #DesignerProperty: Key: OverwriteTag, DisplayName: Overwrite Tag, FieldType: String, DefaultValue: , Description: over write tag of the element with
 #DesignerProperty: Key: Caption, DisplayName: Caption, FieldType: String, DefaultValue: , Description: Text on the element
@@ -334,6 +335,7 @@ Sub Class_Globals
 	Private bClippedRight As Boolean = False
 	Private extm As Map
 	Public OpenItems As List
+	private mSetName as boolean = false
 	
 	'
 	Type VueGridRow(Rows As Int, Columns As List, _
@@ -1288,6 +1290,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bClipped = Props.Get("Clipped")
 		bClippedLeft = Props.Get("ClippedLeft")
 		bClippedRight = Props.Get("ClippedRight")
+		mSetName = Props.Get("SetName")
 	End If
 	
 	setClippedRight(bClippedRight)
@@ -1303,6 +1306,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	AddStyleOnCondition("float", "right", stFloat)
 	'
 	AddAttrOnConditionTrue(":no-gutters", bNoGutter, True)
+	AddAttrOnConditionTrue("name", mName, True)
 	AddAttrOnCondition(":return-object", bReturnObject, True)
 	AddAttr("item-text", stItemText)
 	AddAttr("item-value", stItemValue)

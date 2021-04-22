@@ -58,6 +58,6 @@ ModuleClosedNodes6=
 ModuleClosedNodes7=
 ModuleClosedNodes8=
 ModuleClosedNodes9=
-NavigationStack=VuetifyApp,InitDialog,1084,0,VuetifyApp,Initialize,1069,0,VueElement,setFluid,10959,0,VueElement,getTarget,10962,6,VueComponent,Class_Globals,49,0,VuetifyApp,Class_Globals,418,6,VueElement,RemoveClass,2187,0,VueElement,AddClass,1999,0,VuetifyApp,getTemplateNode,1012,0,VuetifyApp,SetTemplate,1009,1
+NavigationStack=VueElement,GetExpansionPanelContent,830,0,VueElement,setDisplay2Class,851,0,VueElement,setDisplay4Class,891,0,VueElement,DesignerCreateView,1466,6,VueElement,GetMarginPadding,1511,0,VueElement,setML,1558,0,VueElement,AddAttrOnConditionTrue,1640,0,VueElement,AppendPlaceHolder,1716,0,Main,Process_Globals,11,0,Main,AppStart,23,0,BVAD3ListItem,SetName,32,0
 SelectedBuild=0
 VisibleModules=
