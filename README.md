@@ -42,6 +42,9 @@ Run the latest Tutorials subfolder project. This will contain all the updates de
 The latest tutorial will contain the latest updates of the library.
 All tutorials are linked to our YouTube Channel, https://www.youtube.com/playlist?list=PLXw1ldc5AxBMN6EYs1OzcQRj15t1kB2UP
 
+# Join Google Class for Freely Available Learner Material
+https://classroom.google.com/c/MzI1MDg2MTMwODc1?cjc=clzmpm3
+
 # Join Our Telegram Channel
 https://t.me/bananovuematerial
 
