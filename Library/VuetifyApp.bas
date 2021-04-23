@@ -2885,6 +2885,7 @@ End Sub
 
 Sub AddSnackBar(Module As Object, parentID As String, elID As String, vmodel As String, Caption As String, color As String, props As Map) As VueElement
 	Dim elx As VueElement = AddVueElement(Module, parentID, elID, "v-snackbar", vmodel, Caption, color, props)
+	elx.BindAllEvents
 	Return elx
 End Sub
 
@@ -5078,6 +5079,14 @@ Sub UseGoogleCharts
 		AddModule("googlecharts")
 	End If
 End Sub
+'
+'Sub UseTipTap
+'	If ModuleExist("tiptapVuetify") = False Then
+'		Dim tt As BANanoObject = BANano.Window.GetField("tiptapVuetify")
+'		Use(tt)
+'		AddModule("tiptapVuetify")
+'	End If
+'End Sub
 
 Sub UseCarousel3D
 	If ModuleExist("carousel3d") = False Then

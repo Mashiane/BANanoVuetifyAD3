@@ -50,7 +50,7 @@ Version=7
 #DesignerProperty: Key: AutoID, DisplayName: Auto ID/Name, FieldType: Boolean, DefaultValue: False, Description: Overrides the ID/Name with a random string.
 #DesignerProperty: Key: App, DisplayName: App, FieldType: Boolean, DefaultValue: False, Description: 
 #DesignerProperty: Key: Ref, DisplayName: Ref, FieldType: String, DefaultValue:  , Description: 
-#DesignerProperty: Key: SetName, DisplayName: Set the Name, FieldType: Boolean, DefaultValue: False, Description:
+#DesignerProperty: Key: AssignName, DisplayName: Assign Name, FieldType: Boolean, DefaultValue: False
 #DesignerProperty: Key: TagName, DisplayName: Tag Name, FieldType: String, DefaultValue: div, Description: tag of the element
 #DesignerProperty: Key: OverwriteTag, DisplayName: Overwrite Tag, FieldType: String, DefaultValue: , Description: over write tag of the element with
 #DesignerProperty: Key: Caption, DisplayName: Caption, FieldType: String, DefaultValue: , Description: Text on the element
@@ -1290,7 +1290,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bClipped = Props.Get("Clipped")
 		bClippedLeft = Props.Get("ClippedLeft")
 		bClippedRight = Props.Get("ClippedRight")
-		mSetName = Props.Get("SetName")
+		mSetName = Props.Get("AssignName")
 	End If
 	
 	setClippedRight(bClippedRight)
@@ -1306,7 +1306,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	AddStyleOnCondition("float", "right", stFloat)
 	'
 	AddAttrOnConditionTrue(":no-gutters", bNoGutter, True)
-	AddAttrOnConditionTrue("name", mName, True)
+	AddAttrOnConditionTrue("name", mName, mSetName)
 	AddAttrOnCondition(":return-object", bReturnObject, True)
 	AddAttr("item-text", stItemText)
 	AddAttr("item-value", stItemValue)
@@ -4946,6 +4946,10 @@ Sub setOpacity(d As Double)
 	AddStyle("opacity", d)
 End Sub
 
+Sub setZIndex(d As Int)
+	AddStyle("z-index", d)
+End Sub
+
 
 Sub getItemText As String
 	Return stItemText
@@ -8558,6 +8562,13 @@ Sub GetAvatar As VueElement
 	Return elx
 End Sub
 
+'get the chip ref from the chip group
+Sub GetProgress As VueElement
+	Dim elKey As String = $"${mName}progress"$
+	Dim elx As VueElement = GetVueElement(elKey)
+	Return elx
+End Sub
+
 Sub GetButton As VueElement
 	Dim elKey As String = $"${mName}button"$
 	Dim elx As VueElement = GetVueElement(elKey)
@@ -9632,6 +9643,34 @@ End Sub
 
 Sub AddSnackBar(elID As String, vmodel As String, Caption As String, color As String, props As Map) As VueElement
 	Dim elx As VueElement = AddVueElement1(elID, "v-snackbar", vmodel, Caption, color, props)
+	elx.BindAllEvents
+	Return elx
+End Sub
+
+'add a dismissible snackbar
+Sub AddSnackBar1(elID As String, vmodel As String, Caption As String, color As String, icon As String, iTimeOut As Int) As VueElement
+	Dim parentID As String = CleanID(mName)
+	elID = elID.tolowercase
+	Dim sTimeOut As String = $"${elID}timeout"$
+	Dim sColor As String = $"${elID}color"$
+	Dim sIcon As String = $"${elID}icon"$
+	Dim sIconShow As String = $"${elID}iconshow"$
+	Dim sContent As String = $"${elID}message"$
+	Dim sIconValue As String = $"${elID}iconvalue"$
+	'
+	Dim sTemplate As String = $"<v-snackbar app id="${elID}" :timeout="${sTimeOut}" :color="${sColor}" v-model="${vmodel}">
+    <v-icon id="${sIcon}" dark left v-if="${sIconShow}">{{ ${sIconValue} }}</v-icon>{{ ${sContent} }}</v-snackbar>"$
+	'
+	GetVueElement(parentID).Append(sTemplate)
+	
+	Dim elx As VueElement
+	elx.Initialize(mCallBack, elID, elID)
+	elx.BindAllEvents
+	elx.SetData(vmodel, False)
+	elx.SetData(sContent, Caption)
+	elx.SetData(sColor, color)
+	elx.SetData(sTimeOut, iTimeOut)
+	elx.SetData(sIconShow, False)
 	Return elx
 End Sub
 
@@ -9643,6 +9682,24 @@ Sub AddAppBar(elID As String) As VueElement
 	Dim elx As VueElement = AddVueElement1(elID, "v-app-bar", "", "", "", Null)
 	Return elx
 End Sub
+
+'Sub AddTipTap(elID As String) As VueElement
+'	Dim parentID As String = CleanID(mName)
+'	Dim scontent As String = $"${elID}content"$
+'	Dim sextension As String = $"${elID}extensions"$
+'	Dim sTemplate As String = $"<tiptap-vuetify v-model="${scontent}" :extensions="${sextension}/>"$
+'	'
+'	GetVueElement(parentID).Append(sTemplate)
+'	'
+'	Dim elx As VueElement
+'	elx.Initialize(mCallBack, elID, elID)
+'	elx.SetData(scontent, "")
+'	Dim nlx As List
+'	nlx.Initialize 
+'	elx.SetData(sextension, nlx)
+'	Return elx
+'End Sub
+
 
 Sub AddSpeedDial(elID As String, mainIcon As String, closeIcon As String, vmodel As String, mainColor As String) As VueElement
 	Dim parentID As String = CleanID(mName)
@@ -9673,6 +9730,21 @@ Sub AddSpeedDialItem(elID As String, elIcon As String, elColor As String) As Vue
 	Dim elx As VueElement
 	elx.Initialize(mCallBack, elID, elID)
 	elx.BindAllEvents
+	Return elx
+End Sub
+
+Sub AddLoadingProgress(elID As String, vmodel As String, progressSize As Int) As VueElement
+	Dim parentID As String = CleanID(mName)
+	'
+	elID = elID.tolowercase
+	Dim sTemplate As String = $"<v-overlay id="${elID}" v-model="${vmodel}">
+	<v-progress-circular id="${elID}progress" indeterminate size="${progressSize}"></v-progress-circular>
+	</v-overlay>"$
+	GetVueElement(parentID).Append(sTemplate)
+	'
+	Dim elx As VueElement
+	elx.Initialize(mCallBack, elID, elID)
+	elx.SetData(vmodel, False)
 	Return elx
 End Sub
 
@@ -10427,7 +10499,7 @@ Sub AddQRCode(elID As String, Text As String, Width As Int, Height As Int, Color
 	opts.Put("colorDark", ColorDark)
 	opts.Put("colorLight", ColorLight)
 	opts.Put("correctLevel", CorrectLevel)
-	'render the qu code
+	'render the qu code																																																									
 	Dim qrcode As BANanoObject
 	qrcode.Initialize2("QRCode", Array(elID, opts))
 	'
@@ -10449,12 +10521,6 @@ End Sub
 Sub GetFile As VueElement
 	Return GetVueElement($"${mName}file"$)
 End Sub
-
-Sub GetProgress As VueElement
-	Return GetVueElement($"${mName}progress"$)
-End Sub
-
-
 
 
 '<code>
@@ -10789,9 +10855,10 @@ Sub setLazy(b As Boolean)
 	AddAttr(":lazy", b)
 End Sub
 
-Sub RemoveBinding(v As String)
+Sub RemoveBinding(v As String)  As VueElement
 	v = v.ToLowerCase
 	bindings.Remove(v)
+	return me
 End Sub
 
 'items in the treeview can be selectable
@@ -10800,16 +10867,18 @@ Sub setActivatable(b As Boolean)
 End Sub
 
 'set the active items for the treeview
-Sub SetActiveItems(lst As List)
+Sub SetActiveItems(lst As List)  As VueElement
 	Dim ai As String = $"${mName}active"$
 	AddAttr(":active.sync", ai)
 	SetData(ai, lst)
+	Return Me
 End Sub
 
-Sub SetOpenItems(lst As List)
+Sub SetOpenItems(lst As List)  As VueElement
 	Dim oi As String = $"${mName}open"$
 	AddAttr(":open.sync", oi)
 	SetData(oi, lst)
+	Return Me
 End Sub
 
 Sub setHoverable(b As Boolean)
@@ -10944,24 +11013,28 @@ Sub AddTreeViewOpen(itemKey As String)
 	End If
 End Sub
 
-Sub TopRight
+Sub TopRight  As VueElement
 	setTop(True)
 	setRight(True)	
+	Return Me
 End Sub
 
-Sub BottomRight
+Sub BottomRight  As VueElement
 	setBottom(True)
 	setRight(True)
+	Return Me
 End Sub
 
-Sub BottomLeft
+Sub BottomLeft  As VueElement
 	setBottom(True)
 	setLeft(True)	
+	Return Me
 End Sub
 
-Sub TopLeft
+Sub TopLeft  As VueElement
 	setTop(True)
 	setLeft(True)	
+	Return Me
 End Sub
 
 Sub setFluid(b As Boolean)
@@ -10972,4 +11045,80 @@ End Sub
 Sub getTarget As String
 	Dim s As String = $"#${mName}"$
 	Return s
+End Sub
+
+Sub MicroTipTop(tt As String) As VueElement
+	SetAttr("aria-label", tt)
+	SetAttr("data-microtip-position", "top")
+	SetAttr("role", "tooltip")
+	Return Me
+End Sub
+
+Sub MicroTipLeft(tt As String)  As VueElement
+	SetAttr("aria-label", tt)
+	SetAttr("data-microtip-position", "left")
+	SetAttr("role", "tooltip")
+	Return Me
+End Sub
+
+Sub MicroTipRight(tt As String)  As VueElement
+	SetAttr("aria-label", tt)
+	SetAttr("data-microtip-position", "right")
+	SetAttr("role", "tooltip")
+	Return Me
+End Sub
+
+Sub MicroTipBottom(tt As String)  As VueElement
+	SetAttr("aria-label", tt)
+	SetAttr("data-microtip-position", "bottom")
+	SetAttr("role", "tooltip")
+	Return Me
+End Sub
+
+Sub MicroTipTopLeft(tt As String)  As VueElement
+	SetAttr("aria-label", tt)
+	SetAttr("data-microtip-position", "top-left")
+	SetAttr("role", "tooltip")
+	Return Me
+End Sub
+
+Sub MicroTipTopRight(tt As String)  As VueElement
+	SetAttr("aria-label", tt)
+	SetAttr("data-microtip-position", "top-right")
+	SetAttr("role", "tooltip")
+	Return Me
+End Sub
+
+Sub MicroTipBottomRight(tt As String)  As VueElement
+	SetAttr("aria-label", tt)
+	SetAttr("data-microtip-position", "bottom-right")
+	SetAttr("role", "tooltip")
+	Return Me
+End Sub
+
+Sub MicroTipBottomLeft(tt As String)  As VueElement
+	SetAttr("aria-label", tt)
+	SetAttr("data-microtip-position", "bottom-left")
+	SetAttr("role", "tooltip")
+	Return Me
+End Sub
+
+Sub MicroTipSmall  As VueElement
+	SetAttr("data-microtip-size", "small")
+	Return Me
+End Sub
+
+Sub MicroTipMedium  As VueElement
+	SetAttr("data-microtip-size", "medium")
+	Return Me
+End Sub
+
+Sub MicroTipLarge  As VueElement
+	SetAttr("data-microtip-size", "large")
+	Return Me
+End Sub
+
+Sub MicroTipFit  As VueElement
+	SetAttr("data-microtip-size", "fit")
+	Return Me
 End Sub

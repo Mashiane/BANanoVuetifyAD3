@@ -29,42 +29,43 @@ File32=materialdesignicons-webfont.eot
 File33=materialdesignicons-webfont.ttf
 File34=materialdesignicons-webfont.woff
 File35=materialdesignicons-webfont.woff2
-File36=neutralface.png
-File37=numeral.min.js
-File38=orange.png
-File39=oxml.min.js
+File36=microtip.min.css
+File37=neutralface.png
+File38=numeral.min.js
+File39=orange.png
 File4=axios.min.js
-File40=qrcode.min.js
-File41=red.png
-File42=roboto.min.css
-File43=Roboto100.ttf
-File44=Roboto300.ttf
-File45=Roboto400.ttf
-File46=Roboto500.ttf
-File47=Roboto700.ttf
-File48=Roboto900.ttf
-File49=sadface.png
+File40=oxml.min.js
+File41=qrcode.min.js
+File42=red.png
+File43=roboto.min.css
+File44=Roboto100.ttf
+File45=Roboto300.ttf
+File46=Roboto400.ttf
+File47=Roboto500.ttf
+File48=Roboto700.ttf
+File49=Roboto900.ttf
 File5=dayjs.min.js
-File50=themify.eot
-File51=themify.svg
-File52=themify.ttf
-File53=themify.woff
-File54=themify-icons.css
-File55=third-party.js
-File56=upload.php
-File57=v-blur.min.js
-File58=vjsf.css
-File59=vjsf.js
+File50=sadface.png
+File51=themify.eot
+File52=themify.svg
+File53=themify.ttf
+File54=themify.woff
+File55=themify-icons.css
+File56=third-party.js
+File57=upload.php
+File58=v-blur.min.js
+File59=vjsf.css
 File6=fa-brands-400.eot
-File60=vue.min.js
-File61=vue-form-wizard.js
-File62=vue-form-wizard.min.css
-File63=vue-google-charts.browser.js
-File64=vue-google-maps.js
-File65=vue-router.min.js
-File66=vuetify.min.css
-File67=vuetify.min.js
-File68=xlsx.full.min.js
+File60=vjsf.js
+File61=vue.min.js
+File62=vue-form-wizard.js
+File63=vue-form-wizard.min.css
+File64=vue-google-charts.browser.js
+File65=vue-google-maps.js
+File66=vue-router.min.js
+File67=vuetify.min.css
+File68=vuetify.min.js
+File69=xlsx.full.min.js
 File7=fa-brands-400.svg
 File8=fa-brands-400.ttf
 File9=fa-brands-400.woff
@@ -133,6 +134,7 @@ FileGroup65=Default Group
 FileGroup66=Default Group
 FileGroup67=Default Group
 FileGroup68=Default Group
+FileGroup69=Default Group
 FileGroup7=Default Group
 FileGroup8=Default Group
 FileGroup9=Default Group
@@ -159,7 +161,7 @@ Module6=BANanoMySQLE
 Module7=BANanoOXML
 Module8=|absolute|C:\CodingWorld\B4XShared\B4J\BANanoShared
 Module9=BANanoSQLiteE
-NumberOfFiles=68
+NumberOfFiles=69
 NumberOfLibraries=3
 NumberOfModules=19
 Version=8.9
@@ -175,7 +177,7 @@ Version=8.9
 
 Sub Process_Globals
 	Private BANano As BANano 'ignore
-	Public Version As String = "4.05"
+	Public Version As String = "4.06"
 	Public AppName As String = "BANanoVuetifyAD3"
 End Sub
 
@@ -235,6 +237,10 @@ Sub AppStart (Form1 As Form, Args() As String)
 	BANano.Header.AddJavascriptFile("jszip.min.js")
 	BANano.Header.AddJavascriptFile("oxml.min.js")
 	BANano.Header.AddJavascriptFile("xlsx.full.min.js")
+	BANano.Header.AddCSSFile("microtip.min.css")
+	
+	'BANano.Header.AddJavascriptFile("tiptap-vuetify.js")
+	
 	' start the build
 	#if release
 		BANano.BuildAsB4Xlib(Version)
