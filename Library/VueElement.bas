@@ -6979,6 +6979,10 @@ Sub RoundedSM
 	AddClass("rounded-sm")
 End Sub
 
+Sub RoundedMD
+	AddClass("rounded-md")
+End Sub
+
 Sub RoundedXL
 	AddClass("rounded-xl")
 End Sub
@@ -7670,6 +7674,7 @@ Sub BindAllEvents
 	SetOnEvent(mCallBack, "click:event", "")
 	SetOnEvent(mCallBack, "click:more", "")
 	SetOnEvent(mCallBack, "click:date", "")
+	SetOnEvent(mCallBack, "keydown.esc", "")
 End Sub
 
 'get the chip ref from the chip group
@@ -8553,6 +8558,14 @@ Sub AddAvatarWithBadge(elID As String, imgURL As String, avatarSize As Int, vmod
 	vbadge.BindVueElement(img)
 	vbadge.BindVueElement(avatar)
 	Return vbadge
+End Sub
+
+
+Sub GetToolBar(elID As String) As VueElement
+	Dim dialogToolBar As String = $"${elID}toolbar"$
+	dialogToolBar = dialogToolBar.tolowercase
+	Dim elx As VueElement = GetVueElement(dialogToolBar)
+	Return elx
 End Sub
 
 'get the chip ref from the chip group
@@ -9700,6 +9713,27 @@ End Sub
 '	Return elx
 'End Sub
 
+'get the main button of the speed dial
+Sub GetMainButton As VueElement
+	Dim sID As String = $"${mName}mainbutton"$
+	sID = sID.ToLowerCase
+	Dim elx As VueElement = GetVueElement(sID)
+	Return elx
+End Sub
+
+Sub GetMainIcon As VueElement
+	Dim sID As String = $"${mName}mainicon"$
+	sID = sID.ToLowerCase
+	Dim elx As VueElement = GetVueElement(sID)
+	Return elx
+End Sub
+
+Sub GetCloseIcon As VueElement
+	Dim sID As String = $"${mName}closeicon"$
+	sID = sID.ToLowerCase
+	Dim elx As VueElement = GetVueElement(sID)
+	Return elx
+End Sub
 
 Sub AddSpeedDial(elID As String, mainIcon As String, closeIcon As String, vmodel As String, mainColor As String) As VueElement
 	Dim parentID As String = CleanID(mName)

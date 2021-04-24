@@ -15,6 +15,8 @@ Sub Class_Globals
 	Public jsBoolean As BANanoObject
 	Public jsArray As BANanoObject
 	Public jsObject As BANanoObject
+	Public beforeEnter As BANanoObject
+	Public checkBeforeEnter As Boolean
 	
 	Private data As Map
 	Private opt As Map
@@ -23,7 +25,7 @@ Sub Class_Globals
 	Private watches As Map
 	Private filters As Map
 	Private components As Map
-	Private mprops As Map
+	Public mprops As Map
 	Private query As Map
 	Public Template As VueElement
 	Public Path As String = ""
@@ -58,6 +60,25 @@ End Sub
 'return ths vue instance
 Sub Page As VueElement
 	Return GetVueElement(mCallBack, Here)
+End Sub
+
+'SetBeforeEnter
+'<code>
+'X.SetBeforeEnter("checkThis")
+'Sub checkThis(boTo As Object, boFrom as Object, boNext as Object)
+'log(boTo)
+'log(boFrom)
+'log(boNext)
+'End Sub
+'</code>
+Sub SetBeforeEnter(MethodName As String)
+	checkBeforeEnter = True
+	MethodName = MethodName.tolowercase
+	'
+	Dim xto As Object
+	Dim xfrom As Object
+	Dim xnext As Object
+	beforeEnter = BANano.CallBack(mCallBack, MethodName, Array(xto, xfrom, xnext))
 End Sub
 
 Sub AddContainer(contID As String, bFluid As Boolean) As VueElement
@@ -157,6 +178,7 @@ Public Sub Initialize (CallBack As Object, Name As String) As VueComponent
 	filters.Initialize
 	query.Initialize
 	components.initialize
+	checkBeforeEnter = false
 	Path = $"/${mName}"$
 	'
 	jsString.Initialize("String")
@@ -735,6 +757,9 @@ Sub AddProperty1(propName As String, propType As BANanoObject, propDefault As Ob
 	mprops.Put(propName, mprop)
 End Sub
 
+Sub AddRouteProperty(propName As String, propValue As String)
+	mprops.Put(propName, propValue)
+End Sub
 
 'set deactivated
 Sub SetDeActivated(Module As Object, methodName As String, args As List) As VueComponent

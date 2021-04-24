@@ -223,6 +223,7 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	AddAttr(":expanded.sync", expanded)
 	'AddAttr(":key", keyID)
 	AddAttr(":search", search)
+	AddAttr(":hide-actions", True)
 	
 	setNoDataText("Working on it, please wait...")
 	'

@@ -1476,11 +1476,18 @@ Sub AddRoute(comp As VueComponent)
 	eachroute.Put("path", comp.path)
 	eachroute.Put("name", comp.mname)
 	eachroute.Put("component", compx)
-	eachroute.Put("props", True)
+	Dim props As Map = comp.mprops
+	If props.Size > 0 Then
+		eachroute.Put("props", props)
+	Else
+		eachroute.Put("props", True)
+	End If
 	eachroute.Put("meta", comp.meta)
+	If comp.checkBeforeEnter Then
+		eachroute.Put("beforeEnter", comp.beforeEnter)
+	End If
 	routes.Add(eachroute)
 End Sub
-
 
 'register a component with options
 Sub RegisterComponent(compName As String, compOptions As Map) 
@@ -3846,6 +3853,7 @@ Sub AddDialogAlertPrompt(Module As Object, parentID As String, elID As String, b
 	'
 	Dim dialogShow As String = $"${elID}show"$
 	Dim xDialogTitle As String = $"${elID}caption"$
+	Dim dialogToolBar As String = $"${elID}toolbar"$
 	Dim dialogMessage As String = $"${elID}message"$
 	Dim dialogcanceltitle As String = $"${elID}canceltitle"$
 	Dim dialogoktitle As String = $"${elID}oktitle"$
@@ -3875,7 +3883,9 @@ Sub AddDialogAlertPrompt(Module As Object, parentID As String, elID As String, b
 	sbTemplate.Initialize
 	sbTemplate.Append($"<v-dialog id="${elID}" v-model="${dialogShow}" :width="${dialogwidth}" :persistent="${dialogpersistent}">"$)
 	sbTemplate.Append($"<v-card id="${dialogCardID}">"$)
+	sbTemplate.Append($"v-toolbar id="${dialogToolBar}" flat"$)
 	sbTemplate.Append($"<v-card-title id="${dialogTitleID}" v-html="${xDialogTitle}"></v-card-title>"$)
+	sbTemplate.Append($"</v-toolbar>"$)
 	sbTemplate.Append($"<v-card-text id="${dialogtextID}">"$)
 	sbTemplate.Append($"<p v-html="${dialogMessage}"></p>"$)
 	sbTemplate.Append($"<v-text-field id="${dialogpromptID}" v-if="${dialogpromptshow}" "$)
@@ -4006,6 +4016,7 @@ Sub AddDialogInput(Module As Object, parentID As String, elID As String, bPersis
 	parentID = CleanID(parentID)
 	elID = elID.ToLowerCase
 	'
+	Dim dialogToolBar As String = $"${elID}toolbar"$
 	Dim dialogShow As String = $"${elID}show"$
 	Dim xdialogTitle As String = $"${elID}caption"$
 	Dim dialogcanceltitle As String = $"${elID}canceltitle"$
@@ -4033,7 +4044,9 @@ Sub AddDialogInput(Module As Object, parentID As String, elID As String, bPersis
 	sbTemplate.Initialize
 	sbTemplate.Append($"<v-dialog id="${elID}" v-model="${dialogShow}" :width="${dialogwidth}" :persistent="${dialogpersistent}">"$)
 	sbTemplate.Append($"<v-card id="${dialogCardID}">"$)
+	sbTemplate.Append($"v-toolbar id="${dialogToolBar}" flat"$)
 	sbTemplate.Append($"<v-card-title id="${dialogTitleID}">{{ ${xdialogTitle} }}</v-card-title>"$)
+	sbTemplate.Append($"</v-toolbar>"$)
 	sbTemplate.Append($"<v-card-text id="${dialogtextID}">"$)
 	sbTemplate.Append($"<v-container id="${dialogContainerID}" ref="${dialogContainerID}">"$)
 	sbTemplate.Append($"<v-form id="${dialogFormID}" ref="${dialogFormID}">"$)
@@ -4096,6 +4109,14 @@ Sub GetDatePickerText(Module As Object, dpID As String) As VueElement
 	Dim vtextfield As VueElement
 	vtextfield.Initialize(Module, txtid, txtid)
 	Return vtextfield
+End Sub
+
+Sub GetToolBar(Module As Object, elID As String) As VueElement
+	Dim dialogToolBar As String = $"${elID}toolbar"$
+	dialogToolBar = dialogToolBar.tolowercase
+	Dim elx As VueElement
+	elx.Initialize(Module, dialogToolBar, dialogToolBar)
+	Return elx
 End Sub
 
 'get actual date picker
