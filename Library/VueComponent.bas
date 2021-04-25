@@ -178,7 +178,7 @@ Public Sub Initialize (CallBack As Object, Name As String) As VueComponent
 	filters.Initialize
 	query.Initialize
 	components.initialize
-	checkBeforeEnter = false
+	checkBeforeEnter = False
 	Path = $"/${mName}"$
 	'
 	jsString.Initialize("String")
@@ -218,12 +218,17 @@ Public Sub Initialize (CallBack As Object, Name As String) As VueComponent
 	SetMethod(Me, "thousands", Null)
 	SetMethod(Me, "nicemonth", Null)
 	SetMethod(Me, "niceyear", Null)
+	SetMethod(Me, "json2list", Null)
 	Dim x As Object
 	Dim y As Object
 	SetMethod(Me, "FormatDisplayDate", Array(x, y))
 	Return Me
 End Sub
 
+Sub json2list(content As String) As List
+	Dim lcontent As List = BANano.FromJson(content)
+	Return lcontent
+End Sub
 
 Sub AddMsgBox(bPersistent As Boolean, width As Int, okColor As String, cancelColor As String) As VueElement
 	'**** this page needs to use its own dialog, lets add it
@@ -690,7 +695,7 @@ End Sub
 Sub SetBeforeUpdate(Module As Object, methodName As String, args As List) As VueComponent
 	methodName = methodName.ToLowerCase
 	If SubExists(Module, methodName) = False Then Return Me
-	Dim beforeUpdate As Boolean = BANano.CallBack(Module, methodName, args)
+	Dim beforeUpdate As BANanoObject = BANano.CallBack(Module, methodName, args)
 	opt.Put("beforeUpdate", beforeUpdate)
 	SetMethod(Module, methodName,args)
 	Return Me
@@ -700,7 +705,7 @@ End Sub
 Sub SetBeforeDestroy(Module As Object, methodName As String, args As List) As VueComponent
 	methodName = methodName.ToLowerCase
 	If SubExists(Module, methodName) = False Then Return Me
-	Dim beforeDestroy As Boolean = BANano.CallBack(Module, methodName, args)
+	Dim beforeDestroy As BANanoObject = BANano.CallBack(Module, methodName, args)
 	opt.Put("beforeDestroy", beforeDestroy)
 	SetMethod(Module, methodName, args)
 	Return Me
@@ -785,6 +790,14 @@ End Sub
 'change the id of the element, ONLY execute this after a manual Initialize
 Sub setID(varText As String) As VueComponent
 	mName = varText
+	Return Me
+End Sub
+
+Sub SetDataFreeze(prop As String, xvalue As Object) As VueComponent
+	Dim obj As BANanoObject
+	obj.Initialize("Object")
+	Dim res As List = obj.RunMethod("freeze", Array(xvalue))
+	SetData(prop, res)
 	Return Me
 End Sub
 

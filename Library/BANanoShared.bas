@@ -2827,6 +2827,31 @@ Sub readAsArrayBuffer(fr As Map) As BANanoPromise
 	Return promise
 End Sub
 
+'read as data url
+Sub readAsDataURLFromBlob(blb As Map) As BANanoPromise
+	Dim promise As BANanoPromise 'ignore
+		
+	' calling a single upload
+	promise.CallSub(Me, "ReadBlob", Array(blb))
+	Return promise
+End Sub
+
+
+'read blob
+private Sub ReadBlob(blb As Object)
+	' make a filereader
+	Dim FileReader As BANanoObject
+	FileReader.Initialize2("FileReader", Null)
+	
+	' make a callback for the onload event
+	' an onload of a FileReader requires a 'event' param
+	Dim event As Map
+	FileReader.SetField("onload", BANano.CallBack(Me, "OnLoad1", Array(event)))
+	FileReader.SetField("onerror", BANano.CallBack(Me, "OnError1", Array(event)))
+	' start reading the DataURL
+	FileReader.RunMethod("readAsBinaryString", blb)
+End Sub
+
 'read file
 private Sub ReadFile(FileToRead As Object, MethodName As String)
 	' make a filereader
@@ -2861,6 +2886,23 @@ private Sub OnError(event As Map) As String 'IgnoreDeadCode
 	' FileReader.RunMethod("abort", Null)
 	
 	BANano.ReturnElse(CreateMap("name": UploadedFile.GetField("name"), "result": FileReader.GetField("error"), "abort": Abort))
+End Sub
+'
+private Sub OnLoad1(event As Map) As String 'IgnoreDeadCode
+	' getting our file again (set in UploadFileAndGetDataURL)
+	Dim FileReader As BANanoObject = event.Get("target")
+	Dim result As Object = FileReader.Getfield("result")
+	' return to the then of the UploadFileAndGetDataURL
+	BANano.ReturnThen(result)
+End Sub
+
+private Sub OnError1(event As Map) As String 'IgnoreDeadCode
+	Dim FileReader As BANanoObject = event.Get("target")
+	Dim result As Object = FileReader.GetField("error")
+	' uncomment this if you want to abort the whole operatio
+	' Abort = true
+	' FileReader.RunMethod("abort", Null)
+	BANano.ReturnElse(result)
 End Sub
 
 '

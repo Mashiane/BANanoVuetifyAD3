@@ -1083,8 +1083,15 @@ Sub Initialize(Module As Object, myapp As String)
 	SetMethod(Me, "thousands", Null)
 	SetMethod(Me, "nicemonth", Null)
 	SetMethod(Me, "niceyear", Null)
+	SetMethod(Me, "json2list", Null)
 	UseVBlur
 End Sub
+
+Sub json2list(content As String) As List
+	Dim lcontent As List = BANano.FromJson(content)
+	Return lcontent
+End Sub
+
 
 private Sub InitDialog
 	dlgShow = $"${AppName}show"$
@@ -1570,7 +1577,7 @@ End Sub
 Sub SetBeforeUpdate(Module As Object,methodName As String, args As List)
 	methodName = methodName.ToLowerCase
 	If SubExists(Module, methodName) = False Then Return
-	Dim beforeUpdate As Boolean = BANano.CallBack(Module, methodName, args)
+	Dim beforeUpdate As BANanoObject = BANano.CallBack(Module, methodName, args)
 	Options.Put("beforeUpdate", beforeUpdate)
 	SetMethod(Module,methodName, args)
 End Sub
@@ -1578,7 +1585,7 @@ End Sub
 Sub SetBeforeDestroy(Module As Object,methodName As String, args As List)
 	methodName = methodName.ToLowerCase
 	If SubExists(Module, methodName) = False Then Return
-	Dim beforeDestroy As Boolean = BANano.CallBack(Module, methodName, args)
+	Dim beforeDestroy As BANanoObject = BANano.CallBack(Module, methodName, args)
 	Options.Put("beforeDestroy", beforeDestroy)
 	SetMethod(Module, methodName, args)
 End Sub
@@ -1610,6 +1617,8 @@ End Sub
 'focus on a ref
 Sub SetFocus(refID As String) 
 	Try
+		Dim rKey As String = "$refs"
+		refs = Vue.GetField(rKey)
 		refID = refID.tolowercase
 		refs.GetField(refID).RunMethod("focus", Null)
 	Catch
@@ -1623,6 +1632,8 @@ Sub NullifyFileSelect(refID As String)
 End Sub
 
 Sub RefNull(refID As String)
+	Dim rKey As String = "$refs"
+	refs = Vue.GetField(rKey)
 	refID = refID.tolowercase
 	refs.GetField(refID).SetField("value", Null)
 End Sub
@@ -1630,13 +1641,15 @@ End Sub
 
 'click a reference
 Sub Click(refID As String)
+	Dim rKey As String = "$refs"
+	refs = Vue.GetField(rKey)
 	refID = refID.tolowercase
 	refs.GetField(refID).RunMethod("click", Null)
 End Sub
 
 'show the file select
 Sub ShowFileSelect(fsName As String)
-	Click(fsName)
+	ClickFile(fsName)
 End Sub
 
 'refresh an element using the key
@@ -2067,18 +2080,24 @@ End Sub
 
 'reset a form
 Sub FormReset(formName As String)
+	Dim rKey As String = "$refs"
+	refs = Vue.GetField(rKey)
 	formName = formName.ToLowerCase
 	refs.GetField(formName).runmethod("reset", Null)
 End Sub
 
 'resetValidation a form
 Sub FormResetValidation(formName As String)
+	Dim rKey As String = "$refs"
+	refs = Vue.GetField(rKey)
 	formName = formName.ToLowerCase
 	refs.GetField(formName).runmethod("resetValidation", Null)
 End Sub
 
 'validate a form
 Sub FormValidate(formName As String) As Boolean
+	Dim rKey As String = "$refs"
+	refs = Vue.GetField(rKey)
 	formName = formName.ToLowerCase
 	Dim b As Boolean = refs.GetField(formName).runmethod("validate", Null).Result
 	Return b
@@ -2094,6 +2113,8 @@ End Sub
 'get the active component refs
 Sub GetRefs As BANanoObject
 	'get the router view
+	Dim rKey As String = "$refs"
+	refs = Vue.GetField(rKey)
 	RouterView = refs.GetField(RouterViewName)
 	Dim rKey As String = "$refs"
 	Dim refsx As BANanoObject = RouterView.GetField(rKey)
@@ -2102,6 +2123,8 @@ End Sub
 
 'get the active component slots
 Sub GetSlots As BANanoObject
+	Dim rKey As String = "$refs"
+	refs = Vue.GetField(rKey)
 	RouterView = refs.GetField(RouterViewName)
 	Dim rKey As String = "$slots"
 	Dim refsx As BANanoObject = RouterView.GetField(rKey)
@@ -2123,6 +2146,25 @@ Sub getCurrentPath As String
 		Dim cr As String = Route.GetField("path").result
 		Return cr
 	End If	
+End Sub
+
+Sub RouteRefresh
+	Dim sroute As String = "$route"
+	Route = Vue.GetField(sroute)
+End Sub
+
+Sub RouteGetQuery As Map
+	Dim sroute As String = "$route"
+	Route = Vue.GetField(sroute)
+	Dim params As Map = Route.GetField("query").Result
+	Return params
+End Sub
+
+Sub RouteGetParams As Map
+	Dim sroute As String = "$route"
+	Route = Vue.GetField(sroute)
+	Dim params As Map = Route.GetField("params").Result
+	Return params
 End Sub
 
 'Use router To navigate
@@ -2271,6 +2313,8 @@ End Sub
 Sub ScrollTo(elID As String, duration As Int, offset As Int, easing As String)
 	Try
 		elID = elID.tolowercase
+		Dim rKey As String = "$refs"
+		refs = Vue.GetField(rKey)
 		Dim el As BANanoObject = refs.GetField(elID)
 		If duration = Null Then duration = 300
 		If offset = Null Then offset = 0
@@ -2371,6 +2415,14 @@ End Sub
 Sub RemoveData(key As String)
 	key = key.ToLowerCase
 	data.Delete(key)
+End Sub
+
+
+Sub SetDataFreeze(prop As String, xvalue As Object)
+	Dim obj As BANanoObject
+	obj.Initialize("Object")
+	Dim res As List = obj.RunMethod("freeze", Array(xvalue))
+	SetData(prop, res)
 End Sub
 
 'update the state
@@ -4999,6 +5051,7 @@ Sub AddChipWithIcon(Module As Object, parentID As String, elID As String, sicon 
 	Dim vicon As VueElement
 	vicon.Initialize(Module, iconID, iconID)
 	vicon.caption = sicon
+	vicon.Left = True
 	'
 	Dim span As VueElement
 	span.Initialize(Module, spanID, spanID)
@@ -5300,6 +5353,8 @@ End Sub
 
 'click a reference
 Sub ClickFile(refID As String)
+	Dim rKey As String = "$refs"
+	refs = Vue.GetField(rKey)
 	refID = refID.tolowercase
 	Dim fileRefs As BANanoObject = refs.GetField(refID)
 	'get refs
@@ -5307,4 +5362,12 @@ Sub ClickFile(refID As String)
 	Dim fr As BANanoObject = fileRefs.GetField(xref)
 	Dim input As BANanoObject = fr.GetField("input")
 	input.RunMethod("click", Null)
+End Sub
+
+
+Sub SetNextTick(Module As Object, methodName As String) 
+	methodName = methodName.ToLowerCase
+	Dim e As BANanoEvent
+	Dim cb As BANanoObject = BANano.CallBack(Module, methodName, Array(e))
+	Vue.RunMethod("nextTick", cb)
 End Sub

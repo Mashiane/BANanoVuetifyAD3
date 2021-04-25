@@ -153,7 +153,8 @@ Sub SetColumnsFromDataTable(xcolumns As List)
 		End Select
 	Next
 End Sub
-		
+
+'read the 1st worksheet		
 Sub ReadFile(data As String) As List
 	Dim XLSX As BANanoObject
 	XLSX.initialize("XLSX")
@@ -179,6 +180,34 @@ Sub ReadFile(data As String) As List
 	Dim excelRows As List = XLSX.getfield("utils").RunMethod("sheet_to_row_object_array", Array(sheet, readOpt))
 	Return excelRows
 End Sub
+
+'read the 1st worksheet		
+Sub ReadFileWorkSheet(data As String, ws As Int) As List
+	Dim XLSX As BANanoObject
+	XLSX.initialize("XLSX")
+	Dim opt As Map = CreateMap()
+	opt.put("type", "binary")
+	opt.Put("cellDates", True)
+	opt.Put("cellText", False)
+	'opt.put("raw", True)
+	'get the workbook
+	Dim WorkBook As BANanoObject = XLSX.RunMethod("read", Array(data, opt))
+	'get the worksheet names
+	Dim sheetNames As List = WorkBook.getfield("SheetNames").Result
+	'fetch the name of first Sheet.
+	Dim firstSheet As String = sheetNames.get(ws)
+	'get the sheets object
+	Dim sheets As List = WorkBook.getfield("Sheets").Result
+	'get the sheet objetc by name
+	Dim sheet As BANanoObject = sheets.Get(firstSheet)
+	'Read all rows from first sheet into an JSON Array.
+	Dim readOpt As Map = CreateMap()
+	readOpt.Put("defval", "")
+	readOpt.Put("dateNF", "yyyy-mm-dd hh:mm:ss")
+	Dim excelRows As List = XLSX.getfield("utils").RunMethod("sheet_to_row_object_array", Array(sheet, readOpt))
+	Return excelRows
+End Sub
+
 
 'create a style
 Sub CreateStyle As OXMLStyle

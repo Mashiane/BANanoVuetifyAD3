@@ -7580,6 +7580,13 @@ Sub AddCardSubTitle1(elID As String) As VueElement
 	Return AddVueElement1(elID, "v-card-subtitle", "", "", "", Null)
 End Sub
 
+Sub AddSkeletonLoader(elID As String, loadtypes As List) As VueElement
+	Dim elx As VueElement = AddVueElement1(elID, "v-skeleton-loader", "", "", "", Null)
+	Dim xtypes As String = BANanoShared.Join(", ", loadtypes)
+	elx.SetAttr("type", xtypes)
+	Return elx
+End Sub
+
 Sub AddCardText(elID As String, color As String, props As Map) As VueElement
 	Return AddVueElement1(elID, "v-card-text", "", "", color, props)
 End Sub
@@ -7682,6 +7689,28 @@ Sub GetChip As VueElement
 	Dim elKey As String = $"${mName}chip"$
 	Dim elx As VueElement = GetVueElement(elKey)
 	Return elx
+End Sub
+
+Sub AddChipGroupWithIcon(elID As String, DataSource As String, Key As String, Value As String, Icon As String) As VueElement
+	elID = elID.tolowercase
+	DataSource = DataSource.tolowercase
+	Dim parentID As String = CleanID(mName)
+	'
+	Dim chipid As String = $"${elID}chip"$
+	Dim chipicon As String = $"${elID}icon"$
+	
+	'get the text field, there is only 1 element on the layout
+	Dim vchipgroup As VueElement = AddVueElement2(parentID, elID, "v-chip-group", Null)
+	
+	Dim sTemplate As String = $"<v-chip id="${chipid}"><v-icon id="${chipicon}" left>{{ child.${Icon} }}</v-icon>{{ child.${Value} }}</v-chip>"$
+	vchipgroup.Append(sTemplate)
+	'
+	Dim achip As VueElement = GetVueElement(chipid)
+	achip.VFor = $"child in ${DataSource}"$
+	achip.BindKey($"child.${Key}"$)
+	achip.AddAttr(":value", $"child.${Key}"$)
+	vchipgroup.BindVueElement(achip)
+	Return vchipgroup
 End Sub
 
 Sub AddChipGroup(elID As String, vModel As String,  activeClass As String, bMultiple As Boolean, bShowArrows As Boolean, bFilter As Boolean, DataSource As String, Key As String, Value As String, chipgroupprops As Map, chipprops As Map) As VueElement
@@ -9412,6 +9441,7 @@ Sub AddChipWithIcon(elID As String, sicon As String, label As String, bPill As B
 	vchip.SetOnEvent(mCallBack, "click:close", $"'${elID}'"$)'
 	'
 	Dim vicon As VueElement = AddVueElement2(elID, iconID, "v-icon", Null)
+	vicon.Left = True
 	vicon.caption = sicon
 	'
 	Dim span As VueElement  = AddVueElement2(elID, spanID, "span", Null)
@@ -10892,7 +10922,7 @@ End Sub
 Sub RemoveBinding(v As String)  As VueElement
 	v = v.ToLowerCase
 	bindings.Remove(v)
-	return me
+	Return Me
 End Sub
 
 'items in the treeview can be selectable
@@ -11155,4 +11185,29 @@ End Sub
 Sub MicroTipFit  As VueElement
 	SetAttr("data-microtip-size", "fit")
 	Return Me
+End Sub
+
+Sub TargetBlank  As VueElement
+	SetAttr("target", "_blank")
+	Return Me
+End Sub
+
+Sub BindHREF(shref As String)  As VueElement
+	SetAttr(":href", shref)
+	Return Me
+End Sub
+
+Sub AddHiddenFileSelect(elID As String, multiple As Boolean) As VueElement
+	elID = elID.tolowercase
+	Dim parentID As String = CleanID(mName)
+	Dim pe As VueElement = GetVueElement(parentID)
+	Dim fupload As VueElement = pe.AddFileInput(elID, "", "", "", multiple, "", Null)
+	fupload.Ref = elID
+	fupload.VShow = $"${elID}show"$
+	fupload.SetData($"${elID}show"$, False)
+	Return fupload
+End Sub
+
+Sub setBoilerPlate(b As Boolean)
+	SetAttr(":boilerplate", b)
 End Sub

@@ -992,6 +992,46 @@ End Sub
 
 'return a sql to select record of table where one exists
 '<code>
+''select distinct all order by
+'dbConnect.SelectDistinctAll(array("name"), array("name"))
+'dbConnect.result = db.ExecuteWait(dbConnect.query, dbConnect.args)
+'dbConnect.FromJSON
+'Select Case dbConnect.OK
+'Case False
+'Dim strError As String = dbConnect.Error
+'Log(strError)
+'End Select
+'Dim res As List = dbConnect.Result
+'For Each rec As Map in res
+'Next
+'</code>
+Sub SelectDistinctAll(tblfields As List, orderBy As List) As BANanoALASQLE
+	'are we selecting all fields or just some
+	Dim fld1 As String = tblfields.Get(0)
+	Dim selFIelds As String = ""
+	Select Case fld1
+		Case "*"
+			selFIelds = "*"
+		Case Else
+			selFIelds = JoinFields(",", tblfields)
+	End Select
+	Dim sb As StringBuilder
+	sb.Initialize
+	sb.Append($"SELECT DISTINCT ${selFIelds} FROM ${EscapeField(TableName)}"$)
+	If orderBy.IsInitialized And orderBy.Size > 0 Then
+		'order by
+		Dim stro As String = JoinFields(",", orderBy)
+		If stro.Length > 0 Then
+			sb.Append(" ORDER BY ").Append(stro)
+		End If
+	End If
+	query = sb.tostring
+	command =  "select"
+	Return Me
+End Sub
+
+'return a sql to select record of table where one exists
+'<code>
 ''select distinct where
 'Dim sw As Map = CreateMap()
 'sw.put("id", 10)

@@ -143,6 +143,23 @@ Sub SetResponseType(rType As String) As BANanoAxios
 	Return Me
 End Sub
 
+Sub SetResponseTypeStream As BANanoAxios
+	options.put("responseType", "stream")
+	Return Me
+End Sub
+
+Sub SetResponseTypeJSON As BANanoAxios
+	options.put("responseType", "json")
+	Return Me
+End Sub
+
+
+Sub SetResponseTypeBlob As BANanoAxios
+	options.put("responseType", "blob")
+	Return Me
+End Sub
+
+
 'set base url
 Sub SetBaseURL(url As String) As BANanoAxios
 	options.Put("baseURL", url)
