@@ -177,7 +177,7 @@ Version=8.9
 
 Sub Process_Globals
 	Private BANano As BANano 'ignore
-	Public Version As String = "4.10"
+	Public Version As String = "4.11"
 	Public AppName As String = "BANanoVuetifyAD3"
 End Sub
 

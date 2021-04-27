@@ -717,6 +717,22 @@ Sub JoinMapKeys(m As Map, delim As String) As String
 	Return sb.ToString
 End Sub
 
+'join map keys
+Sub JoinMapKeysQuote(m As Map, delim As String, squote As String) As String
+	If m.Size = 0 Then Return ""
+	Dim sb As StringBuilder
+	sb.Initialize
+	Dim kTot As Int = m.Size - 1
+	Dim kCnt As Int
+	Dim strKey As String = m.getkeyat(0)
+	sb.Append(squote & strKey & squote)
+	For kCnt = 1 To kTot
+		Dim strKey As String = m.getkeyat(kCnt)
+		sb.Append(delim).append(squote & strKey & squote)
+	Next
+	Return sb.ToString
+End Sub
+
 'return lorem ipsum
 Sub LoremIpsum(count As String) As String
 	Return Rand_LoremIpsum(count)
