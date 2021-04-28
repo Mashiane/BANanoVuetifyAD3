@@ -1,0 +1,51 @@
+﻿AppType=JavaFX
+Build1=Default,b4j.example
+File1=valert.bjl
+FileGroup1=Default Group
+Group=Default Group
+Library1=banano
+Library2=jcore
+Library3=jfx
+Library4=banbootstrap
+NumberOfFiles=1
+NumberOfLibraries=4
+NumberOfModules=0
+Version=8.9
+@EndOfDesignText@
+#Region Project Attributes 
+	#MainFormWidth: 600
+	#MainFormHeight: 600 
+#End Region
+
+Sub Process_Globals
+	Private BANano As BANano
+	Private Publish As String = "c:\laragon\www"
+	Private BSAlert1 As BSAlert
+	Private div1 As NormalDiv
+End Sub
+
+Sub AppStart (Form1 As Form, Args() As String)
+	BANano.Initialize("BANano", "BANano", 1)
+	
+	BANano.TranspilerOptions.EnableLiveCodeSwapping = False
+	
+	BANano.Build(Publish)
+End Sub
+
+Sub Banano_ready
+	BANano.LoadLayout("#body", "valert")
+	'
+	Dim m As Map = CreateMap()
+	m.Put("background-color", "blue")
+	m.put("border", "1px red solid")
+	m.Put("height", "100px")
+	'convert an object to json
+	Dim sJSON As String = BANano.ToJson(m)
+	div1.SetStyle(sJSON)
+	
+	'BSAlert1.Text = "Mashy"
+End Sub
+
+Private Sub BSAlert1_Click (event As BANanoEvent)
+	BANano.Alert("First BVAD3 Class!")
+End Sub

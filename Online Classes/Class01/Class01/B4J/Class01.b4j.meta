@@ -7,5 +7,6 @@ ModuleBreakpoints2=
 ModuleClosedNodes0=
 ModuleClosedNodes1=
 ModuleClosedNodes2=
+NavigationStack=Visual Designer,lvmain.bjl,-100,2,Visual Designer,lvapp.bjl,-100,6,pgIndex,BuildPageViewer,41,0,Main,BANano_Ready,82,0,Main,AppStart,56,0,pgIndex,Init,25,0,pgIndex,BuildNavigationBar,26,3,pgIndex,AddPages,49,0,pgIndex,BuildDrawer,59,0,pgIndex,vappbarnavicon_ClickStop,67,2
 SelectedBuild=0
 VisibleModules=

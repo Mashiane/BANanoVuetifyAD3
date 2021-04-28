@@ -41,7 +41,7 @@ Sub BuildNavigationBar
 	'add a title to the v-app-bar
 	BANano.LoadLayoutAppend(vappbar.Target, "lvtoolbartitle")
 	'update the title in the navbar
-	vtoolbartitle.Caption = "Application"
+	vtoolbartitle.Caption = "BVAD First Class"
 End Sub
 
 Sub BuildPageViewer
