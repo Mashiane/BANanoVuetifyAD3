@@ -1531,6 +1531,14 @@ Sub MapNiceDates(m As Map, flds As List)
 	Next
 End Sub
 
+
+'return the theme color
+Sub GetThemeColor(color As String, intensity As String) As String
+	Dim s As String = $"${color} ${intensity}"$
+	s = s.trim
+	Return s
+End Sub
+
 Sub MapNiceMoney(m As Map, flds As List)
 	For Each k As String In flds
 		Dim v As String = m.Get(k)

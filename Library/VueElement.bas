@@ -424,18 +424,21 @@ End Sub
 
 
 'set the master html for the app
-Sub SetTemplate(str As String)
+Sub SetTemplate(str As String) As VueElement
 	mElement.Empty
 	mElement.Append(str)
+	Return Me
 End Sub
 
 
-Sub AddGradient(lst As List)
+Sub AddGradient(lst As List) As VueElement
 	Gradients.Add(lst)
+	Return Me
 End Sub
 
-Sub ClearGradients
+Sub ClearGradients As VueElement
 	Gradients.Initialize 
+	return me
 End Sub
 
 Sub NewListViewItemOptions
@@ -566,32 +569,36 @@ Sub AddItemParentChild(parent As String, key As String, iconName As String, icon
 End Sub
 
 'the url should be replaced
-Sub ListViewSetReplace(itemID As String)
+Sub ListViewSetReplace(itemID As String) As VueElement
 	Dim m As Map = CreateMap()
 	m.Put("replace", True)
 	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+	Return Me
 End Sub
 
 'the url should be appended
-Sub ListViewSetAppend(itemID As String)
+Sub ListViewSetAppend(itemID As String) As VueElement
 	Dim m As Map = CreateMap()
 	m.Put("append", True)
 	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+	Return Me
 End Sub
 
 
 'update an icon in the list
-Sub ListViewSetIcon(itemID As String, sIcon As String)
+Sub ListViewSetIcon(itemID As String, sIcon As String) As VueElement
 	Dim m As Map = CreateMap()
 	m.Put("icon", sIcon)
 	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+	Return Me
 End Sub
 
 'update an iconcolor in the list
-Sub ListViewSetIconColor(itemID As String, sIcon As String)
+Sub ListViewSetIconColor(itemID As String, sIcon As String) As VueElement
 	Dim m As Map = CreateMap()
 	m.Put("iconcolor", sIcon)
 	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+	Return Me
 End Sub
 
 private Sub CleanID(v As String) As String
@@ -897,8 +904,9 @@ Sub setDisplay4Class(b As Boolean)
 End Sub
 
 
-Sub AddClassDisplay4
+Sub AddClassDisplay4 As VueElement
 	AddClass("display-4")
+	Return Me
 End Sub
 
 
@@ -912,8 +920,9 @@ Sub setHeadingClass(b As Boolean)
 End Sub
 
 
-Sub AddClassHeading
+Sub AddClassHeading As VueElement
 	AddClass("heading")
+	Return Me
 End Sub
 
 
@@ -930,8 +939,9 @@ Sub AddClassSubHeading
 	AddClass("subheading")
 End Sub
 
-Sub AddClassHeadLine
+Sub AddClassHeadLine As VueElement
 	AddClass("headline")
+	Return Me
 End Sub
 
 Sub setHeadLine(b As Boolean)
@@ -943,8 +953,9 @@ Sub setHeadLineClass(b As Boolean)
 End Sub
 
 
-Sub AddClassTitle
+Sub AddClassTitle As VueElement
 	AddClass("title")
+	Return Me
 End Sub
 
 Sub setTitle(b As Boolean)
@@ -956,8 +967,9 @@ Sub setTitleClass(b As Boolean)
 End Sub
 
 
-Sub AddClassBody1
+Sub AddClassBody1 As VueElement
 	AddClass("body-1")
+	Return Me
 End Sub
 
 
@@ -970,8 +982,9 @@ Sub setBody1(b As Boolean)
 	AddClass("body-1")
 End Sub
 
-Sub AddClassBody2
+Sub AddClassBody2 As VueElement
 	AddClass("body-2")
+	Return Me
 End Sub
 
 Sub setBody2(b As Boolean)
@@ -982,8 +995,9 @@ Sub setBody2Class(b As Boolean)
 	AddClass("body-2")
 End Sub
 
-Sub AddClassSubTitle1
+Sub AddClassSubTitle1 As VueElement
 	AddClass("subtitle-1")
+	Return Me
 End Sub
 
 Sub setSubTitle1(b As Boolean)
@@ -995,8 +1009,9 @@ Sub setSubTitle1Class(b As Boolean)
 End Sub
 
 
-Sub AddClassSubTitle2
+Sub AddClassSubTitle2 As VueElement
 	AddClass("subtitle-2")
+	Return Me
 End Sub
 
 Sub setSubTitle2(b As Boolean)
@@ -1008,8 +1023,9 @@ Sub setSubTitle2Class(b As Boolean)
 End Sub
 
 
-Sub AddClassCaption
+Sub AddClassCaption As VueElement
 	AddClass("caption")
+	return me
 End Sub
 
 Sub setCaptionClass(b As Boolean)
@@ -1134,12 +1150,14 @@ Sub getCenter As Boolean
 	Return bCenter
 End Sub
 
-Sub Shrink
+Sub Shrink As VueElement
 	AddClass("shrink")
+	Return Me
 End Sub
 
-Sub AddClassShrink
+Sub AddClassShrink As VueElement
 	AddClass("shrink")
+	Return Me
 End Sub
 
 'add an attr on condition
@@ -1918,17 +1936,20 @@ public Sub setStates(varBindings As String)
 End Sub
 
 'add a break
-Sub AddBR
+Sub AddBR As VueElement
 	Append("<br>")
+	Return Me
 End Sub
 
 'add a horizontal rule
-Sub AddHR
+Sub AddHR As VueElement
 	Append("<hr>")
+	Return Me
 End Sub
 
-Sub AddLoose(attr As String)
+Sub AddLoose(attr As String) As VueElement
 	Loose.Add(attr)
+	Return Me
 End Sub
 
 'add an element to the text
@@ -2007,11 +2028,11 @@ public Sub Trigger(event As String, params() As String)
 End Sub
 
 'add a class
-public Sub AddClass(varClass As String)
+public Sub AddClass(varClass As String) As VueElement
 	If BANano.IsUndefined(varClass) Or BANano.IsNull(varClass) Then Return
 	If BANano.IsNumber(varClass) Then varClass = BANanoShared.CStr(varClass)
 	varClass = varClass.trim
-	If varClass = "" Then Return
+	If varClass = "" Then Return Me
 	If mElement <> Null Then 
 		mElement.AddClass(varClass)
 	Else
@@ -2020,6 +2041,7 @@ public Sub AddClass(varClass As String)
 			classList.put(mt, mt)
 		Next
 	End If
+	Return Me
 End Sub
 
 Sub AddClasses(listOfClasses As List)
@@ -2084,19 +2106,19 @@ Sub SetVBindIs(t As String) As VueElement
 End Sub
 
 Sub setVSlotHover(b As Boolean)
-	AddAttr("v-slot", "{ hover }")
+	AddAttr("slot", "{ hover }")
 End Sub
 
 Sub setVSlotNoData(b As Boolean)
-	Loose.Add("v-slot:no-data")
+	AddAttr("slot", "no-data")
 End Sub
 
 Sub setVSlotAppend(b As Boolean)
-	Loose.Add("v-slot:append")
+	AddAttr("slot", "append")
 End Sub
 
 Sub setVSlotExtension(b As Boolean)
-	Loose.Add("v-slot:extension")
+	AddAttr("slot", "extension")
 End Sub
 
 'change the text of the element
@@ -2700,6 +2722,13 @@ public Sub getVText() As String
 	Return stVText
 End Sub
 
+'return the theme color
+Sub GetThemeColor(color As String, intensity As String) As String
+	Dim s As String = $"${color} ${intensity}"$
+	s = s.trim
+	Return s
+End Sub
+
 public Sub AddAttrBackgroundColor(varBackgroundColor As String)
 	AddAttr("background-color", varBackgroundColor)
 End Sub
@@ -3235,6 +3264,11 @@ End Sub
 
 public Sub setPosition(s As String)
 	AddAttr("position", S)
+End Sub
+
+Sub PositionAbsolute As VueElement
+	setStylePosition("absolute")
+	Return Me
 End Sub
 
 public Sub setStylePosition(s As String)
@@ -5081,52 +5115,69 @@ Sub setAlertType(mytype As String)
 	AddAttr("type", mytype)
 End Sub
 
-Sub SetTypeText
+Sub SetTypeButton As VueElement
+	AddAttr("type", "button")
+	Return Me
+End Sub
+
+Sub SetTypeText As VueElement
 	AddAttr("type", "text")
+	Return Me
 End Sub
 
-Sub SetTypePassword
+Sub SetTypePassword As VueElement
 	AddAttr("type", "password")
+	Return Me
 End Sub
 
-Sub SetTypeNumber
+Sub SetTypeNumber As VueElement
 	AddAttr("type", "number")
+	Return Me
 End Sub
 
-Sub SetTypeTelephone
+Sub SetTypeTelephone As VueElement
 	AddAttr("type", "tel")
+	Return Me
 End Sub
 
-Sub SetTypeEmail
+Sub SetTypeEmail As VueElement
 	AddAttr("type", "email")
+	Return Me
 End Sub
 
-Sub SetTypeURL
+Sub SetTypeURL As VueElement
 	AddAttr("type", "url")
+	Return Me
 End Sub
 
-Sub SetTypeFile
+Sub SetTypeFile As VueElement
 	AddAttr("type", "file")
+	Return Me
 End Sub
 
-Sub BindType(s As String)
+Sub BindType(s As String) As VueElement
 	AddAttr(":type", s)
+	Return Me
 End Sub
 
-Sub SetTypeInfo
+Sub SetTypeInfo As VueElement
 	AddAttr("type", "info")
+	Return Me
 End Sub
 
-Sub SetTypeWarning
+Sub SetTypeWarning As VueElement
 	AddAttr("type", "warning")
+	Return Me
 End Sub
 
-Sub SetTypeError
+Sub SetTypeError As VueElement
 	AddAttr("type", "error")
+	Return Me
 End Sub
 
-Sub SetTypeSuccess
+Sub SetTypeSuccess As VueElement
 	AddAttr("type", "success")
+	Return Me
 End Sub
 
 Sub setSuccess(b As Boolean)
@@ -5360,6 +5411,16 @@ Sub SetOnOwnEventAttr(eventHandler As Object, methodName As String, event As Str
 	If BANano.IsUndefined(args) Or BANano.IsNull(args) Then args = ""
 	Dim sCode As String = $"${methodName}(${args})"$
 	AddAttr($"v-on:${event}"$, sCode)
+End Sub
+
+Sub ClickNativeToggle
+	Dim event As String = "click.native"
+	AddAttr($"v-on:${event}"$, "toggle")
+End Sub
+
+Sub ClickToggle
+	Dim event As String = "click"
+	AddAttr($"v-on:${event}"$, "toggle")
 End Sub
 
 'clear the items for this
@@ -9354,7 +9415,7 @@ Sub AddHover(elid As String, props As Map) As VueElement
 	elid = elid.tolowercase
 	Dim elx As VueElement = AddVueElement1(elid, "v-hover", "", "", "", props)
 	Dim hoverID As String = $"${elid}hover"$
-	elx.AddAttr("v-slot", $"{ ${hoverID} }"$)
+	elx.AddAttr("slot", $"{ ${hoverID} }"$)
 	Return elx
 End Sub
 
@@ -9726,6 +9787,23 @@ Sub AddAppBar(elID As String) As VueElement
 	Return elx
 End Sub
 
+Sub AddItemGroup(elID As String, vmodel As String, mandatory As Boolean) As VueElement
+	Dim elx As VueElement = AddVueElement1(elID, "v-item-group", vmodel, "", "", Null)
+	If mandatory Then
+		elx.Bind("mandatory", mandatory)
+	End If
+	Return elx
+End Sub
+
+Sub AddItemGroupItem(elID As String, value As String) As VueElement
+	Dim elx As VueElement = AddVueElement1(elID, "v-item", "", "", "", Null)
+	If value <> "" Then
+		elx.BindValue(value)
+	End If
+	Return elx
+End Sub
+
+
 'Sub AddTipTap(elID As String) As VueElement
 '	Dim parentID As String = CleanID(mName)
 '	Dim scontent As String = $"${elID}content"$
@@ -9934,6 +10012,32 @@ Sub AddAppProgress(color As String) As VueElement
 	Return elx
 End Sub
 
+Sub AddColorGroup(elID As String, vModel As String, colors As List) As VueElement
+	elID = elID.tolowercase
+	Dim pitem As VueElement = GetVueElement(mName)
+	Dim colorgroup As VueElement = pitem.AddItemGroup(elID, vModel, True)
+	Dim colorrow As VueElement = colorgroup.AddVRow($"${elID}colorrow"$)
+	Dim colorItem As VueElement = colorrow.AddItemGroupItem($"${elID}coloritem"$, "item")
+	colorItem.VFor = $"item in ${elID}colors"$
+	colorItem.BindKey("item")
+	colorItem.VSlotActiveToggle = True
+	'
+	Dim colorcard As VueElement = colorItem.AddCard1($"${elID}colorcard"$)
+	colorcard.Width = "30"
+	colorcard.Height = "30"
+	colorcard.MR = 2
+	colorcard.ClickNativeToggle
+	colorcard.CursorPointer
+	colorcard.BorderStyle = "solid"
+	colorcard.BorderWidth = "2px"
+	colorcard.Bind("style", "{backgroundColor:item, borderColor: active ? '#222': 'white'}")
+	
+	colorgroup.BindVueElement(colorItem)
+	colorgroup.SetData($"${elID}colors"$, colors)
+	Return colorgroup
+End Sub
+
+
 Sub GetTHead As VueElement
 	Return GetVueElement($"${mName}thead"$)
 End Sub
@@ -10035,6 +10139,7 @@ Sub AddAppSnackBar As VueElement
 	elx.Bind("left", "appsnackleft")
 	elx.Bind("shaped", "appsnackshaped")
 	elx.Bind("rounded", "appsnackrounded")
+	elx.Bind("timeout", "appsnacktimeout")
 	elx.SetData("appsnackmessage", "")
 	elx.SetData("appsnackshow", False)
 	elx.SetData("appsnackright", True)
@@ -10046,6 +10151,7 @@ Sub AddAppSnackBar As VueElement
 	elx.SetData("appsnackleft", False)
 	elx.SetData("appsnackshaped", True)
 	elx.SetData("appsnackrounded", False)
+	elx.SetData("appsnacktimeout", 3000)
 	Return elx
 End Sub
 
@@ -10135,6 +10241,11 @@ Sub AddSlideXReverseTransition(elID As String) As VueElement
 	Return elx
 End Sub
 
+Sub AddTemplate(elID As String) As VueElement
+	Dim elx As VueElement = AddVueElement1(elID, "v-template", "", "", "", Null)
+	Return elx
+End Sub
+
 Sub AddSlotAppend(elID As String) As VueElement
 	Dim elx As VueElement = AddVueElement1(elID, "v-template", "", "", "", Null)
 	elx.VSlotAppend = True
@@ -10188,18 +10299,6 @@ Sub AddBreadCrumbs(elid As String) As VueElement
 	Return vlist
 End Sub
 
-'add item group
-Sub AddItemGroup(elid As String) As VueElement
-	Dim vlist As VueElement = AddVueElement1(elid, "v-item-group", "", "", "", Null)
-	Return vlist
-End Sub
-
-
-'add item
-Sub AddGroupItem(elid As String) As VueElement
-	Dim vlist As VueElement = AddVueElement1(elid, "v-item", "", "", "", Null)
-	Return vlist
-End Sub
 
 Sub AddDataTable(parentID As String, elID As String) As VueTable
 	Dim elx As VueTable
@@ -10264,6 +10363,7 @@ Sub AddChip(elid As String) As VueElement
 	Return AddVueElement1(elid, "v-chip", "", "", "", Null)
 End Sub
 
+'center the content in an element
 Sub CenterContent
 	setAlignCenter(True)
 	setJustifyCenter(True)
@@ -10329,7 +10429,52 @@ Sub setPrevIcon(pi As String)
 End Sub
 
 Sub setAlignStart(b As Boolean)
-	Bind("align-start", b)
+	AddAttr("align", "start")
+End Sub
+
+Sub setAlignEnd(b As Boolean)
+	AddAttr("align", "end")
+End Sub
+
+Sub setJustifySpaceAround(b As Boolean)
+	AddClass("justify-space-around")
+End Sub
+
+Sub setJustifySpaceBetween(b As Boolean)
+	AddClass("justify-space-between")
+End Sub
+
+Sub setJustifyStart(b As Boolean)
+	AddClass("justify-start")
+End Sub
+
+Sub setAlignContentCenter(b As Boolean)
+	Bind("align-content-center", b)
+End Sub
+
+Sub setAlignContentStart(b As Boolean)
+	Bind("align-content-start", b)
+End Sub
+
+Sub setAlignContentSpaceBetween(b As Boolean)
+	Bind("align-content-space-between", b)
+End Sub
+
+Sub setAlignContentSpaceAround(b As Boolean)
+	Bind("align-content-space-around", b)
+End Sub
+
+Sub setAlignContentEnd(b As Boolean)
+	Bind("align-content-end", b)
+End Sub
+
+
+Sub setAlignSpaceAround(b As Boolean)
+	Bind("align-space-around", b)
+End Sub
+
+Sub setAlignSpaceBetween(b As Boolean)
+	Bind("align-space-between", b)
 End Sub
 
 Sub setFabTransition(b As Boolean)
@@ -10451,7 +10596,7 @@ End Sub
 
 'add a hyperlink that opens to blank
 Sub AddLink(elID As String, href As String, caption As String, target As String)
-	Dim elx As VueElement = AddVueElement(elID, "router-link", Null)
+	Dim elx As VueElement = AddVueElement(elID, "a", Null)
 	elx.Href = href
 	elx.Caption = caption
 	elx.Target = target
@@ -11210,4 +11355,23 @@ End Sub
 
 Sub setBoilerPlate(b As Boolean)
 	SetAttr(":boilerplate", b)
+End Sub
+
+Sub setBackdropFilterBlur(r As String)
+	AddStyle("-webkit-backdrop-filter", $"blur(${r})"$)
+	AddStyle("backdrop-filter", $"blur(${r})"$)
+End Sub
+
+Sub AlignItemsCenter As VueElement
+	AddStyle("align-items", "center")
+	Return Me
+End Sub
+
+Sub JustifyContentCenter As VueElement
+	AddStyle("justify-content", "center")
+	Return Me
+End Sub
+
+Sub setVSlotActiveToggle(b As Boolean)
+	AddAttr("v-slot", "{ active, toggle }")
 End Sub

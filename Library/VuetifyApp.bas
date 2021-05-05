@@ -662,6 +662,7 @@ Sub SnackBarInitialize
 	SetData("appsnackleft", False)
 	SetData("appsnackshaped", True)
 	SetData("appsnackrounded", False)
+	SetData("appsnacktimeout", 3000)
 End Sub
 
 'add a master snack bar for the app
@@ -678,6 +679,7 @@ Sub AddAppSnackBar As VueElement
 	elx.Bind("left", "appsnackleft")
 	elx.Bind("shaped", "appsnackshaped")
 	elx.Bind("rounded", "appsnackrounded")
+	elx.Bind("timeout", "appsnacktimeout")
 	BindVueElement(elx)
 	SnackBarInitialize
 	Return elx
@@ -685,6 +687,11 @@ End Sub
 
 Sub SnackBarColor(s As String) As VuetifyApp
 	SetData("appsnackcolor",s)
+	Return Me
+End Sub
+
+Sub SnackBarTimeOut(tout As Int) As VuetifyApp
+	SetData("appsnacktimeout", tout)
 	Return Me
 End Sub
 
@@ -1425,7 +1432,7 @@ Sub GetHexColor(Color As String, Intensity As String) As String
 	Dim hexColor As String = ""
 	If ColorMap.ContainsKey(sCode) Then
 		hexColor = ColorMap.Get(sCode)
-	End If
+	End If	
 	Return hexColor	
 End Sub
 
@@ -1435,8 +1442,20 @@ Sub GetColorHex(sColor As String) As String
 	If ColorMap.ContainsKey(sColor) Then
 		Dim xColor As String = ColorMap.Get(sColor)
 		Return xColor
+	Else
+		Return sColor
 	End If
-	Return ""
+End Sub
+
+Sub ListOfColorsToHex(colors As List) As List
+	Dim colTot As Int = colors.Size - 1
+	Dim colCnt As Int 
+	For colCnt = 0 To colTot
+		Dim strCol As String = colors.Get(colCnt)
+		strCol = GetColorHex(strCol)
+		colors.Set(colCnt, strCol)
+	Next
+	Return colors
 End Sub
 
 Sub ModuleExist(tagName As String) As Boolean
@@ -4950,7 +4969,7 @@ Sub AddHover(Module As Object, parentID As String, elid As String, props As Map)
 	elid = elid.tolowercase
 	Dim elx As VueElement = AddVueElement(Module, parentID, elid, "v-hover", "", "", "", props)
 	Dim hoverID As String = $"${elid}hover"$
-	elx.AddAttr("v-slot", $"{ ${hoverID} }"$)
+	elx.AddAttr("slot", $"{ ${hoverID} }"$)
 	Return elx
 End Sub
 
@@ -5364,10 +5383,16 @@ Sub ClickFile(refID As String)
 	input.RunMethod("click", Null)
 End Sub
 
-
 Sub SetNextTick(Module As Object, methodName As String) 
 	methodName = methodName.ToLowerCase
 	Dim e As BANanoEvent
 	Dim cb As BANanoObject = BANano.CallBack(Module, methodName, Array(e))
 	Vue.RunMethod("nextTick", cb)
+End Sub
+
+'return the theme color
+Sub GetThemeColor(color As String, intensity As String) As String
+	Dim s As String = $"${color} ${intensity}"$
+	s = s.trim
+	Return s
 End Sub
