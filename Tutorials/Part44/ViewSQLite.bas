@@ -110,7 +110,7 @@ Sub btnAdd_click(e As BANanoEvent)
 	'insert current record
 	dbSQLite.Insert1(urec)
 	'build the payload
-	Dim payload As Map = dbSQLite.Build(False)
+	Dim payload As Map = dbSQLite.Build
 	'call the method from the app
 	vuetify.RunMethod("SQLiteOnBrowser", payload)
 End Sub
@@ -130,7 +130,7 @@ Sub btnUpdate4_click(e As BANanoEvent)
 	'update current record
 	dbSQLite.Update1(urec, 4)
 	'build the payload
-	Dim payload As Map = dbSQLite.Build(False)
+	Dim payload As Map = dbSQLite.Build
 	'call the method from the app
 	vuetify.RunMethod("SQLiteOnBrowser", payload)
 	'phpsqlite.RunMethod("getallusers", Null)
@@ -144,7 +144,7 @@ Sub GetAllUsers			'ignoreDeadCode
 	dbSQLite.SetCallBack("ViewSQLite", "GetAllUsersNext")
 	dbSQLite.SelectAll(Array("*"), Array("id"))
 	'build the payload
-	Dim payload As Map = dbSQLite.Build(False)
+	Dim payload As Map = dbSQLite.Build
 	'call the method from the app
 	vuetify.RunMethod("SQLiteOnBrowser", payload)
 	'convert to json
@@ -179,7 +179,7 @@ Sub btnAge30_click(e As BANanoEvent)
 	aw.Put("age", 30)
 	dbSQLite.SelectWhere(Array("*"), aw, Array(">="), Array("name"))
 	'build the payload
-	Dim payload As Map = dbSQLite.Build(False)
+	Dim payload As Map = dbSQLite.Build
 	'call the method from the app
 	vuetify.RunMethod("SQLiteOnBrowser", payload)
 	'convert to json
@@ -201,7 +201,7 @@ Sub btnRec1_click(e As BANanoEvent)
 	dbSQLite.SchemaAddInt(Array("id"))
 	dbSQLite.Read(1)
 	'build the payload
-	Dim payload As Map = dbSQLite.Build(False)
+	Dim payload As Map = dbSQLite.Build
 	'call the method from the app
 	vuetify.RunMethod("SQLiteOnBrowser", payload)
 	'convert to json
@@ -222,7 +222,7 @@ Sub btnDel3_click(e As BANanoEvent)
 	dbSQLite.SchemaAddInt(Array("id"))
 	dbSQLite.Delete(3)
 	'build the payload
-	Dim payload As Map = dbSQLite.Build(False)
+	Dim payload As Map = dbSQLite.Build
 	'call the method from the app
 	vuetify.RunMethod("SQLiteOnBrowser", payload)
 	'phpsqlite.RunMethod("getallusers", Null)
@@ -235,7 +235,7 @@ Sub btnDeleteWhere_click(e As BANanoEvent)
 	dbSQLite.SchemaAddInt(Array("age"))
 	dbSQLite.DeleteWhere(CreateMap("age": 40), Array("<"))
 	'build the payload
-	Dim payload As Map = dbSQLite.Build(False)
+	Dim payload As Map = dbSQLite.Build
 	'call the method from the app
 	vuetify.RunMethod("SQLiteOnBrowser", payload)
 	'phpsqlite.RunMethod("getallusers", Null)
@@ -247,7 +247,7 @@ Sub btnDelAll_click(e As BANanoEvent)
 	dbSQLite.SetCallBack("ViewSQLite", "GetAllUsers")
 	dbSQLite.DeleteAll
 	'build the payload
-	Dim payload As Map = dbSQLite.Build(False)
+	Dim payload As Map = dbSQLite.Build
 	'call the method from the app
 	vuetify.RunMethod("SQLiteOnBrowser", payload)
 	'phpsqlite.RunMethod("getallusers", Null)

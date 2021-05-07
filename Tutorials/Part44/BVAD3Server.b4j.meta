@@ -37,6 +37,6 @@ ModuleClosedNodes6=
 ModuleClosedNodes7=
 ModuleClosedNodes8=
 ModuleClosedNodes9=
-NavigationStack=BROWSERIndex,SQLiteOnBrowser,113,0,ViewSQLite,PayloadManager,75,0,ViewSQLite,Initialize,61,0,ViewSQLite,btnAdd_click,108,0,ViewSQLite,GetAllUsers,137,0,ViewSQLite,GetAllUsersNext,149,0,BROWSERIndex,AddDrawer,203,0,BROWSERIndex,SQLOnBrowser,120,0,BROWSERIndex,Class_Globals,16,0,SHAREDODBC,ToJSON,296,0
+NavigationStack=BROWSERIndex,SQLOnBrowser,142,0,Main,Application_Error,109,0,BROWSERIndex,Initialize,34,0,BROWSERIndex,SQLiteOnBrowser,104,0,BROWSERIndex,WebSocket_Connected,53,0,BROWSERIndex,Class_Globals,13,0,modBVAD3,Process_Globals,6,0,ViewBANanoSQL,btnDelAll_click,267,0,SHAREDODBC,FirstRecord,319,0,Main,AppStart,72,0
 SelectedBuild=0
 VisibleModules=

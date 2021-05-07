@@ -77,7 +77,8 @@ Sub WebSocket_Connected()
 	vuetify.BindVueElement(appmain)
 	
 	'add transition
-	apptransition = vuetify.AddSlideXTransition(Me, appmain.ID, "apptransition", "out-in")
+	apptransition = vuetify.AddSlideXTransition(Me, appmain.ID, "apptransition")
+	apptransition.Mode = "out-in"
 	vuetify.BindVueElement(apptransition)
 	
 	'add router view

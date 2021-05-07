@@ -67,7 +67,7 @@ Module9=ViewMySQL
 NumberOfFiles=20
 NumberOfLibraries=11
 NumberOfModules=12
-Version=8.8
+Version=8.9
 @EndOfDesignText@
 'Non-UI application (console / server application)
 #Region Project Attributes 

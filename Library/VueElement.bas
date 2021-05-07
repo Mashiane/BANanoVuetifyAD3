@@ -46,6 +46,10 @@ Version=7
 #Event: KeydownRightPrevent (e As BANanoEvent)
 #Event: KeydownSpacePrevent (e As BANanoEvent)
 #Event: KeyupEnter (e As BANanoEvent)
+#Event: Drop (e As BANanoEvent)
+#Event: DragOver (e As BANanoEvent)
+#Event: DragEnter (e As BANanoEvent)
+#Event: DragLeave (e As BANanoEvent)
 
 #DesignerProperty: Key: AutoID, DisplayName: Auto ID/Name, FieldType: Boolean, DefaultValue: False, Description: Overrides the ID/Name with a random string.
 #DesignerProperty: Key: App, DisplayName: App, FieldType: Boolean, DefaultValue: False, Description: 
@@ -335,7 +339,7 @@ Sub Class_Globals
 	Private bClippedRight As Boolean = False
 	Private extm As Map
 	Public OpenItems As List
-	private mSetName as boolean = false
+	Private mSetName As Boolean = False
 	
 	'
 	Type VueGridRow(Rows As Int, Columns As List, _
@@ -438,7 +442,7 @@ End Sub
 
 Sub ClearGradients As VueElement
 	Gradients.Initialize 
-	return me
+	Return Me
 End Sub
 
 Sub NewListViewItemOptions
@@ -2029,7 +2033,7 @@ End Sub
 
 'add a class
 public Sub AddClass(varClass As String) As VueElement
-	If BANano.IsUndefined(varClass) Or BANano.IsNull(varClass) Then Return
+	If BANano.IsUndefined(varClass) Or BANano.IsNull(varClass) Then Return Me
 	If BANano.IsNumber(varClass) Then varClass = BANanoShared.CStr(varClass)
 	varClass = varClass.trim
 	If varClass = "" Then Return Me
@@ -7743,6 +7747,10 @@ Sub BindAllEvents
 	SetOnEvent(mCallBack, "click:more", "")
 	SetOnEvent(mCallBack, "click:date", "")
 	SetOnEvent(mCallBack, "keydown.esc", "")
+	SetOnEvent(mCallBack, "drop", "")
+	SetOnEvent(mCallBack, "dragover", "")
+	SetOnEvent(mCallBack, "dragenter", "")
+	SetOnEvent(mCallBack, "dragleave", "")
 End Sub
 
 'get the chip ref from the chip group

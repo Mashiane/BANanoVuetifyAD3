@@ -93,7 +93,7 @@ Sub btnAdd_click(e As BANanoEvent)
 	'insert current record
 	dbMySQL.Insert1(urec)
 	'build the payload
-	Dim payload As Map = dbMySQL.Build(False)
+	Dim payload As Map = dbMySQL.Build
 	'call the method from the app
 	vuetify.RunMethod("SQLOnBrowser", payload)
 End Sub
@@ -113,7 +113,7 @@ Sub btnUpdate4_click(e As BANanoEvent)
 	'update current record
 	dbMySQL.Update1(urec, 4)
 	'build the payload
-	Dim payload As Map = dbMySQL.Build(False)
+	Dim payload As Map = dbMySQL.Build
 	'call the method from the app
 	vuetify.RunMethod("SQLOnBrowser", payload)
 End Sub
@@ -126,7 +126,7 @@ Sub GetAllUsers
 	dbMySQL.SetCallBack("ViewMySQL", "records")
 	dbMySQL.SelectAll(Array("*"), Array("name"))
 	'build the payload
-	Dim payload As Map = dbMySQL.Build(False)
+	Dim payload As Map = dbMySQL.Build
 	'call the method from the app
 	vuetify.RunMethod("SQLOnBrowser", payload)
 End Sub
@@ -184,7 +184,7 @@ Sub btnAge30_click(e As BANanoEvent)
 	aw.Put("age", 30)
 	dbMySQL.SelectWhere(Array("*"), aw, Array(">="), Array("name"))
 	'build the payload
-	Dim payload As Map = dbMySQL.Build(False)
+	Dim payload As Map = dbMySQL.Build
 	'call the method from the app
 	vuetify.RunMethod("SQLOnBrowser", payload)
 End Sub
@@ -198,7 +198,7 @@ Sub btnRec1_click(e As BANanoEvent)
 	dbMySQL.SchemaAddInt(Array("id"))
 	dbMySQL.Read(1)
 	'build the payload
-	Dim payload As Map = dbMySQL.Build(False)
+	Dim payload As Map = dbMySQL.Build
 	'call the method from the app
 	vuetify.RunMethod("SQLOnBrowser", payload)
 End Sub
@@ -211,7 +211,7 @@ Sub btnDel3_click(e As BANanoEvent)
 	dbMySQL.SchemaAddInt(Array("id"))
 	dbMySQL.Delete(3)
 	'build the payload
-	Dim payload As Map = dbMySQL.Build(False)
+	Dim payload As Map = dbMySQL.Build
 	'call the method from the app
 	vuetify.RunMethod("SQLOnBrowser", payload)
 End Sub
@@ -223,7 +223,7 @@ Sub btnDeleteWhere_click(e As BANanoEvent)
 	dbMySQL.SchemaAddInt(Array("age"))
 	dbMySQL.DeleteWhere(CreateMap("age": 40), Array("<"))
 	'build the payload
-	Dim payload As Map = dbMySQL.Build(False)
+	Dim payload As Map = dbMySQL.Build
 	'call the method from the app
 	vuetify.RunMethod("SQLOnBrowser", payload)
 End Sub
@@ -234,7 +234,7 @@ Sub btnDelAll_click(e As BANanoEvent)
 	dbMySQL.SetCallBack("ViewMySQL", "GetAllUsers")
 	dbMySQL.DeleteAll
 	'build the payload
-	Dim payload As Map = dbMySQL.Build(False)
+	Dim payload As Map = dbMySQL.Build
 	'call the method from the app
 	vuetify.RunMethod("SQLOnBrowser", payload)
 End Sub
