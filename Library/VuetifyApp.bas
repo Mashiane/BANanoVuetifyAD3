@@ -5396,3 +5396,13 @@ Sub GetThemeColor(color As String, intensity As String) As String
 	s = s.trim
 	Return s
 End Sub
+
+Sub UseVuetifySimpleWizard
+	'ensure that the module is loaded
+	If ModuleExist("vuetifySimpleWizard") = False Then
+		Dim vsw As BANanoObject
+		vsw.Initialize("vuetifySimpleWizard")
+		Use(vsw)
+		AddModule("vuetifySimpleWizard")
+	End If
+End Sub

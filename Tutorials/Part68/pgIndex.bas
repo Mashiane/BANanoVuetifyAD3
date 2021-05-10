@@ -122,6 +122,8 @@ Sub Init
 	drwlist.AddItemParentChild("components", ViewBottomSheet.name, "", "", "Bottom Sheet", ViewBottomSheet.path)
 	drwlist.AddItemParentChild("components", ViewFAB.name, "", "", "Floating Action Button", ViewFAB.path)
 	drwlist.AddItemParentChild("components", ViewToolTip.name, "", "", "ToolTips", ViewToolTip.path)
+	drwlist.AddItemParentChild("components", ViewExcel.name, "", "", "Excel", ViewExcel.path)
+	drwlist.AddItemParentChild("components", pgVuetifyFormWizard.name, "", "", "Vuetify Form Wizard", pgVuetifyFormWizard.path)
 	'
 	drwlist.AddItemParentChild("", "nav", "mdi-cog", "", "Navigation", "")
 	drwlist.AddItemParentChild("nav", ViewList.name, "", "", "Lists", ViewList.path)
@@ -190,9 +192,13 @@ Sub Init
 	vuetify.BindVueElement(swtTheme)
 	vuetify.SetData("mytheme", False)
 	
+	'
+	vuetify.UseVuetifySimpleWizard
 	'vuetify.UseVueSocialChat
 	'render the ux
 	vuetify.Serve
+	'
+	Log(BANano.Window)
 End Sub
 
 Sub changetheme_change(b As Boolean)
@@ -207,6 +213,7 @@ End Sub
 Sub AddRouters
 	'ViewContacts.Initialize
 	'ViewCRUDBuilder.Initialize
+	pgVuetifyFormWizard.Initialize 
 	ViewTips.Initialize 
 	ViewToolTip.Initialize 
 	ViewFAB.Initialize  
@@ -252,7 +259,8 @@ Sub AddRouters
 	ViewPDFView.Initialize 
 	ViewFormWizard.Initialize 
 	ViewTreeView.Initialize 
-	ViewBottomNavigation.Initialize 
+	ViewBottomNavigation.Initialize
+	ViewExcel.Initialize 
 End Sub
 
 Sub vappbarnavicon_ClickStop (e As BANanoEvent)
