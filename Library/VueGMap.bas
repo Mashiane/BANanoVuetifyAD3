@@ -1141,6 +1141,12 @@ Sub Refresh
 	VC.SetData(markerName, points)
 End Sub
 
+'refresh markers
+Sub Refresh1
+	VC.SetData(soptions, options)
+	VC.SetData(markerName, points)
+End Sub
+
 Sub AddMarker(mID As String, lat As Double, lng As Double, label As String, info As String)
 	mID = mID.tolowercase
 	Dim point As Map = CreateMap()

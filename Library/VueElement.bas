@@ -7076,6 +7076,10 @@ Sub CursorPointer()
 	AddStyle("cursor", "pointer")
 End Sub
 
+Sub CursorGrab()
+	AddStyle("cursor", "grab")
+End Sub
+
 Sub DisplayInlineBlock()
 	AddStyle("display", "inline-block")
 End Sub
@@ -7908,6 +7912,7 @@ Sub AddAvatar(elID As String, imgURL As String, avatarSize As Int, avatarprops A
 	img.BindAllEvents
 	'
 	avatar.BindVueElement(img)
+	avatar.BindAllEvents
 	Return avatar
 End Sub
 
@@ -7928,6 +7933,7 @@ Sub AddAvatar2(elID As String, imgURL As String, avatarSize As Int) As VueElemen
 	img.BindAllEvents
 	'
 	avatar.BindVueElement(img)
+	avatar.BindAllEvents
 	Return avatar
 End Sub
 
@@ -8655,6 +8661,7 @@ Sub AddAvatarWithBadge(elID As String, imgURL As String, avatarSize As Int, vmod
 	'
 	vbadge.BindVueElement(img)
 	vbadge.BindVueElement(avatar)
+	vbadge.BindAllEvents
 	Return vbadge
 End Sub
 
@@ -8702,6 +8709,7 @@ Sub AddAvatar1(elID As String, vmodel As String, avatarSize As Int, avatarprops 
 		
 	img.BindAllEvents
 	avatar.BindVueElement(img)
+	avatar.BindAllEvents
 	Return avatar
 End Sub
 

@@ -1294,6 +1294,7 @@ private Sub ReadCode As MySQLCRUD
 	Dim sbSchemas As String = BuildSchemas
 	'
 	sb.Append($"Sub Read${SingularClean}(s${PrimaryKey} As String)			'ignoredeadcode
+	${dtName}.UpdateLoading(True)
 	${LoadRelationships}
 	${OpenBANanoSQL}
 	Dim ${rsTB} As ${className}
@@ -1309,6 +1310,7 @@ private Sub ReadCode As MySQLCRUD
 		Dim strError As String = ${rsTB}.Error
 		log(strerror)
 		vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
+		${dtName}.UpdateLoading(False)
 		Return
 	End Select
 	Dim ${SingularClean}M As Map = ${rsTB}.result.Get(0)
@@ -1316,6 +1318,7 @@ private Sub ReadCode As MySQLCRUD
 	'show the drawer
 	${ComponentName}.SetData("${ModalShow.tolowercase}", True)
 	${ComponentName}.SetData("${SingularClean.tolowercase}", ${SingularClean}M)
+	${dtName}.UpdateLoading(False)
 End Sub"$).Append(CRLF).Append(CRLF)
 	
 	Return Me
@@ -1325,6 +1328,7 @@ End Sub
 private Sub UpdateCode As MySQLCRUD
 	Dim sbSchemas As String = BuildSchemas
 	sb.Append($"Sub Update${SingularClean}(${SingularClean}M As Map)			'ignoredeadcode
+	${ComponentName}.SetData("${ModalName}loading", True)
 	${RemoveFiles}
 	Dim s${PrimaryKey} As String = ${SingularClean}M.Get("${PrimaryKey}")
 	${OpenBANanoSQL}
@@ -1334,16 +1338,18 @@ private Sub UpdateCode As MySQLCRUD
 	${sbSchemas}
 	'insert current record
 	${rsTB}.Update1(${SingularClean}M, s${PrimaryKey})
-	${rsTB}.JSON = banano.CallInlinePHPWait(${rsTB}.MethodName, ${rsTB}.Build)
+	${rsTB}.JSON = BANano.CallInlinePHPWait(${rsTB}.MethodName, ${rsTB}.Build)
 	${ExecuteBANanoSQL}
 	${rsTB}.FromJSON
 	Select Case ${rsTB}.OK
 	Case False
 		Dim strError As String = ${rsTB}.Error
-		log(strerror)
+		Log(strerror)
 		vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
+		${ComponentName}.SetData("${ModalName}loading", False)
 	Case Else
 		vuetify.ShowSnackBarSuccess("The ${Singular.tolowercase} has been updated successfully!")
+		${ComponentName}.SetData("${ModalName}loading", False)
 		'hide modal form
 		${ComponentName}.SetData("${ModalShow.tolowercase}", False)
 		Dim bReload As Boolean = ${ComponentName}.GetData("reload")
@@ -1459,6 +1465,7 @@ private Sub CreateCode()
 	Dim sbSchemas As String = BuildSchemas
 	'
 	sb.Append($"Sub Create${SingularClean}(${SingularClean}M As Map)			'ignoredeadcode
+	${ComponentName}.SetData("${ModalName}loading", True)
 	'remove the auto-increment key field
 	${SingularClean}M.Remove("${AutoIncrement}")
 	${RemoveFiles}
@@ -1477,8 +1484,10 @@ private Sub CreateCode()
 		Dim strError As String = ${rsTB}.Error
 		log(strError)
 		vuetify.ShowSnackBarError("An error took place whilst running the command. " & strError)
+		${ComponentName}.SetData("${ModalName}loading", False)
 	Case Else
 		vuetify.ShowSnackBarSuccess("The ${Singular.tolowercase} has been added successfully!")
+		${ComponentName}.SetData("${ModalName}loading", False)
 		'hide modal form
 		${ComponentName}.SetData("${ModalShow.tolowercase}", False)
 		'Load records
@@ -1679,6 +1688,13 @@ private Sub CreateTableCode()
 	'
 	sb.Append($"${dtName}.SetDataSource(${ComponentName}.NewList)"$).Append(CRLF)
 	sb.Append($"${ComponentName}.BindVueTable(${dtName})"$).Append(CRLF)
+	'
+	sb.Append($"Dim txt${SingularClean}Search As VueElement = ${dtName}.GetSearchText
+	txt${SingularClean}Search.Rounded = True
+	txt${SingularClean}Search.BindAllEvents
+	txt${SingularClean}Search.Dense = True
+	txt${SingularClean}Search.Solo = True
+	${ComponentName}.BindVueElement(txt${SingularClean}Search)"$).Append(CRLF)
 	sb.Append("End Sub").Append(CRLF).Append(CRLF)
 End Sub
 
@@ -1800,6 +1816,9 @@ private Sub CreateDialogCode
 	AddCode($"Sub Create${PluralClean}Dialog"$)
 	AddComment("create a container")
 	AddCode($"Dim ${ModalName} As VueElement = vuetify.AddDialogInput(Me, ${ComponentName}.Here, "${ModalName}", True, "${Diag_Width}", "${Plural}", "Save", "primary", "Cancel", "error")"$)
+	AddCode($"Dim btn${ModalName}OK As VueElement = ${ModalName}.GetOK("${ModalName}")"$)
+	AddCode($"btn${ModalName}OK.Loading = "${ModalName}loading""$)
+	AddCode($"${ComponentName}.SetData("${ModalName}loading", False)"$)
 	'
 	If Diag_FullScreenOnMobile Then
 		AddCode($"${ModalName}.FullScreenOnMobile = True"$)

@@ -551,6 +551,27 @@ Sub BindVueExcel(el As VueExcel)
 	Next
 End Sub
 
+'bind VueFlowy
+Sub BindVueFlowy(el As VueFlowy)
+	Dim mbindings As Map = el.bindings
+	Dim mmethods As Map = el.methods
+	'apply the binding for the control
+	For Each k As String In mbindings.Keys
+		Dim v As Object = mbindings.Get(k)
+		Select Case k
+		Case "key"
+		Case Else
+			SetData(k, v)
+		End Select
+	Next
+	'apply the events
+	For Each k As String In mmethods.Keys
+		Dim cb As BANanoObject = mmethods.Get(k)
+		SetCallBack(k, cb)
+	Next
+End Sub
+
+
 
 'bind VueSimpleWizard
 Sub BindVueSimpleWizard(el As VueSimpleWizard)
@@ -661,11 +682,13 @@ Sub GetElementByData(dataattr As String, value As String) As BANanoElement
 End Sub
 
 'import a component, the module should have the Initilize method without parameters
-Sub Import(comp As VueComponent)
+Sub Import(Vue As BANanoObject, comp As VueComponent)
+	comp.AppendPlaceHolder
 	Dim compname As String = comp.mName
 	compname = compname.tolowercase
 	If components.ContainsKey(compname) = True Then Return
-	Dim compx As Map = comp.Component
+	Dim compx As BANanoObject = Vue.RunMethod("component", Array(comp.mname, comp.component))
+	'Dim compx As Map = comp.Component
 	components.Put(compname, compx)
 End Sub
 
@@ -1014,6 +1037,7 @@ Sub Component As Map
 	opt.Put("filters", filters)
 	opt.Put("template", sTemplate)
 	opt.Put("components", components)
+	opt.Put("name", mName)
 	Return opt
 End Sub
 

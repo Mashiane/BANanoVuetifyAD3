@@ -45,16 +45,6 @@ Public Sub Initialize(CallBack As Object, Name As String , EventName As String)
 	SetData(stepsName, steps)
 End Sub
 
-Sub Use(vuetify As VuetifyApp)
-	'ensure that the module is loaded
-	If vuetify.ModuleExist("vuetifySimpleWizard") = False Then
-		Dim vsw As BANanoObject
-		vsw.Initialize("vuetifySimpleWizard")
-		vuetify.Use(vsw)
-		vuetify.AddModule("vuetifySimpleWizard")
-	End If
-End Sub
-
 ' this is the place where you create the view in html and run initialize javascript
 Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	mTarget = Target

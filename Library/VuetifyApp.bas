@@ -582,10 +582,12 @@ End Sub
 
 'import a component, the module should have the Initilize method without parameters
 Sub Import(comp As VueComponent)
+	comp.AppendPlaceHolder
 	Dim compname As String = comp.mName
 	compname = compname.tolowercase
 	If components.ContainsKey(compname) = True Then Return
-	Dim compx As Map = comp.Component
+	Dim compx As BANanoObject = Vue.RunMethod("component", Array(comp.mname, comp.component))
+	'Dim compx As Map = comp.Component
 	components.Put(compname, compx)
 End Sub
 
@@ -2167,9 +2169,43 @@ Sub getCurrentPath As String
 	End If	
 End Sub
 
+Sub GetParamValue(qry As String) As Object
+	Dim qrym As Map = RouteGetParams
+	If qrym.ContainsKey(qry) Then
+		Dim value As Object = qrym.Get(qry)
+		Return value
+	End If
+	Return Null
+End Sub
+
+Sub GetQueryValue(qry As String) As String
+	Dim qrym As Map = RouteGetQuery
+	If qrym.ContainsKey(qry) Then
+		Dim value As String = qrym.Get(qry)
+		Return value
+	End If
+	Return ""
+End Sub
+
 Sub RouteRefresh
 	Dim sroute As String = "$route"
 	Route = Vue.GetField(sroute)
+End Sub
+
+'get query map
+Sub GetQuery As Map
+	Dim sroute As String = "$route"
+	Route = Vue.GetField(sroute)
+	Dim params As Map = Route.GetField("query").Result
+	Return params
+End Sub
+
+'get parameters
+Sub GetParams As Map
+	Dim sroute As String = "$route"
+	Route = Vue.GetField(sroute)
+	Dim params As Map = Route.GetField("params").Result
+	Return params
 End Sub
 
 Sub RouteGetQuery As Map
@@ -3384,6 +3420,7 @@ Sub AddAvatarWithBadge(Module As Object, parentID As String, elID As String, img
 	'
 	vbadge.BindVueElement(img)
 	vbadge.BindVueElement(avatar)
+	vbadge.BindAllEvents
 	Return vbadge
 End Sub
 
@@ -3407,6 +3444,7 @@ Sub AddAvatar1(Module As Object, parentID As String, elID As String, vmodel As S
 	avatar.AssignProps(avatarprops)
 	img.BindAllEvents
 	'
+	avatar.BindAllEvents
 	avatar.BindVueElement(img)
 	Return avatar
 End Sub
@@ -3454,6 +3492,7 @@ Sub AddAvatar(Module As Object, parentID As String, elID As String, imgURL As St
 	img.BindAllEvents
 	'
 	avatar.BindVueElement(img)
+	avatar.BindAllEvents
 	Return avatar
 End Sub
 
@@ -3480,6 +3519,7 @@ Sub AddAvatarWithText(Module As Object, parentID As String, elID As String, Capt
 	avatar.BindAllEvents
 	'
 	avatar.BindVueElement(txt)
+	avatar.BindAllEvents
 	Return avatar
 End Sub
 
@@ -3954,7 +3994,7 @@ Sub AddDialogAlertPrompt(Module As Object, parentID As String, elID As String, b
 	sbTemplate.Initialize
 	sbTemplate.Append($"<v-dialog id="${elID}" v-model="${dialogShow}" :width="${dialogwidth}" :persistent="${dialogpersistent}">"$)
 	sbTemplate.Append($"<v-card id="${dialogCardID}">"$)
-	sbTemplate.Append($"v-toolbar id="${dialogToolBar}" flat"$)
+	sbTemplate.Append($"<v-toolbar id="${dialogToolBar}" flat>"$)
 	sbTemplate.Append($"<v-card-title id="${dialogTitleID}" v-html="${xDialogTitle}"></v-card-title>"$)
 	sbTemplate.Append($"</v-toolbar>"$)
 	sbTemplate.Append($"<v-card-text id="${dialogtextID}">"$)
@@ -4115,7 +4155,7 @@ Sub AddDialogInput(Module As Object, parentID As String, elID As String, bPersis
 	sbTemplate.Initialize
 	sbTemplate.Append($"<v-dialog id="${elID}" v-model="${dialogShow}" :width="${dialogwidth}" :persistent="${dialogpersistent}">"$)
 	sbTemplate.Append($"<v-card id="${dialogCardID}">"$)
-	sbTemplate.Append($"v-toolbar id="${dialogToolBar}" flat"$)
+	sbTemplate.Append($"<v-toolbar id="${dialogToolBar}" flat>"$)
 	sbTemplate.Append($"<v-card-title id="${dialogTitleID}">{{ ${xdialogTitle} }}</v-card-title>"$)
 	sbTemplate.Append($"</v-toolbar>"$)
 	sbTemplate.Append($"<v-card-text id="${dialogtextID}">"$)
@@ -5306,6 +5346,15 @@ Sub UseVJSF
 		VJsf.Initialize("VJsf")
 		Dim boVJsf As BANanoObject = VJsf.GetField("default")
 		components.Put("v-jsf", boVJsf)
+	End If	
+End Sub
+
+Sub UseFlowy
+	If components.ContainsKey("flowy") = False Then
+		Dim FlowyVue As BANanoObject = BANano.Window.GetField("flowy-vue")
+		'Dim Flowy As BANanoObject = FlowyVue.GetField("Flowy")
+		'Dim boFlowy As BANanoObject = FlowyVue.GetField("default")
+		components.Put("flowy", FlowyVue)
 	End If	
 End Sub	
 
