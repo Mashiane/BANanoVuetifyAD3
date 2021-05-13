@@ -326,7 +326,7 @@ Version=8.9
 Sub Process_Globals
 	Public BANano As BANano 'ignore
 	Public AppName As String = "bvad3"
-	Public AppTitle As String = "BANanoVuetify AD3 (68)"
+	Public AppTitle As String = "BANanoVuetify AD3 (69)"
 	Private Publish As String = "C:\laragon\www"
 	Public Version As String = "1.00"
 	Public ServerIP As String = "https://localhost"
