@@ -29,6 +29,18 @@ Sub Process_Globals
 	Type sequencePair(value As Int, numTimes As Int)
 End Sub
 
+
+Sub IncrementMap(m As Map, k As String)
+	If m.ContainsKey(k) Then
+		Dim lc As Int = m.Get(k)
+		lc = BANano.parseInt(lc)
+		lc = lc + 1
+		m.Put(k, lc)
+	Else
+		m.Put(k, 1)	
+	End If
+End Sub
+
 Sub EQOperators(sm As Map) As List  'ignore
 	Dim nl As List
 	nl.initialize
@@ -4137,3 +4149,13 @@ Sub MapSetDefaults(orig As Map, defvalues As Map)
 		End If
 	Next
 End Sub
+
+'convert a list to a map
+Sub ListToMap(lst As List) As Map
+	Dim nm As Map = CreateMap()
+	For Each item As String In lst
+		nm.Put(item, item)
+	Next
+	Return nm
+End Sub
+ 

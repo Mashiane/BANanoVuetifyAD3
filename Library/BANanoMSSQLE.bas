@@ -49,6 +49,7 @@ Sub Class_Globals
 	Public view As String
 	Public action As String
 	Public NoResult As Boolean
+	Public URL As String
 End Sub
 
 
@@ -658,6 +659,7 @@ Sub Initialize(dbName As String, tblName As String, PK As String, AI As String) 
 	Record.Initialize
 	MethodName = "BANanoMSSQL"
 	MethodNameDynamic = "BANanoMSSQLDynamic"
+	url = ""
 	result.Initialize
 	command = ""
 	PrimaryKey = PK
@@ -677,7 +679,7 @@ Sub Initialize(dbName As String, tblName As String, PK As String, AI As String) 
 	username = ""
 	password = ""
 	Auto = AI
-	NoResult = false
+	NoResult = False
 	Return Me
 End Sub
 
@@ -696,6 +698,19 @@ private Sub Json2Map(strJSON As String) As Map
 	Catch
 		Return Map1
 	End Try
+End Sub
+
+Sub CallInlinePHPWait(req As String, params As Map) As String
+	Dim data As Map = CreateMap()
+	data.Put("request", req)
+	data.Put("params", params)
+	'
+	Dim axios As BANanoAxios
+	axios.Initialize(URL)
+	axios.SetAccessControlAllowOrigin("*")
+	axios.SetContentType("json")
+	Dim resp As String = BANano.Await(axios.PostWait(data))
+	Return resp
 End Sub
 
 'convert a map to a json string using BANanoJSONGenerator

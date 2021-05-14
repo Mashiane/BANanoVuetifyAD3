@@ -49,6 +49,7 @@ Sub Class_Globals
 	Public view As String
 	Public action As String
 	Public NoResult As Boolean
+	public URL as string
 End Sub
 
 'get a count of all records
@@ -172,6 +173,7 @@ End Sub
 '</code>
 Sub FromJSON As BANanoMySQLE
 	OK = False
+	Try
 	If json.StartsWith("{") Or json.Startswith("[") Then
 		Dim m As Map = BANano.FromJson(json)
 		response = m.Get("response")
@@ -187,6 +189,12 @@ Sub FromJSON As BANanoMySQLE
 		result = NewList
 		affectedRows = -1
 	End If
+	Catch
+		response = json
+		error = json
+		result = NewList
+		affectedRows = -1
+	End Try
 	Return Me
 End Sub
 
@@ -331,6 +339,7 @@ End Sub
 Public Sub Initialize(dbName As String, tblName As String, PK As String, AI As String) As BANanoMySQLE
 	Schema.Initialize
 	Record.Initialize
+	URL = ""
 	MethodName = "BANanoMySQL"
 	MethodNameDynamic = "BANanoMySQLDynamic"
 	result.Initialize
@@ -1582,7 +1591,18 @@ Sub SelectAllAscDesc(tblfields As List, orderBy As List, AscDesc As List)
 	affectedRows = 0
 End Sub
 
-
+Sub CallInlinePHPWait(req As String, params As Map) As String
+	Dim data As Map = CreateMap()
+	data.Put("request", req)
+	data.Put("params", params)
+	'
+	Dim axios As BANanoAxios
+	axios.Initialize(URL)
+	axios.SetAccessControlAllowOrigin("*")
+	axios.SetContentType("json")
+	Dim resp As String = BANano.Await(axios.PostWait(data))
+	Return resp
+End Sub
 
 #if PHP
 function prepareMySQL($conn, $query, $types, $args) {

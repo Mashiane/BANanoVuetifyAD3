@@ -37,6 +37,20 @@ Sub Class_Globals
 	Public view As String
 	Public action As String
 	Public NoResult As Boolean
+	Public URL As String
+End Sub
+
+Sub CallInlinePHPWait(req As String, params As Map) As String
+	Dim data As Map = CreateMap()
+	data.Put("request", req)
+	data.Put("params", params)
+	'
+	Dim axios As BANanoAxios
+	axios.Initialize(URL)
+	axios.SetAccessControlAllowOrigin("*")
+	axios.SetContentType("json")
+	Dim resp As String = BANano.Await(axios.PostWait(data))
+	Return resp
 End Sub
 
 Sub SetCallBack(v As String, a As String)
@@ -435,6 +449,7 @@ Public Sub Initialize(dbName As String, tblName As String, PK As String, AI As S
 	Schema.Initialize
 	Record.Initialize
 	MethodName = "BANanoSQLite"
+	URL = ""
 	result.Initialize
 	command = ""
 	PrimaryKey = PK

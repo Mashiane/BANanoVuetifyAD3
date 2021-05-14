@@ -1,80 +1,82 @@
 ﻿AppType=JavaFX
 Build1=Default,b4j.example
 File1=1.png
-File10=fa-brands-400.woff2
-File11=fa-regular-400.eot
-File12=fa-regular-400.svg
-File13=fa-regular-400.ttf
-File14=fa-regular-400.woff
-File15=fa-regular-400.woff2
-File16=fa-solid-900.eot
-File17=fa-solid-900.svg
-File18=fa-solid-900.ttf
-File19=fa-solid-900.woff
+File10=fa-brands-400.woff
+File11=fa-brands-400.woff2
+File12=fa-regular-400.eot
+File13=fa-regular-400.svg
+File14=fa-regular-400.ttf
+File15=fa-regular-400.woff
+File16=fa-regular-400.woff2
+File17=fa-solid-900.eot
+File18=fa-solid-900.svg
+File19=fa-solid-900.ttf
 File2=2.png
-File20=fa-solid-900.woff2
-File21=fileSaver.min.js
-File22=flowy-vue.css
-File23=flowy-vue.umd.min.js
-File24=fontawesome.css
-File25=gray.png
-File26=green.png
-File27=happyface.png
-File28=html2canvas.js
-File29=jspdf.min.js
+File20=fa-solid-900.woff
+File21=fa-solid-900.woff2
+File22=fileSaver.min.js
+File23=flowy-vue.css
+File24=flowy-vue.umd.min.js
+File25=fontawesome.css
+File26=gray.png
+File27=green.png
+File28=happyface.png
+File29=html2canvas.js
 File3=avatar.png
-File30=jspdf.plugin.autotable.min.js
-File31=jszip.min.js
-File32=lodash.min.js
-File33=materialdesignicons.min.css
-File34=materialdesignicons-webfont.eot
-File35=materialdesignicons-webfont.ttf
-File36=materialdesignicons-webfont.woff
-File37=materialdesignicons-webfont.woff2
-File38=microtip.min.css
-File39=neutralface.png
+File30=jspdf.min.js
+File31=jspdf.plugin.autotable.min.js
+File32=jszip.min.js
+File33=lodash.min.js
+File34=materialdesignicons.min.css
+File35=materialdesignicons-webfont.eot
+File36=materialdesignicons-webfont.ttf
+File37=materialdesignicons-webfont.woff
+File38=materialdesignicons-webfont.woff2
+File39=microtip.min.css
 File4=axios.min.js
-File40=numeral.min.js
-File41=orange.png
-File42=oxml.min.js
-File43=qrcode.min.js
-File44=red.png
-File45=roboto.min.css
-File46=Roboto100.ttf
-File47=Roboto300.ttf
-File48=Roboto400.ttf
-File49=Roboto500.ttf
-File5=dayjs.min.js
-File50=Roboto700.ttf
-File51=Roboto900.ttf
-File52=sadface.png
-File53=themify.eot
-File54=themify.svg
-File55=themify.ttf
-File56=themify.woff
-File57=themify-icons.css
-File58=third-party.js
-File59=upload.php
-File6=fa-brands-400.eot
-File60=v-blur.min.js
-File61=vjsf.css
-File62=vjsf.js
-File63=vue.js
-File64=vue-form-wizard.js
-File65=vue-form-wizard.min.css
-File66=vue-google-charts.browser.js
-File67=vue-google-maps.js
-File68=vue-router.min.js
-File69=vuetify.min.css
-File7=fa-brands-400.svg
-File70=vuetify.min.js
-File71=vuetify-simple-wizard.min.js
-File72=xlsx.full.min.js
-File73=xspreadsheet.css
-File74=xspreadsheet.js
-File75=xspreadsheet.svg
-File8=fa-brands-400.ttf
-File9=fa-brands-400.woff
+File40=nedb.min.js
+File41=neutralface.png
+File42=numeral.min.js
+File43=orange.png
+File44=oxml.min.js
+File45=qrcode.min.js
+File46=red.png
+File47=roboto.min.css
+File48=Roboto100.ttf
+File49=Roboto300.ttf
+File5=BANanoNEDB.bas
+File50=Roboto400.ttf
+File51=Roboto500.ttf
+File52=Roboto700.ttf
+File53=Roboto900.ttf
+File54=sadface.png
+File55=themify.eot
+File56=themify.svg
+File57=themify.ttf
+File58=themify.woff
+File59=themify-icons.css
+File6=dayjs.min.js
+File60=third-party.js
+File61=upload.php
+File62=v-blur.min.js
+File63=vjsf.css
+File64=vjsf.js
+File65=vue.min.js
+File66=vue-form-wizard.js
+File67=vue-form-wizard.min.css
+File68=vue-google-charts.browser.js
+File69=vue-google-maps.js
+File7=fa-brands-400.eot
+File70=vue-router.min.js
+File71=vuetify.min.css
+File72=vuetify.min.js
+File73=vuetify-simple-wizard.min.js
+File74=xlsx.full.min.js
+File75=xspreadsheet.css
+File76=xspreadsheet.js
+File77=xspreadsheet.svg
+File8=fa-brands-400.svg
+File9=fa-brands-400.ttf
 FileGroup1=Default Group
 FileGroup10=Default Group
 FileGroup11=Default Group
@@ -148,6 +150,8 @@ FileGroup72=Default Group
 FileGroup73=Default Group
 FileGroup74=Default Group
 FileGroup75=Default Group
+FileGroup76=Default Group
+FileGroup77=Default Group
 FileGroup8=Default Group
 FileGroup9=Default Group
 Group=Default Group
@@ -155,30 +159,31 @@ Library1=banano
 Library2=jcore
 Library3=jfx
 Module1=BANanoALASQLE
-Module10=BVAD3ListItem
-Module11=MySQLCRUD
-Module12=VueComponent
-Module13=VueElement
-Module14=VueExcel
-Module15=VueFlowy
-Module16=VueGCharts
-Module17=VueGMap
-Module18=VueSimpleWizard
-Module19=VueSocial
+Module10=BANanoSQLiteE
+Module11=BVAD3ListItem
+Module12=MySQLCRUD
+Module13=VueComponent
+Module14=VueElement
+Module15=VueExcel
+Module16=VueFlowy
+Module17=VueGCharts
+Module18=VueGMap
+Module19=VueSimpleWizard
 Module2=BANanoAxios
-Module20=VueTable
-Module21=VuetifyApp
-Module22=VueVJSF
+Module20=VueSocial
+Module21=VueTable
+Module22=VuetifyApp
+Module23=VueVJSF
 Module3=BANanoJSPDF
 Module4=BANanoJSPDFTable
 Module5=BANanoMSSQLE
 Module6=BANanoMySQLE
-Module7=BANanoOXML
-Module8=|absolute|C:\CodingWorld\B4XShared\B4J\BANanoShared
-Module9=BANanoSQLiteE
-NumberOfFiles=75
+Module7=BANanoNEDB
+Module8=BANanoOXML
+Module9=|absolute|C:\CodingWorld\B4XShared\B4J\BANanoShared
+NumberOfFiles=77
 NumberOfLibraries=3
-NumberOfModules=22
+NumberOfModules=23
 Version=8.9
 @EndOfDesignText@
 #Region Project Attributes 
@@ -192,7 +197,7 @@ Version=8.9
 
 Sub Process_Globals
 	Private BANano As BANano 'ignore
-	Public Version As String = "4.17"
+	Public Version As String = "4.20"
 	Public AppName As String = "BANanoVuetifyAD3"
 End Sub
 
@@ -217,7 +222,7 @@ Sub AppStart (Form1 As Form, Args() As String)
 	BANano.Header.AddCSSFile("roboto.min.css")
 	BANano.Header.AddCSSFile("materialdesignicons.min.css")
 	BANano.Header.AddCSSFile("vuetify.min.css")
-	BANano.Header.AddJavascriptFile("vue.js")
+	BANano.Header.AddJavascriptFile("vue.min.js")
 	BANano.Header.AddJavascriptFile("vuetify.min.js")
 	BANano.Header.AddJavascriptFile("vue-router.min.js")
 	BANano.Header.AddJavascriptFile("dayjs.min.js")
@@ -260,6 +265,7 @@ Sub AppStart (Form1 As Form, Args() As String)
 	BANano.Header.AddCSSFile("xspreadsheet.css")
 	BANano.Header.AddJavascriptFile("xspreadsheet.js")
 	BANano.Header.AddJavascriptFile("vuetify-simple-wizard.min.js")
+	BANano.Header.AddJavascriptFile("nedb.min.js")
 	
 	
 	'BANano.Header.AddJavascriptFile("tiptap-vuetify.js")

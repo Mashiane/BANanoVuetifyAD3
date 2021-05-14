@@ -427,6 +427,35 @@ End Sub
 ''get maximum
 'Dim Records as List = NewList
 'Records.add(createmap("id":1"))
+'dbConnect.InsertBulk(records)
+'dbConnect.result = db.ExecuteWait(dbConnect.query, dbConnect.args)
+'dbConnect.FromJSON
+'Select Case dbConnect.OK
+'Case False
+'Dim strError As String = dbConnect.Error
+'Log(strError)
+'End Select
+'</code>
+Sub InsertBulk(recs As List) As BANanoALASQLE
+	Dim sSQL As String = $"SELECT * INTO [${TableName}] FROM ?"$
+	query = sSQL
+	args = Array(recs)
+	types = Null
+	command = "insert"
+	response = ""
+	error = ""
+	result = NewList
+	json = ""
+	affectedRows = 0
+	Return Me
+End Sub
+
+
+'return a sql to delete record of table where one exists
+'<code>
+''get maximum
+'Dim Records as List = NewList
+'Records.add(createmap("id":1"))
 'dbConnect.InsertList
 'dbConnect.result = db.ExecuteWait(dbConnect.query, Records)
 'dbConnect.FromJSON

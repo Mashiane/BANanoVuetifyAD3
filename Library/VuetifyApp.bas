@@ -5455,3 +5455,17 @@ Sub UseVuetifySimpleWizard
 		AddModule("vuetifySimpleWizard")
 	End If
 End Sub
+
+Sub ColorList As List
+	Dim colors As List
+	colors.Initialize 
+	For Each k As String In ColorMap.Keys
+		Dim k1 As String = BANanoShared.MvField(k, 1, " ")
+		k1 = k1.trim
+		If k1 = "" Then Continue
+		If colors.IndexOf(k1) = -1 Then
+			colors.Add(k1)
+		End If
+	Next
+	Return colors
+End Sub
