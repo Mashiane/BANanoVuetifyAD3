@@ -2139,6 +2139,7 @@ Sub BindValue(value As String)
 End Sub
 
 Sub setValidateOnBlur(b As Boolean)
+	If b = False Then Return
 	Bind("validate-on-blur", b)
 End Sub
 
@@ -2164,6 +2165,7 @@ End Sub
 
 'leave absolute
 Sub setLeaveAbsolute(b As Boolean)
+	if b = false then return
 	Bind("leave-absolute", b)
 End Sub
 
@@ -2878,6 +2880,7 @@ public Sub getBorderStyle() As String
 End Sub
 
 public Sub setBorderWidth(varBorderWidth As String)
+	If BANano.IsNull(varBorderWidth) Or BANano.IsUndefined(varBorderWidth) Then Return
 	AddStyle("border-width", varBorderWidth)
 	stBorderWidth = varBorderWidth
 End Sub
@@ -2885,6 +2888,7 @@ End Sub
 
 public Sub setApp(b As Boolean)
 	If BANano.IsNull(b) Or BANano.IsUndefined(b) Then Return
+	If b = False Then Return
 	Bind("app", b)
 	bApp = b
 End Sub
@@ -3524,6 +3528,17 @@ Sub SetCallBack(methodName As String, cb As BANanoObject)
 	methods.Put(methodName, cb)
 End Sub
 
+Sub RemoveEvent(event As String)
+	event = event.ToLowerCase
+	'
+	Dim attrName As String = event
+	attrName = attrName.tolowercase
+	attrName = attrName.Replace(":","")
+	attrName = attrName.Replace(".","")
+	attrName = attrName.Replace("-","")
+	RemoveAttr($"v-on:${event}"$)
+End Sub
+
 Sub SetOnEvent(eventHandler As Object, event As String, args As String)
 	event = event.ToLowerCase
 	'
@@ -3932,6 +3947,7 @@ End Sub
 
 'set hide-selected
 public Sub setHideSelected(b As Boolean)
+	if b = false then return
 	Bind("hide-selected", b)
 End Sub
 
@@ -3965,6 +3981,7 @@ End Sub
 
 'set persistent
 public Sub setPersistent(b As Boolean)
+	If b = False Then Return
 	Bind("persistent", b)
 End Sub
 
@@ -6727,6 +6744,7 @@ Sub AddListViewGroupTemplate(numLines As Int, props As ListViewItemOptions) As V
 	'
 	datasource = datasource.ToLowerCase
 	key = key.ToLowerCase
+	setDataSource(datasource)
 	'
 	Dim sTemplate As StringBuilder
 	sTemplate.Initialize
@@ -9749,15 +9767,28 @@ Sub setDisableRouteWatcher(b As Object)
 End Sub
 
 
-Sub AddToolbarTitle(elID As String, Caption As String, Color As String, props As Map) As VueElement
+Sub AddAppBarTitle(elID As String, Caption As String, TextColor As String) As VueElement
+	Dim elx As VueElement = AddVueElement1(elID, "v-app-bar-title", "", Caption, "", Null)
+	If TextColor <> "" Then 
+		elx.TextColor = TextColor
+	End If
+	Return elx
+End Sub
+
+
+Sub AddToolbarTitle(elID As String, Caption As String, TextColor As String, props As Map) As VueElement
 	Dim elx As VueElement = AddVueElement1(elID, "v-toolbar-title", "", Caption, "", props)
-	elx.TextColor = Color
+	If TextColor <> "" Then 
+		elx.TextColor = TextColor
+	End If
 	Return elx
 End Sub
 
 Sub AddToolbarTitle1(elID As String, Caption As String, TextColor As String) As VueElement
 	Dim elx As VueElement = AddVueElement1(elID, "v-toolbar-title", "", Caption, "", Null)
-	If TextColor <> "" Then elx.TextColor = TextColor
+	If TextColor <> "" Then 
+		elx.TextColor = TextColor
+	End If
 	Return elx
 End Sub
 
@@ -11390,4 +11421,153 @@ End Sub
 
 Sub setVSlotActiveToggle(b As Boolean)
 	AddAttr("v-slot", "{ active, toggle }")
+End Sub
+
+'bind the app snack bar
+Sub BuildSnackBar
+	Dim sid As String = getID
+	setVModel($"${sid}show"$)
+	setCaption($"{{ ${sid}message }}"$)
+	Bind("right", $"${sid}right"$)
+	Bind("top", $"${sid}top"$)
+	Bind("color", $"${sid}color"$)
+	Bind("bottom", $"${sid}bottom"$)
+	Bind("centered", $"${sid}centered"$)
+	Bind("outlined", $"${sid}lined"$)
+	Bind("left", $"${sid}left"$)
+	Bind("shaped", $"${sid}shaped"$)
+	Bind("rounded", $"${sid}rounded"$)
+	Bind("timeout", $"${sid}timeout"$)
+	'
+	SetData($"${sid}message"$, "")
+	SetData($"${sid}show"$, False)
+	SetData($"${sid}right"$, True)
+	SetData($"${sid}top"$, True)
+	SetData($"${sid}color"$,"")
+	SetData($"${sid}bottom"$, False)
+	SetData($"${sid}centered"$, False)
+	SetData($"${sid}outlined"$, False)
+	SetData($"${sid}left"$, False)
+	SetData($"${sid}shaped"$, True)
+	SetData($"${sid}rounded"$, False)
+	SetData($"${sid}timeout"$, 3000)
+End Sub
+
+'list data from tree
+Sub SetDataFromTree
+	'convert items to a tree structure
+	Dim listTree As List = ListViewToTree
+	SetData(stDataSource, listTree)
+End Sub
+
+Sub SnackBarShow(b As Boolean) As VueElement
+	Dim sid As String = getID
+	SetData($"${sid}show"$, b)
+	Return Me
+End Sub
+
+Sub SnackBarMessage(msg As String) As VueElement
+	Dim sid As String = getID
+	SetData($"${sid}message"$, msg)
+	Return Me
+End Sub
+
+Sub SnackBarColor(s As String) As VueElement
+	Dim sid As String = getID
+	SetData($"${sid}color"$,s)
+	Return Me
+End Sub
+
+Sub SnackBarTimeOut(tout As Int) As VueElement
+	Dim sid As String = getID
+	SetData($"${sid}timeout"$, tout)
+	Return Me
+End Sub
+
+Sub SnackBarRounded(b As Boolean) As VueElement
+	Dim sid As String = getID
+	SetData($"${sid}rounded"$,b)
+	Return Me
+End Sub
+
+Sub SnackBarShaped(b As Boolean) As VueElement
+	Dim sid As String = getID
+	SetData($"${sid}shaped"$,b)
+	Return Me
+End Sub
+
+Sub setSnackBarOutlined(b As Boolean) As VueElement
+	Dim sid As String = getID
+	SetData($"${sid}outlined"$,b)
+	Return Me
+End Sub
+
+Sub SnackBarTopLeft As VueElement
+	Dim sid As String = getID
+	SetData($"${sid}right"$, False)
+	SetData($"${sid}left"$, True)
+	SetData($"${sid}top"$, True)
+	SetData($"${sid}bottom"$,False)
+	SetData($"${sid}centered"$,False)
+	Return Me
+End Sub
+
+Sub SnackBarTopCentered As VueElement
+	Dim sid As String = getID
+	SetData($"${sid}right"$, False)
+	SetData($"${sid}left"$, False)
+	SetData($"${sid}top"$, True)
+	SetData($"${sid}bottom"$,False)
+	SetData($"${sid}centered"$,True)
+	Return Me
+End Sub
+
+Sub SnackBarBottomCentered As VueElement
+	Dim sid As String = getID
+	SetData($"${sid}right"$, False)
+	SetData($"${sid}left"$, False)
+	SetData($"${sid}top"$, False)
+	SetData($"${sid}bottom"$,True)
+	SetData($"${sid}centered"$,True)
+	Return Me
+End Sub
+
+Sub SnackBarTopRight As VueElement
+	Dim sid As String = getID
+	SetData($"${sid}right"$, True)
+	SetData($"${sid}left"$, False)
+	SetData($"${sid}top"$, True)
+	SetData($"${sid}bottom"$,False)
+	SetData($"${sid}centered"$,False)
+	Return Me
+End Sub
+
+Sub SnackBarBottomLeft As VueElement
+	Dim sid As String = getID
+	SetData($"${sid}right"$, False)
+	SetData($"${sid}left"$, True)
+	SetData($"${sid}top"$, False)
+	SetData($"${sid}bottom"$,True)
+	SetData($"${sid}centered"$,False)
+	Return Me
+End Sub
+
+Sub SnackBarBottomRight As VueElement
+	Dim sid As String = getID
+	SetData($"${sid}right"$, True)
+	SetData($"${sid}left"$, False)
+	SetData($"${sid}top"$, False)
+	SetData($"${sid}bottom"$,True)
+	SetData($"${sid}centered"$,False)
+	Return Me
+End Sub
+
+Sub SnackBarCentered As VueElement
+	Dim sid As String = getID
+	SetData($"${sid}right"$, False)
+	SetData($"${sid}left"$, False)
+	SetData($"${sid}top"$, False)
+	SetData($"${sid}bottom"$,False)
+	SetData($"${sid}centered"$,True)
+	Return Me
 End Sub

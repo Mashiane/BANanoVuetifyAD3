@@ -651,6 +651,7 @@ Sub FormatFileSize(Bytes As Float) As String	'ignoredeadcode				'ignoredeadcode
 	End Try
 End Sub
 
+
 'initialize the snackbar
 Sub SnackBarInitialize
 	SetData("appsnackmessage", "")
@@ -734,7 +735,7 @@ End Sub
 Sub SnackBarBottomCentered As VuetifyApp
 	SetData("appsnackright", False)
 	SetData("appsnackleft", False)
-	SetData("appsnacktop", True)
+	SetData("appsnacktop", False)
 	SetData("appsnackbottom",True)
 	SetData("appsnackcentered",True)
 	Return Me
@@ -1053,7 +1054,7 @@ Sub Initialize(Module As Object, myapp As String)
 	AppName = myapp.ToLowerCase
 	'get the body of the page
 	Body = BANano.GetElement("#body")
-	Body.Append($"<div ref="app" id="app"><div id="placeholder" v-show="placeholder"></div><div id="appendholder" v-show="appendholder"></div><v-template id="apptemplate" v-show="apptemplate"></v-template></div>"$)
+	Body.Append($"<div ref="app" id="app"><div id="placeholder" v-show="placeholdershow"></div><div id="appendholder" v-show="appendholdershow"></div><v-template id="apptemplate" v-show="apptemplateshow"></v-template></div>"$)
 	'
 	Vue.Initialize("Vue")
 	'
@@ -1075,9 +1076,9 @@ Sub Initialize(Module As Object, myapp As String)
 	InitColors
 	
 	'
-	SetData("placeholder", False)
-	SetData("appendholder", False)
-	SetData("apptemplate", False)
+	SetData("placeholdershow", False)
+	SetData("appendholdershow", False)
+	SetData("apptemplateshow", False)
 	'
 	RTL = False
 	Dark = False

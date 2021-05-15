@@ -1694,3 +1694,56 @@ Sub TreeViewRefresh(tv As VueElement)
 		SetOpenItems(tv.id, openitems)
 	End If
 End Sub
+
+Sub ShowSnackBarError(elID As String, Message As String)
+	If BANano.IsNull(Message) Then Return
+	SetData($"${elID}message"$, Message)
+	SetData($"${elID}color"$, "error")
+	SetData($"${elID}show"$, True)
+End Sub
+
+Sub ShowSnackBarSuccess(elID As String, Message As String)
+	If BANano.IsNull(Message) Then Return
+	SetData($"${elID}message"$, Message)
+	SetData($"${elID}color"$, "success")
+	SetData($"${elID}show"$, True)
+End Sub
+
+Sub ShowSnackBarPrimary(elID As String, Message As String)
+	If BANano.IsNull(Message) Then Return
+	SetData($"${elID}message"$, Message)
+	SetData($"${elID}color"$, "primary")
+	SetData($"${elID}show"$, True)
+End Sub
+
+Sub ShowSnackBarSecondary(elID As String, Message As String)
+	If BANano.IsNull(Message) Then Return
+	SetData($"${elID}message"$, Message)
+	SetData($"${elID}color"$, "secondary")
+	SetData($"${elID}show"$, True)
+End Sub
+
+Sub ShowSnackBarInfo(elID As String, Message As String)
+	If BANano.IsNull(Message) Then Return
+	SetData($"${elID}message"$, Message)
+	SetData($"${elID}color"$, "info")
+	SetData($"${elID}show"$, True)
+End Sub
+
+Sub ShowSnackBarWarning(elID As String, Message As String)
+	If BANano.IsNull(Message) Then Return
+	SetData($"${elID}message"$, Message)
+	SetData($"${elID}color"$, "warning")
+	SetData($"${elID}show"$, True)
+End Sub
+
+Sub ShowSnackBar(elID As String, Message As String)
+	If BANano.IsNull(Message) Then Return
+	SetData($"${elID}message"$, Message)
+	SetData($"${elID}color"$, "")
+	SetData($"${elID}show"$, True)
+End Sub
+
+Sub HideSnackBar(elID As String)
+	SetData($"${elID}show"$, False)
+End Sub
