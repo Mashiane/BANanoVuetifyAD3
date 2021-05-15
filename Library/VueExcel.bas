@@ -18,12 +18,14 @@ Sub Class_Globals
 	Private viewSettings As Map
 	Private pID As String
 	Public bindings As Map
+	Private mElement As BANanoElement
 End Sub
 
 'initialize to the component you want to load to
 Public Sub Initialize(Module As Object, elID As String, eventName As String)
 	mCallBack = Module
 	pID = elID
+	pID = pID.tolowercase
 	mEvent = eventName.tolowercase
 	options.Initialize 
 	rowSettings.Initialize 
@@ -32,7 +34,8 @@ Public Sub Initialize(Module As Object, elID As String, eventName As String)
 	fontSettings.Initialize 
 	methods.Initialize 
 	viewSettings.Initialize 
-	bindings.Initialize 
+	bindings.Initialize
+	mElement = BANano.GetElement($"#${pID}"$) 
 End Sub
 
 'update the state
@@ -221,6 +224,17 @@ Sub setShowContextmenu(b As Boolean)
 	options.Put("showContextmenu", b)
 End Sub
 
+'add a class
+public Sub AddClass(varClass As String) 
+	If BANano.IsUndefined(varClass) Or BANano.IsNull(varClass) Then Return
+	If BANano.IsNumber(varClass) Then varClass = BANanoShared.CStr(varClass)
+	varClass = varClass.trim
+	If varClass = "" Then Return
+	If mElement <> Null Then 
+		mElement.AddClass(varClass)
+	End If
+End Sub
+
 private Sub CleanID(v As String) As String
 	v = v.Replace("#","")
 	v = $"#${v}"$
@@ -231,4 +245,112 @@ End Sub
 'validate the sheet
 Sub validate
 	SS.RunMethod("validate", Null)
+End Sub
+
+Sub HiddenXSOnly
+	AddClass("hidden-xs-only")
+End Sub
+
+Sub HiddenSMOnly
+	AddClass("hidden-sm-only")
+End Sub
+	
+Sub HiddenMDOnly
+	AddClass("hidden-md-only")
+End Sub
+	
+Sub HiddenLGOnly
+	AddClass("hidden-lg-only")
+End Sub
+	
+Sub HiddenXLOnly
+	AddClass("hidden-xl-only")
+End Sub
+'
+Sub HiddenXSAndDown
+	AddClass("hidden-xs-and-down")
+End Sub
+
+Sub HiddenSMAndDown
+	AddClass("hidden-sm-and-down")
+End Sub
+	
+Sub HiddenMDAndDown
+	AddClass("hidden-md-and-down")
+End Sub
+	
+Sub HiddenLGAndDown
+	AddClass("hidden-lg-and-down")
+End Sub
+	
+Sub HiddenXLAndDown
+	AddClass("hidden-xl-and-down")
+End Sub
+'
+Sub HiddenXSAndUp
+	AddClass("hidden-xs-and-up")
+End Sub
+
+Sub HiddenSMAndUp
+	AddClass("hidden-sm-and-up")
+End Sub
+	
+Sub HiddenMDAndUp
+	AddClass("hidden-md-and-up")
+End Sub
+	
+Sub HiddenLGAndUp
+	AddClass("hidden-lg-and-up")
+End Sub
+	
+Sub HiddenXLAndUp
+	AddClass("hidden-xl-and-up")
+End Sub	
+
+Sub HideOnAll
+	AddClass("d-none")
+End Sub
+
+Sub HideOnlyOnXS
+	AddClass("d-none d-sm-flex")
+End Sub
+
+Sub HideOnlyOnSM
+	AddClass("d-sm-none d-md-flex")
+End Sub
+
+Sub HideOnlyOnMD
+	AddClass("d-md-none d-lg-flex")
+End Sub
+
+Sub HideOnlyOnLG
+	AddClass("d-lg-none d-xl-flex")
+End Sub
+
+Sub HideOnlyOnXL
+	AddClass("d-xl-none")
+End Sub
+
+Sub VisibleOnAll
+	AddClass("d-flex")
+End Sub
+
+Sub VisibleOnlyOnXS
+	AddClass("d-flex d-sm-none")
+End Sub
+
+Sub VisibleOnlyOnSM
+	AddClass("d-none d-sm-flex d-md-none")
+End Sub
+
+Sub VisibleOnlyOnMD
+	AddClass("d-none d-md-flex d-lg-none")
+End Sub
+
+Sub VisibleOnlyOnLG
+	AddClass("d-none d-lg-flex d-xl-none")
+End Sub
+
+Sub VisibleOnlyOnXL
+	AddClass("d-none d-xl-flex")
 End Sub

@@ -5458,6 +5458,17 @@ Sub RefreshItems(VC As VueComponent)
 	VC.setdata(stItems, Records)
 End Sub
 
+Sub ListViewClear
+	Records.Initialize
+	OpenItems.Initialize 
+	SetData(stItems, NewList)
+	SetOpenItems(NewList)
+End Sub
+
+Sub ListViewRefresh
+	SetData(stDataSource, Records)
+End Sub
+
 'add a header to the lust
 Sub ListViewAddHeader(txt As String)
 	Dim rec As Map = CreateMap()
@@ -8207,6 +8218,7 @@ Sub AddAlert(elID As String, vmodel As String, bVisible As Boolean, Caption As S
 	elx.SetData(vmodel, bVisible)
 	elx.AlertType = aType
 	elx.Border = BorderPosition
+	elx.BindAllEvents
 	Return elx
 End Sub
 
@@ -10033,6 +10045,36 @@ Sub AddBottomNavigationItem(elID As String, value As String, caption As String, 
 	Return btn
 End Sub
 
+Sub AddBottomNavigationItem1(elID As String, value As String, caption As String, iconName As String, goTo As String) As VueElement
+	Dim parentID As String = CleanID(mName)
+	elID = elID.tolowercase
+	
+	Dim sicon As String = $"${elID}icon"$
+	Dim sspan As String = $"${elID}span"$
+	
+	Dim sTemplate As String = $"<v-btn id="${elID}">
+      <span id="${sspan}">${caption}</span>
+      <v-icon id="${sicon}">${iconName}</v-icon>
+    </v-btn>"$
+	
+	GetVueElement(parentID).Append(sTemplate)
+	
+	Dim btn As VueElement = GetVueElement(elID)
+	If value <> "" Then
+		btn.AddAttr("value", value)
+	End If
+	If goTo <> "" Then
+		btn.To = goTo
+	End If
+	Dim icon As VueElement = GetVueElement(sicon)
+	Dim span As VueElement = GetVueElement(sspan)
+	
+	btn.BindVueElement(icon)
+	btn.BindVueElement(span)
+	btn.BindAllEvents
+	Return btn
+End Sub
+
 
 Sub AddVRow(elID As String) As VueElement
 	Dim elx As VueElement = AddVueElement1(elID, "v-row", "", "", "", Null)
@@ -11451,6 +11493,12 @@ Sub BuildSnackBar
 	SetData($"${sid}shaped"$, True)
 	SetData($"${sid}rounded"$, False)
 	SetData($"${sid}timeout"$, 3000)
+End Sub
+
+Sub ListViewRefreshFromTree
+	'convert items to a tree structure
+	Dim listTree As List = ListViewToTree
+	SetData(stDataSource, listTree)
 End Sub
 
 'list data from tree

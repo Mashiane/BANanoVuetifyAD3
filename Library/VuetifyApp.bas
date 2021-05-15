@@ -3679,6 +3679,7 @@ Sub AddAlert(Module As Object, parentID As String, elID As String, vmodel As Str
 	elx.SetData(vmodel, bVisible)
 	elx.AlertType = aType
 	elx.Border = BorderPosition
+	elx.BindAllEvents
 	Return elx
 End Sub
 
