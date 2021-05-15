@@ -61,7 +61,7 @@ File61=upload.php
 File62=v-blur.min.js
 File63=vjsf.css
 File64=vjsf.js
-File65=vue.js
+File65=vue.min.js
 File66=vue-form-wizard.js
 File67=vue-form-wizard.min.css
 File68=vue-google-charts.browser.js
@@ -197,7 +197,7 @@ Version=8.9
 
 Sub Process_Globals
 	Private BANano As BANano 'ignore
-	Public Version As String = "4.21"
+	Public Version As String = "4.22"
 	Public AppName As String = "BANanoVuetifyAD3"
 End Sub
 
@@ -222,7 +222,7 @@ Sub AppStart (Form1 As Form, Args() As String)
 	BANano.Header.AddCSSFile("roboto.min.css")
 	BANano.Header.AddCSSFile("materialdesignicons.min.css")
 	BANano.Header.AddCSSFile("vuetify.min.css")
-	BANano.Header.AddJavascriptFile("vue.js")
+	BANano.Header.AddJavascriptFile("vue.min.js")
 	BANano.Header.AddJavascriptFile("vuetify.min.js")
 	BANano.Header.AddJavascriptFile("vue-router.min.js")
 	BANano.Header.AddJavascriptFile("dayjs.min.js")
