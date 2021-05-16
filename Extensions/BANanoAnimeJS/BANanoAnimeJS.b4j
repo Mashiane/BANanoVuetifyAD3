@@ -9,9 +9,10 @@ Library3=jxui
 Library4=banano
 Module1=BANanoAnimeJS
 Module2=BANanoAnimeJSItem
+Module3=BANanoAnimeJSTimeLine
 NumberOfFiles=1
 NumberOfLibraries=4
-NumberOfModules=2
+NumberOfModules=3
 Version=8.9
 @EndOfDesignText@
 '
@@ -26,7 +27,7 @@ Version=8.9
 Sub Process_Globals
 	Public BANano As BANano 'ignore
 	Public AppName As String = "BANanoAnimeJS"
-	Public Version As String = "1.00"
+	Public Version As String = "1.02"
 End Sub
 
 Sub AppStart (Form1 As Form, Args() As String)

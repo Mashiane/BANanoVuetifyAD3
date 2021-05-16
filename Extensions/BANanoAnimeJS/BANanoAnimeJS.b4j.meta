@@ -1,12 +1,15 @@
 ﻿ModuleBookmarks0=
 ModuleBookmarks1=
 ModuleBookmarks2=
+ModuleBookmarks3=
 ModuleBreakpoints0=
 ModuleBreakpoints1=
 ModuleBreakpoints2=
+ModuleBreakpoints3=
 ModuleClosedNodes0=1
 ModuleClosedNodes1=
 ModuleClosedNodes2=
-NavigationStack=Main,Process_Globals,13,5,BANanoAnimeJS,Class_Globals,9,0,Main,AppStart,22,1,Main,Application_Error,29,0
+ModuleClosedNodes3=
+NavigationStack=BANanoAnimeJSItem,delay,18,0,BANanoAnimeJSItem,translateYCallBack,51,0,BANanoAnimeJSItem,updateCallBack,57,2,BANanoAnimeJSItem,translateXCallBack,42,0,Main,Process_Globals,13,0
 SelectedBuild=0
-VisibleModules=1
+VisibleModules=

@@ -6,11 +6,14 @@ Version=8.9
 @EndOfDesignText@
 Sub Class_Globals
 	Public options As Map
+	Public targets As List
+	Private BANano As BANano
 End Sub
 
 'Initializes the object. You can add parameters to this method if needed.
 Public Sub Initialize As BANanoAnimeJSItem
 	options.Initialize 
+	targets.Initialize 
 	Return Me
 End Sub
 
@@ -20,15 +23,159 @@ Sub delay(d As Object) As BANanoAnimeJSItem
 	Return Me
 End Sub
 
+'delay callback
+'<code>
+'item.delayCallBack(Me, "delayCallBack")
+'Sub delayCallBack(el As Object, i As Int)
+'End Sub
+'</code>
+Sub delayCallBack(Module As Object, methodName As String) As BANanoAnimeJSItem
+	Dim el, i As Object
+	Dim cb As BANanoObject = BANano.CallBack(Module, methodName, Array(el, i))
+	options.Put("delay", cb.Result)
+End Sub
+
+
+'translateX callback
+'<code>
+'item.translateXCallBack(Me, "translateXCallBack")
+'Sub translateXCallBack(el As Object, i As Int)
+'End Sub
+'</code>
+Sub translateXCallBack(Module As Object, methodName As String) As BANanoAnimeJSItem
+	Dim el, i As Object
+	Dim cb As BANanoObject = BANano.CallBack(Module, methodName, Array(el, i))
+	options.Put("translateX", cb.Result)
+End Sub
+
+
+'update callback
+'<code>
+'item.updateCallBack(Me, "updateCallBack")
+'Sub translateYCallBack(el As Object, i As Int)
+'End Sub
+'</code>
+Sub updateCallBack(Module As Object, methodName As String) As BANanoAnimeJSItem
+	Dim cb As BANanoObject = BANano.CallBack(Module, methodName, Null)
+	options.Put("update", cb.Result)
+End Sub
+
+
+'translateY callback
+'<code>
+'item.translateYCallBack(Me, "translateYCallBack")
+'Sub translateYCallBack(el As Object, i As Int)
+'End Sub
+'</code>
+Sub translateYCallBack(Module As Object, methodName As String) As BANanoAnimeJSItem
+	Dim el, i As Object
+	Dim cb As BANanoObject = BANano.CallBack(Module, methodName, Array(el, i))
+	options.Put("translateY", cb.Result)
+End Sub
+
+'scale callback
+'<code>
+'item.scaleCallBack(Me, "scaleCallBack")
+'Sub scaleCallBack(el As Object, i As Int, l As Object)
+'End Sub
+'</code>
+Sub scaleCallBack(Module As Object, methodName As String) As BANanoAnimeJSItem
+	Dim el, i, l As Object
+	Dim cb As BANanoObject = BANano.CallBack(Module, methodName, Array(el, i, l))
+	options.Put("scale", cb.Result)
+End Sub
+
+'rotate callback
+'<code>
+'item.rotateCallBack(Me, "rotateCallBack")
+'Sub rotateCallBack()
+'End Sub
+'</code>
+Sub rotateCallBack(Module As Object, methodName As String) As BANanoAnimeJSItem
+	Dim cb As BANanoObject = BANano.CallBack(Module, methodName, Null)
+	options.Put("rotate", cb.Result)
+End Sub
+
+'rotate callback
+'<code>
+'item.borderRadiusCallBack(Me, "borderRadiusCallBack")
+'Sub borderRadiusCallBack()
+'End Sub
+'</code>
+Sub borderRadiusCallBack(Module As Object, methodName As String) As BANanoAnimeJSItem
+	Dim cb As BANanoObject = BANano.CallBack(Module, methodName, Null)
+	options.Put("borderRadius", cb.Result)
+End Sub
+
+
+'duration callback
+'<code>
+'item.durationCallBack(Me, "durationCallBack")
+'Sub durationCallBack()
+'End Sub
+'</code>
+Sub durationCallBack(Module As Object, methodName As String) As BANanoAnimeJSItem
+	Dim cb As BANanoObject = BANano.CallBack(Module, methodName, Null)
+	options.Put("duration", cb.Result)
+End Sub
+
 'value
 Sub value(v As Object) As BANanoAnimeJSItem
 	options.Put("value", v)
 	Return Me
 End Sub
 
+'opacity
+Sub opacity(v As Object) As BANanoAnimeJSItem
+	options.Put("opacity", v)
+	Return Me
+End Sub
+
 'easing
 Sub easing(e As Object) As BANanoAnimeJSItem
 	options.Put("easing", e)
+	Return Me
+End Sub
+
+'steps
+Sub steps(numberOfSteps As Int) As BANanoAnimeJSItem
+	options.Put("easing", $"steps(${numberOfSteps})"$)
+	Return Me
+End Sub
+
+'cubicBezier
+Sub cubicBezier(x1 As Object, y1 As Object, x2 As Object, y2 As Object) As BANanoAnimeJSItem
+	options.Put("easing", $"cubicBezier(${x1}, ${y1}, ${x2}, ${y2}})"$)
+	Return Me
+End Sub
+
+'spring
+Sub spring(mass As Object, stiffness As Object, damping As Object, velocity As Object) As BANanoAnimeJSItem
+	options.Put("easing", $"spring(${mass}, ${stiffness}, ${damping}, ${velocity})"$)
+	Return Me
+End Sub
+
+'easeInElastic
+Sub easeInElastic(amplitude As Object, period As Object) As BANanoAnimeJSItem
+	options.Put("easing", $"easeInElastic(${amplitude}, ${period})"$)
+	Return Me
+End Sub
+
+'easeOutElastic
+Sub easeOutElastic(amplitude As Object, period As Object) As BANanoAnimeJSItem
+	options.Put("easing", $"easeOutElastic(${amplitude}, ${period})"$)
+	Return Me
+End Sub
+
+'easeInOutElastic
+Sub easeInOutElastic(amplitude As Object, period As Object) As BANanoAnimeJSItem
+	options.Put("easing", $"easeInOutElastic(${amplitude}, ${period})"$)
+	Return Me
+End Sub
+
+'easeOutInElastic
+Sub easeOutInElastic(amplitude As Object, period As Object) As BANanoAnimeJSItem
+	options.Put("easing", $"easeOutInElastic(${amplitude}, ${period})"$)
 	Return Me
 End Sub
 
@@ -40,6 +187,9 @@ End Sub
 
 'pop return the options
 Sub pop As Map
+	If targets.Size > 0 Then
+		options.Put("targets", targets)
+	End If
 	Return options
 End Sub
 
@@ -228,5 +378,11 @@ End Sub
 'height
 Sub height(h As Object) As BANanoAnimeJSItem
 	change("height", h)
+	Return Me
+End Sub
+
+'set the target to process
+Sub target(jTarget As String) As BANanoAnimeJSItem
+	targets.Add(jTarget)
 	Return Me
 End Sub
