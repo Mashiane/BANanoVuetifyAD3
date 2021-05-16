@@ -1,82 +1,49 @@
 ﻿AppType=JavaFX
 Build1=Default,b4j.example
 File1=1.png
-File10=fa-brands-400.woff
-File11=fa-brands-400.woff2
-File12=fa-regular-400.eot
-File13=fa-regular-400.svg
-File14=fa-regular-400.ttf
-File15=fa-regular-400.woff
-File16=fa-regular-400.woff2
-File17=fa-solid-900.eot
-File18=fa-solid-900.svg
-File19=fa-solid-900.ttf
+File10=gray.png
+File11=green.png
+File12=happyface.png
+File13=html2canvas.js
+File14=jspdf.min.js
+File15=jspdf.plugin.autotable.min.js
+File16=jszip.min.js
+File17=lodash.min.js
+File18=microtip.min.css
+File19=nedb.min.js
 File2=2.png
-File20=fa-solid-900.woff
-File21=fa-solid-900.woff2
-File22=fileSaver.min.js
-File23=flowy-vue.css
-File24=flowy-vue.umd.min.js
-File25=fontawesome.css
-File26=gray.png
-File27=green.png
-File28=happyface.png
-File29=html2canvas.js
-File3=avatar.png
-File30=jspdf.min.js
-File31=jspdf.plugin.autotable.min.js
-File32=jszip.min.js
-File33=lodash.min.js
-File34=materialdesignicons.min.css
-File35=materialdesignicons-webfont.eot
-File36=materialdesignicons-webfont.ttf
-File37=materialdesignicons-webfont.woff
-File38=materialdesignicons-webfont.woff2
-File39=microtip.min.css
-File4=axios.min.js
-File40=nedb.min.js
-File41=neutralface.png
-File42=numeral.min.js
-File43=orange.png
-File44=oxml.min.js
-File45=qrcode.min.js
-File46=red.png
-File47=roboto.min.css
-File48=Roboto100.ttf
-File49=Roboto300.ttf
-File5=BANanoNEDB.bas
-File50=Roboto400.ttf
-File51=Roboto500.ttf
-File52=Roboto700.ttf
-File53=Roboto900.ttf
-File54=sadface.png
-File55=themify.eot
-File56=themify.svg
-File57=themify.ttf
-File58=themify.woff
-File59=themify-icons.css
+File20=neutralface.png
+File21=numeral.min.js
+File22=orange.png
+File23=oxml.min.js
+File24=qrcode.min.js
+File25=red.png
+File26=sadface.png
+File27=third-party.js
+File28=upload.php
+File29=v-blur.min.js
+File3=anime.min.js
+File30=vjsf.css
+File31=vjsf.js
+File32=vue.min.js
+File33=vue-form-wizard.js
+File34=vue-form-wizard.min.css
+File35=vue-google-charts.browser.js
+File36=vue-google-maps.js
+File37=vue-router.min.js
+File38=vuetify.min.css
+File39=vuetify.min.js
+File4=avatar.png
+File40=vuetify-simple-wizard.min.js
+File41=xlsx.full.min.js
+File42=xspreadsheet.css
+File43=xspreadsheet.js
+File44=xspreadsheet.svg
+File5=axios.min.js
 File6=dayjs.min.js
-File60=third-party.js
-File61=upload.php
-File62=v-blur.min.js
-File63=vjsf.css
-File64=vjsf.js
-File65=vue.min.js
-File66=vue-form-wizard.js
-File67=vue-form-wizard.min.css
-File68=vue-google-charts.browser.js
-File69=vue-google-maps.js
-File7=fa-brands-400.eot
-File70=vue-router.min.js
-File71=vuetify.min.css
-File72=vuetify.min.js
-File73=vuetify-simple-wizard.min.js
-File74=xlsx.full.min.js
-File75=xspreadsheet.css
-File76=xspreadsheet.js
-File77=xspreadsheet.svg
-File8=fa-brands-400.svg
-File9=fa-brands-400.ttf
+File7=fileSaver.min.js
+File8=flowy-vue.css
+File9=flowy-vue.umd.min.js
 FileGroup1=Default Group
 FileGroup10=Default Group
 FileGroup11=Default Group
@@ -116,42 +83,9 @@ FileGroup41=Default Group
 FileGroup42=Default Group
 FileGroup43=Default Group
 FileGroup44=Default Group
-FileGroup45=Default Group
-FileGroup46=Default Group
-FileGroup47=Default Group
-FileGroup48=Default Group
-FileGroup49=Default Group
 FileGroup5=Default Group
-FileGroup50=Default Group
-FileGroup51=Default Group
-FileGroup52=Default Group
-FileGroup53=Default Group
-FileGroup54=Default Group
-FileGroup55=Default Group
-FileGroup56=Default Group
-FileGroup57=Default Group
-FileGroup58=Default Group
-FileGroup59=Default Group
 FileGroup6=Default Group
-FileGroup60=Default Group
-FileGroup61=Default Group
-FileGroup62=Default Group
-FileGroup63=Default Group
-FileGroup64=Default Group
-FileGroup65=Default Group
-FileGroup66=Default Group
-FileGroup67=Default Group
-FileGroup68=Default Group
-FileGroup69=Default Group
 FileGroup7=Default Group
-FileGroup70=Default Group
-FileGroup71=Default Group
-FileGroup72=Default Group
-FileGroup73=Default Group
-FileGroup74=Default Group
-FileGroup75=Default Group
-FileGroup76=Default Group
-FileGroup77=Default Group
 FileGroup8=Default Group
 FileGroup9=Default Group
 Group=Default Group
@@ -181,7 +115,7 @@ Module6=BANanoMySQLE
 Module7=BANanoNEDB
 Module8=BANanoOXML
 Module9=|absolute|C:\CodingWorld\B4XShared\B4J\BANanoShared
-NumberOfFiles=77
+NumberOfFiles=44
 NumberOfLibraries=3
 NumberOfModules=23
 Version=8.9
@@ -219,8 +153,6 @@ Sub AppStart (Form1 As Form, Args() As String)
 	'BANano.Header.AddJavascriptFile("https://unpkg.com/vue-form-wizard/dist/vue-form-wizard.js")
 	
 		'
-	BANano.Header.AddCSSFile("roboto.min.css")
-	BANano.Header.AddCSSFile("materialdesignicons.min.css")
 	BANano.Header.AddCSSFile("vuetify.min.css")
 	BANano.Header.AddJavascriptFile("vue.min.js")
 	BANano.Header.AddJavascriptFile("vuetify.min.js")
@@ -236,7 +168,6 @@ Sub AppStart (Form1 As Form, Args() As String)
 	'BANano.Header.AddJavascriptFile("vue-social-chat.min.js")
 	
 	BANano.Header.AddJavascriptFile("vue-google-maps.js")
-	BANano.Header.AddCSSFile("fontawesome.css")
 	'BANano.Header.AddJavascriptFile("Sortable.min.js")
 	'BANano.Header.AddJavascriptFile("vuedraggable.umd.min.js")
 	BANano.Header.AddJavascriptFile("v-blur.min.js")
@@ -250,14 +181,14 @@ Sub AppStart (Form1 As Form, Args() As String)
 	'BANano.Header.AddJavascriptFile("v-tooltip.js")
 	BANano.Header.AddCSSFile("vue-form-wizard.min.css")
 	BANano.Header.AddJavascriptFile("vue-form-wizard.js")
-	BANano.Header.AddCSSFile("themify-icons.css")
+	
 	BANano.Header.AddJavascriptFile("vjsf.js")
 	BANano.Header.AddCSSFile("vjsf.css")
 	BANano.Header.AddJavascriptFile("third-party.js")
 	'BANano.Header.AddJavascriptFile("vuetify-form-base.js")
 	'BANano.Header.AddJavascriptFile("v-mask.min.js")
 	'BANano.Header.AddJavaScriptfile("VueTheMask.umd.js")
-	BANano.Header.AddJavascriptFile("FileSaver.min.js")
+	BANano.Header.AddJavascriptFile("fileSaver.min.js")
 	BANano.Header.AddJavascriptFile("jszip.min.js")
 	BANano.Header.AddJavascriptFile("oxml.min.js")
 	BANano.Header.AddJavascriptFile("xlsx.full.min.js")
@@ -265,8 +196,8 @@ Sub AppStart (Form1 As Form, Args() As String)
 	BANano.Header.AddCSSFile("xspreadsheet.css")
 	BANano.Header.AddJavascriptFile("xspreadsheet.js")
 	BANano.Header.AddJavascriptFile("vuetify-simple-wizard.min.js")
+	BANano.Header.AddJavascriptFile("anime.min.js")
 	BANano.Header.AddJavascriptFile("nedb.min.js")
-	
 	
 	'BANano.Header.AddJavascriptFile("tiptap-vuetify.js")
 	

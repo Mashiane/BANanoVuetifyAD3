@@ -74,16 +74,16 @@ Sub Class_Globals
 	Public const Pattern_none As String = "none"
 	Public const Pattern_solid As String = "solid"
 	Private columns As Map
-	public rows As List
+	Public rows As List
 End Sub
 
 'initialize with filename
 Public Sub Initialize(fileName As String)
-	BANano.DependsOnAsset("FileSaver.min.js")
+	BANano.DependsOnAsset("fileSaver.min.js")
 	BANano.DependsOnAsset("jszip.min.js")
 	BANano.DependsOnAsset("oxml.min.js")
 	BANano.DependsOnAsset("xlsx.full.min.js")
-	
+		
 	oxml.Initialize("oxml")
 	WorkBook = oxml.RunMethod("xlsx", Null)
 	fName = fileName
@@ -125,7 +125,7 @@ Sub SetRowsFromDataTable(recs As List)
 		For Each hdrn As String In columns.keys
 			hdrn = hdrn.ToLowerCase
 			Dim v As String = xlrec.Get(hdrn)
-			v = BANanoShared.CStr(v)
+			v = CStr(v)
 			v = v.trim
 			xlrpt.Add(v)
 		Next
@@ -152,6 +152,12 @@ Sub SetColumnsFromDataTable(xcolumns As List)
 			columns.Put(sDataKey, sTitle)
 		End Select
 	Next
+End Sub
+
+
+
+private Sub CStr(o As Object) As String
+	Return "" & o
 End Sub
 
 'read the 1st worksheet		

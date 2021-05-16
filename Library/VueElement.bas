@@ -9997,6 +9997,18 @@ Sub AddApp(elID As String) As VueElement
 	Return elx
 End Sub
 
+Sub AddVBtn(elID As String) As VueElement
+	Dim elx As VueElement = AddVueElement1(elID, "v-btn", "", "", "", Null)
+	elx.BindAllEvents
+	Return elx
+End Sub
+
+Sub AddVIcon(elID As String) As VueElement
+	Dim elx As VueElement = AddVueElement1(elID, "v-icon", "", "", "", Null)
+	elx.BindAllEvents
+	Return elx
+End Sub
+
 Sub AddBottomNavigation(elID As String, vmodel As String, color As String, grow As Boolean, shift As Boolean) As VueElement
 	Dim elx As VueElement = AddVueElement1(elID, "v-bottom-navigation", vmodel, "", color, Null)
 	elx.setdata(vmodel, "")
@@ -10423,6 +10435,7 @@ End Sub
 Sub AddSheet(elID As String, Height As String, Color As String, props As Map) As VueElement
 	Dim elx As VueElement = AddVueElement1(elID, "v-sheet", "", "", Color, props)
 	elx.Height = Height
+	elx.BindAllEvents
 	Return elx
 End Sub
 
@@ -10430,6 +10443,7 @@ Sub AddSheet1(elID As String, Height As String, Width As String, Color As String
 	Dim elx As VueElement = AddVueElement1(elID, "v-sheet", "", "", Color, Null)
 	elx.Height = Height
 	elx.Width = Width
+	elx.BindAllEvents
 	Return elx
 End Sub
 

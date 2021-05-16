@@ -2733,6 +2733,7 @@ End Sub
 Sub AddSheet(Module As Object, parentID As String, elID As String, Height As String, Color As String, props As Map) As VueElement
 	Dim elx As VueElement = AddVueElement(Module, parentID, elID, "v-sheet", "", "", Color, props)
 	elx.Height = Height
+	elx.BindAllEvents
 	Return elx
 End Sub
 

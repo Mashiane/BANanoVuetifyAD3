@@ -49,7 +49,7 @@ Sub Class_Globals
 	Public view As String
 	Public action As String
 	Public NoResult As Boolean
-	public URL as string
+	Public URL As String
 End Sub
 
 'get a count of all records

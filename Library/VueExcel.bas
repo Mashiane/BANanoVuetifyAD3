@@ -227,12 +227,16 @@ End Sub
 'add a class
 public Sub AddClass(varClass As String) 
 	If BANano.IsUndefined(varClass) Or BANano.IsNull(varClass) Then Return
-	If BANano.IsNumber(varClass) Then varClass = BANanoShared.CStr(varClass)
+	If BANano.IsNumber(varClass) Then varClass = CStr(varClass)
 	varClass = varClass.trim
 	If varClass = "" Then Return
 	If mElement <> Null Then 
 		mElement.AddClass(varClass)
 	End If
+End Sub
+
+private Sub CStr(o As Object) As String
+	Return "" & o
 End Sub
 
 private Sub CleanID(v As String) As String
