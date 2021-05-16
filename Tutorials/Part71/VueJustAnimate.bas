@@ -181,7 +181,6 @@ Sub sht0_click(e As BANanoEvent)
 	Dim a1 As BANanoAnimeJS
 	a1.Initialize(Me, "#sht0")
 	a1.anime.translateX(250)
-	a1.anime.autoplay(True)
 	a1.play
 End Sub
 

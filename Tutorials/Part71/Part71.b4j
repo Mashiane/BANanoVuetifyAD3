@@ -313,14 +313,15 @@ Module50=ViewTextFields
 Module51=ViewTips
 Module52=ViewToolTip
 Module53=ViewTreeView
-Module54=VueJustAnimate
+Module54=VueAnimeJSTimeLines
+Module55=VueJustAnimate
 Module6=ViewAvatars
 Module7=ViewBadges
 Module8=ViewBANanoSQL
 Module9=ViewBottomNavigation
 NumberOfFiles=126
 NumberOfLibraries=11
-NumberOfModules=54
+NumberOfModules=55
 Version=8.9
 @EndOfDesignText@
 #Region Project Attributes 

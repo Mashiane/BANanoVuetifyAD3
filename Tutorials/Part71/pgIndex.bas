@@ -108,6 +108,7 @@ Sub Init
 	'
 	drwlist.AddItemParentChild("", "components", "mdi-cog", "", "Components", "")
 	drwlist.AddItemParentChild("components", VueJustAnimate.name, "",  "", "AnimeJS", VueJustAnimate.path)
+	drwlist.AddItemParentChild("components", VueAnimeJSTimeLines.name, "",  "", "AnimeJS TimeLines", VueAnimeJSTimeLines.path)
 	drwlist.AddItemParentChild("components", ViewTips.name, "",  "", "Tips", ViewTips.path)
 	drwlist.AddItemParentChild("components", ViewAlert.name, "",  "", "Alert", ViewAlert.path)
 	drwlist.AddItemParentChild("components", ViewAvatars.name, "", "", "Avatars", ViewAvatars.path)
@@ -219,6 +220,7 @@ End Sub
 Sub AddRouters
 	'ViewContacts.Initialize
 	'ViewCRUDBuilder.Initialize
+	VueAnimeJSTimeLines.Initialize 
 	VueJustAnimate.Initialize 
 	ViewStaff.Initialize 
 	ViewFlowy.Initialize 
