@@ -254,11 +254,16 @@ FileGroup98=Default Group\Layouts
 FileGroup99=Default Group\Layouts
 Group=Default Group
 Library1=banano
-Library2=bananofaker
-Library3=bananofirestore
-Library4=bananovuetifyad3
-Library5=jcore
-Library6=jfx
+Library10=jcore
+Library11=jfx
+Library2=bananoanimejs
+Library3=bananofaker
+Library4=bananofirestore
+Library5=bananofontawesome
+Library6=bananomaterialdesignicons
+Library7=bananoroboto
+Library8=bananothemify
+Library9=bananovuetifyad3
 Module1=pgIndex
 Module10=ViewBottomSheet
 Module11=ViewButtons
@@ -308,13 +313,14 @@ Module50=ViewTextFields
 Module51=ViewTips
 Module52=ViewToolTip
 Module53=ViewTreeView
+Module54=VueJustAnimate
 Module6=ViewAvatars
 Module7=ViewBadges
 Module8=ViewBANanoSQL
 Module9=ViewBottomNavigation
 NumberOfFiles=126
-NumberOfLibraries=6
-NumberOfModules=53
+NumberOfLibraries=11
+NumberOfModules=54
 Version=8.9
 @EndOfDesignText@
 #Region Project Attributes 
@@ -347,6 +353,8 @@ Sub AppStart (Form1 As Form, Args() As String)
 	BANano.Header.Language = "en"
 	BANano.Header.AddMeta($"<meta name="copyright" content="&copy; 2020 BANanoVuetifyAD3">"$)
 	BANano.Header.AddMeta($"<meta name="robots" content="ALL">"$)
+	
+	
 	
 	'BANano.Header.AddMSTileIcon("mstile-150x150.png", "144x144")
 	'BANano.Header.SetMaskIcon("safari-pinned-tab.svg")

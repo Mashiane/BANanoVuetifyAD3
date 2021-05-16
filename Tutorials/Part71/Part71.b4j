@@ -1,0 +1,537 @@
+﻿AppType=JavaFX
+Build1=Default,b4j.example
+File1=1.jpg
+File10=android-chrome-512x512.png
+File100=vdialogs.bjl
+File101=vdrawerprofile.bjl
+File102=vetable.bjl
+File103=vetable1.bjl
+File104=vfileinputs.bjl
+File105=vforms.bjl
+File106=vgrid.bjl
+File107=vgrid2.bjl
+File108=vhome.bjl
+File109=vimagecontainer.bjl
+File11=apple-touch-icon.png
+File110=vlisticontitle.bjl
+File111=vlists.bjl
+File112=vmypage.bjl
+File113=vparallax.bjl
+File114=vprogresscontainer.bjl
+File115=vquestions.bjl
+File116=vradiogroups.bjl
+File117=vratingcontainer.bjl
+File118=vselects.bjl
+File119=vsliders.bjl
+File12=avatar1.bjl
+File120=vswitches.bjl
+File121=vtables.bjl
+File122=vtextareas.bjl
+File123=vtextfieldcontainer.bjl
+File124=vtooltipcomponent.bjl
+File125=vusers.bjl
+File126=yuna.jpg
+File13=avatar2.bjl
+File14=avatar3.bjl
+File15=background.jpg
+File16=BANanoVuetifyAD3forDummies.pdf
+File17=bg-2.jpg
+File18=bird.jpg
+File19=btndecreasebadge.bjl
+File2=1.png
+File20=btnincreasebadge.bjl
+File21=clint-mckoy.jpg
+File22=dark-beach.jpg
+File23=dialogbutton1.bjl
+File24=dialogbutton2.bjl
+File25=dialogbutton3.bjl
+File26=dtimages.bjl
+File27=dtusers.bjl
+File28=favicon.ico
+File29=favicon-16x16.png
+File3=2.jpg
+File30=favicon-32x32.png
+File31=firebase-logo.png
+File32=google.png
+File33=gray.png
+File34=green.png
+File35=hangouts.png
+File36=happyface.png
+File37=img1.png
+File38=img2.png
+File39=img3.png
+File4=2.png
+File40=img4.png
+File41=img5.png
+File42=img6.png
+File43=img7.png
+File44=img8.png
+File45=img9.png
+File46=inbox.png
+File47=keep.png
+File48=lock.jpg
+File49=login.jpg
+File5=3.jpg
+File50=lstaff.bjl
+File51=lvfw.bjl
+File52=material.jpg
+File53=messenger.png
+File54=mssqlconfig.php
+File55=mysqlconfig.php
+File56=neutralface.png
+File57=office.jpg
+File58=orange.png
+File59=parallax1.jpg
+File6=4.jpg
+File60=parallax2.jpg
+File61=planet.jpg
+File62=pricing.jpg
+File63=red.png
+File64=register.jpg
+File65=sadface.png
+File66=sample-1.jpg
+File67=sky.jpg
+File68=sponge.png
+File69=squirrel.jpg
+File7=5.jpg
+File70=test.db
+File71=test.sql
+File72=txtcity.bjl
+File73=txtFirstName.bjl
+File74=txtLastName.bjl
+File75=txtlocation.bjl
+File76=txtpassword.bjl
+File77=txtshaped.bjl
+File78=txtstreet.bjl
+File79=txtusername.bjl
+File8=alasql.min.js
+File80=upload.php
+File81=vabout.bjl
+File82=valert.bjl
+File83=valert1.bjl
+File84=valert2.bjl
+File85=valertcontainer.bjl
+File86=vavatars.bjl
+File87=vbadgeavatar.bjl
+File88=vbadgeicon.bjl
+File89=vbadges.bjl
+File9=android-chrome-192x192.png
+File90=vbanner.jpg
+File91=vbaseline.bjl
+File92=vbtngettexts.bjl
+File93=vbuttoncontainer.bjl
+File94=vbuttoniconright.bjl
+File95=vbuttonmenu.bjl
+File96=vbuttontogglealert.bjl
+File97=vcheckboxes.bjl
+File98=vchips.bjl
+File99=vdatepickercontainer.bjl
+FileGroup1=Default Group\Images
+FileGroup10=Default Group\Images
+FileGroup100=Default Group\Layouts
+FileGroup101=Default Group\Layouts
+FileGroup102=Default Group\Layouts
+FileGroup103=Default Group\Layouts
+FileGroup104=Default Group\Layouts
+FileGroup105=Default Group\Layouts
+FileGroup106=Default Group\Layouts
+FileGroup107=Default Group\Layouts
+FileGroup108=Default Group\Layouts
+FileGroup109=Default Group
+FileGroup11=Default Group\Images
+FileGroup110=Default Group\Layouts
+FileGroup111=Default Group\Layouts
+FileGroup112=Default Group\Layouts
+FileGroup113=Default Group
+FileGroup114=Default Group
+FileGroup115=Default Group\Layouts
+FileGroup116=Default Group\Layouts
+FileGroup117=Default Group
+FileGroup118=Default Group\Layouts
+FileGroup119=Default Group\Layouts
+FileGroup12=Default Group\Layouts
+FileGroup120=Default Group\Layouts
+FileGroup121=Default Group\Layouts
+FileGroup122=Default Group\Layouts
+FileGroup123=Default Group\Layouts
+FileGroup124=Default Group\Blocks
+FileGroup125=Default Group\Layouts
+FileGroup126=Default Group\Images
+FileGroup13=Default Group\Layouts
+FileGroup14=Default Group\Layouts
+FileGroup15=Default Group\Images
+FileGroup16=Default Group
+FileGroup17=Default Group\Images
+FileGroup18=Default Group\Images
+FileGroup19=Default Group\Layouts
+FileGroup2=Default Group\Images
+FileGroup20=Default Group\Layouts
+FileGroup21=Default Group\Images
+FileGroup22=Default Group\Images
+FileGroup23=Default Group\Layouts
+FileGroup24=Default Group\Layouts
+FileGroup25=Default Group\Layouts
+FileGroup26=Default Group\Layouts
+FileGroup27=Default Group\Layouts
+FileGroup28=Default Group\Images
+FileGroup29=Default Group\Images
+FileGroup3=Default Group\Images
+FileGroup30=Default Group\Images
+FileGroup31=Default Group
+FileGroup32=Default Group
+FileGroup33=Default Group\Images
+FileGroup34=Default Group\Images
+FileGroup35=Default Group
+FileGroup36=Default Group\Images
+FileGroup37=Default Group
+FileGroup38=Default Group
+FileGroup39=Default Group
+FileGroup4=Default Group\Images
+FileGroup40=Default Group
+FileGroup41=Default Group
+FileGroup42=Default Group
+FileGroup43=Default Group
+FileGroup44=Default Group
+FileGroup45=Default Group
+FileGroup46=Default Group
+FileGroup47=Default Group
+FileGroup48=Default Group\Images
+FileGroup49=Default Group\Images
+FileGroup5=Default Group\Images
+FileGroup50=Default Group
+FileGroup51=Default Group
+FileGroup52=Default Group\Images
+FileGroup53=Default Group
+FileGroup54=Default Group
+FileGroup55=Default Group
+FileGroup56=Default Group\Images
+FileGroup57=Default Group\Images
+FileGroup58=Default Group\Images
+FileGroup59=Default Group\Images
+FileGroup6=Default Group\Images
+FileGroup60=Default Group\Images
+FileGroup61=Default Group\Images
+FileGroup62=Default Group\Images
+FileGroup63=Default Group\Images
+FileGroup64=Default Group\Images
+FileGroup65=Default Group\Images
+FileGroup66=Default Group\Images
+FileGroup67=Default Group\Images
+FileGroup68=Default Group\Images
+FileGroup69=Default Group\Images
+FileGroup7=Default Group\Images
+FileGroup70=Default Group
+FileGroup71=Default Group
+FileGroup72=Default Group\Layouts
+FileGroup73=Default Group\Layouts
+FileGroup74=Default Group\Layouts
+FileGroup75=Default Group\Layouts
+FileGroup76=Default Group\Layouts
+FileGroup77=Default Group\Layouts
+FileGroup78=Default Group\Layouts
+FileGroup79=Default Group\Layouts
+FileGroup8=Default Group
+FileGroup80=Default Group\PHP
+FileGroup81=Default Group\Layouts
+FileGroup82=Default Group\Layouts
+FileGroup83=Default Group\Layouts
+FileGroup84=Default Group\Layouts
+FileGroup85=Default Group\Layouts
+FileGroup86=Default Group\Layouts
+FileGroup87=Default Group\Layouts
+FileGroup88=Default Group\Layouts
+FileGroup89=Default Group\Layouts
+FileGroup9=Default Group\Images
+FileGroup90=Default Group\Images
+FileGroup91=Default Group\Blocks
+FileGroup92=Default Group\Layouts
+FileGroup93=Default Group\Layouts
+FileGroup94=Default Group\Layouts
+FileGroup95=Default Group\Layouts
+FileGroup96=Default Group\Layouts
+FileGroup97=Default Group\Layouts
+FileGroup98=Default Group\Layouts
+FileGroup99=Default Group\Layouts
+Group=Default Group
+Library1=banano
+Library10=jcore
+Library11=jfx
+Library2=bananoanimejs
+Library3=bananofaker
+Library4=bananofirestore
+Library5=bananofontawesome
+Library6=bananomaterialdesignicons
+Library7=bananoroboto
+Library8=bananothemify
+Library9=bananovuetifyad3
+Module1=pgIndex
+Module10=ViewBottomSheet
+Module11=ViewButtons
+Module12=ViewCard
+Module13=ViewCheckBoxes
+Module14=ViewChips
+Module15=ViewDatePicker
+Module16=ViewDialog
+Module17=ViewExcel
+Module18=ViewExpansionPanels
+Module19=ViewFAB
+Module2=pgVuetifyFormWizard
+Module20=ViewFileInput
+Module21=ViewFirebase
+Module22=ViewFlowy
+Module23=ViewFormControls
+Module24=ViewFormWizard
+Module25=ViewGrid
+Module26=ViewGrid2
+Module27=ViewHome
+Module28=ViewImage
+Module29=ViewInputDialog
+Module3=Tooltip
+Module30=ViewList
+Module31=ViewManualGrid
+Module32=ViewMSSQL
+Module33=ViewMySQL
+Module34=ViewPageDialog
+Module35=ViewParallax
+Module36=ViewPDFView
+Module37=ViewPHPSQLite
+Module38=ViewProgress
+Module39=ViewQuestions
+Module4=ViewAbout
+Module40=ViewRadioGroup
+Module41=ViewRating
+Module42=ViewSelects
+Module43=ViewSliders
+Module44=ViewStaff
+Module45=ViewStepper
+Module46=ViewSwitches
+Module47=ViewTable
+Module48=ViewTabs
+Module49=ViewTextArea
+Module5=ViewAlert
+Module50=ViewTextFields
+Module51=ViewTips
+Module52=ViewToolTip
+Module53=ViewTreeView
+Module54=VueJustAnimate
+Module6=ViewAvatars
+Module7=ViewBadges
+Module8=ViewBANanoSQL
+Module9=ViewBottomNavigation
+NumberOfFiles=126
+NumberOfLibraries=11
+NumberOfModules=54
+Version=8.9
+@EndOfDesignText@
+#Region Project Attributes 
+	#MergeLibraries: True
+	#LibraryAuthor: Anele Mashy Mbanga
+#End Region
+
+#IgnoreWarnings:12, 15
+Sub Process_Globals
+	Public BANano As BANano 'ignore
+	Public AppName As String = "bvad3"
+	Public AppTitle As String = "BANanoVuetify AD3 (71)"
+	Private Publish As String = "C:\laragon\www"
+	Public Version As String = "1.00"
+	Public ServerIP As String = "https://localhost"
+End Sub
+
+Sub AppStart (Form1 As Form, Args() As String)
+	'initialize banano for first use
+	BANano.Initialize("BANano", AppName, DateTime.now)
+	BANano.HTML_NAME = "index.html"
+	BANano.Header.Title = AppTitle
+	BANano.Header.AddFavicon("favicon.ico", "16x16")
+	BANano.Header.AddAppleTouchIcon("apple-touch-icon.png", "180x180")
+	BANano.Header.Author ="Anele Mbanga (Mashy)"
+	'BANano.Header.Charset = "iso-8859-1"
+	BANano.Header.Description = "BANanoVuetify Empty Template"
+	'BANano.header.Expires = "Mon, 22 Jul 2002 11:12:01 GMT"
+	BANano.Header.Keywords = "banano,vuetify,material design"
+	BANano.Header.Language = "en"
+	BANano.Header.AddMeta($"<meta name="copyright" content="&copy; 2020 BANanoVuetifyAD3">"$)
+	BANano.Header.AddMeta($"<meta name="robots" content="ALL">"$)
+	
+	
+	
+	'BANano.Header.AddMSTileIcon("mstile-150x150.png", "144x144")
+	'BANano.Header.SetMaskIcon("safari-pinned-tab.svg")
+	BANano.Header.AddManifestIcon("android-chrome-192x192.png", "192x192")
+	BANano.Header.AddManifestIcon("android-chrome-512x512.png", "512x512")
+	BANano.TranspilerOptions.UseServiceWorker = False
+	BANano.TranspilerOptions.MergeAllCSSFiles = False
+	BANano.TranspilerOptions.MergeAllJavascriptFiles = False
+	BANano.TranspilerOptions.MinifyOnline = False
+	BANano.TranspilerOptions.RemoveDeadCode = False
+	'BANano.TranspilerOptions.SetFireReadyWhenReadyStateComplete
+	'BANano.TranspilerOptions.GZipGeneratedWebsite(10)
+	BANano.TranspilerOptions.EnableLiveCodeSwapping = False
+	'BANano.TranspilerOptions.RedirectOutput(File.DirApp, "log.txt")
+	'set php settings
+	BANano.PHP_NAME = $"${AppName}.php"$
+	BANano.PHPHost = $"${ServerIP}/${AppName}/"$
+	BANano.PHPAddHeader("Access-Control-Allow-Origin: *")
+	
+	BANano.Build(Publish)
+	
+	'on chrome DISABLE: chrome://flags/#enable-native-notifications
+	'add firebase messaging service worker
+	'at root of site.
+	File.Copy(File.DirAssets, "firebase-logo.png", Publish, "firebase-logo.png")
+	'create the service worker file
+	Dim fbm As String = File.Combine(Publish, "firebase-messaging-sw.js")
+	
+File.WriteString("", fbm, $"//self.addEventListener("notificationclose", console.log);
+//self.addEventListener("notificationclick", console.log);
+
+importScripts("https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js");
+importScripts("https://www.gstatic.com/firebasejs/8.2.1/firebase-messaging.js");
+importScripts("https://www.gstatic.com/firebasejs/8.2.1/firebase-analytics.js");
+
+var firebaseConfig = {
+    apiKey: "AIzaSyCMZcx29liQ9jDzU_fiXfTcd-Rcf_d4BSc",
+    authDomain: "robtrack-51a53.firebaseapp.com",
+	databaseURL: "https://robtrack-51a53-default-rtdb.firebaseio.com",
+    projectId: "robtrack-51a53",
+    storageBucket: "robtrack-51a53.appspot.com",
+    messagingSenderId: "521955206285",
+    appId: "1:521955206285:web:4371b85c9ea07c312deec4",
+    measurementId: "G-MRMG60W701"
+};
+
+firebase.initializeApp(firebaseConfig);
+const messaging = firebase.messaging();
+
+messaging.onBackgroundMessage(function(payload) {
+  const notification = payload.notification;
+  const notificationTitle = notification.title;
+  const notificationOptions = {
+    body: notification.body,
+	icon: notification.icon,
+	requireInteraction: true,
+	vibrate: [300, 100, 400]
+  };
+  return self.registration.showNotification(notificationTitle, notificationOptions);
+});"$)
+
+	'
+	Dim fx As JFX
+	'Dim URL As String = File.GetUri(File.DirApp,"log.txt")
+	'fx.ShowExternalDocument(URL)
+	'
+	Dim appPath As String = $"${ServerIP}/${AppName}/index.html"$
+	fx.ShowExternalDocument(appPath)
+	#if release
+		ExitApplication
+	#end if
+End Sub
+
+'Return true to allow the default exceptions handler to handle the uncaught exception.
+Sub Application_Error (Error As Exception, StackTrace As String) As Boolean
+	Return True
+End Sub
+
+Sub BANano_Ready
+'	define and initialize the code builder
+'	Dim crud As MySQLCRUD
+'	crud.Initialize("BANanoMySQLE")
+'	'define the database name
+'	crud.databasename = "test"
+'	'define the table name
+'	crud.tablename = "user_devices"
+'	'what is the primary key of this table
+'	crud.PrimaryKey = "userdeviceid"
+'	'which field is the auto-increment field, if none comment out
+'	crud.AutoIncrement = "userdeviceid"
+'	'what is the singular name for each record
+'	crud.Singular = "User Device"
+'	'what is the plural name for many records
+'	crud.Plural = "User Devices"
+'	'which field should be used to sort the records
+'	crud.SortBy = "allocationdate"
+'	'what is the component name to create
+'	crud.componentname = "userdevices"
+'	'we have an alert/confirm dialog
+'	crud.HasDialog = True
+'	'IMPORTANT before execution
+'	crud.Prepare
+'	
+'	'add data types for the backend
+'	crud.AddStrings(Array("devicesn", "allocationdate", "active"))
+'	crud.AddIntegers(Array("userdeviceid", "userid"))
+'	
+'	'add these after data type indications to specify the default values per field
+'	crud.AddDefaults("userdeviceid", -1)
+'	crud.AddDefaults("userid", -1)
+'	crud.AddDefaults("devicesn", "")
+'	crud.AddDefaults("allocationdate", "")
+'	crud.AddDefaults("active", "Yes")
+'	
+'	'when dialog is opened, focus on which field. NB: This currently raises an error, comment it out on final file
+'	crud.focuson = "devicesn"
+'	'the field value to show to confirm deletion
+'	crud.DisplayField = "devicesn"
+'	'
+'	'the data-table has search
+'	crud.DT_HasSearch = True
+'	'the data-table has an add new button
+'	crud.DT_HasAddNew = True
+'	'the data-table has clear sort
+'	crud.DT_HasClearSort = True
+'	'the data-table has a column visibility filter
+'	crud.DT_HasFilter = True
+'	'the data-table has a refresh button
+'	crud.DT_HasRefresh = True
+'	
+'	'the data-table has an edit column
+'	crud.DT_HasEdit = True
+'	'the data-table has a delete column
+'	crud.DT_HasDelete = True
+'	'
+'	'add columns to data table
+'	crud.DT_AddColumn("devicesn", "Device")
+'	crud.DT_AddDateTimeColumnDate("allocationdate", "Allocation Date", "ddd, DD MMM YYYY @ HH:mm:ss")
+'	crud.DT_AddSwitch("active", "Active")
+'	
+'	'we want inline-editing on the data-table, these columns should use a text field
+'	crud.DT_SetTextField("devicesn", True)
+'		
+'	'dialog settings
+'	'set visibility for the fields you want hidden in the dialog
+'	crud.AddVisibility("userdeviceid", False)
+'	crud.AddVisibility("userid", False)
+'	'the width of the dialog box
+'	crud.DialogWidth = "600"
+'	
+'	crud.Diag_AddTextField("userdeviceid", 1, 1, "userdeviceid", "User Device No")
+'	crud.Diag_AddTextField("userid", 2, 1, "userid", "User No.")
+'	crud.Diag_AddTextField("devicesn", 3, 1, "devicesn", "Device No.")
+'	crud.Diag_AddDatePicker("allocationdate", 4, 1, "allocationdate", "Allocation Date")
+'	
+'	'crud.Diag_AddSwitch("active", 10, 1, "active", "Active", "Yes", "No", True)
+'	'
+'	crud.Save
+	
+	
+	'create the database
+	Dim db As BANanoSQL
+	db.OpenWait("test", "test")
+	'create the users table
+	Dim users As BANanoALASQLE
+	users.Initialize("test", "users", "id", "id")
+	users.SchemaAddInt(Array("id", "age"))
+	users.SchemaAddText(Array("name"))
+	'schema create table
+	users.SchemaCreateTable
+	users.result = db.ExecuteWait(users.query, users.args)
+	users.FromJSON
+	Select Case users.OK
+	Case False
+		Dim strError As String = users.Error
+		Log(strError)
+	End Select
+	pgIndex.Init
+End Sub
+
