@@ -614,6 +614,25 @@ Sub BindVueElement(el As VueElement)
 	Next
 End Sub
 
+'add html of component to app and this binds events and states
+Sub BindInfoBox(el As VueInfoBox)
+	Dim mbindings As Map = el.bindings
+	Dim mmethods As Map = el.methods
+	'apply the binding for the control
+	For Each k As String In mbindings.Keys
+		Dim v As Object = mbindings.Get(k)
+		Select Case k
+		Case "key"
+		Case Else
+			SetData(k, v)
+		End Select
+	Next
+	'apply the events
+	For Each k As String In mmethods.Keys
+		Dim cb As BANanoObject = mmethods.Get(k)
+		SetCallBack(k, cb)
+	Next
+End Sub
 
 'add html of component to app and this binds events and states
 Sub BindVueTable(el As VueTable)

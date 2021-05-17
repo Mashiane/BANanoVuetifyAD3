@@ -1029,7 +1029,7 @@ End Sub
 
 Sub AddClassCaption As VueElement
 	AddClass("caption")
-	return me
+	Return Me
 End Sub
 
 Sub setCaptionClass(b As Boolean)
@@ -4340,6 +4340,15 @@ End Sub
 'get a row
 Sub Row(RowPos As Int) As BANanoElement
 	Dim rcKey As String = $"${mName}R${RowPos}"$
+	rcKey = rcKey.tolowercase
+	Dim el As BANanoElement
+	el.Initialize($"#${rcKey}"$)
+	Return el
+End Sub
+
+'return element at row and column position
+Sub RC(xRow As Int, column As Int) As BANanoElement
+	Dim rcKey As String = $"${mName}R${xRow}C${column}"$
 	rcKey = rcKey.tolowercase
 	Dim el As BANanoElement
 	el.Initialize($"#${rcKey}"$)
