@@ -70,173 +70,50 @@ Sub Initialize
 End Sub
 
 Sub btnSwalToast_click(e As BANanoEvent)
-	ShowSwalToastSuccess("This is my toast...")
+	vuetify.ShowSwalToastSuccess("This is my toast...")
 End Sub
 
 
 Sub btnSwalInp_click(e As BANanoEvent)
-	Dim resp As String = banano.Await(ShowSwalInputWait("First Name", "Please enter your first name.", "Ok", "Cancel"))
+	Dim resp As String = banano.Await(vuetify.ShowSwalInputWait("First Name", "Please enter your first name.", "Ok", "Cancel"))
 	vuetify.ShowSnackBarSuccess(resp)
 End Sub
 
 
 Sub btnswalL_click(e As BANanoEvent)
-	Dim resp As Boolean = banano.Await(ShowSwalConfirmWait("هل تريد الاستمرار؟", "",  "نعم", "لا"))
+	Dim resp As Boolean = banano.Await(vuetify.ShowSwalConfirmWait("هل تريد الاستمرار؟", "",  "نعم", "لا"))
 	vuetify.ShowSnackBarSuccess(resp)
 End Sub
 
 
 
 Sub btnswalC_click(e As BANanoEvent)
-	Dim resp As Boolean = banano.Await(ShowSwalConfirmWait("Confirm Delete", "Are you sure you want to delete this product?", "Yes", "No"))
+	Dim resp As Boolean = banano.Await(vuetify.ShowSwalConfirmWait("Confirm Delete", "Are you sure you want to delete this product?", "Yes", "No"))
 	vuetify.ShowSnackBarSuccess(resp)
 End Sub
 
 
 Sub btnswalW_click(e As BANanoEvent)
-	ShowSwalWarning("This is a warning")
+	vuetify.ShowSwalWarning("This is a warning")
 End Sub
 
 Sub btnswalN_click(e As BANanoEvent)
-	ShowSwalNotification("It is Done!")
+	vuetify.ShowSwalNotification("It is Done!")
 End Sub
 
 
 Sub btnswal_click(e As BANanoEvent)
-	ShowSwal("Any fool can use a computer")
+	vuetify.ShowSwal("Any fool can use a computer")
 End Sub
 
 Sub btnSwalS_click(e As BANanoEvent)
-	ShowSwalSuccess("A success operation")
+	vuetify.ShowSwalSuccess("A success operation")
 End Sub
 
 Sub btnSwalI_click(e As BANanoEvent)
-	ShowSwalInfo("You have an internet connection!")
+	vuetify.ShowSwalInfo("You have an internet connection!")
 End Sub
 
 Sub btnSwalE_click(e As BANanoEvent)
-	ShowSwalError("An error has occured!")
-End Sub
-
-Sub ShowSwal(s As String)
-	Dim swal As VueSwal
-	swal.Initialize
-	swal.title(s)
-	swal.fire
-End Sub
-
-Sub ShowSwalError(message As String)
-	Dim swal As VueSwal
-	swal.Initialize 
-	swal.title(message)
-	swal.icon("error")
-	swal.fire
-End Sub
-
-Sub ShowSwalSuccess(message As String)
-	Dim swal As VueSwal
-	swal.Initialize 
-	swal.title(message)
-	swal.icon("success")
-	swal.fire
-End Sub
-
-Sub ShowSwalInfo(message As String)
-	Dim swal As VueSwal
-	swal.Initialize 
-	swal.title(message)
-	swal.icon("info")
-	swal.fire
-End Sub
-
-Sub ShowSwalWarning(message As String)
-	Dim swal As VueSwal
-	swal.Initialize 
-	swal.title(message)
-	swal.icon("warning")
-	swal.fire
-End Sub
-
-
-Sub ShowSwalToastSuccess(message As String)
-	Dim swal As VueSwal
-	swal.Initialize 
-	swal.title(message)
-	swal.icon("success")
-	swal.position("top-end")
-	swal.showConfirmButton(False)
-	swal.timer(3000)
-	swal.toast(True)
-	swal.timerProgressBar(True)
-	swal.fire
-End Sub
-
-
-Sub ShowSwalNotification(message As String)
-	Dim swal As VueSwal
-	swal.Initialize 
-	swal.title(message)
-	swal.icon("success")
-	swal.position("top-end")
-	swal.showConfirmButton(False)
-	swal.timer(3000)
-	swal.fire
-End Sub
-
-Sub ShowSwalInputWait(title As String, message As String, okText As String, cancelText As String) As String
-	Dim bp As BANanoPromise
-	bp.CallSub(Me, "ShowSwalInput", Array(title, message, okText, cancelText))
-	Dim resp As Map = banano.Await(bp)
-	Dim isConfirmed As Boolean = resp.Get("isConfirmed")
-	If isConfirmed = False Then
-		Return ""
-	Else
-		Dim value As String = resp.Get("value")
-		Return value
-	End If
-End Sub
-
-Sub ShowSwalConfirmWait(title As String, message As String, okText As String, cancelText As String) As Boolean
-	Dim bp As BANanoPromise
-	bp.CallSub(Me, "ShowSwalConfirm", Array(title, message, okText, cancelText))
-	Dim resp As Map = banano.Await(bp)
-	Dim isConfirmed As Boolean = resp.Get("isConfirmed")
-	Return isConfirmed
-End Sub
-
-Sub ShowSwalConfirm(title As String, message As String, okText As String, cancelText As String) As Map
-	Dim swal As VueSwal
-	swal.Initialize 
-	swal.title(title)
-	If message <> "" Then 
-		swal.text(message)
-	End If
-	swal.icon("question")
-	If okText = "نعم" Then
-		swal.iconHtml("؟")
-	End If
-	swal.confirmButtonText(okText)
-	swal.cancelButtonText(cancelText)
-	swal.showCancelButton(True)
-	swal.confirmButtonColor("#4caf50")
-	swal.cancelButtonColor("#f44336")
-	Dim resp As Map = swal.fire
-	banano.ReturnThen(resp)
-End Sub
-
-Sub ShowSwalInput(title As String, message As String, okText As String, cancelText As String) As Map
-	Dim swal As VueSwal
-	swal.Initialize 
-	swal.title(title)
-	swal.input("text")
-	If message <> "" Then 
-		swal.text(message)
-	End If
-	swal.confirmButtonText(okText)
-	swal.cancelButtonText(cancelText)
-	swal.showCancelButton(True)
-	swal.confirmButtonColor("#4caf50")
-	swal.cancelButtonColor("#f44336")
-	Dim resp As Map = swal.fire
-	banano.ReturnThen(resp)
+	vuetify.ShowSwalError("An error has occured!")
 End Sub

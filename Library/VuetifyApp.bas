@@ -5472,3 +5472,127 @@ Sub ColorList As List
 	Next
 	Return colors
 End Sub
+
+
+Sub ShowSwal(s As String)
+	Dim swal As VueSwal
+	swal.Initialize
+	swal.title(s)
+	swal.fire
+End Sub
+
+Sub ShowSwalError(message As String)
+	Dim swal As VueSwal
+	swal.Initialize 
+	swal.title(message)
+	swal.icon("error")
+	swal.fire
+End Sub
+
+Sub ShowSwalSuccess(message As String)
+	Dim swal As VueSwal
+	swal.Initialize 
+	swal.title(message)
+	swal.icon("success")
+	swal.fire
+End Sub
+
+Sub ShowSwalInfo(message As String)
+	Dim swal As VueSwal
+	swal.Initialize 
+	swal.title(message)
+	swal.icon("info")
+	swal.fire
+End Sub
+
+Sub ShowSwalWarning(message As String)
+	Dim swal As VueSwal
+	swal.Initialize 
+	swal.title(message)
+	swal.icon("warning")
+	swal.fire
+End Sub
+
+
+Sub ShowSwalToastSuccess(message As String)
+	Dim swal As VueSwal
+	swal.Initialize 
+	swal.title(message)
+	swal.icon("success")
+	swal.position("top-end")
+	swal.showConfirmButton(False)
+	swal.timer(3000)
+	swal.toast(True)
+	swal.timerProgressBar(True)
+	swal.fire
+End Sub
+
+
+Sub ShowSwalNotification(message As String)
+	Dim swal As VueSwal
+	swal.Initialize 
+	swal.title(message)
+	swal.icon("success")
+	swal.position("top-end")
+	swal.showConfirmButton(False)
+	swal.timer(3000)
+	swal.fire
+End Sub
+
+Sub ShowSwalInputWait(title As String, message As String, okText As String, cancelText As String) As String
+	Dim bp As BANanoPromise
+	bp.CallSub(Me, "ShowSwalInput", Array(title, message, okText, cancelText))
+	Dim resp As Map = BANano.Await(bp)
+	Dim isConfirmed As Boolean = resp.Get("isConfirmed")
+	If isConfirmed = False Then
+		Return ""
+	Else
+		Dim value As String = resp.Get("value")
+		Return value
+	End If
+End Sub
+
+Sub ShowSwalConfirmWait(title As String, message As String, okText As String, cancelText As String) As Boolean
+	Dim bp As BANanoPromise
+	bp.CallSub(Me, "ShowSwalConfirm", Array(title, message, okText, cancelText))
+	Dim resp As Map = BANano.Await(bp)
+	Dim isConfirmed As Boolean = resp.Get("isConfirmed")
+	Return isConfirmed
+End Sub
+
+Sub ShowSwalConfirm(title As String, message As String, okText As String, cancelText As String) As Map
+	Dim swal As VueSwal
+	swal.Initialize 
+	swal.title(title)
+	If message <> "" Then 
+		swal.text(message)
+	End If
+	swal.icon("question")
+	If okText = "نعم" Then
+		swal.iconHtml("؟")
+	End If
+	swal.confirmButtonText(okText)
+	swal.cancelButtonText(cancelText)
+	swal.showCancelButton(True)
+	swal.confirmButtonColor("#4caf50")
+	swal.cancelButtonColor("#f44336")
+	Dim resp As Map = swal.fire
+	BANano.ReturnThen(resp)
+End Sub
+
+Sub ShowSwalInput(title As String, message As String, okText As String, cancelText As String) As Map
+	Dim swal As VueSwal
+	swal.Initialize 
+	swal.title(title)
+	swal.input("text")
+	If message <> "" Then 
+		swal.text(message)
+	End If
+	swal.confirmButtonText(okText)
+	swal.cancelButtonText(cancelText)
+	swal.showCancelButton(True)
+	swal.confirmButtonColor("#4caf50")
+	swal.cancelButtonColor("#f44336")
+	Dim resp As Map = swal.fire
+	BANano.ReturnThen(resp)
+End Sub

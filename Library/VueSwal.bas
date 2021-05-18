@@ -9,6 +9,12 @@ Sub Class_Globals
 	Private options As Map
 End Sub
 
+#if css
+.sweet-alert {
+  font-family: "Roboto" important;
+}
+#End If
+
 'Initializes the object. You can add parameters to this method if needed.
 Public Sub Initialize As VueSwal
 	options.Initialize 
