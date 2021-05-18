@@ -10,8 +10,8 @@ Sub Class_Globals
 End Sub
 
 #if css
-.sweet-alert {
-  font-family: "Roboto" important;
+.swal2-container {
+    font-family: "Roboto";
 }
 #End If
 
@@ -19,6 +19,7 @@ End Sub
 Public Sub Initialize As VueSwal
 	options.Initialize 
 	swal.Initialize("swal")
+	confirmButtonColor("#2196f3")
 	Return Me
 End Sub
 

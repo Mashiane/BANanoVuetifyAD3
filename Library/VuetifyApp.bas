@@ -5514,19 +5514,58 @@ Sub ShowSwalWarning(message As String)
 End Sub
 
 
-Sub ShowSwalToastSuccess(message As String)
+Sub ShowSwalToastSuccess(message As String, time As Int)
 	Dim swal As VueSwal
 	swal.Initialize 
 	swal.title(message)
 	swal.icon("success")
 	swal.position("top-end")
 	swal.showConfirmButton(False)
-	swal.timer(3000)
+	swal.timer(time)
 	swal.toast(True)
 	swal.timerProgressBar(True)
 	swal.fire
 End Sub
 
+
+Sub ShowSwalToastError(message As String, time As Int)
+	Dim swal As VueSwal
+	swal.Initialize 
+	swal.title(message)
+	swal.icon("error")
+	swal.position("top-end")
+	swal.showConfirmButton(False)
+	swal.timer(time)
+	swal.toast(True)
+	swal.timerProgressBar(True)
+	swal.fire
+End Sub
+
+Sub ShowSwalToastWarning(message As String, time As Int)
+	Dim swal As VueSwal
+	swal.Initialize 
+	swal.title(message)
+	swal.icon("warning")
+	swal.position("top-end")
+	swal.showConfirmButton(False)
+	swal.timer(time)
+	swal.toast(True)
+	swal.timerProgressBar(True)
+	swal.fire
+End Sub
+
+Sub ShowSwalToastInfo(message As String, time As Int)
+	Dim swal As VueSwal
+	swal.Initialize 
+	swal.title(message)
+	swal.icon("info")
+	swal.position("top-end")
+	swal.showConfirmButton(False)
+	swal.timer(time)
+	swal.toast(True)
+	swal.timerProgressBar(True)
+	swal.fire
+End Sub
 
 Sub ShowSwalNotification(message As String)
 	Dim swal As VueSwal

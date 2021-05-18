@@ -62,15 +62,34 @@ Sub Initialize
 	about.BindVueElement(btnSwalInp)
 	'
 	Dim btnSwalToast As VueElement = contswal.Cell(2, 4).AddVBtn("btnSwalToast")
-	btnSwalToast.Caption = "Swal Toast"
+	btnSwalToast.Caption = "Swal Toast Success"
 	about.BindVueElement(btnSwalToast)
+	'
+	Dim btnSwalToastW As VueElement = contswal.Cell(2, 5).AddVBtn("btnSwalToastW")
+	btnSwalToastW.Caption = "Swal Toast Warning"
+	about.BindVueElement(btnSwalToastW)
+	'
+	Dim btnSwalToastE As VueElement = contswal.Cell(2, 6).AddVBtn("btnSwalToastE")
+	btnSwalToastE.Caption = "Swal Toast Error"
+	about.BindVueElement(btnSwalToastE)
 	
 	'add the component as a router
 	vuetify.AddRoute(about) 
 End Sub
 
+
+Sub btnSwalToastE_click(e As BANanoEvent)
+	vuetify.ShowSwalToastError("This is an error...", 1000)
+End Sub
+
+
+Sub btnSwalToastW_click(e As BANanoEvent)
+	vuetify.ShowSwalToastWarning("This is a warning...", 1000)
+End Sub
+
+
 Sub btnSwalToast_click(e As BANanoEvent)
-	vuetify.ShowSwalToastSuccess("This is my toast...")
+	vuetify.ShowSwalToastSuccess("This is my toast...", 1000)
 End Sub
 
 
