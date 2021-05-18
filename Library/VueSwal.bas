@@ -12,7 +12,7 @@ End Sub
 'Initializes the object. You can add parameters to this method if needed.
 Public Sub Initialize As VueSwal
 	options.Initialize 
-	swal.Initialize("Swal")
+	swal.Initialize("swal")
 	Return Me
 End Sub
 
