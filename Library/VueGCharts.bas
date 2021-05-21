@@ -138,7 +138,6 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	If Props <> Null Then
 		mClasses = Props.Get("Classes")
 		mStyle = Props.Get("Style")
-		mClasses = Props.Get("Classes")
 		mAttributes = Props.Get("Attributes")
 		mStyle = Props.Get("Style")
 		mStates = Props.Get("States")

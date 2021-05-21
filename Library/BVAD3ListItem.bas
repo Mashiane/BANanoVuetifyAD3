@@ -124,6 +124,22 @@ Sub SetSubTitle1(v As String) As BVAD3ListItem
 	options.put("subtitle1", v)
 	Return Me
 End Sub
+
+Sub SetSubTitle2(v As String) As BVAD3ListItem	
+	options.put("subtitle2", v)
+	Return Me
+End Sub
+
+Sub SetSubTitle3(v As String) As BVAD3ListItem	
+	options.put("subtitle3", v)
+	Return Me
+End Sub
+
+Sub SetSubTitle4(v As String) As BVAD3ListItem	
+	options.put("subtitle4", v)
+	Return Me
+End Sub
+
 	'
 Sub SetRightIcon(v As String) As BVAD3ListItem	
 	options.put("righticon", v)

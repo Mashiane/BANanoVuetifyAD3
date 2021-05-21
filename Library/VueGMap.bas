@@ -227,7 +227,6 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	If Props <> Null Then
 		mClasses = Props.Get("Classes")
 		mStyle = Props.Get("Style")
-		mClasses = Props.Get("Classes")
 		mAttributes = Props.Get("Attributes")
 		mStyle = Props.Get("Style")
 		mStates = Props.Get("States")
@@ -559,7 +558,7 @@ Sub AddElement(elID As String, tag As String, props As Map, styleProps As Map, c
 	elID = elID.tolowercase
 	elID = elID.Replace("#","")
 	Dim elIT As VueElement
-	elIT.Initialize(mCallBack, elID, tag)
+	elIT.Initialize(mCallBack, elID, elID)
 	elIT.Append(Text)
 	If loose <> Null Then
 		For Each k As String In loose

@@ -145,7 +145,7 @@ Version=7
 #DesignerProperty: Key: Readonly, DisplayName: Readonly, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Required, DisplayName: Required, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: ReturnObject, DisplayName: Return Object, FieldType: Boolean, DefaultValue: False, Description: 
-#DesignerProperty: Key: Rounded, DisplayName: Rounded, FieldType: Boolean, DefaultValue: False , Description: 
+#DesignerProperty: Key: Rounded, DisplayName: Rounded, FieldType: Boolean, DefaultValue: False , Description: , 
 
 #DesignerProperty: Key: Rules, DisplayName: Rules, FieldType: String, DefaultValue:  , Description: Rules
 #DesignerProperty: Key: Shaped, DisplayName: Shaped, FieldType: Boolean, DefaultValue: False , Description: 
@@ -206,12 +206,8 @@ Sub Class_Globals
 	Private mStyle As String = ""
 	Private mAttributes As String = ""
 	Private mCaption As String = ""
-	Private classList As Map
-	Private styleList As Map
-	Private attributeList As Map
 	Private mTagName As String = "div"
 	Private mOverwriteTag As String = ""
-	Private sbText As StringBuilder
 	Private mStates As String
 	Public bindings As Map
 	Public methods As Map
@@ -340,7 +336,10 @@ Sub Class_Globals
 	Private extm As Map
 	Public OpenItems As List
 	Private mSetName As Boolean = False
-	
+	Private xClasses As Map
+	Private xAttributes As Map
+	Private xStyles As Map
+	Private sbText As StringBuilder
 	'
 	Type VueGridRow(Rows As Int, Columns As List, _
 	ma As String, mx As String, my As String, mt As String, mb As String, mr As String, ml As String, _
@@ -368,8 +367,8 @@ Sub Class_Globals
 	Public HasRules As Boolean
 	Public Options As ListViewItemOptions
 	Public Gradients As List
-	Private Loose As List
 	Private computed As Map
+	Public Here As String
 End Sub
 
 'initialize the custom view
@@ -379,17 +378,12 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	mName = mName.Replace("#","")
 	mEventName = mEventName.Replace("#","")
 	mCallBack = CallBack
-	classList.Initialize
-	styleList.Initialize
-	attributeList.Initialize
-	sbText.Initialize
 	bindings.Initialize
 	methods.Initialize
 	OpenItems.Initialize 
 	Steps = 0
 	HasRules = False
 	Gradients.Initialize 
-	Loose.Initialize 
 	computed.Initialize 
 	extm.Initialize
 	extm.Put("html", "mdi-language-html5")
@@ -408,7 +402,6 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	extm.Put("folder", "mdi-folder")
 	extm.Put("woff", "marketweb-webfont.woff")
 	extm.Put("css", "mdi-language-css3")
-	 
 	'
 	LastRow = 0
 	GridRows.Initialize
@@ -424,16 +417,23 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	ntxRow = 0
 	mRouterReplace = False
 	mRouterAppend = False
+	'
+	xClasses.Initialize 
+	xAttributes.Initialize
+	xStyles.Initialize
+	sbText.Initialize 
+	Here = $"#${mname}"$
 End Sub
-
 
 'set the master html for the app
 Sub SetTemplate(str As String) As VueElement
-	mElement.Empty
-	mElement.Append(str)
+	If mElement <> Null Then
+		mElement.Empty
+		mElement.Append(str)
+	End If
+	mCaption = str
 	Return Me
 End Sub
-
 
 Sub AddGradient(lst As List) As VueElement
 	Gradients.Add(lst)
@@ -468,6 +468,9 @@ Sub NewListViewItemOptions
 	Options.title  = "title"
 	Options.subtitle  = "subtitle"
 	Options.subtitle1  = "subtitle1"
+	Options.subtitle2  = "subtitle2"
+	Options.subtitle3  = "subtitle3"
+	Options.subtitle4  = "subtitle4"
 	'
 	Options.righticon  = "righticon"
 	Options.righticonclass  = ""
@@ -736,7 +739,7 @@ End Sub
 Sub AddTabButtonIcon(tabID As String, Icon As String) As VueElement
 	tabID = tabID.ToLowerCase
 	Dim tabE As VueElement
-	Dim vBtn As VueElement
+	Dim vBtnx As VueElement
 	Dim vIcon As VueElement
 	'add the tab 
 	tabE = AddVueElement(tabID, "v-tab", Null)
@@ -744,8 +747,8 @@ Sub AddTabButtonIcon(tabID As String, Icon As String) As VueElement
 	tabE.Key = tabID
 	tabE.Value = tabID
 	'
-	vBtn = tabE.AddVueElement2(tabID, $"${tabID}button"$, "v-btn", Null)
-	vIcon = vBtn.AddVueElement2($"${tabID}button"$, $"${tabID}icon"$, "v-icon", Null)
+	vBtnx = tabE.AddVueElement2(tabID, $"${tabID}button"$, "v-btn", Null)
+	vIcon = vBtnx.AddVueElement2($"${tabID}button"$, $"${tabID}icon"$, "v-icon", Null)
 	vIcon.SetText(Icon)
 	
 	'add the tab item
@@ -1314,7 +1317,15 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bClippedRight = Props.Get("ClippedRight")
 		mSetName = Props.Get("AssignName")
 	End If
-	
+	'
+	If BANano.Exists($"#${mName}"$) Then
+		mElement = BANano.GetElement($"#${mName}"$)
+	Else	
+		mElement = mTarget.Append($"<${mTagName} id="${mName}"></${mTagName}>"$).Get("#" & mName)
+	End If
+		
+	setLoremIpsum(bLoremIpsum)
+	setCaption(mCaption)
 	setClippedRight(bClippedRight)
 	setClipped(bClipped)
 	setClippedLeft(bClippedLeft)
@@ -1406,7 +1417,6 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	'
 	setCoverImage(stCoverImage)
 	setFitScreen(bFitScreen)
-	
 	'
 	If BANano.IsNull(bBuildGrid) Or BANano.IsUndefined(bBuildGrid) Then 
 		bBuildGrid = False
@@ -1463,17 +1473,13 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	SetOnEvent(mCallBack, "KeyPress", eOnKeyPress)
 	SetOnEvent(mCallBack,  "Click.Alt", eOnClickAlt)
 	SetOnEvent(mCallBack,  "Click.Shift", eOnClickShift)
-	
-	'build and get the element
-	Dim strHTML As String = ToString
-	'does the element exist
-	If BANano.Exists($"#${mName}"$) Then
-		mElement = BANano.GetElement($"#${mName}"$)
-		mElement.SetHTML(strHTML) 
-	Else	
-		mElement = mTarget.Append(strHTML).Get("#" & mName)
-	End If
 	setStates(mStates)
+	
+	'check if list
+	If mTagName = "v-list" Then
+		NewListViewItemOptions
+		SetOpenItems(NewList)
+	End If
 	'
 	If bBuildGrid Then
 		If BANano.IsUndefined(stRows) Or BANano.IsNull(stRows) Then
@@ -1519,7 +1525,6 @@ private Sub GetMarginPadding(varOffsets As String) As Map
 	varOffsets = varOffsets.replace("?","")
 	varOffsets = varOffsets.replace(" ","")
 	varOffsets = varOffsets.trim
-	
 	'
 	Dim ss As List = BANanoShared.StrParse(",", varOffsets)
 	'ensure that everything is numeric
@@ -1554,75 +1559,91 @@ private Sub makeN(v As String) As String
 	If v.StartsWith("-") Then
 		v = v.Replace("-", "n")
 	End If
+	v = v.trim
 	Return v
 End Sub
 
 Sub setMA(sma As String)
 	sma = makeN(sma)
+	If sma = "" Then Return
 	AddClass($"ma-${sma}"$)
 End Sub
 
 Sub setMX(sma As String)
 	sma = makeN(sma)
+	If sma = "" Then Return
 	AddClass($"mx-${sma}"$)
 End Sub
 
 Sub setMY(sma As String)
 	sma = makeN(sma)
+	If sma = "" Then Return
 	AddClass($"my-${sma}"$)
 End Sub
 
 Sub setMT(sma As String)
 	sma = makeN(sma)
+	If sma = "" Then Return
 	AddClass($"mt-${sma}"$)
 End Sub
 
 Sub setMB(sma As String)
 	sma = makeN(sma)
+	If sma = "" Then Return
 	AddClass($"mb-${sma}"$)
 End Sub
 
 Sub setML(sma As String)
 	sma = makeN(sma)
+	If sma = "" Then Return
 	AddClass($"ml-${sma}"$)
 End Sub
 
 Sub setMR(sma As String)
 	sma = makeN(sma)
+	If sma = "" Then Return
 	AddClass($"mr-${sma}"$)
 End Sub
 
 Sub setPA(sma As String)
+	sma = makeN(sma)
+	If sma = "" Then Return
 	AddClass($"pa-${sma}"$)
 End Sub
 
 Sub setPX(sma As String)
 	sma = makeN(sma)
+	If sma = "" Then Return
 	AddClass($"px-${sma}"$)
 End Sub
 
 Sub setPY(sma As String)
 	sma = makeN(sma)
+	If sma = "" Then Return
 	AddClass($"py-${sma}"$)
 End Sub
 
 Sub setPT(sma As String)
 	sma = makeN(sma)
+	If sma = "" Then Return
 	AddClass($"pt-${sma}"$)
 End Sub
 
 Sub setPB(sma As String)
 	sma = makeN(sma)
+	If sma = "" Then Return
 	AddClass($"pb-${sma}"$)
 End Sub
 
 Sub setPL(sma As String)
 	sma = makeN(sma)
+	If sma = "" Then Return
 	AddClass($"pl-${sma}"$)
 End Sub
 
 Sub setPR(sma As String)
 	sma = makeN(sma)
+	If sma = "" Then Return
 	AddClass($"pr-${sma}"$)
 End Sub
 
@@ -1738,6 +1759,14 @@ Sub AppendPlaceHolderTo(target As String)
 	elx.append(stemplate)
 End Sub
 
+Sub Empty
+	If mElement <> Null Then
+		mElement.empty
+	End If
+	mCaption = ""
+	sbText.Initialize 
+End Sub
+
 'add anything from the appendholder
 Sub AppendPlaceHolder
 	Dim stemplate As String = BANanoGetHTMLAsIs("placeholder")
@@ -1780,30 +1809,6 @@ Sub getLoremIpsum As Boolean
 	Return bLoremIpsum
 End Sub
 
-'return the generated html
-Sub ToString As String
-	If bLoremIpsum Then
-		mCaption = BANanoShared.LoremIpsum(1)
-	End If
-	'build the 'class' attribute
-	Dim className As String = BANanoShared.JoinMapKeys(classList, " ")
-	If className <> "" Then 
-		AddAttr("class", className)
-	End If
-	'build the 'style' attribute
-	Dim styleName As String = BANanoShared.BuildStyle(styleList)
-	If styleName <> "" Then 
-		AddAttr("style", styleName)
-	End If
-	'build element internal structure
-	Dim iStructure As String = BANanoShared.BuildAttributes(attributeList)
-	iStructure = iStructure.trim
-	Dim stext As String = sbText.ToString
-	Dim strLoose As String = BANanoShared.Join(" ", Loose)
-	'stext = stext.Replace("v-template", "template")
-	Dim rslt As String = $"<${mTagName} id="${mName}" ${strLoose} ${iStructure}>${mCaption}${stext}</${mTagName}>"$
-	Return rslt
-End Sub
 
 Sub getinnerHTML As String
 	If BANano.Exists($"#${mName}"$) Then
@@ -1811,7 +1816,7 @@ Sub getinnerHTML As String
 		Dim str As String = mElement.GetField("innerHTML").Result
 		Return str
 	Else
-		Return ""
+		Return mCaption
 	End If	
 	
 End Sub
@@ -1822,7 +1827,7 @@ Sub getouterHTML As String
 		Dim str As String = mElement.GetField("ounterHTML").Result
 		Return str
 	Else
-		Return ""
+		Return mCaption
 	End If		
 End Sub
 
@@ -1830,12 +1835,28 @@ End Sub
 Sub getHTML As String
 	If BANano.Exists($"#${mName}"$) Then
 		mElement = BANano.GetElement($"#${mName}"$)
-		Return mElement.GetHTML
+		Dim x As String = mElement.GetHTML
+		Return x
 	Else
-		Return ""
+		Dim x As String = ToString
+		Return x
 	End If	
 End Sub
 
+'return the generated html
+Sub ToString As String
+	Dim myStyles As String = BANanoShared.BuildStyle(xStyles)
+	Dim myClasses As String = BANanoShared.BuildClasses(xClasses)
+	'
+	AddAttr("class", myClasses)
+	AddAttr("style", myStyles)
+	'
+	Dim myAttributes As String = BANanoShared.BuildAttributes(xAttributes)
+	
+	'stext = stext.Replace("v-template", "template")
+	Dim rslt As String = $"<${mTagName} id="${mName}" ${myAttributes}>${mCaption}${sbText.tostring}</${mTagName}>"$
+	Return rslt
+End Sub
 
 'bind an attribute
 Sub SetVBindAttribute(prop As String, value As String)
@@ -1952,7 +1973,7 @@ Sub AddHR As VueElement
 End Sub
 
 Sub AddLoose(attr As String) As VueElement
-	Loose.Add(attr)
+	AddAttr(attr, True)
 	Return Me
 End Sub
 
@@ -1961,9 +1982,9 @@ Sub AddElement(elID As String, tag As String, props As Map, styleProps As Map, c
 	elID = elID.tolowercase
 	elID = elID.Replace("#","")
 	Dim elIT As VueElement
-	elIT.Initialize(mCallBack, elID, tag)
+	elIT.Initialize(mCallBack, elID, elID)
 	elIT.Append(Text)
-	If Loose <> Null Then
+	If loosex <> Null Then
 		For Each k As String In loosex
 			elIT.AddLoose(k)
 		Next
@@ -2007,7 +2028,9 @@ End Sub
 public Sub setID(varID As String)
 	varID = varID.tolowercase
 	mName = varID
-	mElement.SetAttr("id", mName)
+	If mElement <> Null Then
+		mElement.SetAttr("id", mName)
+	End If
 End Sub
 
 'add the element to the parent
@@ -2035,16 +2058,19 @@ End Sub
 public Sub AddClass(varClass As String) As VueElement
 	If BANano.IsUndefined(varClass) Or BANano.IsNull(varClass) Then Return Me
 	If BANano.IsNumber(varClass) Then varClass = BANanoShared.CStr(varClass)
+	If BANano.IsBoolean(varClass) Then varClass = ""
 	varClass = varClass.trim
 	If varClass = "" Then Return Me
 	If mElement <> Null Then 
-		mElement.AddClass(varClass)
-	Else
 		Dim mxItems As List = BANanoShared.StrParse(" ", varClass)
 		For Each mt As String In mxItems
-			classList.put(mt, mt)
+			mElement.AddClass(varClass)
 		Next
 	End If
+	Dim mxItems As List = BANanoShared.StrParse(" ", varClass)
+	For Each mt As String In mxItems
+		xClasses.Put(mt, mt)
+	Next
 	Return Me
 End Sub
 
@@ -2084,9 +2110,8 @@ public Sub AddStyle(varProp As String, varStyle As String)
 		aStyle.put(varProp, varStyle)
 		Dim sStyle As String = BANano.ToJSON(aStyle)
 		mElement.SetStyle(sStyle)
-	Else
-		styleList.put(varProp, varStyle)
 	End If
+	xStyles.Put(varProp, varStyle)
 End Sub
 
 Sub SetAttr(varProp As String, varValue As String)
@@ -2129,9 +2154,8 @@ End Sub
 Sub Append(varText As String)
 	If mElement <> Null Then
 		mElement.Append(varText)
-	Else	
-		sbText.Append(varText)
 	End If
+	sbText.Append(varText)
 End Sub
 
 Sub BindValue(value As String)
@@ -2165,7 +2189,7 @@ End Sub
 
 'leave absolute
 Sub setLeaveAbsolute(b As Boolean)
-	if b = false then return
+	If b = False Then Return
 	Bind("leave-absolute", b)
 End Sub
 
@@ -2211,17 +2235,15 @@ End Sub
 Sub RemoveAttr(attrName As String)
 	If mElement <> Null Then
 		mElement.RemoveAttr(attrName)
-	Else
-		attributeList.Remove(attrName)	
 	End If
+	xAttributes.Remove(attrName)
 End Sub
 
 Sub RemoveClass(clsName As String)
 	If mElement <> Null Then
 		mElement.RemoveClass(clsName)
-	Else
-		classList.Remove(clsName)
 	End If
+	xClasses.Remove(clsName)
 End Sub
 
 
@@ -2238,9 +2260,8 @@ Public Sub AddAttr(varProp As String, varValue As String)
 		If varValue = True Then
 			If mElement <> Null Then 
 				mElement.SetAttr(varProp, varValue)
-			Else	
-				attributeList.put(varProp, varValue)
 			End If
+			xAttributes.Put(varProp, varValue)
 		End If
 	Else
 		'varValue = varValue.Replace("~","=")
@@ -2254,9 +2275,8 @@ Public Sub AddAttr(varProp As String, varValue As String)
 			varProp = varProp.Replace(":", "")
 			If mElement <> Null Then
 				mElement.SetAttr($":${varProp}"$, rname)
-			Else
-				attributeList.put($":${varProp}"$, rname)
 			End If
+			xAttributes.put($":${varProp}"$, rname)
 		Else
 			'we have a binding on the property
 			If varProp.StartsWith(":") Then
@@ -2264,13 +2284,11 @@ Public Sub AddAttr(varProp As String, varValue As String)
 					bindings.Put(varValue, Null)
 				End If
 			End If
-			
 					
 			If mElement <> Null Then 
 				mElement.SetAttr(varProp, varValue)
-			Else
-				attributeList.put(varProp, varValue)
 			End If
+			xAttributes.Put(varProp, varValue)
 		End If			
 		'
 '		Select Case varProp
@@ -2291,17 +2309,6 @@ Sub RemoveCodeBindings(b As List)
 	Next
 End Sub
 
-'returns the class names
-Public Sub getClasses() As String
-	Dim sbClass As StringBuilder
-	sbClass.Initialize
-	For Each k As String In classList.Keys
-		sbClass.Append(k).Append(" ")
-	Next
-	mClasses = sbClass.ToString
-	Return mClasses
-End Sub
-
 Sub setClasses(varClasses As String)
 	AddClass(varClasses)
 End Sub
@@ -2311,31 +2318,13 @@ public Sub setStyle(varStyle As String)
 	setStyles(varStyle)
 End Sub
 
-'returns the style as JSON
-public Sub getStyle() As String
-	Dim sbStyle As StringBuilder
-	sbStyle.Initialize
-	sbStyle.Append("{")
-	For Each k As String In styleList.Keys
-		Dim v As String = styleList.Get(k)
-		sbStyle.Append(k).Append(":").Append(v).Append(",")
-	Next
-	sbStyle.Append("}")
-	mStyle = sbStyle.ToString
-	Return mStyle
-End Sub
-
 'sets the attributes
 public Sub setAttributes(varAttributes As String)
 	Dim mxItems As List = BANanoShared.StrParse(";", varAttributes)
 	For Each mt As String In mxItems
 		Dim k As String = BANanoShared.MvField(mt,1,"=")
 		Dim v As String = BANanoShared.MvField(mt,2,"=")
-		If mElement <> Null Then 
-			mElement.SetAttr(k, v)
-		Else
-			attributeList.put(k, v)
-		End If
+		AddAttr(k, v)
 	Next
 End Sub
 
@@ -2347,18 +2336,6 @@ public Sub setStyles(varStyles As String)
 		Dim v As String = BANanoShared.MvField(mt,2,"=")
 		AddStyle(k, v)
 	Next
-End Sub
-
-'returns the attributes
-public Sub getAttributes() As String
-	Dim sbAttr As StringBuilder
-	sbAttr.Initialize
-	For Each k As String In attributeList.Keys
-		Dim v As String = attributeList.Get(k)
-		sbAttr.Append(k).Append("=").Append(v).Append(";")
-	Next
-	mAttributes = sbAttr.ToString
-	Return mAttributes
 End Sub
 
 'sets the caption, , remove v-html and v-text
@@ -2532,8 +2509,6 @@ public Sub getVSlotDefault() As String
 	Return stVSlotDefault
 End Sub
 
-
-
 public Sub setRef(varRef As String)
 	varRef = varRef.tolowercase
 	AddAttr("ref", varRef)
@@ -2544,6 +2519,9 @@ public Sub getRef() As String
 	Return stRef
 End Sub
 
+public Sub setChipLabel(varLabel As Boolean)
+	AddAttr(":label", varLabel)
+End Sub
 
 public Sub setLabel(varLabel As String)
 	AddAttr("label", varLabel)
@@ -2566,7 +2544,6 @@ End Sub
 Sub setEditable(b As Boolean)
 	AddAttr(":editable", b)
 End Sub
-
 
 public Sub getSlot() As String
 	Return stSlot
@@ -2899,7 +2876,10 @@ End Sub
 
 public Sub setColor(varColor As String)
 	If BANano.IsNull(varColor) Or BANano.IsUndefined(varColor) Then varColor = ""
-	If varColor = "normal" Or varColor = "" Then Return
+	varColor = varColor.replace("none", "")
+	varColor = varColor.replace("normal", "")
+	varColor = varColor.trim
+	If varColor = "" Then Return
 	AddAttr("color", varColor)
 	stColor = varColor
 End Sub
@@ -2914,10 +2894,7 @@ End Sub
 
 'set color by attribute
 public Sub setColorAttr(varColor As String)
-	If BANano.IsNull(varColor) Or BANano.IsUndefined(varColor) Then varColor = ""
-	If varColor = "normal" Or varColor = "" Then Return
-	AddAttr("color", varColor)
-	stColor = varColor
+	setColor(varColor)
 End Sub
 
 public Sub setHeaderColor(varColor As String)
@@ -3092,8 +3069,8 @@ public Sub setTransition(s As String)
 	AddAttr("transition", s)
 End Sub
 
-public Sub setOffsetY(b As Boolean)
-	AddAttr(":offset-y", b)
+public Sub setOffsetY(b As Object)
+	AddAttr("offset-y", b)
 End Sub
 
 public Sub setClipped(b As Object)
@@ -3114,8 +3091,8 @@ public Sub setClippedLeft(b As Object)
 	bClippedLeft = b
 End Sub
 
-public Sub setOffsetX(b As Boolean)
-	AddAttr(":offset-y", b)
+public Sub setOffsetX(b As Object)
+	AddAttr("offset-x", b)
 End Sub
 
 public Sub setReactive(b As Boolean)
@@ -3284,7 +3261,7 @@ public Sub setStylePosition(s As String)
 End Sub
 
 public Sub setDepressed(b As Boolean)
-	AddAttr(":depressed", b)
+	AddAttrOnCondition(":depressed", b, True)
 End Sub
 
 public Sub setFab(b As Boolean)
@@ -3452,6 +3429,10 @@ End Sub
 public Sub setAlignCenter(varAlignCenter As Boolean)
 	AddAttrOnConditionTrue("align", "center", varAlignCenter)
 	bAlignCenter = varAlignCenter
+End Sub
+
+public Sub setAlignSelf(varAlignCenter As Boolean)
+	AddAttr("align-self", varAlignCenter)
 End Sub
 
 public Sub getAlignCenter() As Boolean
@@ -3910,7 +3891,7 @@ public Sub setDisabled(varDisabled As String)
 	If BANano.IsNull(varDisabled) Or BANano.IsUndefined(varDisabled) Then 
 		varDisabled = ""
 	End If
-	if varDisabled = "" then return
+	If varDisabled = "" Then Return
 	varDisabled = CStr(varDisabled)
 	varDisabled = varDisabled.tolowercase
 	AddAttr(":disabled", varDisabled)
@@ -3975,7 +3956,7 @@ End Sub
 
 'set outlined
 public Sub setOutlined(varOutlined As Boolean)
-	AddAttrOnCondition("outlined", varOutlined, True)
+	AddAttrOnCondition(":outlined", varOutlined, True)
 	boOutlined = varOutlined
 End Sub
 
@@ -3987,6 +3968,7 @@ End Sub
 
 'set hide overlay
 public Sub setHideOverlay(b As Boolean)
+	If b = False Then Return
 	Bind("hide-overlay", b)
 End Sub
 
@@ -4136,7 +4118,7 @@ End Sub
 
 'set shaped
 public Sub setShaped(varShaped As Boolean)
-	Bind("shaped", varShaped)
+	AddAttrOnCondition(":shaped", boShaped, True)
 	boShaped = varShaped
 End Sub
 
@@ -4157,6 +4139,9 @@ public Sub getSingleLine() As Boolean
 End Sub
 
 public Sub setAlign(varAlign As String)
+	If BANano.IsNull(varAlign) Then varAlign = ""
+	If varAlign = "left" Then Return
+	If varAlign = "normal" Then Return
 	AddAttr("align", varAlign)
 	stAlign = varAlign
 End Sub
@@ -4166,6 +4151,7 @@ public Sub getAlign() As Boolean
 End Sub
 
 public Sub setJustify(varJustify As String)
+	If varJustify = "normal" Then Return
 	AddAttr("justify", varJustify)
 	stJustify = varJustify
 End Sub
@@ -4833,9 +4819,8 @@ Sub SetText(txt As String)
 	RemoveAttr("v-text")
 	If mElement <> Null Then
 		mElement.SetText(txt)
-	Else
-		sbText.Append(txt)	
 	End If
+	mCaption = txt
 End Sub
 
 
@@ -4974,10 +4959,12 @@ Sub FileIcon(ext As String) As String
 End Sub
 
 Sub setOverlap(b As Boolean)
+	If b = False Then Return
 	Bind("overlap", b)
 End Sub
 
 Sub setDot(b As Boolean)
+	If b = False Then Return
 	Bind("dot", b)
 End Sub
 
@@ -6161,6 +6148,9 @@ Sub AddListViewTemplate(numLines As Int, props As ListViewItemOptions) As VueEle
 	Dim titleID As String = $"${elID}title"$
 	Dim subtitleID As String = $"${elID}subtitle"$
 	Dim subtitle1ID As String = $"${elID}subtitle1"$
+	Dim subtitle2ID As String = $"${elID}subtitle2"$
+	Dim subtitle3ID As String = $"${elID}subtitle3"$
+	Dim subtitle4ID As String = $"${elID}subtitle4"$
 	Dim rightactionID As String = $"${elID}rightaction"$
 	Dim rightactiontextID As String = $"${elID}rightactiontext"$
 	Dim rightactionBtnID As String = $"${elID}rightactionbtn"$
@@ -6196,6 +6186,10 @@ Sub AddListViewTemplate(numLines As Int, props As ListViewItemOptions) As VueEle
 	Dim xtitle As String = props.title
 	Dim xsubtitle As String = props.subtitle
 	Dim xsubtitle1 As String = props.subtitle1
+	Dim xsubtitle2 As String = props.subtitle2
+	Dim xsubtitle3 As String = props.subtitle3
+	Dim xsubtitle4 As String = props.subtitle4
+
 	'
 	Dim xrighticon As String = props.righticon
 	Dim xrighticonclass As String = props.righticonclass
@@ -6246,10 +6240,13 @@ Sub AddListViewTemplate(numLines As Int, props As ListViewItemOptions) As VueEle
 <v-list-item-icon id="${itemiconID}" v-if="item.${xicon}">
 <v-icon id="${iconID}" ${props.iconattr} :color="item.${xiconcolor}" class="${xiconclass}" v-html="item.${xicon}"></v-icon>
 </v-list-item-icon>
-<v-list-item-content id="${contentID}" v-if="item.${xtitle} || item.${xsubtitle} || item.${xsubtitle1}">
+<v-list-item-content id="${contentID}" v-if="item.${xtitle} || item.${xsubtitle} || item.${xsubtitle1} || item.${xsubtitle2} || item.${xsubtitle3} || item.${xsubtitle4}">
 <v-list-item-title id="${titleID}" v-if="item.${xtitle}" v-html="item.${xtitle}"></v-list-item-title>
 <v-list-item-subtitle id="${subtitleID}" v-if="item.${xsubtitle}" v-html="item.${xsubtitle}"></v-list-item-subtitle>
 <v-list-item-subtitle id="${subtitle1ID}" v-if="item.${xsubtitle1}" v-html="item.${xsubtitle1}"></v-list-item-subtitle>
+<v-list-item-subtitle id="${subtitle2ID}" v-if="item.${xsubtitle2}" v-html="item.${xsubtitle2}"></v-list-item-subtitle>
+<v-list-item-subtitle id="${subtitle3ID}" v-if="item.${xsubtitle3}" v-html="item.${xsubtitle3}"></v-list-item-subtitle>
+<v-list-item-subtitle id="${subtitle4ID}" v-if="item.${xsubtitle4}" v-html="item.${xsubtitle4}"></v-list-item-subtitle>
 </v-list-item-content>
 <v-list-item-avatar id="${rightavatarID}" class="${xrightitemavatarclass}" v-if="item.${props.rightavatar} || item.${props.rightavataricon} || item.${props.rightavatartext}">
 <v-img id="${rightavatarImgID}" ${props.rightavatarattr} :src="item.${props.rightavatar}" class="${props.rightavatarclass}" v-if="item.${props.rightavatar}"></v-img>
@@ -6349,6 +6346,22 @@ End Sub
 
 Sub GetTitle As VueElement
 	Return GetVueElement($"${mName}title"$)
+End Sub
+
+Sub GetActions As VueElement
+	Return GetVueElement($"${mName}actions"$)
+End Sub
+
+Sub GetDivider As VueElement
+	Return GetVueElement($"${mName}divider"$)
+End Sub
+
+Sub GetSubTitle As VueElement
+	Return GetVueElement($"${mName}subtitle"$)
+End Sub
+
+Sub GetItem As VueElement
+	Return GetVueElement($"${mName}item"$)
 End Sub
 
 Sub GetListItemTitle As VueElement
@@ -6498,6 +6511,9 @@ Sub AddListItemGroupTemplate(numLines As Int) As VueElement
 	Dim titleID As String = $"${elID}title"$
 	Dim subtitleID As String = $"${elID}subtitle"$
 	Dim subtitle1ID As String = $"${elID}subtitle1"$
+	Dim subtitle2ID As String = $"${elID}subtitle2"$
+	Dim subtitle3ID As String = $"${elID}subtitle3"$
+	Dim subtitle4ID As String = $"${elID}subtitle4"$
 	Dim rightactionID As String = $"${elID}rightaction"$
 	Dim rightactiontextID As String = $"${elID}rightactiontext"$
 	Dim rightactionBtnID As String = $"${elID}rightactionbtn"$
@@ -6533,6 +6549,9 @@ Sub AddListItemGroupTemplate(numLines As Int) As VueElement
 	Dim xtitle As String = props.title
 	Dim xsubtitle As String = props.subtitle
 	Dim xsubtitle1 As String = props.subtitle1
+	Dim xsubtitle2 As String = props.subtitle2
+	Dim xsubtitle3 As String = props.subtitle3
+	Dim xsubtitle4 As String = props.subtitle4
 	'
 	Dim xrighticon As String = props.righticon
 	Dim xrighticonclass As String = props.righticonclass
@@ -6581,10 +6600,13 @@ Sub AddListItemGroupTemplate(numLines As Int) As VueElement
 <v-icon id="${iconID}" ${props.iconattr} :color="item.${xiconcolor}" class="${xiconclass}" v-html="item.${xicon}"></v-icon>
 <span id="${avatarTextID}" v-if="item.${props.avatartext}" :color="item.${props.avatartextcolor}" class="${props.avatartextclass}" v-html="item.${props.avatartext}"></span>
 </v-list-item-icon>
-<v-list-item-content id="${contentID}" v-if="item.${xtitle} || item.${xsubtitle} || item.${xsubtitle1}">
+<v-list-item-content id="${contentID}" v-if="item.${xtitle} || item.${xsubtitle} || item.${xsubtitle1} || item.${xsubtitle2} || item.${xsubtitle3} || item.${xsubtitle4}">
 <v-list-item-title id="${titleID}" v-if="item.${xtitle}" v-html="item.${xtitle}"></v-list-item-title>
 <v-list-item-subtitle id="${subtitleID}" v-if="item.${xsubtitle}" v-html="item.${xsubtitle}"></v-list-item-subtitle>
-<v-list-item-subtitle id="${subtitle1ID}" v-If="item.${xsubtitle1}" v-html="item.${xsubtitle1}"></v-list-item-subtitle>
+<v-list-item-subtitle id="${subtitle1ID}" v-if="item.${xsubtitle1}" v-html="item.${xsubtitle1}"></v-list-item-subtitle>
+<v-list-item-subtitle id="${subtitle2ID}" v-if="item.${xsubtitle2}" v-html="item.${xsubtitle2}"></v-list-item-subtitle>
+<v-list-item-subtitle id="${subtitle3ID}" v-if="item.${xsubtitle3}" v-html="item.${xsubtitle3}"></v-list-item-subtitle>
+<v-list-item-subtitle id="${subtitle4ID}" v-if="item.${xsubtitle4}" v-html="item.${xsubtitle4}"></v-list-item-subtitle>
 </v-list-item-content>
 <v-list-item-avatar id="${rightavatarID}" class="${xrightitemavatarclass}" v-if="item.${props.rightavatar} || item.${props.rightavataricon} || item.${props.rightavatartext}">
 <v-img id="${rightavatarImgID}" ${props.rightavatarattr} :src="item.${props.rightavatar}" class="${props.rightavatarclass}" v-if="item.${props.rightavatar}"></v-img>
@@ -6700,6 +6722,9 @@ Sub AddListViewGroupTemplate(numLines As Int, props As ListViewItemOptions) As V
 	Dim titleID As String = $"${elID}title"$
 	Dim subtitleID As String = $"${elID}subtitle"$
 	Dim subtitle1ID As String = $"${elID}subtitle1"$
+	Dim subtitle2ID As String = $"${elID}subtitle2"$
+	Dim subtitle3ID As String = $"${elID}subtitle3"$
+	Dim subtitle4ID As String = $"${elID}subtitle4"$
 	Dim rightactionID As String = $"${elID}rightaction"$
 	Dim rightactiontextID As String = $"${elID}rightactiontext"$
 	Dim rightactionBtnID As String = $"${elID}rightactionbtn"$
@@ -6736,6 +6761,10 @@ Sub AddListViewGroupTemplate(numLines As Int, props As ListViewItemOptions) As V
 	Dim xtitle As String = props.title
 	Dim xsubtitle As String = props.subtitle
 	Dim xsubtitle1 As String = props.subtitle1
+	Dim xsubtitle2 As String = props.subtitle2
+	Dim xsubtitle3 As String = props.subtitle3
+	Dim xsubtitle4 As String = props.subtitle4
+
 	'
 	Dim xrighticon As String = props.righticon
 	Dim xrighticonclass As String = props.righticonclass
@@ -6794,10 +6823,13 @@ sTemplate.Append($"<v-list-item id="${listitemID}" v-for="child in item.items" :
 <v-list-item-icon id="${itemiconID}" v-if="child.${xicon}">
 <v-icon id="${iconID}" ${props.iconattr} :color="child.${xiconcolor}" class="${xiconclass}" v-html="child.${xicon}"></v-icon>
 </v-list-item-icon>
-<v-list-item-content id="${contentID}" v-if="child.${xtitle} || child.${xsubtitle} || child.${xsubtitle1}">
+<v-list-item-content id="${contentID}" v-if="child.${xtitle} || child.${xsubtitle} || child.${xsubtitle1} || child.${xsubtitle2} || child.${xsubtitle3} || child.${xsubtitle4}">
 <v-list-item-title id="${titleID}" v-if="child.${xtitle}" v-html="child.${xtitle}"></v-list-item-title>
 <v-list-item-subtitle id="${subtitleID}" v-if="child.${xsubtitle}" v-html="child.${xsubtitle}"></v-list-item-subtitle>
 <v-list-item-subtitle id="${subtitle1ID}" v-if="child.${xsubtitle1}" v-html="child.${xsubtitle1}"></v-list-item-subtitle>
+<v-list-item-subtitle id="${subtitle2ID}" v-if="child.${xsubtitle2}" v-html="child.${xsubtitle2}"></v-list-item-subtitle>
+<v-list-item-subtitle id="${subtitle3ID}" v-if="child.${xsubtitle3}" v-html="child.${xsubtitle3}"></v-list-item-subtitle>
+<v-list-item-subtitle id="${subtitle4ID}" v-if="child.${xsubtitle4}" v-html="child.${xsubtitle4}"></v-list-item-subtitle>
 </v-list-item-content>
 <v-list-item-avatar id="${rightavatarID}" class="${props.rightitemavatarclass}" v-if="child.${props.rightavatar} || child.${props.rightavataricon} || child.${props.rightavatartext}">
 <v-img id="${rightavatarImgID}" ${props.rightavatarattr} :src="child.${props.rightavatar}" class="${props.rightavatarclass}" v-if="child.${props.rightavatar}"></v-img>
@@ -6833,10 +6865,13 @@ sTemplate.Append($"<v-list-item v-else id="${listitemID}" :key="item.${key}" :to
 <v-list-item-icon id="${itemiconID}" v-if="item.${xicon}">
 <v-icon id="${iconID}" ${props.iconattr} :color="item.${xiconcolor}" class="${xiconclass}" v-html="item.${xicon}"></v-icon>
 </v-list-item-icon>
-<v-list-item-content id="${contentID}" v-if="item.${xtitle} || item.${xsubtitle} || item.${xsubtitle1}">
+<v-list-item-content id="${contentID}" v-if="item.${xtitle} || item.${xsubtitle} || item.${xsubtitle1} || item.${xsubtitle2} || item.${xsubtitle3} || item.${xsubtitle4}">
 <v-list-item-title id="${titleID}" v-if="item.${xtitle}" v-html="item.${xtitle}"></v-list-item-title>
 <v-list-item-subtitle id="${subtitleID}" v-if="item.${xsubtitle}" v-html="item.${xsubtitle}"></v-list-item-subtitle>
 <v-list-item-subtitle id="${subtitle1ID}" v-if="item.${xsubtitle1}" v-html="item.${xsubtitle1}"></v-list-item-subtitle>
+<v-list-item-subtitle id="${subtitle2ID}" v-if="item.${xsubtitle2}" v-html="item.${xsubtitle2}"></v-list-item-subtitle>
+<v-list-item-subtitle id="${subtitle3ID}" v-if="item.${xsubtitle3}" v-html="item.${xsubtitle3}"></v-list-item-subtitle>
+<v-list-item-subtitle id="${subtitle4ID}" v-if="item.${xsubtitle4}" v-html="item.${xsubtitle4}"></v-list-item-subtitle>
 </v-list-item-content>
 <v-list-item-avatar id="${rightavatarID}" class="${props.rightitemavatarclass}" v-if="item.${props.rightavatar} || item.${props.rightavataricon} || item.${props.rightavatartext}">
 <v-img id="${rightavatarImgID}" ${props.rightavatarattr} :src="item.${props.rightavatar}" class="${props.rightavatarclass}" v-if="item.${props.rightavatar}"></v-img>
@@ -7329,15 +7364,21 @@ End Sub
 
 
 Sub appendValue(s As String)
-	Dim sold As String = mElement.GetValue
-	sold = sold & s
-	mElement.setvalue(sold)
+	If mElement <> Null Then
+		Dim sold As String = mElement.GetValue
+		sold = sold & s
+		mElement.setvalue(sold)
+	Else
+	End If
 End Sub
 
 Sub appendText(s As String)
-	Dim sold As String = mElement.GetText
-	sold = sold & s
-	mElement.SetText(sold)
+	If mElement <> Null Then
+		Dim sold As String = mElement.GetText
+		sold = sold & s
+		mElement.SetText(sold)
+	End If
+	sbText.Append(s)
 End Sub
 
 
@@ -7747,6 +7788,7 @@ Sub AddVueElement1(elID As String, tag As String, vModel As String, Caption As S
 End Sub
 
 Sub BindAllEvents
+	SetOnEvent(mCallBack, "close", "")
 	SetOnEvent(mCallBack, "blur", "")
 	SetOnEvent(mCallBack, "click", "")
 	SetOnEvent(mCallBack, "click.stop", "")
@@ -7848,16 +7890,16 @@ Sub AddChipGroup(elID As String, vModel As String,  activeClass As String, bMult
 	vchipgroup.SetData(DataSource, NewList)
 	'
 	'get the text field, there is only 1 element on the layout
-	Dim vchip As VueElement = AddVueElement2(elID, chipid, "v-chip", Null)
-	vchip.VFor = $"item in ${DataSource}"$
-	vchip.BindKey($"item.${Key}"$)
-	vchip.Caption = vchip.ItemInMoustache(Value)
-	vchip.AddAttr(":filter", bFilter)
-	vchip.AddAttr(":value", "item.value")
-	vchip.Outlined = True
-	vchip.AssignProps(chipprops)
+	Dim vchipx As VueElement = AddVueElement2(elID, chipid, "v-chip", Null)
+	vchipx.VFor = $"item in ${DataSource}"$
+	vchipx.BindKey($"item.${Key}"$)
+	vchipx.Caption = vchipx.ItemInMoustache(Value)
+	vchipx.AddAttr(":filter", bFilter)
+	vchipx.AddAttr(":value", "item.value")
+	vchipx.Outlined = True
+	vchipx.AssignProps(chipprops)
 	
-	vchipgroup.BindVueElement(vchip)
+	vchipgroup.BindVueElement(vchipx)
 	Return vchipgroup
 End Sub
 
@@ -8471,8 +8513,8 @@ Sub AddComponent(eTag As String, elID As String) As VueElement
 	Dim parentID As String = CleanID(mName)
 	elID = elID.ToLowerCase
 	'
-	Dim vbtn As VueElement = AddVueElement2(parentID, elID, eTag, Null) 
-	Return vbtn
+	Dim vbtnx As VueElement = AddVueElement2(parentID, elID, eTag, Null) 
+	Return vbtnx
 End Sub
 
 Sub AddBtn(elID As String) As VueElement
@@ -8481,9 +8523,9 @@ Sub AddBtn(elID As String) As VueElement
 	elID = elID.ToLowerCase
 	BANano.GetElement(parentID).Append($"<v-btn id="${elID}"></v-btn>"$)
 	'
-	Dim vbtn As VueElement
-	vbtn.Initialize(mCallBack, elID, elID)
-	Return vbtn
+	Dim vbtnx As VueElement
+	vbtnx.Initialize(mCallBack, elID, elID)
+	Return vbtnx
 End Sub
 
 Sub AddBtnToggle(elID As String) As VueElement
@@ -8728,6 +8770,12 @@ End Sub
 
 Sub GetButton As VueElement
 	Dim elKey As String = $"${mName}button"$
+	Dim elx As VueElement = GetVueElement(elKey)
+	Return elx
+End Sub
+
+Sub GetChild As VueElement
+	Dim elKey As String = $"${mName}child"$
 	Dim elx As VueElement = GetVueElement(elKey)
 	Return elx
 End Sub
@@ -9513,32 +9561,32 @@ Sub AddChipWithAvatar(elID As String, src As String, label As String, bPill As B
 	Dim avarID As String = $"${elID}avatar"$
 	Dim imgID As String = $"${elID}image"$
 	'
-	Dim vchip As VueElement = AddVueElement2(parentID, elID, "v-chip", Null)
-	vchip.AddAttr(":pill", bPill)
-	vchip.AddAttr(":close", bClose)
-	If color <> "" Then vchip.Color = color
-	vchip.AssignProps(chipprops)
-	vchip.BindAllEvents
-	vchip.SetOnEvent(mCallBack, "click", $"'${elID}'"$)
-	vchip.SetOnEvent(mCallBack, "click:close", $"'${elID}'"$)
+	Dim vchipx As VueElement = AddVueElement2(parentID, elID, "v-chip", Null)
+	vchipx.AddAttr(":pill", bPill)
+	vchipx.AddAttr(":close", bClose)
+	If color <> "" Then vchipx.Color = color
+	vchipx.AssignProps(chipprops)
+	vchipx.BindAllEvents
+	vchipx.SetOnEvent(mCallBack, "click", $"'${elID}'"$)
+	vchipx.SetOnEvent(mCallBack, "click:close", $"'${elID}'"$)
 	'
-	Dim vavatar As VueElement = AddVueElement2(elID, avarID, "v-avatar", Null)
-	vavatar.AddAttr(":left", True)
-	vavatar.AssignProps(avatarprops)
+	Dim vavatarx As VueElement = AddVueElement2(elID, avarID, "v-avatar", Null)
+	vavatarx.AddAttr(":left", True)
+	vavatarx.AssignProps(avatarprops)
 	'
-	Dim vimg As VueElement = AddVueElement2(avarID, imgID, "v-img", Null)
-	vimg.Src = src
-	vimg.lazysrc = src
-	vimg.AssignProps(imgprops)
+	Dim vimgx As VueElement = AddVueElement2(avarID, imgID, "v-img", Null)
+	vimgx.Src = src
+	vimgx.lazysrc = src
+	vimgx.AssignProps(imgprops)
 	'
 	Dim span As VueElement = AddVueElement2(elID, spanID, "span", Null)
 	span.Caption = label
 	'
-	vchip.BindVueElement(span)
-	vchip.BindVueElement(vavatar)
-	vchip.BindVueElement(vimg)
+	vchipx.BindVueElement(span)
+	vchipx.BindVueElement(vavatarx)
+	vchipx.BindVueElement(vimgx)
 	'
-	Return vchip
+	Return vchipx
 End Sub
 
 
@@ -9548,27 +9596,27 @@ Sub AddChipWithIcon(elID As String, sicon As String, label As String, bPill As B
 	Dim iconID As String = $"${elID}icon"$
 	Dim spanID As String = $"${elID}span"$
 	'
-	Dim vchip As VueElement = AddVueElement2(parentID, elID, "v-chip", Null)
-	vchip.AddAttr(":pill", bPill)
-	vchip.AddAttr(":close", bClose)
-	If color <> "" Then vchip.Color = color
-	vchip.BindAllEvents
-	vchip.SetOnEvent(mCallBack, "click", $"'${elID}'"$)
-	vchip.SetOnEvent(mCallBack, "click:close", $"'${elID}'"$)'
+	Dim vchipx As VueElement = AddVueElement2(parentID, elID, "v-chip", Null)
+	vchipx.AddAttr(":pill", bPill)
+	vchipx.AddAttr(":close", bClose)
+	If color <> "" Then vchipx.Color = color
+	vchipx.BindAllEvents
+	vchipx.SetOnEvent(mCallBack, "click", $"'${elID}'"$)
+	vchipx.SetOnEvent(mCallBack, "click:close", $"'${elID}'"$)'
 	'
-	Dim vicon As VueElement = AddVueElement2(elID, iconID, "v-icon", Null)
-	vicon.Left = True
-	vicon.caption = sicon
+	Dim viconx As VueElement = AddVueElement2(elID, iconID, "v-icon", Null)
+	viconx.Left = True
+	viconx.caption = sicon
 	'
 	Dim span As VueElement  = AddVueElement2(elID, spanID, "span", Null)
 	span.Caption = label
 	'
-	vchip.AssignProps(chipprops)
-	vicon.AssignProps(iconprops)
+	vchipx.AssignProps(chipprops)
+	viconx.AssignProps(iconprops)
 	'
-	vchip.BindVueElement(vicon)
-	vchip.BindVueElement(span)
-	Return vchip
+	vchipx.BindVueElement(viconx)
+	vchipx.BindVueElement(span)
+	Return vchipx
 End Sub
 
 Sub AddRadioGroup(elID As String, vmodel As String, sLabel As String, bRow As Boolean, bMultiple As Boolean, sourceTable As String, key As String, value As String, colorField As String, radiogroupprops As Map, radioprops As Map) As VueElement
@@ -10368,6 +10416,13 @@ Sub AddSlotExtension(elID As String) As VueElement
 	Return elx
 End Sub
 
+Sub setProgressColor(i As String)
+	AddAttr("progress-color", i)
+End Sub
+
+Sub setTextColorAttr(i As String)
+	AddAttr("text-color", i)
+End Sub
 
 Sub setCloseDelay(i As Int)
 	AddAttr("close-delay", i)
@@ -11113,6 +11168,15 @@ Sub TabShape
 	setShape("tab")
 End Sub
 
+
+Sub setClose(b As Boolean)
+	AddAttr(":close", b)
+End Sub
+
+Sub setPill(b As Boolean)
+	AddAttr(":pill", b)
+End Sub
+
 Sub setShape(s As String)
 	AddAttr("shape", s)
 End Sub
@@ -11613,6 +11677,23 @@ Sub SnackBarTopRight As VueElement
 	Return Me
 End Sub
 
+Sub BuildColor(s As String, i As String) As String
+	If BANano.IsNull(s) Then s = ""
+	If BANano.IsNull(i) Then i = ""
+	If BANano.IsUndefined(s) Then s = ""
+	If BANano.IsUndefined(i) Then i = ""
+	'
+	s = s.Replace("none", "")
+	s = s.replace("normal", "")
+	'
+	i = i.replace("none", "")
+	i = i.replace("normal", "")
+	'
+	Dim x As String = $"${s} ${i}"$
+	x = x.Trim
+	Return x
+End Sub
+
 Sub SnackBarBottomLeft As VueElement
 	Dim sid As String = getID
 	SetData($"${sid}right"$, False)
@@ -11641,4 +11722,29 @@ Sub SnackBarCentered As VueElement
 	SetData($"${sid}bottom"$,False)
 	SetData($"${sid}centered"$,True)
 	Return Me
+End Sub
+
+Sub setAvatar(b As Boolean)
+	If b = False Then Return
+	Bind("avatar", b)
+End Sub
+
+Sub setContent(s As String)
+	Bind("content", s)
+End Sub
+
+Sub setAspectRatio(sAspectRatio As String)
+	AddAttr("aspect-ratio", sAspectRatio)
+End Sub
+
+Sub setContain(bContain As String)
+	AddAttr(":contain", bContain)
+End Sub
+
+Sub setSrcSet(s As String)
+	AddAttr("src-set", s)
+End Sub
+
+Sub SetCloseIcon(s As String)
+	AddAttr("close-icon", s)
 End Sub

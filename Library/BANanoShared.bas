@@ -680,6 +680,31 @@ Sub BuildStyle(styles As Map) As String
 	Return sbx.tostring
 End Sub
 
+'build classes
+Sub BuildClasses(properties As Map) As String
+	If properties.Size = 0 Then Return ""
+	Dim sbx As StringBuilder
+	sbx.Initialize
+	For Each k As String In properties.keys
+		Dim v As String = properties.get(k)
+		'
+		If BANano.IsUndefined(v) Then v = ""
+		If BANano.IsNull(v) Then v = ""
+		'
+		If BANano.IsUndefined(k) Then k = ""
+		If BANano.IsNull(k) Then k = ""
+		'
+		If k = "" Then Continue
+		If v = "" Then Continue
+		'
+		sbx.Append(k).Append(" ")
+	Next
+	Dim sout As String = sbx.ToString
+	sout = sout.trim
+	Return sout
+End Sub
+
+
 'build attributes
 Sub BuildAttributes(properties As Map) As String
 	If properties.ContainsKey("tagname") Then
@@ -1755,6 +1780,7 @@ Sub ProperCase(myStr As String) As String
 		Return myStr
 	End Try
 End Sub
+
 
 
 'lowercase map keys

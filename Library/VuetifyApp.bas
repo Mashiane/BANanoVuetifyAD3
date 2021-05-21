@@ -417,7 +417,7 @@ Sub Class_Globals
 	rightswitchattr As String, rightchipattr As String, iconattr As String, hasdivider As Boolean, insetdivider As Boolean, _
 	rightavatar As String, rightavatarclass As String, rightavataricon As String, _
 	rightavatariconcolor As String, rightavatariconclass As String, rightavatarattr As String, rightavatariconattr As String, _
-	rightitemavatarclass As String, avatartext As String, rightavatartext As String, avatartextcolor As String, rightavatartextcolor As String, avatartextclass As String, rightavatartextclass As String)
+	rightitemavatarclass As String, avatartext As String, rightavatartext As String, avatartextcolor As String, rightavatartextcolor As String, avatartextclass As String, rightavatartextclass As String, subtitle2 As String, subtitle3 As String, subtitle4 As String)
 	'
 	Public RouterViewName As String
 	Public DatabaseName As String
@@ -471,6 +471,9 @@ Sub NewListViewItemOptions() As ListViewItemOptions
 	lvio.title  = "title"
 	lvio.subtitle  = "subtitle"
 	lvio.subtitle1  = "subtitle1"
+	lvio.subtitle2  = "subtitle2"
+	lvio.subtitle3  = "subtitle3"
+	lvio.subtitle4  = "subtitle4"
 	'
 	lvio.righticon  = "righticon"
 	lvio.righticonclass  = ""
@@ -1498,7 +1501,6 @@ Sub AddRoute(comp As VueComponent)
 	End If
 	'ensure content in the placeholder is added
 	comp.AppendPlaceHolder
-	
 	Dim compx As BANanoObject = Vue.RunMethod("component", Array(comp.mname, comp.component))
 	
 	Dim eachroute As Map = CreateMap()
@@ -3189,17 +3191,17 @@ Sub AddChipGroup(Module As Object, parentID As String, elID As String, vModel As
 	vchipgroup.SetData(DataSource, NewList)
 	'
 	'get the text field, there is only 1 element on the layout
-	Dim vchip As VueElement
-	vchip.Initialize(Module, chipid, chipid)
-	vchip.VFor = $"item in ${DataSource}"$
-	vchip.BindKey($"item.${Key}"$)
-	vchip.Caption = vchip.ItemInMoustache(Value)
-	vchip.AddAttr(":filter", bFilter)
-	vchip.AddAttr(":value", "item.value")
-	vchip.Outlined = True
-	vchip.AssignProps(chipprops)
+	Dim vchipx As VueElement
+	vchipx.Initialize(Module, chipid, chipid)
+	vchipx.VFor = $"item in ${DataSource}"$
+	vchipx.BindKey($"item.${Key}"$)
+	vchipx.Caption = vchipx.ItemInMoustache(Value)
+	vchipx.AddAttr(":filter", bFilter)
+	vchipx.AddAttr(":value", "item.value")
+	vchipx.Outlined = True
+	vchipx.AssignProps(chipprops)
 	
-	vchipgroup.BindVueElement(vchip)
+	vchipgroup.BindVueElement(vchipx)
 	Return vchipgroup
 End Sub
 
@@ -5061,36 +5063,36 @@ Sub AddChipWithAvatar(Module As Object, parentID As String, elID As String, src 
 	'
 	BANano.GetElement(parentID).Append($"<v-chip id="${elID}"><v-avatar id="${avarID}"><v-img id="${imgID}"></v-img></v-avatar><span id="${spanID}"></span></v-chip>"$)
 	
-	Dim vchip As VueElement
-	vchip.Initialize(Module, elID, elID)
-	vchip.AddAttr(":pill", bPill)
-	vchip.AddAttr(":close", bClose)
-	If color <> "" Then vchip.Color = color
-	vchip.AssignProps(chipprops)
-	vchip.BindAllEvents
-	vchip.SetOnEvent(Module, "click", $"'${elID}'"$)
-	vchip.SetOnEvent(Module, "click:close", $"'${elID}'"$)
+	Dim vchipx As VueElement
+	vchipx.Initialize(Module, elID, elID)
+	vchipx.AddAttr(":pill", bPill)
+	vchipx.AddAttr(":close", bClose)
+	If color <> "" Then vchipx.Color = color
+	vchipx.AssignProps(chipprops)
+	vchipx.BindAllEvents
+	vchipx.SetOnEvent(Module, "click", $"'${elID}'"$)
+	vchipx.SetOnEvent(Module, "click:close", $"'${elID}'"$)
 	'
-	Dim vavatar As VueElement
-	vavatar.Initialize(Module, avarID, avarID)
-	vavatar.AddAttr(":left", True)
-	vavatar.AssignProps(avatarprops)
+	Dim vavatarx As VueElement
+	vavatarx.Initialize(Module, avarID, avarID)
+	vavatarx.AddAttr(":left", True)
+	vavatarx.AssignProps(avatarprops)
 	'
-	Dim vimg As VueElement
-	vimg.Initialize(Module, imgID, imgID)
-	vimg.Src = src
-	vimg.lazysrc = src
-	vimg.AssignProps(imgprops)
+	Dim vimgx As VueElement
+	vimgx.Initialize(Module, imgID, imgID)
+	vimgx.Src = src
+	vimgx.lazysrc = src
+	vimgx.AssignProps(imgprops)
 	'
 	Dim span As VueElement
 	span.Initialize(Module, spanID, spanID)
 	span.Caption = label
 	'
-	vchip.BindVueElement(span)
-	vchip.BindVueElement(vavatar)
-	vchip.BindVueElement(vimg)
+	vchipx.BindVueElement(span)
+	vchipx.BindVueElement(vavatarx)
+	vchipx.BindVueElement(vimgx)
 	'
-	Return vchip
+	Return vchipx
 End Sub
 
 
@@ -5101,30 +5103,30 @@ Sub AddChipWithIcon(Module As Object, parentID As String, elID As String, sicon 
 	Dim spanID As String = $"${elID}span"$
 	BANano.GetElement(parentID).Append($"<v-chip id="${elID}"><v-icon id="${iconID}"></v-icon><span id="${spanID}"></span></v-chip>"$)
 	'
-	Dim vchip As VueElement
-	vchip.Initialize(Module, elID, elID)
-	vchip.AddAttr(":pill", bPill)
-	vchip.AddAttr(":close", bClose)
-	If color <> "" Then vchip.Color = color
-	vchip.BindAllEvents
-	vchip.SetOnEvent(Module, "click", $"'${elID}'"$)
-	vchip.SetOnEvent(Module, "click:close", $"'${elID}'"$)'
+	Dim vchipx As VueElement
+	vchipx.Initialize(Module, elID, elID)
+	vchipx.AddAttr(":pill", bPill)
+	vchipx.AddAttr(":close", bClose)
+	If color <> "" Then vchipx.Color = color
+	vchipx.BindAllEvents
+	vchipx.SetOnEvent(Module, "click", $"'${elID}'"$)
+	vchipx.SetOnEvent(Module, "click:close", $"'${elID}'"$)'
 	'
-	Dim vicon As VueElement
-	vicon.Initialize(Module, iconID, iconID)
-	vicon.caption = sicon
-	vicon.Left = True
+	Dim viconx As VueElement
+	viconx.Initialize(Module, iconID, iconID)
+	viconx.caption = sicon
+	viconx.Left = True
 	'
 	Dim span As VueElement
 	span.Initialize(Module, spanID, spanID)
 	span.Caption = label
 	'
-	vchip.AssignProps(chipprops)
-	vicon.AssignProps(iconprops)
+	vchipx.AssignProps(chipprops)
+	viconx.AssignProps(iconprops)
 	'
-	vchip.BindVueElement(vicon)
-	vchip.BindVueElement(span)
-	Return vchip
+	vchipx.BindVueElement(viconx)
+	vchipx.BindVueElement(span)
+	Return vchipx
 End Sub
 
 Sub AddRadioGroup(Module As Object, parentID As String, elID As String, vmodel As String, sLabel As String, bRow As Boolean, bMultiple As Boolean, sourceTable As String, key As String, value As String, colorField As String, radiogroupprops As Map, radioprops As Map) As VueElement
@@ -5578,6 +5580,50 @@ Sub ShowSwalNotification(message As String)
 	swal.fire
 End Sub
 
+Sub ShowSwalNotificationSuccess(message As String, time As Int)
+	Dim swal As VueSwal
+	swal.Initialize 
+	swal.title(message)
+	swal.icon("success")
+	swal.position("top-end")
+	swal.showConfirmButton(False)
+	swal.timer(time)
+	swal.fire
+End Sub
+
+Sub ShowSwalNotificationError(message As String, time As Int)
+	Dim swal As VueSwal
+	swal.Initialize 
+	swal.title(message)
+	swal.icon("error")
+	swal.position("top-end")
+	swal.showConfirmButton(False)
+	swal.timer(time)
+	swal.fire
+End Sub
+
+Sub ShowSwalNotificationInfo(message As String, time As Int)
+	Dim swal As VueSwal
+	swal.Initialize 
+	swal.title(message)
+	swal.icon("info")
+	swal.position("top-end")
+	swal.showConfirmButton(False)
+	swal.timer(time)
+	swal.fire
+End Sub
+
+Sub ShowSwalNotificationWarning(message As String, time As Int)
+	Dim swal As VueSwal
+	swal.Initialize 
+	swal.title(message)
+	swal.icon("warning")
+	swal.position("top-end")
+	swal.showConfirmButton(False)
+	swal.timer(time)
+	swal.fire
+End Sub
+
 Sub ShowSwalInputWait(title As String, message As String, okText As String, cancelText As String) As String
 	Dim bp As BANanoPromise
 	bp.CallSub(Me, "ShowSwalInput", Array(title, message, okText, cancelText))
@@ -5634,4 +5680,15 @@ Sub ShowSwalInput(title As String, message As String, okText As String, cancelTe
 	swal.cancelButtonColor("#f44336")
 	Dim resp As Map = swal.fire
 	BANano.ReturnThen(resp)
+End Sub
+
+Sub SetTimeOut(Module As Object, MethodName As String, ms As Int)
+	Dim cb As BANanoObject = BANano.callback(Module, MethodName, Null)
+	BANano.Window.SetTimeout(cb, ms)
+End Sub
+
+Sub SetInterval(Module As Object, MethodName As String, ms As Int) As Int
+	Dim cb As BANanoObject = BANano.CallBack(Module, MethodName, Null)
+	Dim res As Int = BANano.Window.SetInterval(cb, ms)
+	Return res
 End Sub

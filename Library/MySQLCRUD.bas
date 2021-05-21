@@ -1817,7 +1817,7 @@ private Sub CreateDialogCode
 	AddComment("create a container")
 	AddCode($"Dim ${ModalName} As VueElement = vuetify.AddDialogInput(Me, ${ComponentName}.Here, "${ModalName}", True, "${Diag_Width}", "${Plural}", "Save", "primary", "Cancel", "error")"$)
 	AddCode($"Dim btn${ModalName}OK As VueElement = ${ModalName}.GetOK("${ModalName}")"$)
-	AddCode($"btn${ModalName}OK.Loading = "${ModalName}loading""$)
+	AddCode($"btn${ModalName}OK.Loading = "${ModalName.tolowercase}loading""$)
 	AddCode($"${ComponentName}.SetData("${ModalName}loading", False)"$)
 	'
 	If Diag_FullScreenOnMobile Then

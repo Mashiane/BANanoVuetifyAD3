@@ -638,27 +638,27 @@ Sub AddFilter(activeClass As String)
 	ct.Append($"<v-chip-group id="${filterChips}"><v-chip id="${filterChip}"></v-chip></v-chip-group><v-divider></v-divider>"$)
 		
 	'get the text field, there is only 1 element on the layout
-	Dim vchipgroup As VueElement
-	vchipgroup.Initialize(mCallBack, filterChips, filterChips)
-	vchipgroup.Bind("show-arrows", True)
-	vchipgroup.VModel = filters
-	vchipgroup.SetData(filters, NewList)
-	vchipgroup.Multiple = True
-	vchipgroup.Column = True
-	vchipgroup.AddAttr("active-class", activeClass)
-	vchipgroup.BindAllEvents
-	vchipgroup.SetOnEventOwn(mCallBack, $"${mName}_filterchange"$, "change", "")
+	Dim vchipgroupx As VueElement
+	vchipgroupx.Initialize(mCallBack, filterChips, filterChips)
+	vchipgroupx.Bind("show-arrows", True)
+	vchipgroupx.VModel = filters
+	vchipgroupx.SetData(filters, NewList)
+	vchipgroupx.Multiple = True
+	vchipgroupx.Column = True
+	vchipgroupx.AddAttr("active-class", activeClass)
+	vchipgroupx.BindAllEvents
+	vchipgroupx.SetOnEventOwn(mCallBack, $"${mName}_filterchange"$, "change", "")
 	'get the text field, there is only 1 element on the layout
-	Dim vchip As VueElement
-	vchip.Initialize(mCallBack, filterChip, filterChip)
-	vchip.VFor = $"item in ${allcolumns}"$
-	vchip.BindKey("item.value")
-	vchip.Caption = vchip.ItemInMoustache("text")
-	vchip.AddAttr(":filter", True)
-	vchip.AddAttr(":value", "item.value")
-	vchip.Outlined = True
-	vchipgroup.BindVueElement(vchip)
-	VC.BindVueElement(vchipgroup)
+	Dim vchipx As VueElement
+	vchipx.Initialize(mCallBack, filterChip, filterChip)
+	vchipx.VFor = $"item in ${allcolumns}"$
+	vchipx.BindKey("item.value")
+	vchipx.Caption = vchipx.ItemInMoustache("text")
+	vchipx.AddAttr(":filter", True)
+	vchipx.AddAttr(":value", "item.value")
+	vchipx.Outlined = True
+	vchipgroupx.BindVueElement(vchipx)
+	VC.BindVueElement(vchipgroupx)
 End Sub
 
 

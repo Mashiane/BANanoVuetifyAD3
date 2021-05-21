@@ -29,7 +29,6 @@ Sub Class_Globals
 	Private query As Map
 	Public Template As VueElement
 	Public Path As String = ""
-	Public TemplateID As String
 	Public AppTemplateName As String = "#apptemplate"
 	Public AppendHolderName As String = "#appendholder"
 	Public PlaceHolderName As String = "#placeholder"
@@ -189,8 +188,8 @@ Public Sub Initialize (CallBack As Object, Name As String) As VueComponent
 	meta.Initialize 
 	'
 	'add the placeholder div to the app
-	TemplateID = $"${mName}ph"$
-	Template.Initialize(mCallBack, TemplateID, "template")
+	Template.Initialize(mCallBack, "placeholder", "placeholder")
+	Template.Empty
 	'
 	dialogShow = $"${mName}show"$
 	dialogTitle = $"${mName}caption"$
@@ -1046,6 +1045,7 @@ End Sub
 'return the component
 Sub Component As Map
 	Dim sTemplate As String = Template.ToString
+	sTemplate = $"<span>${sTemplate}</span>"$
 	sTemplate = sTemplate.Replace("v-template", "template")
 	Dim cb As BANanoObject = BANano.CallBack(Me, "returndata", Null)
 	opt.Put("data", cb.Result)
@@ -1434,8 +1434,7 @@ End Sub
 
 'add anything from the appendholder
 Sub AppendHolder 
-	Dim stemplate As String = BANanoGetHTMLAsIs("appendholder")
-	Template.Append(stemplate)
+	Template.AppendPlaceHolder
 End Sub
 
 'add anything from the appendholder
@@ -1454,8 +1453,9 @@ End Sub
 
 'add anything from the appendholder
 Sub AppendPlaceHolder
-	Dim stemplate As String = BANanoGetHTMLAsIs("placeholder")
-	Template.Append(stemplate)
+	'Dim stemplate As String = BANanoGetHTMLAsIs("placeholder")
+	'Template.Append(stemplate)
+	Template.AppendPlaceHolder
 End Sub
 
 #End Region
