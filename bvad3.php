@@ -141,14 +141,14 @@ function prepareMySQL($conn, $query, $types, $args) {
  
 function BANanoMySQL($command, $query, $args, $types) { 
 	$resp = array(); 
-	header('Access-Control-Allow-Origin: *'); 
-	header('content-type: application/json; charset=utf-8'); 
-	header("Access-Control-Allow-Credentials: true"); 
-	header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS'); 
-	header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token , Authorization'); 
+	//header('Access-Control-Allow-Origin: *'); 
+	//header('content-type: application/json; charset=utf-8'); 
+	//header("Access-Control-Allow-Credentials: true"); 
+	//header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS'); 
+	//header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token , Authorization'); 
 	require_once './assets/mysqlconfig.php'; 
     //connect To MySQL 
-    $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME); 
+    $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME, DB_PORT); 
     //we cannot connect Return an error 
     if ($conn->connect_error) { 
         $response = $conn->connect_error; 
@@ -226,10 +226,10 @@ function BANanoMySQL($command, $query, $args, $types) {
 function BANanoMySQLDynamic($command, $query, $args, $types, $host, $username, $password, $dbname) { 
 	$resp = array(); 
 	header('Access-Control-Allow-Origin: *'); 
-	header('content-type: application/json; charset=utf-8'); 
-	header("Access-Control-Allow-Credentials: true"); 
-	header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS'); 
-	header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token , Authorization'); 
+	//header('content-type: application/json; charset=utf-8'); 
+	//header("Access-Control-Allow-Credentials: true"); 
+	//header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS'); 
+	//header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token , Authorization'); 
 	//connect To MySQL 
     $conn = new mysqli($host, $username, $password); 
     //we cannot connect Return an error 
