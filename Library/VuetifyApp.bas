@@ -1057,7 +1057,7 @@ Sub Initialize(Module As Object, myapp As String)
 	AppName = myapp.ToLowerCase
 	'get the body of the page
 	Body = BANano.GetElement("#body")
-	Body.Append($"<div ref="app" id="app"><div id="placeholder" v-show="placeholdershow"></div><div id="appendholder" v-show="appendholdershow"></div><v-template id="apptemplate" v-show="apptemplateshow"></v-template></div>"$)
+	Body.Append($"<div ref="app" id="app"><div id="placeholder" v-show="placeholdershow"></div><div id="appendholder" v-show="appendholdershow"></div><div id="apptemplate" v-show="apptemplateshow"></div></div>"$)
 	'
 	Vue.Initialize("Vue")
 	'
