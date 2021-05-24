@@ -9,12 +9,11 @@ Sub Process_Globals
 	Public vuetify As VuetifyApp
 	Public about As VueComponent
 	Public path As String
-	Public name As String = "adbadges"
+	Public name As String = "adsnackbars"
 	Private banano As BANano
-	Private VContainer1 As VContainer
-	Private VBadge1 As VBadge
-	Private VBadge2 As VBadge
-	Private VBadge4 As VBadge
+	Private VSnackBar1 As VSnackBar
+	Private VSnackBar2 As VSnackBar
+	Private VSnackBar3 As VSnackBar
 End Sub
 
 Sub Initialize
@@ -24,12 +23,22 @@ Sub Initialize
 	about.Initialize(Me, name)
 	path = about.path
 	
-	banano.LoadLayout(about.Here, "badges")
+	banano.LoadLayout(about.Here, "mysnackbars")
 	'
-	about.BindVueElement(VBadge2.VElement)
-	VBadge2.Update(about, 3)
-		
+	about.BindVueElement(VSnackBar1.VElement)
+	about.BindVueElement(VSnackBar2.VElement)
+	about.BindVueElement(VSnackBar3.VElement)
+	'
+	about.SetData("snack1", False)
+	
+	about.SetCreated(Me, "oncreated", Null)	
 	'add the component as a router
 	vuetify.AddRoute(about) 
 End Sub
+
+Sub oncreated
+	about.SetData("snack1", True)
+End Sub
+
+
 

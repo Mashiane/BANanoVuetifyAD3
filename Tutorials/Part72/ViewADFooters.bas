@@ -9,12 +9,8 @@ Sub Process_Globals
 	Public vuetify As VuetifyApp
 	Public about As VueComponent
 	Public path As String
-	Public name As String = "adbadges"
+	Public name As String = "adfooters"
 	Private banano As BANano
-	Private VContainer1 As VContainer
-	Private VBadge1 As VBadge
-	Private VBadge2 As VBadge
-	Private VBadge4 As VBadge
 End Sub
 
 Sub Initialize
@@ -24,12 +20,16 @@ Sub Initialize
 	about.Initialize(Me, name)
 	path = about.path
 	
-	banano.LoadLayout(about.Here, "badges")
+	banano.LoadLayout(about.Here, "myfooter")
+	
+	Dim links As List = about.newlist
+	links.AddAll(Array("Home", "About Us", "Team", "Services", "Blog", "Contact Us"))
+	about.SetData("links", links)
 	'
-	about.BindVueElement(VBadge2.VElement)
-	VBadge2.Update(about, 3)
-		
+	Dim icons As List = about.newlist
+	icons.AddAll(Array("mdi-facebook", "mdi-twitter", "mdi-linkedin", "mdi-instagram"))
+	about.SetData("icons", icons)
+	
 	'add the component as a router
 	vuetify.AddRoute(about) 
 End Sub
-

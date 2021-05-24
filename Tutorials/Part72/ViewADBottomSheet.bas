@@ -34,9 +34,6 @@ Sub Initialize
 	about.BindVueElement(VBtn2.VElement)
 	about.BindVueElement(VBtn4.VElement)
 	about.BindVueElement(VBtn3.VElement)
-	
-	Log(VBottomSheet1.VElement.ToString)
-	
 	'add the component as a router
 	vuetify.AddRoute(about) 
 End Sub

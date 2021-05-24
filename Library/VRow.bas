@@ -7,13 +7,16 @@ Version=8.9
 'Custom BANano View class
 ' Properties that will be show in the ABStract Designer.  They will be passed in the props map in DesignerCreateView (Case Sensitive!)
 #DesignerProperty: Key: AutoID, DisplayName: Auto ID/Name, FieldType: Boolean, DefaultValue: False, Description: Overrides the ID/Name with a random string.
+#DesignerProperty: Key: VFor, DisplayName: V-For, FieldType: String, DefaultValue:  , Description: 
+#DesignerProperty: Key: Key, DisplayName: Key, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: FillHeight, DisplayName: FillHeight, FieldType: Boolean, DefaultValue: False, Description: Fill Height
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue:  , Description: , List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: ColorIntensity, DisplayName: Color Intensity, FieldType: String, DefaultValue:  normal, Description: , List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: TextColor, DisplayName: Text Color, FieldType: String, DefaultValue:  , Description: , List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: TextColorIntensity, DisplayName: Text Color Intensity, FieldType: String, DefaultValue:  normal, Description: , List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
-#DesignerProperty: Key: Align, DisplayName: Align, FieldType: String, DefaultValue: , Description: Align, List: left|center|right|start|end
-#DesignerProperty: Key: Justify, DisplayName: Justify, FieldType: String, DefaultValue: , Description: Justify, List: left|center|right|start|end|space-around|space-between
+#DesignerProperty: Key: Align, DisplayName: Align, FieldType: String, DefaultValue: , Description: Align, List: normal|start|center|end|baseline|stretch
+#DesignerProperty: Key: Justify, DisplayName: Justify, FieldType: String, DefaultValue: , Description: Justify, List: normal|start|center|end|space-between|space-around
+#DesignerProperty: Key: NoGutters, DisplayName: NoGutters, FieldType: Boolean, DefaultValue: False, Description: No Gutters
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
@@ -54,6 +57,7 @@ Sub Class_Globals
 	Private mVShow As String = ""
 	Private mVIf As String = ""
 	Private bFillHeight As Boolean
+	Private bNoGutters As Boolean
 	Private sMA As String
 Private sMB As String
 Private sML As String
@@ -68,6 +72,8 @@ Private sPR As String
 Private sPT As String
 Private sPX As String
 Private sPY As String
+Private sVFor As String
+Private sKey As String
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -114,6 +120,9 @@ sPR = Props.Get("PR")
 sPT = Props.Get("PT")
 sPX = Props.Get("PX")
 sPY = Props.Get("PY")
+sKey = Props.Get("Key")
+sVFor = Props.Get("VFor")
+bNoGutters = Props.Get("NoGutters")
 	End If
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
@@ -147,6 +156,9 @@ VElement.PR = sPR
 VElement.PT = sPT
 VElement.PX = sPX
 VElement.PY = sPY
+VElement.SetAttrOnTrue(":no-gutters", bNoGutters, True)
+VElement.VFor = sVFor
+VElement.BindKey(sKey)
 End Sub
 
 public Sub AddToParent(targetID As String)

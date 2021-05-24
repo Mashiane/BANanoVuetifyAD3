@@ -127,37 +127,49 @@ Module30=VCarouselItem
 Module31=VChip
 Module32=VCol
 Module33=VContainer
-Module34=VFAB
-Module35=VImg
-Module36=VLabel
-Module37=VRow
-Module38=VSheet
-Module39=VSpeedDial
+Module34=VDialog
+Module35=VFAB
+Module36=VFooter
+Module37=VForm
+Module38=VIcon
+Module39=VImg
 Module4=BANanoJSPDFTable
-Module40=VToolBar
-Module41=VToolBarTitle
-Module42=VTreeView
-Module43=VueComponent
-Module44=VueElement
-Module45=VueExcel
-Module46=VueFlowy
-Module47=VueGCharts
-Module48=VueGMap
-Module49=VueInfoBox
+Module40=VLabel
+Module41=VListSlot
+Module42=VNavigationDrawer
+Module43=VRating
+Module44=VRow
+Module45=VSheet
+Module46=VSkeletonLoader
+Module47=VSnackBar
+Module48=VSpeedDial
+Module49=VTemplate
 Module5=BANanoMSSQLE
-Module50=VueSimpleWizard
-Module51=VueSocial
-Module52=VueSwal
-Module53=VueTable
-Module54=VuetifyApp
-Module55=VueVJSF
+Module50=VTimeLine
+Module51=VToolBar
+Module52=VToolBarTitle
+Module53=VTransition
+Module54=VTreeView
+Module55=VueComponent
+Module56=VueElement
+Module57=VueExcel
+Module58=VueFlowy
+Module59=VueGCharts
 Module6=BANanoMySQLE
+Module60=VueGMap
+Module61=VueInfoBox
+Module62=VueSimpleWizard
+Module63=VueSocial
+Module64=VueSwal
+Module65=VueTable
+Module66=VuetifyApp
+Module67=VueVJSF
 Module7=BANanoNEDB
 Module8=BANanoOXML
 Module9=|absolute|C:\CodingWorld\B4XShared\B4J\BANanoShared
 NumberOfFiles=48
 NumberOfLibraries=3
-NumberOfModules=55
+NumberOfModules=67
 Version=8.9
 @EndOfDesignText@
 #Region Project Attributes 
@@ -171,7 +183,7 @@ Version=8.9
 
 Sub Process_Globals
 	Private BANano As BANano 'ignore
-	Public Version As String = "4.30"
+	Public Version As String = "5.00"
 	Public AppName As String = "BANanoVuetifyAD3"
 End Sub
 
@@ -280,30 +292,45 @@ End Sub
     }
 }
 
-/* width */
-.md-scrollbar::-webkit-scrollbar {
+.light::-webkit-scrollbar {
   width: 15px;
 }
 
-/* Track */
-.md-scrollbar::-webkit-scrollbar-track {
-  background: #f1f1f1; 
-  border-radius: 10px;
-}
- 
-/* Handle */
-.md-scrollbar::-webkit-scrollbar-thumb {
-  background: #888; 
-  border-radius:10px;
+.light::-webkit-scrollbar-track {
+  background: #e6e6e6;
+  border-left: 1px solid #dadada;
 }
 
-/* Handle on hover */
-.md-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #555; 
+.light::-webkit-scrollbar-thumb {
+  background: #b0b0b0;
+  border: solid 3px #e6e6e6;
+  border-radius: 7px;
+}
+
+.light::-webkit-scrollbar-thumb:hover {
+  background: black;
+}
+
+.dark::-webkit-scrollbar {
+  width: 15px;
+}
+
+.dark::-webkit-scrollbar-track {
+  background: #202020;
+  border-left: 1px solid #2c2c2c;
+}
+
+.dark::-webkit-scrollbar-thumb {
+  background: #3e3e3e;
+  border: solid 3px #202020;
+  border-radius: 7px;
+}
+
+.dark::-webkit-scrollbar-thumb:hover {
+  background: white;
 }
 
 #End If
-
 
 ' HERE STARTS YOUR APP
 Sub BANano_Ready()

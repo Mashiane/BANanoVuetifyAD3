@@ -116,11 +116,19 @@ Sub Init
 	drwlist.AddItemParentChild("ad", ViewADCarousel.name, "",  "", "AD Carousel", ViewADCarousel.path)
 	'
 	drwlist.AddItemParentChild("ad", ViewADChips.name, "",  "", "AD Chips", ViewADChips.path)
+	drwlist.AddItemParentChild("ad", ViewADDialog.name, "",  "", "AD Dialog", ViewADDialog.path)
+	drwlist.AddItemParentChild("ad", ViewADInputs.name, "",  "", "AD Inputs", ViewADInputs.path)
+	drwlist.AddItemParentChild("ad", ViewADDrawer.name, "",  "", "AD Drawer", ViewADDrawer.path)
+	
 	drwlist.AddItemParentChild("ad", ViewADFAB.name, "",  "", "AD FAB", ViewADFAB.path)
+	drwlist.AddItemParentChild("ad", ViewADFooters.name, "",  "", "AD Footers", ViewADFooters.path)
 	drwlist.AddItemParentChild("ad", ViewADSpeed.name, "",  "", "AD SpeedDial", ViewADSpeed.path)
 	drwlist.AddItemParentChild("ad", ViewADBadges.name, "",  "", "AD Badges", ViewADBadges.path)
 	drwlist.AddItemParentChild("ad", ViewADAvatars.name, "",  "", "AD Avatars", ViewADAvatars.path)
 	drwlist.AddItemParentChild("ad", ViewADCards.name, "",  "", "AD Cards", ViewADCards.path)
+	drwlist.AddItemParentChild("ad", ViewADSnackBars.name, "",  "", "AD SnackBar", ViewADSnackBars.path)
+	
+	drwlist.AddItemParentChild("ad", ViewADSkeletons.name, "",  "", "AD SkeletonLoaders", ViewADSkeletons.path)
 	drwlist.AddItemParentChild("ad", ViewADTreeView.name, "",  "", "AD TreeView", ViewADTreeView.path)
 	
 	drwlist.AddItemParentChild("", "components", "mdi-cog", "", "Components", "")
@@ -222,9 +230,6 @@ Sub Init
 	'vuetify.UseVueSocialChat
 	'render the ux
 	vuetify.Serve
-	'
-		'
-	Log(BANano.Window)
 End Sub
 
 Sub changetheme_change(b As Boolean)
@@ -239,6 +244,12 @@ End Sub
 Sub AddRouters
 	'ViewContacts.Initialize
 	'ViewCRUDBuilder.Initialize
+	ViewADInputs.Initialize 
+	ViewADFooters.Initialize 
+	ViewADSkeletons.Initialize 
+	ViewADDrawer.Initialize 
+	ViewADSnackBars.Initialize 
+	ViewADDialog.Initialize 
 	ViewADBottomSheet.Initialize 
 	ViewADBottomNav.Initialize 
 	ViewADTreeView.Initialize 

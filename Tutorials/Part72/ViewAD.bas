@@ -15,6 +15,7 @@ Sub Process_Globals
 	Private VBtn2 As VBtn
 	Private VBtn4 As VBtn
 	Private VBtn6 As VBtn
+	Private VIcon1 As VIcon
 End Sub
 
 Sub Initialize
@@ -28,7 +29,7 @@ Sub Initialize
 	contAD.AddRows(1).AddColumns12
 	contAD.BuildGrid
 	'
-	contAD.Matrix(1, 1).LoadLayout("buttons")
+	contAD.Matrix(1, 1).LoadLayout("mybuttons")
 	'
 	'bind events
 	about.BindVueElement(VBtn2.VElement)

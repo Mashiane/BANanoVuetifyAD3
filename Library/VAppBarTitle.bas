@@ -122,7 +122,3 @@ Sub RemoveAttr(p As String) As VAppBarTitle
 	VElement.RemoveAttr(p)
 	Return Me
 End Sub
-
-Sub SetText(s As String) As VAppBarTitle
-	VElement.Caption = s
-End Sub

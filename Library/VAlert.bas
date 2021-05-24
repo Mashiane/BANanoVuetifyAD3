@@ -72,7 +72,7 @@ Private sMinWidth As String
 Private sMode As String
 Private bOutlined As Boolean
 Private bProminent As Boolean
-Private sRounded As string
+Private sRounded As String
 Private bShaped As Boolean
 Private bText As Boolean
 Private sTextColor As String

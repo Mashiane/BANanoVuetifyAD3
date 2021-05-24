@@ -9,12 +9,9 @@ Sub Process_Globals
 	Public vuetify As VuetifyApp
 	Public about As VueComponent
 	Public path As String
-	Public name As String = "adbadges"
+	Public name As String = "adinputs"
 	Private banano As BANano
-	Private VContainer1 As VContainer
-	Private VBadge1 As VBadge
-	Private VBadge2 As VBadge
-	Private VBadge4 As VBadge
+	Private VRating1 As VRating
 End Sub
 
 Sub Initialize
@@ -24,12 +21,15 @@ Sub Initialize
 	about.Initialize(Me, name)
 	path = about.path
 	
-	banano.LoadLayout(about.Here, "badges")
+	banano.LoadLayout(about.Here, "myinputs")
 	'
-	about.BindVueElement(VBadge2.VElement)
-	VBadge2.Update(about, 3)
-		
+	about.BindVueElement(VRating1.VElement)
+
 	'add the component as a router
 	vuetify.AddRoute(about) 
 End Sub
 
+
+Private Sub VRating1_Input (num As Double)
+	vuetify.ShowSwal(num)
+End Sub

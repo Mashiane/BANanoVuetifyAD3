@@ -210,28 +210,28 @@ sCardTextContent = Props.Get("CardTextContent")
 	If sTitle <> "" Then
 		If bTitleOnImage Then
 			'add on image
-			VElement.GetImage.Append($"<v-card-title id="${mName}title"></v-card-title>"$)
+			VElement.GetImage.Append($"<v-card-title id="${mName}cardtitle"></v-card-title>"$)
 		Else
-			VElement.Append($"<v-card-title id="${mName}title"></v-card-title>"$)
+			VElement.Append($"<v-card-title id="${mName}cardtitle"></v-card-title>"$)
 		End If
-		VElement.GetTitle.Caption = sTitle
+		VElement.GetCardTitle.Caption = sTitle
 	End If
 	
 	'do we have a sub title
 	If sSubTitle <> "" Then
 		If bSubTitleOnImage Then
 			'add on image
-			VElement.GetImage.Append($"<v-card-subtitle id="${mName}subtitle"></v-card-subtitle>"$)
+			VElement.GetImage.Append($"<v-card-subtitle id="${mName}cardsubtitle"></v-card-subtitle>"$)
 		Else
-			VElement.Append($"<v-card-subtitle id="${mName}subtitle"></v-card-subtitle>"$)
+			VElement.Append($"<v-card-subtitle id="${mName}cardsubtitle"></v-card-subtitle>"$)
 		End If
-		VElement.GetSubTitle.Caption = sSubTitle
+		VElement.GetCardSubTitle.Caption = sSubTitle
 	End If
 	'
 	'we have card text
 	If bCardText <> False Then
-		VElement.Append($"<v-card-text id="${mName}text"></v-card-text>"$)
-		VElement.GetText.Caption = sCardTextContent
+		VElement.Append($"<v-card-text id="${mName}cardtext"></v-card-text>"$)
+		VElement.GetCardText.Caption = sCardTextContent
 	End If
 	'
 	If bDivider Then
@@ -239,7 +239,7 @@ sCardTextContent = Props.Get("CardTextContent")
 	End If
 	'
 	If bActions Then
-		VElement.Append($"<v-card-actions id="${mName}actions"></v-card-actions>"$)
+		VElement.Append($"<v-card-actions id="${mName}cardactions"></v-card-actions>"$)
 	End If
 	'
 	VElement.Classes = mClasses
@@ -328,19 +328,19 @@ Sub UploadElevation(VC As VueComponent, b As Boolean) As VCard
 End Sub
 
 Sub CardTitle As VueElement
-	Return VElement.GetTitle
+	Return VElement.GetCardTitle
 End Sub
 
 Sub CardText As VueElement
-	Return VElement.GetText
+	Return VElement.GetCardText
 End Sub
 
 Sub CardActions As VueElement
-	Return VElement.getactions
+	Return VElement.getCardActions
 End Sub
 
 Sub CardSubTitle As VueElement
-	Return VElement.GetSubTitle
+	Return VElement.GetCardSubTitle
 End Sub
 
 Sub CardImage As VueElement

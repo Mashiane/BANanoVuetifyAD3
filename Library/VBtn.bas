@@ -39,6 +39,8 @@ Version=8.9
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VIf, DisplayName: V-If, FieldType: String, DefaultValue:  , Description: 
+#DesignerProperty: Key: VFor, DisplayName: V-For, FieldType: String, DefaultValue:  , Description: 
+#DesignerProperty: Key: Key, DisplayName: Key, FieldType: String, DefaultValue:  , Description: 
 
 Sub Class_Globals
     Private BANano As BANano 'ignore
@@ -71,7 +73,7 @@ Sub Class_Globals
 	Private bLoading As Boolean
 	Private bOutlined As Boolean
 	Private bRaised As Boolean
-	Private sRounded As string
+	Private sRounded As String
 	Private bShaped As Boolean
 	Private sSize As String
 	Private sTarget As String
@@ -79,6 +81,8 @@ Sub Class_Globals
 	Private sTo As String
 	Private bAbsolute As Boolean
 	Private sPosition As String
+	Private sVFor As String
+	Private sKey As String
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -130,6 +134,8 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sTo = Props.Get("To")
 		bAbsolute = Props.Get("Absolute")
 		sPosition = Props.Get("Position")
+		sVFor = Props.Get("VFor")
+		sKey = Props.Get("Key")
 	End If
 	
 	'build and get the element
@@ -190,6 +196,8 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.Tile = bTile
 	VElement.To = sTo
 	VElement.Absolute = bAbsolute
+	VElement.AddAttr("v-for", sVFor)
+	VElement.Bind(":key", sKey)
 	Select Case sPosition
 	Case "normal"
 	Case "top-left"
@@ -261,10 +269,6 @@ End Sub
 Sub RemoveAttr(p As String) As VBtn
 	VElement.RemoveAttr(p)
 	Return Me
-End Sub
-
-Sub SetText(s As String) As VBtn
-	VElement.Caption = s
 End Sub
 
 Sub Visible(VC As VueComponent, b As Boolean)

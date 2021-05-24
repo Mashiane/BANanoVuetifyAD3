@@ -7,15 +7,27 @@ Version=8.9
 'Custom BANano View class
 ' Properties that will be show in the ABStract Designer.  They will be passed in the props map in DesignerCreateView (Case Sensitive!)
 #DesignerProperty: Key: AutoID, DisplayName: Auto ID/Name, FieldType: Boolean, DefaultValue: False, Description: Overrides the ID/Name with a random string.
-#DesignerProperty: Key: Cols, DisplayName: Cols, FieldType: String, DefaultValue: 12 , Description:
+#DesignerProperty: Key: VFor, DisplayName: V-For, FieldType: String, DefaultValue:  , Description: 
+#DesignerProperty: Key: Key, DisplayName: Key, FieldType: String, DefaultValue:  , Description: 
+#DesignerProperty: Key: Offset, DisplayName: Offset, FieldType: String, DefaultValue: , Description: Offset
+#DesignerProperty: Key: Cols, DisplayName: Cols, FieldType: String, DefaultValue: , Description:
+#DesignerProperty: Key: OffsetSM, DisplayName: OffsetSM, FieldType: String, DefaultValue: , , Description:
+#DesignerProperty: Key: OffsetMD, DisplayName: OffsetMD, FieldType: String, DefaultValue: , Description:
+#DesignerProperty: Key: OffsetLG, DisplayName: OffsetLG, FieldType: String, DefaultValue: , Description:
+#DesignerProperty: Key: OffsetXL, DisplayName: OffsetXL, FieldType: String, DefaultValue: , Description:
+#DesignerProperty: Key: SM, DisplayName: SM, FieldType: String, DefaultValue: , Description:
+#DesignerProperty: Key: MD, DisplayName: MD, FieldType: String, DefaultValue: , Description:
+#DesignerProperty: Key: LG, DisplayName: LG, FieldType: String, DefaultValue: , Description:
+#DesignerProperty: Key: XL, DisplayName: XL, FieldType: String, DefaultValue: , Description:
 #DesignerProperty: Key: FillHeight, DisplayName: FillHeight, FieldType: Boolean, DefaultValue: False, Description: Fill Height
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue:  , Description: , List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: ColorIntensity, DisplayName: Color Intensity, FieldType: String, DefaultValue:  normal, Description: , List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: TextColor, DisplayName: Text Color, FieldType: String, DefaultValue:  , Description: , List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: TextColorIntensity, DisplayName: Text Color Intensity, FieldType: String, DefaultValue:  normal, Description: , List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: AlignSelf, DisplayName: Align Self, FieldType: String, DefaultValue: , Description: AlignSelf, List: normal|left|center|right|start|end
-#DesignerProperty: Key: Align, DisplayName: Align, FieldType: String, DefaultValue: , Description: Align, List: normal|left|center|right|start|end
-#DesignerProperty: Key: Justify, DisplayName: Justify, FieldType: String, DefaultValue: , Description: Justify, List: normal|left|center|right|start|end|space-around|space-between
+#DesignerProperty: Key: Align, DisplayName: Align, FieldType: String, DefaultValue: , Description: Align, List: normal|start|center|end|baseline|stretch
+#DesignerProperty: Key: Justify, DisplayName: Justify, FieldType: String, DefaultValue: , Description: Justify, List: normal|start|center|end|space-between|space-around
+#DesignerProperty: Key: Dense, DisplayName: Dense, FieldType: Boolean, DefaultValue: False, Description: Dense
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
@@ -58,20 +70,32 @@ Sub Class_Globals
 	Private mCols As String = ""
 	Private mAlignSelf As String = ""
 	Private sMA As String
-Private sMB As String
-Private sML As String
-Private sMR As String
-Private sMT As String
-Private sMX As String
-Private sMY As String
-Private sPA As String
-Private sPB As String
-Private sPL As String
-Private sPR As String
-Private sPT As String
-Private sPX As String
-Private sPY As String
-private bFillHeight as boolean
+	Private sMB As String
+	Private sML As String
+	Private sMR As String
+	Private sMT As String
+	Private sMX As String
+	Private sMY As String
+	Private sPA As String
+	Private sPB As String
+	Private sPL As String
+	Private sPR As String
+	Private sPT As String
+	Private sPX As String
+	Private sPY As String
+	Private bFillHeight As Boolean
+	Private bDense As Boolean
+	Private sSM As String
+	Private sMD As String
+	Private sLG As String
+	Private sXL As String
+	Private sOffset As String
+	Private sOffsetSM As String
+	Private sOffsetMD As String
+	Private sOffsetLG As String
+	Private sOffsetXL As String
+	Private sVFor As String
+	Private sKey As String
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -106,20 +130,32 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mCols = Props.Get("Cols")
 		mAlignSelf = Props.Get("AlignSelf")
 		sMA = Props.Get("MA")
-sMB = Props.Get("MB")
-sML = Props.Get("ML")
-sMR = Props.Get("MR")
-sMT = Props.Get("MT")
-sMX = Props.Get("MX")
-sMY = Props.Get("MY")
-sPA = Props.Get("PA")
-sPB = Props.Get("PB")
-sPL = Props.Get("PL")
-sPR = Props.Get("PR")
-sPT = Props.Get("PT")
-sPX = Props.Get("PX")
-sPY = Props.Get("PY")
-bFillHeight = Props.Get("FillHeight")
+		bDense = Props.Get("Dense")
+		sVFor = Props.Get("VFor")
+		sKey = Props.Get("Key")
+		sMB = Props.Get("MB")
+		sML = Props.Get("ML")
+		sMR = Props.Get("MR")
+		sMT = Props.Get("MT")
+		sMX = Props.Get("MX")
+		sMY = Props.Get("MY")
+		sPA = Props.Get("PA")
+		sPB = Props.Get("PB")
+		sPL = Props.Get("PL")
+		sPR = Props.Get("PR")
+		sPT = Props.Get("PT")
+		sPX = Props.Get("PX")
+		sPY = Props.Get("PY")
+		bFillHeight = Props.Get("FillHeight")
+		sSM = Props.Get("SM")
+		sMD = Props.Get("MD")
+		sLG = Props.Get("LG")
+		sXL = Props.Get("XL")
+		sOffset = Props.Get("Offset")
+		sOffsetSM = Props.Get("OffsetSM")
+		sOffsetMD = Props.Get("OffsetMD")
+		sOffsetLG = Props.Get("OffsetLG")
+		sOffsetXL = Props.Get("OffsetXL")
 	End If
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
@@ -141,20 +177,32 @@ bFillHeight = Props.Get("FillHeight")
 	VElement.AlignSelf = mAlignSelf
 	VElement.VShow = mVShow
 	VElement.MA = sMA
-VElement.MB = sMB
-VElement.ML = sML
-VElement.MR = sMR
-VElement.MT = sMT
-VElement.MX = sMX
-VElement.MY = sMY
-VElement.PA = sPA
-VElement.PB = sPB
-VElement.PL = sPL
-VElement.PR = sPR
-VElement.PT = sPT
-VElement.PX = sPX
-VElement.PY = sPY
-VElement.FillHeight = bFillHeight
+	VElement.MB = sMB
+	VElement.ML = sML
+	VElement.MR = sMR
+	VElement.MT = sMT
+	VElement.MX = sMX
+	VElement.MY = sMY
+	VElement.PA = sPA
+	VElement.PB = sPB
+	VElement.PL = sPL
+	VElement.PR = sPR
+	VElement.PT = sPT
+	VElement.PX = sPX
+	VElement.PY = sPY
+	VElement.FillHeight = bFillHeight
+	VElement.AddAttr(":dense", bDense)
+	VElement.AddAttr("v-for", sVFor)
+	VElement.AddAttr(":key", sKey)
+	VElement.AddAttr("sm", sSM)
+	VElement.SetAttr("md", sMD)
+	VElement.SetAttr("lg", sLG)
+	VElement.SetAttr("xl", sXL)
+	VElement.SetAttr("offset", sOffset)
+	VElement.SetAttr("offset-sm", sOffsetSM)
+	VElement.SetAttr("offset-md", sOffsetMD)
+	VElement.SetAttr("offset-lg", sOffsetLG)
+	VElement.SetAttr("offset-xl", sOffsetXL)
 End Sub
 
 public Sub AddToParent(targetID As String)

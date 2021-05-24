@@ -10,7 +10,7 @@ Version=8.9
 #DesignerProperty: Key: ColorIntensity, DisplayName: Color Intensity, FieldType: String, DefaultValue:  normal, Description: , List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: Left, DisplayName: Left, FieldType: Boolean, DefaultValue: False, Description: Left
 #DesignerProperty: Key: Bottom, DisplayName: Bottom, FieldType: Boolean, DefaultValue: False, Description: Bottom
-#DesignerProperty: Key: Content, DisplayName: Content, FieldType: String, DefaultValue: , Description: Content
+#DesignerProperty: Key: Content, DisplayName: Content, FieldType: String, DefaultValue: badge1, Description: Content
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: false, Description: Dark
 #DesignerProperty: Key: Dot, DisplayName: Dot, FieldType: Boolean, DefaultValue: false, Description: Dot
 #DesignerProperty: Key: Icon, DisplayName: Icon, FieldType: String, DefaultValue: , Description: Icon
@@ -134,6 +134,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.Attributes = mAttributes	
 	VElement.Left = bLeft
 	VElement.Bottom = bBottom
+	VElement.BindAllEvents
 End Sub	
 
 
@@ -158,7 +159,7 @@ Sub Visible(VC As VueComponent, b As Boolean)
 	VC.SetData(mVIf, b)
 End Sub
 
-Sub UpdateContent(VC As VueComponent, b As Boolean)
+Sub Update(VC As VueComponent, b As Boolean)
 	VC.SetData(sContent, b)
 End Sub
 

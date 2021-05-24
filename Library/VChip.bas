@@ -253,7 +253,3 @@ Sub RemoveAttr(p As String) As VChip
 	VElement.RemoveAttr(p)
 	Return Me
 End Sub
-
-Sub SetText(s As String) As VChip
-	VElement.Caption = s
-End Sub

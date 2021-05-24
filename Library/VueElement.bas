@@ -1681,6 +1681,11 @@ private Sub GetOffsetSizes(varOffsets As String) As Map
 	Return m
 End Sub
 
+public Sub SetAttrOnTrue(varClass As String, varCondition As Boolean, varShouldBe As Boolean)
+	If BANano.IsUndefined(varShouldBe) Or BANano.IsNull(varShouldBe) Then Return
+	If BANano.IsUndefined(varCondition) Or BANano.IsNull(varCondition) Then Return
+	If varShouldBe Then AddAttr(varClass, varCondition)
+End Sub
 
 public Sub AddAttrOnConditionTrue(varClass As String, varCondition As Boolean, varShouldBe As Boolean)
 	If BANano.IsUndefined(varShouldBe) Or BANano.IsNull(varShouldBe) Then Return
@@ -6376,6 +6381,18 @@ Sub GetCardTitle As VueElement
 	Return GetVueElement($"${mName}cardtitle"$)
 End Sub
 
+Sub GetCardSubTitle As VueElement
+	Return GetVueElement($"${mName}cardsubtitle"$)
+End Sub
+
+Sub GetCard As VueElement
+	Return GetVueElement($"${mName}card"$)
+End Sub
+
+Sub GetCardText As VueElement
+	Return GetVueElement($"${mName}cardtext"$)
+End Sub
+
 Sub AddMaterialCard(elID As String, sheetColor As String, elIcon As String, elTitle As String, elValue As String) As VueElement
 	elID = elID.tolowercase
 	Dim elID As String = elID.ToLowerCase
@@ -7835,6 +7852,8 @@ Sub BindAllEvents
 	SetOnEvent(mCallBack, "dragover", "")
 	SetOnEvent(mCallBack, "dragenter", "")
 	SetOnEvent(mCallBack, "dragleave", "")
+	SetOnEvent(mCallBack, "transitionend", "")
+	SetOnEvent(mCallBack, "update:mini-variant", "")
 End Sub
 
 'get the chip ref from the chip group
@@ -8901,6 +8920,19 @@ End Sub
 
 Sub GetCancel(elID As String) As VueElement
 	Dim elKey As String = $"${elID}cancel"$
+	Dim elx As VueElement = GetVueElement(elKey)
+	Return elx
+End Sub
+
+Sub GetOK1 As VueElement
+	Dim elKey As String = $"${mName}_ok"$
+	Dim elx As VueElement = GetVueElement(elKey)
+	Return elx
+End Sub
+
+
+Sub GetCancel1 As VueElement
+	Dim elKey As String = $"${mName}_cancel"$
 	Dim elx As VueElement = GetVueElement(elKey)
 	Return elx
 End Sub

@@ -122,7 +122,3 @@ Sub RemoveAttr(p As String) As VToolBarTitle
 	VElement.RemoveAttr(p)
 	Return Me
 End Sub
-
-Sub SetText(s As String) As VToolBarTitle
-	VElement.Caption = s
-End Sub
