@@ -1635,7 +1635,7 @@ function BANanoMySQL($command, $query, $args, $types) {
 	//header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token , Authorization');
 	require_once './assets/mysqlconfig.php';
     //connect To MySQL
-    $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME, DB_PORT);
+    $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
     //we cannot connect Return an error
     if ($conn->connect_error) {
         $response = $conn->connect_error;
