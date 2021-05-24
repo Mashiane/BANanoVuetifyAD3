@@ -709,7 +709,7 @@ End Sub
 Sub AddTab(tabID As String, Caption As String, Icon As String, IconOnLeft As Boolean) As VueElement
 	tabID = tabID.ToLowerCase
 	Dim tabE As VueElement
-	Dim vIcon As VueElement
+	Dim vIconx As VueElement
 	'add the tab 
 	tabE = AddVueElement(tabID, "v-tab", Null)
 	tabE.Href = "#tab" & tabID
@@ -717,14 +717,14 @@ Sub AddTab(tabID As String, Caption As String, Icon As String, IconOnLeft As Boo
 	tabE.Value = tabID
 	If Icon <> "" Then
 		If IconOnLeft Then
-			vIcon = tabE.AddVueElement($"${tabID}icon"$, "v-icon",Null)
-			vIcon.left = True
-			vIcon.SetText(Icon)
+			vIconx = tabE.AddVueElement($"${tabID}icon"$, "v-icon",Null)
+			vIconx.left = True
+			vIconx.SetText(Icon)
 			tabE.Append(Caption)
 		Else
 			tabE.Append(Caption)
-			vIcon = tabE.AddVueElement($"${tabID}icon"$, "v-icon",Null)
-			vIcon.SetText(Icon)
+			vIconx = tabE.AddVueElement($"${tabID}icon"$, "v-icon",Null)
+			vIconx.SetText(Icon)
 		End If
 	Else	
 		tabE.SetText(Caption)
@@ -740,7 +740,7 @@ Sub AddTabButtonIcon(tabID As String, Icon As String) As VueElement
 	tabID = tabID.ToLowerCase
 	Dim tabE As VueElement
 	Dim vBtnx As VueElement
-	Dim vIcon As VueElement
+	Dim vIconx As VueElement
 	'add the tab 
 	tabE = AddVueElement(tabID, "v-tab", Null)
 	tabE.Href = "#tab" & tabID
@@ -748,8 +748,8 @@ Sub AddTabButtonIcon(tabID As String, Icon As String) As VueElement
 	tabE.Value = tabID
 	'
 	vBtnx = tabE.AddVueElement2(tabID, $"${tabID}button"$, "v-btn", Null)
-	vIcon = vBtnx.AddVueElement2($"${tabID}button"$, $"${tabID}icon"$, "v-icon", Null)
-	vIcon.SetText(Icon)
+	vIconx = vBtnx.AddVueElement2($"${tabID}button"$, $"${tabID}icon"$, "v-icon", Null)
+	vIconx.SetText(Icon)
 	
 	'add the tab item
 	Dim ti As VueElement = AddVueElement($"tab${tabID}"$, "v-tab-item", Null)
@@ -6421,10 +6421,10 @@ Sub AddMaterialCard(elID As String, sheetColor As String, elIcon As String, elTi
 	
 	BANano.GetElement(parentID).Append(sTemplate)
 	'
-	Dim vcard As VueElement = GetVueElement(elID)
-	vcard.MT = 3
+	Dim vcardx As VueElement = GetVueElement(elID)
+	vcardx.MT = 3
 	
-	Dim avat As VueElement = vcard.GetListItemAvatar
+	Dim avat As VueElement = vcardx.GetListItemAvatar
 	avat.MT = "n10"
 	avat.Width = "100"
 	avat.Height = "100"
@@ -6435,11 +6435,11 @@ Sub AddMaterialCard(elID As String, sheetColor As String, elIcon As String, elTi
 	'sht.Elevation = "10"
 	'sht.rounded = True
 	'
-	Dim lt As VueElement = vcard.GetListItemTitle
+	Dim lt As VueElement = vcardx.GetListItemTitle
 	lt.MB = 1
 	
-	vcard.BindAllEvents
-	Return vcard
+	vcardx.BindAllEvents
+	Return vcardx
 End Sub
 
 Sub AddMaterialCard3(elID As String, sheetColor As String, elIcon As String, elTitle As String, elValue As String, elTitle1 As String, elValue1 As String, elTitle2 As String, elValue2 As String) As VueElement
@@ -6480,10 +6480,10 @@ Sub AddMaterialCard3(elID As String, sheetColor As String, elIcon As String, elT
 	
 	BANano.GetElement(parentID).Append(sTemplate)
 	'
-	Dim vcard As VueElement = GetVueElement(elID)
-	vcard.MT = 3
+	Dim vcardx As VueElement = GetVueElement(elID)
+	vcardx.MT = 3
 	
-	Dim avat As VueElement = vcard.GetListItemAvatar
+	Dim avat As VueElement = vcardx.GetListItemAvatar
 	avat.MarginTop = "-200px"
 	avat.Width = "100"
 	avat.Height = "100"
@@ -6494,11 +6494,11 @@ Sub AddMaterialCard3(elID As String, sheetColor As String, elIcon As String, elT
 	'sht.Elevation = "10"
 	'sht.rounded = True
 	'
-	Dim lt As VueElement = vcard.GetListItemTitle
+	Dim lt As VueElement = vcardx.GetListItemTitle
 	lt.MB = 1
 	
-	vcard.BindAllEvents
-	Return vcard
+	vcardx.BindAllEvents
+	Return vcardx
 End Sub
 
 
@@ -8743,11 +8743,11 @@ Sub AddAvatarWithBadge(elID As String, imgURL As String, avatarSize As Int, vmod
 	Dim avatarid As String = $"${elID}avatar"$
 	Dim imageid As String = $"${elID}image"$
 	'
-	Dim vbadge As VueElement = AddVueElement2(parentID, elID, "v-badge", Null)
-	If badgeColor <> "" Then vbadge.Color = badgeColor
-	If vmodel <> "" Then vbadge.Bind("content", vmodel)
-	If vmodel <> "" Then vbadge.Bind("value", vmodel)
-	vbadge.AssignProps(badgeprops)
+	Dim vbadgex As VueElement = AddVueElement2(parentID, elID, "v-badge", Null)
+	If badgeColor <> "" Then vbadgex.Color = badgeColor
+	If vmodel <> "" Then vbadgex.Bind("content", vmodel)
+	If vmodel <> "" Then vbadgex.Bind("value", vmodel)
+	vbadgex.AssignProps(badgeprops)
 	'
 	Dim avatar As VueElement = AddVueElement2(elID, avatarid, "v-avatar", Null)
 	If avatarSize <> 0 Then avatar.AddAttr("size", avatarSize)
@@ -8759,10 +8759,10 @@ Sub AddAvatarWithBadge(elID As String, imgURL As String, avatarSize As Int, vmod
 	img.Alt = ""
 	img.BindAllEvents
 	'
-	vbadge.BindVueElement(img)
-	vbadge.BindVueElement(avatar)
-	vbadge.BindAllEvents
-	Return vbadge
+	vbadgex.BindVueElement(img)
+	vbadgex.BindVueElement(avatar)
+	vbadgex.BindAllEvents
+	Return vbadgex
 End Sub
 
 
@@ -9408,22 +9408,22 @@ End Sub
 Sub AddRating(sid As String, vmodel As String, slength As Int, ssize As Int, bHover As Boolean, color As String, props As Map) As VueElement
 	Dim parentID As String = CleanID(mName)
 	sid = sid.ToLowerCase
-	Dim vrating As VueElement = AddVueElement2(parentID, sid, "v-rating", Null)
-	vrating.VModel = vmodel
-	vrating.SetData(vmodel, Null)
+	Dim vratingx As VueElement = AddVueElement2(parentID, sid, "v-rating", Null)
+	vratingx.VModel = vmodel
+	vratingx.SetData(vmodel, Null)
 	If slength <> 0 Then 
-		vrating.AddAttr("length", slength)
+		vratingx.AddAttr("length", slength)
 	End If
 	If ssize <> 0 Then 
-		vrating.AddAttr("size", ssize)
+		vratingx.AddAttr("size", ssize)
 	End If
-	vrating.AddAttr(":hover", bHover)
+	vratingx.AddAttr(":hover", bHover)
 	If color <> "" Then 
-		vrating.Color = color
+		vratingx.Color = color
 	End If
-	vrating.AssignProps(props)
-	vrating.BindAllEvents
-	Return vrating
+	vratingx.AssignProps(props)
+	vratingx.BindAllEvents
+	Return vratingx
 End Sub
 
 Sub AddCheckBox(sid As String, vmodel As String, slabel As String, truevalue As Object, falsevalue As Object, color As String, props As Map) As VueElement
@@ -9459,16 +9459,16 @@ End Sub
 Sub AddImage1(elID As String, vmodel As String, alt As String, sheight As String, swidth As String, props As Map) As VueElement
 	Dim parentID As String = CleanID(mName)
 	elID = elID.ToLowerCase
-	Dim vimg As VueElement = AddVueElement2(parentID, elID, "v-img", Null)
-	If sheight <> "" Then vimg.MaxHeight = sheight
-	If swidth <> "" Then vimg.MaxWidth = swidth
-	vimg.AddAttr(":src", vmodel)
-	vimg.AddAttr(":lazy-src", vmodel)
-	vimg.Alt = alt
-	'vimg.AddAttr(":aspect-ratio", "16/9")
-	vimg.BindAllEvents
-	vimg.AssignProps(props)
-	Return vimg
+	Dim vimgx As VueElement = AddVueElement2(parentID, elID, "v-img", Null)
+	If sheight <> "" Then vimgx.MaxHeight = sheight
+	If swidth <> "" Then vimgx.MaxWidth = swidth
+	vimgx.AddAttr(":src", vmodel)
+	vimgx.AddAttr(":lazy-src", vmodel)
+	vimgx.Alt = alt
+	'vimgx.AddAttr(":aspect-ratio", "16/9")
+	vimgx.BindAllEvents
+	vimgx.AssignProps(props)
+	Return vimgx
 End Sub
 
 '<code>
@@ -9481,20 +9481,20 @@ End Sub
 Sub AddImage(elID As String, src As String, lazysrc As String, alt As String, sheight As String, swidth As String, props As Map) As VueElement
 	Dim parentID As String = CleanID(mName)
 	elID = elID.ToLowerCase
-	Dim vimg As VueElement = AddVueElement2(parentID, elID, "v-img", Null)
-	If sheight <> "" Then vimg.MaxHeight = sheight
-	If swidth <> "" Then vimg.MaxWidth = swidth
-	vimg.Src = src
-	vimg.Alt = alt
+	Dim vimgx As VueElement = AddVueElement2(parentID, elID, "v-img", Null)
+	If sheight <> "" Then vimgx.MaxHeight = sheight
+	If swidth <> "" Then vimgx.MaxWidth = swidth
+	vimgx.Src = src
+	vimgx.Alt = alt
 	If lazysrc = "" Then 
-		vimg.AddAttr("lazy-src", src)
+		vimgx.AddAttr("lazy-src", src)
 	Else
-		vimg.AddAttr("lazy-src", lazysrc)
+		vimgx.AddAttr("lazy-src", lazysrc)
 	End If
-	'vimg.AddAttr(":aspect-ratio", "16/9")
-	vimg.BindAllEvents
-	vimg.AssignProps(props)
-	Return vimg
+	'vimgx.AddAttr(":aspect-ratio", "16/9")
+	vimgx.BindAllEvents
+	vimgx.AssignProps(props)
+	Return vimgx
 End Sub
 
 'add spacer

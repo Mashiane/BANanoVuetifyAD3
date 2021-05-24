@@ -4,6 +4,8 @@ ModulesStructureVersion=1
 Type=Class
 Version=8.9
 @EndOfDesignText@
+#IgnoreWarnings:12
+
 #DesignerProperty: Key: Text, DisplayName: Caption, FieldType: String, DefaultValue: , Description: Text
 #DesignerProperty: Key: HeadLine, DisplayName: HeadLine, FieldType: Boolean, DefaultValue: false, Description: HeadLine
 #DesignerProperty: Key: Icon, DisplayName: Icon, FieldType: String, DefaultValue: , Description: Icon

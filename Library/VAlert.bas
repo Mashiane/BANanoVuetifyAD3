@@ -4,6 +4,8 @@ ModulesStructureVersion=1
 Type=Class
 Version=8.9
 @EndOfDesignText@
+#IgnoreWarnings:12
+
 #DesignerProperty: Key: AlertType, DisplayName: AlertType, FieldType: String, DefaultValue: none, Description: AlertType, List: none|success|info|warning|error
 #DesignerProperty: Key: Border, DisplayName: Border, FieldType: String, DefaultValue: none, Description: Border, List: none|top|right|bottom|left
 #DesignerProperty: Key: Caption, DisplayName: Caption, FieldType: String, DefaultValue: Alert, Description: Caption

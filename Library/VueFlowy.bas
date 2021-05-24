@@ -4,6 +4,8 @@ ModulesStructureVersion=1
 Type=Class
 Version=8.9
 @EndOfDesignText@
+#IgnoreWarnings:12
+
 #Event: add (item As Map)
 #Event: remove (item As Map)
 #Event: dragStart (item As Map)

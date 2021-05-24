@@ -4,6 +4,8 @@ ModulesStructureVersion=1
 Type=Class
 Version=8.9
 @EndOfDesignText@
+#IgnoreWarnings:12
+
 #Event: Change (item As Object)
 
 #DesignerProperty: Key: ActiveClass, DisplayName: ActiveClass, FieldType: String, DefaultValue: , Description: ActiveClass
@@ -222,7 +224,7 @@ Sub Clear(VC As VueComponent)
 	xitems.Initialize 
 End Sub
 
-Sub AddItem(elID As String, caption As String, color As String, iconName As String, goTo As String) As VueElement
+Sub AddItem(elID As String, caption As String, color As String, iconName As String, goTo As String) As VBottomNavigation
 	Dim nm As Map = CreateMap()
 	nm.Put("id", elID)
 	nm.Put("value", elID)
@@ -231,6 +233,7 @@ Sub AddItem(elID As String, caption As String, color As String, iconName As Stri
 	If iconName <> "" Then nm.Put("icon", iconName)
 	nm.Put("caption", caption)
 	xitems.Add(nm)
+	Return Me
 End Sub
 
 Sub Refresh(VC As VueComponent)

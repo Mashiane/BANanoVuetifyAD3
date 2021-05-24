@@ -4,6 +4,8 @@ ModulesStructureVersion=1
 Type=Class
 Version=8.9
 @EndOfDesignText@
+#IgnoreWarnings:12
+
 #DesignerProperty: Key: SkeletonType, DisplayName: Types(s), FieldType: String, DefaultValue: card1, Description: Types(s)
 #DesignerProperty: Key: Boilerplate, DisplayName: Boilerplate, FieldType: Boolean, DefaultValue: false, Description: Boilerplate
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: false, Description: Dark

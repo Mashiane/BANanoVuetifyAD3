@@ -4,6 +4,7 @@ ModulesStructureVersion=1
 Type=Class
 Version=8.9
 @EndOfDesignText@
+#IgnoreWarnings:12
 #Event: nextClicked (currentPage As Map)
 #Event: backClicked (currentPage As Map)
 

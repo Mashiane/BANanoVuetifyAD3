@@ -4,6 +4,7 @@ ModulesStructureVersion=1
 Type=Class
 Version=8.9
 @EndOfDesignText@
+#IgnoreWarnings:12
 #Event: Input (b As Boolean)
 #Event: TransitionEnd(obj As Map)
 

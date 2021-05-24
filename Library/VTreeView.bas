@@ -4,6 +4,7 @@ ModulesStructureVersion=1
 Type=Class
 Version=8.9
 @EndOfDesignText@
+#IgnoreWarnings:12
 #Event: Input (items As List)
 #Event: UpdateActive (items As List)
 #Event: UpdateOpen (items As List)

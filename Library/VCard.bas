@@ -4,6 +4,10 @@ ModulesStructureVersion=1
 Type=Class
 Version=8.9
 @EndOfDesignText@
+#IgnoreWarnings:12
+
+#Event: Click (e As BANanoEvent)
+
 #DesignerProperty: Key: Img, DisplayName: Image, FieldType: String, DefaultValue: , Description: Image
 #DesignerProperty: Key: ImgHeight, DisplayName: Image Height, FieldType: String, DefaultValue: , Description: Image Height
 #DesignerProperty: Key: Title, DisplayName: Title, FieldType: String, DefaultValue: , Description: Title

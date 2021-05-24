@@ -4,6 +4,8 @@ ModulesStructureVersion=1
 Type=Class
 Version=8.9
 @EndOfDesignText@
+#IgnoreWarnings:12
+
 #Event: ok_click (e As BANanoEvent)
 #Event: cancel_click (e As BANanoEvent)
 

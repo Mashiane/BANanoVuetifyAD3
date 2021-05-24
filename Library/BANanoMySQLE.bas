@@ -1635,6 +1635,93 @@ function BANanoMySQL($command, $query, $args, $types) {
 	//header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token , Authorization');
 	require_once './assets/mysqlconfig.php';
     //connect To MySQL
+	mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+    $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+    //we cannot connect Return an error
+    if ($conn->connect_error) {
+        $response = $conn->connect_error;
+        $resp['response'] = "Error";
+		$resp['error'] = $response;
+		$resp['result'] = array();
+		$output = json_encode($resp);
+        die($output);
+    }
+    mysqli_set_charset($conn, 'utf8');
+    //$query = mysqli_real_escape_string($conn, $query);
+    $commands = array('delete', 'update', 'replace', 'insert', 'connection', 'createdb', 'dropdb', 'createtable', 'droptable');
+    if (in_array($command, $commands)) {
+        $command = 'changes';
+    }
+    switch ($command) {
+    case "changes":
+        $stmt = prepareMySQL($conn, $query, $types, $args);
+        if (! $stmt -> execute()) {
+			$response = $stmt->error;
+        	$resp['response'] = "Error";
+			$resp['error'] = $response;
+			$resp['result'] = array();
+			$output = json_encode($resp);
+	        die($output);
+		}
+	
+		$affRows = $conn->affected_rows;
+    	$resp['response'] = "Success";
+		$resp['error'] = '';
+		$resp['result'] = array();
+		$resp['affectedRows'] = $affRows;
+		$output = json_encode($resp);
+        break;
+    default:
+        $stmt = prepareMySQL($conn, $query, $types, $args);
+        
+		if (!($result = $stmt->execute())) {
+			$response = $stmt->error;
+        	$resp['response'] = "Error";
+			$resp['error'] = $response;
+			$resp['result'] = array();
+			$output = json_encode($resp);
+	        die($output);
+		}
+
+		//use meta data
+		$meta = $stmt->result_metadata();
+    	while ($field = $meta->fetch_field())
+    		{
+        		$params[] = &$row[$field->name];
+    		}
+	    call_user_func_array(array($stmt, 'bind_result'), $params);
+		$rows = array();
+    	while ($stmt->fetch()) {
+        	foreach($row as $key => $val)
+        	{
+            	$c[$key] = $val;
+        	}
+        	$rows[] = $c;
+    	}
+		
+		$affRows = $conn->affected_rows;
+    	$resp['response'] = "Success";
+		$resp['error'] = '';
+		$resp['result'] = $rows;
+		$resp['affectedRows'] = $affRows;
+		$output = json_encode($resp);
+        break;
+	}
+	echo ($output);
+    $stmt->close();
+    $conn->close();
+}
+
+function BANanoMySQL1($command, $query, $args, $types) {
+	$resp = array();
+	//header('Access-Control-Allow-Origin: *');
+	//header('content-type: application/json; charset=utf-8');
+	//header("Access-Control-Allow-Credentials: true");
+	//header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
+	//header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token , Authorization');
+	require_once './assets/mysqlconfig.php';
+    //connect To MySQL
+	mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
     $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
     //we cannot connect Return an error
     if ($conn->connect_error) {

@@ -4,6 +4,8 @@ ModulesStructureVersion=1
 Type=Class
 Version=8.9
 @EndOfDesignText@
+#IgnoreWarnings:12
+
 'Custom BANano View class
 #Event: ClickStop (e As BANanoEvent)
 

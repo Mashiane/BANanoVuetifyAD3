@@ -4,6 +4,8 @@ ModulesStructureVersion=1
 Type=Class
 Version=8.9
 @EndOfDesignText@
+#IgnoreWarnings:12
+
 #Event: Change (i As Int)
 #DesignerProperty: Key: ImagesSource, DisplayName: Images Source, FieldType: String, DefaultValue: , Description: ImageSource
 #DesignerProperty: Key: ImagesLink, DisplayName: Images Link, FieldType: Boolean, DefaultValue: false, Description: Images Link

@@ -4,6 +4,8 @@ ModulesStructureVersion=1
 Type=Class
 Version=8.9
 @EndOfDesignText@
+#IgnoreWarnings:12
+
 Sub Class_Globals
 	Private swal As BANanoObject
 	Private options As Map

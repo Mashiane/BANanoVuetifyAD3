@@ -3404,12 +3404,12 @@ Sub AddAvatarWithBadge(Module As Object, parentID As String, elID As String, img
 	'
 	BANano.GetElement(parentID).Append($"<v-badge id="${elID}"><v-avatar id="${avatarid}"><v-img id="${imageid}"></v-img></v-avatar></v-badge>"$)
 	'
-	Dim vbadge As VueElement
-	vbadge.Initialize(Module, elID, elID)
-	If badgeColor <> "" Then vbadge.Color = badgeColor
-	If vmodel <> "" Then vbadge.Bind("content", vmodel)
-	If vmodel <> "" Then vbadge.Bind("value", vmodel)
-	vbadge.AssignProps(badgeprops)
+	Dim vbadgex As VueElement
+	vbadgex.Initialize(Module, elID, elID)
+	If badgeColor <> "" Then vbadgex.Color = badgeColor
+	If vmodel <> "" Then vbadgex.Bind("content", vmodel)
+	If vmodel <> "" Then vbadgex.Bind("value", vmodel)
+	vbadgex.AssignProps(badgeprops)
 	'
 	Dim img As VueElement
 	img.Initialize(Module, imageid, imageid)
@@ -3422,10 +3422,10 @@ Sub AddAvatarWithBadge(Module As Object, parentID As String, elID As String, img
 	avatar.AssignProps(avatarprops)
 	img.BindAllEvents
 	'
-	vbadge.BindVueElement(img)
-	vbadge.BindVueElement(avatar)
-	vbadge.BindAllEvents
-	Return vbadge
+	vbadgex.BindVueElement(img)
+	vbadgex.BindVueElement(avatar)
+	vbadgex.BindAllEvents
+	Return vbadgex
 End Sub
 
 Sub AddAvatar1(Module As Object, parentID As String, elID As String, vmodel As String, avatarSize As Int, avatarprops As Map) As VueElement
@@ -4022,8 +4022,8 @@ Sub AddDialogAlertPrompt(Module As Object, parentID As String, elID As String, b
 	
 	BANano.GetElement(parentID).Append(sbTemplate.tostring)
 	'
-	Dim vdialog As VueElement
-	vdialog.Initialize(Module, elID, elID)
+	Dim vdialogx As VueElement
+	vdialogx.Initialize(Module, elID, elID)
 	'
 	Dim vbtnc As VueElement
 	vbtnc.Initialize(Module, cancelid, cancelid)
@@ -4033,30 +4033,30 @@ Sub AddDialogAlertPrompt(Module As Object, parentID As String, elID As String, b
 	vbtno.Initialize(Module, okid, okid)
 	vbtno.BindAllEvents
 	
-	vdialog.BindVueElement(vbtnc)
-	vdialog.BindVueElement(vbtno)
+	vdialogx.BindVueElement(vbtnc)
+	vdialogx.BindVueElement(vbtno)
 	
 	'set states
-	vdialog.SetData(dialogwidth, dWidth)
+	vdialogx.SetData(dialogwidth, dWidth)
 	'hide the dialog
-	vdialog.SetData(dialogShow, False)
+	vdialogx.SetData(dialogShow, False)
 	'set persistence
-	vdialog.SetData(dialogpersistent, bPersistent)
-	vdialog.SetData(xDialogTitle, "")
-	vdialog.SetData(dialogMessage, "")
-	vdialog.SetData(dialogpromptshow, False)
-	vdialog.SetData(dialogpromptlabel, "")
-	vdialog.SetData(dialogprompthint, "")
-	vdialog.SetData(dialogpromptvalue, "")
-	vdialog.SetData(dialogpromptplaceholder, "")
-	vdialog.SetData(dialogcanceltitle, "Cancel")
-	vdialog.SetData(DialogCancelShow, True)
-	vdialog.SetData(dialogcancelcolor, CancelColor)
-	vdialog.SetData(DialogOkShow, True)
-	vdialog.SetData(dialogokcolor, OkColor)
-	vdialog.SetData(dialogoktitle, "Ok")
-	vdialog.SetData(texttype, "text")
-	Return vdialog
+	vdialogx.SetData(dialogpersistent, bPersistent)
+	vdialogx.SetData(xDialogTitle, "")
+	vdialogx.SetData(dialogMessage, "")
+	vdialogx.SetData(dialogpromptshow, False)
+	vdialogx.SetData(dialogpromptlabel, "")
+	vdialogx.SetData(dialogprompthint, "")
+	vdialogx.SetData(dialogpromptvalue, "")
+	vdialogx.SetData(dialogpromptplaceholder, "")
+	vdialogx.SetData(dialogcanceltitle, "Cancel")
+	vdialogx.SetData(DialogCancelShow, True)
+	vdialogx.SetData(dialogcancelcolor, CancelColor)
+	vdialogx.SetData(DialogOkShow, True)
+	vdialogx.SetData(dialogokcolor, OkColor)
+	vdialogx.SetData(dialogoktitle, "Ok")
+	vdialogx.SetData(texttype, "text")
+	Return vdialogx
 End Sub
 
 Sub DialogCancelShowHide(eliD As String, b As Boolean)
@@ -4182,8 +4182,8 @@ Sub AddDialogInput(Module As Object, parentID As String, elID As String, bPersis
 	
 	BANano.GetElement(parentID).Append(sbTemplate.tostring)
 	'
-	Dim vdialog As VueElement
-	vdialog.Initialize(Module, elID, elID)
+	Dim vdialogx As VueElement
+	vdialogx.Initialize(Module, elID, elID)
 	'
 	Dim vbtnc As VueElement
 	vbtnc.Initialize(Module, cancelid, cancelid)
@@ -4197,25 +4197,25 @@ Sub AddDialogInput(Module As Object, parentID As String, elID As String, bPersis
 	vbtno.Bind("color", dialogokcolor)
 	vbtno.BindAllEvents
 	
-	vdialog.BindVueElement(vbtnc)
-	vdialog.BindVueElement(vbtno)
+	vdialogx.BindVueElement(vbtnc)
+	vdialogx.BindVueElement(vbtno)
 	
 	'set states
-	vdialog.SetData(dialogwidth, dWidth)
+	vdialogx.SetData(dialogwidth, dWidth)
 	'hide the dialog
-	vdialog.SetData(dialogShow, False)
+	vdialogx.SetData(dialogShow, False)
 	'set persistence
-	vdialog.SetData(dialogpersistent, bPersistent)
-	vdialog.SetData(xdialogTitle, Title)
-	vdialog.SetData(dialogcanceltitle, CancelTitle)
-	vdialog.SetData(dialogcancelshow, True)
-	vdialog.SetData(dialogcancelcolor, CancelColor)
-	vdialog.SetData(dialogokshow, True)
-	vdialog.SetData(dialogokcolor, OkColor)
-	vdialog.SetData(dialogoktitle, OkTitle)
-	vdialog.SetData(okKey, DateTime.now)
-	vdialog.SetData(cancelKey, DateTime.Now)
-	Return vdialog
+	vdialogx.SetData(dialogpersistent, bPersistent)
+	vdialogx.SetData(xdialogTitle, Title)
+	vdialogx.SetData(dialogcanceltitle, CancelTitle)
+	vdialogx.SetData(dialogcancelshow, True)
+	vdialogx.SetData(dialogcancelcolor, CancelColor)
+	vdialogx.SetData(dialogokshow, True)
+	vdialogx.SetData(dialogokcolor, OkColor)
+	vdialogx.SetData(dialogoktitle, OkTitle)
+	vdialogx.SetData(okKey, DateTime.now)
+	vdialogx.SetData(cancelKey, DateTime.Now)
+	Return vdialogx
 End Sub
 
 'get the date picker text field
@@ -4878,23 +4878,23 @@ Sub AddRating(Module As Object, parentID As String, sid As String, vmodel As Str
 	parentID = CleanID(parentID)
 	sid = sid.ToLowerCase
 	BANano.GetElement(parentID).Append($"<v-rating id="${sid}"></v-rating>"$)
-	Dim vrating As VueElement
-	vrating.Initialize(Module, sid, sid)
-	vrating.VModel = vmodel
-	vrating.SetData(vmodel, Null)
+	Dim vratingx As VueElement
+	vratingx.Initialize(Module, sid, sid)
+	vratingx.VModel = vmodel
+	vratingx.SetData(vmodel, Null)
 	If slength <> 0 Then 
-		vrating.AddAttr("length", slength)
+		vratingx.AddAttr("length", slength)
 	End If
 	If ssize <> 0 Then 
-		vrating.AddAttr("size", ssize)
+		vratingx.AddAttr("size", ssize)
 	End If
-	vrating.AddAttr(":hover", bHover)
+	vratingx.AddAttr(":hover", bHover)
 	If color <> "" Then 
-		vrating.Color = color
+		vratingx.Color = color
 	End If
-	vrating.AssignProps(props)
-	vrating.BindAllEvents
-	Return vrating
+	vratingx.AssignProps(props)
+	vratingx.BindAllEvents
+	Return vratingx
 End Sub
 
 Sub AddCheckBox(Module As Object, parentID As String, sid As String, vmodel As String, slabel As String, truevalue As Object, falsevalue As Object, color As String, props As Map) As VueElement
@@ -4933,17 +4933,17 @@ Sub AddImage1(Module As Object, parentID As String, elID As String, vmodel As St
 	parentID = CleanID(parentID)
 	elID = elID.ToLowerCase
 	BANano.GetElement(parentID).Append($"<v-img id="${elID}"></v-img>"$)
-	Dim vimg As VueElement
-	vimg.Initialize(Module, elID, elID)
-	If sheight <> "" Then vimg.MaxHeight = sheight
-	If swidth <> "" Then vimg.MaxWidth = swidth
-	vimg.AddAttr(":src", vmodel)
-	vimg.AddAttr(":lazy-src", vmodel)
-	vimg.Alt = alt
+	Dim vimgx As VueElement
+	vimgx.Initialize(Module, elID, elID)
+	If sheight <> "" Then vimgx.MaxHeight = sheight
+	If swidth <> "" Then vimgx.MaxWidth = swidth
+	vimgx.AddAttr(":src", vmodel)
+	vimgx.AddAttr(":lazy-src", vmodel)
+	vimgx.Alt = alt
 	'vimg.AddAttr(":aspect-ratio", "16/9")
-	vimg.BindAllEvents
-	vimg.AssignProps(props)
-	Return vimg
+	vimgx.BindAllEvents
+	vimgx.AssignProps(props)
+	Return vimgx
 End Sub
 
 '<code>
@@ -4957,21 +4957,21 @@ Sub AddImage(Module As Object, parentID As String, elID As String, src As String
 	parentID = CleanID(parentID)
 	elID = elID.ToLowerCase
 	BANano.GetElement(parentID).Append($"<v-img id="${elID}"></v-img>"$)
-	Dim vimg As VueElement
-	vimg.Initialize(Module, elID, elID)
-	If sheight <> "" Then vimg.MaxHeight = sheight
-	If swidth <> "" Then vimg.MaxWidth = swidth
-	vimg.Src = src
-	vimg.Alt = alt
+	Dim vimgx As VueElement
+	vimgx.Initialize(Module, elID, elID)
+	If sheight <> "" Then vimgx.MaxHeight = sheight
+	If swidth <> "" Then vimgx.MaxWidth = swidth
+	vimgx.Src = src
+	vimgx.Alt = alt
 	If lazysrc = "" Then 
-		vimg.AddAttr("lazy-src", src)
+		vimgx.AddAttr("lazy-src", src)
 	Else
-		vimg.AddAttr("lazy-src", lazysrc)
+		vimgx.AddAttr("lazy-src", lazysrc)
 	End If
 	'vimg.AddAttr(":aspect-ratio", "16/9")
-	vimg.BindAllEvents
-	vimg.AssignProps(props)
-	Return vimg
+	vimgx.BindAllEvents
+	vimgx.AssignProps(props)
+	Return vimgx
 End Sub
 
 'add spacer
