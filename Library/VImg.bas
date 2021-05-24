@@ -24,6 +24,8 @@ Version=8.9
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
+#DesignerProperty: Key: VOn, DisplayName: V-On, FieldType: String, DefaultValue:  , Description: V-On
+#DesignerProperty: Key: VBind, DisplayName: V-Bind, FieldType: String, DefaultValue:  , Description: V-Bind
 Sub Class_Globals
     Private BANano As BANano 'ignore
 	Private mName As String 'ignore
@@ -52,6 +54,8 @@ Private sSrc As String
 Private sSrcset As String
 Private sTransition As String
 Private sWidth As String
+Private sVOn As String
+Private sVBind As String
 	End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -91,6 +95,8 @@ sSrc = Props.Get("Src")
 sSrcset = Props.Get("Srcset")
 sTransition = Props.Get("Transition")
 sWidth = Props.Get("Width")
+sVOn = Props.Get("VOn")
+		sVBind = Props.Get("VBind")
 	End If
 	'
 	'build and get the element
@@ -122,6 +128,8 @@ VElement.Src = sSrc
 VElement.Srcset = sSrcset
 VElement.Transition = sTransition
 VElement.Width = sWidth
+VElement.AddAttr("v-on", sVOn)
+	VElement.AddAttr("v-bind", sVBind)
 VElement.BindAllEvents
 End Sub
 

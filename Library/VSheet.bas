@@ -62,6 +62,8 @@ Private sVFor As String
 Private sVIf As String
 Private sVShow As String
 Private sWidth As String
+Private sVOn As String
+Private sVBind As String
 	End Sub
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	mName = Name.tolowercase
@@ -103,6 +105,8 @@ sVFor = Props.Get("VFor")
 sVIf = Props.Get("VIf")
 sVShow = Props.Get("VShow")
 sWidth = Props.Get("Width")
+sVOn = Props.Get("VOn")
+sVBind = Props.Get("VBind")
 	End If
 	'
 	'build and get the element
@@ -136,6 +140,8 @@ VElement.AddAttr("v-for", sVFor)
 VElement.AddAttr("v-if", sVIf)
 VElement.AddAttr("v-show", sVShow)
 VElement.AddAttr("width", sWidth)
+VElement.AddAttr("v-on", sVOn)
+	VElement.AddAttr("v-bind", sVBind)
 VElement.BindAllEvents
 End Sub
 public Sub AddToParent(targetID As String)

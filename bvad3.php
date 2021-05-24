@@ -387,20 +387,23 @@ function BANanoMySQLDynamic($command, $query, $args, $types, $host, $username, $
 	        die($output); 
 		} 
 		 
-		if (!($result = $stmt->get_result())) { 
-			$response = $stmt->error; 
-        	$resp['response'] = "Error"; 
-			$resp['error'] = $response; 
-			$resp['result'] = array(); 
-			$output = json_encode($resp); 
-	        die($output); 
-		} 
+		//use meta data 
+		$meta = $stmt->result_metadata(); 
+    	while ($field = $meta->fetch_field()) 
+    		{ 
+        		$params[] = &$row[$field->name]; 
+    		} 
+	    call_user_func_array(array($stmt, 'bind_result'), $params); 
+		$rows = array(); 
+    	while ($stmt->fetch()) { 
+        	foreach($row as $key => $val) 
+        	{ 
+            	$c[$key] = $val; 
+        	} 
+        	$rows[] = $c; 
+    	} 
 		 
 		$affRows = $conn->affected_rows; 
-    	$rows = array(); 
-        while ($row = $result->fetch_assoc()) { 
-            $rows[] = $row; 
-        } 
     	$resp['response'] = "Success"; 
 		$resp['error'] = ''; 
 		$resp['result'] = $rows; 
@@ -448,9 +451,7 @@ function BANanoMySQLDynamic($command, $query, $args, $types, $host, $username, $
         	die($output); 
 		} 
         $stmt = prepareMySQL($conn, $query, $types, $args); 
-        //$result = $stmt->execute(); 
-		//$result = $stmt->get_result(); 
-         
+                
 		if (!($result = $stmt->execute())) { 
 			$response = $stmt->error; 
         	$resp['response'] = "Error"; 
@@ -460,20 +461,23 @@ function BANanoMySQLDynamic($command, $query, $args, $types, $host, $username, $
 	        die($output); 
 		} 
 		 
-		if (!($result = $stmt->get_result())) { 
-			$response = $stmt->error; 
-        	$resp['response'] = "Error"; 
-			$resp['error'] = $response; 
-			$resp['result'] = array(); 
-			$output = json_encode($resp); 
-	        die($output); 
-		} 
+		//use meta data 
+		$meta = $stmt->result_metadata(); 
+    	while ($field = $meta->fetch_field()) 
+    		{ 
+        		$params[] = &$row[$field->name]; 
+    		} 
+	    call_user_func_array(array($stmt, 'bind_result'), $params); 
+		$rows = array(); 
+    	while ($stmt->fetch()) { 
+        	foreach($row as $key => $val) 
+        	{ 
+            	$c[$key] = $val; 
+        	} 
+        	$rows[] = $c; 
+    	} 
 		 
 		$affRows = $conn->affected_rows; 
-    	$rows = array(); 
-        while ($row = $result->fetch_assoc()) { 
-            $rows[] = $row; 
-        } 
     	$resp['response'] = "Success"; 
 		$resp['error'] = ''; 
 		$resp['result'] = $rows; 

@@ -12,6 +12,8 @@ Version=8.9
 #DesignerProperty: Key: LoremIpsum, DisplayName: LoremIpsum, FieldType: Boolean, DefaultValue: false, Description: LoremIpsum
 #DesignerProperty: Key: Vertical, DisplayName: Vertical, FieldType: Boolean, DefaultValue: false, Description: Vertical
 #DesignerProperty: Key: Inset, DisplayName: Inset, FieldType: Boolean, DefaultValue: false, Description: Inset
+#DesignerProperty: Key: VOn, DisplayName: V-On, FieldType: String, DefaultValue:  , Description: V-On
+#DesignerProperty: Key: VBind, DisplayName: V-Bind, FieldType: String, DefaultValue:  , Description: V-Bind
 #DesignerProperty: Key: Href, DisplayName: Href, FieldType: String, DefaultValue: , Description: Href
 #DesignerProperty: Key: Target, DisplayName: Target, FieldType: String, DefaultValue: , Description: Target, List: _blank|_self|_parent|_top|none
 #DesignerProperty: Key: To, DisplayName: To, FieldType: String, DefaultValue: , Description: To
@@ -86,7 +88,9 @@ Private sTo As String
 Private sVIf As String
 Private sVShow As String
 Private bVertical As Boolean
-private bInset as boolean
+Private bInset As Boolean
+Private sVOn As String
+private sVBind as string
 	End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -142,6 +146,8 @@ sVIf = Props.Get("VIf")
 sVShow = Props.Get("VShow")
 bVertical = Props.Get("Vertical")
 bInset = Props.Get("Inset")
+sVOn = Props.Get("VOn")
+		sVBind = Props.Get("VBind")
 	End If
 	'
 	'build and get the element
@@ -187,6 +193,8 @@ VElement.VIf = sVIf
 VElement.VShow = sVShow
 VElement.Vertical = bVertical
 VElement.Inset = bInset
+VElement.AddAttr("v-on", sVOn)
+	VElement.AddAttr("v-bind", sVBind)
 VElement.BindAllEvents
 End Sub
 public Sub AddToParent(targetID As String)

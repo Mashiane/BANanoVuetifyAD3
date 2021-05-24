@@ -15,6 +15,8 @@ Version=8.9
 #DesignerProperty: Key: Position, DisplayName: Position, FieldType: String, DefaultValue: , Description: Position, List: none|left|right
 #DesignerProperty: Key: Size, DisplayName: Own Size, FieldType: String, DefaultValue: , Description: Own Size
 #DesignerProperty: Key: Size1, DisplayName: Size, FieldType: String, DefaultValue: none, Description: Size, List: none|large|small|x-large|x-small
+#DesignerProperty: Key: VOn, DisplayName: V-On, FieldType: String, DefaultValue:  , Description: V-On
+#DesignerProperty: Key: VBind, DisplayName: V-Bind, FieldType: String, DefaultValue:  , Description: V-Bind
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
 #DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: , Description: VModel
 #DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue: , Description: VShow
@@ -45,6 +47,8 @@ Sub Class_Globals
 	Private sVIf As String
 	Private sVModel As String
 	Private sVShow As String
+	Private sVOn As String
+	Private sVBind As String
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -79,6 +83,8 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sVIf = Props.Get("VIf")
 		sVModel = Props.Get("VModel")
 		sVShow = Props.Get("VShow")
+		sVOn = Props.Get("VOn")
+		sVBind = Props.Get("VBind")
 	End If
 	'
 	'build and get the element
@@ -97,6 +103,8 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.AddAttr(":dark", bDark)
 	VElement.AddAttr(":dense", bDense)
 	VElement.AddAttr(":disabled", bDisabled)
+	VElement.AddAttr("v-on", sVOn)
+	VElement.AddAttr("v-bind", sVBind)
 	'
 	Select Case sPosition
 	Case "left"

@@ -34,6 +34,8 @@ Version=8.9
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
+#DesignerProperty: Key: VOn, DisplayName: V-On, FieldType: String, DefaultValue:  , Description: V-On
+#DesignerProperty: Key: VBind, DisplayName: V-Bind, FieldType: String, DefaultValue:  , Description: V-Bind
 
 Sub Class_Globals
     Private BANano As BANano 'ignore
@@ -70,6 +72,8 @@ Private sSize1 As String
 Private sVIf As String
 Private sVModel As String
 Private sVShow As String
+Private sVOn As String
+private sVBind as string
 	End Sub
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	mName = Name.tolowercase
@@ -114,6 +118,8 @@ sSize1 = Props.Get("Size1")
 sVIf = Props.Get("VIf")
 sVModel = Props.Get("VModel")
 sVShow = Props.Get("VShow")
+sVOn = Props.Get("VOn")
+		sVBind = Props.Get("VBind")
 	End If
 	'
 	'build and get the element
@@ -160,6 +166,8 @@ VElement.AddAttr("v-if", sVIf)
 VElement.AddAttr("v-model", sVModel)
 VElement.AddAttr("v-show", sVShow)
 VElement.SetData(sVModel, 2)
+VElement.AddAttr("v-on", sVOn)
+	VElement.AddAttr("v-bind", sVBind)
 VElement.BindAllEvents
 End Sub
 

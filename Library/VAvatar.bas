@@ -30,6 +30,8 @@ Version=8.9
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
 #DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue: , Description: VShow
+#DesignerProperty: Key: VOn, DisplayName: V-On, FieldType: String, DefaultValue:  , Description: V-On
+#DesignerProperty: Key: VBind, DisplayName: V-Bind, FieldType: String, DefaultValue:  , Description: V-Bind
 
 '
 Sub Class_Globals
@@ -52,7 +54,7 @@ Private sMaxWidth As String
 Private sMinHeight As String
 Private sMinWidth As String
 Private sPosition As String
-Private sRounded As string
+Private sRounded As String
 Private sSize As String
 Private bTile As Boolean
 Private sWidth As String
@@ -64,6 +66,8 @@ Private mTextColor As String = ""
 	Private mIcon As String = ""
 	Private mImage As String = ""
 	Private bIconDark As String = ""
+	Private sVOn As String
+	Private sVBind As String
 	End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -107,6 +111,8 @@ bHeadLine = Props.Get("HeadLine")
 mIcon = Props.Get("Icon")
 mImage = Props.Get("Image")
 bIconDark = Props.Get("IconDark")
+sVOn = Props.Get("VOn")
+		sVBind = Props.Get("VBind")
 	End If
 	'
 	'build and get the element
@@ -169,6 +175,8 @@ VElement.AddClass(sRounded)
 VElement.Size = sSize
 VElement.Tile = bTile
 VElement.Width = sWidth
+VElement.AddAttr("v-on", sVOn)
+	VElement.AddAttr("v-bind", sVBind)
 VElement.BindAllEvents
 End Sub
 

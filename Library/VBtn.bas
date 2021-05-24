@@ -43,6 +43,8 @@ Version=8.9
 #DesignerProperty: Key: VIf, DisplayName: V-If, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VFor, DisplayName: V-For, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Key, DisplayName: Key, FieldType: String, DefaultValue:  , Description: 
+#DesignerProperty: Key: VOn, DisplayName: V-On, FieldType: String, DefaultValue:  , Description: V-On
+#DesignerProperty: Key: VBind, DisplayName: V-Bind, FieldType: String, DefaultValue:  , Description: V-Bind
 
 Sub Class_Globals
     Private BANano As BANano 'ignore
@@ -85,6 +87,8 @@ Sub Class_Globals
 	Private sPosition As String
 	Private sVFor As String
 	Private sKey As String
+	Private sVOn As String
+	private sVBind as string
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -138,6 +142,8 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sPosition = Props.Get("Position")
 		sVFor = Props.Get("VFor")
 		sKey = Props.Get("Key")
+		sVOn = Props.Get("VOn")
+		sVBind = Props.Get("VBind")
 	End If
 	
 	'build and get the element
@@ -200,6 +206,8 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.Absolute = bAbsolute
 	VElement.AddAttr("v-for", sVFor)
 	VElement.Bind(":key", sKey)
+	VElement.AddAttr("v-on", sVOn)
+	VElement.AddAttr("v-bind", sVBind)
 	Select Case sPosition
 	Case "normal"
 	Case "top-left"
