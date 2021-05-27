@@ -10,6 +10,7 @@ Version=8.9
 #Event: Click (id As String)
 ' Properties that will be show in the ABStract Designer.  They will be passed in the props map in DesignerCreateView (Case Sensitive!)
 #DesignerProperty: Key: AutoID, DisplayName: Auto ID/Name, FieldType: Boolean, DefaultValue: False, Description: Overrides the ID/Name with a random string.
+#DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: fab, Description: VModel
 #DesignerProperty: Key: OpenIcon, DisplayName: Open Icon, FieldType: String, DefaultValue: mdi-account-circle, Description: Open Icon
 #DesignerProperty: Key: CloseIcon, DisplayName: Close Icon, FieldType: String, DefaultValue: mdi-close, Description: Close Icon
 #DesignerProperty: Key: Direction, DisplayName: Direction, FieldType: String, DefaultValue: top, Description: Direction, List: top|right|bottom|left
@@ -28,7 +29,6 @@ Version=8.9
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
-#DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VIf, DisplayName: V-If, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: ItemKeys, DisplayName: Item Keys (;), FieldType: String, DefaultValue:  add; edit; delete, Description: Item Icons
 #DesignerProperty: Key: ItemIcons, DisplayName: Item Icons (;), FieldType: String, DefaultValue:  mdi-plus; mdi-pencil; mdi-delete, Description: Item Icons
@@ -46,7 +46,6 @@ Sub Class_Globals
 	Private mStyles As String = ""
 	Private mAttributes As String = ""
 	Public VElement As VueElement
-	Private mVShow As String = ""
 	Private mVIf As String = ""
 	Private mTextColor As String = ""
 	Private mTextColorIntensity As String = ""
@@ -65,6 +64,7 @@ Sub Class_Globals
 	Private sItemKeys As String
 	Private sItemIcons As String
 	Private sItemColors As String
+	Private sVModel As String
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -92,7 +92,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mColorIntensity = Props.Get("ColorIntensity")
 		mTextColor = Props.Get("TextColor")
 		mTextColorIntensity = Props.Get("TextColorIntensity")
-		mVShow = Props.Get("VShow")
+		sVModel = Props.Get("VModel")
 		mVIf = Props.Get("VIf")
 		bDark = Props.Get("Dark")
 		bDisabled = Props.Get("Disabled")
@@ -108,6 +108,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sItemKeys = Props.Get("ItemKeys")
 		sItemIcons = Props.Get("ItemIcons")
 		sItemColors = Props.Get("ItemColors")
+		sVModel = Props.Get("VModel")
 	End If
 	'
 	'build the data source
@@ -143,14 +144,15 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	End If
 	'add the open and close icons
 	mElement.Append($"<v-template v-slot:activator>
-        <v-btn id="${mName}button" v-model="${mName}fab" fab>
-          <v-icon v-if="${mName}fab">${sCloseIcon}</v-icon>
+    <v-btn id="${mName}button" v-model="${sVModel}" fab>
+      <v-icon v-if="${sVModel}">${sCloseIcon}</v-icon>
           <v-icon v-else>${sOpenIcon}</v-icon>
         </v-btn>
       </v-template>
 	  <v-btn id="${mName}child" v-for="item in ${ds}" :key="item.id" fab dark small :color="item.color">
         <v-icon v-html=item.icon></v-icon>
       </v-btn>"$)
+	
 	'
 	VElement.Initialize(mCallBack, mName, mName)
 	'save the data source
@@ -164,7 +166,8 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.Attributes = mAttributes	
 	VElement.GetButton.TextColor = VElement.BuildColor(mTextColor, mTextColorIntensity)
 	VElement.VIf = mVIf
-	VElement.VShow = mVShow
+	VElement.vmodel = sVModel
+	VElement.SetData(sVModel, False)
 	VElement.OpenOnHover = bOpenOnHover
 	VElement.Direction = sDirection
 	VElement.Transition = sTransition
@@ -172,8 +175,6 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.SetData($"${mName}disabled"$, bDisabled)
 	VElement.GetButton.Outlined = bOutlined
 	VElement.Absolute = bAbsolute
-	VElement.VModel = $"${mName}fab"$
-	VElement.SetData($"${mName}fab"$, False)
 	'
 	Select Case sPosition
 	Case "normal"
@@ -204,6 +205,10 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.BindAllEvents
 	VElement.GetChild.SetOnEventOwn(mCallBack, $"${mName}_click"$, "click", "item.id")
 	VElement.BindVueElement(VElement.GetChild)
+End Sub
+
+Sub Button As VueElement
+	Return VElement.GetButton
 End Sub
 
 public Sub AddToParent(targetID As String)
@@ -244,5 +249,10 @@ End Sub
 
 Sub Visible(VC As VueComponent, b As Boolean)
 	VC.SetData(mVIf, b)
-	VC.SetData(mVShow, b)
+	VC.SetData(sVModel, b)
+End Sub
+
+
+Sub getID As String
+	Return mName
 End Sub

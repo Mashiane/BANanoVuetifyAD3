@@ -166,3 +166,8 @@ End Sub
 Sub getVModel As String
 	Return sVModel
 End Sub
+
+
+Sub getID As String
+	Return mName
+End Sub

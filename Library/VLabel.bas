@@ -8,9 +8,10 @@ Version=8.9
 #Event: Click (e As BANanoEvent)
 
 #DesignerProperty: Key: Caption, DisplayName: Caption, FieldType: String, DefaultValue: , Description: Caption
-#DesignerProperty: Key: Size, DisplayName: Size, FieldType: String, DefaultValue: div, Description: Size, List: a|div|h1|h2|h3|h4|h5|h6|label|p|span|v-spacer|v-divider|v-subheader|v-main|slot|v-tabs-slider|v-expand-transition
+#DesignerProperty: Key: Size, DisplayName: Size, FieldType: String, DefaultValue: div, Description: Size, List: a|div|h1|h2|h3|h4|h5|h6|label|p|span|v-spacer|v-divider|v-subheader|v-main|slot|v-tabs-slider|router-view|router-link
 #DesignerProperty: Key: LoremIpsum, DisplayName: LoremIpsum, FieldType: Boolean, DefaultValue: false, Description: LoremIpsum
 #DesignerProperty: Key: SetName, DisplayName: SetName, FieldType: Boolean, DefaultValue: false, Description: SetName
+#DesignerProperty: Key: SetRef, DisplayName: SetRef, FieldType: Boolean, DefaultValue: false, Description: SetRef
 #DesignerProperty: Key: Vertical, DisplayName: Vertical, FieldType: Boolean, DefaultValue: false, Description: Vertical
 #DesignerProperty: Key: Inset, DisplayName: Inset, FieldType: Boolean, DefaultValue: false, Description: Inset
 #DesignerProperty: Key: VOn, DisplayName: V-On, FieldType: String, DefaultValue:  , Description: V-On
@@ -93,6 +94,7 @@ Private bInset As Boolean
 Private sVOn As String
 Private sVBind As String
 Private bSetName As Boolean
+Private bSetRef As Boolean
 	End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -151,6 +153,7 @@ bInset = Props.Get("Inset")
 sVOn = Props.Get("VOn")
 		sVBind = Props.Get("VBind")
 		bSetName = Props.Get("SetName")
+		bSetRef = Props.Get("SetRef")
 	End If
 	'
 	'build and get the element
@@ -163,6 +166,9 @@ sVOn = Props.Get("VOn")
 	VElement.Initialize(mCallBack, mName, mName)
 	If bSetName Then
 		VElement.SetAttr("name", mName)
+	End If
+	If bSetRef Then 
+		VElement.SetAttr("ref", mName)
 	End If
 	VElement.TagName = sSize
 	VElement.Classes = mClasses
@@ -236,4 +242,9 @@ Sub Visible(VC As VueComponent, b As Boolean) As VLabel
 	VC.SetData(sVIf, b)
 	VC.SetData(sVShow, b)
 	Return Me
+End Sub
+
+
+Sub getID As String
+	Return mName
 End Sub

@@ -125,3 +125,8 @@ Sub Visible(VC As VueComponent, b As Boolean) As VCardSubTitle
 	VC.SetData(mVShow, b)
 	Return Me
 End Sub
+
+
+Sub getID As String
+	Return mName
+End Sub

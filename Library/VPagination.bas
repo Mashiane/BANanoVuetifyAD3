@@ -205,3 +205,8 @@ Sub GetSelectedPage(VC As VueComponent) As Int
 	Dim res As String = VC.GetData(sVModel)
 	Return res
 End Sub
+
+
+Sub getID As String
+	Return mName
+End Sub

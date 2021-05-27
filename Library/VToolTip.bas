@@ -90,7 +90,7 @@ Private sTransition As String
 Private sVIf As String
 Private sVModel As String
 Private sZIndex As String
-private sCaption as string
+Private sCaption As String
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -249,4 +249,9 @@ Sub Visible(VC As VueComponent, b As Boolean) As VToolTip
 	VC.SetData(sVIf, b)
 	VC.SetData(sVModel, b)
 	Return Me
+End Sub
+
+
+Sub getID As String
+	Return mName
 End Sub

@@ -7,7 +7,7 @@ Version=8.9
 #IgnoreWarnings:12
 
 #DesignerProperty: Key: Absolute, DisplayName: Absolute, FieldType: Boolean, DefaultValue: false, Description: Absolute
-#DesignerProperty: Key: App, DisplayName: App, FieldType: Boolean, DefaultValue: false, Description: App
+#DesignerProperty: Key: App, DisplayName: App, FieldType: Boolean, DefaultValue: True, Description: App
 #DesignerProperty: Key: Caption, DisplayName: Caption, FieldType: String, DefaultValue: SnackBar , Description: Caption
 #DesignerProperty: Key: Centered, DisplayName: Centered, FieldType: Boolean, DefaultValue: false, Description: Centered
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue: blue , Description: Color, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
@@ -178,7 +178,7 @@ VElement.AddAttr(":top", True)
 VElement.AddAttr(":right", True)
 End Select
 
-VElement.AddAttr("rounded", sRounded)
+VElement.AddClass("rounded")
 VElement.AddAttr(":shaped", bShaped)
 VElement.AddAttr(":text", bText)
 VElement.TextColor = VElement.BuildColor(sTextColor, sTextColorIntensity)
@@ -233,4 +233,9 @@ Sub Visible(VC As VueComponent, b As Boolean) As VSnackBar
 	VC.SetData(sVIf, b)
 	VC.SetData(sVModel, b)
 	Return Me
+End Sub
+
+
+Sub getID As String
+	Return mName
 End Sub

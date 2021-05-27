@@ -9,11 +9,11 @@ Version=8.9
 #Event: ok_click (e As BANanoEvent)
 #Event: cancel_click (e As BANanoEvent)
 
+#DesignerProperty: Key: HasToolbar, DisplayName: HasToolbar, FieldType: Boolean, DefaultValue: true, Description: HasToolbar
+#DesignerProperty: Key: ToolbarCaption, DisplayName: ToolbarCaption, FieldType: String, DefaultValue: Toolbar Title, Description: ToolbarCaption
+'
 #DesignerProperty: Key: HasCardTitle, DisplayName: HasCardTitle, FieldType: Boolean, DefaultValue: true, Description: HasCardTitle
 #DesignerProperty: Key: CardTitleCaption, DisplayName: CardTitleCaption, FieldType: String, DefaultValue: Dialog Title, Description: CardTitleCaption
-'
-#DesignerProperty: Key: HasToolbar, DisplayName: HasToolbar, FieldType: Boolean, DefaultValue: false, Description: HasToolbar
-#DesignerProperty: Key: ToolbarCaption, DisplayName: ToolbarCaption, FieldType: String, DefaultValue: Dialog Toolbar, Description: ToolbarCaption
 '
 #DesignerProperty: Key: HasCardText, DisplayName: HasCardText, FieldType: Boolean, DefaultValue: true, Description: HasCardText
 #DesignerProperty: Key: CardTextCaption, DisplayName: CardTextCaption, FieldType: String, DefaultValue: Dialog Message, Description: CardTextCaption
@@ -40,6 +40,7 @@ Version=8.9
 #DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: Boolean, DefaultValue: false, Description: Disabled
 #DesignerProperty: Key: Eager, DisplayName: Eager, FieldType: Boolean, DefaultValue: false, Description: Eager
 #DesignerProperty: Key: Fullscreen, DisplayName: Fullscreen, FieldType: Boolean, DefaultValue: false, Description: Fullscreen
+#DesignerProperty: Key: FullscreenOnMobile, DisplayName: FullscreenOnMobile, FieldType: Boolean, DefaultValue: false, Description: FullscreenOnMobile
 #DesignerProperty: Key: HideOverlay, DisplayName: HideOverlay, FieldType: Boolean, DefaultValue: false, Description: HideOverlay
 #DesignerProperty: Key: InternalActivator, DisplayName: InternalActivator, FieldType: Boolean, DefaultValue: false, Description: InternalActivator
 #DesignerProperty: Key: Light, DisplayName: Light, FieldType: Boolean, DefaultValue: false, Description: Light
@@ -93,7 +94,6 @@ Private bHasCardText As Boolean
 Private bHasCardTitle As Boolean
 Private bHasDivider As Boolean
 Private bHasOk As Boolean
-Private bHasToolbar As Boolean
 Private bHideOverlay As Boolean
 Private bInternalActivator As Boolean
 Private bLight As Boolean
@@ -113,11 +113,13 @@ Private bPersistent As Boolean
 Private bRetainFocus As Boolean
 Private sReturnValue As String
 Private bScrollable As Boolean
-Private sToolbarCaption As String
 Private sTransition As String
 Private sVIf As String
 Private sVModel As String
 Private sWidth As String
+Private bHasToolbar As Boolean
+Private sToolbarCaption As String
+private bFullscreenOnMobile as boolean
 	End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -141,6 +143,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mStyles = Props.Get("Styles")
 		mAttributes = Props.Get("Attributes")
 		sActivator = Props.Get("Activator")
+		bHasToolbar = Props.Get("HasToolbar")
 sAttach = Props.Get("Attach")
 sCancelCaption = Props.Get("CancelCaption")
 sCancelColor = Props.Get("CancelColor")
@@ -159,7 +162,6 @@ bHasCardText = Props.Get("HasCardText")
 bHasCardTitle = Props.Get("HasCardTitle")
 bHasDivider = Props.Get("HasDivider")
 bHasOk = Props.Get("HasOk")
-bHasToolbar = Props.Get("HasToolbar")
 bHideOverlay = Props.Get("HideOverlay")
 bInternalActivator = Props.Get("InternalActivator")
 bLight = Props.Get("Light")
@@ -179,11 +181,12 @@ bPersistent = Props.Get("Persistent")
 bRetainFocus = Props.Get("RetainFocus")
 sReturnValue = Props.Get("ReturnValue")
 bScrollable = Props.Get("Scrollable")
-sToolbarCaption = Props.Get("ToolbarCaption")
 sTransition = Props.Get("Transition")
 sVIf = Props.Get("VIf")
 sVModel = Props.Get("VModel")
 sWidth = Props.Get("Width")
+sToolbarCaption = Props.Get("ToolbarCaption")
+bFullscreenOnMobile = Props.Get("FullscreenOnMobile")
 	End If
 	'
 	'build and get the element
@@ -199,20 +202,21 @@ sWidth = Props.Get("Width")
 	'add the card
 	VElement.Append($"<v-card id="${mName}card"></v-card>"$)
 	'
+	If bHasToolbar Then
+		VElement.GetCard.Append($"<v-toolbar id="${mName}toolbar" flat></v-toolbar>"$)
+		VElement.GetToolBar(mName).Append($"<v-toolbar-title id="${mName}toolbartitle">${sToolbarCaption}</v-toolbar-title>"$)
+	End If	
 	If bHasCardTitle Then
 		VElement.GetCard.Append($"<v-card-title id="${mName}cardtitle">${sCardTitleCaption}</v-card-title>"$)
 	End If
-	If bHasToolbar Then
-		VElement.GetCard.Append($"<v-toolbar id="${mName}toolbar">${sToolbarCaption}</v-toolbar>"$)
-	End If
 	If bHasDivider Then
-		VElement.GetCard.Append($"<v-divider id="${mName}divider1"></v-divider>"$)
+		VElement.GetCard.Append($"<v-divider id="${mName}divider1" class="mx-2"></v-divider>"$)
 	End If
 	If bHasCardText Then
 		VElement.GetCard.Append($"<v-card-text id="${mName}cardtext">${sCardTextCaption}</v-card-text>"$)
 	End If
 	If bHasDivider Then
-		VElement.GetCard.Append($"<v-divider id="${mName}divider2"></v-divider>"$)
+		VElement.GetCard.Append($"<v-divider id="${mName}divider2" class="mx-2"></v-divider>"$)
 	End If
 	If bHasCardActions Then
 		VElement.GetCard.Append($"<v-card-actions id="${mName}cardactions" inset></v-card-actions>"$)
@@ -258,6 +262,7 @@ VElement.AddAttr("transition", sTransition)
 VElement.AddAttr("v-if", sVIf)
 VElement.AddAttr("v-model", sVModel)
 VElement.AddAttr("width", sWidth)
+VElement.FullScreenOnMobile = bFullscreenOnMobile
 VElement.SetData(sVModel, False)
 VElement.BindAllEvents
 
@@ -351,4 +356,9 @@ End Sub
 
 Sub getVModel As String
 	Return sVModel
+End Sub
+
+
+Sub getID As String
+	Return mName
 End Sub

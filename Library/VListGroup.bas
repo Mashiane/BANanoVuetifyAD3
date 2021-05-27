@@ -155,3 +155,8 @@ End Sub
 Sub Collapse(VC As VueComponent, b As Boolean)
 	VC.SetData(sVModel, b)
 End Sub
+
+
+Sub getID As String
+	Return mName
+End Sub

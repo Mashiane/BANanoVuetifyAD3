@@ -263,3 +263,8 @@ Sub RemoveAttr(p As String) As VChip
 	VElement.RemoveAttr(p)
 	Return Me
 End Sub
+
+
+Sub getID As String
+	Return mName
+End Sub

@@ -8,8 +8,10 @@ Version=8.9
 #Event: Input (b As Boolean)
 #Event: TransitionEnd(obj As Map)
 
+#DesignerProperty: Key: App, DisplayName: App, FieldType: Boolean, DefaultValue: True, Description: App
+#DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: drawer1, Description: VModel
 #DesignerProperty: Key: Absolute, DisplayName: Absolute, FieldType: Boolean, DefaultValue: false, Description: Absolute
-#DesignerProperty: Key: App, DisplayName: App, FieldType: Boolean, DefaultValue: false, Description: App
+#DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: , Description: Width
 #DesignerProperty: Key: Bottom, DisplayName: Bottom, FieldType: Boolean, DefaultValue: false, Description: Bottom
 #DesignerProperty: Key: Clipped, DisplayName: Clipped, FieldType: Boolean, DefaultValue: false, Description: Clipped
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue: , Description: Color, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
@@ -36,8 +38,7 @@ Version=8.9
 #DesignerProperty: Key: Temporary, DisplayName: Temporary, FieldType: Boolean, DefaultValue: false, Description: Temporary
 #DesignerProperty: Key: Touchless, DisplayName: Touchless, FieldType: Boolean, DefaultValue: false, Description: Touchless
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
-#DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: drawer1, Description: VModel
-#DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: , Description: Width
+
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
@@ -221,4 +222,13 @@ Sub Visible(VC As VueComponent, b As Boolean) As VNavigationDrawer
 	VC.SetData(sVIf, b)
 	VC.SetData(sVModel, b)
 	Return Me
+End Sub
+
+Sub getVModel As String
+	Return sVModel
+End Sub
+
+
+Sub getID As String
+	Return mName
 End Sub

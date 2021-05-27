@@ -216,7 +216,7 @@ VElement.Left = True
 Case "right"
 VElement.Right = True
 End Select
-VElement.AddAttr("rounded", sRounded)
+VElement.AddClass(sRounded)
 VElement.Size = sSize
 VElement.Tile = bTile
 VElement.Width = sWidth
@@ -278,4 +278,9 @@ End Sub
 Sub Visible(VC As VueComponent, b As Boolean)
 	VC.SetData(mVIf, b)
 	VC.SetData(mVShow, b)
+End Sub
+
+
+Sub getID As String
+	Return mName
 End Sub

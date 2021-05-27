@@ -206,3 +206,8 @@ End Sub
 Sub Update(VC As VueComponent, num As Int)
 	VC.SetData(sVModel, num)
 End Sub
+
+
+Sub getID As String
+	Return mName
+End Sub

@@ -308,10 +308,10 @@ Sub Class_Globals
 	Private stPaddingAXYTBLR As String = "a=?; x=?; y=?; t=?; b=?; l=?; r=?"
 	Private stMarginAXYTBLR As String = "a=?; x=?; y=?; t=?; b=?; l=?; r=?"
 	Private bFluid As Boolean = False
-	Private bBuildGrid As Boolean = False
+	Public bBuildGrid As Boolean = False
 	Private bShowGridDesign As Boolean = False
-	Private stRows As String = ""
-	Private stColumns As String = ""
+	Public stRows As String = ""
+	Public stColumns As String = ""
 	Private stStyleHeight As String = ""
 	Private stStyleWidth As String = ""
 	Private stStyleMaxHeight As String = ""
@@ -422,7 +422,7 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	xAttributes.Initialize
 	xStyles.Initialize
 	sbText.Initialize 
-	Here = $"#${mname}"$
+	Here = $"#${mName}"$
 End Sub
 
 'set the master html for the app
@@ -2092,6 +2092,7 @@ public Sub AddClassOnCondition(varClass As String, varCondition As Boolean, varS
 	If BANano.IsUndefined(varShouldBe) Or BANano.IsNull(varShouldBe) Then Return
 	If varShouldBe <> varCondition Then Return
 	If BANano.IsNumber(varClass) Then varClass = BANanoShared.CStr(varClass)
+	If varClass = "none" Then Return
 	AddClass(varClass)
 End Sub
 
@@ -7833,6 +7834,7 @@ Sub BindAllEvents
 	SetOnEvent(mCallBack, "click:close", "")
 	SetOnEvent(mCallBack, "update:active", "")
 	SetOnEvent(mCallBack, "update:open", "")
+	SetOnEvent(mCallBack, "update:error", "")
 	SetOnEvent(mCallBack, "focus", "")
 	SetOnEvent(mCallBack, "input", "")
 	SetOnEvent(mCallBack, "keydown", "")
@@ -7848,6 +7850,7 @@ Sub BindAllEvents
 	SetOnEvent(mCallBack, "keydown.right.prevent", "")
 	SetOnEvent(mCallBack, "keydown.space.prevent", "")
 	SetOnEvent(mCallBack, "keyup.enter", "")
+	SetOnEvent(mCallBack, "keyup.enter.prevent", "")
 	SetOnEvent(mCallBack, "keyup.esc", "")
 	SetOnEvent(mCallBack, "touchstart.stop", "")
 	SetOnEvent(mCallBack, "click:event", "")

@@ -174,7 +174,7 @@ VElement.MinWidth = sMinWidth
 VElement.Mode = sMode
 VElement.Outlined = bOutlined
 VElement.Prominent = bProminent
-VElement.AddAttr("rounded", sRounded)
+VElement.AddClass(sRounded)
 VElement.Shaped = bShaped
 VElement.AddAttr(":text", bText)
 VElement.TextColor = sTextColor
@@ -227,4 +227,9 @@ Sub Visible(VC As VueComponent, b As Boolean) As VAlert
 	VC.SetData(mVIf, b)
 	VC.SetData(sValue, b)
 	Return Me
+End Sub
+
+
+Sub getID As String
+	Return mName
 End Sub

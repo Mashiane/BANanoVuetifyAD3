@@ -124,3 +124,7 @@ Sub RemoveAttr(p As String) As VAppBarNavIcon
 	Return Me
 End Sub
 
+
+Sub getID As String
+	Return mName
+End Sub

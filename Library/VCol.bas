@@ -249,3 +249,8 @@ Sub Visible(VC As VueComponent, b As Boolean)
 	VC.SetData(mVShow, b)
 	VC.SetData(mVIf, b)
 End Sub
+
+
+Sub getID As String
+	Return mName
+End Sub

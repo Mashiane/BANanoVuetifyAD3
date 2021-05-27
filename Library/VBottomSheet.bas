@@ -222,3 +222,8 @@ Sub Disabled(VC As VueComponent, b As Boolean) As VBottomSheet
 	VC.SetData(sDisabled, b)
 	Return Me
 End Sub
+
+
+Sub getID As String
+	Return mName
+End Sub

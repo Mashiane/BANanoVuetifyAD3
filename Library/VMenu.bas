@@ -243,7 +243,7 @@ End Select
 VElement.AddAttr("position-x", sPositionX)
 VElement.AddAttr("position-y", sPositionY)
 VElement.AddAttr("return-value", sReturnValue)
-VElement.AddAttr("rounded", sRounded)
+VElement.AddClass(sRounded)
 VElement.AddAttr(":tile", bTile)
 VElement.AddAttr("transition", sTransition)
 VElement.AddAttr("v-bind", sVBind)
@@ -296,4 +296,9 @@ Sub Visible(VC As VueComponent, b As Boolean) As VMenu
 	VC.SetData(sVIf, b)
 	VC.SetData(sVShow, b)
 	Return Me
+End Sub
+
+
+Sub getID As String
+	Return mName
 End Sub

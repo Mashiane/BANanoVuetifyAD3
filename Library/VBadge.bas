@@ -188,3 +188,8 @@ End Sub
 Sub Decrement(VC As VueComponent, b As Boolean)
 	VC.Decrement(sContent)
 End Sub
+
+
+Sub getID As String
+	Return mName
+End Sub

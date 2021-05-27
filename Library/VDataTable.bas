@@ -373,3 +373,8 @@ Sub Clear(VC As VueComponent)
 	VC.SetData(sValue, xitems)
 	VC.SetData(sLoading, False)
 End Sub
+
+
+Sub getID As String
+	Return mName
+End Sub

@@ -163,7 +163,7 @@ VElement.MinHeight = sMinHeight
 VElement.MinWidth = sMinWidth
 VElement.Outlined = bOutlined
 VElement.Prominent = bProminent
-VElement.AddAttr("rounded", sRounded)
+VElement.AddClass(sRounded)
 VElement.Shaped = bShaped
 VElement.AddAttr(":short", bShort)
 VElement.Src = sSrc
@@ -208,4 +208,9 @@ Sub Visible(VC As VueComponent, b As Boolean) As VToolBar
 	VC.SetData(sVIf, b)
 	VC.SetData(sVShow, b)
 	Return Me
+End Sub
+
+
+Sub getID As String
+	Return mName
 End Sub

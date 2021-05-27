@@ -132,7 +132,7 @@ VElement.AddAttr("max-width", sMaxWidth)
 VElement.AddAttr("min-height", sMinHeight)
 VElement.AddAttr("min-width", sMinWidth)
 VElement.AddAttr("outlined", bOutlined)
-VElement.AddAttr("rounded", sRounded)
+VElement.AddClass(sRounded)
 VElement.AddAttr("shaped", bShaped)
 VElement.TextColor = VElement.BuildColor(sTextColor, sTextColorIntensity)
 VElement.AddAttr("tile", bTile)
@@ -177,4 +177,9 @@ Sub Visible(VC As VueComponent, b As Boolean) As VSheet
 	VC.SetData(sVIf, b)
 	VC.SetData(sVShow, b)
 	Return Me
+End Sub
+
+
+Sub getID As String
+	Return mName
 End Sub

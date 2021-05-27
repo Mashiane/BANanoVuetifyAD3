@@ -5,10 +5,19 @@ Type=Class
 Version=8.9
 @EndOfDesignText@
 #IgnoreWarnings:12
-#DesignerProperty: Key: Size, DisplayName: Transition, FieldType: String, DefaultValue: , Description: Transition, List: v-fade-transition|v-expand-transition|v-scale-transition|v-scroll-x-transition|v-scroll-x-reverse-transition|v-scroll-y-transition|v-scroll-y-reverse-transition|v-slide-x-transition|v-slide-x-reverse-transition|v-slide-y-transition|v-slide-y-reverse-transition
+
+#DesignerProperty: Key: Size, DisplayName: Transition, FieldType: String, DefaultValue: v-slide-x-transition, Description: Transition, List: v-fab-transition|v-fade-transition|v-expand-transition|v-scale-transition|v-scroll-x-transition|v-scroll-x-reverse-transition|v-scroll-y-transition|v-scroll-y-reverse-transition|v-slide-x-transition|v-slide-x-reverse-transition|v-slide-y-transition|v-slide-y-reverse-transition|transition|transition-group
+#DesignerProperty: Key: TransitionName, DisplayName: Transition Name, FieldType: String, DefaultValue: , Description: Transition Name
+#DesignerProperty: Key: Appear, DisplayName: Appear, FieldType: Boolean, DefaultValue: false, Description: Appear
+#DesignerProperty: Key: Group, DisplayName: Group, FieldType: Boolean, DefaultValue: false, Description: Group
+#DesignerProperty: Key: HideOnLeave, DisplayName: HideOnLeave, FieldType: Boolean, DefaultValue: false, Description: HideOnLeave
+#DesignerProperty: Key: LeaveAbsolute, DisplayName: LeaveAbsolute, FieldType: Boolean, DefaultValue: false, Description: LeaveAbsolute
+#DesignerProperty: Key: Mode, DisplayName: Mode, FieldType: String, DefaultValue: , Description: Mode, List: in-out|none|out-in
+#DesignerProperty: Key: Origin, DisplayName: Origin, FieldType: String, DefaultValue: , Description: Origin
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
+
 Sub Class_Globals
     Private BANano As BANano 'ignore
 	Private mName As String 'ignore
@@ -21,6 +30,13 @@ Sub Class_Globals
 	Private mAttributes As String = ""
 	Public VElement As VueElement
 	Private sSize As String = ""
+	Private sTransitionName As String
+	Private bAppear As Boolean
+Private bGroup As Boolean
+Private bHideOnLeave As Boolean
+Private bLeaveAbsolute As Boolean
+Private sMode As String
+Private sOrigin As String
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -43,8 +59,16 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mClasses = Props.Get("Classes")
 		mStyles = Props.Get("Styles")
 		mAttributes = Props.Get("Attributes")
+		sTransitionName = Props.Get("TransitionName")
+		bAppear = Props.Get("Appear")
+bGroup = Props.Get("Group")
+bHideOnLeave = Props.Get("HideOnLeave")
+bLeaveAbsolute = Props.Get("LeaveAbsolute")
+sMode = Props.Get("Mode")
+sOrigin = Props.Get("Origin")
+sSize = Props.Get("Size")
 	End If
-	'
+	
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
 		mElement = BANano.GetElement($"#${mName}"$)
@@ -57,6 +81,13 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.Classes = mClasses
 	VElement.Styles = mStyles
 	VElement.Attributes = mAttributes
+	VElement.AddAttr(":appear", bAppear)
+	VElement.AddAttr(":group", bGroup)
+	VElement.AddAttr(":hide-on-leave", bHideOnLeave)
+	VElement.AddAttr(":leave-absolute", bLeaveAbsolute)
+	VElement.AddAttr("mode", sMode)
+	VElement.AddAttr("origin", sOrigin)
+	VElement.AddAttr("name", sTransitionName)
 End Sub
 
 public Sub AddToParent(targetID As String)
@@ -95,3 +126,6 @@ Sub RemoveAttr(p As String) As VTransition
 	Return Me
 End Sub
 
+Sub getID As String
+	Return mName
+End Sub

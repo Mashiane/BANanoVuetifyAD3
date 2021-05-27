@@ -326,3 +326,8 @@ private Sub FileIcon(ext As String) As String
 		Return ext
 	End If
 End Sub
+
+
+Sub getID As String
+	Return mName
+End Sub

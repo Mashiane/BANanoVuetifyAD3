@@ -186,3 +186,8 @@ Sub Visible(VC As VueComponent, b As Boolean) As VListSlot
 	VC.SetData(sVShow, b)
 	Return Me
 End Sub
+
+
+Sub getID As String
+	Return mName
+End Sub

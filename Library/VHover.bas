@@ -145,3 +145,8 @@ Sub Visible(VC As VueComponent, b As Boolean) As VHover
 	VC.SetData(sVModel, b)
 	Return Me
 End Sub
+
+
+Sub getID As String
+	Return mName
+End Sub

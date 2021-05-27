@@ -221,3 +221,8 @@ Sub GetRating(VC As VueComponent) As Int
 	Dim res As Int = VC.GetData(sVModel)
 	Return res
 End Sub
+
+
+Sub getID As String
+	Return mName
+End Sub

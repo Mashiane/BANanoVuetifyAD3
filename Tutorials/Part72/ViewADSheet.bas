@@ -13,6 +13,11 @@ Sub Process_Globals
 	Private banano As BANano
 	Private cardsr1 As VRow
 	Private VCard3 As VCard
+	Private VSheet1 As VSheet
+	Private VSheet2 As VSheet
+	Private VSheet3 As VSheet
+	Private VSheet4 As VSheet
+	Private VSheet5 As VSheet
 End Sub
 
 Sub Initialize
@@ -23,6 +28,9 @@ Sub Initialize
 	path = about.path
 	
 	banano.LoadLayout(about.Here, "mysheets")
+	
+	Log(VSheet2.VElement.ToString)
+	
 	'add the component as a router
 	vuetify.AddRoute(about) 
 End Sub

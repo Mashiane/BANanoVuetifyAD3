@@ -160,3 +160,8 @@ End Sub
 Sub Refresh(VC As VueComponent)
 	VC.SetData(sItems, xitems)
 End Sub
+
+
+Sub getID As String
+	Return mName
+End Sub

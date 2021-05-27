@@ -286,7 +286,7 @@ sPY = Props.Get("PY")
 	End If
 	'
 	If bDivider Then
-		VElement.Append($"<v-divider id="${mName}divider"></v-divider>"$)
+		VElement.Append($"<v-divider id="${mName}divider" class="mx-2"></v-divider>"$)
 	End If
 	'
 	If bActions Then
@@ -315,7 +315,7 @@ VElement.MinHeight = sMinHeight
 VElement.MinWidth = sMinWidth
 VElement.Outlined = bOutlined
 VElement.Raised = bRaised
-VElement.AddAttr("rounded", sRounded)
+VElement.AddClass(sRounded)
 VElement.Shaped = bShaped
 VElement.Target = sTarget
 VElement.TextColor = VElement.BuildColor(sTextcolor, sTextcolorintensity)
@@ -411,4 +411,9 @@ End Sub
 
 Sub CardImage As VueElement
 	Return VElement.GetImage
+End Sub
+
+
+Sub getID As String
+	Return mName
 End Sub

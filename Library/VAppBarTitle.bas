@@ -124,3 +124,8 @@ Sub RemoveAttr(p As String) As VAppBarTitle
 	VElement.RemoveAttr(p)
 	Return Me
 End Sub
+
+
+Sub getID As String
+	Return mName
+End Sub

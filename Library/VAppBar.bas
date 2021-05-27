@@ -7,7 +7,7 @@ Version=8.9
 #IgnoreWarnings:12
 
 #DesignerProperty: Key: Absolute, DisplayName: Absolute, FieldType: Boolean, DefaultValue: false, Description: Absolute
-#DesignerProperty: Key: App, DisplayName: App, FieldType: Boolean, DefaultValue: false, Description: App
+#DesignerProperty: Key: App, DisplayName: App, FieldType: Boolean, DefaultValue: True, Description: App
 #DesignerProperty: Key: Bottom, DisplayName: Bottom, FieldType: Boolean, DefaultValue: false, Description: Bottom
 #DesignerProperty: Key: ClippedLeft, DisplayName: ClippedLeft, FieldType: Boolean, DefaultValue: false, Description: ClippedLeft
 #DesignerProperty: Key: ClippedRight, DisplayName: ClippedRight, FieldType: Boolean, DefaultValue: false, Description: ClippedRight
@@ -213,7 +213,7 @@ VElement.MinHeight = sMinHeight
 VElement.MinWidth = sMinWidth
 VElement.Outlined = bOutlined
 VElement.Prominent = bProminent
-VElement.AddAttr("rounded", sRounded)
+VElement.AddClass(sRounded)
 VElement.AddAttr(":scroll-off-screen", bScrollOffScreen)
 VElement.ScrollTarget = sScrollTarget
 VElement.ScrollThreshold = sScrollThreshold
@@ -271,4 +271,9 @@ Sub Visible(VC As VueComponent, b As Boolean) As VAppBar
 	VC.SetData(sVIf, b)
 	VC.SetData(sValue, b)
 	Return Me
+End Sub
+
+
+Sub getID As String
+	Return mName
 End Sub

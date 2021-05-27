@@ -11,14 +11,14 @@ Version=8.9
 #DesignerProperty: Key: AutoID, DisplayName: Auto ID/Name, FieldType: Boolean, DefaultValue: False, Description: Overrides the ID/Name with a random string.
 #DesignerProperty: Key: IconName, DisplayName: Icon Name, FieldType: String, DefaultValue: , Description: Icon Name
 #DesignerProperty: Key: IconDark, DisplayName: Icon Dark, FieldType: Boolean, DefaultValue: False, Description: Icon Dark
-#DesignerProperty: Key: Size, DisplayName: Size, FieldType: String, DefaultValue: normal, Description: Size, List: x-small|small|normal|large|x-large
+#DesignerProperty: Key: Size, DisplayName: Size, FieldType: String, DefaultValue: large, Description: Size, List: x-small|small|normal|large|x-large
+#DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: true, Description: Dark
 #DesignerProperty: Key: Absolute, DisplayName: Absolute, FieldType: Boolean, DefaultValue: False, Description: Absolute
 #DesignerProperty: Key: Position, DisplayName: Position, FieldType: String, DefaultValue: , Description: Position, List: normal|top-left|top-right|bottom-left|bottom-right
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue:  , Description: , List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: ColorIntensity, DisplayName: Color Intensity, FieldType: String, DefaultValue:  normal, Description: , List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: TextColor, DisplayName: Text Color, FieldType: String, DefaultValue:  , Description: , List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: TextColorIntensity, DisplayName: Text Color Intensity, FieldType: String, DefaultValue:  normal, Description: , List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
-#DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: False, Description: Dark
 #DesignerProperty: Key: Depressed, DisplayName: Depressed, FieldType: Boolean, DefaultValue: False, Description: Depressed
 #DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: Boolean, DefaultValue: False, Description: Disabled
 #DesignerProperty: Key: HREF, DisplayName: HREF, FieldType: String, DefaultValue: , Description: HREF
@@ -110,7 +110,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	If BANano.Exists($"#${mName}"$) Then
 		mElement = BANano.GetElement($"#${mName}"$)
 	Else	
-		mElement = mTarget.Append($"<v-btn id="${mName}"></v-btn>"$).Get("#" & mName)
+		mElement = mTarget.Append($"<v-fab-transition><v-btn id="${mName}"></v-btn></v-fab-transition>"$).Get("#" & mName)
 	End If
 		
 	VElement.Initialize(mCallBack, mName, mName)
@@ -213,4 +213,9 @@ End Sub
 Sub Visible(VC As VueComponent, b As Boolean)
 	VC.SetData(mVIf, b)
 	VC.SetData(mVShow, b)
+End Sub
+
+
+Sub getID As String
+	Return mName
 End Sub

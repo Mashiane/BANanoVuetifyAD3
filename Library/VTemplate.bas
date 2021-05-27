@@ -6,7 +6,7 @@ Version=8.9
 @EndOfDesignText@
 #IgnoreWarnings:12
 
-#DesignerProperty: Key: Slot, DisplayName: Slot, FieldType: String, DefaultValue: , Description: Slot, List: none|v-slot:append|v-slot:prepend|v-slot:activator-on-attrs|v-slot:activator-on|v-slot:progress|v-slot:extension|v-slot:default-hover|v-slot:placeholder
+#DesignerProperty: Key: Slot, DisplayName: Slot, FieldType: String, DefaultValue: , Description: Slot, List: none|v-slot:append|v-slot:prepend|v-slot:activator-on-attrs|v-slot:activator-on|v-slot:progress|v-slot:extension|v-slot:default-hover|v-slot:placeholder|v-slot-active-toggle
 #DesignerProperty: Key: VFor, DisplayName: VFor, FieldType: String, DefaultValue: , Description: VFor
 #DesignerProperty: Key: Key, DisplayName: Key, FieldType: String, DefaultValue: , Description: Key
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue: , Description: Color, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
@@ -110,7 +110,7 @@ sTextColorIntensity = Props.Get("TextColorIntensity")
 sVIf = Props.Get("VIf")
 sVShow = Props.Get("VShow")
 sKey = Props.Get("Key")
-svfor = Props.Get("VFor")
+sVFor = Props.Get("VFor")
 	End If
 	
 	If BANano.IsNull(sSlot) Or BANano.IsUndefined(sSlot) Then sSlot = ""
@@ -122,6 +122,8 @@ svfor = Props.Get("VFor")
 		sSlot = $"v-slot:activator="{ on }""$
 	Case "v-slot:default-hover"
 		sSlot = $"v-slot:default="{ hover }""$
+	Case "v-slot-active-toggle"
+		sSlot = $"v-slot:"{ active, toggle }""$
 	End Select
 	'
 	'build and get the element
@@ -200,4 +202,9 @@ Sub Visible(VC As VueComponent, b As Boolean) As VTemplate
 	VC.SetData(sVIf, b)
 	VC.SetData(sVShow, b)
 	Return Me
+End Sub
+
+
+Sub getID As String
+	Return mName
 End Sub

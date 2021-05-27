@@ -7,7 +7,7 @@ Version=8.9
 #IgnoreWarnings:12
 
 #DesignerProperty: Key: Absolute, DisplayName: Absolute, FieldType: Boolean, DefaultValue: false, Description: Absolute
-#DesignerProperty: Key: App, DisplayName: App, FieldType: Boolean, DefaultValue: False, Description: App
+#DesignerProperty: Key: App, DisplayName: App, FieldType: Boolean, DefaultValue: True, Description: App
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue: , Description: Color, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: ColorIntensity, DisplayName: ColorIntensity, FieldType: String, DefaultValue: , Description: ColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: false, Description: Dark
@@ -133,7 +133,7 @@ VElement.AddAttr("max-width", sMaxWidth)
 VElement.AddAttr("min-height", sMinHeight)
 VElement.AddAttr(":outlined", bOutlined)
 VElement.AddAttr(":padless", bPadless)
-VElement.AddAttr("rounded", sRounded)
+VElement.AddClass(sRounded)
 VElement.AddAttr(":shaped", bShaped)
 VElement.AddAttr(":tile", bTile)
 VElement.AddAttr("v-if", sVIf)
@@ -182,4 +182,9 @@ Sub Visible(VC As VueComponent, b As Boolean) As VFooter
 	VC.SetData(sVIf, b)
 	VC.SetData(sVShow, b)
 	Return Me
+End Sub
+
+
+Sub getID As String
+	Return mName
 End Sub
