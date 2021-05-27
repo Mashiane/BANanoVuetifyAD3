@@ -40,22 +40,41 @@ Sub Class_Globals
 	Public const HALIGN_BOTTOM As String = "bottom"
 	'
 	Public const PAGE_A0 As String = "a0"
-	Public const PAGE_A2 As String = "a2"
+	Public const PAGE_A1 As String = "a1"
+	Public const PAGE_A2 As String = "a2"	
+	Public const PAGE_A3 As String = "a3"
 	Public const PAGE_A4 As String = "a4"
+	Public const PAGE_A5 As String = "a5"	
 	Public const PAGE_A6 As String = "a6"
+	Public const PAGE_A7 As String = "a7"	
 	Public const PAGE_A8 As String = "a8"
+	Public const PAGE_A9 As String = "a9"	
 	Public const PAGE_A10 As String = "a10"
+	'
+	Public const PAGE_B0 As String = "b0"
 	Public const PAGE_B1 As String = "b1"
+	Public const PAGE_B2 As String = "b2"
 	Public const PAGE_B3 As String = "b3"
+	Public const PAGE_B4 As String = "b4"	
 	Public const PAGE_B5 As String = "b5"
+	Public const PAGE_B6 As String = "b6"	
 	Public const PAGE_B7 As String = "b7"
+	Public const PAGE_B8 As String = "b8"	
 	Public const PAGE_B9 As String = "b9"
+	Public const PAGE_B10 As String = "b10"
+	
 	Public const PAGE_C0 As String = "c0"
+	Public const PAGE_C1 As String = "c1"
 	Public const PAGE_C2 As String = "c2"
+	Public const PAGE_C3 As String = "c3"	
 	Public const PAGE_C4 As String = "c4"
+	Public const PAGE_C5 As String = "c5"	
 	Public const PAGE_C6 As String = "c6"
+	Public const PAGE_C7 As String = "c7"	
 	Public const PAGE_C8 As String = "c8"
+	Public const PAGE_C9 As String = "c9"	
 	Public const PAGE_C10 As String = "c10"
+	Public const PAGE_DL As String = "dl"	
 	Public const PAGE_LETTER As String = "letter"
 	Public const PAGE_GOVERNMENT_LETTER As String = "government-letter"
 	Public const PAGE_LEGAL As String = "legal"
@@ -63,9 +82,11 @@ Sub Class_Globals
 	Public const PAGE_LEDGER As String = "ledger"
 	Public const PAGE_TABLOID As String = "tabloid"
 	Public const PAGE_CREDIT_CARD As String = "credit-card"	
+	'
 	Public const UNIT_MM As String = "mm"
 	Public const UNIT_PT As String = "pt"
-	
+	Public const UNIT_IN As String = "in"
+		
 	Private mOrientation As String
 	Private mUnits As String
 	Private encryption As Map

@@ -8,8 +8,9 @@ Version=8.9
 #Event: Click (e As BANanoEvent)
 
 #DesignerProperty: Key: Caption, DisplayName: Caption, FieldType: String, DefaultValue: , Description: Caption
-#DesignerProperty: Key: Size, DisplayName: Size, FieldType: String, DefaultValue: div, Description: Size, List: a|div|h1|h2|h3|h4|h5|h6|label|p|span|v-spacer|v-divider|v-subheader|v-main
+#DesignerProperty: Key: Size, DisplayName: Size, FieldType: String, DefaultValue: div, Description: Size, List: a|div|h1|h2|h3|h4|h5|h6|label|p|span|v-spacer|v-divider|v-subheader|v-main|slot|v-tabs-slider|v-expand-transition
 #DesignerProperty: Key: LoremIpsum, DisplayName: LoremIpsum, FieldType: Boolean, DefaultValue: false, Description: LoremIpsum
+#DesignerProperty: Key: SetName, DisplayName: SetName, FieldType: Boolean, DefaultValue: false, Description: SetName
 #DesignerProperty: Key: Vertical, DisplayName: Vertical, FieldType: Boolean, DefaultValue: false, Description: Vertical
 #DesignerProperty: Key: Inset, DisplayName: Inset, FieldType: Boolean, DefaultValue: false, Description: Inset
 #DesignerProperty: Key: VOn, DisplayName: V-On, FieldType: String, DefaultValue:  , Description: V-On
@@ -90,7 +91,8 @@ Private sVShow As String
 Private bVertical As Boolean
 Private bInset As Boolean
 Private sVOn As String
-private sVBind as string
+Private sVBind As String
+Private bSetName As Boolean
 	End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -148,6 +150,7 @@ bVertical = Props.Get("Vertical")
 bInset = Props.Get("Inset")
 sVOn = Props.Get("VOn")
 		sVBind = Props.Get("VBind")
+		bSetName = Props.Get("SetName")
 	End If
 	'
 	'build and get the element
@@ -158,6 +161,9 @@ sVOn = Props.Get("VOn")
 	End If
 	'
 	VElement.Initialize(mCallBack, mName, mName)
+	If bSetName Then
+		VElement.SetAttr("name", mName)
+	End If
 	VElement.TagName = sSize
 	VElement.Classes = mClasses
 	VElement.Styles = mStyles

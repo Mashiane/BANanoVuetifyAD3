@@ -8,9 +8,11 @@ Version=8.9
 
 #DesignerProperty: Key: Text, DisplayName: Caption, FieldType: String, DefaultValue: Button , Description: Text
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue: , Description: Color, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
-#DesignerProperty: Key: Colorintensity, DisplayName: Colorintensity, FieldType: String, DefaultValue: , Description: Colorintensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
-#DesignerProperty: Key: Textcolor, DisplayName: Textcolor, FieldType: String, DefaultValue: , Description: Textcolor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
-#DesignerProperty: Key: Textcolorintensity, DisplayName: Textcolorintensity, FieldType: String, DefaultValue: , Description: Textcolorintensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
+#DesignerProperty: Key: ColorIntensity, DisplayName: Colorintensity, FieldType: String, DefaultValue: , Description: Colorintensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
+#DesignerProperty: Key: TextColor, DisplayName: Textcolor, FieldType: String, DefaultValue: , Description: Textcolor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
+#DesignerProperty: Key: TextColorIntensity, DisplayName: Textcolorintensity, FieldType: String, DefaultValue: , Description: Textcolorintensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
+#DesignerProperty: Key: Align, DisplayName: Align, FieldType: String, DefaultValue: , Description: Align, List: normal|start|center|end|baseline|stretch
+#DesignerProperty: Key: Justify, DisplayName: Justify, FieldType: String, DefaultValue: , Description: Justify, List: normal|start|center|end|space-between|space-around
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
 #DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue: , Description: VShow
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
@@ -34,7 +36,10 @@ Private sColorintensity As String
 Private sTextcolor As String
 Private sTextcolorintensity As String
 Private sText As String
+Private mAlign As String = ""
+	Private mJustify As String = ""
 	End Sub
+	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	mName = Name.tolowercase
 	mEventName = EventName.ToLowerCase
@@ -57,10 +62,12 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mVShow = Props.Get("VShow")
 		mVIf = Props.Get("VIf")
 		sColor = Props.Get("Color")
-sColorintensity = Props.Get("Colorintensity")
-sTextcolor = Props.Get("Textcolor")
-sTextcolorintensity = Props.Get("Textcolorintensity")
+sColorintensity = Props.Get("ColorIntensity")
+sTextcolor = Props.Get("TextColor")
+sTextcolorintensity = Props.Get("TextColorIntensity")
 sText = Props.Get("Text")
+mAlign = Props.Get("Align")
+		mJustify = Props.Get("Justify")
 	End If
 	'
 	'build and get the element
@@ -80,6 +87,8 @@ sText = Props.Get("Text")
 	VElement.Color = VElement.BuildColor(sColor, sColorintensity)
 VElement.TextColor = VElement.BuildColor(sTextcolor, sTextcolorintensity)
 VElement.Caption = sText
+VElement.setAlign(mAlign)	
+	VElement.setJustify(mJustify)
 VElement.BindAllEvents
 End Sub
 public Sub AddToParent(targetID As String)

@@ -6,7 +6,9 @@ Version=8.9
 @EndOfDesignText@
 #IgnoreWarnings:12
 
-#DesignerProperty: Key: Slot, DisplayName: Slot, FieldType: String, DefaultValue: , Description: Slot, List: none|v-slot:append|v-slot:prepend|v-slot:activator-on-attrs
+#DesignerProperty: Key: Slot, DisplayName: Slot, FieldType: String, DefaultValue: , Description: Slot, List: none|v-slot:append|v-slot:prepend|v-slot:activator-on-attrs|v-slot:activator-on|v-slot:progress|v-slot:extension|v-slot:default-hover|v-slot:placeholder
+#DesignerProperty: Key: VFor, DisplayName: VFor, FieldType: String, DefaultValue: , Description: VFor
+#DesignerProperty: Key: Key, DisplayName: Key, FieldType: String, DefaultValue: , Description: Key
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue: , Description: Color, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: ColorIntensity, DisplayName: ColorIntensity, FieldType: String, DefaultValue: , Description: ColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: TextColor, DisplayName: TextColor, FieldType: String, DefaultValue: , Description: TextColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
@@ -62,6 +64,8 @@ Private sTextColor As String
 Private sTextColorIntensity As String
 Private sVIf As String
 Private sVShow As String
+Private sKey As String
+private sVFor as string
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -105,6 +109,8 @@ sTextColor = Props.Get("TextColor")
 sTextColorIntensity = Props.Get("TextColorIntensity")
 sVIf = Props.Get("VIf")
 sVShow = Props.Get("VShow")
+sKey = Props.Get("Key")
+svfor = Props.Get("VFor")
 	End If
 	
 	If BANano.IsNull(sSlot) Or BANano.IsUndefined(sSlot) Then sSlot = ""
@@ -112,6 +118,10 @@ sVShow = Props.Get("VShow")
 	Select Case sSlot
 	Case "v-slot:activator-on-attrs"
 		sSlot = $"v-slot:activator="{ on, attrs }""$	
+	Case "v-slot:activator-on"
+		sSlot = $"v-slot:activator="{ on }""$
+	Case "v-slot:default-hover"
+		sSlot = $"v-slot:default="{ hover }""$
 	End Select
 	'
 	'build and get the element
@@ -145,6 +155,8 @@ VElement.TextColor = VElement.BuildColor(sTextColor, sTextColorIntensity)
 VElement.TextColorIntensity = sTextColorIntensity
 VElement.VIf = sVIf
 VElement.VShow = sVShow
+VElement.VFor = sVFor
+VElement.Bind("key", sKey)
 VElement.BindAllEvents
 End Sub
 

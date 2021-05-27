@@ -186,7 +186,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		'add the avatar
 		Dim xAvatar As String = $"${mName}avatar"$
 		Dim xImage As String = $"${mName}image"$
-		VElement.Append($"<v-avatar id="${xAvatar}"><v-img id="${xImage}"></v-img></v-avatar>"$)
+		VElement.Append($"<v-avatar id="${xAvatar}"><v-img id="${xImage}" alt=""></v-img></v-avatar>"$)
 		VElement.GetAvatar.Left = True
 		VElement.GetImage.Src = sAvatar	
 		VElement.Append($"<span id="${mName}text">${mText}</span>"$)	

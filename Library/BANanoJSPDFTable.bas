@@ -34,7 +34,7 @@ Sub Class_Globals
 	Private BANano As BANano
 	Type styleDef (font As String, lineWidth As Double, lineColor As List, fillColor As List, fontSize As Int, _
 	cellPadding As Int, fontStyle As String,overflow As String, textColor As List, halign As String, valign As String, _
-	fillStyle As String, rowHeight As Int, columnWidth As String, minCellWidth As Int, minCellHeight As Int)
+	fillStyle As String, rowHeight As Int, minCellWidth As Int, minCellHeight As Int, cellWidth As String)
 	Public styles As styleDef
 	Public headerStyles As styleDef
 	Public alternateRowStyles As styleDef
@@ -103,9 +103,9 @@ Sub NewStyleDef As styleDef
 	stylesx.valign = "top"
 	stylesx.fillStyle = ""
 	stylesx.rowHeight = 0
-	stylesx.columnWidth = 0
 	stylesx.minCellWidth = 10
 	stylesx.minCellHeight = 0
+	stylesx.cellWidth = ""
 	Return stylesx
 End Sub
 
@@ -285,8 +285,8 @@ private Sub CopyStyles(source As styleDef, target As Map)
 	If source.cellPadding <> 0 Then
 		target.Put("cellPadding", source.cellPadding)
 	End If
-	If source.columnWidth <> 0 Then
-		target.Put("columnWidth", source.columnWidth)
+	If source.cellWidth <> "" Then
+		target.Put("cellWidth", source.cellWidth)
 	End If
 	If source.rowHeight <> 0 Then
 		target.Put("rowHeight", source.rowHeight)

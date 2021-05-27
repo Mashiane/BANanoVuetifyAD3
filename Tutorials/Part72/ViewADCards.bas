@@ -11,8 +11,11 @@ Sub Process_Globals
 	Public path As String
 	Public name As String = "adcards"
 	Private banano As BANano
-	Private cardsr1 As VRow
 	Private VCard3 As VCard
+	Private VCard1 As VCard
+	Private VCard2 As VCard
+	Private VCard4 As VCard
+	Private VCard5 As VCard
 End Sub
 
 Sub Initialize
@@ -24,8 +27,22 @@ Sub Initialize
 	
 	banano.LoadLayout(about.Here, "mycards")
 	'load the profile
-	banano.LoadLayoutAppend(VCard3.CardImage.Here, "profile")
+	banano.LoadLayoutAppend(VCard3.CardImage.Here, "myprofile")
+	'
+	about.BindVueElement(VCard1.VElement)
+	about.BindVueElement(VCard2.VElement)
+	about.BindVueElement(VCard3.VElement)
+	about.BindVueElement(VCard4.VElement)
+	about.BindVueElement(VCard5.VElement)
+	
+	Log(VCard4.VElement.ToString)
+	
 	'add the component as a router
 	vuetify.AddRoute(about) 
 End Sub
 
+
+
+Private Sub VCard4_Click (e As BANanoEvent)
+	
+End Sub

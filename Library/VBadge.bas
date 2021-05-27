@@ -7,6 +7,8 @@ Version=8.9
 #IgnoreWarnings:12
 
 #DesignerProperty: Key: Avatar, DisplayName: Avatar, FieldType: Boolean, DefaultValue: false, Description: Avatar
+#DesignerProperty: Key: AvatarImg, DisplayName: AvatarImg, FieldType: String, DefaultValue: , Description: AvatarImg
+#DesignerProperty: Key: AvatarSize, DisplayName: AvatarSize, FieldType: String, DefaultValue: 48, Description: AvatarSize
 #DesignerProperty: Key: Bordered, DisplayName: Bordered, FieldType: Boolean, DefaultValue: false, Description: Bordered
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue:  blue, Description: , List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: ColorIntensity, DisplayName: Color Intensity, FieldType: String, DefaultValue:  normal, Description: , List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
@@ -60,6 +62,8 @@ Sub Class_Globals
 	Private bLeft As Boolean = False
 	Private bBottom As Boolean = False
 	Private mVIf As String = ""
+	Private sAvatarImg As String = ""
+	Private sAvatarSize As String = ""
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -87,7 +91,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bAvatar = Props.Get("Avatar")
 		bBordered = Props.Get("Bordered")
 		sColor = Props.Get("Color")
-		sColorintensity = Props.Get("Colorintensity")
+		sColorintensity = Props.Get("ColorIntensity")
 		sContent = Props.Get("Content")
 		bDark = Props.Get("Dark")
 		bDot = Props.Get("Dot")
@@ -102,6 +106,8 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sValue = Props.Get("Value")
 		bBottom = Props.Get("Bottom")
 		bLeft = Props.Get("Left")
+		sAvatarImg = Props.Get("AvatarImg")
+		sAvatarSize = Props.Get("AvatarSize")
 	End If
 	'
 	'build and get the element
@@ -112,11 +118,21 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	End If
 	'
 	VElement.Initialize(mCallBack, mName, mName)
+	'
+	If BANano.IsNull(sAvatarImg) Or BANano.IsUndefined(sAvatarImg) Then
+		sAvatarImg = ""
+	End If
+	If sAvatarImg <> "" Then
+		VElement.Append($"<v-avatar id="${mName}avatar"><img id="${mName}image" alt=""></img></v-avatar>"$)
+		VElement.GetAvatar.Size = sAvatarSize
+		VElement.GetImage.Src = sAvatarImg
+	End If
+	
 	VElement.TagName = "v-badge"
 	VElement.setAvatar(bAvatar)
 	VElement.Bordered = bBordered
 	VElement.Color = VElement.BuildColor(sColor, sColorintensity)
-	VElement.Content = sContent
+	VElement.SetAttr(":content", sContent)
 	VElement.Dark = bDark
 	VElement.Dot = bDot
 	VElement.SetAttr("icon", sIcon)

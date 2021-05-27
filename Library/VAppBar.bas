@@ -213,7 +213,7 @@ VElement.MinHeight = sMinHeight
 VElement.MinWidth = sMinWidth
 VElement.Outlined = bOutlined
 VElement.Prominent = bProminent
-VElement.AddClass(sRounded)
+VElement.AddAttr("rounded", sRounded)
 VElement.AddAttr(":scroll-off-screen", bScrollOffScreen)
 VElement.ScrollTarget = sScrollTarget
 VElement.ScrollThreshold = sScrollThreshold

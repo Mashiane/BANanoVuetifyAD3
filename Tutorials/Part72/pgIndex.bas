@@ -106,31 +106,47 @@ Sub Init
 	drwlist.AddItemParentChild("home", ViewPDFView.name, "",  "", "PDF View", ViewPDFView.path)
 	
 	drwlist.AddItemParentChild("", "ad", "mdi-cog", "", "Abstracts", "")
-	drwlist.AddItemParentChild("ad", ViewADAppBar.name, "",  "", "AD AppBar", ViewADAppBar.path)
+	drwlist.AddItemParentChild("ad", ViewADLogin.name, "",  "", "AD Login", ViewADLogin.path)
 	drwlist.AddItemParentChild("ad", ViewADAlerts.name, "",  "", "AD Alerts", ViewADAlerts.path)
-	drwlist.AddItemParentChild("ad", ViewAD.name, "",  "", "AD Buttons", ViewAD.path)
-	drwlist.AddItemParentChild("ad", ViewADBreadCrumbs.name, "",  "", "AD BreadCrumbs", ViewADBreadCrumbs.path)
+	drwlist.AddItemParentChild("ad", ViewADAvatars.name, "",  "", "AD Avatars", ViewADAvatars.path)
+	drwlist.AddItemParentChild("ad", ViewADAppBar.name, "",  "", "AD AppBar", ViewADAppBar.path)
+	
+	drwlist.AddItemParentChild("ad", ViewADBadges.name, "",  "", "AD Badges", ViewADBadges.path)
 	drwlist.AddItemParentChild("ad", ViewADBottomNav.name, "",  "", "AD BottomNav", ViewADBottomNav.path)
 	drwlist.AddItemParentChild("ad", ViewADBottomSheet.name, "",  "", "AD BottomSheet", ViewADBottomSheet.path)
+	drwlist.AddItemParentChild("ad", ViewADBreadCrumbs.name, "",  "", "AD BreadCrumbs", ViewADBreadCrumbs.path)
+	drwlist.AddItemParentChild("ad", ViewAD.name, "",  "", "AD Buttons", ViewAD.path)
 	
+	drwlist.AddItemParentChild("ad", ViewADCards.name, "",  "", "AD Cards", ViewADCards.path)
 	drwlist.AddItemParentChild("ad", ViewADCarousel.name, "",  "", "AD Carousel", ViewADCarousel.path)
-	'
 	drwlist.AddItemParentChild("ad", ViewADChips.name, "",  "", "AD Chips", ViewADChips.path)
-	drwlist.AddItemParentChild("ad", ViewADDialog.name, "",  "", "AD Dialog", ViewADDialog.path)
-	drwlist.AddItemParentChild("ad", ViewADInputs.name, "",  "", "AD Inputs", ViewADInputs.path)
-	drwlist.AddItemParentChild("ad", ViewADDrawer.name, "",  "", "AD Drawer", ViewADDrawer.path)
 	
+	drwlist.AddItemParentChild("ad", ViewADDialog.name, "",  "", "AD Dialog", ViewADDialog.path)
+	drwlist.AddItemParentChild("ad", ViewADDrawer.name, "",  "", "AD Drawer", ViewADDrawer.path)
+	'
 	drwlist.AddItemParentChild("ad", ViewADFAB.name, "",  "", "AD FAB", ViewADFAB.path)
 	drwlist.AddItemParentChild("ad", ViewADFooters.name, "",  "", "AD Footers", ViewADFooters.path)
-	drwlist.AddItemParentChild("ad", ViewADSpeed.name, "",  "", "AD SpeedDial", ViewADSpeed.path)
-	drwlist.AddItemParentChild("ad", ViewADBadges.name, "",  "", "AD Badges", ViewADBadges.path)
-	drwlist.AddItemParentChild("ad", ViewADAvatars.name, "",  "", "AD Avatars", ViewADAvatars.path)
-	drwlist.AddItemParentChild("ad", ViewADCards.name, "",  "", "AD Cards", ViewADCards.path)
-	drwlist.AddItemParentChild("ad", ViewADSnackBars.name, "",  "", "AD SnackBar", ViewADSnackBars.path)
+	'
+	drwlist.AddItemParentChild("ad", ViewADIcons.name, "",  "", "AD Icons", ViewADIcons.path)
+	drwlist.AddItemParentChild("ad", ViewADImages.name, "",  "", "AD Images", ViewADImages.path)
 	
+	drwlist.AddItemParentChild("ad", ViewADInputs.name, "",  "", "AD Inputs", ViewADInputs.path)
+	drwlist.AddItemParentChild("ad", ViewADtextField.name, "",  "", "AD TextField", ViewADtextField.path)
+	
+	
+	drwlist.AddItemParentChild("ad", ViewADOverlay.name, "",  "", "AD Overlay", ViewADOverlay.path)
+	
+	drwlist.AddItemParentChild("ad", ViewADProgress.name, "",  "", "AD Progress", ViewADProgress.path)
+	
+	drwlist.AddItemParentChild("ad", ViewADSheet.name, "",  "", "AD Sheets", ViewADSheet.path)
+	'	
 	drwlist.AddItemParentChild("ad", ViewADSkeletons.name, "",  "", "AD SkeletonLoaders", ViewADSkeletons.path)
-	drwlist.AddItemParentChild("ad", ViewADTreeView.name, "",  "", "AD TreeView", ViewADTreeView.path)
+	drwlist.AddItemParentChild("ad", ViewADSnackBars.name, "",  "", "AD SnackBar", ViewADSnackBars.path)
+	drwlist.AddItemParentChild("ad", ViewADSpeed.name, "",  "", "AD SpeedDial", ViewADSpeed.path)
 	
+	drwlist.AddItemParentChild("ad", ViewADTooltips.name, "",  "", "AD ToolTips", ViewADTooltips.path)
+	drwlist.AddItemParentChild("ad", ViewADTreeView.name, "",  "", "AD TreeView", ViewADTreeView.path)
+	'
 	drwlist.AddItemParentChild("", "components", "mdi-cog", "", "Components", "")
 	drwlist.AddItemParentChild("components", ViewSwal.name, "",  "", "Sweet Alert", ViewSwal.path)
 	drwlist.AddItemParentChild("components", ViewInfoBox.name, "",  "", "InfoBox", ViewInfoBox.path)
@@ -244,6 +260,14 @@ End Sub
 Sub AddRouters
 	'ViewContacts.Initialize
 	'ViewCRUDBuilder.Initialize
+	ViewADTextField.Initialize 
+	ViewADLogin.initialize
+	ViewADImages.Initialize 
+	ViewADIcons.Initialize 
+	ViewADOverlay.Initialize 
+	ViewADProgress.Initialize 
+	ViewADSheet.Initialize 
+	ViewADTooltips.Initialize
 	ViewADInputs.Initialize 
 	ViewADFooters.Initialize 
 	ViewADSkeletons.Initialize 

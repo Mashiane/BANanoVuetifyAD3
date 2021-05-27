@@ -772,18 +772,18 @@ Dim sTemplate As String = $"<v-tab id="${tabID}">
 	
 	BANano.GetElement(parentID).Append(sTemplate)
 	'
-	Dim vtab As VueElement = GetVueElement(tabID)
-	vtab.Href = "#tab" & tabID
-	vtab.Key = tabID
-	vtab.Value = tabID	
-	vtab.BindAllEvents
-	vtab.setdata(vModel, Value)
+	Dim vtabx As VueElement = GetVueElement(tabID)
+	vtabx.Href = "#tab" & tabID
+	vtabx.Key = tabID
+	vtabx.Value = tabID	
+	vtabx.BindAllEvents
+	vtabx.setdata(vModel, Value)
 	'
 	'add the tab item
 	Dim ti As VueElement = AddVueElement($"tab${tabID}"$, "v-tab-item", Null)
 	ti.Key = "tab" & tabID
 	'
-	Return vtab
+	Return vtabx
 End Sub
 
 'get a tab item
@@ -2066,6 +2066,7 @@ public Sub AddClass(varClass As String) As VueElement
 	If BANano.IsBoolean(varClass) Then varClass = ""
 	varClass = varClass.trim
 	If varClass = "" Then Return Me
+	If varClass = "none" Then Return Me
 	If mElement <> Null Then 
 		Dim mxItems As List = BANanoShared.StrParse(" ", varClass)
 		For Each mt As String In mxItems
@@ -2634,6 +2635,10 @@ public Sub getVHtml() As String
 End Sub
 
 public Sub setVIf(varVIf As String)
+	If BANano.IsNull(varVIf) Or BANano.IsUndefined(varVIf) Then
+		varVIf = ""
+	End If
+	If varVIf = "" Then Return
 	varVIf = varVIf.tolowercase
 	AddAttr("v-if", varVIf)
 	stVIf = varVIf
@@ -3054,7 +3059,6 @@ public Sub setElevation(s As String)
 	If BANano.IsNull(s) Or BANano.IsUndefined(s) Then s = ""
 	If s = "" Then Return
 	AddAttr("elevation", S)
-	AddClass("elevation-" & s)
 End Sub
 
 Sub setDisableResizeWatcher(b As Boolean)
@@ -3933,7 +3937,7 @@ End Sub
 
 'set hide-selected
 public Sub setHideSelected(b As Boolean)
-	if b = false then return
+	If b = False Then Return
 	Bind("hide-selected", b)
 End Sub
 
@@ -4122,9 +4126,9 @@ public Sub getShowGridDesign() As Boolean
 End Sub
 
 'set shaped
-public Sub setShaped(varShaped As Boolean)
-	AddAttrOnCondition(":shaped", boShaped, True)
+public Sub setShaped(varShaped As Boolean)	
 	boShaped = varShaped
+	AddAttrOnCondition(":shaped", boShaped, True)
 End Sub
 
 'get shaped
@@ -6277,15 +6281,15 @@ Sub AddListViewTemplate(numLines As Int, props As ListViewItemOptions) As VueEle
 	
 	BANano.GetElement(parentID).Append(sTemplate)
 	'
-	Dim vlistitem As VueElement
-	vlistitem.Initialize(mCallBack, listitemID, listitemID)
+	Dim vlistitemx As VueElement
+	vlistitemx.Initialize(mCallBack, listitemID, listitemID)
 	Select Case numLines
 	Case 2
-		vlistitem.AddAttr(":two-line", True)
+		vlistitemx.AddAttr(":two-line", True)
 	Case 3
-		vlistitem.AddAttr(":three-line", True)
+		vlistitemx.AddAttr(":three-line", True)
 	End Select
-	vlistitem.SetOnEventOwn(mCallBack, $"${elID}_click"$, "click", "item")
+	vlistitemx.SetOnEventOwn(mCallBack, $"${elID}_click"$, "click", "item")
 	'left action
 	'
 '	Dim vleftcheckbox As VueElement
@@ -6324,17 +6328,17 @@ Sub AddListViewTemplate(numLines As Int, props As ListViewItemOptions) As VueEle
 	'	vrightswitch.SetOnEventOwn(mCallBack, $"${elID}_rightclick"$, "change.stop", "item")
 	'End If
 	
-	vlistitem.SetData(datasource, NewList)
-	vlistitem.BindVueElement(vlistitem)
-	vlistitem.BindVueElement(vleftlistitemaction)
-	vlistitem.BindVueElement(vrightlistitemaction)
+	vlistitemx.SetData(datasource, NewList)
+	vlistitemx.BindVueElement(vlistitemx)
+	vlistitemx.BindVueElement(vleftlistitemaction)
+	vlistitemx.BindVueElement(vrightlistitemaction)
 '	vlistitem.BindVueElement(vleftcheckbox)
 '	vlistitem.BindVueElement(vrightcheckbox)
 '	vlistitem.BindVueElement(vrightswitch)
 '	vlistitem.BindVueElement(vleftswitch)
 	'
-	BindVueElement(vlistitem)
-	Return vlistitem
+	BindVueElement(vlistitemx)
+	Return vlistitemx
 End Sub
 
 Sub GetListItem As VueElement
@@ -6650,15 +6654,15 @@ Sub AddListItemGroupTemplate(numLines As Int) As VueElement
 	
 	BANano.GetElement(parentID).Append(sTemplate)
 	'
-	Dim vlistitem As VueElement
-	vlistitem.Initialize(mCallBack, listitemID, listitemID)
+	Dim vlistitemx As VueElement
+	vlistitemx.Initialize(mCallBack, listitemID, listitemID)
 	Select Case numLines
 	Case 2
-		vlistitem.AddAttr(":two-line", True)
+		vlistitemx.AddAttr(":two-line", True)
 	Case 3
-		vlistitem.AddAttr(":three-line", True)
+		vlistitemx.AddAttr(":three-line", True)
 	End Select
-	vlistitem.SetOnEventOwn(mCallBack, $"${elID}_click"$, "click", "item")
+	vlistitemx.SetOnEventOwn(mCallBack, $"${elID}_click"$, "click", "item")
 	'left action
 	'
 '	Dim vleftcheckbox As VueElement
@@ -6697,17 +6701,17 @@ Sub AddListItemGroupTemplate(numLines As Int) As VueElement
 	'	vrightswitch.SetOnEventOwn(mCallBack, $"${elID}_rightclick"$, "change.stop", "item")
 	'End If
 	
-	vlistitem.SetData(datasource, NewList)
-	vlistitem.BindVueElement(vlistitem)
-	vlistitem.BindVueElement(vleftlistitemaction)
-	vlistitem.BindVueElement(vrightlistitemaction)
+	vlistitemx.SetData(datasource, NewList)
+	vlistitemx.BindVueElement(vlistitemx)
+	vlistitemx.BindVueElement(vleftlistitemaction)
+	vlistitemx.BindVueElement(vrightlistitemaction)
 '	vlistitem.BindVueElement(vleftcheckbox)
 '	vlistitem.BindVueElement(vrightcheckbox)
 '	vlistitem.BindVueElement(vrightswitch)
 '	vlistitem.BindVueElement(vleftswitch)
 	'
-	BindVueElement(vlistitem)
-	Return vlistitem
+	BindVueElement(vlistitemx)
+	Return vlistitemx
 End Sub
 
 'add a list item template to draw item
@@ -6911,21 +6915,21 @@ sTemplate.Append("</v-template>")
 	'
 	BANano.GetElement(parentID).Append(sTemplate.tostring)
 	'
-	Dim vlistitem As VueElement
-	vlistitem.Initialize(mCallBack, listitemID, listitemID)
+	Dim vlistitemx As VueElement
+	vlistitemx.Initialize(mCallBack, listitemID, listitemID)
 	Select Case numLines
 	Case 2
-		vlistitem.AddAttr(":two-line", True)
+		vlistitemx.AddAttr(":two-line", True)
 	Case 3
-		vlistitem.AddAttr(":three-line", True)
+		vlistitemx.AddAttr(":three-line", True)
 	End Select
-	vlistitem.SetOnEventOwn(mCallBack, $"${elID}_click"$, "click", "child")
+	vlistitemx.SetOnEventOwn(mCallBack, $"${elID}_click"$, "click", "child")
 	'left action
 	'
-	vlistitem.SetData(datasource, NewList)
-	vlistitem.BindVueElement(vlistitem)
-	BindVueElement(vlistitem)
-	Return vlistitem
+	vlistitemx.SetData(datasource, NewList)
+	vlistitemx.BindVueElement(vlistitemx)
+	BindVueElement(vlistitemx)
+	Return vlistitemx
 End Sub
 
 Sub ToAttributes(m As Map) As String
@@ -7808,6 +7812,7 @@ Sub BindAllEvents
 	SetOnEvent(mCallBack, "close", "")
 	SetOnEvent(mCallBack, "blur", "")
 	SetOnEvent(mCallBack, "click", "")
+	SetOnEvent(mCallBack, "click.native", "")
 	SetOnEvent(mCallBack, "click.stop", "")
 	SetOnEvent(mCallBack, "click.prevent", "")
 	SetOnEvent(mCallBack, "change", "")
@@ -7843,6 +7848,7 @@ Sub BindAllEvents
 	SetOnEvent(mCallBack, "keydown.right.prevent", "")
 	SetOnEvent(mCallBack, "keydown.space.prevent", "")
 	SetOnEvent(mCallBack, "keyup.enter", "")
+	SetOnEvent(mCallBack, "keyup.esc", "")
 	SetOnEvent(mCallBack, "touchstart.stop", "")
 	SetOnEvent(mCallBack, "click:event", "")
 	SetOnEvent(mCallBack, "click:more", "")
@@ -9499,39 +9505,39 @@ End Sub
 
 'add spacer
 Sub AddSpacer1(elid As String, props As Map) As VueElement
-	Dim vlist As VueElement = AddVueElement1(elid, "v-spacer", "", "", "", props)
-	Return vlist
+	Dim vlistx As VueElement = AddVueElement1(elid, "v-spacer", "", "", "", props)
+	Return vlistx
 End Sub
 
 'add sparkline
 Sub AddSparkLine(elid As String) As VueElement
-	Dim vlist As VueElement = AddVueElement1(elid, "v-sparkline", "", "", "", Null)
-	Return vlist
+	Dim vlistx As VueElement = AddVueElement1(elid, "v-sparkline", "", "", "", Null)
+	Return vlistx
 End Sub
 
 
 'add divider
 Sub AddDivider1(elid As String, props As Map) As VueElement
-	Dim vlist As VueElement = AddVueElement1(elid, "v-divider", "", "", "", props)
-	Return vlist
+	Dim vlistx As VueElement = AddVueElement1(elid, "v-divider", "", "", "", props)
+	Return vlistx
 End Sub
 
 
 Sub AddList(elid As String, bDense As Boolean, bFlat As Boolean, bRounded As Boolean, props As Map) As VueElement
-	Dim vlist As VueElement = AddVueElement1(elid, "v-list", "", "", "", props)
-	vlist.Bind("rounded", bRounded)
-	vlist.Bind("flat", bFlat)
-	vlist.Bind("dense", bDense)
-	vlist.NewListViewItemOptions
-	vlist.SetOpenItems(NewList)
-	Return vlist
+	Dim vlistx As VueElement = AddVueElement1(elid, "v-list", "", "", "", props)
+	vlistx.Bind("rounded", bRounded)
+	vlistx.Bind("flat", bFlat)
+	vlistx.Bind("dense", bDense)
+	vlistx.NewListViewItemOptions
+	vlistx.SetOpenItems(NewList)
+	Return vlistx
 End Sub
 
 Sub AddList1(elID As String) As VueElement
-	Dim vlist As VueElement = AddVueElement1(elID, "v-list", "", "", "", Null)
-	vlist.NewListViewItemOptions
-	vlist.SetOpenItems(NewList)
-	Return vlist
+	Dim vlistx As VueElement = AddVueElement1(elID, "v-list", "", "", "", Null)
+	vlistx.NewListViewItemOptions
+	vlistx.SetOpenItems(NewList)
+	Return vlistx
 End Sub
 
 Sub AddListItem(elid As String, props As Map) As VueElement
@@ -9539,10 +9545,10 @@ Sub AddListItem(elid As String, props As Map) As VueElement
 End Sub
 
 Sub AddFooter(elid As String, bPadless As Boolean, bFlat As Boolean, props As Map) As VueElement
-	Dim vlist As VueElement = AddVueElement1(elid, "v-footer", "", "", "", props)
-	vlist.Bind("padless", bPadless)
-	vlist.Bind("flat", bFlat)
-	Return vlist
+	Dim vlistx As VueElement = AddVueElement1(elid, "v-footer", "", "", "", props)
+	vlistx.Bind("padless", bPadless)
+	vlistx.Bind("flat", bFlat)
+	Return vlistx
 End Sub
 
 
@@ -10491,9 +10497,9 @@ End Sub
 'add bread crumbs
 Sub AddBreadCrumbs(elid As String) As VueElement
 	elid = elid.tolowercase
-	Dim vlist As VueElement = AddVueElement1(elid, "v-breadcrumbs", "", "", "", Null)
-	vlist.setItems($"${elid}items"$)
-	Return vlist
+	Dim vlistx As VueElement = AddVueElement1(elid, "v-breadcrumbs", "", "", "", Null)
+	vlistx.setItems($"${elid}items"$)
+	Return vlistx
 End Sub
 
 

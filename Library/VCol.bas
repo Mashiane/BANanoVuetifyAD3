@@ -63,9 +63,10 @@ Sub Class_Globals
 	Private mAttributes As String = ""
 	Public VElement As VueElement
 	Private mAlign As String = ""
+	Private mJustify As String = ""
 	Private mTextColor As String = ""
 	Private mTextColorIntensity As String = ""
-	Private mJustify As String = ""
+	
 	Private mColorIntensity As String = ""
 	Private mVShow As String = ""
 	Private mVIf As String = ""

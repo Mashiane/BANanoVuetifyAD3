@@ -31,7 +31,7 @@ Version=8.9
 #DesignerProperty: Key: Loading, DisplayName: Loading, FieldType: Boolean, DefaultValue: False, Description: Loading
 #DesignerProperty: Key: Outlined, DisplayName: Outlined, FieldType: Boolean, DefaultValue: False, Description: Outlined
 #DesignerProperty: Key: Raised, DisplayName: Text, FieldType: Boolean, DefaultValue: True, Description: Transparent Background Off
-#DesignerProperty: Key: Rounded, DisplayName: Rounded, FieldType: String, DefaultValue: none, Description: Rounded, List: none|rounded-0|rounded|rounded-sm|rounded-lg|rounded-xl|rounded-t-xl|rounded-r-xl|rounded-b-xl|rounded-l-xl|rounded-tl-xl|rounded-tr-xl|rounded-br-xl|rounded-bl-xl|rounded-pill|rounded-circle
+#DesignerProperty: Key: Rounded, DisplayName: Rounded, FieldType: Boolean, DefaultValue: False, Description: Rounded, 
 #DesignerProperty: Key: Shaped, DisplayName: Shaped, FieldType: Boolean, DefaultValue: False, Description: Shaped
 #DesignerProperty: Key: Tile, DisplayName: Tile, FieldType: Boolean, DefaultValue: False, Description: Tile
 #DesignerProperty: Key: To, DisplayName: To, FieldType: String, DefaultValue: , Description: To
@@ -77,7 +77,7 @@ Sub Class_Globals
 	Private bLoading As Boolean
 	Private bOutlined As Boolean
 	Private bRaised As Boolean
-	Private sRounded As String
+	Private bRounded As Boolean
 	Private bShaped As Boolean
 	Private sSize As String
 	Private sTarget As String
@@ -88,7 +88,7 @@ Sub Class_Globals
 	Private sVFor As String
 	Private sKey As String
 	Private sVOn As String
-	private sVBind as string
+	Private sVBind As String
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -132,7 +132,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bLoading = Props.Get("Loading")
 		bOutlined = Props.Get("Outlined")
 		bRaised = Props.Get("Raised")
-		sRounded = Props.Get("Rounded")
+		bRounded = Props.Get("Rounded")
 		bShaped = Props.Get("Shaped")
 		sSize = Props.Get("Size")
 		sTarget = Props.Get("Target")
@@ -198,7 +198,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.SetData($"${mName}loading"$, bLoading)
 	VElement.Outlined = bOutlined
 	VElement.Raised = bRaised
-	VElement.AddClass(sRounded)
+	VElement.AddAttr(":rounded", bRounded)
 	VElement.Shaped = bShaped
 	VElement.Target = sTarget
 	VElement.Tile = bTile

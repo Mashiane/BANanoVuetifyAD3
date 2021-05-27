@@ -58,7 +58,7 @@ Version=8.9
 #DesignerProperty: Key: Scrollable, DisplayName: Scrollable, FieldType: Boolean, DefaultValue: false, Description: Scrollable
 #DesignerProperty: Key: Transition, DisplayName: Transition, FieldType: String, DefaultValue: , Description: Transition, List: none|fab-transition|fade-transition|expand-transition|scale-transition|scroll-x-transition|scroll-x-reverse-transition|scroll-y-transition|scroll-y-reverse-transition|slide-x-transition|slide-x-reverse-transition|slide-y-transition|slide-y-reverse-transition
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
-#DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: , Description: VModel
+#DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: dialog, Description: VModel
 #DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: 700, Description: Width
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
@@ -259,7 +259,6 @@ VElement.AddAttr("v-if", sVIf)
 VElement.AddAttr("v-model", sVModel)
 VElement.AddAttr("width", sWidth)
 VElement.SetData(sVModel, False)
-'
 VElement.BindAllEvents
 
 If bHasOk Then
@@ -315,4 +314,32 @@ Sub Visible(VC As VueComponent, b As Boolean) As VDialog
 	VC.SetData(sVIf, b)
 	VC.SetData(sVModel, b)
 	Return Me
+End Sub
+
+Sub Card As VueElement
+	Return VElement.GetCard
+End Sub
+
+Sub ToolBar As VueElement
+	Return VElement.GetToolBar(mName)
+End Sub
+
+Sub CardTitle As VueElement
+	Return VElement.GetCardTitle
+End Sub
+
+Sub CardText As VueElement
+	Return VElement.GetCardText
+End Sub
+
+Sub CardActions As VueElement
+	Return VElement.getCardActions
+End Sub
+
+Sub CardSubTitle As VueElement
+	Return VElement.GetCardSubTitle
+End Sub
+
+Sub CardImage As VueElement
+	Return VElement.GetImage
 End Sub

@@ -4976,25 +4976,25 @@ End Sub
 
 'add spacer
 Sub AddSpacer(Module As Object, parentID As String, elid As String, props As Map) As VueElement
-	Dim vlist As VueElement = AddVueElement(Module, parentID, elid, "v-spacer", "", "", "", props)
-	Return vlist
+	Dim vlistx As VueElement = AddVueElement(Module, parentID, elid, "v-spacer", "", "", "", props)
+	Return vlistx
 End Sub
 
 'add divider
 Sub AddDivider(Module As Object, parentID As String, elid As String, props As Map) As VueElement
-	Dim vlist As VueElement = AddVueElement(Module, parentID, elid, "v-divider", "", "", "", props)
-	Return vlist
+	Dim vlistx As VueElement = AddVueElement(Module, parentID, elid, "v-divider", "", "", "", props)
+	Return vlistx
 End Sub
 
 
 Sub AddList(Module As Object, parentID As String, elid As String, bDense As Boolean, bFlat As Boolean, bRounded As Boolean, props As Map) As VueElement
-	Dim vlist As VueElement = AddVueElement(Module, parentID, elid, "v-list", "", "", "", props)
-	vlist.Bind("rounded", bRounded)
-	vlist.Bind("flat", bFlat)
-	vlist.Bind("dense", bDense)
-	vlist.NewListViewItemOptions
-	vlist.SetOpenItems(NewList)
-	Return vlist
+	Dim vlistx As VueElement = AddVueElement(Module, parentID, elid, "v-list", "", "", "", props)
+	vlistx.Bind("rounded", bRounded)
+	vlistx.Bind("flat", bFlat)
+	vlistx.Bind("dense", bDense)
+	vlistx.NewListViewItemOptions
+	vlistx.SetOpenItems(NewList)
+	Return vlistx
 End Sub
 
 
@@ -5003,10 +5003,10 @@ Sub AddListItem(Module As Object, parentID As String, elid As String, props As M
 End Sub
 
 Sub AddFooter(Module As Object, parentID As String, elid As String, bPadless As Boolean, bFlat As Boolean, props As Map) As VueElement
-	Dim vlist As VueElement = AddVueElement(Module, parentID, elid, "v-footer", "", "", "", props)
-	vlist.Bind("padless", bPadless)
-	vlist.Bind("flat", bFlat)
-	Return vlist
+	Dim vlistx As VueElement = AddVueElement(Module, parentID, elid, "v-footer", "", "", "", props)
+	vlistx.Bind("padless", bPadless)
+	vlistx.Bind("flat", bFlat)
+	Return vlistx
 End Sub
 
 

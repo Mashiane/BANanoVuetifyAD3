@@ -22,7 +22,7 @@ Sub Initialize
 	path = about.path
 	
 	Dim contfab1 As VueElement = about.Page.AddContainer("contfab2", True)
-	banano.LoadLayout(contfab1.Here, "speeds")
+	banano.LoadLayout(contfab1.Here, "myspeeds")
 	
 	'*IMPORTANT
 	about.BindVueElement(VSpeedDial1.VElement)

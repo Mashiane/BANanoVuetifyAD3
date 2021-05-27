@@ -174,7 +174,7 @@ VElement.MinWidth = sMinWidth
 VElement.Mode = sMode
 VElement.Outlined = bOutlined
 VElement.Prominent = bProminent
-VElement.AddClass(sRounded)
+VElement.AddAttr("rounded", sRounded)
 VElement.Shaped = bShaped
 VElement.AddAttr(":text", bText)
 VElement.TextColor = sTextColor

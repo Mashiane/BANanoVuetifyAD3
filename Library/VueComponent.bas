@@ -1766,3 +1766,8 @@ End Sub
 Sub HideSnackBar(elID As String)
 	SetData($"${elID}show"$, False)
 End Sub
+
+Sub SetTimeOut(MethodName As String, ms As Int)
+	Dim cb As BANanoObject = BANano.callback(mCallBack, MethodName, Null)
+	BANano.Window.SetTimeout(cb, ms)
+End Sub

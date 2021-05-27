@@ -3406,7 +3406,7 @@ public Sub setElevation(varElevation As String)
 	If BANano.IsNull(varElevation) Then varElevation = ""
 	If varElevation = "" Then Return
 	AddAttr("elevation", varElevation)
-	AddClass("elevation-" & varElevation)
+	'AddClass("elevation-" & varElevation)
 	stElevation = varElevation
 End Sub
 

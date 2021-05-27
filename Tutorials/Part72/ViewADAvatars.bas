@@ -25,7 +25,7 @@ Sub Initialize
 	about.Initialize(Me, name)
 	path = about.path
 	
-	banano.LoadLayout(about.Here, "avatars")
+	banano.LoadLayout(about.Here, "myavatars")
 	'add the component as a router
 	vuetify.AddRoute(about) 
 End Sub

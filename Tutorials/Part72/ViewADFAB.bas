@@ -25,7 +25,7 @@ Sub Initialize
 	path = about.path
 	
 	Dim contfab1 As VueElement = about.Page.AddContainer("contfab1", True)
-	banano.LoadLayout(contfab1.Here, "fabs")
+	banano.LoadLayout(contfab1.Here, "myfabs")
 	
 	about.BindVueElement(VFAB1.VElement)
 	about.BindVueElement(VFAB2.VElement)

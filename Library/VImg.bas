@@ -6,18 +6,21 @@ Version=8.9
 @EndOfDesignText@
 #IgnoreWarnings:12
 
+'Custom BANano View class
+#Event: Click (e As BANanoEvent)
+
+#DesignerProperty: Key: Src, DisplayName: Src, FieldType: String, DefaultValue: , Description: Src
+#DesignerProperty: Key: LazySrc, DisplayName: LazySrc, FieldType: String, DefaultValue: , Description: LazySrc
 #DesignerProperty: Key: Alt, DisplayName: Alt, FieldType: String, DefaultValue: , Description: Alt
 #DesignerProperty: Key: AspectRatio, DisplayName: AspectRatio, FieldType: String, DefaultValue: , Description: AspectRatio
 #DesignerProperty: Key: Contain, DisplayName: Contain, FieldType: Boolean, DefaultValue: false, Description: Contain
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: false, Description: Dark
 #DesignerProperty: Key: Height, DisplayName: Height, FieldType: String, DefaultValue: , Description: Height
-#DesignerProperty: Key: LazySrc, DisplayName: LazySrc, FieldType: String, DefaultValue: , Description: LazySrc
 #DesignerProperty: Key: MaxHeight, DisplayName: MaxHeight, FieldType: String, DefaultValue: 200 , Description: MaxHeight
 #DesignerProperty: Key: MaxWidth, DisplayName: MaxWidth, FieldType: String, DefaultValue: 200 , Description: MaxWidth
 #DesignerProperty: Key: MinHeight, DisplayName: MinHeight, FieldType: String, DefaultValue: , Description: MinHeight
 #DesignerProperty: Key: MinWidth, DisplayName: MinWidth, FieldType: String, DefaultValue: , Description: MinWidth
 #DesignerProperty: Key: Sizes, DisplayName: Sizes, FieldType: String, DefaultValue: , Description: Sizes
-#DesignerProperty: Key: Src, DisplayName: Src, FieldType: String, DefaultValue: , Description: Src
 #DesignerProperty: Key: Srcset, DisplayName: Srcset, FieldType: String, DefaultValue: , Description: Srcset
 #DesignerProperty: Key: Transition, DisplayName: Transition, FieldType: String, DefaultValue: , Description: Transition
 #DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: , Description: Width
@@ -26,6 +29,13 @@ Version=8.9
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: VOn, DisplayName: V-On, FieldType: String, DefaultValue:  , Description: V-On
 #DesignerProperty: Key: VBind, DisplayName: V-Bind, FieldType: String, DefaultValue:  , Description: V-Bind
+#DesignerProperty: Key: AnimeAlternate, DisplayName: AnimeAlternate, FieldType: Boolean, DefaultValue: false, Description: AnimeAlternate
+#DesignerProperty: Key: AnimeDirection, DisplayName: AnimeDirection, FieldType: String, DefaultValue: , Description: AnimeDirection
+#DesignerProperty: Key: AnimeDuration, DisplayName: AnimeDuration, FieldType: String, DefaultValue: , Description: AnimeDuration
+#DesignerProperty: Key: AnimeEasing, DisplayName: AnimeEasing, FieldType: String, DefaultValue: , Description: AnimeEasing
+#DesignerProperty: Key: AnimeLoop, DisplayName: AnimeLoop, FieldType: Boolean, DefaultValue: false, Description: AnimeLoop
+#DesignerProperty: Key: AnimeTranslateX, DisplayName: AnimeTranslateX, FieldType: String, DefaultValue: , Description: AnimeTranslateX
+#DesignerProperty: Key: AnimeTranslateY, DisplayName: AnimeTranslateY, FieldType: String, DefaultValue: , Description: AnimeTranslateY
 Sub Class_Globals
     Private BANano As BANano 'ignore
 	Private mName As String 'ignore
@@ -56,6 +66,14 @@ Private sTransition As String
 Private sWidth As String
 Private sVOn As String
 Private sVBind As String
+Private bAnimeAlternate As Boolean
+Private sAnimeDirection As String
+Private sAnimeDuration As String
+Private sAnimeEasing As String
+Private bAnimeLoop As Boolean
+Private sAnimeTranslateX As String
+Private sAnimeTranslateY As String
+Public Animate As BANanoAnimeJS
 	End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -97,6 +115,13 @@ sTransition = Props.Get("Transition")
 sWidth = Props.Get("Width")
 sVOn = Props.Get("VOn")
 		sVBind = Props.Get("VBind")
+		bAnimeAlternate = Props.Get("AnimeAlternate")
+sAnimeDirection = Props.Get("AnimeDirection")
+sAnimeDuration = Props.Get("AnimeDuration")
+sAnimeEasing = Props.Get("AnimeEasing")
+bAnimeLoop = Props.Get("AnimeLoop")
+sAnimeTranslateX = Props.Get("AnimeTranslateX")
+sAnimeTranslateY = Props.Get("AnimeTranslateY")
 	End If
 	'
 	'build and get the element
@@ -131,6 +156,19 @@ VElement.Width = sWidth
 VElement.AddAttr("v-on", sVOn)
 	VElement.AddAttr("v-bind", sVBind)
 VElement.BindAllEvents
+'
+
+	Animate.Initialize(mCallBack, $"#${mName}"$)
+	Animate.anime.translateX(sAnimeTranslateX)
+	Animate.anime.translateY(sAnimeTranslateY)
+	
+	Animate.anime.alternate(bAnimeAlternate)
+	If bAnimeAlternate = False Then
+		Animate.anime.direction(sAnimeDirection)
+	End If
+	Animate.anime.loopIT(bAnimeLoop)
+	Animate.anime.duration(sAnimeDuration)
+	Animate.anime.easing(sAnimeEasing)
 End Sub
 
 public Sub AddToParent(targetID As String)

@@ -30,7 +30,7 @@ Sub Initialize
 	contAD.AddRows(1).AddColumns12
 	contAD.BuildGrid
 	'
-	contAD.Matrix(1, 1).LoadLayout("chips")
+	contAD.Matrix(1, 1).LoadLayout("mychips")
 	
 	about.BindVueElement(chipad1.VElement)
 	about.BindVueElement(VChip1.VElement)

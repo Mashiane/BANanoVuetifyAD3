@@ -163,7 +163,7 @@ VElement.MinHeight = sMinHeight
 VElement.MinWidth = sMinWidth
 VElement.Outlined = bOutlined
 VElement.Prominent = bProminent
-VElement.AddClass(sRounded)
+VElement.AddAttr("rounded", sRounded)
 VElement.Shaped = bShaped
 VElement.AddAttr(":short", bShort)
 VElement.Src = sSrc

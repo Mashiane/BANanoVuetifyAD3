@@ -6,7 +6,12 @@ Version=8.9
 @EndOfDesignText@
 #IgnoreWarnings:12
 
+#DesignerProperty: Key: Align, DisplayName: Align, FieldType: String, DefaultValue: , Description: Align, List: normal|start|center|end|baseline|stretch
+#DesignerProperty: Key: Justify, DisplayName: Justify, FieldType: String, DefaultValue: , Description: Justify, List: normal|start|center|end|space-between|space-around
 #DesignerProperty: Key: Fluid, DisplayName: Fluid, FieldType: Boolean, DefaultValue: false, Description: Fluid
+#DesignerProperty: Key: FillHeight, DisplayName: FillHeight, FieldType: Boolean, DefaultValue: false, Description: FillHeight
+#DesignerProperty: Key: BackgroundImage, DisplayName: BackgroundImage, FieldType: String, DefaultValue:  , Description: BackgroundImage
+#DesignerProperty: Key: FitScreen, DisplayName: Fit Screen VH, FieldType: Boolean, DefaultValue: False, Description: FitScreen VH
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue:  , Description: , List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: ColorIntensity, DisplayName: Color Intensity, FieldType: String, DefaultValue:  normal, Description: , List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
@@ -32,6 +37,11 @@ Sub Class_Globals
 	Public VElement As VueElement
 	Private mVShow As String = ""
 	Private mVIf As String = ""
+	Private sAlign As String
+	Private sJustify As String
+	Private bFillHeight As Boolean
+	Private sBackgroundImage As String
+	Private bFitScreen As Boolean
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -57,7 +67,12 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mAttributes = Props.Get("Attributes")
 		mVIf = Props.Get("VIf")
 		sColor = Props.Get("Color")
-		sColorintensity = Props.Get("Colorintensity")
+		sColorintensity = Props.Get("ColorIntensity")
+		sAlign = Props.Get("Align")
+		sJustify = Props.Get("Justify")
+		bFillHeight = Props.Get("FillHeight")
+		sBackgroundImage = Props.Get("BackgroundImage")
+		bFitScreen = Props.Get("FitScreen")
 	End If
 	'
 	'build and get the element
@@ -73,6 +88,12 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.Color = VElement.BuildColor(sColor, sColorintensity)
 	VElement.VShow = mVShow
 	VElement.VIf = mVIf
+	VElement.setAlign(sAlign)	
+	VElement.setJustify(sJustify)
+	VElement.AddAttr(":fill-height", bFillHeight)
+	VElement.CoverImage = sBackgroundImage
+	VElement.FitScreen = bFitScreen
+	VElement.BindAllEvents	
 End Sub	
 
 public Sub AddToParent(targetID As String)

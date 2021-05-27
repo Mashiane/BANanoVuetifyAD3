@@ -20,7 +20,7 @@ Version=8.9
 #DesignerProperty: Key: Actions, DisplayName: Actions, FieldType: Boolean, DefaultValue: True, Description: Actions
 #DesignerProperty: Key: ActiveClass, DisplayName: ActiveClass, FieldType: String, DefaultValue: , Description: ActiveClass
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue: , Description: Color, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
-#DesignerProperty: Key: Colorintensity, DisplayName: Colorintensity, FieldType: String, DefaultValue: , Description: Colorintensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
+#DesignerProperty: Key: ColorIntensity, DisplayName: Colorintensity, FieldType: String, DefaultValue: , Description: Colorintensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: false, Description: Dark
 #DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: String, DefaultValue: , Description: Disabled
 #DesignerProperty: Key: Elevation, DisplayName: Elevation, FieldType: String, DefaultValue: , Description: Elevation
@@ -29,7 +29,7 @@ Version=8.9
 #DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: , Description: Width
 #DesignerProperty: Key: Hover, DisplayName: Hover, FieldType: Boolean, DefaultValue: false, Description: Hover
 #DesignerProperty: Key: Href, DisplayName: Href, FieldType: String, DefaultValue: , Description: Href
-#DesignerProperty: Key: LoaderHeight, DisplayName: LoaderHeight, FieldType: String, DefaultValue: 4, Description: LoaderHeight
+#DesignerProperty: Key: LoaderHeight, DisplayName: LoaderHeight, FieldType: String, DefaultValue: , Description: LoaderHeight
 #DesignerProperty: Key: Loading, DisplayName: Loading, FieldType: String, DefaultValue: , Description: Loading
 #DesignerProperty: Key: MaxHeight, DisplayName: MaxHeight, FieldType: String, DefaultValue: , Description: MaxHeight
 #DesignerProperty: Key: MaxWidth, DisplayName: MaxWidth, FieldType: String, DefaultValue: , Description: MaxWidth
@@ -40,8 +40,8 @@ Version=8.9
 #DesignerProperty: Key: Rounded, DisplayName: Rounded, FieldType: String, DefaultValue: none, Description: Rounded, List: none|rounded-0|rounded|rounded-sm|rounded-lg|rounded-xl|rounded-t-xl|rounded-r-xl|rounded-b-xl|rounded-l-xl|rounded-tl-xl|rounded-tr-xl|rounded-br-xl|rounded-bl-xl|rounded-pill|rounded-circle
 #DesignerProperty: Key: Shaped, DisplayName: Shaped, FieldType: Boolean, DefaultValue: false, Description: Shaped
 #DesignerProperty: Key: Target, DisplayName: Target, FieldType: String, DefaultValue: , Description: Target, List: _blank|_self|_parent|_top|none
-#DesignerProperty: Key: Textcolor, DisplayName: Textcolor, FieldType: String, DefaultValue: , Description: Textcolor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
-#DesignerProperty: Key: Textcolorintensity, DisplayName: Textcolorintensity, FieldType: String, DefaultValue: , Description: Textcolorintensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
+#DesignerProperty: Key: TextColor, DisplayName: Textcolor, FieldType: String, DefaultValue: , Description: Textcolor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
+#DesignerProperty: Key: TextColorIntensity, DisplayName: Textcolorintensity, FieldType: String, DefaultValue: , Description: Textcolorintensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: Tile, DisplayName: Tile, FieldType: Boolean, DefaultValue: false, Description: Tile
 #DesignerProperty: Key: To, DisplayName: To, FieldType: String, DefaultValue: , Description: To
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
@@ -51,6 +51,20 @@ Version=8.9
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: VOn, DisplayName: V-On, FieldType: String, DefaultValue:  , Description: V-On
 #DesignerProperty: Key: VBind, DisplayName: V-Bind, FieldType: String, DefaultValue:  , Description: V-Bind
+#DesignerProperty: Key: MA, DisplayName: MA, FieldType: String, DefaultValue: , Description: MA
+#DesignerProperty: Key: MB, DisplayName: MB, FieldType: String, DefaultValue: , Description: MB
+#DesignerProperty: Key: ML, DisplayName: ML, FieldType: String, DefaultValue: , Description: ML
+#DesignerProperty: Key: MR, DisplayName: MR, FieldType: String, DefaultValue: , Description: MR
+#DesignerProperty: Key: MT, DisplayName: MT, FieldType: String, DefaultValue: , Description: MT
+#DesignerProperty: Key: MX, DisplayName: MX, FieldType: String, DefaultValue: , Description: MX
+#DesignerProperty: Key: MY, DisplayName: MY, FieldType: String, DefaultValue: , Description: MY
+#DesignerProperty: Key: PA, DisplayName: PA, FieldType: String, DefaultValue: , Description: PA
+#DesignerProperty: Key: PB, DisplayName: PB, FieldType: String, DefaultValue: , Description: PB
+#DesignerProperty: Key: PL, DisplayName: PL, FieldType: String, DefaultValue: , Description: PL
+#DesignerProperty: Key: PR, DisplayName: PR, FieldType: String, DefaultValue: , Description: PR
+#DesignerProperty: Key: PT, DisplayName: PT, FieldType: String, DefaultValue: , Description: PT
+#DesignerProperty: Key: PX, DisplayName: PX, FieldType: String, DefaultValue: , Description: PX
+#DesignerProperty: Key: PY, DisplayName: PY, FieldType: String, DefaultValue: , Description: PY
 Sub Class_Globals
     Private BANano As BANano 'ignore
 	Private mName As String 'ignore
@@ -101,7 +115,21 @@ Private bSubTitleOnImage As Boolean
 Private bActions As Boolean
 Private sCardTextContent As String
 Private sVOn As String
-private sVBind as string
+Private sVBind As String
+Private sMA As String
+Private sMB As String
+Private sML As String
+Private sMR As String
+Private sMT As String
+Private sMX As String
+Private sMY As String
+Private sPA As String
+Private sPB As String
+Private sPL As String
+Private sPR As String
+Private sPT As String
+Private sPX As String
+Private sPY As String
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -128,7 +156,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mVIf = Props.Get("VIf")
 		sActiveClass = Props.Get("ActiveClass")
 sColor = Props.Get("Color")
-sColorintensity = Props.Get("Colorintensity")
+sColorintensity = Props.Get("ColorIntensity")
 bDark = Props.Get("Dark")
 sDisabled = Props.Get("Disabled")
 sElevation = Props.Get("Elevation")
@@ -164,6 +192,20 @@ bActions = Props.Get("Actions")
 sCardTextContent = Props.Get("CardTextContent")
 sVOn = Props.Get("VOn")
 		sVBind = Props.Get("VBind")
+		sMA = Props.Get("MA")
+sMB = Props.Get("MB")
+sML = Props.Get("ML")
+sMR = Props.Get("MR")
+sMT = Props.Get("MT")
+sMX = Props.Get("MX")
+sMY = Props.Get("MY")
+sPA = Props.Get("PA")
+sPB = Props.Get("PB")
+sPL = Props.Get("PL")
+sPR = Props.Get("PR")
+sPT = Props.Get("PT")
+sPX = Props.Get("PX")
+sPY = Props.Get("PY")
 	End If
 	'
 	'build and get the element
@@ -180,7 +222,7 @@ sVOn = Props.Get("VOn")
 		sImg = ""
 	End If
 	If sImg <> "" Then
-		VElement.Append($"<v-img id="${mName}image"></v-img>"$)
+		VElement.Append($"<v-img id="${mName}image" alt=""></v-img>"$)
 		VElement.GetImage.Src = sImg
 		If BANano.IsNull(sImgHeight) Or BANano.IsUndefined(sImgHeight) Then
 			sImgHeight = ""
@@ -273,7 +315,7 @@ VElement.MinHeight = sMinHeight
 VElement.MinWidth = sMinWidth
 VElement.Outlined = bOutlined
 VElement.Raised = bRaised
-VElement.AddClass(sRounded)
+VElement.AddAttr("rounded", sRounded)
 VElement.Shaped = bShaped
 VElement.Target = sTarget
 VElement.TextColor = VElement.BuildColor(sTextcolor, sTextcolorintensity)
@@ -282,6 +324,20 @@ VElement.To = sTo
 VElement.Width = sWidth
 VElement.AddAttr("v-on", sVOn)
 	VElement.AddAttr("v-bind", sVBind)
+	VElement.MA = sMA
+VElement.MB = sMB
+VElement.ML = sML
+VElement.MR = sMR
+VElement.MT = sMT
+VElement.MX = sMX
+VElement.MY = sMY
+VElement.PA = sPA
+VElement.PB = sPB
+VElement.PL = sPL
+VElement.PR = sPR
+VElement.PT = sPT
+VElement.PX = sPX
+VElement.PY = sPY
 VElement.BindAllEvents
 End Sub
 
@@ -326,7 +382,6 @@ Sub Visible(VC As VueComponent, b As Boolean) As VCard
 	VC.SetData(mVShow, b)
 	Return Me
 End Sub
-
 
 Sub Loading(VC As VueComponent, b As Boolean) As VCard
 	VC.SetData(sLoading, b)

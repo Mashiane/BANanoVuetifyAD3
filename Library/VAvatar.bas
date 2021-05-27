@@ -11,6 +11,7 @@ Version=8.9
 #DesignerProperty: Key: Icon, DisplayName: Icon, FieldType: String, DefaultValue: , Description: Icon
 #DesignerProperty: Key: IconDark, DisplayName: IconDark, FieldType: Boolean, DefaultValue: True, Description: IconDark
 #DesignerProperty: Key: Image, DisplayName: Image, FieldType: String, DefaultValue: , Description: Image
+#DesignerProperty: Key: Elevation, DisplayName: Elevation, FieldType: String, DefaultValue: , Description: Elevation
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue: primary, Description: Color, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: ColorIntensity, DisplayName: Color Intensity, FieldType: String, DefaultValue:  normal, Description: , List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: TextColor, DisplayName: Text Color, FieldType: String, DefaultValue: white , Description: , List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
@@ -32,7 +33,20 @@ Version=8.9
 #DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue: , Description: VShow
 #DesignerProperty: Key: VOn, DisplayName: V-On, FieldType: String, DefaultValue:  , Description: V-On
 #DesignerProperty: Key: VBind, DisplayName: V-Bind, FieldType: String, DefaultValue:  , Description: V-Bind
-
+#DesignerProperty: Key: MA, DisplayName: MA, FieldType: String, DefaultValue: , Description: MA
+#DesignerProperty: Key: MB, DisplayName: MB, FieldType: String, DefaultValue: , Description: MB
+#DesignerProperty: Key: ML, DisplayName: ML, FieldType: String, DefaultValue: , Description: ML
+#DesignerProperty: Key: MR, DisplayName: MR, FieldType: String, DefaultValue: , Description: MR
+#DesignerProperty: Key: MT, DisplayName: MT, FieldType: String, DefaultValue: , Description: MT
+#DesignerProperty: Key: MX, DisplayName: MX, FieldType: String, DefaultValue: , Description: MX
+#DesignerProperty: Key: MY, DisplayName: MY, FieldType: String, DefaultValue: , Description: MY
+#DesignerProperty: Key: PA, DisplayName: PA, FieldType: String, DefaultValue: , Description: PA
+#DesignerProperty: Key: PB, DisplayName: PB, FieldType: String, DefaultValue: , Description: PB
+#DesignerProperty: Key: PL, DisplayName: PL, FieldType: String, DefaultValue: , Description: PL
+#DesignerProperty: Key: PR, DisplayName: PR, FieldType: String, DefaultValue: , Description: PR
+#DesignerProperty: Key: PT, DisplayName: PT, FieldType: String, DefaultValue: , Description: PT
+#DesignerProperty: Key: PX, DisplayName: PX, FieldType: String, DefaultValue: , Description: PX
+#DesignerProperty: Key: PY, DisplayName: PY, FieldType: String, DefaultValue: , Description: PY
 '
 Sub Class_Globals
     Private BANano As BANano 'ignore
@@ -68,6 +82,21 @@ Private mTextColor As String = ""
 	Private bIconDark As String = ""
 	Private sVOn As String
 	Private sVBind As String
+	Private sElevation As String
+	Private sMA As String
+Private sMB As String
+Private sML As String
+Private sMR As String
+Private sMT As String
+Private sMX As String
+Private sMY As String
+Private sPA As String
+Private sPB As String
+Private sPL As String
+Private sPR As String
+Private sPT As String
+Private sPX As String
+Private sPY As String
 	End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -113,6 +142,21 @@ mImage = Props.Get("Image")
 bIconDark = Props.Get("IconDark")
 sVOn = Props.Get("VOn")
 		sVBind = Props.Get("VBind")
+		sElevation = Props.Get("Elevation")
+		sMA = Props.Get("MA")
+sMB = Props.Get("MB")
+sML = Props.Get("ML")
+sMR = Props.Get("MR")
+sMT = Props.Get("MT")
+sMX = Props.Get("MX")
+sMY = Props.Get("MY")
+sPA = Props.Get("PA")
+sPB = Props.Get("PB")
+sPL = Props.Get("PL")
+sPR = Props.Get("PR")
+sPT = Props.Get("PT")
+sPX = Props.Get("PX")
+sPY = Props.Get("PY")
 	End If
 	'
 	'build and get the element
@@ -164,6 +208,7 @@ VElement.MaxHeight = sMaxHeight
 VElement.MaxWidth = sMaxWidth
 VElement.MinHeight = sMinHeight
 VElement.MinWidth = sMinWidth
+VElement.Elevation = sElevation
 Select Case sPosition
 Case "normal"	
 Case "left"
@@ -171,12 +216,26 @@ VElement.Left = True
 Case "right"
 VElement.Right = True
 End Select
-VElement.AddClass(sRounded)
+VElement.AddAttr("rounded", sRounded)
 VElement.Size = sSize
 VElement.Tile = bTile
 VElement.Width = sWidth
 VElement.AddAttr("v-on", sVOn)
 	VElement.AddAttr("v-bind", sVBind)
+	VElement.MA = sMA
+VElement.MB = sMB
+VElement.ML = sML
+VElement.MR = sMR
+VElement.MT = sMT
+VElement.MX = sMX
+VElement.MY = sMY
+VElement.PA = sPA
+VElement.PB = sPB
+VElement.PL = sPL
+VElement.PR = sPR
+VElement.PT = sPT
+VElement.PX = sPX
+VElement.PY = sPY
 VElement.BindAllEvents
 End Sub
 
