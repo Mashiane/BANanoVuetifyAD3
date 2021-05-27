@@ -316,6 +316,11 @@ Sub Visible(VC As VueComponent, b As Boolean) As VDialog
 	Return Me
 End Sub
 
+Sub VisibleOnApp(vapp As VuetifyApp, b As Boolean)
+	vapp.SetData(sVModel, b)
+	vapp.SetData(sVIf, b)
+End Sub
+
 Sub Card As VueElement
 	Return VElement.GetCard
 End Sub
@@ -342,4 +347,8 @@ End Sub
 
 Sub CardImage As VueElement
 	Return VElement.GetImage
+End Sub
+
+Sub getVModel As String
+	Return sVModel
 End Sub
