@@ -13,14 +13,14 @@ Version=8.95
 #Event: MouseUp(e As BANanoEvent)
 #Event: UpdateError(B As Boolean)
 
-#DesignerProperty: Key: Label, DisplayName: Label, FieldType: String, DefaultValue: , Description: Label
-#DesignerProperty: Key: TrueValue, DisplayName: TrueValue, FieldType: String, DefaultValue: , Description: TrueValue
-#DesignerProperty: Key: FalseValue, DisplayName: FalseValue, FieldType: String, DefaultValue: , Description: FalseValue
+#DesignerProperty: Key: Label, DisplayName: Label, FieldType: String, DefaultValue: Switch1, Description: Label
+#DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: Switch1, Description: VModel
+#DesignerProperty: Key: TrueValue, DisplayName: TrueValue, FieldType: String, DefaultValue: Yes, Description: TrueValue
+#DesignerProperty: Key: FalseValue, DisplayName: FalseValue, FieldType: String, DefaultValue: No, Description: FalseValue
 #DesignerProperty: Key: InputValue, DisplayName: InputValue, FieldType: String, DefaultValue: , Description: InputValue
 #DesignerProperty: Key: Inset, DisplayName: Inset, FieldType: Boolean, DefaultValue: false, Description: Inset
 #DesignerProperty: Key: SetRef, DisplayName: SetRef, FieldType: Boolean, DefaultValue: false, Description: SetRef
 #DesignerProperty: Key: ValidateOnBlur, DisplayName: ValidateOnBlur, FieldType: Boolean, DefaultValue: false, Description: ValidateOnBlur
-#DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: , Description: VModel
 
 #DesignerProperty: Key: AppendIcon, DisplayName: AppendIcon, FieldType: String, DefaultValue: , Description: AppendIcon
 #DesignerProperty: Key: BackgroundColor, DisplayName: BackgroundColor, FieldType: String, DefaultValue: , Description: BackgroundColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
@@ -236,7 +236,7 @@ VElement.SetData(sMessages, VElement.newlist)
 VElement.AddAttr(":multiple", bMultiple)
 VElement.AddAttr(":persistent-hint", bPersistentHint)
 VElement.AddAttr("prepend-icon", sPrependIcon)
-VElement.AddAttr("readonly", sReadonly)
+VElement.AddAttr(":readonly", sReadonly)
 VElement.SetData(sReadonly, False)
 VElement.AddAttr(":ripple", bRipple)
 VElement.AddAttr(":rules", sRules)
@@ -253,6 +253,7 @@ VElement.AddAttr("v-model", sVModel)
 VElement.AddAttr("v-on", sVOn)
 VElement.AddAttr("v-show", sVShow)
 VElement.AddAttr(":validate-on-blur", bValidateOnBlur)
+VElement.SetData(sVModel, "No")
 VElement.BindAllEvents
 End Sub
 

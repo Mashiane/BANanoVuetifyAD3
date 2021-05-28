@@ -130,8 +130,9 @@ Sub Init
 	drwlist.AddItemParentChild("ad", ViewADIcons.name, "",  "", "AD Icons", ViewADIcons.path)
 	drwlist.AddItemParentChild("ad", ViewADImages.name, "",  "", "AD Images", ViewADImages.path)
 	
-	drwlist.AddItemParentChild("ad", ViewADInputs.name, "",  "", "AD Inputs", ViewADInputs.path)
-	drwlist.AddItemParentChild("ad", ViewADtextField.name, "",  "", "AD TextField", ViewADtextField.path)
+	drwlist.AddItemParentChild("ad", ViewADInputs.name, "",  "", "AD Rating", ViewADInputs.path)
+	drwlist.AddItemParentChild("ad", ViewADTextField.name, "",  "", "AD TextField", ViewADTextField.path)
+	drwlist.AddItemParentChild("ad", ViewADSwitch.name, "",  "", "AD Switch", ViewADSwitch.path)
 	
 	
 	drwlist.AddItemParentChild("ad", ViewADOverlay.name, "",  "", "AD Overlay", ViewADOverlay.path)
@@ -260,6 +261,7 @@ End Sub
 Sub AddRouters
 	'ViewContacts.Initialize
 	'ViewCRUDBuilder.Initialize
+	ViewADswitch.Initialize 
 	ViewADTextField.Initialize 
 	ViewADLogin.initialize
 	ViewADImages.Initialize 

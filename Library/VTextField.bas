@@ -22,10 +22,11 @@ Version=8.95
 #Event: UpdateError (B As Boolean)
 #Event: KeyupEnterPrevent (e As BANanoEvent)
 
-#DesignerProperty: Key: Label, DisplayName: Label, FieldType: String, DefaultValue: , Description: Label
-#DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: , Description: VModel
+#DesignerProperty: Key: Label, DisplayName: Label, FieldType: String, DefaultValue: Label1, Description: Label
+#DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: Label1, Description: VModel
 #DesignerProperty: Key: SetRef, DisplayName: SetRef, FieldType: Boolean, DefaultValue: false, Description: SetRef
 #DesignerProperty: Key: TypeOf, DisplayName: TypeOf, FieldType: String, DefaultValue: text, Description: TypeOf, List: text|password|email|tel|email|url|number|search|time|button|hidden|reset|submit
+#DesignerProperty: Key: ShowEyes, DisplayName: ShowEyes, FieldType: Boolean, DefaultValue: false, Description: ShowEyes
 #DesignerProperty: Key: TextArea, DisplayName: TextArea, FieldType: Boolean, DefaultValue: false, Description: TextArea
 #DesignerProperty: Key: AppendIcon, DisplayName: AppendIcon, FieldType: String, DefaultValue: , Description: AppendIcon
 #DesignerProperty: Key: AppendOuterIcon, DisplayName: AppendOuterIcon, FieldType: String, DefaultValue: , Description: AppendOuterIcon
@@ -159,6 +160,8 @@ Private sVOn As String
 Private sVShow As String
 Private bValidateOnBlur As Boolean
 Private sRequired As String
+Private bShowEyes As Boolean
+Private sShowEyes As String
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -184,6 +187,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	sReadonly = $"${mName}readonly"$
 	sVShow = $"${mName}show"$
 	sLoading = $"${mName}loading"$
+	sShowEyes = $"${mName}eyes"$
 End Sub
 	
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
@@ -253,6 +257,7 @@ sVOn = Props.Get("VOn")
 'sVShow = Props.Get("VShow")
 bValidateOnBlur = Props.Get("ValidateOnBlur")
 'sRequired = Props.Get("Required")
+bShowEyes = Props.Get("ShowEyes")
 	End If
 	'
 	Dim stagName As String = "v-text-field"
@@ -277,6 +282,9 @@ bValidateOnBlur = Props.Get("ValidateOnBlur")
 	End If
 	If bSetRef Then
 		VElement.Ref = mName
+	End If
+	If BANano.IsNull(bShowEyes) Or BANano.IsUndefined(bShowEyes) Then
+		bShowEyes = False
 	End If
 	'
 	VElement.Classes = mClasses
@@ -352,7 +360,23 @@ VElement.AddAttr("v-on", sVOn)
 VElement.AddAttr("v-show", sVShow)
 VElement.SetData(sVShow, True)
 VElement.AddAttr(":validate-on-blur", bValidateOnBlur)
+'
+If bShowEyes Then
+	VElement.Bind("append-icon", $"${sShowEyes} ? 'mdi-eye' : 'mdi-eye-off'"$)
+	VElement.Bind("type", $"${sShowEyes} ? 'text' : 'password'"$)
+	VElement.SetData(sShowEyes, False)
+End If
 VElement.BindAllEvents
+End Sub
+
+'toggle the password
+Sub PasswordVisible(VC As VueComponent, b As Boolean)
+	VC.setdata(sShowEyes, b)
+End Sub
+
+'toggle the password
+Sub TogglePassword(VC As VueComponent)
+	VC.Toggle(sShowEyes)
 End Sub
 
 Sub Required(VC As VueComponent, b As Boolean)
@@ -449,7 +473,6 @@ End Sub
 Sub AddRule(methodName As String)
 	VElement.AddRule(methodName)
 End Sub
-
 
 Sub getID As String
 	Return mName

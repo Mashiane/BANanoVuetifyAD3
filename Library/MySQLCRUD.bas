@@ -60,8 +60,9 @@ Sub Class_Globals
 	Private dtCont As StringBuilder
 	Private SingularClean As String
 	Private PluralClean As String
-	Type DBRelationship(source As String, key As String, value As String, vmodel As String)
+	Type DBRelationship(source As String, key As String, value As String, vmodel As String, keys as String, values as string)
 	Private relationships As List
+	Private datasources As List
 	Private className As String
 	Private addedFiles As List
 	Private matrix As List
@@ -147,6 +148,7 @@ Public Sub Initialize(clsName As String) As MySQLCRUD
 	Diag_Width = "600"
 	dtCont.Initialize
 	relationships.Initialize 
+	datasources.Initialize 
 	addedFiles.Initialize 
 	matrix.initialize
 	matrixMap.initialize
@@ -713,17 +715,15 @@ Sub Diag_AddComboBox(fldName As String, row As Int, col As Int, vmodel As String
 	dtCont.Append($"${ComponentName}.BindVueElement(${Prefix}${fldName})"$).Append(CRLF)
 	dtCont.Append($"${ComponentName}.SetData("${DataSource}", ${ComponentName}.NewList)"$).Append(CRLF)
 	'
-	Dim rel As DBRelationship
-	rel.Initialize 
-	rel.key = Key
-	rel.value = Value
-	rel.source = DataSource
-	rel.vmodel = vmodel
-	relationships.Add(rel)
+	AddRelationship(Key,Value,DataSource,vmodel)
 	UpdateMatrix(row, col)
 End Sub
 
 Sub AddRelationship(key As String, value As String, datasource As String, vmodel As String)
+	key = key.Trim
+	value = value.Trim
+	datasource = datasource.Trim
+	'
 	If value = "" Or key = "" Then Return
 	Dim rel As DBRelationship
 	rel.Initialize
@@ -731,7 +731,26 @@ Sub AddRelationship(key As String, value As String, datasource As String, vmodel
 	rel.value = value
 	rel.source = datasource
 	rel.vmodel = vmodel
+	rel.keys = ""
+	rel.values = ""
 	relationships.Add(rel)
+End Sub
+
+Sub AddDataSource(key As String, value As String, datasource As String, vmodel As String, keys As String, values As String)
+	key = key.Trim
+	value = value.Trim
+	datasource = datasource.Trim
+	'
+	If value = "" Or key = "" Then Return
+	Dim rel As DBRelationship
+	rel.Initialize
+	rel.key = key
+	rel.value = value
+	rel.source = datasource
+	rel.vmodel = vmodel
+	rel.keys = keys
+	rel.values = values
+	datasources.Add(rel)
 End Sub
 
 'add a select to the dialog
@@ -744,13 +763,7 @@ Sub Diag_AddSelect(fldName As String, row As Int, col As Int, vmodel As String, 
 	dtCont.Append($"${ComponentName}.BindVueElement(${Prefix}${fldName})"$).Append(CRLF)
 	dtCont.Append($"${ComponentName}.SetData("${DataSource}", ${ComponentName}.NewList)"$).Append(CRLF)
 	'
-	Dim rel As DBRelationship
-	rel.Initialize
-	rel.key = Key
-	rel.value = Value
-	rel.source = DataSource
-	rel.vmodel = vmodel
-	relationships.Add(rel)
+	AddRelationship(Key, Value, DataSource, vmodel)
 	UpdateMatrix(row, col)
 End Sub
 
@@ -766,14 +779,7 @@ Sub Diag_AddChipGroup(fldName As String, row As Int, col As Int, vmodel As Strin
 	SetProperties(fldName,vmodel)
 	dtCont.Append($"${ComponentName}.BindVueElement(${Prefix}${fldName})"$).Append(CRLF)
 	dtCont.Append($"${ComponentName}.SetData("${DataSource}", ${ComponentName}.NewList)"$).Append(CRLF)
-	'
-	Dim rel As DBRelationship
-	rel.Initialize
-	rel.key = Key
-	rel.value = Value
-	rel.source = DataSource
-	rel.vmodel = vmodel
-	relationships.Add(rel)
+	AddRelationship(Key, Value, DataSource, vmodel)
 	UpdateMatrix(row, col)
 End Sub
 
@@ -827,13 +833,7 @@ Sub Diag_AddAutoComplete(fldName As String, row As Int, col As Int, vmodel As St
 	dtCont.Append($"${ComponentName}.BindVueElement(${Prefix}${fldName})"$).Append(CRLF)
 	dtCont.Append($"${ComponentName}.SetData("${DataSource}", ${ComponentName}.NewList)"$).Append(CRLF)
 	'
-	Dim rel As DBRelationship
-	rel.Initialize
-	rel.key = Key
-	rel.value = Value
-	rel.source = DataSource
-	rel.vmodel = vmodel
-	relationships.Add(rel)
+	AddRelationship(Key, value, DataSource, vmodel)
 	UpdateMatrix(row, col)
 End Sub
 
@@ -869,13 +869,7 @@ Sub Diag_AddRadioGroup(fldName As String, row As Int, col As Int, vmodel As Stri
 	dtCont.Append($"${ComponentName}.BindVueElement(${Prefix}${fldName})"$).Append(CRLF)
 	dtCont.Append($"${ComponentName}.SetData("${DataSource}", ${ComponentName}.NewList)"$).Append(CRLF)
 	
-	Dim rel As DBRelationship
-	rel.Initialize
-	rel.key = Key
-	rel.value = Value
-	rel.source = DataSource
-	rel.vmodel = vmodel
-	relationships.Add(rel)
+	AddRelationship(Key, Value, DataSource, vmodel)
 	UpdateMatrix(row, col)
 End Sub
 

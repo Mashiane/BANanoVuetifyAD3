@@ -19,6 +19,8 @@ Sub Process_Globals
 	Private VTextField6 As VTextField
 	Private VTextField7 As VTextField
 	Private VTextField8 As VTextField
+	Private VTextField9 As VTextField
+	Private VTextField10 As VTextField
 End Sub
 
 Sub Initialize
@@ -38,7 +40,15 @@ Sub Initialize
 	about.BindVueElement(VTextField6.VElement)
 	about.BindVueElement(VTextField7.VElement)
 	about.BindVueElement(VTextField8.VElement)
+	about.BindVueElement(VTextField9.VElement)
+	about.BindVueElement(VTextField10.VElement)
+	
 		
 	'add the component as a router
 	vuetify.AddRoute(about) 
+End Sub
+
+
+Private Sub VTextField9_ClickAppend (e As BANanoEvent)
+	VTextField9.TogglePassword(about)
 End Sub
