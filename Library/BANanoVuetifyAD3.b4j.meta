@@ -262,6 +262,6 @@ ModuleClosedNodes85=
 ModuleClosedNodes86=
 ModuleClosedNodes87=
 ModuleClosedNodes9=
-NavigationStack=MySQLCRUD,InitilizeCode,1738,0,MySQLCRUD,BuildForeignLinks,1774,0,MySQLCRUD,LoadRelationships,1788,0,MySQLCRUD,RelationshipsCode,1180,0,MySQLCRUD,Diag_AddComboBox,711,0,MySQLCRUD,Diag_AddPassword,696,0,MySQLCRUD,Diag_AddSelect,746,0,MySQLCRUD,Class_Globals,56,6,MySQLCRUD,AddDataSource,749,6,MySQLCRUD,AddRelationship,723,6
+NavigationStack=Main,AppStart,33,0,MySQLCRUD,Class_Globals,58,6,MySQLCRUD,Initialize,144,0,MySQLCRUD,BuildGrid,2270,0,MySQLCRUD,AddDataSource,746,6,MySQLCRUD,ToString,2286,6,MySQLCRUD,LoadCode,1174,0,MySQLCRUD,MoneyCodeRead,1330,0,MySQLCRUD,BuildSchemas,1305,0,MySQLCRUD,RelationshipsCode,1287,6
 SelectedBuild=0
 VisibleModules=12

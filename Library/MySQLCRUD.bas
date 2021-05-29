@@ -60,7 +60,7 @@ Sub Class_Globals
 	Private dtCont As StringBuilder
 	Private SingularClean As String
 	Private PluralClean As String
-	Type DBRelationship(source As String, key As String, value As String, vmodel As String, keys as String, values as string)
+	Type DBRelationship(source As String, key As String, value As String, vmodel As String, keys As String, values As String)
 	Private relationships As List
 	Private datasources As List
 	Private className As String
@@ -741,7 +741,7 @@ Sub AddDataSource(key As String, value As String, datasource As String, vmodel A
 	value = value.Trim
 	datasource = datasource.Trim
 	'
-	If value = "" Or key = "" Then Return
+	If keys = "" Or values = "" Then Return
 	Dim rel As DBRelationship
 	rel.Initialize
 	rel.key = key
@@ -1147,16 +1147,16 @@ private Sub LoadCode
 	'	Return
 	'End If
 	${ComponentName}.SetData("${Plural.tolowercase}", ${ComponentName}.NewMap)
-	Dim spermissions As String = vuetify.GetData("permissions")
-	Dim perma As List = BANanoShared.StrParse(",", spermissions)
-	For Each strp As String In perma
-		${ComponentName}.SetData(strp, True)
-	Next
+	'Dim spermissions As String = vuetify.GetData("permissions")
+	'Dim perma As List = BANanoShared.StrParse(",", spermissions)
+	'For Each strp As String In perma
+	'	${ComponentName}.SetData(strp, True)
+	'Next
+	'If ${ComponentName}.GetData("${Plural.tolowercase}.see") = False Then
+	'	vuetify.ShowSnackBarError("You do not have permission to see these ${Plural.tolowercase}")
+	'	Return
+	'End If
 	${dtName}.SetRows(${ComponentName}.NewList)
-	If ${ComponentName}.GetData("${Plural.tolowercase}.see") = False Then
-		vuetify.ShowSnackBarError("You do not have permission to see these ${Plural.tolowercase}")
-		Return
-	End If
 	'Show progress loader
 	${dtName}.UpdateLoading(True)
 	${LoadRelationships}
@@ -1188,6 +1188,73 @@ End Sub
 'build the relationships
 private Sub RelationshipsCode
 	If relationships.Size = 0 Then Return
+	'
+	Dim lsources As Map
+	lsources.Initialize 
+	For Each rec As DBRelationship In datasources
+		Dim ssource As String = rec.source
+		lsources.put(ssource, ssource)
+	Next
+	Dim rTot As Int = relationships.Size - 1
+	Dim rCnt As Int
+	For rCnt = rTot To 0 Step -1
+		Dim xitem As DBRelationship = relationships.Get(rCnt)
+		Dim xsource As String = xitem.source
+		If lsources.ContainsKey(xsource) Then
+			relationships.RemoveAt(rCnt)	
+		End If
+	Next	
+	
+	'create links for data sources
+	For Each rec As DBRelationship In datasources
+		Dim ssource As String = rec.source
+		Dim skey As String = rec.key
+		Dim svmodel As String = rec.vmodel 
+		Dim svalue As String = rec.value
+		Dim skeys As String = rec.keys
+		Dim svalues As String = rec.values
+		'
+		Dim spkeys As List = BANanoShared.StrParse(",", skeys)
+		Dim spvalues As List = BANanoShared.StrParse(",", svalues)
+		'
+		Dim xValues As StringBuilder
+		xValues.Initialize 
+		Dim vTot As Int = spkeys.Size - 1
+		Dim vCnt As Int 
+		For vCnt = 0 To vTot
+			Dim xKey As String = spkeys.Get(vCnt)
+			Dim xVal As String = spvalues.Get(vCnt)			
+			xValues.Append($"dsList.Add(CreateMap("${skey}":"${xKey}", "${svalue}":"${xVal}"))"$)
+			xValues.Append(CRLF)
+		Next
+		
+		sb.Append("'Load key values from custom entries").Append(CRLF)
+		sb.Append($"Sub Load${ssource}		'ignoredeadcode
+			Dim dsList As List
+			dsList.Initialize
+			${xValues.tostring}
+			${ComponentName}.SetData("${ssource}", dsList)
+	foreign${ssource}.Initialize
+	For Each relmap As Map In dsList
+		Dim s${skey} As String = relmap.GetDefault("${skey}", "")
+		Dim s${svalue} As String = relmap.GetDefault("${svalue}", "")
+		foreign${ssource}.put(s${skey}, s${svalue})
+	Next
+		End Sub"$).Append(CRLF).Append(CRLF) 
+		'
+		AddCode($"Sub Get${ssource}(sValue As String) As String   'IgnoreDeadCode"$)
+	AddCode($"if foreign${ssource}.ContainsKey(sValue) Then"$)
+	AddCode($"Dim xValue As String = foreign${ssource}.get(sValue)"$)
+	AddCode("return xValue")
+	AddCode("else")
+	AddCode("return sValue")
+	AddCode("end if")
+	AddCode("End Sub")
+	AddCode(CRLF)
+	AddCode(CRLF) 
+	Next
+	
+	
 	For Each rec As DBRelationship In relationships
 		Dim ssource As String = rec.source
 		Dim skey As String = rec.key
@@ -1201,6 +1268,7 @@ private Sub RelationshipsCode
 		Dim xarri As String = BANanoShared.List2ArrayVariable(xfields)
 		Dim tbName As String = $"rs${ssource}"$
 		'
+		sb.Append("'Load key values from database").Append(CRLF)
 		sb.Append($"Sub Load${ssource}		'ignoredeadcode
 		${OpenBANanoSQL}
 	Dim ${tbName} As ${className}
@@ -1719,14 +1787,14 @@ End Sub"$).append(CRLF).append(CRLF)
 	AddCode($"${ComponentName}.vuetify = vuetify"$)
 	AddCode($"path = ${ComponentName}.path"$)
 	AddComment("")
-	AddComment("setting up permissions")
-	AddCode($"${ComponentName}.SetData("${Plural.tolowercase}", ${ComponentName}.NewMap)"$)
+	AddComment("'setting up permissions")
+	AddCode($"'${ComponentName}.SetData("${Plural.tolowercase}", ${ComponentName}.NewMap)"$)
 	AddComment("'add a msgbox dialog for this page")
 	AddCode($"msgBox = ${ComponentName}.AddMsgBox(True, 500, "success", "error")"$)
 	
 	sb.Append($"'add a container to hold the ${Plural.tolowercase}
 	cont${SingularClean} = vuetify.AddContainer(Me, ${ComponentName}.Here, "cont${SingularClean}", True)
-	cont${SingularClean}.Blurred = "!${Plural.tolowercase}.see"
+	'cont${SingularClean}.Blurred = "!${Plural.tolowercase}.see"
 	cont${SingularClean}.AddRows1.AddColumns12
 	cont${SingularClean}.BuildGrid
 	'
@@ -1919,10 +1987,10 @@ End Sub"$).Append(CRLF).Append(CRLF)
 	'TABLE ADD
 	If DT_HasAddNew Then
 	sb.Append($"Sub ${dtName}_add_click(e As BANanoEvent)				'ignoredeadcode
-	If ${ComponentName}.GetData("${Plural.tolowercase}.add") = False Then
-		vuetify.ShowSnackBarError("You do not have permission to add a ${Singular.tolowercase}!")
-		Return 
-	End If
+	'If ${ComponentName}.GetData("${Plural.tolowercase}.add") = False Then
+	'	vuetify.ShowSnackBarError("You do not have permission to add a ${Singular.tolowercase}!")
+	'	Return 
+	'End If
 	Add${SingularClean}
 End Sub"$).Append(CRLF).Append(CRLF)
 	'
@@ -1950,10 +2018,10 @@ End If
 	'TABLE EDIT
 	If DT_HasEdit Then
 	sb.Append($"Private Sub ${dtName}_edit (item As Map)				'ignoredeadcode
-	If ${ComponentName}.GetData("${Plural.tolowercase}.update") = False Then
-		vuetify.ShowSnackBarError("You do not have permission to update a ${Singular.tolowercase}!")
-		Return 
-	End If
+	'If ${ComponentName}.GetData("${Plural.tolowercase}.update") = False Then
+	'	vuetify.ShowSnackBarError("You do not have permission to update a ${Singular.tolowercase}!")
+	'	Return 
+	'End If
 	${ComponentName}.SetData("reload", true)
 	'get the current $refs
 	${ComponentName}.refs = vuetify.GetRefs
@@ -1971,10 +2039,10 @@ End Sub"$).Append(CRLF).Append(CRLF)
 	'TABLE DELETE
 	If DT_HasDelete Then
 	sb.Append($"Private Sub ${dtName}_delete (item As Map)				'ignoredeadcode
-	If ${ComponentName}.GetData("${Plural.tolowercase}.delete") = False Then
-		vuetify.ShowSnackBarError("You do not have permission to delete a ${Singular.tolowercase}!")
-		Return 
-	End If
+	'If ${ComponentName}.GetData("${Plural.tolowercase}.delete") = False Then
+	'	vuetify.ShowSnackBarError("You do not have permission to delete a ${Singular.tolowercase}!")
+	'	Return 
+	'End If
 	Dim s${DisplayField} As String = item.Get("${DisplayField}")
 	Dim s${PrimaryKey} As String = item.Get("${PrimaryKey}")
 	${ComponentName}.SetData("${PrimaryKey.tolowercase}", s${PrimaryKey})
@@ -2034,10 +2102,10 @@ End Sub"$).Append(CRLF).Append(CRLF)
 	
 	'
 	sb.Append($"Private Sub ${dtName}_change (item As Map)				'ignoredeadcode
-	If ${ComponentName}.GetData("${Plural.tolowercase}.update") = False Then
-		vuetify.ShowSnackBarError("You do not have permission to update a ${Singular.tolowercase}!")
-		Return 
-	End If
+	'If ${ComponentName}.GetData("${Plural.tolowercase}.update") = False Then
+	'	vuetify.ShowSnackBarError("You do not have permission to update a ${Singular.tolowercase}!")
+	'	Return 
+	'End If
 	${ComponentName}.SetData("reload", False)
 	${ComponentName}.RunMethod("Update${SingularClean}", item)
 End Sub"$).Append(CRLF).Append(CRLF)
@@ -2050,10 +2118,10 @@ End Sub"$).Append(CRLF).Append(CRLF)
 	'
 	If DT_HasSave Then
 sb.Append($"Sub ${dtName}_save (item As Map)
-If ${ComponentName}.GetData("${Plural.tolowercase}.update") = False Then
-		vuetify.ShowSnackBarError("You do not have permission to update a ${Singular.tolowercase}!")
-		Return 
-	End If
+'If ${ComponentName}.GetData("${Plural.tolowercase}.update") = False Then
+'		vuetify.ShowSnackBarError("You do not have permission to update a ${Singular.tolowercase}!")
+'		Return 
+'	End If
 ${ComponentName}.SetData("reload", False)
 ${ComponentName}.RunMethod("Update${SingularClean}", item)
 End Sub"$).append(CRLF).append(CRLF)
@@ -2081,10 +2149,10 @@ End Sub"$).Append(CRLF).Append(CRLF)
 	'
 	If DT_HasClone Then
 sb.Append($"Sub ${dtName}_clone (item As Map)
-If ${ComponentName}.GetData("${Plural.tolowercase}.add") = False Then
-		vuetify.ShowSnackBarError("You do not have permission to add a ${Singular.tolowercase}!")
-		Return 
-	End If
+'If ${ComponentName}.GetData("${Plural.tolowercase}.add") = False Then
+'		vuetify.ShowSnackBarError("You do not have permission to add a ${Singular.tolowercase}!")
+'		Return 
+'	End If
 Dim rec As Map = BANanoShared.CopyMap(item, array("*"))
 ${ComponentName}.RunMethod("Create${SingularClean}", rec)
 End Sub"$).Append(CRLF).Append(CRLF)
@@ -2092,10 +2160,10 @@ End Sub"$).Append(CRLF).Append(CRLF)
 
 	If DT_HasEditDialog Then
 		sb.Append($"Sub ${dtName}_SaveItem (item As Map)
-		If ${ComponentName}.GetData("${Plural.tolowercase}.update") = False Then
-		vuetify.ShowSnackBarError("You do not have permission to update a ${Singular.tolowercase}!")
-		Return 
-	End If
+		'If ${ComponentName}.GetData("${Plural.tolowercase}.update") = False Then
+		'vuetify.ShowSnackBarError("You do not have permission to update a ${Singular.tolowercase}!")
+		'Return 
+	'End If
 	${ComponentName}.SetData("reload", False)
 	${ComponentName}.RunMethod("Update${SingularClean}", item)
 End Sub"$).append(CRLF).append(CRLF)
@@ -2236,6 +2304,7 @@ End Sub
 
 'convert to string
 Sub ToString As String
+	'remove data sources from relationships
 	AddCode(DB_CreateTable)
 	AddCode("")
 	'
