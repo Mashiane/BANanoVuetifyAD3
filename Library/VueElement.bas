@@ -2675,6 +2675,12 @@ public Sub setValue(varValue As String)
 	stValue = varValue
 End Sub
 
+
+public Sub getValue() As String
+	Return stValue
+End Sub
+
+
 public Sub setInputValue(varValue As String)
 	AddAttr("input-value", varValue)
 End Sub
@@ -2687,9 +2693,6 @@ public Sub setShift(varValue As Boolean)
 	AddAttr(":shift", varValue)
 End Sub
 
-public Sub getValue() As String
-	Return stValue
-End Sub
 
 public Sub setVShow(varVShow As String)
 	If BANano.IsNull(varVShow) Or BANano.IsUndefined(varVShow) Then

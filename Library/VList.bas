@@ -12,7 +12,6 @@ Version=8.95
 
 #DesignerProperty: Key: TwoLine, DisplayName: TwoLine, FieldType: Boolean, DefaultValue: false, Description: TwoLine
 #DesignerProperty: Key: ThreeLine, DisplayName: ThreeLine, FieldType: Boolean, DefaultValue: false, Description: ThreeLine
-#DesignerProperty: Key: Template, DisplayName: Template, FieldType: String, DefaultValue: list, Description: Template, List: none|list|list-item-group|tree
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue: , Description: Color, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: ColorIntensity, DisplayName: ColorIntensity, FieldType: String, DefaultValue: , Description: ColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: false, Description: Dark
@@ -151,7 +150,6 @@ sVIf = Props.Get("VIf")
 sVOn = Props.Get("VOn")
 sVShow = Props.Get("VShow")
 sWidth = Props.Get("Width")
-xTemplate = Props.Get("Template")
 	End If
 	'
 	'build and get the element
@@ -204,6 +202,7 @@ End Sub
 'set options from definition
 Sub SetOptions(opt As VListOptions)
 	Dim tmp As ListViewItemOptions = opt.Options
+	xTemplate = opt.Template
 	Select Case xTemplate
 	Case "none"
 	Case "list"
@@ -213,6 +212,7 @@ Sub SetOptions(opt As VListOptions)
 	Case "tree"
 		AddListViewGroupTemplate(tmp)
 	End Select
+	VElement.setdata(tmp.dataSource, VElement.NewList)
 End Sub
 
 public Sub AddToParent(targetID As String)
@@ -267,6 +267,11 @@ Sub Clear(VC As VueComponent)
 	VC.SetData(DataSource, Records)
 End Sub
 
+Sub ClearOnApp(app As VuetifyApp)
+	Records.Initialize 
+	app.SetData(DataSource, Records)
+End Sub
+
 Sub Refresh(VC As VueComponent)
 	Select Case xTemplate
 	Case "tree"
@@ -277,7 +282,18 @@ Sub Refresh(VC As VueComponent)
 	End Select
 End Sub
 
-'add a header to the lust
+Sub RefreshOnApp(app As VuetifyApp)
+	Select Case xTemplate
+	Case "tree"
+		Dim recs As List = BANanoShared.Unflatten(Records, "items")
+		app.SetData(DataSource, recs)	
+	Case Else
+		app.setdata(DataSource, Records)
+	End Select
+End Sub
+
+
+'add a header to the list
 Sub AddHeader(txt As String)
 	Dim rec As Map = CreateMap()
 	rec.Put("header", txt)
@@ -894,7 +910,7 @@ private Sub AddListViewTemplate(props As ListViewItemOptions)
 	Dim xrightitemavatarclass As String = props.rightitemavatarclass
 	
 	'
-	Dim sTemplate As String = $"<v-template id="${templateID}" v-for="(item, index) in ${DataSource}" :key="item.${key}">
+	Dim sTemplate As String = $"<v-template id="${templateID}" v-for="(item, index) in ${DataSource}">
 <v-subheader id="${headerID}" v-if="item.header" :key="item.header">{{ item.header }}</v-subheader>
 <v-divider id="${dividerID}" v-else-if="item.divider" :key="index" :inset="item.inset"></v-divider>
 <v-list-item id="${listitemID}" v-else="true" :key="item.${key}" :to="item.${xurl}" active-class="${xactiveclass}">
@@ -1116,7 +1132,7 @@ End Sub
 
 
 'add a list view item
-Sub AddItemParentChild(parent As String, key As String, iconName As String, iconColor As String, title As String, subtitle As String, subtitle1 As String, url As String) As VList
+Sub AddItem(parent As String, key As String, iconName As String, iconColor As String, title As String, url As String) As VList
 	parent = parent.ToLowerCase
 	key = key.ToLowerCase
 	'
@@ -1126,8 +1142,6 @@ Sub AddItemParentChild(parent As String, key As String, iconName As String, icon
 	If iconColor <> "" Then nitem.Put("iconcolor", iconColor)
 	If title <> "" Then nitem.Put("title", title)
 	If url <> "" Then nitem.Put("to", url)
-	If subtitle <> "" Then nitem.Put("subtitle", subtitle)
-	If subtitle1 <> "" Then nitem.Put("subtitle1", subtitle1)
 	nitem.Put("parentid", parent)
 	Records.Add(nitem)
 	Return Me
@@ -1162,7 +1176,7 @@ Sub SetItemIconColor(itemID As String, sIcon As String) As VList
 	Dim m As Map = CreateMap()
 	m.Put("iconcolor", sIcon)
 	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
-	return me
+	Return Me
 End Sub
 
 'add a header to the lust
@@ -1182,14 +1196,14 @@ Sub AddItemDivider(binset As Boolean)
 	Records.Add(rec)
 End Sub
 
-Sub SetItemRightChip(itemID As String, sValue As String) as vlist
+Sub SetItemRightChip(itemID As String, sValue As String) As VList
 	Dim m As Map = CreateMap()
 	m.Put("rightchip", sValue)
 	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
-	return me
+	Return Me
 End Sub
 
-Sub SetItemRightChipColor(itemID As String, xColor As String) as vlist
+Sub SetItemRightChipColor(itemID As String, xColor As String) As VList
 	Dim m As Map = CreateMap()
 	m.Put("rightchipcolor", xColor)
 	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
@@ -1235,70 +1249,70 @@ Sub SetItemRightText(itemID As String, sIcon As String) as vlist
 	Dim m As Map = CreateMap()
 	m.Put("righttext", sIcon)
 	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
-	return me
+	Return Me
 End Sub
 
-Sub SetItemRightIconColor(itemID As String, sIcon As String) as vlist
+Sub SetItemRightIconColor(itemID As String, sIcon As String) As VList
 	Dim m As Map = CreateMap()
 	m.Put("righticoncolor", sIcon)
 	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
-	return me
+	Return Me
 End Sub
 
-Sub SetItemRightRating(itemID As String, sIcon As String) as vlist
+Sub SetItemRightRating(itemID As String, sIcon As String) As VList
 	Dim m As Map = CreateMap()
 	m.Put("rightrating", sIcon)
 	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
-	return me
+	Return Me
 End Sub
 
 Sub SetItemTo(itemID As String, sTo As String) as vlist
 	Dim m As Map = CreateMap()
 	m.Put("to", sTo)
 	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
-	return me
+	Return Me
 End Sub
 
-Sub SetItemLeftIcon(itemID As String, sIcon As String) as vlist
+Sub SetItemLeftIcon(itemID As String, sIcon As String) As VList
 	Dim m As Map = CreateMap()
 	m.Put("lefticon", sIcon)
 	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
-	return me
+	Return Me
 End Sub
 
-Sub SetItemLeftIconColor(itemID As String, sIcon As String) as vlist
+Sub SetItemLeftIconColor(itemID As String, sIcon As String) As VList
 	Dim m As Map = CreateMap()
 	m.Put("lefticoncolor", sIcon)
 	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
-	return me
+	Return Me
 End Sub
 
-Sub SetItemLeftCheckBox(itemID As String, bChecked As Boolean) as vlist
+Sub SetItemLeftCheckBox(itemID As String, bChecked As Boolean) As VList
 	Dim m As Map = CreateMap()
 	m.Put("leftcheckbox", bChecked)
 	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
-	return me
+	Return Me
 End Sub
 
-Sub SetItemLeftSwitch(itemID As String, bChecked As Boolean) as vlist
+Sub SetItemLeftSwitch(itemID As String, bChecked As Boolean) As VList
 	Dim m As Map = CreateMap()
 	m.Put("leftswitch", bChecked)
 	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
-	return me
+	Return Me
 End Sub
 
-Sub SetItemRightSwitch(itemID As String, bChecked As Boolean) as vlist
+Sub SetItemRightSwitch(itemID As String, bChecked As Boolean) As VList
 	Dim m As Map = CreateMap()
 	m.Put("rightswitch", bChecked)
 	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
-	return me
+	Return Me
 End Sub
 
-Sub SetItemRightCheckBox(itemID As String, bChecked As Boolean) as vlist
+Sub SetItemRightCheckBox(itemID As String, bChecked As Boolean) As VList
 	Dim m As Map = CreateMap()
 	m.Put("rightcheckbox", bChecked)
 	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
-	return me
+	Return Me
 End Sub
 
 Sub AddItemLeftCheckBox(id As String, bChecked As Boolean, title As String, subtitle As String, subtitle1 As String)
@@ -1484,3 +1498,4 @@ Sub AddItem2(rec As Map) As VList
 	Records.Add(rec)
 	Return Me
 End Sub
+

@@ -5,6 +5,7 @@ Type=Class
 Version=8.95
 @EndOfDesignText@
 #IgnoreWarnings:12
+#DesignerProperty: Key: Template, DisplayName: Template, FieldType: String, DefaultValue: list, Description: Template, List: none|list|list-item-group|tree
 #DesignerProperty: Key: Key, DisplayName: Key, FieldType: String, DefaultValue: id, Description: Key
 #DesignerProperty: Key: DataSource, DisplayName: DataSource, FieldType: String, DefaultValue: , Description: DataSource
 #DesignerProperty: Key: Title, DisplayName: Title, FieldType: String, DefaultValue: title, Description: Title
@@ -69,18 +70,20 @@ Version=8.95
 #DesignerProperty: Key: RightRating, DisplayName: RightRating, FieldType: String, DefaultValue: rightrating, Description: RightRating
 #DesignerProperty: Key: RightRatingAttr, DisplayName: RightRatingAttr, FieldType: String, DefaultValue: , Description: RightRatingAttr
 #DesignerProperty: Key: RightRatingColor, DisplayName: RightRatingColor, FieldType: String, DefaultValue: rightratingcolor, Description: RightRatingColor
+#DesignerProperty: Key: RightSwitch, DisplayName: RightSwitch, FieldType: String, DefaultValue: rightswitch, Description: RightSwitch
 #DesignerProperty: Key: RightSwitchAttr, DisplayName: RightSwitchAttr, FieldType: String, DefaultValue: , Description: RightSwitchAttr
+#DesignerProperty: Key: RightSwitchColor, DisplayName: RightSwitchColor, FieldType: String, DefaultValue: , Description: RightSwitchColor
 #DesignerProperty: Key: RightText, DisplayName: RightText, FieldType: String, DefaultValue: righttext, Description: RightText
 #DesignerProperty: Key: RightTextAttr, DisplayName: RightTextAttr, FieldType: String, DefaultValue: , Description: RightTextAttr
 
 Sub Class_Globals
     Private BANano As BANano 'ignore
 	Private mName As String 'ignore
-	Private mEventName As String 'ignore
-	Private mCallBack As Object 'ignore
-	Private mTarget As BANanoElement 'ignore
-	Private mElement As BANanoElement 'ignore
-	Public VElement As VueElement
+	'Private mEventName As String 'ignore
+	'Private mCallBack As Object 'ignore
+	'Private mTarget As BANanoElement 'ignore
+	'Private mElement As BANanoElement 'ignore
+	'Public VElement As VueElement
 	Private sActiveClass As String
 Private sAvatar As String
 Private sAvatarAttr As String
@@ -149,26 +152,30 @@ Private bSwitchInset As Boolean
 Private sTitle As String
 Private sTo As String
 Public Options As ListViewItemOptions
+Private sRightSwitch As String
+Private sRightSwitchColor As String
+Public Template As String = "none"
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	mName = Name.tolowercase
-	mEventName = EventName.ToLowerCase
-	mCallBack = CallBack	
-	mName = mName.Replace("#","")
-	mEventName = mEventName.Replace("#","")
-	If mName <> "" Then
-		Dim fKey As String = $"#${mName}"$
-		If BANano.Exists(fKey) Then 
-			mElement = BANano.GetElement(fKey)
-		End If
-	End If
+	'mEventName = EventName.ToLowerCase
+	'mCallBack = CallBack	
+	'mName = mName.Replace("#","")
+	'mEventName = mEventName.Replace("#","")
+'	If mName <> "" Then
+'		Dim fKey As String = $"#${mName}"$
+'		If BANano.Exists(fKey) Then 
+'			mElement = BANano.GetElement(fKey)
+'		End If
+'	End If
 	Options.Initialize 
 End Sub
 
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
-	mTarget = Target
+	'mTarget = Target
 	If Props <> Null Then
+		Template = Props.Get("Template")
 		sActiveClass = Props.Get("ActiveClass")
 sAvatar = Props.Get("Avatar")
 sAvatarAttr = Props.Get("AvatarAttr")
@@ -236,19 +243,22 @@ sSubTitle4 = Props.Get("SubTitle4")
 bSwitchInset = Props.Get("SwitchInset")
 sTitle = Props.Get("Title")
 sTo = Props.Get("To")
+sRightSwitch = Props.Get("RightSwitch")
+sRightSwitchColor = Props.Get("RightSwitchColor")
 	End If
 	'
 	'build and get the element
-	If BANano.Exists($"#${mName}"$) Then
-		mElement = BANano.GetElement($"#${mName}"$)
-	Else	
-		mElement = mTarget.Append($"<div id="${mName} v-if="${mName}options"></div>"$).Get("#" & mName)
-	End If
+	'If BANano.Exists($"#${mName}"$) Then
+	'	mElement = BANano.GetElement($"#${mName}"$)
+	'Else	
+	'	mElement = mTarget.Append($"<div id="${mName} v-if="${mName}options"></div>"$).Get("#" & mName)
+	'End If
 	'
-	VElement.Initialize(mCallBack, mName, mName)
-	VElement.TagName = "div"
+	'VElement.Initialize(mCallBack, mName, mName)
+	'VElement.TagName = "div"
 	'dont show this component
-	VElement.SetData($"${mName}options"$, False)
+	'VElement.SetData($"${mName}options"$, False)
+	Options.Initialize 
 	Options.ActiveClass = sActiveClass
 Options.Avatar = sAvatar
 Options.AvatarAttr = sAvatarAttr
@@ -316,50 +326,52 @@ Options.SubTitle4 = sSubTitle4
 Options.SwitchInset = bSwitchInset
 Options.Title = sTitle
 Options.url = sTo
+Options.rightswitch = sRightSwitch
 End Sub
 
-public Sub AddToParent(targetID As String)
-	mTarget = BANano.GetElement("#" & targetID.ToLowerCase)
-	DesignerCreateView(mTarget, Null)
-End Sub
+'public Sub AddToParent(targetID As String)
+'	mTarget = BANano.GetElement("#" & targetID.ToLowerCase)
+'	DesignerCreateView(mTarget, Null)
+'End Sub
+'
+'public Sub Remove()
+'	mTarget.Empty
+'	BANano.SetMeToNull
+'End Sub
+'
+'public Sub Trigger(event As String, params() As String)
+'	If mElement <> Null Then
+'		mElement.Trigger(event, params)
+'	End If
+'End Sub
+'
+'Sub AddClass(s As String) As VListOptions
+'	VElement.AddClass(s)
+'	Return Me
+'End Sub
+'
+'Sub AddAttr(p As String, v As Object) As VListOptions
+'	VElement.SetAttr(p, v)
+'	Return Me
+'End Sub
+'
+'Sub AddStyle(p As String, v As String) As VListOptions
+'	VElement.AddStyle(p, v)
+'	Return Me
+'End Sub
+'
+'Sub RemoveAttr(p As String) As VListOptions
+'	VElement.RemoveAttr(p)
+'	Return Me
+'End Sub
 
-public Sub Remove()
-	mTarget.Empty
-	BANano.SetMeToNull
-End Sub
-
-public Sub Trigger(event As String, params() As String)
-	If mElement <> Null Then
-		mElement.Trigger(event, params)
-	End If
-End Sub
-
-Sub AddClass(s As String) As VListOptions
-	VElement.AddClass(s)
-	Return Me
-End Sub
-
-Sub AddAttr(p As String, v As Object) As VListOptions
-	VElement.SetAttr(p, v)
-	Return Me
-End Sub
-
-Sub AddStyle(p As String, v As String) As VListOptions
-	VElement.AddStyle(p, v)
-	Return Me
-End Sub
-
-Sub RemoveAttr(p As String) As VListOptions
-	VElement.RemoveAttr(p)
-	Return Me
-End Sub
 'get ActiveClass
 Sub getActiveClass As String
 Return sActiveClass
 End Sub
 'set ActiveClass
 Sub setActiveClass(vActiveClass As String)
-If BANano.IsNull(vActiveClass) or BANano.IsUndefined(vActiveClass) Then Return
+If BANano.IsNull(vActiveClass) Or BANano.IsUndefined(vActiveClass) Then Return
 sActiveClass  = vActiveClass
 Options.ActiveClass = vActiveClass
 End Sub
@@ -369,7 +381,7 @@ Return sAvatar
 End Sub
 'set Avatar
 Sub setAvatar(vAvatar As String)
-If BANano.IsNull(vAvatar) or BANano.IsUndefined(vAvatar) Then Return
+If BANano.IsNull(vAvatar) Or BANano.IsUndefined(vAvatar) Then Return
 sAvatar  = vAvatar
 Options.Avatar = vAvatar
 End Sub
@@ -379,7 +391,7 @@ Return sAvatarAttr
 End Sub
 'set AvatarAttr
 Sub setAvatarAttr(vAvatarAttr As String)
-If BANano.IsNull(vAvatarAttr) or BANano.IsUndefined(vAvatarAttr) Then Return
+If BANano.IsNull(vAvatarAttr) Or BANano.IsUndefined(vAvatarAttr) Then Return
 sAvatarAttr  = vAvatarAttr
 Options.AvatarAttr = vAvatarAttr
 End Sub
@@ -389,7 +401,7 @@ Return sAvatarClass
 End Sub
 'set AvatarClass
 Sub setAvatarClass(vAvatarClass As String)
-If BANano.IsNull(vAvatarClass) or BANano.IsUndefined(vAvatarClass) Then Return
+If BANano.IsNull(vAvatarClass) Or BANano.IsUndefined(vAvatarClass) Then Return
 sAvatarClass  = vAvatarClass
 Options.AvatarClass = vAvatarClass
 End Sub
@@ -399,7 +411,7 @@ Return sAvatarIcon
 End Sub
 'set AvatarIcon
 Sub setAvatarIcon(vAvatarIcon As String)
-If BANano.IsNull(vAvatarIcon) or BANano.IsUndefined(vAvatarIcon) Then Return
+If BANano.IsNull(vAvatarIcon) Or BANano.IsUndefined(vAvatarIcon) Then Return
 sAvatarIcon  = vAvatarIcon
 Options.AvatarIcon = vAvatarIcon
 End Sub
@@ -409,7 +421,7 @@ Return sAvatarIconAttr
 End Sub
 'set AvatarIconAttr
 Sub setAvatarIconAttr(vAvatarIconAttr As String)
-If BANano.IsNull(vAvatarIconAttr) or BANano.IsUndefined(vAvatarIconAttr) Then Return
+If BANano.IsNull(vAvatarIconAttr) Or BANano.IsUndefined(vAvatarIconAttr) Then Return
 sAvatarIconAttr  = vAvatarIconAttr
 Options.AvatarIconAttr = vAvatarIconAttr
 End Sub
@@ -419,7 +431,7 @@ Return sAvatarIconClass
 End Sub
 'set AvatarIconClass
 Sub setAvatarIconClass(vAvatarIconClass As String)
-If BANano.IsNull(vAvatarIconClass) or BANano.IsUndefined(vAvatarIconClass) Then Return
+If BANano.IsNull(vAvatarIconClass) Or BANano.IsUndefined(vAvatarIconClass) Then Return
 sAvatarIconClass  = vAvatarIconClass
 Options.AvatarIconClass = vAvatarIconClass
 End Sub
@@ -429,7 +441,7 @@ Return sAvatarIconColor
 End Sub
 'set AvatarIconColor
 Sub setAvatarIconColor(vAvatarIconColor As String)
-If BANano.IsNull(vAvatarIconColor) or BANano.IsUndefined(vAvatarIconColor) Then Return
+If BANano.IsNull(vAvatarIconColor) Or BANano.IsUndefined(vAvatarIconColor) Then Return
 sAvatarIconColor  = vAvatarIconColor
 Options.AvatarIconColor = vAvatarIconColor
 End Sub
@@ -439,7 +451,7 @@ Return sAvatarText
 End Sub
 'set AvatarText
 Sub setAvatarText(vAvatarText As String)
-If BANano.IsNull(vAvatarText) or BANano.IsUndefined(vAvatarText) Then Return
+If BANano.IsNull(vAvatarText) Or BANano.IsUndefined(vAvatarText) Then Return
 sAvatarText  = vAvatarText
 Options.AvatarText = vAvatarText
 End Sub
@@ -499,7 +511,7 @@ Return sIconAttr
 End Sub
 'set IconAttr
 Sub setIconAttr(vIconAttr As String)
-If BANano.IsNull(vIconAttr) or BANano.IsUndefined(vIconAttr) Then Return
+If BANano.IsNull(vIconAttr) Or BANano.IsUndefined(vIconAttr) Then Return
 sIconAttr  = vIconAttr
 Options.IconAttr = vIconAttr
 End Sub
@@ -579,7 +591,7 @@ Return sLeftIcon
 End Sub
 'set LeftIcon
 Sub setLeftIcon(vLeftIcon As String)
-If BANano.IsNull(vLeftIcon) or BANano.IsUndefined(vLeftIcon) Then Return
+If BANano.IsNull(vLeftIcon) Or BANano.IsUndefined(vLeftIcon) Then Return
 sLeftIcon  = vLeftIcon
 Options.LeftIcon = vLeftIcon
 End Sub
@@ -589,7 +601,7 @@ Return sLeftIconAttr
 End Sub
 'set LeftIconAttr
 Sub setLeftIconAttr(vLeftIconAttr As String)
-If BANano.IsNull(vLeftIconAttr) or BANano.IsUndefined(vLeftIconAttr) Then Return
+If BANano.IsNull(vLeftIconAttr) Or BANano.IsUndefined(vLeftIconAttr) Then Return
 sLeftIconAttr  = vLeftIconAttr
 Options.LeftIconAttr = vLeftIconAttr
 End Sub
@@ -599,7 +611,7 @@ Return sLeftIconClass
 End Sub
 'set LeftIconClass
 Sub setLeftIconClass(vLeftIconClass As String)
-If BANano.IsNull(vLeftIconClass) or BANano.IsUndefined(vLeftIconClass) Then Return
+If BANano.IsNull(vLeftIconClass) Or BANano.IsUndefined(vLeftIconClass) Then Return
 sLeftIconClass  = vLeftIconClass
 Options.LeftIconClass = vLeftIconClass
 End Sub
@@ -609,7 +621,7 @@ Return sLeftIconColor
 End Sub
 'set LeftIconColor
 Sub setLeftIconColor(vLeftIconColor As String)
-If BANano.IsNull(vLeftIconColor) or BANano.IsUndefined(vLeftIconColor) Then Return
+If BANano.IsNull(vLeftIconColor) Or BANano.IsUndefined(vLeftIconColor) Then Return
 sLeftIconColor  = vLeftIconColor
 Options.LeftIconColor = vLeftIconColor
 End Sub
@@ -619,9 +631,19 @@ Return sLeftSwitch
 End Sub
 'set LeftSwitch
 Sub setLeftSwitch(vLeftSwitch As String)
-If BANano.IsNull(vLeftSwitch) or BANano.IsUndefined(vLeftSwitch) Then Return
+If BANano.IsNull(vLeftSwitch) Or BANano.IsUndefined(vLeftSwitch) Then Return
 sLeftSwitch  = vLeftSwitch
 Options.LeftSwitch = vLeftSwitch
+End Sub
+'get RightSwitch
+Sub getRightSwitch As String
+Return sRightSwitch
+End Sub
+'set RightSwitch
+Sub setRightSwitch(vRightSwitch As String)
+If BANano.IsNull(vRightSwitch) Or BANano.IsUndefined(vRightSwitch) Then Return
+sRightSwitch  = vRightSwitch
+Options.RightSwitch = vRightSwitch
 End Sub
 'get LeftSwitchAttr
 Sub getLeftSwitchAttr As String
@@ -629,7 +651,7 @@ Return sLeftSwitchAttr
 End Sub
 'set LeftSwitchAttr
 Sub setLeftSwitchAttr(vLeftSwitchAttr As String)
-If BANano.IsNull(vLeftSwitchAttr) or BANano.IsUndefined(vLeftSwitchAttr) Then Return
+If BANano.IsNull(vLeftSwitchAttr) Or BANano.IsUndefined(vLeftSwitchAttr) Then Return
 sLeftSwitchAttr  = vLeftSwitchAttr
 Options.LeftSwitchAttr = vLeftSwitchAttr
 End Sub
@@ -639,7 +661,7 @@ Return sRightAvatar
 End Sub
 'set RightAvatar
 Sub setRightAvatar(vRightAvatar As String)
-If BANano.IsNull(vRightAvatar) or BANano.IsUndefined(vRightAvatar) Then Return
+If BANano.IsNull(vRightAvatar) Or BANano.IsUndefined(vRightAvatar) Then Return
 sRightAvatar  = vRightAvatar
 Options.RightAvatar = vRightAvatar
 End Sub
@@ -649,7 +671,7 @@ Return sRightAvatarAttr
 End Sub
 'set RightAvatarAttr
 Sub setRightAvatarAttr(vRightAvatarAttr As String)
-If BANano.IsNull(vRightAvatarAttr) or BANano.IsUndefined(vRightAvatarAttr) Then Return
+If BANano.IsNull(vRightAvatarAttr) Or BANano.IsUndefined(vRightAvatarAttr) Then Return
 sRightAvatarAttr  = vRightAvatarAttr
 Options.RightAvatarAttr = vRightAvatarAttr
 End Sub
@@ -659,7 +681,7 @@ Return sRightAvatarClass
 End Sub
 'set RightAvatarClass
 Sub setRightAvatarClass(vRightAvatarClass As String)
-If BANano.IsNull(vRightAvatarClass) or BANano.IsUndefined(vRightAvatarClass) Then Return
+If BANano.IsNull(vRightAvatarClass) Or BANano.IsUndefined(vRightAvatarClass) Then Return
 sRightAvatarClass  = vRightAvatarClass
 Options.RightAvatarClass = vRightAvatarClass
 End Sub
@@ -669,7 +691,7 @@ Return sRightAvatarIcon
 End Sub
 'set RightAvatarIcon
 Sub setRightAvatarIcon(vRightAvatarIcon As String)
-If BANano.IsNull(vRightAvatarIcon) or BANano.IsUndefined(vRightAvatarIcon) Then Return
+If BANano.IsNull(vRightAvatarIcon) Or BANano.IsUndefined(vRightAvatarIcon) Then Return
 sRightAvatarIcon  = vRightAvatarIcon
 Options.RightAvatarIcon = vRightAvatarIcon
 End Sub
@@ -679,7 +701,7 @@ Return sRightAvatarIconAttr
 End Sub
 'set RightAvatarIconAttr
 Sub setRightAvatarIconAttr(vRightAvatarIconAttr As String)
-If BANano.IsNull(vRightAvatarIconAttr) or BANano.IsUndefined(vRightAvatarIconAttr) Then Return
+If BANano.IsNull(vRightAvatarIconAttr) Or BANano.IsUndefined(vRightAvatarIconAttr) Then Return
 sRightAvatarIconAttr  = vRightAvatarIconAttr
 Options.RightAvatarIconAttr = vRightAvatarIconAttr
 End Sub
@@ -689,7 +711,7 @@ Return sRightAvatarIconClass
 End Sub
 'set RightAvatarIconClass
 Sub setRightAvatarIconClass(vRightAvatarIconClass As String)
-If BANano.IsNull(vRightAvatarIconClass) or BANano.IsUndefined(vRightAvatarIconClass) Then Return
+If BANano.IsNull(vRightAvatarIconClass) Or BANano.IsUndefined(vRightAvatarIconClass) Then Return
 sRightAvatarIconClass  = vRightAvatarIconClass
 Options.RightAvatarIconClass = vRightAvatarIconClass
 End Sub
@@ -699,7 +721,7 @@ Return sRightAvatarIconColor
 End Sub
 'set RightAvatarIconColor
 Sub setRightAvatarIconColor(vRightAvatarIconColor As String)
-If BANano.IsNull(vRightAvatarIconColor) or BANano.IsUndefined(vRightAvatarIconColor) Then Return
+If BANano.IsNull(vRightAvatarIconColor) Or BANano.IsUndefined(vRightAvatarIconColor) Then Return
 sRightAvatarIconColor  = vRightAvatarIconColor
 Options.RightAvatarIconColor = vRightAvatarIconColor
 End Sub
@@ -709,7 +731,7 @@ Return sRightAvatarText
 End Sub
 'set RightAvatarText
 Sub setRightAvatarText(vRightAvatarText As String)
-If BANano.IsNull(vRightAvatarText) or BANano.IsUndefined(vRightAvatarText) Then Return
+If BANano.IsNull(vRightAvatarText) Or BANano.IsUndefined(vRightAvatarText) Then Return
 sRightAvatarText  = vRightAvatarText
 Options.RightAvatarText = vRightAvatarText
 End Sub
@@ -719,7 +741,7 @@ Return sRightAvatarTextClass
 End Sub
 'set RightAvatarTextClass
 Sub setRightAvatarTextClass(vRightAvatarTextClass As String)
-If BANano.IsNull(vRightAvatarTextClass) or BANano.IsUndefined(vRightAvatarTextClass) Then Return
+If BANano.IsNull(vRightAvatarTextClass) Or BANano.IsUndefined(vRightAvatarTextClass) Then Return
 sRightAvatarTextClass  = vRightAvatarTextClass
 Options.RightAvatarTextClass = vRightAvatarTextClass
 End Sub
@@ -729,7 +751,7 @@ Return sRightAvatarTextColor
 End Sub
 'set RightAvatarTextColor
 Sub setRightAvatarTextColor(vRightAvatarTextColor As String)
-If BANano.IsNull(vRightAvatarTextColor) or BANano.IsUndefined(vRightAvatarTextColor) Then Return
+If BANano.IsNull(vRightAvatarTextColor) Or BANano.IsUndefined(vRightAvatarTextColor) Then Return
 sRightAvatarTextColor  = vRightAvatarTextColor
 Options.RightAvatarTextColor = vRightAvatarTextColor
 End Sub
@@ -739,7 +761,7 @@ Return sRightCheckBox
 End Sub
 'set RightCheckBox
 Sub setRightCheckBox(vRightCheckBox As String)
-If BANano.IsNull(vRightCheckBox) or BANano.IsUndefined(vRightCheckBox) Then Return
+If BANano.IsNull(vRightCheckBox) Or BANano.IsUndefined(vRightCheckBox) Then Return
 sRightCheckBox  = vRightCheckBox
 Options.RightCheckBox = vRightCheckBox
 End Sub
@@ -879,7 +901,7 @@ Return sRightText
 End Sub
 'set RightText
 Sub setRightText(vRightText As String)
-If BANano.IsNull(vRightText) or BANano.IsUndefined(vRightText) Then Return
+If BANano.IsNull(vRightText) Or BANano.IsUndefined(vRightText) Then Return
 sRightText  = vRightText
 Options.RightText = vRightText
 End Sub
@@ -889,7 +911,7 @@ Return sRightTextAttr
 End Sub
 'set RightTextAttr
 Sub setRightTextAttr(vRightTextAttr As String)
-If BANano.IsNull(vRightTextAttr) or BANano.IsUndefined(vRightTextAttr) Then Return
+If BANano.IsNull(vRightTextAttr) Or BANano.IsUndefined(vRightTextAttr) Then Return
 sRightTextAttr  = vRightTextAttr
 Options.RightTextAttr = vRightTextAttr
 End Sub
@@ -899,7 +921,7 @@ Return bShowLeftCheckBoxes
 End Sub
 'set ShowLeftCheckBoxes
 Sub setShowLeftCheckBoxes(vShowLeftCheckBoxes As Boolean)
-If BANano.IsNull(vShowLeftCheckBoxes) or BANano.IsUndefined(vShowLeftCheckBoxes) Then Return
+If BANano.IsNull(vShowLeftCheckBoxes) Or BANano.IsUndefined(vShowLeftCheckBoxes) Then Return
 bShowLeftCheckBoxes  = vShowLeftCheckBoxes
 Options.ShowLeftCheckBoxes = vShowLeftCheckBoxes
 End Sub
@@ -909,7 +931,7 @@ Return bShowLeftSwitches
 End Sub
 'set ShowLeftSwitches
 Sub setShowLeftSwitches(vShowLeftSwitches As Boolean)
-If BANano.IsNull(vShowLeftSwitches) or BANano.IsUndefined(vShowLeftSwitches) Then Return
+If BANano.IsNull(vShowLeftSwitches) Or BANano.IsUndefined(vShowLeftSwitches) Then Return
 bShowLeftSwitches  = vShowLeftSwitches
 Options.ShowLeftSwitches = vShowLeftSwitches
 End Sub
@@ -919,7 +941,7 @@ Return bShowRightCheckBoxes
 End Sub
 'set ShowRightCheckBoxes
 Sub setShowRightCheckBoxes(vShowRightCheckBoxes As Boolean)
-If BANano.IsNull(vShowRightCheckBoxes) or BANano.IsUndefined(vShowRightCheckBoxes) Then Return
+If BANano.IsNull(vShowRightCheckBoxes) Or BANano.IsUndefined(vShowRightCheckBoxes) Then Return
 bShowRightCheckBoxes  = vShowRightCheckBoxes
 Options.ShowRightCheckBoxes = vShowRightCheckBoxes
 End Sub
@@ -929,7 +951,7 @@ Return bShowRightRating
 End Sub
 'set ShowRightRating
 Sub setShowRightRating(vShowRightRating As Boolean)
-If BANano.IsNull(vShowRightRating) or BANano.IsUndefined(vShowRightRating) Then Return
+If BANano.IsNull(vShowRightRating) Or BANano.IsUndefined(vShowRightRating) Then Return
 bShowRightRating  = vShowRightRating
 Options.ShowRightRating = vShowRightRating
 End Sub
@@ -939,7 +961,7 @@ Return bShowRightSwitches
 End Sub
 'set ShowRightSwitches
 Sub setShowRightSwitches(vShowRightSwitches As Boolean)
-If BANano.IsNull(vShowRightSwitches) or BANano.IsUndefined(vShowRightSwitches) Then Return
+If BANano.IsNull(vShowRightSwitches) Or BANano.IsUndefined(vShowRightSwitches) Then Return
 bShowRightSwitches  = vShowRightSwitches
 Options.ShowRightSwitches = vShowRightSwitches
 End Sub
@@ -949,7 +971,7 @@ Return sSubTitle
 End Sub
 'set SubTitle
 Sub setSubTitle(vSubTitle As String)
-If BANano.IsNull(vSubTitle) or BANano.IsUndefined(vSubTitle) Then Return
+If BANano.IsNull(vSubTitle) Or BANano.IsUndefined(vSubTitle) Then Return
 sSubTitle  = vSubTitle
 Options.SubTitle = vSubTitle
 End Sub
@@ -959,7 +981,7 @@ Return sSubTitle1
 End Sub
 'set SubTitle1
 Sub setSubTitle1(vSubTitle1 As String)
-If BANano.IsNull(vSubTitle1) or BANano.IsUndefined(vSubTitle1) Then Return
+If BANano.IsNull(vSubTitle1) Or BANano.IsUndefined(vSubTitle1) Then Return
 sSubTitle1  = vSubTitle1
 Options.SubTitle1 = vSubTitle1
 End Sub
@@ -969,7 +991,7 @@ Return sSubTitle2
 End Sub
 'set SubTitle2
 Sub setSubTitle2(vSubTitle2 As String)
-If BANano.IsNull(vSubTitle2) or BANano.IsUndefined(vSubTitle2) Then Return
+If BANano.IsNull(vSubTitle2) Or BANano.IsUndefined(vSubTitle2) Then Return
 sSubTitle2  = vSubTitle2
 Options.SubTitle2 = vSubTitle2
 End Sub
@@ -979,7 +1001,7 @@ Return sSubTitle3
 End Sub
 'set SubTitle3
 Sub setSubTitle3(vSubTitle3 As String)
-If BANano.IsNull(vSubTitle3) or BANano.IsUndefined(vSubTitle3) Then Return
+If BANano.IsNull(vSubTitle3) Or BANano.IsUndefined(vSubTitle3) Then Return
 sSubTitle3  = vSubTitle3
 Options.SubTitle3 = vSubTitle3
 End Sub
