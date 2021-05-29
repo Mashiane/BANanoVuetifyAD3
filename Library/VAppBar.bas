@@ -47,6 +47,7 @@ Version=8.9
 #DesignerProperty: Key: TextColorIntensity, DisplayName: TextColorIntensity, FieldType: String, DefaultValue: , Description: TextColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: Tile, DisplayName: Tile, FieldType: Boolean, DefaultValue: false, Description: Tile
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
+#DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue: , Description: VShow
 #DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: , Description: Value
 #DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: , Description: Width
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
@@ -92,7 +93,7 @@ Private sMinHeight As String
 Private sMinWidth As String
 Private bOutlined As Boolean
 Private bProminent As Boolean
-Private sRounded As string
+Private sRounded As String
 Private bScrollOffScreen As Boolean
 Private sScrollTarget As String
 Private sScrollThreshold As String
@@ -106,6 +107,7 @@ Private bTile As Boolean
 Private sVIf As String
 Private sValue As String
 Private sWidth As String
+private sVShow as string
 	End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -171,6 +173,7 @@ bTile = Props.Get("Tile")
 sVIf = Props.Get("VIf")
 sValue = Props.Get("Value")
 sWidth = Props.Get("Width")
+sVShow = Props.Get("VShow")
 	End If
 	'
 	'build and get the element
@@ -227,7 +230,8 @@ VElement.Tile = bTile
 VElement.VIf = sVIf
 VElement.AddAttr(":value", sValue)
 VElement.Width = sWidth
-VElement.SetData(sValue, True)
+VElement.VShow = sVShow
+VElement.SetData(sVShow, True)
 VElement.BindAllEvents
 End Sub
 

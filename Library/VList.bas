@@ -1242,10 +1242,10 @@ Sub SetItemRightIcon(itemID As String, sIcon As String) as vlist
 	Dim m As Map = CreateMap()
 	m.Put("righticon", sIcon)
 	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
-	return me
+	Return Me
 End Sub
 
-Sub SetItemRightText(itemID As String, sIcon As String) as vlist
+Sub SetItemRightText(itemID As String, sIcon As String) As VList
 	Dim m As Map = CreateMap()
 	m.Put("righttext", sIcon)
 	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)

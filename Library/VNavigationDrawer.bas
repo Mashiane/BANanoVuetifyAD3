@@ -38,7 +38,7 @@ Version=8.9
 #DesignerProperty: Key: Temporary, DisplayName: Temporary, FieldType: Boolean, DefaultValue: false, Description: Temporary
 #DesignerProperty: Key: Touchless, DisplayName: Touchless, FieldType: Boolean, DefaultValue: false, Description: Touchless
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
-
+#DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue: , Description: VShow
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
@@ -84,6 +84,7 @@ Private bTouchless As Boolean
 Private sVIf As String
 Private sVModel As String
 Private sWidth As String
+private sVShow as string
 	End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -136,6 +137,7 @@ bTouchless = Props.Get("Touchless")
 sVIf = Props.Get("VIf")
 sVModel = Props.Get("VModel")
 sWidth = Props.Get("Width")
+sVShow = Props.Get("VShow")
 	End If
 	'
 	'build and get the element
@@ -179,6 +181,7 @@ VElement.AddAttr("v-if", sVIf)
 VElement.AddAttr("v-model", sVModel)
 VElement.AddAttr("width", sWidth)
 VElement.SetData(sVModel, False)
+VElement.SetData(sVShow, True)
 VElement.BindAllEvents
 End Sub
 
@@ -220,6 +223,7 @@ End Sub
 
 Sub Visible(VC As VueComponent, b As Boolean) As VNavigationDrawer
 	VC.SetData(sVIf, b)
+	VC.SetData(sVShow, b)
 	VC.SetData(sVModel, b)
 	Return Me
 End Sub
@@ -228,6 +232,9 @@ Sub getVModel As String
 	Return sVModel
 End Sub
 
+Sub getVShow As String
+	Return sVShow
+End Sub
 
 Sub getID As String
 	Return mName
