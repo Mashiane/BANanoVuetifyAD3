@@ -171,17 +171,26 @@ Sub RemoveAttr(p As String) As VProgressCircular
 	Return Me
 End Sub
 
-Sub Visible(VC As VueComponent, b As Boolean) As VProgressCircular
+Sub UpdateVisible(VC As VueComponent, b As Boolean) As VProgressCircular
 	VC.SetData(sVIf, b)
 	VC.SetData(sVShow, b)
 	Return Me
 End Sub
 
-Sub Update(VC As VueComponent, num As Int)
+Sub SetValue(VC As VueComponent, num As Int)
 	VC.SetData(sVModel, num)
 End Sub
 
+Sub GetValue(VC As VueComponent) As Int
+	Dim num As Int = VC.GetData(sVModel)
+	Return num
+End Sub
 
 Sub getID As String
 	Return mName
+End Sub
+
+
+Sub getHere As String
+	Return $"#${mName}"$
 End Sub

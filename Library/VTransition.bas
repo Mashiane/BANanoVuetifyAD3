@@ -129,3 +129,8 @@ End Sub
 Sub getID As String
 	Return mName
 End Sub
+
+
+Sub getHere As String
+	Return $"#${mName}"$
+End Sub

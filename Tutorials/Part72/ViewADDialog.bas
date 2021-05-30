@@ -32,15 +32,15 @@ Sub Initialize
 End Sub
 
 Private Sub VBtn1_Click (e As BANanoEvent)
-	VDialog1.Visible(about, True)
+	VDialog1.UpdateVisible(about, True)
 End Sub
 
 Private Sub VDialog1_ok_click (e As BANanoEvent)
-	VDialog1.Visible(about, False)
+	VDialog1.UpdateVisible(about, False)
 	vuetify.ShowSwal("Ok click")
 End Sub
 
 Private Sub VDialog1_cancel_click (e As BANanoEvent)
-	VDialog1.Visible(about, False)
+	VDialog1.UpdateVisible(about, False)
 	vuetify.ShowSwal("Cancel click")
 End Sub

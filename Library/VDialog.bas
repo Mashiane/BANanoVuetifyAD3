@@ -10,13 +10,17 @@ Version=8.9
 #Event: cancel_click (e As BANanoEvent)
 
 #DesignerProperty: Key: HasToolbar, DisplayName: HasToolbar, FieldType: Boolean, DefaultValue: true, Description: HasToolbar
+#DesignerProperty: Key: ToolBarColor, DisplayName: ToolBarColor, FieldType: String, DefaultValue: , Description: ToolBarColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
+#DesignerProperty: Key: ToolBarColorIntensity, DisplayName: ToolBarColorIntensity, FieldType: String, DefaultValue: , Description: ToolBarColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: ToolbarCaption, DisplayName: ToolbarCaption, FieldType: String, DefaultValue: Toolbar Title, Description: ToolbarCaption
+#DesignerProperty: Key: ToolbarDark, DisplayName: ToolbarDark, FieldType: Boolean, DefaultValue: False, Description: ToolbarDark
 '
 #DesignerProperty: Key: HasCardTitle, DisplayName: HasCardTitle, FieldType: Boolean, DefaultValue: true, Description: HasCardTitle
 #DesignerProperty: Key: CardTitleCaption, DisplayName: CardTitleCaption, FieldType: String, DefaultValue: Dialog Title, Description: CardTitleCaption
 '
 #DesignerProperty: Key: HasCardText, DisplayName: HasCardText, FieldType: Boolean, DefaultValue: true, Description: HasCardText
 #DesignerProperty: Key: CardTextCaption, DisplayName: CardTextCaption, FieldType: String, DefaultValue: Dialog Message, Description: CardTextCaption
+#DesignerProperty: Key: CardTextAppend, DisplayName: CardTextAppend, FieldType: Boolean, DefaultValue: True, Description: CardTextAppend
 '
 #DesignerProperty: Key: HasDivider, DisplayName: HasDivider, FieldType: Boolean, DefaultValue: true, Description: HasDivider
 
@@ -24,11 +28,17 @@ Version=8.9
 '
 #DesignerProperty: Key: HasCancel, DisplayName: HasCancel, FieldType: Boolean, DefaultValue: true, Description: HasCancel
 #DesignerProperty: Key: CancelCaption, DisplayName: CancelCaption, FieldType: String, DefaultValue: Cancel, Description: CancelCaption
+#DesignerProperty: Key: CancelVisible, DisplayName: CancelVisible, FieldType: Boolean, DefaultValue: True, Description: CancelVisible
+#DesignerProperty: Key: CancelLoading, DisplayName: CancelLoading, FieldType: Boolean, DefaultValue: False, Description: CancelLoading
+#DesignerProperty: Key: CancelDisabled, DisplayName: CancelDisabled, FieldType: Boolean, DefaultValue: False, Description: CancelDisabled
 #DesignerProperty: Key: CancelColor, DisplayName: CancelColor, FieldType: String, DefaultValue: red, Description: CancelColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: CancelColorIntensity, DisplayName: CancelColorIntensity, FieldType: String, DefaultValue: , Description: CancelColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 
 #DesignerProperty: Key: HasOk, DisplayName: HasOk, FieldType: Boolean, DefaultValue: true, Description: HasOk
 #DesignerProperty: Key: OkCaption, DisplayName: OkCaption, FieldType: String, DefaultValue: Ok, Description: OkCaption
+#DesignerProperty: Key: OkVisible, DisplayName: OkVisible, FieldType: Boolean, DefaultValue: True, Description: OKVisible
+#DesignerProperty: Key: OkLoading, DisplayName: OkLoading, FieldType: Boolean, DefaultValue: False, Description: OkLoading
+#DesignerProperty: Key: OkDisabled, DisplayName: OkDisabled, FieldType: Boolean, DefaultValue: False, Description: OkDisabled
 #DesignerProperty: Key: OkColor, DisplayName: OkColor, FieldType: String, DefaultValue: green, Description: OkColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: OkColorIntensity, DisplayName: OkColorIntensity, FieldType: String, DefaultValue: , Description: OkColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 
@@ -64,6 +74,7 @@ Version=8.9
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
+
 Sub Class_Globals
     Private BANano As BANano 'ignore
 	Private mName As String 'ignore
@@ -119,7 +130,34 @@ Private sVModel As String
 Private sWidth As String
 Private bHasToolbar As Boolean
 Private sToolbarCaption As String
-private bFullscreenOnMobile as boolean
+Private bFullscreenOnMobile As Boolean
+'
+Private xToolbarCaption As String
+Private xCardTitleCaption As String
+Private sToolBarColor As String
+Private sToolBarColorIntensity As String
+Private bToolbarDark As Boolean
+Private xToolBarDark As String
+Private xToolBarColor As String
+Private xCardTextCaption As String
+Private xCancelColor As String
+Private xOkColor As String
+Private xOkCaption As String
+Private xCancelCaption As String
+Private xOkVisible As String
+Private xOkLoading As String
+Private xOkDisabled As String
+Private xCancelVisible As String
+Private xCancelLoading As String
+Private xCancelDisabled As String
+'
+Private bOkVisible As Boolean
+Private bOkLoading As Boolean
+Private bOkDisabled As Boolean
+Private bCancelVisible As Boolean
+Private bCancelLoading As Boolean
+Private bCancelDisabled As Boolean
+Private bCardTextAppend As Boolean
 	End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -134,7 +172,22 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey)
 		End If
 	End If
-	End Sub
+	xToolbarCaption = $"${mName}toolbarcaption"$
+	xCardTitleCaption = $"${mName}cardtitlecaption"$
+	xToolBarColor = $"${mName}toolbarcolor"$
+	xToolBarDark = $"${mName}toolbardark"$
+	xCardTextCaption = $"${mName}cardtextcaption"$
+	xCancelColor = $"${mName}cancel_color"$
+	xOkColor = $"${mName}ok_color"$
+	xOkCaption = $"${mName}ok_caption"$
+	xCancelCaption = $"${mName}cancel_caption"$
+	xOkVisible = $"${mName}_okvshow"$
+	xOkLoading = $"${mName}ok_loading"$
+	xOkDisabled  = $"${mName}ok_disabled"$
+	xCancelVisible = $"${mName}_cancelvshow"$
+	xCancelLoading = $"${mName}cancel_loading"$
+	xCancelDisabled = $"${mName}cancel_disabled"$
+End Sub
 	
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	mTarget = Target
@@ -144,6 +197,13 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mAttributes = Props.Get("Attributes")
 		sActivator = Props.Get("Activator")
 		bHasToolbar = Props.Get("HasToolbar")
+		bOkVisible = Props.Get("OkVisible")
+		bOkLoading = Props.Get("OkLoading")
+		bOkDisabled = Props.Get("OkDisabled")
+		bCancelVisible = Props.Get("CancelVisible")
+		bCancelLoading = Props.Get("CancelLoading")
+		bCancelDisabled = Props.Get("CancelDisabled")
+		bCardTextAppend = Props.Get("CardTextAppend")
 sAttach = Props.Get("Attach")
 sCancelCaption = Props.Get("CancelCaption")
 sCancelColor = Props.Get("CancelColor")
@@ -187,6 +247,9 @@ sVModel = Props.Get("VModel")
 sWidth = Props.Get("Width")
 sToolbarCaption = Props.Get("ToolbarCaption")
 bFullscreenOnMobile = Props.Get("FullscreenOnMobile")
+sToolBarColor = Props.Get("ToolBarColor")
+sToolBarColorIntensity = Props.Get("ToolBarColorIntensity")
+bToolbarDark = Props.Get("ToolBarDark")
 	End If
 	'
 	'build and get the element
@@ -198,36 +261,71 @@ bFullscreenOnMobile = Props.Get("FullscreenOnMobile")
 	'
 	VElement.Initialize(mCallBack, mName, mName)
 	VElement.TagName = "v-dialog"
+	VElement.SetData(xToolbarCaption, sToolbarCaption)
+	VElement.SetData(xCardTitleCaption, sCardTitleCaption)
+	sToolBarColor = VElement.BuildColor(sToolBarColor, sToolBarColorIntensity)
+	VElement.SetData(xToolBarColor, sToolBarColor)
+	VElement.SetData(xToolBarDark, bToolbarDark)
+	VElement.SetData(xCardTextCaption, sCardTextCaption)
+	sCancelColor = VElement.BuildColor(sCancelColor, sCancelColorIntensity)
+	sOkColor = VElement.BuildColor(sOkColor, sOkColorIntensity)
+	VElement.SetData(xOkColor, sOkColor)
+	VElement.SetData(xCancelColor, sCancelColor)
+	VElement.SetData(xOkCaption, sOkCaption)
+	VElement.SetData(xCancelCaption, sCancelCaption)
 	'
+	VElement.SetData(xOkVisible, bOkVisible)
+	VElement.SetData(xOkLoading, bOkLoading)
+	VElement.SetData(xOkDisabled, bOkDisabled)
+	'
+	VElement.SetData(xCancelVisible, bCancelVisible)
+	VElement.SetData(xCancelLoading, bCancelLoading)
+	VElement.SetData(xCancelDisabled, bCancelDisabled)
+	
 	'add the card
 	VElement.Append($"<v-card id="${mName}card"></v-card>"$)
 	'
 	If bHasToolbar Then
 		VElement.GetCard.Append($"<v-toolbar id="${mName}toolbar" flat></v-toolbar>"$)
-		VElement.GetToolBar(mName).Append($"<v-toolbar-title id="${mName}toolbartitle">${sToolbarCaption}</v-toolbar-title>"$)
+		VElement.GetToolBar1.Append($"<v-toolbar-title id="${mName}toolbartitle"></v-toolbar-title>"$)
+		VElement.GetToolBar1.Bind("color", xToolBarColor)
+		VElement.GetToolBar1.Bind("dark", xToolBarDark)
+		VElement.GetToolBarTitle.VHtml = xToolbarCaption
+		VElement.BindVueElement(VElement.GetToolBar1)
+		VElement.BindVueElement(VElement.GetToolbarTitle)
 	End If	
 	If bHasCardTitle Then
-		VElement.GetCard.Append($"<v-card-title id="${mName}cardtitle">${sCardTitleCaption}</v-card-title>"$)
-	End If
-	If bHasDivider Then
-		VElement.GetCard.Append($"<v-divider id="${mName}divider1" class="mx-2"></v-divider>"$)
+		VElement.GetCard.Append($"<v-card-title id="${mName}cardtitle"></v-card-title>"$)
+		VElement.GetCardTitle.VHtml = xCardTitleCaption
+		VElement.BindVueElement(VElement.GetCardTitle)
 	End If
 	If bHasCardText Then
-		VElement.GetCard.Append($"<v-card-text id="${mName}cardtext">${sCardTextCaption}</v-card-text>"$)
+		VElement.GetCard.Append($"<v-card-text id="${mName}cardtext"></v-card-text>"$)
+		'we will not append anything to it
+		If bCardTextAppend = False Then
+			VElement.GetCardText.VHtml = xCardTextCaption
+			VElement.BindVueElement(VElement.GetCardText)
+		End If
 	End If
 	If bHasDivider Then
 		VElement.GetCard.Append($"<v-divider id="${mName}divider2" class="mx-2"></v-divider>"$)
 	End If
 	If bHasCardActions Then
-		VElement.GetCard.Append($"<v-card-actions id="${mName}cardactions" inset></v-card-actions>"$)
+		VElement.GetCard.Append($"<v-card-actions id="${mName}cardactions"></v-card-actions>"$)
 		If bHasCancel Then
-			Dim cancelColor As String = VElement.BuildColor(sCancelColor, sCancelColorIntensity)
-			VElement.GetCardActions.Append($"<v-btn id="${mName}_cancel" dark color="${cancelColor}">${sCancelCaption}</v-btn>"$)
+			VElement.GetCardActions.Append($"<v-btn id="${mName}_cancel" dark>{{${xCancelCaption} }}</v-btn>"$)
+			VElement.GetCancel1.Bind("color", xCancelColor)
+			VElement.GetCancel1.Disabled = xCancelDisabled
+			VElement.GetCancel1.Vshow = xCancelVisible
+			VElement.GetCancel1.Loading = xCancelLoading
 		End If
 		VElement.GetCardActions.Append($"<v-spacer></v-spacer>"$)
 		If bHasOk Then
-			Dim okcolor As String = VElement.BuildColor(sOkColor, sOkColorIntensity)
-			VElement.GetCardActions.Append($"<v-btn id="${mName}_ok" dark color="${okcolor}">${sOkCaption}</v-btn>"$)
+			VElement.GetCardActions.Append($"<v-btn id="${mName}_ok" dark>{{ ${xOkCaption} }}</v-btn>"$)
+			VElement.GetOK1.Bind("color", xOkColor)
+			VElement.GetOK1.Disabled = xOkDisabled
+			VElement.GetOK1.Vshow = xOkVisible
+			VElement.GetOK1.Loading = xOkLoading
 		End If
 	End If
 	'
@@ -235,7 +333,7 @@ bFullscreenOnMobile = Props.Get("FullscreenOnMobile")
 	VElement.Styles = mStyles
 	VElement.Attributes = mAttributes
 	'
-		VElement.AddAttr("activator", sActivator)
+VElement.AddAttr("activator", sActivator)
 VElement.AddAttr("attach", sAttach)
 VElement.AddAttr("close-delay", sCloseDelay)
 VElement.AddAttr("content-class", sContentClass)
@@ -265,7 +363,7 @@ VElement.AddAttr("width", sWidth)
 VElement.FullScreenOnMobile = bFullscreenOnMobile
 VElement.SetData(sVModel, False)
 VElement.BindAllEvents
-
+'
 If bHasOk Then
 	Dim okb As VueElement = VElement.GetOK1
 	okb.BindAllEvents
@@ -279,86 +377,199 @@ If bHasCancel Then
 End If
 End Sub
 
-public Sub AddToParent(targetID As String)
-	mTarget = BANano.GetElement("#" & targetID.ToLowerCase)
-	DesignerCreateView(mTarget, Null)
+
+'update the card text
+Sub UpdateCardText(VC As VueComponent, vCardText As String)
+	sCardTextCaption = vCardText
+	VC.SetData(xCardTextCaption, vCardText)
 End Sub
 
-public Sub Remove()
-	mTarget.Empty
-	BANano.SetMeToNull
+'update the toolbar dark status
+Sub UpdateToolbarDark(VC As VueComponent, vDark As Boolean)
+	bToolbarDark = vDark
+	VC.SetData(xToolBarDark, vDark)
 End Sub
 
-public Sub Trigger(event As String, params() As String)
-	If mElement <> Null Then
-		mElement.Trigger(event, params)
-	End If
+'update the toolbar color
+Sub UpdateToolbarColor(VC As VueComponent, vColor As String, vIntensity As String)
+	sToolBarColor = VElement.BuildColor(vColor, vIntensity)
+	VC.SetData(xToolBarColor, sToolBarColor)
 End Sub
 
+'update the ok color
+Sub UpdateOkColor(VC As VueComponent, vColor As String, vIntensity As String)
+	sOkColor = VElement.BuildColor(vColor, vIntensity)
+	VC.SetData(xOkColor, sOkColor)
+End Sub
+
+'update the cancel color
+Sub UpdateCancelColor(VC As VueComponent, vColor As String, vIntensity As String)
+	sCancelColor = VElement.BuildColor(vColor, vIntensity)
+	VC.SetData(xCancelColor, sCancelColor)
+End Sub
+
+'update the card title
+Sub UpdateCardTitle(VC As VueComponent, vCardTitleCaption As String)
+	sCardTitleCaption = vCardTitleCaption
+	VC.SetData(xCardTitleCaption, vCardTitleCaption)
+End Sub
+
+'update the toolbar title
+Sub UpdateToolBarTitle(VC As VueComponent, vToolbarCaption As String)
+	sToolbarCaption = vToolbarCaption
+	VC.SetData(xToolbarCaption, vToolbarCaption)
+End Sub
+
+'add a class
 Sub AddClass(s As String) As VDialog
 	VElement.AddClass(s)
 	Return Me
 End Sub
 
+'add an attribute
 Sub AddAttr(p As String, v As Object) As VDialog
 	VElement.SetAttr(p, v)
 	Return Me
 End Sub
 
+'add a style
 Sub AddStyle(p As String, v As String) As VDialog
 	VElement.AddStyle(p, v)
 	Return Me
 End Sub
 
+'remove an attribute
 Sub RemoveAttr(p As String) As VDialog
 	VElement.RemoveAttr(p)
 	Return Me
 End Sub
 
-Sub Visible(VC As VueComponent, b As Boolean) As VDialog
+'turn visibility on and off
+Sub UpdateVisible(VC As VueComponent, b As Boolean) As VDialog
 	VC.SetData(sVIf, b)
 	VC.SetData(sVModel, b)
 	Return Me
 End Sub
 
+'turn visibility on and off on app
 Sub VisibleOnApp(vapp As VuetifyApp, b As Boolean)
 	vapp.SetData(sVModel, b)
 	vapp.SetData(sVIf, b)
 End Sub
 
-Sub Card As VueElement
-	Return VElement.GetCard
+''get the card inside the dialog
+'Sub Card As VCard
+'	Dim scard As String = $"${mName}card"$
+'	Dim elx As VCard
+'	elx.Initialize(mCallBack, scard, scard)
+'	Return elx
+'End Sub
+
+''get the toolbar
+'Sub ToolBar As VToolBar
+'	Dim scard As String = $"${mName}toolbar"$
+'	Dim elx As VToolBar
+'	elx.Initialize(mCallBack, scard, scard)
+'	Return elx
+'End Sub
+
+''get the card title
+'Sub CardTitle As VCardTitle
+'	Dim scard As String = $"${mName}cardtitle"$
+'	Dim elx As VCardTitle
+'	elx.Initialize(mCallBack, scard, scard)
+'	Return elx
+'End Sub
+
+'get the card text
+Sub CardText As VCardText
+	Dim scard As String = $"${mName}cardtext"$
+	Dim elx As VCardText
+	elx.Initialize(mCallBack, scard, scard)
+	Return elx
 End Sub
 
-Sub ToolBar As VueElement
-	Return VElement.GetToolBar(mName)
+''get the card actions
+'Sub CardActions As VCardActions
+'	Dim scard As String = $"${mName}cardactions"$
+'	Dim elx As VCardActions
+'	elx.Initialize(mCallBack, scard, scard)
+'	Return elx
+'End Sub
+
+''get the ok button
+'Sub OkButton As VBtn
+'	Dim scard As String = $"${mName}_ok"$
+'	Dim elx As VBtn
+'	elx.Initialize(mCallBack, scard, scard)
+'	Return elx
+'End Sub
+
+''get the cancel button
+'Sub CancelButton As VBtn
+'	Dim scard As String = $"${mName}_cancel"$
+'	Dim elx As VBtn
+'	elx.Initialize(mCallBack, scard, scard)
+'	Return elx
+'End Sub
+
+'update the label of the ok button
+Sub UpdateOkLabel(VC As VueComponent, s As String)
+	sOkCaption = s
+	VElement.SetData(xOkCaption, sOkCaption)
 End Sub
 
-Sub CardTitle As VueElement
-	Return VElement.GetCardTitle
+'update the label of the cancel button
+Sub UpdateCancelLabel(VC As VueComponent, s As String)
+	sCancelCaption = s
+	VElement.SetData(xCancelCaption, sOkCaption)
 End Sub
 
-Sub CardText As VueElement
-	Return VElement.GetCardText
+'update the visibility of the ok button
+Sub UpdateOkVisible(VC As VueComponent, b As Boolean)
+	bOkVisible = b
+	VElement.SetData(xOkVisible, bOkVisible)
 End Sub
+	
+'update the loading of the ok button
+Sub UpdateOkLoading(VC As VueComponent, b As Boolean)
+	bOkLoading = b
+	VElement.SetData(xOkLoading, bOkLoading)
+End Sub	
 
-Sub CardActions As VueElement
-	Return VElement.getCardActions
+'update the disanled of the ok button
+Sub UpdateOkDisabled(VC As VueComponent, b As Boolean)
+	bOkDisabled = b
+	VElement.SetData(xOkDisabled, bOkDisabled)
+End Sub		
+
+'update the visibility of the cancel button
+Sub UpdateCancelVisible(VC As VueComponent, b As Boolean)
+	bCancelVisible = b
+	VElement.SetData(xCancelVisible, bCancelVisible)
 End Sub
+	
+'update the loading of the cancel button
+Sub UpdateCancelLoading(VC As VueComponent, b As Boolean)
+	bCancelLoading = b
+	VElement.SetData(xCancelLoading, bCancelLoading)
+End Sub	
 
-Sub CardSubTitle As VueElement
-	Return VElement.GetCardSubTitle
-End Sub
-
-Sub CardImage As VueElement
-	Return VElement.GetImage
+'update the disanled of the cancel button
+Sub UpdateCancelDisabled(VC As VueComponent, b As Boolean)
+	bCancelDisabled = b
+	VElement.SetData(xCancelDisabled, bCancelDisabled)
 End Sub
 
 Sub getVModel As String
 	Return sVModel
 End Sub
 
-
 Sub getID As String
 	Return mName
+End Sub
+
+
+Sub getHere As String
+	Return $"#${mName}"$
 End Sub

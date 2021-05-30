@@ -107,7 +107,8 @@ Private bTile As Boolean
 Private sVIf As String
 Private sValue As String
 Private sWidth As String
-private sVShow as string
+Private sVShow As String
+Private xColor As String
 	End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -122,6 +123,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey)
 		End If
 	End If
+	xColor = $"${mname}color"$
 	End Sub
 	
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
@@ -195,7 +197,8 @@ VElement.ClippedLeft = bClippedLeft
 VElement.ClippedRight = bClippedRight
 VElement.AddAttr(":collapse", bCollapse)
 VElement.AddAttr(":collapse-on-scroll", bCollapseOnScroll)
-VElement.Color = VElement.BuildColor(sColor, sColorIntensity)
+VElement.Bind("color", xColor)
+VElement.SetData(xColor, VElement.BuildColor(sColor, sColorIntensity))
 VElement.Dark = bDark
 VElement.Dense = bDense
 VElement.AddAttr(":elevate-on-scroll", bElevateOnScroll)
@@ -270,13 +273,22 @@ Sub RemoveAttr(p As String) As VAppBar
 	Return Me
 End Sub
 
-Sub Visible(VC As VueComponent, b As Boolean) As VAppBar
+Sub UpdateVisible(VC As VueComponent, b As Boolean) As VAppBar
 	VC.SetData(sVIf, b)
 	VC.SetData(sValue, b)
 	Return Me
 End Sub
 
+Sub UpdateColor(VC As VueComponent, vColor As String, vIntensity As String)
+	sColor = VElement.BuildColor(vColor, vIntensity)
+	VElement.SetData(xColor, sColor)
+End Sub
 
 Sub getID As String
 	Return mName
+End Sub
+
+
+Sub getHere As String
+	Return $"#${mName}"$
 End Sub

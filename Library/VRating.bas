@@ -207,17 +207,17 @@ Sub RemoveAttr(p As String) As VRating
 	Return Me
 End Sub
 
-Sub Visible(VC As VueComponent, b As Boolean) As VRating
+Sub UpdateVisible(VC As VueComponent, b As Boolean) As VRating
 	VC.SetData(sVIf, b)
 	VC.SetData(sVShow, b)
 	Return Me
 End Sub
 
-Sub SetRating(VC As VueComponent, newRating As Double)
+Sub SetValue(VC As VueComponent, newRating As Double)
 	VC.SetData(sVModel, newRating)
 End Sub
 
-Sub GetRating(VC As VueComponent) As Int
+Sub GetValue(VC As VueComponent) As Int
 	Dim res As Int = VC.GetData(sVModel)
 	Return res
 End Sub
@@ -225,4 +225,9 @@ End Sub
 
 Sub getID As String
 	Return mName
+End Sub
+
+
+Sub getHere As String
+	Return $"#${mName}"$
 End Sub

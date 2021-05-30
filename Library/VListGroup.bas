@@ -152,11 +152,16 @@ Sub RemoveAttr(p As String) As VListGroup
 	Return Me
 End Sub
 
-Sub Collapse(VC As VueComponent, b As Boolean)
+Sub UpdateCollapse(VC As VueComponent, b As Boolean)
 	VC.SetData(sVModel, b)
 End Sub
 
 
 Sub getID As String
 	Return mName
+End Sub
+
+
+Sub getHere As String
+	Return $"#${mName}"$
 End Sub

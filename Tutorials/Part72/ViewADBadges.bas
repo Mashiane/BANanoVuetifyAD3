@@ -16,6 +16,7 @@ Sub Process_Globals
 	Private VBadge2 As VBadge
 	Private VBadge4 As VBadge
 	Private VBadge5 As VBadge
+	Private VBtn1 As VBtn
 End Sub
 
 Sub Initialize
@@ -29,9 +30,10 @@ Sub Initialize
 	'
 	about.BindVueElement(VBadge2.VElement)
 	about.BindVueElement(VBadge5.VElement)
+	about.BindVueElement(VBtn1.VElement)
 	
-	VBadge2.Update(about, 3)
-	VBadge5.Update(about, 1)
+	VBadge2.UpdateContent(about, 3)
+	VBadge5.UpdateContent(about, 1)
 		
 	'add the component as a router
 	vuetify.AddRoute(about) 

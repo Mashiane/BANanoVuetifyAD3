@@ -292,7 +292,7 @@ Sub RemoveAttr(p As String) As VMenu
 	Return Me
 End Sub
 
-Sub Visible(VC As VueComponent, b As Boolean) As VMenu
+Sub UpdateVisible(VC As VueComponent, b As Boolean) As VMenu
 	VC.SetData(sVIf, b)
 	VC.SetData(sVShow, b)
 	Return Me
@@ -301,4 +301,9 @@ End Sub
 
 Sub getID As String
 	Return mName
+End Sub
+
+
+Sub getHere As String
+	Return $"#${mName}"$
 End Sub

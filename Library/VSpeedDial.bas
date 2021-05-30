@@ -247,7 +247,7 @@ Sub RemoveAttr(p As String) As VSpeedDial
 	Return Me
 End Sub
 
-Sub Visible(VC As VueComponent, b As Boolean)
+Sub UpdateVisible(VC As VueComponent, b As Boolean)
 	VC.SetData(mVIf, b)
 	VC.SetData(sVModel, b)
 End Sub
@@ -255,4 +255,9 @@ End Sub
 
 Sub getID As String
 	Return mName
+End Sub
+
+
+Sub getHere As String
+	Return $"#${mName}"$
 End Sub

@@ -195,18 +195,27 @@ Sub RemoveAttr(p As String) As VPagination
 	Return Me
 End Sub
 
-Sub Visible(VC As VueComponent, b As Boolean) As VPagination
+Sub UpdateVisible(VC As VueComponent, b As Boolean) As VPagination
 	VC.SetData(sVIf, b)
 	VC.SetData(sVShow, b)
 	Return Me
 End Sub
 
-Sub GetSelectedPage(VC As VueComponent) As Int
+Sub GetValue(VC As VueComponent) As Int
 	Dim res As String = VC.GetData(sVModel)
 	Return res
+End Sub
+
+Sub SetValue(VC As VueComponent, p As Int)
+	VC.SetData(sVModel, p)
 End Sub
 
 
 Sub getID As String
 	Return mName
+End Sub
+
+
+Sub getHere As String
+	Return $"#${mName}"$
 End Sub

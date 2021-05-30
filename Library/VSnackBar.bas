@@ -81,6 +81,8 @@ Private sVIf As String
 Private sVModel As String
 Private bVertical As Boolean
 Private sWidth As String
+Private xCaption As String
+Private xColor As String
 	End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -95,6 +97,8 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey)
 		End If
 	End If
+	xCaption = $"${mName}caption"$
+	xColor = $"${mName}color"$
 	End Sub
 	
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
@@ -139,29 +143,33 @@ sWidth = Props.Get("Width")
 	If BANano.Exists($"#${mName}"$) Then
 		mElement = BANano.GetElement($"#${mName}"$)
 	Else	
-		mElement = mTarget.Append($"<v-snackbar id="${mName}">${sCaption}</v-snackbar>"$).Get("#" & mName)
+		mElement = mTarget.Append($"<v-snackbar id="${mName}"></v-snackbar>"$).Get("#" & mName)
 	End If
 	'
 	VElement.Initialize(mCallBack, mName, mName)
 	VElement.TagName = "v-snackbar"
 	VElement.Classes = mClasses
 	VElement.Styles = mStyles
+	VElement.caption = VElement.InMoustache1(sCaption, xCaption)
+	VElement.SetData(xCaption, sCaption)
 	VElement.Attributes = mAttributes
 	VElement.AddAttr(":absolute", bAbsolute)
-VElement.AddAttr(":app", bApp)
-VElement.AddAttr(":centered", bCentered)
-VElement.Color = VElement.BuildColor(sColor, sColorIntensity)
-VElement.AddAttr("content-class", sContentClass)
-VElement.AddAttr(":dark", bDark)
-VElement.AddAttr("elevation", sElevation)
-VElement.AddAttr("height", sHeight)
-VElement.AddAttr(":light", bLight)
-VElement.AddAttr("max-height", sMaxHeight)
-VElement.AddAttr("max-width", sMaxWidth)
-VElement.AddAttr("min-height", sMinHeight)
-VElement.AddAttr("min-width", sMinWidth)
-VElement.AddAttr(":multi-line", bMultiLine)
-VElement.AddAttr(":outlined", bOutlined)
+	VElement.AddAttr(":app", bApp)
+	VElement.AddAttr(":centered", bCentered)	
+	sColor = VElement.BuildColor(sColor, sColorIntensity)
+	VElement.Bind("color", xColor)
+	VElement.SetData(xColor, sColor)
+	VElement.AddAttr("content-class", sContentClass)
+	VElement.AddAttr(":dark", bDark)
+	VElement.AddAttr("elevation", sElevation)
+	VElement.AddAttr("height", sHeight)
+	VElement.AddAttr(":light", bLight)
+	VElement.AddAttr("max-height", sMaxHeight)
+	VElement.AddAttr("max-width", sMaxWidth)
+	VElement.AddAttr("min-height", sMinHeight)
+	VElement.AddAttr("min-width", sMinWidth)
+	VElement.AddAttr(":multi-line", bMultiLine)
+	VElement.AddAttr(":outlined", bOutlined)
 Select Case sPosition
 Case "none"	
 Case "bottom-left"
@@ -191,6 +199,16 @@ VElement.AddAttr(":vertical", bVertical)
 VElement.AddAttr("width", sWidth)
 VElement.AddAttr(sVModel, False)
 VElement.BindAllEvents
+End Sub
+
+'update the label of the button
+Sub UpdateLabel(VC As VueComponent, s As String)
+	VC.SetData(xCaption, S)
+End Sub
+
+Sub UpdateColor(VC As VueComponent, vColor As String, vIntensity As String)
+	sColor = VElement.BuildColor(vColor, vIntensity)
+	VElement.SetData(xColor, sColor)
 End Sub
 
 public Sub AddToParent(targetID As String)
@@ -229,7 +247,7 @@ Sub RemoveAttr(p As String) As VSnackBar
 	Return Me
 End Sub
 
-Sub Visible(VC As VueComponent, b As Boolean) As VSnackBar
+Sub UpdateVisible(VC As VueComponent, b As Boolean) As VSnackBar
 	VC.SetData(sVIf, b)
 	VC.SetData(sVModel, b)
 	Return Me
@@ -238,4 +256,9 @@ End Sub
 
 Sub getID As String
 	Return mName
+End Sub
+
+
+Sub getHere As String
+	Return $"#${mName}"$
 End Sub

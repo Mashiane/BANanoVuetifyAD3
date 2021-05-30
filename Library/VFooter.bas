@@ -178,7 +178,7 @@ Sub RemoveAttr(p As String) As VFooter
 	Return Me
 End Sub
 
-Sub Visible(VC As VueComponent, b As Boolean) As VFooter
+Sub UpdateVisible(VC As VueComponent, b As Boolean) As VFooter
 	VC.SetData(sVIf, b)
 	VC.SetData(sVShow, b)
 	Return Me
@@ -187,4 +187,9 @@ End Sub
 
 Sub getID As String
 	Return mName
+End Sub
+
+
+Sub getHere As String
+	Return $"#${mName}"$
 End Sub

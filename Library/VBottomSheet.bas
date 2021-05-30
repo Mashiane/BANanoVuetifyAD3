@@ -211,14 +211,14 @@ Sub RemoveAttr(p As String) As VBottomSheet
 	Return Me
 End Sub
 
-Sub Visible(VC As VueComponent, b As Boolean) As VBottomSheet
+Sub UpdateVisible(VC As VueComponent, b As Boolean) As VBottomSheet
 	VC.SetData(sVIf, b)
 	VC.SetData(sValue, b)
 	Return Me
 End Sub
 
 
-Sub Disabled(VC As VueComponent, b As Boolean) As VBottomSheet
+Sub UpdateDisabled(VC As VueComponent, b As Boolean) As VBottomSheet
 	VC.SetData(sDisabled, b)
 	Return Me
 End Sub
@@ -226,4 +226,9 @@ End Sub
 
 Sub getID As String
 	Return mName
+End Sub
+
+
+Sub getHere As String
+	Return $"#${mName}"$
 End Sub

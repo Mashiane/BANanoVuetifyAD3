@@ -207,7 +207,7 @@ Sub RemoveAttr(p As String) As VImg
 	Return Me
 End Sub
 
-Sub Visible(VC As VueComponent, b As Boolean) As VImg
+Sub UpdateVisible(VC As VueComponent, b As Boolean) As VImg
 	VC.SetData(mVIf, b)
 	VC.SetData(mVShow, b)
 	Return Me
@@ -216,4 +216,9 @@ End Sub
 
 Sub getID As String
 	Return mName
+End Sub
+
+
+Sub getHere As String
+	Return $"#${mName}"$
 End Sub

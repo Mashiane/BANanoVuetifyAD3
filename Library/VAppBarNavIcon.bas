@@ -124,7 +124,17 @@ Sub RemoveAttr(p As String) As VAppBarNavIcon
 	Return Me
 End Sub
 
+Sub UpdateVisible(VC As VueComponent, b As Boolean) As VAppBarNavIcon
+	VC.SetData(mVIf, b)
+	VC.SetData(mVShow, b)
+	Return Me
+End Sub
 
 Sub getID As String
 	Return mName
+End Sub
+
+
+Sub getHere As String
+	Return $"#${mName}"$
 End Sub

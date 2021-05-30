@@ -37,6 +37,7 @@ Sub Class_Globals
 	Private mTextColorIntensity As String = ""
 	Private mColorIntensity As String = ""
 	Private mText As String = ""
+	Private xCaption As String = ""
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -51,6 +52,7 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey)
 		End If
 	End If
+	xCaption = $"${mName}caption"$
 End Sub
 
 ' this is the place where you create the view in html and run initialize javascript
@@ -85,8 +87,14 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.TextColor = mTextColor
 	VElement.TextColorIntensity = mTextColorIntensity
 	VElement.VIf = mVIf
-	VElement.Caption = mText
+	VElement.Caption = VElement.InMoustache1(mText, xCaption)
+	VElement.SetData(xCaption, mText)
 	VElement.VShow = mVShow
+End Sub
+
+Sub UpdateTitle(VC As VueComponent, sText As String)
+	mText = sText
+	VC.setdata(xCaption, mText)
 End Sub
 
 public Sub AddToParent(targetID As String)
@@ -125,7 +133,17 @@ Sub RemoveAttr(p As String) As VAppBarTitle
 	Return Me
 End Sub
 
+Sub UpdateVisible(VC As VueComponent, b As Boolean) As VAppBarTitle
+	VC.SetData(mVIf, b)
+	VC.SetData(mVShow, b)
+	Return Me
+End Sub
 
 Sub getID As String
 	Return mName
+End Sub
+
+
+Sub getHere As String
+	Return $"#${mName}"$
 End Sub

@@ -47,7 +47,7 @@ End Sub
 'called each time the page is navigated to
 Sub oncreated
 	'the dialog is visible
-	VDialog1.Visible(about, True)
+	VDialog1.UpdateVisible(about, True)
 End Sub
 
 Private Sub VDialog1_ok_click (e As BANanoEvent)

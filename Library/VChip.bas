@@ -218,12 +218,12 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 End Sub
 
 
-Sub Disabled(VC As VueComponent, b As Boolean)
+Sub UpdateDisabled(VC As VueComponent, b As Boolean)
 	VC.SetData($"${mName}disabled"$, b)
 End Sub
 
 
-Sub Visible(VC As VueComponent, b As Boolean)
+Sub UpdateVisible(VC As VueComponent, b As Boolean)
 	VC.SetData(mVIf, b)
 	VC.SetData(sActive, b)
 End Sub
@@ -267,4 +267,9 @@ End Sub
 
 Sub getID As String
 	Return mName
+End Sub
+
+
+Sub getHere As String
+	Return $"#${mName}"$
 End Sub

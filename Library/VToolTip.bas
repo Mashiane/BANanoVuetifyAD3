@@ -245,7 +245,7 @@ Sub RemoveAttr(p As String) As VToolTip
 	Return Me
 End Sub
 
-Sub Visible(VC As VueComponent, b As Boolean) As VToolTip
+Sub UpdateVisible(VC As VueComponent, b As Boolean) As VToolTip
 	VC.SetData(sVIf, b)
 	VC.SetData(sVModel, b)
 	Return Me
@@ -254,4 +254,9 @@ End Sub
 
 Sub getID As String
 	Return mName
+End Sub
+
+
+Sub getHere As String
+	Return $"#${mName}"$
 End Sub

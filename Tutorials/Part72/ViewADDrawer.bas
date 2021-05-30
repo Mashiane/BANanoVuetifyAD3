@@ -35,15 +35,15 @@ End Sub
 
 Sub oncreated
 	'hide the drawer
-	VNavigationDrawer1.Visible(about, False)
+	VNavigationDrawer1.UpdateVisible(about, False)
 End Sub
 
 
 Private Sub VBtn1_Click (e As BANanoEvent)
 	'show the drawer
-	VNavigationDrawer1.Visible(about, True)
+	VNavigationDrawer1.UpdateVisible(about, True)
 End Sub
 
 Private Sub btnCloseDrawer_Click (e As BANanoEvent)
-	VNavigationDrawer1.Visible(about, False)	
+	VNavigationDrawer1.UpdateVisible(about, False)	
 End Sub

@@ -172,12 +172,12 @@ public Sub Trigger(event As String, params() As String)
 	End If
 End Sub
 
-Sub Visible(VC As VueComponent, b As Boolean)
+Sub UpdateVisible(VC As VueComponent, b As Boolean)
 	VC.SetData(sValue, b)
 	VC.SetData(mVIf, b)
 End Sub
 
-Sub Update(VC As VueComponent, b As Boolean)
+Sub UpdateContent(VC As VueComponent, b As Boolean)
 	VC.SetData(sContent, b)
 End Sub
 
@@ -192,4 +192,9 @@ End Sub
 
 Sub getID As String
 	Return mName
+End Sub
+
+
+Sub getHere As String
+	Return $"#${mName}"$
 End Sub

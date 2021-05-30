@@ -11,6 +11,18 @@ Sub Process_Globals
 	Public path As String
 	Public name As String = "adfooters"
 	Private banano As BANano
+	Private VBtn1 As VBtn
+	Private VBtn2 As VBtn
+	Private VCard1 As VCard
+	Private VCard2 As VCard
+	Private VCard3 As VCard
+	Private VCardTitle1 As VCardTitle
+	Private VContainer1 As VContainer
+	Private VFooter1 As VFooter
+	Private VFooter2 As VFooter
+	Private VIcon1 As VIcon
+	Private VRow1 As VRow
+	Private VRow2 As VRow
 End Sub
 
 Sub Initialize
@@ -29,6 +41,11 @@ Sub Initialize
 	Dim icons As List = about.newlist
 	icons.AddAll(Array("mdi-facebook", "mdi-twitter", "mdi-linkedin", "mdi-instagram"))
 	about.SetData("icons", icons)
+	
+	about.BindVueElement(VBtn1.VElement)
+	about.BindVueElement(VBtn2.VElement)
+	
+	
 	
 	'add the component as a router
 	vuetify.AddRoute(about) 

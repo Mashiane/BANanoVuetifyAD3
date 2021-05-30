@@ -221,7 +221,7 @@ Sub RemoveAttr(p As String) As VNavigationDrawer
 	Return Me
 End Sub
 
-Sub Visible(VC As VueComponent, b As Boolean) As VNavigationDrawer
+Sub UpdateVisible(VC As VueComponent, b As Boolean) As VNavigationDrawer
 	VC.SetData(sVIf, b)
 	VC.SetData(sVShow, b)
 	VC.SetData(sVModel, b)
@@ -238,4 +238,9 @@ End Sub
 
 Sub getID As String
 	Return mName
+End Sub
+
+
+Sub getHere As String
+	Return $"#${mName}"$
 End Sub

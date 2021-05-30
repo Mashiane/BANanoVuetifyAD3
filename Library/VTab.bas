@@ -211,7 +211,7 @@ Sub RemoveAttr(p As String) As VTab
 	Return Me
 End Sub
 
-Sub Visible(VC As VueComponent, b As Boolean) As VTab
+Sub UpdateVisible(VC As VueComponent, b As Boolean) As VTab
 	VC.SetData(sVIf, b)
 	VC.SetData(sVShow, b)
 	Return Me
@@ -220,4 +220,9 @@ End Sub
 
 Sub getID As String
 	Return mName
+End Sub
+
+
+Sub getHere As String
+	Return $"#${mName}"$
 End Sub

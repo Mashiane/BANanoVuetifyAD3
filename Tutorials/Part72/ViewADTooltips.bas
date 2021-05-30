@@ -13,6 +13,7 @@ Sub Process_Globals
 	Private banano As BANano
 	Private cardsr1 As VRow
 	Private VCard3 As VCard
+	Private VBtn1 As VBtn
 End Sub
 
 Sub Initialize
@@ -23,6 +24,8 @@ Sub Initialize
 	path = about.path
 	
 	banano.LoadLayout(about.Here, "mytooltips")
+	about.BindVueElement(VBtn1.VElement)
+	
 	'add the component as a router
 	vuetify.AddRoute(about) 
 End Sub

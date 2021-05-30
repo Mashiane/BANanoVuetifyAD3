@@ -113,7 +113,7 @@ Sub RemoveAttr(p As String) As VForm
 	Return Me
 End Sub
 
-Sub Valid(VC As VueComponent, b As Boolean) As VForm
+Sub UpdateValid(VC As VueComponent, b As Boolean) As VForm
 	VC.SetData(sVModel, b)
 	Return Me
 End Sub
@@ -121,4 +121,9 @@ End Sub
 
 Sub getID As String
 	Return mName
+End Sub
+
+
+Sub getHere As String
+	Return $"#${mName}"$
 End Sub

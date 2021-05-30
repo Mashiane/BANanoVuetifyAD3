@@ -166,11 +166,11 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.BindAllEvents
 End Sub
 
-Sub Loading(VC As VueComponent, b As Boolean)
+Sub UpdateLoading(VC As VueComponent, b As Boolean)
 	VC.SetData($"${mName}loading"$, b)
 End Sub
 
-Sub Disabled(VC As VueComponent, b As Boolean)
+Sub UpdateDisabled(VC As VueComponent, b As Boolean)
 	VC.SetData($"${mName}disabled"$, b)
 End Sub
 
@@ -210,7 +210,7 @@ Sub RemoveAttr(p As String) As VFAB
 	Return Me
 End Sub
 
-Sub Visible(VC As VueComponent, b As Boolean)
+Sub UpdateVisible(VC As VueComponent, b As Boolean)
 	VC.SetData(mVIf, b)
 	VC.SetData(mVShow, b)
 End Sub
@@ -218,4 +218,9 @@ End Sub
 
 Sub getID As String
 	Return mName
+End Sub
+
+
+Sub getHere As String
+	Return $"#${mName}"$
 End Sub

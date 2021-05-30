@@ -165,7 +165,7 @@ Sub RemoveAttr(p As String) As VCarouselItem
 	VElement.RemoveAttr(p)
 	Return Me
 End Sub
-Sub Visible(VC As VueComponent, b As Boolean) As VCarouselItem
+Sub UpdateVisible(VC As VueComponent, b As Boolean) As VCarouselItem
 	VC.SetData(sVIf, b)
 	VC.SetData(sVShow, b)
 	Return Me
@@ -174,4 +174,9 @@ End Sub
 
 Sub getID As String
 	Return mName
+End Sub
+
+
+Sub getHere As String
+	Return $"#${mName}"$
 End Sub

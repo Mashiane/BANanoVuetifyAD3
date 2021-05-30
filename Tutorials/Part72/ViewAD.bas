@@ -16,6 +16,16 @@ Sub Process_Globals
 	Private VBtn4 As VBtn
 	Private VBtn6 As VBtn
 	Private VIcon1 As VIcon
+	Private VBtn1 As VBtn
+	Private VBtn10 As VBtn
+	Private VBtn3 As VBtn
+	Private VBtn5 As VBtn
+	Private VBtn7 As VBtn
+	Private VBtn8 As VBtn
+	Private VBtn9 As VBtn
+	Private vbtns As VueElement
+	Private vrow1 As VueElement
+	Private vrow2 As VueElement
 End Sub
 
 Sub Initialize
@@ -32,16 +42,23 @@ Sub Initialize
 	contAD.Matrix(1, 1).LoadLayout("mybuttons")
 	'
 	'bind events
+	about.BindVueElement(VBtn1.VElement)
 	about.BindVueElement(VBtn2.VElement)
+	about.BindVueElement(VBtn3.VElement)
 	about.BindVueElement(VBtn4.VElement)
+	about.BindVueElement(VBtn5.VElement)
+	about.BindVueElement(VBtn7.VElement)
 	about.BindVueElement(VBtn6.VElement)
+	about.BindVueElement(VBtn8.VElement)
+	about.BindVueElement(VBtn9.VElement)
+	about.BindVueElement(VBtn10.VElement)
 	
 	'add the component as a router
 	vuetify.AddRoute(about) 
 End Sub
 
 Private Sub VBtn6_Click (e As BANanoEvent)
-	VBtn6.Loading(about, True)
+	VBtn6.UpdateLoading(about, True)
 	vuetify.SetTimeOut(Me, "turnoff", 3000)
 End Sub
 
@@ -54,5 +71,5 @@ Private Sub VBtn4_Click (e As BANanoEvent)
 End Sub
 
 Sub turnoff
-	VBtn6.Loading(about, False)
+	VBtn6.UpdateLoading(about, False)
 End Sub

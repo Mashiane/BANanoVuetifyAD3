@@ -61,17 +61,17 @@ End Sub
 
 
 Sub hideoverlay2
-	VOverlay2.Visible(about, False)
+	VOverlay2.UpdateVisible(about, False)
 End Sub
 
 Sub hideoverlay
-	VOverlay1.Visible(about, False)
+	VOverlay1.UpdateVisible(about, False)
 End Sub
 
 Private Sub VBtn1_Click (e As BANanoEvent)
-	VOverlay1.Visible(about, True)
+	VOverlay1.UpdateVisible(about, True)
 End Sub
 
 Private Sub VBtn2_Click (e As BANanoEvent)
-	VOverlay1.Visible(about, True)
+	VOverlay1.UpdateVisible(about, True)
 End Sub

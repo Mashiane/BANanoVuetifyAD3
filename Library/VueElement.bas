@@ -5335,9 +5335,23 @@ End Sub
 
 'return a moustache
 Sub InMoustache(valuex As String) As String
-	Dim s As String = $"{{ ${valuex} }}"$
-	Return s
+	If valuex.StartsWith("{{") Then
+		Return valuex
+	Else
+		valuex = $"{{ ${valuex} }}"$
+		Return valuex
+	End If
 End Sub
+
+Sub InMoustache1(valuex As String, other As String) As String
+	If valuex.StartsWith("{{") Then
+		Return valuex
+	Else
+		valuex = $"{{ ${other} }}"$
+		Return valuex
+	End If
+End Sub
+
 
 'return a moustache
 'returns item.
@@ -8785,6 +8799,13 @@ Sub GetToolBar(elID As String) As VueElement
 	Return elx
 End Sub
 
+Sub GetToolBar1 As VueElement
+	Dim dialogToolBar As String = $"${mName}toolbar"$
+	dialogToolBar = dialogToolBar.tolowercase
+	Dim elx As VueElement = GetVueElement(dialogToolBar)
+	Return elx
+End Sub
+
 'get the chip ref from the chip group
 Sub GetAvatar As VueElement
 	Dim elKey As String = $"${mName}avatar"$
@@ -11060,6 +11081,11 @@ End Sub
 
 Sub GetToolbarTitle As VueElement
 	Dim btn As VueElement = GetVueElement($"${mName}toolbartitle"$)
+	Return btn
+End Sub
+
+Sub GetTitleToolbar As VueElement
+	Dim btn As VueElement = GetVueElement($"${mName}titletoolbar"$)
 	Return btn
 End Sub
 

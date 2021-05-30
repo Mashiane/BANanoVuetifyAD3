@@ -110,7 +110,7 @@ Sub RemoveAttr(p As String) As VCardActions
 	VElement.RemoveAttr(p)
 	Return Me
 End Sub
-Sub Visible(VC As VueComponent, b As Boolean) As VCardActions
+Sub UpdateVisible(VC As VueComponent, b As Boolean) As VCardActions
 	VC.SetData(mVIf, b)
 	VC.SetData(mVShow, b)
 	Return Me
@@ -119,4 +119,9 @@ End Sub
 
 Sub getID As String
 	Return mName
+End Sub
+
+
+Sub getHere As String
+	Return $"#${mName}"$
 End Sub

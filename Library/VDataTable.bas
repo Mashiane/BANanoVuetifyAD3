@@ -309,49 +309,49 @@ Sub RemoveAttr(p As String) As VDataTable
 	Return Me
 End Sub
 
-Sub Visible(VC As VueComponent, b As Boolean) As VDataTable
+Sub UpdateVisible(VC As VueComponent, b As Boolean) As VDataTable
 	VC.SetData(sVIf, b)
 	VC.SetData(sVShow, b)
 	Return Me
 End Sub
 
 'set Expanded
-Sub Expanded(VC As VueComponent, vExpanded As List)
+Sub UpdateExpanded(VC As VueComponent, vExpanded As List)
 	VC.SetData(sExpanded, vExpanded)
 End Sub
 
 'set GroupBy
-Sub GroupBy(VC As VueComponent, vGroupBy As List)
+Sub UpdateGroupBy(VC As VueComponent, vGroupBy As List)
 	VC.SetData(sGroupBy, vGroupBy)
 End Sub
 
 'set Headers
-Sub Headers(VC As VueComponent, vHeaders As List)
+Sub UpdateHeaders(VC As VueComponent, vHeaders As List)
 	VC.SetData(sHeaders, vHeaders)
 End Sub
 
 'set Items
-Sub Items(VC As VueComponent, vItems As List)
+Sub UpdateItems(VC As VueComponent, vItems As List)
 	VC.SetData(sItems, vItems)
 End Sub
 
 'set Loading
-Sub Loading(VC As VueComponent, vLoading As Boolean)
+Sub UpdateLoading(VC As VueComponent, vLoading As Boolean)
 	VC.SetData(sLoading, vLoading)
 End Sub
 
 'set Search
-Sub Search(VC As VueComponent, vSearch As String)
+Sub UpdateSearch(VC As VueComponent, vSearch As String)
 	VC.SetData(sSearch, vSearch)
 End Sub
 
 'set SortBy
-Sub SortBy(VC As VueComponent, vSortBy As List)
+Sub UpdateSortBy(VC As VueComponent, vSortBy As List)
 	VC.SetData(sSortBy, vSortBy)
 End Sub
 
 'set SortDesc
-Sub SortDesc(VC As VueComponent, vSortDesc As List)
+Sub UpdateSortDesc(VC As VueComponent, vSortDesc As List)
 	VC.SetData(sSortDesc, vSortDesc)
 End Sub
 
@@ -377,4 +377,9 @@ End Sub
 
 Sub getID As String
 	Return mName
+End Sub
+
+
+Sub getHere As String
+	Return $"#${mName}"$
 End Sub

@@ -2114,6 +2114,26 @@ Sub CopyMap(source As Map, keys As List) As Map
 	Return nm
 End Sub
 
+Sub CamelCase(idName As String) As String
+	idName = idName.trim
+	If idName = "" Then Return ""
+	Dim ls As StringBuilder
+	ls.Initialize
+	Dim slen As Int = idName.Length
+	Dim i As Int = 0
+	For i = 0 To slen - 1
+		Dim mout As String = idName.CharAt(i)
+		If "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".IndexOf(mout) = -1 Then
+			ls.Append("-")
+		Else
+			ls.Append(mout)
+		End If
+	Next
+	Dim sname As String = ls.tostring
+	sname = ProperSubName(sname, False)
+	Return sname
+End Sub
+
 'get file parent path
 Sub GetFileParentPath(Path As String) As String
 	Dim Path1 As String

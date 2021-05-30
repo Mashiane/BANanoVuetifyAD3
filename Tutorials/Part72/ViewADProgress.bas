@@ -38,8 +38,8 @@ Sub Initialize
 	about.BindVueElement(VProgressCircular3.VElement)
 	about.BindVueElement(VProgressCircular8.VElement)
 	
-	VProgressCircular1.Update(about, 5)
-	VProgressCircular1.Update(about, 10)
+	VProgressCircular1.SetValue(about, 5)
+	VProgressCircular1.SetValue(about, 10)
 	
 	'add the component as a router
 	vuetify.AddRoute(about) 

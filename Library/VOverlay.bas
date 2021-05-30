@@ -156,7 +156,7 @@ Sub RemoveAttr(p As String) As VOverlay
 	Return Me
 End Sub
 
-Sub Visible(VC As VueComponent, b As Boolean) As VOverlay
+Sub UpdateVisible(VC As VueComponent, b As Boolean) As VOverlay
 	VC.SetData(sVIf, b)
 	VC.SetData(sVModel, b)
 	Return Me
@@ -170,4 +170,9 @@ End Sub
 
 Sub getID As String
 	Return mName
+End Sub
+
+
+Sub getHere As String
+	Return $"#${mName}"$
 End Sub

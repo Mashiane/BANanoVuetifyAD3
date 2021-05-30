@@ -293,13 +293,13 @@ Sub RemoveAttr(p As String) As VSwitch
 	Return Me
 End Sub
 
-Sub Visible(VC As VueComponent, b As Boolean) As VSwitch
+Sub UpdateVisible(VC As VueComponent, b As Boolean) As VSwitch
 	VC.SetData(sVIf, b)
 	VC.SetData(sVShow, b)
 	Return Me
 End Sub
 
-Sub Required(VC As VueComponent, b As Boolean)
+Sub UpdateRequired(VC As VueComponent, b As Boolean)
 	VC.SetData(sRequired, b)
 End Sub
 
@@ -311,7 +311,7 @@ Sub ClearRules(VC As VueComponent)
 	VC.SetData(sRules, VC.NewList)
 End Sub
 
-Sub ReadOnly(VC As VueComponent, b As Boolean)
+Sub UpdateReadOnly(VC As VueComponent, b As Boolean)
 	VC.SetData(sReadonly, b)
 End Sub
 
@@ -319,15 +319,15 @@ Sub ClearMessages(VC As VueComponent)
 	VC.SetData(sMessages, VC.NewList)
 End Sub
 
-Sub Disabled(VC As VueComponent, b As Boolean)
+Sub UpdateDisabled(VC As VueComponent, b As Boolean)
 	VC.SetData(sDisabled, b)
 End Sub
 
-Sub Error(VC As VueComponent, b As Boolean)
+Sub UpdateError(VC As VueComponent, b As Boolean)
 	VC.SetData(sError, b)
 End Sub
 
-Sub Success(VC As VueComponent, b As Boolean)
+Sub UpdateSuccess(VC As VueComponent, b As Boolean)
 	VC.SetData(sSuccess, b)
 End Sub
 
@@ -335,7 +335,7 @@ Sub ClearErrorMessages(VC As VueComponent)
 	VC.SetData(sErrorMessages, VC.NewList)
 End Sub
 
-Sub Loading(VC As VueComponent, b As Boolean)
+Sub UpdateLoading(VC As VueComponent, b As Boolean)
 	VC.SetData(sLoading, b)
 End Sub
 
@@ -355,4 +355,9 @@ End Sub
 
 Sub getID As String
 	Return mName
+End Sub
+
+
+Sub getHere As String
+	Return $"#${mName}"$
 End Sub

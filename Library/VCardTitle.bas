@@ -129,7 +129,7 @@ Sub RemoveAttr(p As String) As VCardTitle
 	Return Me
 End Sub
 
-Sub Visible(VC As VueComponent, b As Boolean) As VCardTitle
+Sub UpdateVisible(VC As VueComponent, b As Boolean) As VCardTitle
 	VC.SetData(mVIf, b)
 	VC.SetData(mVShow, b)
 	Return Me
@@ -138,4 +138,9 @@ End Sub
 
 Sub getID As String
 	Return mName
+End Sub
+
+
+Sub getHere As String
+	Return $"#${mName}"$
 End Sub

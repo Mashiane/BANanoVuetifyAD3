@@ -42,11 +42,11 @@ Sub Initialize
 End Sub
 
 Sub oncreated
-	chipad1.Visible(about, True)
+	chipad1.UpdateVisible(about, True)
 End Sub
 
 Private Sub chipad1_ClickClose (e As BANanoEvent)
-	chipad1.Visible(about, False)
+	chipad1.UpdateVisible(about, False)
 End Sub
 
 Private Sub VChip1_Click (e As BANanoEvent)

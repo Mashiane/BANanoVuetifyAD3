@@ -262,6 +262,6 @@ ModuleClosedNodes85=
 ModuleClosedNodes86=
 ModuleClosedNodes87=
 ModuleClosedNodes9=
-NavigationStack=VNavigationDrawer,AddStyle,208,0,VNavigationDrawer,Trigger,194,0,VNavigationDrawer,getVModel,227,0,VNavigationDrawer,Visible,220,2,VAppBar,Class_Globals,103,4,VNavigationDrawer,getVShow,228,1,VNavigationDrawer,Remove,189,0,VNavigationDrawer,DesignerCreateView,177,6,VAppBar,DesignerCreateView,227,6,VAppBar,Trigger,242,0,Main,Process_Globals,10,0
+NavigationStack=VueElement,AddHamburger,10380,0,VueElement,AddRow,10398,0,VueElement,setOpenDelay,10492,0,VSnackBar,UpdateLabel,199,0,VSnackBar,DesignerCreateView,196,0,VToolBarTitle,DesignerCreateView,86,1,VueElement,setVSlotActiveToggle,11618,0,VDialog,UpdateToolbarDark,376,0,VDialog,UpdateCardText,380,0,VDialog,DesignerCreateView,370,6
 SelectedBuild=0
 VisibleModules=

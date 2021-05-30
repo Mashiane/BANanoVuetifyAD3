@@ -13,7 +13,7 @@ Version=8.9
 ' Properties that will be show in the ABStract Designer.  They will be passed in the props map in DesignerCreateView (Case Sensitive!)
 #DesignerProperty: Key: AutoID, DisplayName: Auto ID/Name, FieldType: Boolean, DefaultValue: False, Description: Overrides the ID/Name with a random string.
 #DesignerProperty: Key: Text, DisplayName: Caption, FieldType: String, DefaultValue: Button , Description: Text
-#DesignerProperty: Key: Raised, DisplayName: Text, FieldType: Boolean, DefaultValue: True, Description: Transparent Background Off
+#DesignerProperty: Key: Raised, DisplayName: Raised/Text, FieldType: Boolean, DefaultValue: True, Description: Transparent Background Off
 #DesignerProperty: Key: Block, DisplayName: Block, FieldType: Boolean, DefaultValue: False, Description: Block
 #DesignerProperty: Key: Icon, DisplayName: Icon, FieldType: Boolean, DefaultValue: False, Description: Icon
 #DesignerProperty: Key: Size, DisplayName: Size, FieldType: String, DefaultValue: normal, Description: Size, List: x-small|small|normal|large|x-large
@@ -91,6 +91,10 @@ Sub Class_Globals
 	Private sKey As String
 	Private sVOn As String
 	Private sVBind As String
+	Private xColor As String
+	Private xCaption As String
+	Private xLoading As String
+	Private xDisabled As String
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -105,6 +109,10 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey)
 		End If
 	End If
+	xColor = $"${mName}color"$
+	xCaption = $"${mName}caption"$
+	xLoading = $"${mName}loading"$
+	xDisabled  = $"${mName}disabled"$
 End Sub
 
 ' this is the place where you create the view in html and run initialize javascript
@@ -157,9 +165,14 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		
 	VElement.Initialize(mCallBack, mName, mName)
 	VElement.TagName = "v-btn"
+	If mText.StartsWith("{{") Then
+	Else	
+		VElement.SetData(xCaption, mText)
+	End If
+	
 	If BANano.IsNull(sIconName) Or sIconName = "" Then
 		'set the text
-		VElement.Caption = mText
+		VElement.Caption = VElement.InMoustache1(mText, xCaption)
 	Else	
 		Dim siconID As String = $"${mName}icon"$
 		Select Case sIconAlignment
@@ -171,10 +184,10 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 			VElement.Append($"<v-icon id="${siconID}">${sIconName}</v-icon>"$)
 			VElement.GetIcon.Dark = bIconDark
 			VElement.GetIcon.Left = True
-			VElement.Append($"<span id="${mName}text">${mText}</span>"$)
+			VElement.Append($"<span id="${mName}text">${VElement.InMoustache1(mText, xCaption)}</span>"$)
 		Case "right"
 			VElement.Caption = ""
-			VElement.Append($"<span id="${mName}text">${mText}</span>"$)
+			VElement.Append($"<span id="${mName}text">${VElement.InMoustache1(mText, xCaption)}</span>"$)
 			VElement.Append($"<v-icon id="${siconID}">${sIconName}</v-icon>"$)
 			VElement.GetIcon.Dark = bIconDark
 			VElement.GetIcon.Right = True
@@ -182,7 +195,9 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	End If
 	
 	VElement.Classes = mClasses
-	VElement.Color = VElement.BuildColor(mColor, mColorIntensity)
+	mColor = VElement.BuildColor(mColor, mColorIntensity)
+	VElement.Bind("color", xColor)
+	VElement.SetData(xColor, mColor)
 	VElement.Styles = mStyles
 	VElement.Attributes = mAttributes	
 	VElement.TextColor = VElement.BuildColor(mTextColor, mTextColorIntensity)
@@ -191,13 +206,13 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.Block = bBlock
 	VElement.Dark = bDark
 	VElement.Depressed = bDepressed
-	VElement.Disabled = $"${mName}disabled"$
-	VElement.SetData($"${mName}disabled"$, bDisabled)
+	VElement.Disabled = xDisabled
+	VElement.SetData(xDisabled, bDisabled)
 	VElement.FAB = bFAB
 	VElement.HREF = sHREF
 	VElement.ButtonIcon = bIcon
-	VElement.Loading = $"${mName}loading"$
-	VElement.SetData($"${mName}loading"$, bLoading)
+	VElement.Loading = xLoading
+	VElement.SetData(xLoading, bLoading)
 	VElement.Outlined = bOutlined
 	VElement.Raised = bRaised
 	VElement.AddAttr(":rounded", bRounded)
@@ -239,56 +254,74 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.BindAllEvents
 End Sub
 
-Sub Loading(VC As VueComponent, b As Boolean)
-	VC.SetData($"${mName}loading"$, b)
+'update the label of the button
+Sub UpdateLabel(VC As VueComponent, s As String)
+	VC.SetData(xCaption, S)
 End Sub
 
-Sub Disabled(VC As VueComponent, b As Boolean)
-	VC.SetData($"${mName}disabled"$, b)
+'update the color of the button
+Sub UpdateColor(VC As VueComponent, s As String)
+	VC.SetData(xColor, S)
 End Sub
 
+'update the loading state of the button
+Sub UpdateLoading(VC As VueComponent, b As Boolean)
+	VC.SetData(xLoading, b)
+End Sub
+
+'update the disabled state of the button
+Sub UpdateDisabled(VC As VueComponent, b As Boolean)
+	VC.SetData(xDisabled, b)
+End Sub
+
+'add to parent
 public Sub AddToParent(targetID As String)
 	mTarget = BANano.GetElement("#" & targetID.ToLowerCase)
 	DesignerCreateView(mTarget, Null)
 End Sub
 
+'remove the element
 public Sub Remove()
 	mTarget.Empty
 	BANano.SetMeToNull
 End Sub
 
-public Sub Trigger(event As String, params() As String)
-	If mElement <> Null Then
-		mElement.Trigger(event, params)
-	End If
-End Sub
-
+'add a class
 Sub AddClass(s As String) As VBtn
 	VElement.AddClass(s)
 	Return Me
 End Sub
 
+'add an attribute
 Sub AddAttr(p As String, v As Object) As VBtn
 	VElement.SetAttr(p, v)
 	Return Me
 End Sub
 
+'add a style
 Sub AddStyle(p As String, v As String) As VBtn
 	VElement.AddStyle(p, v)
 	Return Me
 End Sub
 
+'remove an attribute
 Sub RemoveAttr(p As String) As VBtn
 	VElement.RemoveAttr(p)
 	Return Me
 End Sub
 
-Sub Visible(VC As VueComponent, b As Boolean)
+'change visibility of the button
+Sub UpdateVisible(VC As VueComponent, b As Boolean)
 	VC.SetData(mVIf, b)
 	VC.SetData(mVShow, b)
 End Sub
 
-
+'get the id of the button
 Sub getID As String
 	Return mName
+End Sub
+
+'get the element name
+Sub getHere As String
+	Return $"#${mName}"$
 End Sub

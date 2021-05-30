@@ -80,6 +80,7 @@ Private bTile As Boolean
 Private sVIf As String
 Private sVShow As String
 Private sWidth As String
+Private xColor As String
 	End Sub
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	mName = Name.tolowercase
@@ -93,7 +94,9 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey)
 		End If
 	End If
+	xColor = $"${mName}color"$
 	End Sub
+	
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	mTarget = Target
 	If Props <> Null Then
@@ -147,7 +150,8 @@ sWidth = Props.Get("Width")
 	VElement.Absolute = bAbsolute
 VElement.Bottom = bBottom
 VElement.AddAttr(":collapse", bCollapse)
-VElement.Color = VElement.BuildColor(sColor, sColorIntensity)
+VElement.Bind("color", xColor)
+VElement.SetData(xColor, VElement.BuildColor(sColor, sColorIntensity))
 VElement.Dark = bDark
 VElement.Dense = bDense
 VElement.Elevation = sElevation
@@ -175,19 +179,23 @@ VElement.VShow = sVShow
 VElement.Width = sWidth
 VElement.BindAllEvents
 End Sub
+
 public Sub AddToParent(targetID As String)
 	mTarget = BANano.GetElement("#" & targetID.ToLowerCase)
 	DesignerCreateView(mTarget, Null)
 End Sub
+
 public Sub Remove()
 	mTarget.Empty
 	BANano.SetMeToNull
 End Sub
+
 public Sub Trigger(event As String, params() As String)
 	If mElement <> Null Then
 		mElement.Trigger(event, params)
 	End If
 End Sub
+
 Sub AddClass(s As String) As VToolBar
 	VElement.AddClass(s)
 	Return Me
@@ -204,13 +212,23 @@ Sub RemoveAttr(p As String) As VToolBar
 	VElement.RemoveAttr(p)
 	Return Me
 End Sub
-Sub Visible(VC As VueComponent, b As Boolean) As VToolBar
+
+Sub UpdateVisible(VC As VueComponent, b As Boolean) As VToolBar
 	VC.SetData(sVIf, b)
 	VC.SetData(sVShow, b)
 	Return Me
 End Sub
 
+Sub UpdateColor(VC As VueComponent, vColor As String, vIntensity As String)
+	sColor = VElement.BuildColor(vColor, vIntensity)
+	VElement.SetData(xColor, sColor)
+End Sub
 
 Sub getID As String
 	Return mName
+End Sub
+
+
+Sub getHere As String
+	Return $"#${mName}"$
 End Sub

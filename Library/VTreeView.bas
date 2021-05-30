@@ -232,36 +232,45 @@ VElement.SetData(sValue, VElement.NewList)
 VElement.SetData(sValue, VElement.NewList)
 VElement.BindAllEvents
 End Sub
+
 public Sub AddToParent(targetID As String)
 	mTarget = BANano.GetElement("#" & targetID.ToLowerCase)
 	DesignerCreateView(mTarget, Null)
 End Sub
+
 public Sub Remove()
 	mTarget.Empty
 	BANano.SetMeToNull
 End Sub
+
 public Sub Trigger(event As String, params() As String)
 	If mElement <> Null Then
 		mElement.Trigger(event, params)
 	End If
 End Sub
+
 Sub AddClass(s As String) As VTreeView
 	VElement.AddClass(s)
 	Return Me
+
 End Sub
+
 Sub AddAttr(p As String, v As Object) As VTreeView
 	VElement.SetAttr(p, v)
 	Return Me
 End Sub
+
 Sub AddStyle(p As String, v As String) As VTreeView
 	VElement.AddStyle(p, v)
 	Return Me
 End Sub
+
 Sub RemoveAttr(p As String) As VTreeView
 	VElement.RemoveAttr(p)
 	Return Me
 End Sub
-Sub Visible(VC As VueComponent, b As Boolean) As VTreeView
+
+Sub UpdateVisible(VC As VueComponent, b As Boolean) As VTreeView
 	VC.SetData(sVIf, b)
 	VC.SetData(sVShow, b)
 	Return Me
@@ -286,7 +295,6 @@ End Sub
 Sub Clear(VC As VueComponent)
 	VC.SetData(sActive, VC.NewList)
 	VC.SetData(sOpen, VC.NewList)
-	VC.SetData(sValue, VC.NewList)
 	VC.SetData(sValue, VC.NewList)
 End Sub
 
@@ -330,4 +338,9 @@ End Sub
 
 Sub getID As String
 	Return mName
+End Sub
+
+
+Sub getHere As String
+	Return $"#${mName}"$
 End Sub

@@ -29,7 +29,7 @@ Sub Initialize
 	about.BindVueElement(VSwitch2.VElement)
 	about.BindVueElement(VSwitch3.VElement)
 
-	VSwitch3.Loading(about, True)
+	VSwitch3.UpdateLoading(about, True)
 	'add the component as a router
 	vuetify.AddRoute(about) 
 End Sub

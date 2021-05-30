@@ -41,17 +41,17 @@ End Sub
 
 
 Private Sub VBtn1_Click (e As BANanoEvent)
-	VBottomSheet1.Visible(about, True)
+	VBottomSheet1.UpdateVisible(about, True)
 End Sub
 
 Private Sub VBtn2_Click (e As BANanoEvent)
-	VBottomSheet1.Visible(about, False)
+	VBottomSheet1.UpdateVisible(about, False)
 End Sub
 
 Private Sub VBtn4_Click (e As BANanoEvent)
-	VBottomSheet2.Visible(about, False)
+	VBottomSheet2.UpdateVisible(about, False)
 End Sub
 
 Private Sub VBtn3_Click (e As BANanoEvent)
-	VBottomSheet2.Visible(about, True)
+	VBottomSheet2.UpdateVisible(about, True)
 End Sub
