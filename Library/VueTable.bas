@@ -597,6 +597,12 @@ Sub AddExcel
 	AddTitleIcon(btnKey, "mdi-file-excel-box-outline", "cyan")
 End Sub
 
+Sub AddToolbarIcon(elID As String, eIcon As String, btnColor As String)
+	Dim btnKey As String = $"${mName}_${elID}"$
+	btnKey = btnKey.tolowercase
+	AddTitleIcon(btnKey, eIcon, btnColor)
+End Sub
+
 'a button with an icon on the left
 Sub AddTitleIcon(elID As String, eIcon As String, btnColor As String)
 	Dim ct As BANanoElement

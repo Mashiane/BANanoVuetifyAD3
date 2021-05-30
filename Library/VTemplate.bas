@@ -6,7 +6,7 @@ Version=8.9
 @EndOfDesignText@
 #IgnoreWarnings:12
 
-#DesignerProperty: Key: Slot, DisplayName: Slot, FieldType: String, DefaultValue: , Description: Slot, List: none|v-slot:append|v-slot:prepend|v-slot:activator-on-attrs|v-slot:activator-on|v-slot:progress|v-slot:extension|v-slot:default-hover|v-slot:placeholder|v-slot-active-toggle
+#DesignerProperty: Key: Slot, DisplayName: Slot, FieldType: String, DefaultValue: , Description: Slot, List: none|v-slot:append|v-slot:prepend|v-slot:activator-on-attrs|v-slot:activator-on|v-slot:progress|v-slot:extension|v-slot:default-hover|v-slot:placeholder|v-slot-active-toggle|v-slot-thumb-label-props
 #DesignerProperty: Key: VFor, DisplayName: VFor, FieldType: String, DefaultValue: , Description: VFor
 #DesignerProperty: Key: Key, DisplayName: Key, FieldType: String, DefaultValue: , Description: Key
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue: , Description: Color, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
@@ -65,7 +65,7 @@ Private sTextColorIntensity As String
 Private sVIf As String
 Private sVShow As String
 Private sKey As String
-private sVFor as string
+Private sVFor As String
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -124,6 +124,8 @@ sVFor = Props.Get("VFor")
 		sSlot = $"v-slot:default="{ hover }""$
 	Case "v-slot-active-toggle"
 		sSlot = $"v-slot:"{ active, toggle }""$
+	Case "v-slot-thumb-label-props"
+		sSlot = $"v-slot:thumb-label="props""$
 	End Select
 	'
 	'build and get the element

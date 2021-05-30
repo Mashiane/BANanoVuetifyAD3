@@ -1351,6 +1351,16 @@ Sub RefreshKey(keyName As String) As VueComponent
 End Sub
 
 'add a rule
+'Me.AddRule("ruleName", "methodName")
+'<code>
+'Sub Rule(v As String) As Object	'ignoredeadcode
+'If v = "" Then
+'return "This is required!"
+'Else
+'Return True
+'End If
+'End Sub
+'</code>
 Sub AddRule(ruleName As String, MethodName As String)
 	If BANano.IsNull(ruleName) Or BANano.IsUndefined(ruleName) Then ruleName = ""
 	ruleName = ruleName.ToLowerCase

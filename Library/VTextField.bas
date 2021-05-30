@@ -469,6 +469,17 @@ Sub SetValue(VC As VueComponent, txt As String)
 	VC.SetData(sVModel, txt)
 End Sub
 
+'add a rule
+'<code>
+'Me.AddRule("methodName")
+'Sub Rule(v As String) As Object	'ignoredeadcode
+'If v = "" Then
+'return "This is required!"
+'Else
+'Return True
+'End If
+'End Sub
+'</code>
 Sub AddRule(methodName As String)
 	VElement.AddRule(methodName)
 End Sub

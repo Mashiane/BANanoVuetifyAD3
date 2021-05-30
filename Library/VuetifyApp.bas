@@ -2389,12 +2389,22 @@ End Sub
 
 
 'scroll to a particular item
-Sub Goto(elID As String)
+Sub GoTo(elID As String)
 	elID = elID.tolowercase
 	Vuetify.RunMethod("goTo", Array(elID))
 End Sub
 
 'add a rule
+'<code>
+'Me.AddRule("ruleName", "methodName")
+'Sub Rule(v As String) As Object	'ignoredeadcode
+'If v = "" Then
+'return "This is required!"
+'Else
+'Return True
+'End If
+'End Sub
+'</code>
 Sub AddRule(ruleName As String, MethodName As String)
 	If BANano.IsNull(ruleName) Or BANano.IsUndefined(ruleName) Then ruleName = ""
 	ruleName = ruleName.ToLowerCase
