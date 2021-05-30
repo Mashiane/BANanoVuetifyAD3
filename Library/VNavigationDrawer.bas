@@ -179,9 +179,9 @@ VElement.AddAttr(":temporary", bTemporary)
 VElement.AddAttr(":touchless", bTouchless)
 VElement.AddAttr("v-if", sVIf)
 VElement.AddAttr("v-model", sVModel)
+VElement.AddAttr("v-show", sVShow)
 VElement.AddAttr("width", sWidth)
 VElement.SetData(sVModel, False)
-VElement.SetData(sVShow, True)
 VElement.BindAllEvents
 End Sub
 

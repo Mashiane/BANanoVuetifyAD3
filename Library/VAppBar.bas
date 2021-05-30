@@ -231,7 +231,6 @@ VElement.VIf = sVIf
 VElement.AddAttr(":value", sValue)
 VElement.Width = sWidth
 VElement.VShow = sVShow
-VElement.SetData(sVShow, True)
 VElement.BindAllEvents
 End Sub
 
