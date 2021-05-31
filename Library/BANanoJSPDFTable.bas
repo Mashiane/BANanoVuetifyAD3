@@ -328,19 +328,24 @@ Sub setBody(body As List)
 	options.Put("body", body)
 End Sub
 
-'set start Y
-Sub setstartY(y As Int)
-	options.Put("startY", y)
-End Sub
-
 'use CSS
 Sub useCss(b As Boolean)
 	options.Put("useCss", b)
 End Sub
 
-'set page break
-Sub setpageBreak(pb As String)
-	options.Put("pageBreak", pb)
+'set padding
+Sub setPadding(p As Object)
+	options.Put("padding", p)
+End Sub
+
+'set font size
+Sub setFontSize(fs As Object)
+	options.Put("fontSize", fs)
+End Sub
+
+'set line height
+Sub setlineHeight(lh As Object)
+	options.Put("lineHeight", lh)
 End Sub
 
 'set row page break
@@ -348,14 +353,19 @@ Sub setrowPageBreak(rpb As String)
 	options.Put("rowPageBreak", rpb)
 End Sub
 
-'set table width
-Sub settableWidth(tw As String)
-	options.Put("tableWidth", tw)
-End Sub
-
 'set show head
 Sub setshowHead(sh As String)
 	options.Put("showHead", sh)
+End Sub
+
+'set horizontalPageBreakRepeat
+Sub sethorizontalPageBreakRepeat(v As Object)
+	options.Put("horizontalPageBreakRepeat", v)
+End Sub
+
+'set horizontalPageBreak
+Sub sethorizontalPageBreak(v As Boolean)
+	options.Put("horizontalPageBreak", v)
 End Sub
 
 'set show foot
