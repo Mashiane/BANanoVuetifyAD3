@@ -2279,6 +2279,14 @@ Public Sub AddAttr(varProp As String, varValue As String)
 				mElement.SetAttr(varProp, varValue)
 			End If
 			xAttributes.Put(varProp, varValue)
+		Else
+			'value is false
+			If varProp.Contains("return-object") Then
+				If mElement <> Null Then 
+					mElement.SetAttr(varProp, varValue)
+				End If
+				xAttributes.Put(varProp, varValue)
+			End If
 		End If
 	Else
 		'varValue = varValue.Replace("~","=")
@@ -7862,6 +7870,8 @@ Sub BindAllEvents
 	SetOnEvent(mCallBack, "update:active", "")
 	SetOnEvent(mCallBack, "update:open", "")
 	SetOnEvent(mCallBack, "update:error", "")
+	SetOnEvent(mCallBack, "update:list-index", "")
+	SetOnEvent(mCallBack, "update:search-input", "")
 	SetOnEvent(mCallBack, "focus", "")
 	SetOnEvent(mCallBack, "input", "")
 	SetOnEvent(mCallBack, "keydown", "")
@@ -7890,6 +7900,7 @@ Sub BindAllEvents
 	SetOnEvent(mCallBack, "dragleave", "")
 	SetOnEvent(mCallBack, "transitionend", "")
 	SetOnEvent(mCallBack, "update:mini-variant", "")
+	SetOnEvent(mCallBack, "update:indeterminate", "")
 End Sub
 
 'get the chip ref from the chip group

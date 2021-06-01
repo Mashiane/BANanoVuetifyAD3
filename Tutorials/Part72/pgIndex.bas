@@ -134,6 +134,9 @@ Sub Init
 	drwlist.AddItemParentChild("ad", ViewADTextField.name, "",  "", "AD TextField", ViewADTextField.path)
 	drwlist.AddItemParentChild("ad", ViewADSwitch.name, "",  "", "AD Switch", ViewADSwitch.path)
 	drwlist.AddItemParentChild("ad", ViewADSliders.name, "",  "", "AD Sliders", ViewADSliders.path)
+	drwlist.AddItemParentChild("ad", ViewADSelects.name, "",  "", "AD Selects", ViewADSelects.path)
+	drwlist.AddItemParentChild("ad", ViewADAutoComplete.name, "",  "", "AD AutoComplete", ViewADAutoComplete.path)
+	drwlist.AddItemParentChild("ad", ViewAdCombo.name, "",  "", "AD ComboBox", ViewAdCombo.path)
 	
 	
 	drwlist.AddItemParentChild("ad", ViewADOverlay.name, "",  "", "AD Overlay", ViewADOverlay.path)
@@ -262,6 +265,9 @@ End Sub
 Sub AddRouters
 	'ViewContacts.Initialize
 	'ViewCRUDBuilder.Initialize
+	ViewADCombo.Initialize 
+	ViewADAutoComplete.Initialize 
+	ViewADSelects.Initialize 
 	ViewADSliders.Initialize 
 	ViewADSwitch.Initialize 
 	ViewADTextField.Initialize 

@@ -20,7 +20,7 @@ Version=8.95
 #Event: MouseDown (e As BANanoEvent)
 #Event: MouseUp (e As BANanoEvent)
 #Event: UpdateError (B As Boolean)
-#Event: KeyupEnterPrevent (e As BANanoEvent)
+#Event: KeyUpEnterPrevent (e As BANanoEvent)
 
 #DesignerProperty: Key: Label, DisplayName: Label, FieldType: String, DefaultValue: Label1, Description: Label
 #DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: Label1, Description: VModel
@@ -67,7 +67,7 @@ Version=8.95
 #DesignerProperty: Key: PrependInnerIcon, DisplayName: PrependInnerIcon, FieldType: String, DefaultValue: , Description: PrependInnerIcon
 '#DesignerProperty: Key: Readonly, DisplayName: Readonly, FieldType: String, DefaultValue: , Description: Readonly
 #DesignerProperty: Key: Reverse, DisplayName: Reverse, FieldType: Boolean, DefaultValue: false, Description: Reverse
-#DesignerProperty: Key: Rounded, DisplayName: Rounded, FieldType: Boolean, DefaultValue: false, Description: Rounded, List: none|rounded-0|rounded|rounded-sm|rounded-lg|rounded-xl|rounded-t-xl|rounded-r-xl|rounded-b-xl|rounded-l-xl|rounded-tl-xl|rounded-tr-xl|rounded-br-xl|rounded-bl-xl|rounded-pill|rounded-circle
+#DesignerProperty: Key: Rounded, DisplayName: Rounded, FieldType: Boolean, DefaultValue: false, Description: Rounded
 #DesignerProperty: Key: RowHeight, DisplayName: RowHeight, FieldType: String, DefaultValue: , Description: RowHeight
 #DesignerProperty: Key: Rows, DisplayName: TextArea Rows, FieldType: String, DefaultValue: , Description: Rows
 '#DesignerProperty: Key: Rules, DisplayName: Rules, FieldType: String, DefaultValue: , Description: Rules
