@@ -205,13 +205,6 @@ public Sub Remove()
 	BANano.SetMeToNull
 End Sub
 
-'trigger an event
-public Sub Trigger(event As String, params() As String)
-	If mElement <> Null Then
-		mElement.Trigger(event, params)
-	End If
-End Sub
-
 'set the parent component
 Sub setParentComponent(PVC As VueComponent)
 	VC = PVC

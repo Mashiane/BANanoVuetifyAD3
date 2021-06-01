@@ -193,13 +193,6 @@ public Sub Remove()
 	BANano.SetMeToNull
 End Sub
 
-'trigger an event
-public Sub Trigger(event As String, params() As String)
-	If mElement <> Null Then
-		mElement.Trigger(event, params)
-	End If
-End Sub
-
 private Sub setonNext(sonNext As String)
 	mElement.SetAttr(":onNext", sonNext)
 End Sub

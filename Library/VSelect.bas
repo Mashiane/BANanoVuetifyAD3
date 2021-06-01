@@ -188,6 +188,7 @@ Private sVOn As String
 Private sVShow As String
 Private bValidateOnBlur As Boolean
  Private xitems As List
+ Private xReturnObject As String
 	End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -203,6 +204,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 		End If 
 	End If 
 	xitems.Initialize 
+	xReturnObject = $"${mName}returnobject"$
 	End Sub
 
 Sub DesignerCreateView (Target As BANanoElement, Props As Map) 
@@ -368,7 +370,8 @@ VElement.AddAttr("prepend-inner-icon", sPrependInnerIcon)
 VElement.AddAttr(":readonly", sReadonly)
 VElement.SetData(sReadonly, False)
 
-VElement.AddAttr(":return-object", bReturnObject)
+VElement.AddAttr(":return-object", xReturnObject)
+VElement.SetData(xReturnObject, bReturnObject)
 VElement.AddAttr(":reverse", bReverse)
 VElement.AddAttr(":rounded", bRounded)
 VElement.AddAttr(":rules", sRules)
@@ -411,6 +414,12 @@ VElement.AddAttr(":validate-on-blur", bValidateOnBlur)
 VElement.BindAllEvents
 End Sub
 
+
+Sub UpdateReturnObject(VC As VueComponent, b As Boolean) 
+	VC.SetData(xReturnObject, b)
+End Sub
+
+
 public Sub AddToParent(targetID As String) 
 	mTarget = BANano.GetElement("#" & targetID.ToLowerCase) 
 	DesignerCreateView(mTarget, Null) 
@@ -419,12 +428,6 @@ End Sub
 public Sub Remove() 
 	mTarget.Empty 
 	BANano.SetMeToNull 
-End Sub
-
-public Sub Trigger(event As String, params() As String) 
-	If mElement <> Null Then 
-		mElement.Trigger(event, params) 
-	End If 
 End Sub
 
 Sub AddClass(s As String) As VSelect 

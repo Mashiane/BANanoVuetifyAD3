@@ -244,13 +244,6 @@ public Sub Remove()
 	BANano.SetMeToNull
 End Sub
 
-'trigger an event
-public Sub Trigger(event As String, params() As String)
-	If mElement <> Null Then
-		mElement.Trigger(event, params)
-	End If
-End Sub
-
 'set the height
 Sub setHeight(vHeight As String)
 	If BANano.IsNull(vHeight) Or BANano.IsUndefined(vHeight) Then 

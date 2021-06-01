@@ -16,6 +16,7 @@ Sub Process_Globals
 	Private VCard2 As VCard
 	Private VCard4 As VCard
 	Private VCard5 As VCard
+	Private VAvatar1 As VAvatar
 End Sub
 
 Sub Initialize
@@ -34,8 +35,7 @@ Sub Initialize
 	about.BindVueElement(VCard3.VElement)
 	about.BindVueElement(VCard4.VElement)
 	about.BindVueElement(VCard5.VElement)
-	
-	Log(VCard4.VElement.ToString)
+	about.BindVueElement(VAvatar1.VElement)
 	
 	'add the component as a router
 	vuetify.AddRoute(about) 

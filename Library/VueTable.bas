@@ -813,13 +813,6 @@ public Sub Remove()
 	BANano.SetMeToNull
 End Sub
 
-'trigger an event
-public Sub Trigger(event As String, params() As String)
-	If mElement <> Null Then
-		mElement.Trigger(event, params)
-	End If
-End Sub
-
 'add a class
 public Sub AddClass(varClass As String)
 	If BANano.IsUndefined(varClass) Or BANano.IsNull(varClass) Then Return

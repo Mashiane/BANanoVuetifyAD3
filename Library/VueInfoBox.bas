@@ -441,13 +441,6 @@ public Sub Remove()
 	BANano.SetMeToNull
 End Sub
 
-'trigger an event
-public Sub Trigger(event As String, params() As String)
-	If mElement <> Null Then
-		mElement.Trigger(event, params)
-	End If
-End Sub
-
 'update the state
 Sub SetData(prop As String, value As Object)
 	If BANano.IsNull(prop) Or BANano.IsUndefined(prop) Then

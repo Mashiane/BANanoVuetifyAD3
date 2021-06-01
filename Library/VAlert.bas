@@ -197,11 +197,6 @@ public Sub Remove()
 	BANano.SetMeToNull
 End Sub
 
-public Sub Trigger(event As String, params() As String)
-	If mElement <> Null Then
-		mElement.Trigger(event, params)
-	End If
-End Sub
 
 Sub AddClass(s As String) As VAlert
 	VElement.AddClass(s)

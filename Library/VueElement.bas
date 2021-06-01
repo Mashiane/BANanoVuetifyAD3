@@ -2048,6 +2048,14 @@ public Sub setID(varID As String)
 	End If
 End Sub
 
+public Sub SetAttr1(varID As String, varValue As Boolean)
+	varID = varID.tolowercase
+	If mElement <> Null Then
+		mElement.SetAttr($":${varID}"$, varValue)
+	End If
+	xAttributes.Put($":${varID}"$, varValue)
+End Sub
+
 'add the element to the parent
 public Sub AddToParent(targetID As String)
 	targetID = targetID.tolowercase
@@ -2060,13 +2068,6 @@ End Sub
 public Sub Remove()
 	mElement.Remove
 	BANano.SetMeToNull
-End Sub
-
-'trigger an event
-public Sub Trigger(event As String, params() As String)
-	If mElement <> Null Then
-		mElement.Trigger(event, params)
-	End If
 End Sub
 
 'add a class
@@ -3081,6 +3082,7 @@ public Sub setElevation(s As String)
 	If BANano.IsNull(s) Or BANano.IsUndefined(s) Then s = ""
 	If s = "" Then Return
 	AddAttr("elevation", S)
+	AddClass("elevation-" & s)
 End Sub
 
 Sub setDisableResizeWatcher(b As Boolean)

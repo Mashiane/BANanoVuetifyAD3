@@ -144,11 +144,6 @@ public Sub Remove()
 	mTarget.Empty
 	BANano.SetMeToNull
 End Sub
-public Sub Trigger(event As String, params() As String)
-	If mElement <> Null Then
-		mElement.Trigger(event, params)
-	End If
-End Sub
 Sub AddClass(s As String) As VCarouselItem
 	VElement.AddClass(s)
 	Return Me

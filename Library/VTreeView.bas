@@ -95,6 +95,7 @@ Private sVShow As String
 Private sValue As String
 Private xitems As List
 Private extm As Map
+Private xReturnObject As String
 	End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -110,6 +111,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 		End If
 	End If
 	xitems.Initialize
+	xReturnObject = $"${mName}returnobject"$
 	' 
 	extm.Initialize
 	extm.Put("html", "mdi-language-html5")
@@ -216,7 +218,8 @@ VElement.AddAttr("on-icon", sOnIcon)
 VElement.AddAttr(":open", sOpen)
 VElement.AddAttr(":open-all", bOpenAll)
 VElement.AddAttr(":open-on-click", bOpenOnClick)
-VElement.AddAttr(":return-object", bReturnObject)
+VElement.AddAttr(":return-object", xReturnObject)
+VElement.SetData(xReturnObject, bReturnObject)
 VElement.AddAttr(":rounded", bRounded)
 VElement.AddAttr("search", sSearch)
 VElement.AddAttr(":selectable", bSelectable)
@@ -243,12 +246,6 @@ public Sub Remove()
 	BANano.SetMeToNull
 End Sub
 
-public Sub Trigger(event As String, params() As String)
-	If mElement <> Null Then
-		mElement.Trigger(event, params)
-	End If
-End Sub
-
 Sub AddClass(s As String) As VTreeView
 	VElement.AddClass(s)
 	Return Me
@@ -264,6 +261,12 @@ Sub AddStyle(p As String, v As String) As VTreeView
 	VElement.AddStyle(p, v)
 	Return Me
 End Sub
+
+
+Sub UpdateReturnObject(VC As VueComponent, b As Boolean) 
+	VC.SetData(xReturnObject, b)
+End Sub
+
 
 Sub RemoveAttr(p As String) As VTreeView
 	VElement.RemoveAttr(p)
