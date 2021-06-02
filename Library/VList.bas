@@ -1,5 +1,5 @@
 ﻿B4J=true
-Group=Default Group
+Group=Default Group\ListView
 ModulesStructureVersion=1
 Type=Class
 Version=8.95
@@ -10,13 +10,14 @@ Version=8.95
 #Event: RightClick (e As BANanoEvent)
 #Event: LeftClick (e As BANanoEvent)
 
+#DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: TwoLine, DisplayName: TwoLine, FieldType: Boolean, DefaultValue: false, Description: TwoLine
 #DesignerProperty: Key: ThreeLine, DisplayName: ThreeLine, FieldType: Boolean, DefaultValue: false, Description: ThreeLine
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue: , Description: Color, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: ColorIntensity, DisplayName: ColorIntensity, FieldType: String, DefaultValue: , Description: ColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: false, Description: Dark
 #DesignerProperty: Key: Dense, DisplayName: Dense, FieldType: Boolean, DefaultValue: false, Description: Dense
-#DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: String, DefaultValue: , Description: Disabled
+#DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: Boolean, DefaultValue: False, Description: Disabled
 #DesignerProperty: Key: Elevation, DisplayName: Elevation, FieldType: String, DefaultValue: , Description: Elevation
 #DesignerProperty: Key: Expand, DisplayName: Expand, FieldType: Boolean, DefaultValue: false, Description: Expand
 #DesignerProperty: Key: Flat, DisplayName: Flat, FieldType: Boolean, DefaultValue: false, Description: Flat
@@ -39,8 +40,8 @@ Version=8.95
 #DesignerProperty: Key: VBind, DisplayName: VBind, FieldType: String, DefaultValue: , Description: VBind
 #DesignerProperty: Key: VFor, DisplayName: VFor, FieldType: String, DefaultValue: , Description: VFor
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
+#DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VOn, DisplayName: VOn, FieldType: String, DefaultValue: , Description: VOn
-#DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue: , Description: VShow
 #DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: , Description: Width
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
@@ -93,6 +94,8 @@ Public Records As List
 Public DataSource As String
 Private numLines As Int
 Private xTemplate As String
+Private bDisabled As Boolean
+Private bHidden As Boolean
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -110,6 +113,8 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	Records.Initialize 
 	DataSource = ""
 	numLines = 0
+	sDisabled = $"${mName}disabled"$
+	sVShow = $"${mName}show"$
 	NewListViewItemOptions
 End Sub
 	
@@ -123,7 +128,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 sColorIntensity = Props.Get("ColorIntensity")
 bDark = Props.Get("Dark")
 bDense = Props.Get("Dense")
-sDisabled = Props.Get("Disabled")
+bDisabled = Props.Get("Disabled")
 sElevation = Props.Get("Elevation")
 bExpand = Props.Get("Expand")
 bFlat = Props.Get("Flat")
@@ -147,8 +152,9 @@ bTwoLine = Props.Get("TwoLine")
 sVBind = Props.Get("VBind")
 sVFor = Props.Get("VFor")
 sVIf = Props.Get("VIf")
-sVOn = Props.Get("VOn")
 sVShow = Props.Get("VShow")
+sVOn = Props.Get("VOn")
+bHidden = Props.Get("Hidden")
 sWidth = Props.Get("Width")
 	End If
 	'
@@ -159,6 +165,10 @@ sWidth = Props.Get("Width")
 		mElement = mTarget.Append($"<v-list id="${mName}"></v-list>"$).Get("#" & mName)
 	End If
 	'
+	If BANano.IsNull(bDisabled) Or BANano.IsUndefined(bDisabled) Then
+		bDisabled = False 
+	End If
+	
 	VElement.Initialize(mCallBack, mName, mName)
 	VElement.TagName = "v-list"
 	VElement.Classes = mClasses
@@ -167,7 +177,8 @@ sWidth = Props.Get("Width")
 	VElement.Color = VElement.BuildColor(sColor, sColorIntensity)
 VElement.AddAttr(":dark", bDark)
 VElement.AddAttr(":dense", bDense)
-VElement.AddAttr("disabled", sDisabled)
+VElement.AddAttr(":disabled", sDisabled)
+VElement.SetData(sDisabled, bDisabled)
 VElement.AddAttr("elevation", sElevation)
 VElement.AddAttr(":expand", bExpand)
 VElement.AddAttr(":flat", bFlat)
@@ -192,6 +203,7 @@ VElement.AddAttr("v-for", sVFor)
 VElement.AddAttr("v-if", sVIf)
 VElement.AddAttr("v-on", sVOn)
 VElement.AddAttr("v-show", sVShow)
+VElement.SetData(sVShow, Not(bHidden))
 VElement.AddAttr("width", sWidth)
 numLines = 0
 If bThreeLine Then numLines = 3
@@ -249,6 +261,11 @@ Sub UpdateVisible(VC As VueComponent, b As Boolean) As VList
 	VC.SetData(sVIf, b)
 	VC.SetData(sVShow, b)
 	Return Me
+End Sub
+
+Sub UpdateDisabled(VC As VueComponent, b As Boolean)
+	bdisabled = b
+	VC.SetData(sDisabled, b)
 End Sub
 
 
@@ -317,13 +334,13 @@ private Sub CleanID(v As String) As String
 End Sub
 
 'add a list item template to draw item
-private Sub AddListItemGroupTemplate(props As ListViewItemOptions)
+Sub AddListItemGroupTemplate(props As ListViewItemOptions)
 	Dim elID As String = mName.ToLowerCase
 	Dim parentID As String = CleanID(mName)
 	'
 	Dim templateID As String = $"${elID}template"$
-	Dim headerID As String = $"${elID}header"$
-	Dim dividerID As String = $"${elID}divider"$
+	'Dim headerID As String = $"${elID}header"$
+	'Dim dividerID As String = $"${elID}divider"$
 	Dim listitemID As String = $"${elID}listitem"$
 	Dim leftactionID As String = $"${elID}leftaction"$
 	Dim leftactionBtnID As String = $"${elID}leftactionbtn"$
@@ -523,9 +540,9 @@ Sub AddListViewGroupTemplate(props As ListViewItemOptions)
 	Dim elID As String = mName.ToLowerCase
 	Dim parentID As String = CleanID(mName)
 	'
-	Dim templateID As String = $"${elID}template"$
-	Dim headerID As String = $"${elID}header"$
-	Dim dividerID As String = $"${elID}divider"$
+	'Dim templateID As String = $"${elID}template"$
+	'Dim headerID As String = $"${elID}header"$
+	'Dim dividerID As String = $"${elID}divider"$
 	Dim listitemID As String = $"${elID}listitem"$
 	Dim leftactionID As String = $"${elID}leftaction"$
 	Dim leftactionBtnID As String = $"${elID}leftactionbtn"$
@@ -813,7 +830,7 @@ private Sub NewListViewItemOptions
 End Sub
 
 'add a list item template to draw item
-private Sub AddListViewTemplate(props As ListViewItemOptions) 
+Sub AddListViewTemplate(props As ListViewItemOptions) 
 	Dim elID As String = mName.ToLowerCase
 	Dim parentID As String = CleanID(mName)
 	'
@@ -882,7 +899,7 @@ private Sub AddListViewTemplate(props As ListViewItemOptions)
 	Dim xrighticonclass As String = props.righticonclass
 	Dim xrighttext As String = props.righttext
 	Dim xrighticoncolor As String = props.righticoncolor
-	datasource = props.dataSource
+	DataSource = props.dataSource
 	Dim key As String = props.key
 	
 	Dim xactiveclass As String = props.activeclass
@@ -1205,10 +1222,10 @@ Sub SetItemRightChipColor(itemID As String, xColor As String) As VList
 	Dim m As Map = CreateMap()
 	m.Put("rightchipcolor", xColor)
 	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
-	return me
+	Return Me
 End Sub
 
-Sub SetItemAvatar(itemID As String, sIcon As String) as vlist
+Sub SetItemAvatar(itemID As String, sIcon As String) As VList
 	Dim m As Map = CreateMap()
 	m.Put("avatar", sIcon)
 	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
@@ -1497,3 +1514,6 @@ Sub AddItem2(rec As Map) As VList
 	Return Me
 End Sub
 
+Sub BindVueElement(VE As VueElement)
+	VElement.BindVueElement(VE)
+End Sub

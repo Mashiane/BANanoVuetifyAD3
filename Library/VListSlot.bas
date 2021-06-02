@@ -1,11 +1,12 @@
 ﻿B4J=true
-Group=Default Group
+Group=Default Group\ListView
 ModulesStructureVersion=1
 Type=Class
 Version=8.9
 @EndOfDesignText@
 #IgnoreWarnings:12
 
+#DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: Caption, DisplayName: Caption, FieldType: String, DefaultValue: , Description: Caption
 #DesignerProperty: Key: Size, DisplayName: Slot, FieldType: String, DefaultValue: , Description: Slot, List: v-list-item-action|v-list-item-title|v-list-item-subtitle|v-list-item-icon|v-list-item-content|v-list-item-action-text
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue: , Description: Color, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
@@ -64,6 +65,7 @@ Private sTextColor As String
 Private sTextColorIntensity As String
 Private sVIf As String
 Private sVShow As String
+Private bHidden As Boolean
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -78,6 +80,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey)
 		End If
 	End If
+	sVShow = $"${mName}show"$
 	End Sub
 	
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
@@ -107,7 +110,8 @@ sSize = Props.Get("Size")
 sTextColor = Props.Get("TextColor")
 sTextColorIntensity = Props.Get("TextColorIntensity")
 sVIf = Props.Get("VIf")
-sVShow = Props.Get("VShow")
+svshow = Props.Get("VShow")
+bHidden = Props.Get("Hidden")
 	End If
 	'
 	'build and get the element

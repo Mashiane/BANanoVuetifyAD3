@@ -552,6 +552,7 @@ Sub AddElement(elID As String, tag As String, props As Map, styleProps As Map, c
 	elID = elID.Replace("#","")
 	Dim elIT As VueElement
 	elIT.Initialize(mCallBack, elID, elID)
+	elIT.TagName = tag
 	elIT.Append(Text)
 	If loose <> Null Then
 		For Each k As String In loose

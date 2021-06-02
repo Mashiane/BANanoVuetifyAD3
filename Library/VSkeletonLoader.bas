@@ -1,11 +1,12 @@
 ﻿B4J=true
-Group=Default Group
+Group=Default Group\Layouts
 ModulesStructureVersion=1
 Type=Class
 Version=8.9
 @EndOfDesignText@
 #IgnoreWarnings:12
 
+#DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: SkeletonType, DisplayName: Types(s), FieldType: String, DefaultValue: card1, Description: Types(s)
 #DesignerProperty: Key: Boilerplate, DisplayName: Boilerplate, FieldType: Boolean, DefaultValue: false, Description: Boilerplate
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: false, Description: Dark
@@ -55,6 +56,7 @@ Private sVIf As String
 Private sVShow As String
 Private sWidth As String
 Private xitems As List
+Private bHidden As Boolean
 	End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -70,6 +72,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 		End If
 	End If
 	xitems.Initialize 
+	sVShow = $"${mName}show"$
 	End Sub
 	
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
@@ -94,6 +97,7 @@ sTransition = Props.Get("Transition")
 sTypes = Props.Get("Types")
 sVIf = Props.Get("VIf")
 sVShow = Props.Get("VShow")
+bHidden = Props.Get("Hidden")
 sWidth = Props.Get("Width")
 	End If
 	'
@@ -125,6 +129,7 @@ VElement.AddAttr("transition", sTransition)
 VElement.AddAttr("types", sTypes)
 VElement.AddAttr("v-if", sVIf)
 VElement.AddAttr("v-show", sVShow)
+VElement.SetData(sVShow, Not(bHidden))
 VElement.AddAttr("width", sWidth)
 VElement.SetData(sLoading, False)
 VElement.SetData(sSkeletonType, "card")

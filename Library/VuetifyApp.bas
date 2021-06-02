@@ -3235,33 +3235,33 @@ Sub AddAutoComplete(Module As Object, parentID As String, elID As String, vmodel
 	displayField = displayField.tolowercase
 	'
 	BANano.GetElement(parentID).Append($"<v-autocomplete id="${elID}"></v-autocomplete>"$)
-	Dim vselect As VueElement
-	vselect.Initialize(Module, elID, elID)
-	vselect.label = sLabel
-	vselect.Required = bRequired
-	vselect.Placeholder = sPlaceHolder
-	vselect.Hint = sHelperText
-	vselect.Multiple = bMultiple
-	vselect.Items = $":${sourceTable}"$
-	If displayField <> "" Then vselect.ItemText = displayField
-	If sourceField <> "" Then vselect.ItemValue = sourceField
-	vselect.VModel = vmodel
-	vselect.Bind("return-object", returnObject)
-	vselect.AssignProps(props)
+	Dim vselectx As VueElement
+	vselectx.Initialize(Module, elID, elID)
+	vselectx.label = sLabel
+	vselectx.Required = bRequired
+	vselectx.Placeholder = sPlaceHolder
+	vselectx.Hint = sHelperText
+	vselectx.Multiple = bMultiple
+	vselectx.Items = $":${sourceTable}"$
+	If displayField <> "" Then vselectx.ItemText = displayField
+	If sourceField <> "" Then vselectx.ItemValue = sourceField
+	vselectx.VModel = vmodel
+	vselectx.Bind("return-object", returnObject)
+	vselectx.AssignProps(props)
 	'
 	If bMultiple Then
 		Dim lst As List = NewList
-		vselect.SetData(vmodel, lst)
+		vselectx.SetData(vmodel, lst)
 	Else
-		vselect.SetData(vmodel, Null)
+		vselectx.SetData(vmodel, Null)
 	End If
 	If returnObject = False Then
-		vselect.SetData(vmodel, "")
+		vselectx.SetData(vmodel, "")
 	End If
 	Dim lst As List = NewList
-	vselect.SetData(sourceTable, lst)
-	vselect.BindAllEvents
-	Return vselect
+	vselectx.SetData(sourceTable, lst)
+	vselectx.BindAllEvents
+	Return vselectx
 End Sub
 
 
@@ -3274,33 +3274,33 @@ Sub AddComboBox(Module As Object, parentID As String, elID As String, vmodel As 
 	
 	'
 	BANano.GetElement(parentID).Append($"<v-combobox id="${elID}"></v-combobox>"$)
-	Dim vselect As VueElement
-	vselect.Initialize(Module, elID, elID)
-	vselect.label = sLabel
-	vselect.Required = bRequired
-	vselect.Placeholder = sPlaceHolder
-	vselect.Hint = sHelperText
-	vselect.Multiple = bMultiple
-	vselect.Items = $":${sourceTable}"$
-	If displayField <> "" Then vselect.ItemText = displayField
-	If sourceField <> "" Then vselect.ItemValue = sourceField
-	vselect.VModel = vmodel
-	vselect.Bind("return-object", returnObject)
-	vselect.AssignProps(props)
+	Dim vselectx As VueElement
+	vselectx.Initialize(Module, elID, elID)
+	vselectx.label = sLabel
+	vselectx.Required = bRequired
+	vselectx.Placeholder = sPlaceHolder
+	vselectx.Hint = sHelperText
+	vselectx.Multiple = bMultiple
+	vselectx.Items = $":${sourceTable}"$
+	If displayField <> "" Then vselectx.ItemText = displayField
+	If sourceField <> "" Then vselectx.ItemValue = sourceField
+	vselectx.VModel = vmodel
+	vselectx.Bind("return-object", returnObject)
+	vselectx.AssignProps(props)
 	'
 	If bMultiple Then
 		Dim lst As List = NewList
-		vselect.SetData(vmodel, lst)
+		vselectx.SetData(vmodel, lst)
 	Else
-		vselect.SetData(vmodel, Null)
+		vselectx.SetData(vmodel, Null)
 	End If
 	If returnObject = False Then
-		vselect.SetData(vmodel, "")
+		vselectx.SetData(vmodel, "")
 	End If
 	Dim lst As List = NewList
-	vselect.SetData(sourceTable, lst)
-	vselect.BindAllEvents
-	Return vselect
+	vselectx.SetData(sourceTable, lst)
+	vselectx.BindAllEvents
+	Return vselectx
 End Sub
 
 'a button with an icon on the right
@@ -3547,34 +3547,34 @@ Sub AddSelect(Module As Object, parentID As String, elID As String, vmodel As St
 	
 	'
 	BANano.GetElement(parentID).Append($"<v-select id="${elID}"></v-select>"$)
-	Dim vselect As VueElement
-	vselect.Initialize(Module, elID, elID)
-	vselect.label = sLabel
-	vselect.Required = bRequired
-	vselect.Placeholder = sPlaceHolder
-	vselect.Hint = sHelperText
-	vselect.Multiple = bMultiple
-	vselect.Items = $":${sourceTable}"$
-	If displayField <> "" Then vselect.ItemText = displayField
-	If sourceField <> "" Then vselect.ItemValue = sourceField
-	vselect.VModel = vmodel
-	vselect.ReturnObject = returnObject
+	Dim vselectx As VueElement
+	vselectx.Initialize(Module, elID, elID)
+	vselectx.label = sLabel
+	vselectx.Required = bRequired
+	vselectx.Placeholder = sPlaceHolder
+	vselectx.Hint = sHelperText
+	vselectx.Multiple = bMultiple
+	vselectx.Items = $":${sourceTable}"$
+	If displayField <> "" Then vselectx.ItemText = displayField
+	If sourceField <> "" Then vselectx.ItemValue = sourceField
+	vselectx.VModel = vmodel
+	vselectx.ReturnObject = returnObject
 	'
 	If bMultiple Then
 		Dim lst As List = NewList
-		vselect.SetData(vmodel, lst)
+		vselectx.SetData(vmodel, lst)
 	Else
-		vselect.SetData(vmodel, Null)
+		vselectx.SetData(vmodel, Null)
 	End If
 	If returnObject = False Then
-		vselect.SetData(vmodel, "")
+		vselectx.SetData(vmodel, "")
 	End If
 	'
-	vselect.AssignProps(props)
+	vselectx.AssignProps(props)
 	'
-	vselect.SetData(sourceTable, NewList)
-	vselect.BindAllEvents
-	Return vselect
+	vselectx.SetData(sourceTable, NewList)
+	vselectx.BindAllEvents
+	Return vselectx
 End Sub
 
 Sub AddRouterView(Module As Object, parentID As String, elID As String) As VueElement
@@ -3704,7 +3704,7 @@ End Sub
 'Sub btn1_click(e As BANanoEvent)
 'End Sub
 '</code>
-Sub AddButton1(Module As Object, parentID As String, elID As String, sLabel As String, props As Map) As VueElement
+Sub AddButton1(Module As Object, parentID As String, elID As String, sLabel As String, props As Map) As VueElement 'ignore
 	parentID = CleanID(parentID)
 	elID = elID.ToLowerCase
 	'
@@ -3731,7 +3731,7 @@ End Sub
 'Sub btn1_click(e As BANanoEvent)
 'End Sub
 '</code>
-Sub AddButton(Module As Object, parentID As String, elID As String, sLabel As String, eColor As String, bOutlined As Boolean,  props As Map) As VueElement
+Sub AddButton(Module As Object, parentID As String, elID As String, sLabel As String, eColor As String, bOutlined As Boolean,  props As Map) As VueElement   'ignore
 	parentID = CleanID(parentID)
 	elID = elID.ToLowerCase
 	'
@@ -4232,9 +4232,9 @@ End Sub
 Sub GetDatePickerText(Module As Object, dpID As String) As VueElement
 	Dim txtid As String = $"${dpID}text"$
 	txtid = txtid.ToLowerCase
-	Dim vtextfield As VueElement
-	vtextfield.Initialize(Module, txtid, txtid)
-	Return vtextfield
+	Dim vtextfieldx As VueElement
+	vtextfieldx.Initialize(Module, txtid, txtid)
+	Return vtextfieldx
 End Sub
 
 Sub GetToolBar(Module As Object, elID As String) As VueElement
@@ -4307,23 +4307,23 @@ Ok</v-btn>
 	sbTemplate = sbTemplate.Replace("~","$")
 	BANano.GetElement(parentID).Append(sbTemplate)
 	'
-	Dim vmenu As VueElement
-	vmenu.Initialize(Module, menuref, menuref)
+	Dim vmenux As VueElement
+	vmenux.Initialize(Module, menuref, menuref)
 	
-	Dim vtextfield As VueElement
-	vtextfield.Initialize(Module, txtid, txtid)
-	vtextfield.AssignProps(txtprops)
-	vtextfield.BindAllEvents
+	Dim vtextfieldx As VueElement
+	vtextfieldx.Initialize(Module, txtid, txtid)
+	vtextfieldx.AssignProps(txtprops)
+	vtextfieldx.BindAllEvents
 	'
-	Dim vdatepicker As VueElement
-	vdatepicker.Initialize(Module, dtpicker, dtpicker)
-	vdatepicker.AssignProps(dateprops)
+	Dim vdatepickerx As VueElement
+	vdatepickerx.Initialize(Module, dtpicker, dtpicker)
+	vdatepickerx.AssignProps(dateprops)
 	'
-	vtextfield.BindVueElement(vmenu)
-	vtextfield.BindVueElement(vdatepicker)
-	vtextfield.SetData(vmodel, "")
-	vtextfield.SetData(menuref, False)
-	Return vtextfield
+	vtextfieldx.BindVueElement(vmenux)
+	vtextfieldx.BindVueElement(vdatepickerx)
+	vtextfieldx.SetData(vmodel, "")
+	vtextfieldx.SetData(menuref, False)
+	Return vtextfieldx
 End Sub
 
 
@@ -4365,23 +4365,23 @@ Ok</v-btn>
 	sbTemplate = sbTemplate.Replace("~","$")
 	BANano.GetElement(parentID).Append(sbTemplate)
 	'
-	Dim vmenu As VueElement
-	vmenu.Initialize(Module, menuref, menuref)
+	Dim vmenux As VueElement
+	vmenux.Initialize(Module, menuref, menuref)
 	
-	Dim vtextfield As VueElement
-	vtextfield.Initialize(Module, txtid, txtid)
-	vtextfield.AssignProps(txtprops)
-	vtextfield.BindAllEvents
+	Dim vtextfieldx As VueElement
+	vtextfieldx.Initialize(Module, txtid, txtid)
+	vtextfieldx.AssignProps(txtprops)
+	vtextfieldx.BindAllEvents
 	'
-	Dim vdatepicker As VueElement
-	vdatepicker.Initialize(Module, dtpicker, dtpicker)
-	vdatepicker.AssignProps(dateprops)
+	Dim vdatepickerx As VueElement
+	vdatepickerx.Initialize(Module, dtpicker, dtpicker)
+	vdatepickerx.AssignProps(dateprops)
 	'
-	vtextfield.BindVueElement(vmenu)
-	vtextfield.BindVueElement(vdatepicker)
-	vtextfield.SetData(vmodel, "")
-	vtextfield.SetData(menuref, False)
-	Return vtextfield
+	vtextfieldx.BindVueElement(vmenux)
+	vtextfieldx.BindVueElement(vdatepickerx)
+	vtextfieldx.SetData(vmodel, "")
+	vtextfieldx.SetData(menuref, False)
+	Return vtextfieldx
 End Sub
 
 
@@ -4420,34 +4420,34 @@ Sub AddSearch(Module As Object, parentID As String, elID As String, vmodel As St
 	parentID = CleanID(parentID)
 	elID = elID.ToLowerCase
 	BANano.GetElement(parentID).Append($"<v-text-field id="${elID}"></v-text-field>"$)
-	Dim vtextfield As VueElement
-	vtextfield.Initialize(Module, elID, elID)
-	vtextfield.Label = slabel
-	vtextfield.AppendIcon = "mdi-magnify"
-	vtextfield.VModel = vmodel
-	vtextfield.SetData(vmodel, "")
-	vtextfield.SetTypeText
-	vtextfield.Solo = bSolo
-	vtextfield.Clearable = True
-	vtextfield.SingleLine = True
-	vtextfield.HideDetails = True
-	vtextfield.BindAllEvents
-	vtextfield.Shrink
-	vtextfield.AssignProps(props)
-	Return vtextfield
+	Dim vtextfieldx As VueElement
+	vtextfieldx.Initialize(Module, elID, elID)
+	vtextfieldx.Label = slabel
+	vtextfieldx.AppendIcon = "mdi-magnify"
+	vtextfieldx.VModel = vmodel
+	vtextfieldx.SetData(vmodel, "")
+	vtextfieldx.SetTypeText
+	vtextfieldx.Solo = bSolo
+	vtextfieldx.Clearable = True
+	vtextfieldx.SingleLine = True
+	vtextfieldx.HideDetails = True
+	vtextfieldx.BindAllEvents
+	vtextfieldx.Shrink
+	vtextfieldx.AssignProps(props)
+	Return vtextfieldx
 End Sub
 
 Sub AddParallax(Module As Object, parentID As String, elID As String, sheight As String, src As String, alt As String, props As Map) As VueElement
 	parentID = CleanID(parentID)
 	elID = elID.ToLowerCase
 	BANano.GetElement(parentID).Append($"<v-parallax id="${elID}"></v-parallax>"$)
-	Dim vparallax As VueElement
-	vparallax.Initialize(Module, elID, elID)
-	vparallax.Src = src
-	vparallax.Height = sheight
-	vparallax.Alt = alt
-	vparallax.AssignProps(props)
-	Return vparallax
+	Dim vparallaxx As VueElement
+	vparallaxx.Initialize(Module, elID, elID)
+	vparallaxx.Src = src
+	vparallaxx.Height = sheight
+	vparallaxx.Alt = alt
+	vparallaxx.AssignProps(props)
+	Return vparallaxx
 End Sub
 
 '<code>
@@ -4501,23 +4501,23 @@ Sub AddFileInput(Module As Object, parentID As String, elID As String, vmodel As
 	parentID = CleanID(parentID)
 	elID = elID.ToLowerCase
 	BANano.GetElement(parentID).Append($"<v-file-input id="${elID}"></v-file-input>"$)
-	Dim vfileinput As VueElement
-	vfileinput.Initialize(Module, elID, elID)
-	vfileinput.Label = slabel
-	vfileinput.Placeholder = splaceholder
-	vfileinput.Hint = sHint
-	vfileinput.VModel = vmodel
-	vfileinput.AddAttrOnConditionTrue(":multiple", bMultiple, True)
-	vfileinput.BindAllEvents
-	vfileinput.AssignProps(props)
+	Dim vfileinputx As VueElement
+	vfileinputx.Initialize(Module, elID, elID)
+	vfileinputx.Label = slabel
+	vfileinputx.Placeholder = splaceholder
+	vfileinputx.Hint = sHint
+	vfileinputx.VModel = vmodel
+	vfileinputx.AddAttrOnConditionTrue(":multiple", bMultiple, True)
+	vfileinputx.BindAllEvents
+	vfileinputx.AssignProps(props)
 	If vmodel <> "" Then
 		If bMultiple Then
-			vfileinput.SetData(vmodel, NewList)
+			vfileinputx.SetData(vmodel, NewList)
 		Else
-			vfileinput.SetData(vmodel, Null)	
+			vfileinputx.SetData(vmodel, Null)	
 		End If
 	End If
-	Return vfileinput
+	Return vfileinputx
 End Sub
 
 
@@ -4677,19 +4677,19 @@ Sub AddSlider(Module As Object, parentID As String, elID As String, vmodel As St
 	elID = elID.ToLowerCase
 	BANano.GetElement(parentID).Append($"<v-slider id="${elID}"></v-slider>"$)
 	'get the text field, there is only 1 element on the layout
-	Dim vslider As VueElement
-	vslider.Initialize(Module, elID, elID)
-	vslider.Label = slabel
-	vslider.VModel = vmodel
-	vslider.SetData(vmodel, 0)
-	If bShowThumb Then vslider.AddAttr("thumb-label", "always")
-	vslider.AddAttr(":vertical", bVertical)
-	vslider.AddAttr("min", iminvalue)
-	vslider.AddAttr("max", imaxvalue)
-	If iStep > 0 Then vslider.AddAttr("step", iStep)
-	vslider.BindAllEvents
-	vslider.AssignProps(props)
-	Return vslider
+	Dim vsliderx As VueElement
+	vsliderx.Initialize(Module, elID, elID)
+	vsliderx.Label = slabel
+	vsliderx.VModel = vmodel
+	vsliderx.SetData(vmodel, 0)
+	If bShowThumb Then vsliderx.AddAttr("thumb-label", "always")
+	vsliderx.AddAttr(":vertical", bVertical)
+	vsliderx.AddAttr("min", iminvalue)
+	vsliderx.AddAttr("max", imaxvalue)
+	If iStep > 0 Then vsliderx.AddAttr("step", iStep)
+	vsliderx.BindAllEvents
+	vsliderx.AssignProps(props)
+	Return vsliderx
 End Sub
 
 '<code>
@@ -4744,15 +4744,15 @@ Sub AddTextField1(Module As Object, parentID As String, elID As String, vModel A
 	parentID = CleanID(parentID)
 	elID = elID.ToLowerCase
 	BANano.GetElement(parentID).Append($"<v-text-field id="${elID}"></v-v-text-field>"$)
-	Dim vtextfield As VueElement
-	vtextfield.Initialize(Module, elID, elID)
-	vtextfield.Label = sLabel
-	vtextfield.VModel = vModel
-	vtextfield.SetData(vModel, "")
-	vtextfield.SetTypeText
-	vtextfield.BindAllEvents
-	vtextfield.AssignProps(props)
-	Return vtextfield
+	Dim vtextfieldx As VueElement
+	vtextfieldx.Initialize(Module, elID, elID)
+	vtextfieldx.Label = sLabel
+	vtextfieldx.VModel = vModel
+	vtextfieldx.SetData(vModel, "")
+	vtextfieldx.SetTypeText
+	vtextfieldx.BindAllEvents
+	vtextfieldx.AssignProps(props)
+	Return vtextfieldx
 End Sub
 
 
@@ -4765,22 +4765,22 @@ Sub AddTextField(Module As Object, parentID As String, elID As String, vmodel As
 	parentID = CleanID(parentID)
 	elID = elID.ToLowerCase
 	BANano.GetElement(parentID).Append($"<v-text-field id="${elID}"></v-v-text-field>"$)
-	Dim vtextfield As VueElement
-	vtextfield.Initialize(Module, elID, elID)
-	vtextfield.Label = slabel
-	vtextfield.Required = bRequired
-	vtextfield.PrependIcon = sPrependIcon
+	Dim vtextfieldx As VueElement
+	vtextfieldx.Initialize(Module, elID, elID)
+	vtextfieldx.Label = slabel
+	vtextfieldx.Required = bRequired
+	vtextfieldx.PrependIcon = sPrependIcon
 	If iMaxLen > 0 Then
-		vtextfield.Counter = True
+		vtextfieldx.Counter = True
 	End If
-	vtextfield.Placeholder = splaceholder
-	vtextfield.Hint = sHint
-	vtextfield.VModel = vmodel
-	vtextfield.SetData(vmodel, "")
-	vtextfield.SetTypeText
-	vtextfield.BindAllEvents
-	vtextfield.AssignProps(props)
-	Return vtextfield
+	vtextfieldx.Placeholder = splaceholder
+	vtextfieldx.Hint = sHint
+	vtextfieldx.VModel = vmodel
+	vtextfieldx.SetData(vmodel, "")
+	vtextfieldx.SetTypeText
+	vtextfieldx.BindAllEvents
+	vtextfieldx.AssignProps(props)
+	Return vtextfieldx
 End Sub
 
 '<code>
@@ -4802,22 +4802,22 @@ Sub AddTextArea(Module As Object, parentID As String, elID As String, vmodel As 
 	parentID = CleanID(parentID)
 	elID = elID.ToLowerCase
 	BANano.GetElement(parentID).Append($"<v-textarea id="${elID}"></v-textarea>"$)
-	Dim vtextfield As VueElement
-	vtextfield.Initialize(Module, elID, elID)
-	vtextfield.Label = slabel
-	vtextfield.Required = bRequired
-	vtextfield.PrependIcon = sPrependIcon
+	Dim vtextfieldx As VueElement
+	vtextfieldx.Initialize(Module, elID, elID)
+	vtextfieldx.Label = slabel
+	vtextfieldx.Required = bRequired
+	vtextfieldx.PrependIcon = sPrependIcon
 	If iMaxLen > 0 Then
-		vtextfield.Counter = True
+		vtextfieldx.Counter = True
 	End If
-	vtextfield.Placeholder = splaceholder
-	vtextfield.Hint = sHint
-	vtextfield.VModel = vmodel
-	vtextfield.SetData(vmodel, "")
-	vtextfield.SetTypeText
-	vtextfield.BindAllEvents
-	vtextfield.AssignProps(props)
-	Return vtextfield
+	vtextfieldx.Placeholder = splaceholder
+	vtextfieldx.Hint = sHint
+	vtextfieldx.VModel = vmodel
+	vtextfieldx.SetData(vmodel, "")
+	vtextfieldx.SetTypeText
+	vtextfieldx.BindAllEvents
+	vtextfieldx.AssignProps(props)
+	Return vtextfieldx
 End Sub
 
 Sub AddPassword1(Module As Object, parentID As String, fldName As String, vmodel As String, title As String, maxLen As Int, props As Map) As VueElement
@@ -4830,27 +4830,27 @@ Sub AddPassword(Module As Object, parentID As String, elID As String, vmodel As 
 	BANano.GetElement(parentID).Append($"<v-text-field id="${elID}"></v-text-field>"$)
 	Dim bshowPassword As String = $"${elID}ShowPassword"$
 	bshowPassword = bshowPassword.tolowercase
-	Dim vtextfield As VueElement
-	vtextfield.Initialize(Module, elID, elID)
-	vtextfield.Label = slabel
-	vtextfield.Required = bRequired
-	vtextfield.PrependIcon = sPrependIcon
+	Dim vtextfieldx As VueElement
+	vtextfieldx.Initialize(Module, elID, elID)
+	vtextfieldx.Label = slabel
+	vtextfieldx.Required = bRequired
+	vtextfieldx.PrependIcon = sPrependIcon
 	If iMaxLen > 0 Then
-		vtextfield.Counter = True
+		vtextfieldx.Counter = True
 	End If
-	vtextfield.Placeholder = splaceholder
-	vtextfield.Hint = sHint
-	vtextfield.VModel = vmodel
-	vtextfield.SetData(vmodel, "")
-	vtextfield.SetTypePassword
-	vtextfield.BindAllEvents
-	vtextfield.AddAttr(":type", $"${bshowPassword} ? 'text' : 'password'"$)
-	vtextfield.AddAttr(":append-icon", $"${bshowPassword} ? 'mdi-eye' : 'mdi-eye-off'"$)
-	vtextfield.AddAttr("v-on:click:append", $"${bshowPassword} = !${bshowPassword}"$)
-	vtextfield.AddAttr("autocomplete", "off")
-	vtextfield.AssignProps(props)
-	vtextfield.SetData(bshowPassword, False)
-	Return vtextfield
+	vtextfieldx.Placeholder = splaceholder
+	vtextfieldx.Hint = sHint
+	vtextfieldx.VModel = vmodel
+	vtextfieldx.SetData(vmodel, "")
+	vtextfieldx.SetTypePassword
+	vtextfieldx.BindAllEvents
+	vtextfieldx.AddAttr(":type", $"${bshowPassword} ? 'text' : 'password'"$)
+	vtextfieldx.AddAttr(":append-icon", $"${bshowPassword} ? 'mdi-eye' : 'mdi-eye-off'"$)
+	vtextfieldx.AddAttr("v-on:click:append", $"${bshowPassword} = !${bshowPassword}"$)
+	vtextfieldx.AddAttr("autocomplete", "off")
+	vtextfieldx.AssignProps(props)
+	vtextfieldx.SetData(bshowPassword, False)
+	Return vtextfieldx
 End Sub
 
 
@@ -4859,28 +4859,28 @@ Sub AddSwitch(Module As Object, parentID As String, sid As String, vmodel As Str
 	sid = sid.ToLowerCase
 	BANano.GetElement(parentID).Append($"<v-switch id="${sid}"></v-switch>"$)
 	'
-	Dim vswitch As VueElement
-	vswitch.Initialize(Module, sid, sid)
-	vswitch.VModel = vmodel
-	vswitch.label = slabel
+	Dim vswitchx As VueElement
+	vswitchx.Initialize(Module, sid, sid)
+	vswitchx.VModel = vmodel
+	vswitchx.label = slabel
 	If BANano.IsNull(truevalue) = False Or BANano.IsUndefined(truevalue) = False Then 
-		vswitch.AddAttr("true-value", truevalue)
+		vswitchx.AddAttr("true-value", truevalue)
 	End If
 	If BANano.IsNull(falsevalue) = False Or BANano.IsUndefined(truevalue) = False Then 
-		vswitch.AddAttr("false-value", falsevalue)
+		vswitchx.AddAttr("false-value", falsevalue)
 	End If
 	If bInset Then
-		vswitch.AddAttr(":inset", bInset)
+		vswitchx.AddAttr(":inset", bInset)
 	End If
 	If color <> "" Then 
-		vswitch.Color = color
+		vswitchx.Color = color
 	End If
-	vswitch.AssignProps(props)
-	vswitch.BindAllEvents
+	vswitchx.AssignProps(props)
+	vswitchx.BindAllEvents
 	If vmodel <> "" Then
-		vswitch.SetData(vmodel, falsevalue)
+		vswitchx.SetData(vmodel, falsevalue)
 	End If
-	Return vswitch
+	Return vswitchx
 End Sub
 
 
@@ -4911,25 +4911,25 @@ Sub AddCheckBox(Module As Object, parentID As String, sid As String, vmodel As S
 	parentID = CleanID(parentID)
 	sid = sid.ToLowerCase
 	BANano.GetElement(parentID).Append($"<v-checkbox id="${sid}"></v-checkbox>"$)
-	Dim vcheckbox As VueElement
-	vcheckbox.Initialize(Module, sid, sid)
-	vcheckbox.VModel = vmodel
-	vcheckbox.SetData(vmodel, Null)
-	vcheckbox.label = slabel
+	Dim vcheckboxx As VueElement
+	vcheckboxx.Initialize(Module, sid, sid)
+	vcheckboxx.VModel = vmodel
+	vcheckboxx.SetData(vmodel, Null)
+	vcheckboxx.label = slabel
 	If BANano.IsNull(truevalue) = False Or BANano.IsUndefined(truevalue) = False Then
-		vcheckbox.Value = truevalue
-		vcheckbox.AddAttr("true-value", truevalue)
+		vcheckboxx.Value = truevalue
+		vcheckboxx.AddAttr("true-value", truevalue)
 	End If
 	If BANano.IsNull(falsevalue) = False Or BANano.IsUndefined(truevalue) = False Then
-		vcheckbox.AddAttr("false-value", falsevalue)
+		vcheckboxx.AddAttr("false-value", falsevalue)
 	End If
-	If color <> "" Then vcheckbox.Color = color
-	vcheckbox.AssignProps(props)
-	vcheckbox.BindAllEvents
+	If color <> "" Then vcheckboxx.Color = color
+	vcheckboxx.AssignProps(props)
+	vcheckboxx.BindAllEvents
 	If vmodel <> "" Then 
-		vcheckbox.SetData(vmodel, truevalue)
+		vcheckboxx.SetData(vmodel, truevalue)
 	End If
-	Return vcheckbox
+	Return vcheckboxx
 End Sub
 
 '<code>
@@ -5655,7 +5655,7 @@ Sub ShowSwalConfirmWait(title As String, message As String, okText As String, ca
 	Return isConfirmed
 End Sub
 
-Sub ShowSwalConfirm(title As String, message As String, okText As String, cancelText As String) As Map
+Sub ShowSwalConfirm(title As String, message As String, okText As String, cancelText As String) As Map  'ignore
 	Dim swal As VueSwal
 	swal.Initialize 
 	swal.title(title)
@@ -5675,7 +5675,7 @@ Sub ShowSwalConfirm(title As String, message As String, okText As String, cancel
 	BANano.ReturnThen(resp)
 End Sub
 
-Sub ShowSwalInput(title As String, message As String, okText As String, cancelText As String) As Map
+Sub ShowSwalInput(title As String, message As String, okText As String, cancelText As String) As Map   'ignore
 	Dim swal As VueSwal
 	swal.Initialize 
 	swal.title(title)

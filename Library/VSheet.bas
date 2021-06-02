@@ -1,11 +1,12 @@
 ﻿B4J=true
-Group=Default Group
+Group=Default Group\Layouts
 ModulesStructureVersion=1
 Type=Class
 Version=8.9
 @EndOfDesignText@
 #IgnoreWarnings:12
 
+#DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: Height, DisplayName: Height, FieldType: String, DefaultValue: 200px, Description: Height
 #DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: 200px, Description: Width
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue: blue, Description: Color, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
@@ -64,7 +65,9 @@ Private sVShow As String
 Private sWidth As String
 Private sVOn As String
 Private sVBind As String
+Private bHidden As Boolean
 	End Sub
+	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	mName = Name.tolowercase
 	mEventName = EventName.ToLowerCase
@@ -77,6 +80,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey)
 		End If
 	End If
+	sVShow = $"${mName}show"$
 	End Sub
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	mTarget = Target
@@ -103,7 +107,8 @@ sTextColorIntensity = Props.Get("TextColorIntensity")
 bTile = Props.Get("Tile")
 sVFor = Props.Get("VFor")
 sVIf = Props.Get("VIf")
-sVShow = Props.Get("VShow")
+svshow = Props.Get("VShow")
+bHidden = Props.Get("Hidden")
 sWidth = Props.Get("Width")
 sVOn = Props.Get("VOn")
 sVBind = Props.Get("VBind")
@@ -139,6 +144,7 @@ VElement.AddAttr("tile", bTile)
 VElement.AddAttr("v-for", sVFor)
 VElement.AddAttr("v-if", sVIf)
 VElement.AddAttr("v-show", sVShow)
+VElement.SetData(sVShow, Not(bHidden))
 VElement.AddAttr("width", sWidth)
 VElement.AddAttr("v-on", sVOn)
 	VElement.AddAttr("v-bind", sVBind)
@@ -183,3 +189,4 @@ End Sub
 Sub getHere As String
 	Return $"#${mName}"$
 End Sub
+

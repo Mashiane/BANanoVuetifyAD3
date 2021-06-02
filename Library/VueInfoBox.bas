@@ -32,7 +32,7 @@ Sub Class_Globals
 	Private mCallBack As Object
 	Private mEvent As String
 	Public methods As Map
-	Private BANano As BANano
+	Private BANano As BANano  'ignore
 	Private mName As String
 	Public bindings As Map
 	Private mElement As BANanoElement

@@ -1,5 +1,5 @@
 ﻿B4J=true
-Group=Default Group
+Group=Default Group\Forms
 ModulesStructureVersion=1
 Type=Class
 Version=7
@@ -23,18 +23,24 @@ Version=7
 #DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: checkbox1, Description: VModel
 #DesignerProperty: Key: TrueValue, DisplayName: TrueValue, FieldType: String, DefaultValue: True, Description: TrueValue
 #DesignerProperty: Key: FalseValue, DisplayName: FalseValue, FieldType: String, DefaultValue: False, Description: FalseValue
+#DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: , Description: Value
 #DesignerProperty: Key: OffIcon, DisplayName: OffIcon, FieldType: String, DefaultValue: , Description: OffIcon
 #DesignerProperty: Key: OnIcon, DisplayName: OnIcon, FieldType: String, DefaultValue: , Description: OnIcon
 #DesignerProperty: Key: PrependIcon, DisplayName: PrependIcon, FieldType: String, DefaultValue: , Description: PrependIcon
 #DesignerProperty: Key: AppendIcon, DisplayName: AppendIcon, FieldType: String, DefaultValue: , Description: AppendIcon
 #DesignerProperty: Key: InputValue, DisplayName: InputValue, FieldType: String, DefaultValue: , Description: InputValue
+#DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: Boolean, DefaultValue: False, Description: Disabled
+#DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
+#DesignerProperty: Key: Readonly, DisplayName: Readonly, FieldType: Boolean, DefaultValue: False, Description: Readonly
+#DesignerProperty: Key: Required, DisplayName: Required, FieldType: Boolean, DefaultValue: False, Description: Required 
+
+
 #DesignerProperty: Key: BackgroundColor, DisplayName: BackgroundColor, FieldType: String, DefaultValue: , Description: BackgroundColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: BackgroundColorIntensity, DisplayName: Backgroundcolorintensity, FieldType: String, DefaultValue: , Description: Backgroundcolorintensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue: , Description: Color, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: ColorIntensity, DisplayName: Colorintensity, FieldType: String, DefaultValue: , Description: Colorintensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: False, Description: Dark
 #DesignerProperty: Key: Dense, DisplayName: Dense, FieldType: Boolean, DefaultValue: False, Description: Dense
-#DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: String, DefaultValue: , Description: Disabled
 #DesignerProperty: Key: Error, DisplayName: Error, FieldType: String, DefaultValue: , Description: Error
 #DesignerProperty: Key: ErrorCount, DisplayName: ErrorCount, FieldType: String, DefaultValue: , Description: ErrorCount
 #DesignerProperty: Key: ErrorMessages, DisplayName: ErrorMessages, FieldType: String, DefaultValue: , Description: ErrorMessages
@@ -45,7 +51,6 @@ Version=7
 #DesignerProperty: Key: Messages, DisplayName: Messages, FieldType: String, DefaultValue: , Description: Messages
 #DesignerProperty: Key: Multiple, DisplayName: Multiple, FieldType: Boolean, DefaultValue: False, Description: Multiple
 #DesignerProperty: Key: PersistentHint, DisplayName: PersistentHint, FieldType: Boolean, DefaultValue: False, Description: PersistentHint
-#DesignerProperty: Key: Readonly, DisplayName: Readonly, FieldType: String, DefaultValue: , Description: Readonly
 #DesignerProperty: Key: Ripple, DisplayName: Ripple, FieldType: Boolean, DefaultValue: False, Description: Ripple
 #DesignerProperty: Key: Rules, DisplayName: Rules, FieldType: String, DefaultValue: , Description: Rules
 #DesignerProperty: Key: Success, DisplayName: Success, FieldType: String, DefaultValue: , Description: Success
@@ -53,8 +58,8 @@ Version=7
 #DesignerProperty: Key: VBind, DisplayName: VBind, FieldType: String, DefaultValue: , Description: VBind
 #DesignerProperty: Key: VFor, DisplayName: VFor, FieldType: String, DefaultValue: , Description: VFor
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
+#DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VOn, DisplayName: VOn, FieldType: String, DefaultValue: , Description: VOn
-#DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue: , Description: VShow
 #DesignerProperty: Key: ValidateOnBlur, DisplayName: ValidateOnBlur, FieldType: Boolean, DefaultValue: False, Description: ValidateOnBlur
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag. 
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use = 
@@ -108,7 +113,13 @@ Private sVModel As String
 Private sVOn As String
 Private sVShow As String
 Private bValidateOnBlur As Boolean
- 
+ Private sValue As String
+ '
+ Private bDisabled As Boolean
+Private bHidden As Boolean
+Private bReadonly As Boolean
+Private bRequired As Boolean
+Private sRequired As String
 	End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -123,11 +134,19 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey) 
 		End If 
 	End If 
+	sRequired = $"${mName}required"$
+	sDisabled = $"${mName}disabled"$
+	sReadonly = $"${mName}readonly"$
+	sVShow = $"${mName}show"$
 	End Sub
 
 Sub DesignerCreateView (Target As BANanoElement, Props As Map) 
 	mTarget = Target 
 	If Props <> Null Then 
+		bDisabled = Props.Get("Disabled")
+bHidden = Props.Get("Hidden")
+bReadonly = Props.Get("Readonly")
+bRequired = Props.Get("Required")
 		mClasses = Props.Get("Classes") 
 		mStyles = Props.Get("Styles") 
 		mAttributes = Props.Get("Attributes") 
@@ -138,7 +157,6 @@ sColor = Props.Get("Color")
 sColorIntensity = Props.Get("ColorIntensity")
 bDark = Props.Get("Dark")
 bDense = Props.Get("Dense")
-sDisabled = Props.Get("Disabled")
 sError = Props.Get("Error")
 sErrorCount = Props.Get("ErrorCount")
 sErrorMessages = Props.Get("ErrorMessages")
@@ -164,11 +182,11 @@ sTrueValue = Props.Get("TrueValue")
 sVBind = Props.Get("VBind")
 sVFor = Props.Get("VFor")
 sVIf = Props.Get("VIf")
+sVShow = Props.Get("VShow")
 sVModel = Props.Get("VModel")
 sVOn = Props.Get("VOn")
-sVShow = Props.Get("VShow")
 bValidateOnBlur = Props.Get("ValidateOnBlur")
- 
+ sValue = Props.Get("Value")
 	End If 
 	' 
 	'build and get the element 
@@ -177,7 +195,13 @@ bValidateOnBlur = Props.Get("ValidateOnBlur")
 	Else	 
 		mElement = mTarget.Append($"<v-checkbox id="${mName}"></v-checkbox>"$).Get("#" & mName) 
 	End If 
-	' 
+	'
+	If BANano.IsNull(bDisabled) Or BANano.IsUndefined(bDisabled) Then
+		bDisabled = False 
+	End If
+	If BANano.IsNull(bRequired) Or BANano.IsUndefined(bRequired) Then
+		bRequired = False 
+	End If
 	VElement.Initialize(mCallBack, mName, mName) 
 	VElement.TagName = "v-checkbox" 
 	VElement.Classes = mClasses 
@@ -189,7 +213,9 @@ VElement.AddAttr("color", VElement.BuildColor(sColor, sColorIntensity))
 VElement.AddAttr(":dark", bDark)
 VElement.AddAttr(":dense", bDense)
 VElement.AddAttr(":disabled", sDisabled)
-VElement.SetData(sDisabled, False)
+VElement.SetData(sDisabled, bDisabled)
+VElement.AddAttr(":required", sRequired)
+VElement.SetData(sRequired, bRequired)
 
 VElement.AddAttr(":error", sError)
 VElement.SetData(sError, False)
@@ -198,7 +224,7 @@ VElement.AddAttr("error-count", sErrorCount)
 VElement.AddAttr(":error-messages", sErrorMessages)
 VElement.SetData(sErrorMessages, VElement.Newlist)
 
-VElement.AddAttr(":false-value", sFalseValue)
+VElement.AddAttr("false-value", sFalseValue)
 VElement.SetData(sFalseValue, False)
 
 VElement.AddAttr(":hide-details", bHideDetails)
@@ -220,7 +246,7 @@ VElement.AddAttr("on-icon", sOnIcon)
 VElement.AddAttr(":persistent-hint", bPersistentHint)
 VElement.AddAttr("prepend-icon", sPrependIcon)
 VElement.AddAttr(":readonly", sReadonly)
-VElement.SetData(sReadonly, False)
+VElement.SetData(sReadonly, bReadonly)
 
 VElement.AddAttr(":ripple", bRipple)
 VElement.AddAttr(":rules", sRules)
@@ -237,22 +263,22 @@ VElement.AddAttr("v-bind", sVBind)
 VElement.AddAttr("v-for", sVFor)
 VElement.AddAttr("v-if", sVIf)
 VElement.AddAttr("v-model", sVModel)
+VElement.AddAttr("value", sValue)
 
 If BANano.IsNull(bMultiple) Or BANano.IsUndefined(bMultiple) Then
 	bMultiple = False
 End If
 '
 If bMultiple = False Then
-	VElement.SetData(sVModel, Null)
+	VElement.SetData(sVModel, sValue)
 Else
 	VElement.SetData(sVModel, VElement.NewList)
 End If
 
 VElement.AddAttr("v-on", sVOn)
 VElement.AddAttr("v-show", sVShow)
+VElement.SetData(sVShow, Not(bHidden))
 VElement.AddAttr(":validate-on-blur", bValidateOnBlur)
-
-
 VElement.BindAllEvents
 End Sub
 
@@ -266,33 +292,31 @@ public Sub Remove()
 	BANano.SetMeToNull 
 End Sub
 
-Sub AddClass(s As String) As VCheckbox 
+Sub AddClass(s As String) As VCheckBox 
 	VElement.AddClass(s) 
 	Return Me 
 End Sub
 
-Sub AddAttr(p As String, v As Object) As VCheckbox 
+Sub AddAttr(p As String, v As Object) As VCheckBox 
 	VElement.SetAttr(p, v) 
 	Return Me 
 End Sub
 
-Sub AddStyle(p As String, v As String) As VCheckbox 
+Sub AddStyle(p As String, v As String) As VCheckBox 
 	VElement.AddStyle(p, v) 
 	Return Me 
 End Sub
 
-Sub RemoveAttr(p As String) As VCheckbox 
+Sub RemoveAttr(p As String) As VCheckBox 
 	VElement.RemoveAttr(p) 
 	Return Me 
 End Sub
 
-Sub UpdateVisible(VC As VueComponent, b As Boolean) As VCheckbox 
+Sub UpdateVisible(VC As VueComponent, b As Boolean) As VCheckBox 
 	VC.SetData(sVIf, b) 
 	VC.SetData(sVShow, b) 
 	Return Me 
 End Sub
-
-
 
 'Update Disabled
 Sub UpdateDisabled(VC As VueComponent, vDisabled As Object)
@@ -314,10 +338,6 @@ Sub ClearErrorMessages(VC As VueComponent)
 VC.SetData(sErrorMessages, VC.NewList)
 End Sub
 
-'Update FalseValue
-Sub UpdateFalseValue(VC As VueComponent, vFalseValue As Object)
-VC.SetData(sFalseValue, vFalseValue)
-End Sub
 
 'Update Indeterminate
 Sub UpdateIndeterminate(VC As VueComponent, vIndeterminate As Object)
@@ -399,3 +419,4 @@ End Sub
 Sub AddRule(methodName As String)
 	VElement.AddRule(methodName)
 End Sub
+

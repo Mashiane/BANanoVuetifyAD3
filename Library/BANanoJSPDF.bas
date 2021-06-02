@@ -1,5 +1,5 @@
 ﻿B4J=true
-Group=Default Group
+Group=Default Group\PDF
 ModulesStructureVersion=1
 Type=Class
 Version=8.9
@@ -8,7 +8,7 @@ Version=8.9
 Sub Class_Globals
 	Private fname As String
 	Private jsPDF As BANanoObject
-	Private BANano As BANano
+	Private BANano As BANano  'ignore
 	Private mCallBack As Object
 	Public const ORIENTATION_LANDSCAPE As String = "landscape"
 	Public const ORIENTATION_POTRAIT As String = "potrait"

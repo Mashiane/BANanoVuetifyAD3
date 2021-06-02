@@ -1,11 +1,12 @@
 ﻿B4J=true
-Group=Default Group
+Group=Default Group\Tabs
 ModulesStructureVersion=1
 Type=Class
 Version=8.95
 @EndOfDesignText@
 #IgnoreWarnings:12
 
+#DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: Caption, DisplayName: Caption, FieldType: String, DefaultValue: , Description: Caption
 #DesignerProperty: Key: Badge, DisplayName: Badge, FieldType: String, DefaultValue: , Description: Badge
 #DesignerProperty: Key: BadgeColor, DisplayName: BadgeColor, FieldType: String, DefaultValue: , Description: BadgeColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
@@ -13,7 +14,7 @@ Version=8.95
 #DesignerProperty: Key: ActiveClass, DisplayName: ActiveClass, FieldType: String, DefaultValue: , Description: ActiveClass
 #DesignerProperty: Key: Append, DisplayName: Append, FieldType: Boolean, DefaultValue: false, Description: Append
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: false, Description: Dark
-#DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: String, DefaultValue: , Description: Disabled
+#DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: Boolean, DefaultValue: False, Description: Disabled
 #DesignerProperty: Key: Exact, DisplayName: Exact, FieldType: Boolean, DefaultValue: false, Description: Exact
 #DesignerProperty: Key: ExactActiveClass, DisplayName: ExactActiveClass, FieldType: String, DefaultValue: , Description: ExactActiveClass
 #DesignerProperty: Key: Href, DisplayName: Href, FieldType: String, DefaultValue: , Description: Href
@@ -31,6 +32,7 @@ Version=8.95
 #DesignerProperty: Key: VBind, DisplayName: VBind, FieldType: String, DefaultValue: , Description: VBind
 #DesignerProperty: Key: VFor, DisplayName: VFor, FieldType: String, DefaultValue: , Description: VFor
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
+#DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: , Description: VModel
 #DesignerProperty: Key: VOn, DisplayName: VOn, FieldType: String, DefaultValue: , Description: VOn
 #DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue: , Description: VShow
@@ -77,6 +79,8 @@ Private sVIf As String
 Private sVModel As String
 Private sVOn As String
 Private sVShow As String
+Private bDisabled As Boolean
+Private bHidden As Boolean
 	End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -91,7 +95,9 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey)
 		End If
 	End If
-	End Sub
+	sDisabled = $"${mName}disabled"$
+	sVShow = $"${mName}show"$
+End Sub
 
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	mTarget = Target
@@ -103,7 +109,6 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 bAppend = Props.Get("Append")
 sCaption = Props.Get("Caption")
 bDark = Props.Get("Dark")
-sDisabled = Props.Get("Disabled")
 bExact = Props.Get("Exact")
 sExactActiveClass = Props.Get("ExactActiveClass")
 sHref = Props.Get("Href")
@@ -121,12 +126,14 @@ sTo = Props.Get("To")
 sVBind = Props.Get("VBind")
 sVFor = Props.Get("VFor")
 sVIf = Props.Get("VIf")
+svshow = Props.Get("VShow")
 sVModel = Props.Get("VModel")
 sVOn = Props.Get("VOn")
-sVShow = Props.Get("VShow")
+bHidden = Props.Get("Hidden")
 sBadge = Props.Get("Badge")
 sBadgeColor = Props.Get("BadgeColor")
 sBadgeColorIntensity = Props.Get("BadgeColorIntensity")
+bDisabled = Props.Get("Disabled")
 End If
 	'
 	'build and get the element
@@ -147,6 +154,10 @@ End If
 		VElement.Append($"<v-icon id="${mName}icon">${sIcon}</v-icon>"$)
 		VElement.GetIcon.Color = VElement.BuildColor(sIconColor, sIconColorIntensity)
 	End If
+	
+	If BANano.IsNull(bDisabled) Or BANano.IsUndefined(bDisabled) Then
+		bDisabled = False 
+	End If
 		
 	VElement.Classes = mClasses
 	VElement.Styles = mStyles
@@ -154,7 +165,8 @@ End If
 	VElement.AddAttr("active-class", sActiveClass)
 VElement.AddAttr(":append", bAppend)
 VElement.AddAttr(":dark", bDark)
-VElement.AddAttr("disabled", sDisabled)
+VElement.AddAttr(":disabled", sDisabled)
+VElement.SetData(sDisabled, bDisabled)
 VElement.AddAttr(":exact", bExact)
 VElement.AddAttr("exact-active-class", sExactActiveClass)
 VElement.AddAttr("href", sHref)
@@ -172,6 +184,7 @@ VElement.AddAttr("v-if", sVIf)
 VElement.AddAttr("v-model", sVModel)
 VElement.AddAttr("v-on", sVOn)
 VElement.AddAttr("v-show", sVShow)
+VElement.SetData(sVShow, Not(bHidden))
 VElement.BindAllEvents
 End Sub
 
@@ -219,4 +232,9 @@ End Sub
 
 Sub getHere As String
 	Return $"#${mName}"$
+End Sub
+
+Sub UpdateDisabled(VC As VueComponent, b As Boolean)
+	bDisabled = b
+	VC.SetData(sDisabled, b)
 End Sub

@@ -1,5 +1,5 @@
 ﻿B4J=true
-Group=Default Group
+Group=Default Group\ToolBars
 ModulesStructureVersion=1
 Type=Class
 Version=8.9
@@ -8,6 +8,7 @@ Version=8.9
 
 #Event: Change (item As Object)
 
+#DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: ActiveClass, DisplayName: ActiveClass, FieldType: String, DefaultValue: , Description: ActiveClass
 #DesignerProperty: Key: App, DisplayName: App, FieldType: Boolean, DefaultValue: True, Description: App
 #DesignerProperty: Key: BackgroundColor, DisplayName: BackgroundColor, FieldType: String, DefaultValue: , Description: BackgroundColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
@@ -77,6 +78,7 @@ Sub Class_Globals
 	Private sWidth As String
 	Private xitems As List
 	Private itemsName As String
+	private bHidden as boolean
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -93,6 +95,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	End If
 	xitems.Initialize 
 	itemsName = $"${mName}items"$
+	sVShow = $"${mName}show"$
 End Sub
 	
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
@@ -124,7 +127,8 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sScrollThreshold = Props.Get("ScrollThreshold")
 		bShift = Props.Get("Shift")
 		sVIf = Props.Get("VIf")
-		sVShow = Props.Get("VShow")
+		svshow = Props.Get("VShow")
+		bHidden = Props.Get("Hidden")
 		sValue = Props.Get("Value")
 		sWidth = Props.Get("Width")
 	End If
@@ -170,6 +174,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.AddAttr(":shift", bShift)
 	VElement.AddAttr("v-if", sVIf)
 	VElement.AddAttr("v-show", sVShow)
+	VElement.SetData(sVShow, Not(bHidden))
 	VElement.AddAttr("value", sValue)
 	VElement.AddAttr("width", sWidth)
 	VElement.SetData(itemsName, VElement.NewList)

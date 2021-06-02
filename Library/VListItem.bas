@@ -1,5 +1,5 @@
 ﻿B4J=true
-Group=Default Group
+Group=Default Group\ListView
 ModulesStructureVersion=1
 Type=Class
 Version=8.95
@@ -10,13 +10,14 @@ Version=8.95
 #Event: Click (e As BANanoEvent)
 #Event: KeyDown (e As BANanoEvent)
 
+#DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: ActiveClass, DisplayName: ActiveClass, FieldType: String, DefaultValue: , Description: ActiveClass
 #DesignerProperty: Key: Append, DisplayName: Append, FieldType: Boolean, DefaultValue: false, Description: Append
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue: , Description: Color, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: ColorIntensity, DisplayName: ColorIntensity, FieldType: String, DefaultValue: , Description: ColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: false, Description: Dark
 #DesignerProperty: Key: Dense, DisplayName: Dense, FieldType: Boolean, DefaultValue: false, Description: Dense
-#DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: String, DefaultValue: , Description: Disabled
+#DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: Boolean, DefaultValue: False, Description: Disabled
 #DesignerProperty: Key: Exact, DisplayName: Exact, FieldType: Boolean, DefaultValue: false, Description: Exact
 #DesignerProperty: Key: ExactActiveClass, DisplayName: ExactActiveClass, FieldType: String, DefaultValue: , Description: ExactActiveClass
 #DesignerProperty: Key: Href, DisplayName: Href, FieldType: String, DefaultValue: , Description: Href
@@ -38,8 +39,8 @@ Version=8.95
 #DesignerProperty: Key: VBind, DisplayName: VBind, FieldType: String, DefaultValue: , Description: VBind
 #DesignerProperty: Key: VFor, DisplayName: VFor, FieldType: String, DefaultValue: , Description: VFor
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
+#DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VOn, DisplayName: VOn, FieldType: String, DefaultValue: , Description: VOn
-#DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue: , Description: VShow
 #DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: , Description: Value
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
@@ -87,6 +88,8 @@ Private sVIf As String
 Private sVOn As String
 Private sVShow As String
 Private sValue As String
+Private bDisabled As Boolean
+private bHidden as boolean
 	End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -101,7 +104,9 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey)
 		End If
 	End If
-	End Sub
+	sDisabled = $"${mName}disabled"$
+	sVShow = $"${mName}show"$
+End Sub
 
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	mTarget = Target
@@ -115,7 +120,6 @@ sColor = Props.Get("Color")
 sColorIntensity = Props.Get("ColorIntensity")
 bDark = Props.Get("Dark")
 bDense = Props.Get("Dense")
-sDisabled = Props.Get("Disabled")
 bExact = Props.Get("Exact")
 sExactActiveClass = Props.Get("ExactActiveClass")
 sHref = Props.Get("Href")
@@ -137,9 +141,11 @@ bTwoLine = Props.Get("TwoLine")
 sVBind = Props.Get("VBind")
 sVFor = Props.Get("VFor")
 sVIf = Props.Get("VIf")
-sVOn = Props.Get("VOn")
 sVShow = Props.Get("VShow")
+sVOn = Props.Get("VOn")
+bHidden = Props.Get("Hidden")
 sValue = Props.Get("Value")
+bDisabled = Props.Get("Disabled")
 	End If
 	'
 	'build and get the element
@@ -149,6 +155,10 @@ sValue = Props.Get("Value")
 		mElement = mTarget.Append($"<v-list-item id="${mName}"></v-list-item>"$).Get("#" & mName)
 	End If
 	'
+	If BANano.IsNull(bDisabled) Or BANano.IsUndefined(bDisabled) Then
+		bDisabled = False 
+	End If
+	
 	VElement.Initialize(mCallBack, mName, mName)
 	VElement.TagName = "v-list-item"
 	VElement.Classes = mClasses
@@ -159,7 +169,8 @@ VElement.AddAttr(":append", bAppend)
 VElement.Color = VElement.BuildColor(sColor, sColorIntensity)
 VElement.AddAttr(":dark", bDark)
 VElement.AddAttr(":dense", bDense)
-VElement.AddAttr("disabled", sDisabled)
+VElement.AddAttr(":disabled", sDisabled)
+VElement.SetData(sDisabled, bDisabled)
 VElement.AddAttr(":exact", bExact)
 VElement.AddAttr("exact-active-class", sExactActiveClass)
 VElement.AddAttr("href", sHref)
@@ -182,6 +193,7 @@ VElement.AddAttr("v-for", sVFor)
 VElement.AddAttr("v-if", sVIf)
 VElement.AddAttr("v-on", sVOn)
 VElement.AddAttr("v-show", sVShow)
+VElement.SetData(sVShow, Not(bHidden))
 VElement.AddAttr("value", sValue)
 VElement.BindAllEvents
 End Sub
@@ -230,4 +242,9 @@ End Sub
 
 Sub getHere As String
 	Return $"#${mName}"$
+End Sub
+
+Sub UpdateDisabled(VC As VueComponent, b As Boolean)
+	bDisabled = b
+	VC.SetData(sDisabled, b)
 End Sub

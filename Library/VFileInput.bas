@@ -1,5 +1,5 @@
 ﻿B4J=true
-Group=Default Group
+Group=Default Group\Forms
 ModulesStructureVersion=1
 Type=Class
 Version=7
@@ -12,6 +12,7 @@ Version=7
 #Event: Blur (e As BANanoEvent)
 #Event: Change (item As Object)
 #Event: Click (e As BANanoEvent)
+#Event: Button_Click (e As BANanoEvent)
 #Event: ClickAppend (e As BANanoEvent)
 #Event: ClickAppendOuter (e As BANanoEvent)
 #Event: ClickClear (e As BANanoEvent)
@@ -24,9 +25,19 @@ Version=7
 #Event: MouseUp (e As BANanoEvent)
 #Event: UpdateError (B As Boolean)
 
-#DesignerProperty: Key: Label, DisplayName: Label, FieldType: String, DefaultValue: , Description: Label
-#DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: , Description: VModel
 
+#DesignerProperty: Key: Label, DisplayName: Label, FieldType: String, DefaultValue: File1, Description: Label
+#DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: file1, Description: VModel
+#DesignerProperty: Key: IsGoogle, DisplayName: IsGoogle, FieldType: Boolean, DefaultValue: False, Description: IsGoogle
+#DesignerProperty: Key: ButtonHeight, DisplayName: ButtonHeight, FieldType: String, DefaultValue: 104px, Description: ButtonHeight
+#DesignerProperty: Key: ButtonWidth, DisplayName: ButtonWidth, FieldType: String, DefaultValue: 104px, Description: ButtonWidth
+#DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: Boolean, DefaultValue: False, Description: Disabled
+#DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
+#DesignerProperty: Key: Loading, DisplayName: Loading, FieldType: Boolean, DefaultValue: False, Description: Loading
+#DesignerProperty: Key: Readonly, DisplayName: Readonly, FieldType: Boolean, DefaultValue: False, Description: Readonly
+#DesignerProperty: Key: Required, DisplayName: Required, FieldType: Boolean, DefaultValue: False, Description: Required 
+
+#DesignerProperty: Key: Accept, DisplayName: Accept, FieldType: String, DefaultValue: , Description: Accept
 #DesignerProperty: Key: AppendIcon, DisplayName: AppendIcon, FieldType: String, DefaultValue: , Description: AppendIcon
 #DesignerProperty: Key: AppendOuterIcon, DisplayName: AppendOuterIcon, FieldType: String, DefaultValue: , Description: AppendOuterIcon
 #DesignerProperty: Key: Autofocus, DisplayName: Autofocus, FieldType: Boolean, DefaultValue: False, Description: Autofocus
@@ -37,12 +48,11 @@ Version=7
 #DesignerProperty: Key: Clearable, DisplayName: Clearable, FieldType: Boolean, DefaultValue: False, Description: Clearable
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue: , Description: Color, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: ColorIntensity, DisplayName: Colorintensity, FieldType: String, DefaultValue: , Description: Colorintensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
-#DesignerProperty: Key: Counter, DisplayName: Counter, FieldType: String, DefaultValue: , Description: Counter
+#DesignerProperty: Key: Counter, DisplayName: Counter, FieldType: Boolean, DefaultValue: False, Description: Counter
 #DesignerProperty: Key: CounterSizeString, DisplayName: CounterSizeString, FieldType: String, DefaultValue: , Description: CounterSizeString
 #DesignerProperty: Key: CounterString, DisplayName: CounterString, FieldType: String, DefaultValue: , Description: CounterString
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: False, Description: Dark
 #DesignerProperty: Key: Dense, DisplayName: Dense, FieldType: Boolean, DefaultValue: False, Description: Dense
-#DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: String, DefaultValue: , Description: Disabled
 #DesignerProperty: Key: Error, DisplayName: Error, FieldType: String, DefaultValue: , Description: Error
 #DesignerProperty: Key: ErrorCount, DisplayName: ErrorCount, FieldType: String, DefaultValue: , Description: ErrorCount
 #DesignerProperty: Key: ErrorMessages, DisplayName: ErrorMessages, FieldType: String, DefaultValue: , Description: ErrorMessages
@@ -56,7 +66,6 @@ Version=7
 #DesignerProperty: Key: Indeterminate, DisplayName: Indeterminate, FieldType: String, DefaultValue: , Description: Indeterminate
 #DesignerProperty: Key: Light, DisplayName: Light, FieldType: Boolean, DefaultValue: False, Description: Light
 #DesignerProperty: Key: LoaderHeight, DisplayName: LoaderHeight, FieldType: String, DefaultValue: , Description: LoaderHeight
-#DesignerProperty: Key: Loading, DisplayName: Loading, FieldType: String, DefaultValue: , Description: Loading
 #DesignerProperty: Key: Messages, DisplayName: Messages, FieldType: String, DefaultValue: , Description: Messages
 #DesignerProperty: Key: Multiple, DisplayName: Multiple, FieldType: Boolean, DefaultValue: False, Description: Multiple
 #DesignerProperty: Key: Outlined, DisplayName: Outlined, FieldType: Boolean, DefaultValue: False, Description: Outlined
@@ -84,8 +93,8 @@ Version=7
 #DesignerProperty: Key: VBind, DisplayName: VBind, FieldType: String, DefaultValue: , Description: VBind
 #DesignerProperty: Key: VFor, DisplayName: VFor, FieldType: String, DefaultValue: , Description: VFor
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
+#DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VOn, DisplayName: VOn, FieldType: String, DefaultValue: , Description: VOn
-#DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue: , Description: VShow
 #DesignerProperty: Key: ValidateOnBlur, DisplayName: ValidateOnBlur, FieldType: Boolean, DefaultValue: False, Description: ValidateOnBlur
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag. 
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use = 
@@ -112,7 +121,7 @@ Private sClearIcon As String
 Private bClearable As Boolean
 Private sColor As String
 Private sColorIntensity As String
-Private sCounter As String
+Private bCounter As Boolean
 Private sCounterSizeString As String
 Private sCounterString As String
 Private bDark As Boolean
@@ -164,7 +173,18 @@ Private sVModel As String
 Private sVOn As String
 Private sVShow As String
 Private bValidateOnBlur As Boolean
- 
+ Private sAccept As String
+ Private bIsGoogle As Boolean
+ Private sButtonWidth As String
+ Private sButtonHeight As String
+ '
+ Private bDisabled As Boolean
+Private bHidden As Boolean
+Private bLoading As Boolean
+Private bReadonly As Boolean
+Private bRequired As Boolean
+Private sRequired As String
+Private sReadonly As String
 	End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -179,11 +199,21 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey) 
 		End If 
 	End If 
+	sRequired = $"${mName}required"$
+	sDisabled = $"${mName}disabled"$
+	sReadonly = $"${mName}readonly"$
+	sVShow = $"${mName}show"$
+	sLoading = $"${mName}loading"$
 	End Sub
 
 Sub DesignerCreateView (Target As BANanoElement, Props As Map) 
 	mTarget = Target 
 	If Props <> Null Then 
+		bDisabled = Props.Get("Disabled")
+bHidden = Props.Get("Hidden")
+bLoading = Props.Get("Loading")
+bReadonly = Props.Get("Readonly")
+bRequired = Props.Get("Required")
 		mClasses = Props.Get("Classes") 
 		mStyles = Props.Get("Styles") 
 		mAttributes = Props.Get("Attributes") 
@@ -197,12 +227,11 @@ sClearIcon = Props.Get("ClearIcon")
 bClearable = Props.Get("Clearable")
 sColor = Props.Get("Color")
 sColorIntensity = Props.Get("ColorIntensity")
-sCounter = Props.Get("Counter")
+bCounter = Props.Get("Counter")
 sCounterSizeString = Props.Get("CounterSizeString")
 sCounterString = Props.Get("CounterString")
 bDark = Props.Get("Dark")
 bDense = Props.Get("Dense")
-sDisabled = Props.Get("Disabled")
 sError = Props.Get("Error")
 sErrorCount = Props.Get("ErrorCount")
 sErrorMessages = Props.Get("ErrorMessages")
@@ -245,22 +274,66 @@ sUpdateThisOnUpload = Props.Get("UpdateThisOnUpload")
 sVBind = Props.Get("VBind")
 sVFor = Props.Get("VFor")
 sVIf = Props.Get("VIf")
+sVShow = Props.Get("VShow")
 sVModel = Props.Get("VModel")
 sVOn = Props.Get("VOn")
-sVShow = Props.Get("VShow")
 bValidateOnBlur = Props.Get("ValidateOnBlur")
- 
+ sAccept = Props.Get("Accept")
+ bIsGoogle = Props.Get("IsGoogle")
+ sButtonWidth = Props.Get("ButtonWidth")
+ sButtonHeight = Props.Get("ButtonHeight")
 	End If 
-	' 
-	'build and get the element 
-	If BANano.Exists($"#${mName}"$) Then 
-		mElement = BANano.GetElement($"#${mName}"$) 
-	Else	 
-		mElement = mTarget.Append($"<v-file-input ref="${mName}" id="${mName}"></v-file-input>"$).Get("#" & mName) 
-	End If 
-	' 
-	VElement.Initialize(mCallBack, mName, mName) 
-	VElement.TagName = "v-file-input" 
+	'
+	If BANano.IsNull(bIsGoogle) Or BANano.IsUndefined(bIsGoogle) Then
+		bIsGoogle = False
+	End If
+	 
+	If bIsGoogle = False Then 
+		'build and get the element 
+		If BANano.Exists($"#${mName}"$) Then 
+			mElement = BANano.GetElement($"#${mName}"$) 
+		Else	 
+			mElement = mTarget.Append($"<v-file-input ref="${mName}" id="${mName}"></v-file-input>"$).Get("#" & mName) 
+		End If 
+		VElement.Initialize(mCallBack, mName, mName) 
+		VElement.TagName = "v-file-input" 
+	Else
+		'is google button
+		Dim btnid As String = $"${mName}_button"$
+		Dim iconid As String = $"${mName}icon"$
+		Dim progid As String = $"${mName}progress"$
+		
+		Dim sTemplate As String = $"<div id="${mName}div" class="text-center">
+		<v-btn id="${btnid}" icon class="grey lighten-2 mb-4" style="height: ${sButtonHeight};width: ${sButtonWidth};" v-show="!${sLoading}">
+		<v-icon id="${iconid}" x-large class="grey--text text--darken-1">mdi-upload</v-icon>
+		</v-btn>
+		<v-file-input id="${mName}" v-show="${mName}filehidden" ref="${mName}"></v-file-input>
+		<v-progress-circular id="${progid}" v-if="${sLoading}" :rotate="360" :indeterminate=true :size="100" :width="5" color="teal"></v-progress-circular>
+		</div>"$
+		sTemplate = sTemplate.Replace("~","$")
+		
+		If BANano.Exists($"#${mName}"$) Then 
+			mElement = BANano.GetElement($"#${mName}"$) 
+		Else	 
+			mElement = mTarget.Append(sTemplate).Get("#" & mName) 
+		End If 
+		VElement.Initialize(mCallBack, mName, mName) 
+		VElement.TagName = "v-file-input"
+		
+		'hide the file input and not loading
+		VElement.SetData($"${mName}filehidden"$, False)
+	End If
+	'	
+	If BANano.IsNull(bDisabled) Or BANano.IsUndefined(bDisabled) Then
+		bDisabled = False 
+	End If
+	If BANano.IsNull(bRequired) Or BANano.IsUndefined(bRequired) Then
+		bRequired = False 
+	End If
+	If BANano.IsNull(bLoading) Or BANano.IsUndefined(bLoading) Then
+		bLoading = False 
+	End If
+	
 	VElement.Classes = mClasses 
 	VElement.Styles = mStyles 
 	VElement.Attributes = mAttributes 
@@ -272,13 +345,18 @@ VElement.AddAttr(":chips", bChips)
 VElement.AddAttr("clear-icon", sClearIcon)
 VElement.AddAttr(":clearable", bClearable)
 VElement.AddAttr("color", VElement.BuildColor(sColor, sColorIntensity))
-VElement.AddAttr("counter", sCounter)
+VElement.AddAttr(":counter", bCounter)
 VElement.AddAttr("counter-size-string", sCounterSizeString)
 VElement.AddAttr("counter-string", sCounterString)
 VElement.AddAttr(":dark", bDark)
 VElement.AddAttr(":dense", bDense)
 VElement.AddAttr(":disabled", sDisabled)
-VElement.SetData(sDisabled, False)
+VElement.SetData(sDisabled, bDisabled)
+VElement.AddAttr(":required", sRequired)
+VElement.SetData(sRequired, bRequired)
+VElement.AddAttr(":readonly", sReadonly)
+VElement.SetData(sReadonly, bReadonly)
+VElement.AddAttr("accept", sAccept)
 
 VElement.AddAttr(":error", sError)
 VElement.SetData(sError, False)
@@ -301,7 +379,7 @@ VElement.AddAttr("label", sLabel)
 VElement.AddAttr(":light", bLight)
 VElement.AddAttr("loader-height", sLoaderHeight)
 VElement.AddAttr(":loading", sLoading)
-VElement.SetData(sLoading, False)
+VElement.SetData(sLoading, bLoading)
 
 VElement.AddAttr(":messages", sMessages)
 VElement.SetData(sMessages, VElement.NewList)
@@ -344,10 +422,16 @@ VElement.SetData(sVModel, Null)
 
 VElement.AddAttr("v-on", sVOn)
 VElement.AddAttr("v-show", sVShow)
+VElement.SetData(sVShow, Not(bHidden))
 VElement.AddAttr(":validate-on-blur", bValidateOnBlur)
-
-
 VElement.BindAllEvents
+'
+If bIsGoogle Then
+	Dim btn As VueElement = VElement.GetButton1
+	btn.BindAllEvents
+	VElement.BindVueElement(btn)
+End If
+
 End Sub
 
 public Sub AddToParent(targetID As String) 
@@ -489,3 +573,84 @@ End Sub
 Sub AddRule(methodName As String)
 	VElement.AddRule(methodName)
 End Sub
+
+'
+
+'<code>
+'Sub fi1_change(fileObj As Map)
+'If banano.IsNull(fileObj) Or banano.IsUndefined(fileObj) Then Return
+'fil1.UpdateLoading(VC, True)
+''get file details
+'Dim fileDet As FileObject
+'fileDet = BANanoShared.GetFileDetails(fileObj)
+'Dim fn As String = fileDet.FileName
+''you can check the size here
+'Dim fs As Long = fileDet.FileSize
+'If fs >= 5000 Then
+'End If
+''start uploading the file
+'fileDet = BANanoShared.UploadFileWait(fileObj)
+'Dim sstatus As String = fileDet.Status
+'Select Case sstatus
+'Case "error"
+'fil1.UpdateLoading(VC, False)
+'vuetify.ShowSnackBarError($"The file '${fn}' was not uploaded successfully!"$)
+'Case "success"
+'vuetify.ShowSnackBarSuccess($"The file '${fn}' was uploaded successfully!"$)
+'End Select
+'Dim fp As String = fileDet.FullPath
+''update state of some element like an image
+''VC.SetData("vmodel", fp)
+'fil1.UpdateLoading(VC, False)
+'End Sub
+''****for multiple files
+'Sub fi1_change(fileList As List)
+'If banano.IsNull(fileList) Or banano.IsUndefined(fileList) Then Return
+'fil1.UpdateLoading(VC, True)
+'Dim uploads As List = vc.NewList
+'for each fileObj As Map in fileList
+''get file details
+'Dim fileDet As FileObject
+'fileDet = BANanoShared.GetFileDetails(fileObj)
+'Dim fn As String = fileDet.FileName
+''you can check the size here
+''start uploading the file
+'fileDet = BANanoShared.UploadFileWait(fileObj)
+'Dim sstatus As String = fileDet.Status
+'Select Case sstatus
+'Case "error"
+'vuetify.ShowSnackBarError($"The file '${fn}' was not uploaded successfully!"$)
+'Case "success"
+'vuetify.ShowSnackBarSuccess($"The file '${fn}' was uploaded successfully!"$)
+'End Select
+'Dim fp As String = fileDet.FullPath
+''uploads.Add(fp)
+'next
+'fil1.UpdateLoading(VC, False)
+'End Sub
+'</code>
+Sub OnChangeUpload
+End Sub
+
+'click by reference
+Sub Click(VC As VueComponent)
+	Dim fileRefs As BANanoObject = VC.refs.GetField(mName)
+	'get refs
+	Dim xref As String = "$refs"
+	Dim fr As BANanoObject = fileRefs.GetField(xref)
+	Dim input As BANanoObject = fr.GetField("input")
+	input.SetField("value", "")
+	input.RunMethod("click", Null)
+End Sub
+
+'clear
+Sub Clear(VC As VueComponent)
+	VC.SetData(sVModel, "")
+	Dim fileRefs As BANanoObject = VC.refs.GetField(mName)
+	'get refs
+	Dim xref As String = "$refs"
+	Dim fr As BANanoObject = fileRefs.GetField(xref)
+	Dim input As BANanoObject = fr.GetField("input")
+	input.SetField("value", "")
+End Sub
+

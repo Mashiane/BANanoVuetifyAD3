@@ -126,7 +126,7 @@ Module29=VCardTitle
 Module3=BANanoJSPDF
 Module30=VCarousel
 Module31=VCarouselItem
-Module32=VCheckbox
+Module32=VCheckBox
 Module33=VChip
 Module34=VCol
 Module35=VComboBox
@@ -211,7 +211,7 @@ Version=8.95
 
 Sub Process_Globals
 	Private BANano As BANano 'ignore
-	Public Version As String = "5.09"
+	Public Version As String = "5.12"
 	Public AppName As String = "BANanoVuetifyAD3"
 End Sub
 

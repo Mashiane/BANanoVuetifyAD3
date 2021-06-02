@@ -1,5 +1,5 @@
 ﻿B4J=true
-Group=Default Group
+Group=Default Group\ListView
 ModulesStructureVersion=1
 Type=Class
 Version=8.95
@@ -12,7 +12,7 @@ Version=8.95
 #DesignerProperty: Key: AppendIcon, DisplayName: AppendIcon, FieldType: String, DefaultValue: , Description: AppendIcon
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue: , Description: Color, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: ColorIntensity, DisplayName: ColorIntensity, FieldType: String, DefaultValue: , Description: ColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
-#DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: String, DefaultValue: , Description: Disabled
+#DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: Boolean, DefaultValue: False, Description: Disabled
 #DesignerProperty: Key: Eager, DisplayName: Eager, FieldType: Boolean, DefaultValue: false, Description: Eager
 #DesignerProperty: Key: Group, DisplayName: Group, FieldType: String, DefaultValue: , Description: Group
 #DesignerProperty: Key: NoAction, DisplayName: NoAction, FieldType: Boolean, DefaultValue: false, Description: NoAction
@@ -51,6 +51,7 @@ Private bSubGroup As Boolean
 Private sTextColor As String
 Private sTextColorIntensity As String
 Private sVModel As String
+private bDisabled as boolean
 	End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -65,6 +66,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey)
 		End If
 	End If
+	sDisabled = $"${mName}disabled"$
 End Sub
 
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
@@ -77,7 +79,6 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 sAppendIcon = Props.Get("AppendIcon")
 sColor = Props.Get("Color")
 sColorIntensity = Props.Get("ColorIntensity")
-sDisabled = Props.Get("Disabled")
 bEager = Props.Get("Eager")
 sGroup = Props.Get("Group")
 bNoAction = Props.Get("NoAction")
@@ -87,6 +88,7 @@ bSubGroup = Props.Get("SubGroup")
 sTextColor = Props.Get("TextColor")
 sTextColorIntensity = Props.Get("TextColorIntensity")
 sVModel = Props.Get("VModel")
+bDisabled = Props.Get("Disabled")
 	End If
 	'
 	'build and get the element
@@ -96,6 +98,10 @@ sVModel = Props.Get("VModel")
 		mElement = mTarget.Append($"<v-list-group id="${mName}"></v-list-group>"$).Get("#" & mName)
 	End If
 	'
+	If BANano.IsNull(bDisabled) Or BANano.IsUndefined(bDisabled) Then
+		bDisabled = False 
+	End If
+	
 	VElement.Initialize(mCallBack, mName, mName)
 	VElement.TagName = "v-list-group"
 	VElement.Classes = mClasses
@@ -104,7 +110,8 @@ sVModel = Props.Get("VModel")
 	VElement.AddAttr("active-class", sActiveClass)
 VElement.AddAttr("append-icon", sAppendIcon)
 VElement.Color = VElement.BuildColor(sColor, sColorIntensity)
-VElement.AddAttr("disabled", sDisabled)
+VElement.AddAttr(":disabled", sDisabled)
+VElement.SetData(sDisabled, bDisabled)
 VElement.AddAttr(":eager", bEager)
 VElement.AddAttr("group", sGroup)
 VElement.AddAttr(":no-action", bNoAction)
@@ -158,4 +165,9 @@ End Sub
 
 Sub getHere As String
 	Return $"#${mName}"$
+End Sub
+
+Sub UpdateDisabled(VC As VueComponent, b As Boolean)
+	bDisabled = b
+	VC.SetData(sDisabled, b)
 End Sub

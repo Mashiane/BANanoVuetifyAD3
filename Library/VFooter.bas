@@ -1,11 +1,12 @@
 ﻿B4J=true
-Group=Default Group
+Group=Default Group\ToolBars
 ModulesStructureVersion=1
 Type=Class
 Version=8.9
 @EndOfDesignText@
 #IgnoreWarnings:12
 
+#DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: Absolute, DisplayName: Absolute, FieldType: Boolean, DefaultValue: false, Description: Absolute
 #DesignerProperty: Key: App, DisplayName: App, FieldType: Boolean, DefaultValue: True, Description: App
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue: , Description: Color, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
@@ -62,6 +63,7 @@ Private bTile As Boolean
 Private sVIf As String
 Private sVShow As String
 Private bWidth As Boolean
+private bHidden as boolean
 	End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -76,6 +78,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey)
 		End If
 	End If
+	sVShow = $"${mName}show"$
 	End Sub
 
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
@@ -103,7 +106,8 @@ sRounded = Props.Get("Rounded")
 bShaped = Props.Get("Shaped")
 bTile = Props.Get("Tile")
 sVIf = Props.Get("VIf")
-sVShow = Props.Get("VShow")
+svshow = Props.Get("VShow")
+bHidden = Props.Get("Hidden")
 bWidth = Props.Get("Width")
 	End If
 	'
@@ -138,6 +142,7 @@ VElement.AddAttr(":shaped", bShaped)
 VElement.AddAttr(":tile", bTile)
 VElement.AddAttr("v-if", sVIf)
 VElement.AddAttr("v-show", sVShow)
+VElement.SetData(sVShow, Not(bHidden))
 VElement.AddAttr(":width", bWidth)
 VElement.BindAllEvents
 End Sub

@@ -1,5 +1,5 @@
 ﻿B4J=true
-Group=Default Group
+Group=Default Group\Database
 ModulesStructureVersion=1
 Type=Class
 Version=8.9
@@ -10,7 +10,7 @@ Sub Class_Globals
 	Public db As BANanoObject
 	Private fname As String
 	Private mCallBack As Object
-	Private BANano As BANano
+	Private BANano As BANano 'ignore
 	Public const NeDB_LT As String = "$lt"
 	Public const NeDB_LTE As String = "$lte"
 	Public const NeDB_GT As String = "$gt"
@@ -120,7 +120,7 @@ Sub count(doc As Map)
 	Dim methodName As String = $"${fname}_count"$
 	If SubExists(mCallBack, methodName) Then
 		Dim err As Object
-		Dim countr As Int
+		Dim countr As Int   'ignore
 		Dim cb As BANanoObject = BANano.CallBack(mCallBack, methodName, Array(err, countr))
 		db.RunMethod("count", Array(doc, cb))
 	End If
@@ -154,7 +154,7 @@ Sub update(query As Map, values As Map, multi As Boolean, upsert As Boolean, ret
 	Dim methodName As String = $"${fname}_update"$
 	If SubExists(mCallBack, methodName) Then
 		Dim err As Object
-		Dim numAffected As Int
+		Dim numAffected As Int    'ignore
 		Dim options As Map = CreateMap()
 		options.Put("multi", multi)
 		options.Put("upsert", upsert)
@@ -193,7 +193,7 @@ Sub remove(doc As Map, multi As Boolean)
 	Dim methodName As String = $"${fname}_remove"$
 	If SubExists(mCallBack, methodName) Then
 		Dim err As Object
-		Dim numRemoved As Int
+		Dim numRemoved As Int   'ignore
 		Dim cb As BANanoObject = BANano.CallBack(mCallBack, methodName, Array(err, numRemoved))
 		db.RunMethod("remove", Array(doc, opt, cb))
 	Else

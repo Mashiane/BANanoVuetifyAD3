@@ -1,5 +1,5 @@
 ﻿B4J=true
-Group=Default Group
+Group=Default Group\Forms
 ModulesStructureVersion=1
 Type=Class
 Version=8.9
@@ -69,6 +69,7 @@ Version=8.9
 #DesignerProperty: Key: Scrollable, DisplayName: Scrollable, FieldType: Boolean, DefaultValue: false, Description: Scrollable
 #DesignerProperty: Key: Transition, DisplayName: Transition, FieldType: String, DefaultValue: , Description: Transition, List: none|fab-transition|fade-transition|expand-transition|scale-transition|scroll-x-transition|scroll-x-reverse-transition|scroll-y-transition|scroll-y-reverse-transition|slide-x-transition|slide-x-reverse-transition|slide-y-transition|slide-y-reverse-transition
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
+#DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: dialog, Description: VModel
 #DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: 700, Description: Width
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
@@ -158,6 +159,8 @@ Private bCancelVisible As Boolean
 Private bCancelLoading As Boolean
 Private bCancelDisabled As Boolean
 Private bCardTextAppend As Boolean
+Private sDisabled As String
+Private sVShow As String
 	End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -187,6 +190,8 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	xCancelVisible = $"${mName}_cancelvshow"$
 	xCancelLoading = $"${mName}cancel_loading"$
 	xCancelDisabled = $"${mName}cancel_disabled"$
+	'
+	sDisabled = $"${mName}disabled"$
 End Sub
 	
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
@@ -243,6 +248,7 @@ sReturnValue = Props.Get("ReturnValue")
 bScrollable = Props.Get("Scrollable")
 sTransition = Props.Get("Transition")
 sVIf = Props.Get("VIf")
+sVShow = Props.Get("VShow")
 sVModel = Props.Get("VModel")
 sWidth = Props.Get("Width")
 sToolbarCaption = Props.Get("ToolbarCaption")
@@ -329,6 +335,10 @@ bToolbarDark = Props.Get("ToolBarDark")
 		End If
 	End If
 	'
+	If BANano.IsNull(bDisabled) Or BANano.IsUndefined(bDisabled) Then
+		bDisabled = False 
+	End If
+	
 	VElement.Classes = mClasses
 	VElement.Styles = mStyles
 	VElement.Attributes = mAttributes
@@ -338,7 +348,8 @@ VElement.AddAttr("attach", sAttach)
 VElement.AddAttr("close-delay", sCloseDelay)
 VElement.AddAttr("content-class", sContentClass)
 VElement.AddAttr(":dark", bDark)
-VElement.AddAttr(":disabled", bDisabled)
+VElement.AddAttr(":disabled", sDisabled)
+VElement.SetData(sDisabled, bDisabled)
 VElement.AddAttr(":eager", bEager)
 VElement.AddAttr(":fullscreen", bFullscreen)
 VElement.AddAttr(":hide-overlay", bHideOverlay)
@@ -379,9 +390,9 @@ End Sub
 
 
 'update the card text
-Sub UpdateCardText(VC As VueComponent, vCardText As String)
-	sCardTextCaption = vCardText
-	VC.SetData(xCardTextCaption, vCardText)
+Sub UpdateCardText(VC As VueComponent, vCardTextx As String)
+	sCardTextCaption = vCardTextx
+	VC.SetData(xCardTextCaption, vCardTextx)
 End Sub
 
 'update the toolbar dark status
@@ -452,9 +463,9 @@ Sub UpdateVisible(VC As VueComponent, b As Boolean) As VDialog
 End Sub
 
 'turn visibility on and off on app
-Sub VisibleOnApp(vapp As VuetifyApp, b As Boolean)
-	vapp.SetData(sVModel, b)
-	vapp.SetData(sVIf, b)
+Sub VisibleOnApp(vappx As VuetifyApp, b As Boolean)
+	vappx.SetData(sVModel, b)
+	vappx.SetData(sVIf, b)
 End Sub
 
 ''get the card inside the dialog
@@ -516,49 +527,49 @@ End Sub
 'update the label of the ok button
 Sub UpdateOkLabel(VC As VueComponent, s As String)
 	sOkCaption = s
-	VElement.SetData(xOkCaption, sOkCaption)
+	VC.SetData(xOkCaption, sOkCaption)
 End Sub
 
 'update the label of the cancel button
 Sub UpdateCancelLabel(VC As VueComponent, s As String)
 	sCancelCaption = s
-	VElement.SetData(xCancelCaption, sOkCaption)
+	VC.SetData(xCancelCaption, sOkCaption)
 End Sub
 
 'update the visibility of the ok button
 Sub UpdateOkVisible(VC As VueComponent, b As Boolean)
 	bOkVisible = b
-	VElement.SetData(xOkVisible, bOkVisible)
+	VC.SetData(xOkVisible, bOkVisible)
 End Sub
 	
 'update the loading of the ok button
 Sub UpdateOkLoading(VC As VueComponent, b As Boolean)
 	bOkLoading = b
-	VElement.SetData(xOkLoading, bOkLoading)
+	VC.SetData(xOkLoading, bOkLoading)
 End Sub	
 
 'update the disanled of the ok button
 Sub UpdateOkDisabled(VC As VueComponent, b As Boolean)
 	bOkDisabled = b
-	VElement.SetData(xOkDisabled, bOkDisabled)
+	VC.SetData(xOkDisabled, bOkDisabled)
 End Sub		
 
 'update the visibility of the cancel button
 Sub UpdateCancelVisible(VC As VueComponent, b As Boolean)
 	bCancelVisible = b
-	VElement.SetData(xCancelVisible, bCancelVisible)
+	VC.SetData(xCancelVisible, bCancelVisible)
 End Sub
 	
 'update the loading of the cancel button
 Sub UpdateCancelLoading(VC As VueComponent, b As Boolean)
 	bCancelLoading = b
-	VElement.SetData(xCancelLoading, bCancelLoading)
+	VC.SetData(xCancelLoading, bCancelLoading)
 End Sub	
 
 'update the disanled of the cancel button
 Sub UpdateCancelDisabled(VC As VueComponent, b As Boolean)
 	bCancelDisabled = b
-	VElement.SetData(xCancelDisabled, bCancelDisabled)
+	VC.SetData(xCancelDisabled, bCancelDisabled)
 End Sub
 
 Sub getVModel As String

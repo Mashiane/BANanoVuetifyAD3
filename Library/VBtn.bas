@@ -1,5 +1,5 @@
 ﻿B4J=true
-Group=Default Group
+Group=Default Group\Buttons
 ModulesStructureVersion=1
 Type=Class
 Version=8.9
@@ -21,7 +21,10 @@ Version=8.9
 #DesignerProperty: Key: IconName, DisplayName: Icon Name, FieldType: String, DefaultValue: , Description: Icon Name
 #DesignerProperty: Key: IconAlignment, DisplayName: Icon Alignment, FieldType: String, DefaultValue: normal, Description: Icon Alignment, List: normal|left|right
 #DesignerProperty: Key: IconDark, DisplayName: Icon Dark, FieldType: Boolean, DefaultValue: False, Description: Icon Dark
+#DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: Boolean, DefaultValue: False, Description: Disabled
+#DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: Loading, DisplayName: Loading, FieldType: Boolean, DefaultValue: False, Description: Loading
+'
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue:  , Description: , List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: ColorIntensity, DisplayName: Color Intensity, FieldType: String, DefaultValue:  normal, Description: , List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: TextColor, DisplayName: Text Color, FieldType: String, DefaultValue:  , Description: , List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
@@ -30,7 +33,6 @@ Version=8.9
 #DesignerProperty: Key: Position, DisplayName: Position, FieldType: String, DefaultValue: , Description: Position, List: normal|top-left|top-right|bottom-left|bottom-right
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: False, Description: Dark
 #DesignerProperty: Key: Depressed, DisplayName: Depressed, FieldType: Boolean, DefaultValue: False, Description: Depressed
-#DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: Boolean, DefaultValue: False, Description: Disabled
 #DesignerProperty: Key: HREF, DisplayName: HREF, FieldType: String, DefaultValue: , Description: HREF
 #DesignerProperty: Key: Outlined, DisplayName: Outlined, FieldType: Boolean, DefaultValue: False, Description: Outlined
 #DesignerProperty: Key: Rounded, DisplayName: Rounded, FieldType: Boolean, DefaultValue: False, Description: Rounded, 
@@ -95,6 +97,7 @@ Sub Class_Globals
 	Private xCaption As String
 	Private xLoading As String
 	Private xDisabled As String
+	Private bHidden As Boolean
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -113,6 +116,7 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	xCaption = $"${mName}caption"$
 	xLoading = $"${mName}loading"$
 	xDisabled  = $"${mName}disabled"$
+	mVShow = $"${mName}show"$
 End Sub
 
 ' this is the place where you create the view in html and run initialize javascript
@@ -128,6 +132,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mTextColorIntensity = Props.Get("TextColorIntensity")
 		mVShow = Props.Get("VShow")
 		mVIf = Props.Get("VIf")
+		bHidden = Props.Get("Hidden")
 		mText = Props.Get("Text")
 		bBlock = Props.Get("Block")
 		bDark = Props.Get("Dark")
@@ -161,6 +166,16 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mElement = BANano.GetElement($"#${mName}"$)
 	Else	
 		mElement = mTarget.Append($"<v-btn id="${mName}"></v-btn>"$).Get("#" & mName)
+	End If
+	
+	If BANano.IsNull(bLoading) Or BANano.IsUndefined(bLoading) Then
+		bLoading = False 
+	End If
+	If BANano.IsNull(bDisabled) Or BANano.IsUndefined(bDisabled) Then
+		bDisabled = False 
+	End If
+	If BANano.IsNull(bHidden) Or BANano.IsUndefined(bHidden) Then
+		bHidden = False 
 	End If
 		
 	VElement.Initialize(mCallBack, mName, mName)
@@ -203,6 +218,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.TextColor = VElement.BuildColor(mTextColor, mTextColorIntensity)
 	VElement.VIf = mVIf
 	VElement.VShow = mVShow
+	VElement.SetData(mVShow, Not(bHidden))
 	VElement.Block = bBlock
 	VElement.Dark = bDark
 	VElement.Depressed = bDepressed

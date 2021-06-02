@@ -1,5 +1,5 @@
 ﻿B4J=true
-Group=Default Group
+Group=Default Group\Forms
 ModulesStructureVersion=1
 Type=Class
 Version=7
@@ -32,6 +32,12 @@ Version=7
 #DesignerProperty: Key: ItemValue, DisplayName: ItemValue, FieldType: String, DefaultValue: value, Description: ItemValue
 #DesignerProperty: Key: ItemDisabled, DisplayName: ItemDisabled, FieldType: String, DefaultValue: disabled, Description: ItemDisabled
 #DesignerProperty: Key: Items, DisplayName: Items, FieldType: String, DefaultValue: items1, Description: Items
+#DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: Boolean, DefaultValue: False, Description: Disabled
+#DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
+#DesignerProperty: Key: Loading, DisplayName: Loading, FieldType: Boolean, DefaultValue: False, Description: Loading
+#DesignerProperty: Key: Readonly, DisplayName: Readonly, FieldType: Boolean, DefaultValue: False, Description: Readonly
+#DesignerProperty: Key: Required, DisplayName: Required, FieldType: Boolean, DefaultValue: False, Description: Required 
+
 #DesignerProperty: Key: AppendIcon, DisplayName: AppendIcon, FieldType: String, DefaultValue: , Description: AppendIcon
 #DesignerProperty: Key: AppendOuterIcon, DisplayName: AppendOuterIcon, FieldType: String, DefaultValue: , Description: AppendOuterIcon
 #DesignerProperty: Key: Attach, DisplayName: Attach, FieldType: String, DefaultValue: , Description: Attach
@@ -49,7 +55,6 @@ Version=7
 #DesignerProperty: Key: DeletableChips, DisplayName: DeletableChips, FieldType: Boolean, DefaultValue: False, Description: DeletableChips
 #DesignerProperty: Key: Dense, DisplayName: Dense, FieldType: Boolean, DefaultValue: False, Description: Dense
 #DesignerProperty: Key: DisableLookup, DisplayName: DisableLookup, FieldType: Boolean, DefaultValue: False, Description: DisableLookup
-#DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: String, DefaultValue: , Description: Disabled
 #DesignerProperty: Key: Eager, DisplayName: Eager, FieldType: Boolean, DefaultValue: False, Description: Eager
 #DesignerProperty: Key: Error, DisplayName: Error, FieldType: String, DefaultValue: , Description: Error
 #DesignerProperty: Key: ErrorCount, DisplayName: ErrorCount, FieldType: String, DefaultValue: , Description: ErrorCount
@@ -67,7 +72,6 @@ Version=7
 #DesignerProperty: Key: Key, DisplayName: Key, FieldType: String, DefaultValue: , Description: Key
 #DesignerProperty: Key: Light, DisplayName: Light, FieldType: Boolean, DefaultValue: False, Description: Light
 #DesignerProperty: Key: LoaderHeight, DisplayName: LoaderHeight, FieldType: String, DefaultValue: , Description: LoaderHeight
-#DesignerProperty: Key: Loading, DisplayName: Loading, FieldType: String, DefaultValue: , Description: Loading
 #DesignerProperty: Key: MenuProps, DisplayName: MenuProps, FieldType: String, DefaultValue: , Description: MenuProps
 #DesignerProperty: Key: Messages, DisplayName: Messages, FieldType: String, DefaultValue: , Description: Messages
 #DesignerProperty: Key: Multiple, DisplayName: Multiple, FieldType: Boolean, DefaultValue: False, Description: Multiple
@@ -80,7 +84,6 @@ Version=7
 #DesignerProperty: Key: Prefix, DisplayName: Prefix, FieldType: String, DefaultValue: , Description: Prefix
 #DesignerProperty: Key: PrependIcon, DisplayName: PrependIcon, FieldType: String, DefaultValue: , Description: PrependIcon
 #DesignerProperty: Key: PrependInnerIcon, DisplayName: PrependInnerIcon, FieldType: String, DefaultValue: , Description: PrependInnerIcon
-#DesignerProperty: Key: Readonly, DisplayName: Readonly, FieldType: String, DefaultValue: , Description: Readonly
 #DesignerProperty: Key: ReturnObject, DisplayName: ReturnObject, FieldType: Boolean, DefaultValue: False, Description: ReturnObject
 #DesignerProperty: Key: Reverse, DisplayName: Reverse, FieldType: Boolean, DefaultValue: False, Description: Reverse
 #DesignerProperty: Key: Rounded, DisplayName: Rounded, FieldType: Boolean, DefaultValue: False, Description: Rounded, 
@@ -96,8 +99,8 @@ Version=7
 #DesignerProperty: Key: VBind, DisplayName: VBind, FieldType: String, DefaultValue: , Description: VBind
 #DesignerProperty: Key: VFor, DisplayName: VFor, FieldType: String, DefaultValue: , Description: VFor
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
+#DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VOn, DisplayName: VOn, FieldType: String, DefaultValue: , Description: VOn
-#DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue: , Description: VShow
 #DesignerProperty: Key: ValidateOnBlur, DisplayName: ValidateOnBlur, FieldType: Boolean, DefaultValue: False, Description: ValidateOnBlur
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag. 
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use = 
@@ -189,6 +192,13 @@ Private sVShow As String
 Private bValidateOnBlur As Boolean
  Private xitems As List
  Private xReturnObject As String
+ '
+ Private bDisabled As Boolean
+Private bHidden As Boolean
+Private bLoading As Boolean
+Private bReadonly As Boolean
+Private bRequired As Boolean
+Private sRequired As String
 	End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -205,11 +215,21 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	End If 
 	xitems.Initialize 
 	xReturnObject = $"${mName}returnobject"$
+	sRequired = $"${mName}required"$
+	sDisabled = $"${mName}disabled"$
+	sReadonly = $"${mName}readonly"$
+	sVShow = $"${mName}show"$
+	sLoading = $"${mName}loading"$
 	End Sub
 
 Sub DesignerCreateView (Target As BANanoElement, Props As Map) 
 	mTarget = Target 
 	If Props <> Null Then 
+		bDisabled = Props.Get("Disabled")
+bHidden = Props.Get("Hidden")
+bLoading = Props.Get("Loading")
+bReadonly = Props.Get("Readonly")
+bRequired = Props.Get("Required")
 		mClasses = Props.Get("Classes") 
 		mStyles = Props.Get("Styles") 
 		mAttributes = Props.Get("Attributes") 
@@ -230,7 +250,6 @@ bDark = Props.Get("Dark")
 bDeletableChips = Props.Get("DeletableChips")
 bDense = Props.Get("Dense")
 bDisableLookup = Props.Get("DisableLookup")
-sDisabled = Props.Get("Disabled")
 bEager = Props.Get("Eager")
 sError = Props.Get("Error")
 sErrorCount = Props.Get("ErrorCount")
@@ -282,9 +301,9 @@ sSuffix = Props.Get("Suffix")
 sVBind = Props.Get("VBind")
 sVFor = Props.Get("VFor")
 sVIf = Props.Get("VIf")
+sVShow = Props.Get("VShow")
 sVModel = Props.Get("VModel")
 sVOn = Props.Get("VOn")
-sVShow = Props.Get("VShow")
 bValidateOnBlur = Props.Get("ValidateOnBlur")
  
 	End If 
@@ -296,6 +315,16 @@ bValidateOnBlur = Props.Get("ValidateOnBlur")
 		mElement = mTarget.Append($"<v-select id="${mName}"></v-select>"$).Get("#" & mName) 
 	End If 
 	' 
+	If BANano.IsNull(bDisabled) Or BANano.IsUndefined(bDisabled) Then
+		bDisabled = False 
+	End If
+	If BANano.IsNull(bRequired) Or BANano.IsUndefined(bRequired) Then
+		bRequired = False 
+	End If
+	If BANano.IsNull(bLoading) Or BANano.IsUndefined(bLoading) Then
+		bLoading = False 
+	End If
+	
 	VElement.Initialize(mCallBack, mName, mName) 
 	VElement.TagName = "v-select" 
 	VElement.Classes = mClasses 
@@ -317,7 +346,10 @@ VElement.AddAttr(":deletable-chips", bDeletableChips)
 VElement.AddAttr(":dense", bDense)
 VElement.AddAttr(":disable-lookup", bDisableLookup)
 VElement.AddAttr(":disabled", sDisabled)
-VElement.SetData(sDisabled, False)
+VElement.SetData(sDisabled, bDisabled)
+VElement.AddAttr(":required", sRequired)
+VElement.SetData(sRequired, bRequired)
+
 
 VElement.AddAttr(":eager", bEager)
 VElement.AddAttr(":error", sError)
@@ -347,7 +379,7 @@ VElement.AddAttr("label", sLabel)
 VElement.AddAttr(":light", bLight)
 VElement.AddAttr("loader-height", sLoaderHeight)
 VElement.AddAttr(":loading", sLoading)
-VElement.SetData(sLoading, False)
+VElement.SetData(sLoading, bLoading)
 
 VElement.AddAttr(":menu-props", sMenuProps)
 VElement.SetData(sMenuProps, VElement.NewMap)
@@ -368,7 +400,7 @@ VElement.AddAttr("prefix", sPrefix)
 VElement.AddAttr("prepend-icon", sPrependIcon)
 VElement.AddAttr("prepend-inner-icon", sPrependInnerIcon)
 VElement.AddAttr(":readonly", sReadonly)
-VElement.SetData(sReadonly, False)
+VElement.SetData(sReadonly, bReadonly)
 
 VElement.AddAttr(":return-object", xReturnObject)
 VElement.SetData(xReturnObject, bReturnObject)
@@ -405,9 +437,8 @@ Else
 End If
 
 VElement.AddAttr("v-on", sVOn)
-VElement.AddAttr(":v-show", sVShow)
-VElement.SetData(sVShow, True)
-
+VElement.AddAttr("v-show", sVShow)
+VElement.SetData(sVShow, Not(bHidden))
 VElement.AddAttr(":validate-on-blur", bValidateOnBlur)
 
 
@@ -637,7 +668,7 @@ End Sub
 Sub AddItem(value As String, text As String)
 	Dim nm As Map = CreateMap()
 	nm.Put(sItemValue, value)
-	nm.Put(sItemText, value)
+	nm.Put(sItemText, text)
 	xitems.Add(nm)
 End Sub
 
@@ -650,3 +681,4 @@ End Sub
 Sub getVModel As String
 	Return sVModel
 End Sub
+

@@ -283,6 +283,6 @@ ModuleClosedNodes91=
 ModuleClosedNodes92=
 ModuleClosedNodes93=
 ModuleClosedNodes94=
-NavigationStack=VueSimpleWizard,Remove,188,0,VTransition,AddClass,97,0,VTimeLine,AddClass,89,0,VueFlowy,Remove,201,0,VueGCharts,Remove,240,0,VueGMap,Remove,359,0,VueInfoBox,Remove,437,0,VTreeView,UpdateReturnObject,261,0,VTreeView,Remove,237,0,VTreeView,AddClass,246,0
+NavigationStack=VSelect,DesignerCreateView,319,0,VSlider,DesignerCreateView,238,0,VSwitch,DesignerCreateView,207,0,VTextField,DesignerCreateView,279,0,VueTable,DesignerCreateView,423,0,VBtn,Class_Globals,93,4,VBtn,Initialize,112,3,VBtn,DesignerCreateView,217,6,VBtn,UpdateDisabled,284,0,Main,AppStart,23,0,Main,Process_Globals,11,0
 SelectedBuild=0
 VisibleModules=

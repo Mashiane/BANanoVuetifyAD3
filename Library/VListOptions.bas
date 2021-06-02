@@ -1,5 +1,5 @@
 ﻿B4J=true
-Group=Default Group
+Group=Default Group\ListView
 ModulesStructureVersion=1
 Type=Class
 Version=8.95
@@ -7,7 +7,7 @@ Version=8.95
 #IgnoreWarnings:12
 #DesignerProperty: Key: Template, DisplayName: Template, FieldType: String, DefaultValue: list, Description: Template, List: none|list|list-item-group|tree
 #DesignerProperty: Key: Key, DisplayName: Key, FieldType: String, DefaultValue: id, Description: Key
-#DesignerProperty: Key: DataSource, DisplayName: DataSource, FieldType: String, DefaultValue: , Description: DataSource
+#DesignerProperty: Key: DataSource, DisplayName: Items, FieldType: String, DefaultValue: list1, Description: Items
 #DesignerProperty: Key: Title, DisplayName: Title, FieldType: String, DefaultValue: title, Description: Title
 #DesignerProperty: Key: SubTitle, DisplayName: SubTitle, FieldType: String, DefaultValue: subtitle, Description: SubTitle
 #DesignerProperty: Key: SubTitle1, DisplayName: SubTitle1, FieldType: String, DefaultValue: subtitle1, Description: SubTitle1
@@ -33,7 +33,7 @@ Version=8.95
 #DesignerProperty: Key: AvatarTextClass, DisplayName: AvatarTextClass, FieldType: String, DefaultValue: , Description: AvatarTextClass
 #DesignerProperty: Key: AvatarTextColor, DisplayName: AvatarTextColor, FieldType: String, DefaultValue: avatartextcolor, Description: AvatarTextColor
 #DesignerProperty: Key: ItemAvatarClass, DisplayName: ItemAvatarClass, FieldType: String, DefaultValue: , Description: ItemAvatarClass
-#DesignerProperty: Key: HasDivider, DisplayName: HasDivider, FieldType: Boolean, DefaultValue: false, Description: HasDivider
+#DesignerProperty: Key: HasDivider, DisplayName: HasDivider, FieldType: Boolean, DefaultValue: true, Description: HasDivider
 #DesignerProperty: Key: InsetDivider, DisplayName: InsetDivider, FieldType: Boolean, DefaultValue: false, Description: InsetDivider
 #DesignerProperty: Key: Icon, DisplayName: Icon, FieldType: String, DefaultValue: icon, Description: Icon
 #DesignerProperty: Key: IconAttr, DisplayName: IconAttr, FieldType: String, DefaultValue: iconattr, Description: IconAttr
@@ -374,10 +374,10 @@ Sub getAvatar As String
 Return sAvatar
 End Sub
 'set Avatar
-Sub setAvatar(vAvatar As String)
-If BANano.IsNull(vAvatar) Or BANano.IsUndefined(vAvatar) Then Return
-sAvatar  = vAvatar
-Options.Avatar = vAvatar
+Sub setAvatar(vAvatarx As String)
+If BANano.IsNull(vAvatarx) Or BANano.IsUndefined(vAvatarx) Then Return
+sAvatar  = vAvatarx
+Options.Avatar = vAvatarx
 End Sub
 'get AvatarAttr
 Sub getAvatarAttr As String
@@ -475,7 +475,7 @@ Return sDataSource
 End Sub
 'set DataSource
 Sub setDataSource(vDataSource As String)
-If BANano.IsNull(vDataSource) or BANano.IsUndefined(vDataSource) Then Return
+If BANano.IsNull(vDataSource) Or BANano.IsUndefined(vDataSource) Then Return
 sDataSource  = vDataSource
 Options.DataSource = vDataSource
 End Sub
@@ -485,7 +485,7 @@ Return bHasDivider
 End Sub
 'set HasDivider
 Sub setHasDivider(vHasDivider As Boolean)
-If BANano.IsNull(vHasDivider) or BANano.IsUndefined(vHasDivider) Then Return
+If BANano.IsNull(vHasDivider) Or BANano.IsUndefined(vHasDivider) Then Return
 bHasDivider  = vHasDivider
 Options.HasDivider = vHasDivider
 End Sub
@@ -494,10 +494,10 @@ Sub getIcon As String
 Return sIcon
 End Sub
 'set Icon
-Sub setIcon(vIcon As String)
-If BANano.IsNull(vIcon) or BANano.IsUndefined(vIcon) Then Return
-sIcon  = vIcon
-Options.Icon = vIcon
+Sub setIcon(vIconx As String)
+If BANano.IsNull(vIconx) Or BANano.IsUndefined(vIconx) Then Return
+sIcon  = vIconx
+Options.Icon = vIconx
 End Sub
 'get IconAttr
 Sub getIconAttr As String

@@ -1,11 +1,12 @@
 ﻿B4J=true
-Group=Default Group
+Group=Default Group\ToolBars
 ModulesStructureVersion=1
 Type=Class
 Version=8.9
 @EndOfDesignText@
 #IgnoreWarnings:12
 
+#DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: Absolute, DisplayName: Absolute, FieldType: Boolean, DefaultValue: false, Description: Absolute
 #DesignerProperty: Key: Bottom, DisplayName: Bottom, FieldType: Boolean, DefaultValue: false, Description: Bottom
 #DesignerProperty: Key: Collapse, DisplayName: Collapse, FieldType: Boolean, DefaultValue: false, Description: Collapse
@@ -81,6 +82,7 @@ Private sVIf As String
 Private sVShow As String
 Private sWidth As String
 Private xColor As String
+private bHidden as boolean
 	End Sub
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	mName = Name.tolowercase
@@ -95,6 +97,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 		End If
 	End If
 	xColor = $"${mName}color"$
+	sVShow = $"${mName}show"$
 	End Sub
 	
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
@@ -131,7 +134,8 @@ sTextColor = Props.Get("TextColor")
 sTextColorIntensity = Props.Get("TextColorIntensity")
 bTile = Props.Get("Tile")
 sVIf = Props.Get("VIf")
-sVShow = Props.Get("VShow")
+svshow = Props.Get("VShow")
+bHidden = Props.Get("Hidden")
 sWidth = Props.Get("Width")
 	End If
 	'
@@ -215,7 +219,7 @@ End Sub
 
 Sub UpdateColor(VC As VueComponent, vColor As String, vIntensity As String)
 	sColor = VElement.BuildColor(vColor, vIntensity)
-	VElement.SetData(xColor, sColor)
+	VC.SetData(xColor, sColor)
 End Sub
 
 Sub getID As String

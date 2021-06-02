@@ -12,7 +12,7 @@ Sub Class_Globals
 	Public ID As String
 	Private sattendents As String
 	Private lstattendents As List
-	Private BANAno As BANano
+	Private BANAno As BANano  'ignore
 End Sub
 
 Public Sub Initialize(VA As VuetifyApp, parentID As String, elID As String, hdr As String, ftr As String)

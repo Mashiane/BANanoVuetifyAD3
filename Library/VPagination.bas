@@ -1,5 +1,5 @@
 ﻿B4J=true
-Group=Default Group
+Group=Default Group\DataTable
 ModulesStructureVersion=1
 Type=Class
 Version=8.95
@@ -10,6 +10,7 @@ Version=8.95
 #Event: Next (e As BANanoEvent)
 #Event: Previous (e As BANanoEvent)
 
+#DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: Circle, DisplayName: Circle, FieldType: Boolean, DefaultValue: false, Description: Circle
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue: , Description: Color, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: ColorIntensity, DisplayName: ColorIntensity, FieldType: String, DefaultValue: , Description: ColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
@@ -30,9 +31,9 @@ Version=8.95
 #DesignerProperty: Key: VBind, DisplayName: VBind, FieldType: String, DefaultValue: , Description: VBind
 #DesignerProperty: Key: VFor, DisplayName: VFor, FieldType: String, DefaultValue: , Description: VFor
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
+#DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: , Description: VModel
 #DesignerProperty: Key: VOn, DisplayName: VOn, FieldType: String, DefaultValue: , Description: VOn
-#DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue: , Description: VShow
 #DesignerProperty: Key: WrapperAriaLabel, DisplayName: WrapperAriaLabel, FieldType: String, DefaultValue: , Description: WrapperAriaLabel
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
@@ -73,6 +74,7 @@ Private sVModel As String
 Private sVOn As String
 Private sVShow As String
 Private sWrapperAriaLabel As String
+private bHidden as boolean
 	End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -87,6 +89,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey)
 		End If
 	End If
+	sVShow = $"${mName}show"$
 End Sub
 
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
@@ -117,7 +120,7 @@ sVFor = Props.Get("VFor")
 sVIf = Props.Get("VIf")
 sVModel = Props.Get("VModel")
 sVOn = Props.Get("VOn")
-sVShow = Props.Get("VShow")
+bHidden = Props.Get("Hidden")
 sWrapperAriaLabel = Props.Get("WrapperAriaLabel")
 	End If
 	'
@@ -154,6 +157,7 @@ VElement.AddAttr("v-if", sVIf)
 VElement.AddAttr("v-model", sVModel)
 VElement.AddAttr("v-on", sVOn)
 VElement.AddAttr("v-show", sVShow)
+VElement.SetData(sVShow, Not(bHidden))
 VElement.AddAttr("wrapper-aria-label", sWrapperAriaLabel)
 VElement.SetData(sVModel, 1)
 VElement.BindAllEvents
@@ -213,3 +217,4 @@ End Sub
 Sub getHere As String
 	Return $"#${mName}"$
 End Sub
+

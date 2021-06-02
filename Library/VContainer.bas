@@ -1,5 +1,5 @@
 ﻿B4J=true
-Group=Default Group
+Group=Default Group\Grid
 ModulesStructureVersion=1
 Type=Class
 Version=8.9
@@ -14,17 +14,19 @@ Version=8.9
 #DesignerProperty: Key: FitScreen, DisplayName: Fit Screen VH, FieldType: Boolean, DefaultValue: False, Description: FitScreen VH
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue:  , Description: , List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: ColorIntensity, DisplayName: Color Intensity, FieldType: String, DefaultValue:  normal, Description: , List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
+
+#DesignerProperty: Key: Border, DisplayName: Border, FieldType: String, DefaultValue:  , Description: 
+#DesignerProperty: Key: BorderColor, DisplayName: BorderColor, FieldType: String, DefaultValue:  , Description: , List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
+#DesignerProperty: Key: BorderRadius, DisplayName: Border Radius, FieldType: String, DefaultValue:  , Description: 
+#DesignerProperty: Key: BorderStyle, DisplayName: Border Style, FieldType: String, DefaultValue:  , Description: , List: none|hidden|dotted|dashed|solid|double|groove|ridge|inset|outset|initial|inherit
+#DesignerProperty: Key: BorderWidth, DisplayName: Border Width, FieldType: String, DefaultValue:  , Description: 
+
 #DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VIf, DisplayName: V-If, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
 '
-'#DesignerProperty: Key: Border, DisplayName: Border, FieldType: String, DefaultValue:  , Description: 
-'#DesignerProperty: Key: BorderColor, DisplayName: BorderColor, FieldType: String, DefaultValue:  , Description: , List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
-'#DesignerProperty: Key: BorderRadius, DisplayName: Border Radius, FieldType: String, DefaultValue:  , Description: 
-'#DesignerProperty: Key: BorderStyle, DisplayName: Border Style, FieldType: String, DefaultValue:  , Description: , List: none|hidden|dotted|dashed|solid|double|groove|ridge|inset|outset|initial|inherit
-'#DesignerProperty: Key: BorderWidth, DisplayName: Border Width, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: BuildGrid, DisplayName: Build Grid, FieldType: Boolean, DefaultValue: False, Description: BuildGrid
 #DesignerProperty: Key: ShowGridDesign, DisplayName: Show Grid Design, FieldType: Boolean, DefaultValue: False, Description: ShowGridDesign
 #DesignerProperty: Key: Rows, DisplayName: Rows, FieldType: String, DefaultValue: , Description: Rows
@@ -78,9 +80,6 @@ Sub Class_Globals
 	Private bFillHeight As Boolean
 	Private sBackgroundImage As String
 	Private bFitScreen As Boolean
-	Private sSizes As String
-	Private sPaddingAXYTBLR As String
-	Private sMarginAXYTBLR As String
 	Private sMA As String
 Private sMB As String
 Private sML As String
@@ -110,7 +109,13 @@ Private stOffSets As String = "xs=?; s=?; m=?; l=?; x=?"
 	Private bBuildGrid As Boolean = False
 	Private bShowGridDesign As Boolean = False
 	Private sRows As String = ""
-	private sColumns as string = ""
+	Private sColumns As String = ""
+		Private sBorder As String
+Private sBorderColor As String
+Private sBorderRadius As String
+Private sBorderStyle As String
+Private sBorderWidth As String
+
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -172,6 +177,11 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sOffsetMD = Props.Get("OffsetMD")
 		sOffsetLG = Props.Get("OffsetLG")
 		sOffsetXL = Props.Get("OffsetXL")
+		sBorder = Props.Get("Border")
+sBorderColor = Props.Get("BorderColor")
+sBorderRadius = Props.Get("BorderRadius")
+sBorderStyle = Props.Get("BorderStyle")
+sBorderWidth = Props.Get("BorderWidth")
 	End If
 	'
 	'build and get the element
@@ -231,6 +241,14 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.ShowGridDesign = bShowGridDesign
 	VElement.strows = sRows
 	VElement.stColumns = sColumns
+	VElement.Classes = mClasses
+	VElement.Styles = mStyles
+	VElement.Attributes = mAttributes
+	VElement.Border = sBorder
+	VElement.BorderColor = sBorderColor
+	VElement.BorderRadius = sBorderRadius
+	VElement.BorderStyle = sBorderStyle
+	VElement.BorderWidth = sBorderWidth
 	VElement.BindAllEvents	
 End Sub	
 

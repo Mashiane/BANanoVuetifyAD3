@@ -1,11 +1,18 @@
 ﻿B4J=true
-Group=Default Group
+Group=Default Group\Forms
 ModulesStructureVersion=1
 Type=Class
 Version=8.9
 @EndOfDesignText@
 #IgnoreWarnings:12
 #Event: Input (num As Double)
+
+#DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: rating1, Description: VModel
+#DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: Boolean, DefaultValue: False, Description: Disabled
+#DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
+#DesignerProperty: Key: Readonly, DisplayName: Readonly, FieldType: Boolean, DefaultValue: False, Description: Readonly
+#DesignerProperty: Key: Required, DisplayName: Required, FieldType: Boolean, DefaultValue: False, Description: Required 
+
 
 #DesignerProperty: Key: BackgroundColor, DisplayName: BackgroundColor, FieldType: String, DefaultValue: , Description: BackgroundColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: BackgroundColorIntensity, DisplayName: BackgroundColorIntensity, FieldType: String, DefaultValue: , Description: BackgroundColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
@@ -24,13 +31,11 @@ Version=8.9
 #DesignerProperty: Key: Length, DisplayName: Length, FieldType: String, DefaultValue: 5, Description: Length
 #DesignerProperty: Key: Light, DisplayName: Light, FieldType: Boolean, DefaultValue: false, Description: Light
 #DesignerProperty: Key: OpenDelay, DisplayName: OpenDelay, FieldType: String, DefaultValue: , Description: OpenDelay
-#DesignerProperty: Key: Readonly, DisplayName: Readonly, FieldType: Boolean, DefaultValue: false, Description: Readonly
 #DesignerProperty: Key: Ripple, DisplayName: Ripple, FieldType: Boolean, DefaultValue: false, Description: Ripple
 #DesignerProperty: Key: Size, DisplayName: Size, FieldType: String, DefaultValue: , Description: Size
 #DesignerProperty: Key: Size1, DisplayName: Own Size, FieldType: String, DefaultValue: , Description: Size1, List: none|large|small|x-large|x-small
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
-#DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: rating1, Description: VModel
-#DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue: , Description: VShow
+#DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
@@ -73,8 +78,17 @@ Private sVIf As String
 Private sVModel As String
 Private sVShow As String
 Private sVOn As String
-private sVBind as string
+Private sVBind As String
+'
+Private bDisabled As Boolean
+Private bHidden As Boolean
+Private bReadonly As Boolean
+Private bRequired As Boolean
+Private sRequired As String
+Private sDisabled As String
+Private sReadonly As String
 	End Sub
+	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	mName = Name.tolowercase
 	mEventName = EventName.ToLowerCase
@@ -87,10 +101,18 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey)
 		End If
 	End If
+	sRequired = $"${mName}required"$
+	sDisabled = $"${mName}disabled"$
+	sReadonly = $"${mName}readonly"$
+	sVShow = $"${mName}show"$
 	End Sub
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	mTarget = Target
 	If Props <> Null Then
+		bDisabled = Props.Get("Disabled")
+bHidden = Props.Get("Hidden")
+bReadonly = Props.Get("Readonly")
+bRequired = Props.Get("Required")
 		mClasses = Props.Get("Classes")
 		mStyles = Props.Get("Styles")
 		mAttributes = Props.Get("Attributes")
@@ -116,8 +138,8 @@ bRipple = Props.Get("Ripple")
 sSize = Props.Get("Size")
 sSize1 = Props.Get("Size1")
 sVIf = Props.Get("VIf")
-sVModel = Props.Get("VModel")
 sVShow = Props.Get("VShow")
+sVModel = Props.Get("VModel")
 sVOn = Props.Get("VOn")
 		sVBind = Props.Get("VBind")
 	End If
@@ -129,6 +151,13 @@ sVOn = Props.Get("VOn")
 		mElement = mTarget.Append($"<v-rating id="${mName}"></v-rating>"$).Get("#" & mName)
 	End If
 	'
+	If BANano.IsNull(bDisabled) Or BANano.IsUndefined(bDisabled) Then
+		bDisabled = False 
+	End If
+	If BANano.IsNull(bRequired) Or BANano.IsUndefined(bRequired) Then
+		bRequired = False 
+	End If
+	
 	VElement.Initialize(mCallBack, mName, mName)
 	VElement.TagName = "v-rating"
 	VElement.Classes = mClasses
@@ -152,6 +181,12 @@ VElement.AddAttr("open-delay", sOpenDelay)
 VElement.AddAttr(":readonly", bReadonly)
 VElement.AddAttr(":ripple", bRipple)
 VElement.AddAttr("size", sSize)
+VElement.AddAttr(":disabled", sDisabled)
+VElement.SetData(sDisabled, bDisabled)
+VElement.AddAttr(":required", sRequired)
+VElement.SetData(sRequired, bRequired)
+VElement.AddAttr(":readonly", sReadonly)
+VElement.SetData(sReadonly, bReadonly)
 Select Case sSize1
 Case "large"
 VElement.AddAttr(":large", True)
@@ -165,6 +200,7 @@ End Select
 VElement.AddAttr("v-if", sVIf)
 VElement.AddAttr("v-model", sVModel)
 VElement.AddAttr("v-show", sVShow)
+VElement.SetData(sVShow, Not(bHidden))
 VElement.SetData(sVModel, 2)
 VElement.AddAttr("v-on", sVOn)
 	VElement.AddAttr("v-bind", sVBind)

@@ -9,6 +9,7 @@ Version=8.9
 #Event: UpdateActive (items As List)
 #Event: UpdateOpen (items As List)
 
+#DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: Active, DisplayName: Active Binding, FieldType: String, DefaultValue: treeactive, Description: Active
 #DesignerProperty: Key: Value, DisplayName: Value Binding, FieldType: String, DefaultValue: treevalue, Description: Value
 #DesignerProperty: Key: Items, DisplayName: Items Binding, FieldType: String, DefaultValue: treeitems, Description: Items
@@ -96,6 +97,7 @@ Private sValue As String
 Private xitems As List
 Private extm As Map
 Private xReturnObject As String
+Private bHidden As Boolean
 	End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -133,6 +135,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	
 	extm.Put("c", "mdi-language-c")
 	extm.Put("c++", "mdi-language-cpp")
+	sVShow = $"${mName}show"$
 	End Sub
 	
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
@@ -173,7 +176,8 @@ sSelectionType = Props.Get("SelectionType")
 bShaped = Props.Get("Shaped")
 bTransition = Props.Get("Transition")
 sVIf = Props.Get("VIf")
-sVShow = Props.Get("VShow")
+svshow = Props.Get("VShow")
+bHidden = Props.Get("Hidden")
 sValue = Props.Get("Value")
 	End If
 	'
@@ -229,6 +233,7 @@ VElement.AddAttr(":shaped", bShaped)
 VElement.AddAttr(":transition", bTransition)
 VElement.AddAttr("v-if", sVIf)
 VElement.AddAttr("v-show", sVShow)
+VElement.SetData(sVShow, Not(bHidden))
 VElement.SetData(sActive, VElement.NewList)
 VElement.SetData(sOpen, VElement.NewList)
 VElement.SetData(sValue, VElement.NewList)
@@ -347,3 +352,4 @@ End Sub
 Sub getHere As String
 	Return $"#${mName}"$
 End Sub
+

@@ -1,5 +1,5 @@
 ﻿B4J=true
-Group=Default Group
+Group=Default Group\Card
 ModulesStructureVersion=1
 Type=Class
 Version=8.9
@@ -7,6 +7,9 @@ Version=8.9
 #IgnoreWarnings:12
 
 #Event: Click (e As BANanoEvent)
+
+#DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: Boolean, DefaultValue: False, Description: Disabled
+#DesignerProperty: Key: Loading, DisplayName: Loading, FieldType: Boolean, DefaultValue: False, Description: Loading
 
 #DesignerProperty: Key: Img, DisplayName: Image, FieldType: String, DefaultValue: , Description: Image
 #DesignerProperty: Key: ImgHeight, DisplayName: Image Height, FieldType: String, DefaultValue: , Description: Image Height
@@ -22,7 +25,6 @@ Version=8.9
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue: , Description: Color, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: ColorIntensity, DisplayName: Colorintensity, FieldType: String, DefaultValue: , Description: Colorintensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: false, Description: Dark
-#DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: String, DefaultValue: , Description: Disabled
 #DesignerProperty: Key: Elevation, DisplayName: Elevation, FieldType: String, DefaultValue: , Description: Elevation
 #DesignerProperty: Key: Flat, DisplayName: Flat, FieldType: Boolean, DefaultValue: false, Description: Flat
 #DesignerProperty: Key: Height, DisplayName: Height, FieldType: String, DefaultValue: , Description: Height
@@ -30,7 +32,6 @@ Version=8.9
 #DesignerProperty: Key: Hover, DisplayName: Hover, FieldType: Boolean, DefaultValue: false, Description: Hover
 #DesignerProperty: Key: Href, DisplayName: Href, FieldType: String, DefaultValue: , Description: Href
 #DesignerProperty: Key: LoaderHeight, DisplayName: LoaderHeight, FieldType: String, DefaultValue: , Description: LoaderHeight
-#DesignerProperty: Key: Loading, DisplayName: Loading, FieldType: String, DefaultValue: , Description: Loading
 #DesignerProperty: Key: MaxHeight, DisplayName: MaxHeight, FieldType: String, DefaultValue: , Description: MaxHeight
 #DesignerProperty: Key: MaxWidth, DisplayName: MaxWidth, FieldType: String, DefaultValue: , Description: MaxWidth
 #DesignerProperty: Key: MinHeight, DisplayName: MinHeight, FieldType: String, DefaultValue: , Description: MinHeight
@@ -130,6 +131,8 @@ Private sPR As String
 Private sPT As String
 Private sPX As String
 Private sPY As String
+Private bdisabled As Boolean
+Private bLoading As Boolean
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -144,6 +147,8 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey)
 		End If
 	End If
+	sDisabled = $"${mName}disabled"$
+	sLoading = $"${mName}loading"$
 	End Sub
 	
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
@@ -158,7 +163,6 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 sColor = Props.Get("Color")
 sColorintensity = Props.Get("ColorIntensity")
 bDark = Props.Get("Dark")
-sDisabled = Props.Get("Disabled")
 sElevation = Props.Get("Elevation")
 bFlat = Props.Get("Flat")
 sHeight = Props.Get("Height")
@@ -166,7 +170,8 @@ bHover = Props.Get("Hover")
 sHref = Props.Get("Href")
 sImg = Props.Get("Img")
 sLoaderHeight = Props.Get("LoaderHeight")
-sLoading = Props.Get("Loading")
+bLoading = Props.Get("Loading")
+bdisabled = Props.Get("Disabled")
 sMaxHeight = Props.Get("MaxHeight")
 sMaxWidth = Props.Get("MaxWidth")
 sMinHeight = Props.Get("MinHeight")
@@ -293,6 +298,14 @@ sPY = Props.Get("PY")
 		VElement.Append($"<v-card-actions id="${mName}cardactions"></v-card-actions>"$)
 	End If
 	'
+	If BANano.IsNull(bdisabled) Or BANano.IsUndefined(bdisabled) Then
+		bdisabled = False 
+	End If
+	
+	If BANano.IsNull(bLoading) Or BANano.IsUndefined(bLoading) Then
+		bLoading = False 
+	End If
+	
 	VElement.Classes = mClasses
 	VElement.Styles = mStyles
 	VElement.Attributes = mAttributes
@@ -301,14 +314,16 @@ sPY = Props.Get("PY")
 	VElement.ActiveClass = sActiveClass
 VElement.Color = VElement.BuildColor(sColor, sColorintensity)
 VElement.Dark = bDark
-VElement.Disabled = sDisabled
+VElement.bind("disabled", sDisabled)
+VElement.SetData(sDisabled, bdisabled)
 VElement.Elevation = sElevation
 VElement.Flat = bFlat
 VElement.Height = sHeight
 VElement.Hover = bHover
 VElement.Href = sHref
 VElement.LoaderHeight = sLoaderHeight
-VElement.Loading = sLoading
+VElement.bind("loading", sLoading)
+VElement.SetData(sLoading, bLoading)
 VElement.MaxHeight = sMaxHeight
 VElement.MaxWidth = sMaxWidth
 VElement.MinHeight = sMinHeight
@@ -415,4 +430,9 @@ End Sub
 
 Sub getHere As String
 	Return $"#${mName}"$
+End Sub
+
+Sub UpdateDisabled(VC As VueComponent, b As Boolean)
+	bdisabled = b
+	VC.SetData(sDisabled, b)
 End Sub

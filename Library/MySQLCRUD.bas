@@ -1,5 +1,5 @@
 ﻿B4J=true
-Group=Default Group
+Group=Default Group\Database
 ModulesStructureVersion=1
 Type=Class
 Version=8.8
@@ -67,7 +67,7 @@ Sub Class_Globals
 	Private addedFiles As List
 	Private matrix As List
 	Private matrixMap As Map
-	Private BANano As BANano
+	Private BANano As BANano  'ignore
 	Private HideDetailsM As Map
 	Private DenseM As Map
 	Private RequiredM As Map
@@ -244,7 +244,7 @@ Sub Diag_SetRounded(fldName As String, b As Boolean)
 End Sub
 
 'set properties
-private Sub SetProperties(fldNAme As String, vmodel As String)
+private Sub SetProperties(fldNAme As String, svmodel as string)   'ignore
 	If HideDetailsM.ContainsKey(fldNAme) Then
 		dtCont.Append($"${Prefix}${fldNAme}.HideDetails = True"$).Append(CRLF)
 	End If
@@ -833,7 +833,7 @@ Sub Diag_AddAutoComplete(fldName As String, row As Int, col As Int, vmodel As St
 	dtCont.Append($"${ComponentName}.BindVueElement(${Prefix}${fldName})"$).Append(CRLF)
 	dtCont.Append($"${ComponentName}.SetData("${DataSource}", ${ComponentName}.NewList)"$).Append(CRLF)
 	'
-	AddRelationship(Key, value, DataSource, vmodel)
+	AddRelationship(Key, Value, DataSource, vmodel)
 	UpdateMatrix(row, col)
 End Sub
 
@@ -1209,7 +1209,7 @@ private Sub RelationshipsCode
 	For Each rec As DBRelationship In datasources
 		Dim ssource As String = rec.source
 		Dim skey As String = rec.key
-		Dim svmodel As String = rec.vmodel 
+		'Dim svmodel As String = rec.vmodel 
 		Dim svalue As String = rec.value
 		Dim skeys As String = rec.keys
 		Dim svalues As String = rec.values
@@ -1258,7 +1258,7 @@ private Sub RelationshipsCode
 	For Each rec As DBRelationship In relationships
 		Dim ssource As String = rec.source
 		Dim skey As String = rec.key
-		Dim svmodel As String = rec.vmodel 
+		'Dim svmodel As String = rec.vmodel 
 		Dim svalue As String = rec.value
 		'
 		Dim xfields As List

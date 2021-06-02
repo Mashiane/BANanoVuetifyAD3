@@ -6,13 +6,14 @@ Version=8.9
 @EndOfDesignText@
 #IgnoreWarnings:12
 
+#DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: AlignTop, DisplayName: AlignTop, FieldType: Boolean, DefaultValue: false, Description: AlignTop
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: false, Description: Dark
 #DesignerProperty: Key: Dense, DisplayName: Dense, FieldType: Boolean, DefaultValue: false, Description: Dense
 #DesignerProperty: Key: Light, DisplayName: Light, FieldType: Boolean, DefaultValue: false, Description: Light
 #DesignerProperty: Key: Reverse, DisplayName: Reverse, FieldType: Boolean, DefaultValue: false, Description: Reverse
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
-#DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue: , Description: VShow
+#DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
@@ -34,7 +35,9 @@ Private bLight As Boolean
 Private bReverse As Boolean
 Private sVIf As String
 Private sVShow As String
+Private bHidden As Boolean
 	End Sub
+	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	mName = Name.tolowercase
 	mEventName = EventName.ToLowerCase
@@ -47,7 +50,9 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey)
 		End If
 	End If
+	sVShow = $"${mName}show"$
 	End Sub
+	
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	mTarget = Target
 	If Props <> Null Then
@@ -61,6 +66,7 @@ bLight = Props.Get("Light")
 bReverse = Props.Get("Reverse")
 sVIf = Props.Get("VIf")
 sVShow = Props.Get("VShow")
+bHidden = Props.Get("Hidden")
 	End If
 	'
 	'build and get the element
@@ -82,6 +88,7 @@ VElement.AddAttr(":light", bLight)
 VElement.AddAttr(":reverse", bReverse)
 VElement.AddAttr("v-if", sVIf)
 VElement.AddAttr("v-show", sVShow)
+VElement.SetData(sVShow, Not(bHidden))
 VElement.BindAllEvents
 End Sub
 public Sub AddToParent(targetID As String)

@@ -1,5 +1,5 @@
 ﻿B4J=true
-Group=Default Group
+Group=Default Group\Buttons
 ModulesStructureVersion=1
 Type=Class
 Version=8.9
@@ -104,6 +104,10 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sTo = Props.Get("To")
 		bAbsolute = Props.Get("Absolute")
 		sPosition = Props.Get("Position")
+	End If
+	
+	If BANano.IsNull(bLoading) Or BANano.IsUndefined(bLoading) Then
+		bLoading = False 
 	End If
 	
 	'build and get the element

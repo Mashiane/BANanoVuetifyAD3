@@ -1,5 +1,5 @@
 ﻿B4J=true
-Group=Default Group
+Group=Default Group\Notifications
 ModulesStructureVersion=1
 Type=Class
 Version=8.9
@@ -33,6 +33,7 @@ Version=8.9
 #DesignerProperty: Key: Timeout, DisplayName: Timeout, FieldType: String, DefaultValue: , Description: Timeout
 #DesignerProperty: Key: Transition, DisplayName: Transition, FieldType: String, DefaultValue: expand-transition, Description: Transition, List: none|fab-transition|fade-transition|expand-transition|scale-transition|scroll-x-transition|scroll-x-reverse-transition|scroll-y-transition|scroll-y-reverse-transition|slide-x-transition|slide-x-reverse-transition|slide-y-transition|slide-y-reverse-transition
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
+#DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: snackshow , Description: VModel
 #DesignerProperty: Key: Vertical, DisplayName: Vertical, FieldType: Boolean, DefaultValue: false, Description: Vertical
 #DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: , Description: Width
@@ -83,6 +84,7 @@ Private bVertical As Boolean
 Private sWidth As String
 Private xCaption As String
 Private xColor As String
+Private sVShow as String
 	End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -134,6 +136,7 @@ bTile = Props.Get("Tile")
 sTimeout = Props.Get("Timeout")
 sTransition = Props.Get("Transition")
 sVIf = Props.Get("VIf")
+svshow = Props.Get("VShow")
 sVModel = Props.Get("VModel")
 bVertical = Props.Get("Vertical")
 sWidth = Props.Get("Width")
@@ -208,7 +211,7 @@ End Sub
 
 Sub UpdateColor(VC As VueComponent, vColor As String, vIntensity As String)
 	sColor = VElement.BuildColor(vColor, vIntensity)
-	VElement.SetData(xColor, sColor)
+	VC.SetData(xColor, sColor)
 End Sub
 
 public Sub AddToParent(targetID As String)

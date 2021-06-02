@@ -854,11 +854,11 @@ Sub GetExpansionPanelContent As VueElement
 	Return elx
 End Sub
 
-Sub setTextCenterClass(b As Boolean)
+Sub setTextCenterClass(b As Boolean)  'ignore
 	AddClass("text-center")
 End Sub
 
-Sub setTextCenter(b As Boolean)
+Sub setTextCenter(b As Boolean)  'ignore
 	AddClass("text-center")
 End Sub
 
@@ -866,11 +866,11 @@ Sub AddClassTextCenter
 	AddClass("text-center")
 End Sub
 
-Sub setDisplay2Class(b As Boolean)
+Sub setDisplay2Class(b As Boolean)   'ignore
 	AddClass("display-2")
 End Sub
 
-Sub setDisplay2(b As Boolean)
+Sub setDisplay2(b As Boolean)   'ignore
 	AddClass("display-2")
 End Sub
 
@@ -878,11 +878,11 @@ Sub AddClassDisplay2
 	AddClass("display-2")
 End Sub
 
-Sub setDisplay1(b As Boolean)
+Sub setDisplay1(b As Boolean)   'ignore
 	AddClass("display-1")
 End Sub
 
-Sub setDisplay1Class(b As Boolean)
+Sub setDisplay1Class(b As Boolean)  'ignore
 	AddClass("display-1")
 End Sub
 
@@ -890,11 +890,11 @@ Sub AddClassDisplay1
 	AddClass("display-1")
 End Sub
 
-Sub setDisplay3(b As Boolean)
+Sub setDisplay3(b As Boolean)   'ignore
 	AddClass("display-3")
 End Sub
 
-Sub setDisplay3Class(b As Boolean)
+Sub setDisplay3Class(b As Boolean)   'ignore
 	AddClass("display-3")
 End Sub
 
@@ -902,11 +902,11 @@ Sub AddClassDisplay3
 	AddClass("display-3")
 End Sub
 
-Sub setDisplay4(b As Boolean)
+Sub setDisplay4(b As Boolean)  'ignore
 	AddClass("display-4")
 End Sub
 
-Sub setDisplay4Class(b As Boolean)
+Sub setDisplay4Class(b As Boolean)  'ignore
 	AddClass("display-4")
 End Sub
 
@@ -917,12 +917,12 @@ Sub AddClassDisplay4 As VueElement
 End Sub
 
 
-Sub setHeading(b As Boolean)
+Sub setHeading(b As Boolean)  'ignore
 	AddClass("heading")
 End Sub
 
 
-Sub setHeadingClass(b As Boolean)
+Sub setHeadingClass(b As Boolean)  'ignore
 	AddClass("heading")
 End Sub
 
@@ -933,12 +933,12 @@ Sub AddClassHeading As VueElement
 End Sub
 
 
-Sub setSubHeadingClass(b As Boolean)
+Sub setSubHeadingClass(b As Boolean)  'ignore
 	AddClass("subheading")
 End Sub
 
 
-Sub setSubHeading(b As Boolean)
+Sub setSubHeading(b As Boolean)   'ignore
 	AddClass("subheading")
 End Sub
 
@@ -951,11 +951,11 @@ Sub AddClassHeadLine As VueElement
 	Return Me
 End Sub
 
-Sub setHeadLine(b As Boolean)
+Sub setHeadLine(b As Boolean)  'ignore
 	AddClass("headline")
 End Sub
 
-Sub setHeadLineClass(b As Boolean)
+Sub setHeadLineClass(b As Boolean)   'ignore
 	AddClass("headline")
 End Sub
 
@@ -965,11 +965,11 @@ Sub AddClassTitle As VueElement
 	Return Me
 End Sub
 
-Sub setTitle(b As Boolean)
+Sub setTitle(b As Boolean)  'ignore
 	AddClass("title")
 End Sub
 
-Sub setTitleClass(b As Boolean)
+Sub setTitleClass(b As Boolean)   'ignore
 	AddClass("title")
 End Sub
 
@@ -980,12 +980,12 @@ Sub AddClassBody1 As VueElement
 End Sub
 
 
-Sub setBody1Class(b As Boolean)
+Sub setBody1Class(b As Boolean) 'ignore
 	AddClass("body-1")
 End Sub
 
 
-Sub setBody1(b As Boolean)
+Sub setBody1(b As Boolean) 'ignore
 	AddClass("body-1")
 End Sub
 
@@ -994,11 +994,11 @@ Sub AddClassBody2 As VueElement
 	Return Me
 End Sub
 
-Sub setBody2(b As Boolean)
+Sub setBody2(b As Boolean) 'ignore
 	AddClass("body-2")
 End Sub
 
-Sub setBody2Class(b As Boolean)
+Sub setBody2Class(b As Boolean) 'ignore
 	AddClass("body-2")
 End Sub
 
@@ -1007,11 +1007,11 @@ Sub AddClassSubTitle1 As VueElement
 	Return Me
 End Sub
 
-Sub setSubTitle1(b As Boolean)
+Sub setSubTitle1(b As Boolean) 'ignore
 	AddClass("subtitle-1")
 End Sub
 
-Sub setSubTitle1Class(b As Boolean)
+Sub setSubTitle1Class(b As Boolean) 'ignore
 	AddClass("subtitle-1")
 End Sub
 
@@ -1021,11 +1021,11 @@ Sub AddClassSubTitle2 As VueElement
 	Return Me
 End Sub
 
-Sub setSubTitle2(b As Boolean)
+Sub setSubTitle2(b As Boolean) 'ignore
 	AddClass("subtitle-2")
 End Sub
 
-Sub setSubTitle2Class(b As Boolean)
+Sub setSubTitle2Class(b As Boolean) 'ignore
 	AddClass("subtitle-2")
 End Sub
 
@@ -1035,7 +1035,7 @@ Sub AddClassCaption As VueElement
 	Return Me
 End Sub
 
-Sub setCaptionClass(b As Boolean)
+Sub setCaptionClass(b As Boolean)  'ignore
 	AddClass("caption")
 End Sub
 
@@ -1998,6 +1998,7 @@ Sub AddElement(elID As String, tag As String, props As Map, styleProps As Map, c
 	elID = elID.Replace("#","")
 	Dim elIT As VueElement
 	elIT.Initialize(mCallBack, elID, elID)
+	elIT.TagName = tag
 	elIT.Append(Text)
 	If loosex <> Null Then
 		For Each k As String In loosex
@@ -2152,19 +2153,19 @@ Sub SetVBindIs(t As String) As VueElement
 	Return Me
 End Sub
 
-Sub setVSlotHover(b As Boolean)
+Sub setVSlotHover(b As Boolean)   'ignore
 	AddAttr("slot", "{ hover }")
 End Sub
 
-Sub setVSlotNoData(b As Boolean)
+Sub setVSlotNoData(b As Boolean)  'ignore
 	AddAttr("slot", "no-data")
 End Sub
 
-Sub setVSlotAppend(b As Boolean)
+Sub setVSlotAppend(b As Boolean)  'ignore
 	AddAttr("slot", "append")
 End Sub
 
-Sub setVSlotExtension(b As Boolean)
+Sub setVSlotExtension(b As Boolean)  'ignore
 	AddAttr("slot", "extension")
 End Sub
 
@@ -2952,7 +2953,7 @@ public Sub setDismissible(b As Boolean)
 	AddAttr(":dismissible", b)
 End Sub
 
-Sub setFontWeightLight(b As Boolean)
+Sub setFontWeightLight(b As Boolean)  'ignore
 	AddClass("font-weight-light")
 End Sub
 
@@ -6553,8 +6554,8 @@ Sub AddListItemGroupTemplate(numLines As Int) As VueElement
 	Dim parentID As String = CleanID(mName)
 	'
 	Dim templateID As String = $"${elID}template"$
-	Dim headerID As String = $"${elID}header"$
-	Dim dividerID As String = $"${elID}divider"$
+	'Dim headerID As String = $"${elID}header"$
+	'Dim dividerID As String = $"${elID}divider"$
 	Dim listitemID As String = $"${elID}listitem"$
 	Dim leftactionID As String = $"${elID}leftaction"$
 	Dim leftactionBtnID As String = $"${elID}leftactionbtn"$
@@ -6763,9 +6764,9 @@ Sub AddListViewGroupTemplate(numLines As Int, props As ListViewItemOptions) As V
 	Dim elID As String = mName.ToLowerCase
 	Dim parentID As String = CleanID(mName)
 	'
-	Dim templateID As String = $"${elID}template"$
-	Dim headerID As String = $"${elID}header"$
-	Dim dividerID As String = $"${elID}divider"$
+	'Dim templateID As String = $"${elID}template"$
+	'Dim headerID As String = $"${elID}header"$
+	'Dim dividerID As String = $"${elID}divider"$
 	Dim listitemID As String = $"${elID}listitem"$
 	Dim leftactionID As String = $"${elID}leftaction"$
 	Dim leftactionBtnID As String = $"${elID}leftactionbtn"$
@@ -7453,7 +7454,7 @@ Sub setResize(l As String)
 	AddStyle("resize", l)
 End Sub
 
-Sub setTranslate(x As String, y As String)
+Sub setTranslate(x As String, y As String)   'ignore
 	
 End Sub
 
@@ -7470,7 +7471,7 @@ Sub setTranslateY(a As String)
 	
 End Sub
 
-Sub setScale(x As String, y As String)
+Sub setScale(x As String, y As String)  'ignore
 	
 End Sub
 
@@ -7990,32 +7991,32 @@ Sub AddAutoComplete(elID As String, vmodel As String, sLabel As String, bRequire
 	sourceField = sourceField.ToLowerCase
 	displayField = displayField.tolowercase
 	
-	Dim vselect As VueElement = AddVueElement2(parentID, elID, "v-autocomplete", Null)
-	vselect.label = sLabel
-	vselect.Required = bRequired
-	vselect.Placeholder = sPlaceHolder
-	vselect.Hint = sHelperText
-	vselect.Multiple = bMultiple
-	vselect.Items = $":${sourceTable}"$
-	If displayField <> "" Then vselect.ItemText = displayField
-	If sourceField <> "" Then vselect.ItemValue = sourceField
-	vselect.VModel = vmodel
-	vselect.Bind("return-object", returnObject)
-	vselect.AssignProps(props)
+	Dim vselectx As VueElement = AddVueElement2(parentID, elID, "v-autocomplete", Null)
+	vselectx.label = sLabel
+	vselectx.Required = bRequired
+	vselectx.Placeholder = sPlaceHolder
+	vselectx.Hint = sHelperText
+	vselectx.Multiple = bMultiple
+	vselectx.Items = $":${sourceTable}"$
+	If displayField <> "" Then vselectx.ItemText = displayField
+	If sourceField <> "" Then vselectx.ItemValue = sourceField
+	vselectx.VModel = vmodel
+	vselectx.Bind("return-object", returnObject)
+	vselectx.AssignProps(props)
 	'
 	If bMultiple Then
 		Dim lst As List = NewList
-		vselect.SetData(vmodel, lst)
+		vselectx.SetData(vmodel, lst)
 	Else
-		vselect.SetData(vmodel, Null)
+		vselectx.SetData(vmodel, Null)
 	End If
 	If returnObject = False Then
-		vselect.SetData(vmodel, "")
+		vselectx.SetData(vmodel, "")
 	End If
 	Dim lst As List = NewList
-	vselect.SetData(sourceTable, lst)
-	vselect.BindAllEvents
-	Return vselect
+	vselectx.SetData(sourceTable, lst)
+	vselectx.BindAllEvents
+	Return vselectx
 End Sub
 
 Sub AddRouterView(elID As String) As VueElement
@@ -8174,33 +8175,33 @@ Sub AddSelect(elID As String, vmodel As String, sLabel As String, bRequired As B
 	sourceField = sourceField.ToLowerCase
 	displayField = displayField.tolowercase
 	
-	Dim vselect As VueElement = AddVueElement2(parentID, elID, "v-select", Null)
-	vselect.label = sLabel
-	vselect.Required = bRequired
-	vselect.Placeholder = sPlaceHolder
-	vselect.Hint = sHelperText
-	vselect.Multiple = bMultiple
-	vselect.Items = $":${sourceTable}"$
-	If displayField <> "" Then vselect.ItemText = displayField
-	If sourceField <> "" Then vselect.ItemValue = sourceField
-	vselect.VModel = vmodel
-	vselect.ReturnObject = returnObject
+	Dim vselectx As VueElement = AddVueElement2(parentID, elID, "v-select", Null)
+	vselectx.label = sLabel
+	vselectx.Required = bRequired
+	vselectx.Placeholder = sPlaceHolder
+	vselectx.Hint = sHelperText
+	vselectx.Multiple = bMultiple
+	vselectx.Items = $":${sourceTable}"$
+	If displayField <> "" Then vselectx.ItemText = displayField
+	If sourceField <> "" Then vselectx.ItemValue = sourceField
+	vselectx.VModel = vmodel
+	vselectx.ReturnObject = returnObject
 	'
 	If bMultiple Then
 		Dim lst As List = NewList
-		vselect.SetData(vmodel, lst)
+		vselectx.SetData(vmodel, lst)
 	Else
-		vselect.SetData(vmodel, Null)
+		vselectx.SetData(vmodel, Null)
 	End If
 	If returnObject = False Then
-		vselect.SetData(vmodel, "")
+		vselectx.SetData(vmodel, "")
 	End If
 	'
-	vselect.AssignProps(props)
+	vselectx.AssignProps(props)
 	'
-	vselect.SetData(sourceTable, NewList)
-	vselect.BindAllEvents
-	Return vselect
+	vselectx.SetData(sourceTable, NewList)
+	vselectx.BindAllEvents
+	Return vselectx
 End Sub
 
 Sub setSlideXTransition(b As Boolean)
@@ -8608,32 +8609,32 @@ Sub AddComboBox(elID As String, vmodel As String, sLabel As String, bRequired As
 	displayField = displayField.tolowercase
 	
 	'
-	Dim vselect As VueElement = AddVueElement2(parentID, elID, "v-combobox", Null)
-	vselect.label = sLabel
-	vselect.Required = bRequired
-	vselect.Placeholder = sPlaceHolder
-	vselect.Hint = sHelperText
-	vselect.Multiple = bMultiple
-	vselect.Items = $":${sourceTable}"$
-	If displayField <> "" Then vselect.ItemText = displayField
-	If sourceField <> "" Then vselect.ItemValue = sourceField
-	vselect.VModel = vmodel
-	vselect.Bind("return-object", returnObject)
-	vselect.AssignProps(props)
+	Dim vselectx As VueElement = AddVueElement2(parentID, elID, "v-combobox", Null)
+	vselectx.label = sLabel
+	vselectx.Required = bRequired
+	vselectx.Placeholder = sPlaceHolder
+	vselectx.Hint = sHelperText
+	vselectx.Multiple = bMultiple
+	vselectx.Items = $":${sourceTable}"$
+	If displayField <> "" Then vselectx.ItemText = displayField
+	If sourceField <> "" Then vselectx.ItemValue = sourceField
+	vselectx.VModel = vmodel
+	vselectx.Bind("return-object", returnObject)
+	vselectx.AssignProps(props)
 	'
 	If bMultiple Then
 		Dim lst As List = NewList
-		vselect.SetData(vmodel, lst)
+		vselectx.SetData(vmodel, lst)
 	Else
-		vselect.SetData(vmodel, Null)
+		vselectx.SetData(vmodel, Null)
 	End If
 	If returnObject = False Then
-		vselect.SetData(vmodel, "")
+		vselectx.SetData(vmodel, "")
 	End If
 	Dim lst As List = NewList
-	vselect.SetData(sourceTable, lst)
-	vselect.BindAllEvents
-	Return vselect
+	vselectx.SetData(sourceTable, lst)
+	vselectx.BindAllEvents
+	Return vselectx
 End Sub
 
 'a button with an icon on the right
@@ -8849,6 +8850,12 @@ Sub GetButton As VueElement
 	Return elx
 End Sub
 
+Sub GetButton1 As VueElement
+	Dim elKey As String = $"${mName}_button"$
+	Dim elx As VueElement = GetVueElement(elKey)
+	Return elx
+End Sub
+
 Sub GetChild As VueElement
 	Dim elKey As String = $"${mName}child"$
 	Dim elx As VueElement = GetVueElement(elKey)
@@ -8931,23 +8938,23 @@ Ok</v-btn>
 	sbTemplate = sbTemplate.Replace("~","$")
 	BANano.GetElement(parentID).Append(sbTemplate)
 	'
-	Dim vmenu As VueElement
-	vmenu.Initialize(mCallBack, menuref, menuref)
+	Dim vmenux As VueElement
+	vmenux.Initialize(mCallBack, menuref, menuref)
 	
-	Dim vtextfield As VueElement
-	vtextfield.Initialize(mCallBack, txtid, txtid)
-	vtextfield.AssignProps(txtprops)
-	vtextfield.BindAllEvents
+	Dim vtextfieldx As VueElement
+	vtextfieldx.Initialize(mCallBack, txtid, txtid)
+	vtextfieldx.AssignProps(txtprops)
+	vtextfieldx.BindAllEvents
 	'
-	Dim vdatepicker As VueElement
-	vdatepicker.Initialize(mCallBack, dtpicker, dtpicker)
-	vdatepicker.AssignProps(dateprops)
+	Dim vdatepickerx As VueElement
+	vdatepickerx.Initialize(mCallBack, dtpicker, dtpicker)
+	vdatepickerx.AssignProps(dateprops)
 	'
-	vtextfield.BindVueElement(vmenu)
-	vtextfield.BindVueElement(vdatepicker)
-	vtextfield.SetData(vmodel, "")
-	vtextfield.SetData(menuref, False)
-	Return vtextfield
+	vtextfieldx.BindVueElement(vmenux)
+	vtextfieldx.BindVueElement(vdatepickerx)
+	vtextfieldx.SetData(vmodel, "")
+	vtextfieldx.SetData(menuref, False)
+	Return vtextfieldx
 End Sub
 
 Sub GetClear(elID As String) As VueElement
@@ -9041,23 +9048,23 @@ Ok</v-btn>
 	sbTemplate = sbTemplate.Replace("~","$")
 	BANano.GetElement(parentID).Append(sbTemplate)
 	'
-	Dim vmenu As VueElement
-	vmenu.Initialize(mCallBack, menuref, menuref)
+	Dim vmenux As VueElement
+	vmenux.Initialize(mCallBack, menuref, menuref)
 	
-	Dim vtextfield As VueElement
-	vtextfield.Initialize(mCallBack, txtid, txtid)
-	vtextfield.AssignProps(txtprops)
-	vtextfield.BindAllEvents
+	Dim vtextfieldx As VueElement
+	vtextfieldx.Initialize(mCallBack, txtid, txtid)
+	vtextfieldx.AssignProps(txtprops)
+	vtextfieldx.BindAllEvents
 	'
-	Dim vdatepicker As VueElement
-	vdatepicker.Initialize(mCallBack, dtpicker, dtpicker)
-	vdatepicker.AssignProps(dateprops)
+	Dim vdatepickerx As VueElement
+	vdatepickerx.Initialize(mCallBack, dtpicker, dtpicker)
+	vdatepickerx.AssignProps(dateprops)
 	'
-	vtextfield.BindVueElement(vmenu)
-	vtextfield.BindVueElement(vdatepicker)
-	vtextfield.SetData(vmodel, "")
-	vtextfield.SetData(menuref, False)
-	Return vtextfield
+	vtextfieldx.BindVueElement(vmenux)
+	vtextfieldx.BindVueElement(vdatepickerx)
+	vtextfieldx.SetData(vmodel, "")
+	vtextfieldx.SetData(menuref, False)
+	Return vtextfieldx
 End Sub
 
 'set computed
@@ -9113,31 +9120,31 @@ End Sub
 Sub AddSearch(elID As String, vmodel As String, slabel As String, bSolo As Boolean, props As Map) As VueElement
 	Dim parentID As String = CleanID(mName)
 	elID = elID.ToLowerCase
-	Dim vtextfield As VueElement = AddVueElement2(parentID, elID, "v-text-field", Null)
-	vtextfield.Label = slabel
-	vtextfield.AppendIcon = "mdi-magnify"
-	vtextfield.VModel = vmodel
-	vtextfield.SetData(vmodel, "")
-	vtextfield.SetTypeText
-	vtextfield.Solo = bSolo
-	vtextfield.Clearable = True
-	vtextfield.SingleLine = True
-	vtextfield.HideDetails = True
-	vtextfield.BindAllEvents
-	vtextfield.Shrink
-	vtextfield.AssignProps(props)
-	Return vtextfield
+	Dim vtextfieldx As VueElement = AddVueElement2(parentID, elID, "v-text-field", Null)
+	vtextfieldx.Label = slabel
+	vtextfieldx.AppendIcon = "mdi-magnify"
+	vtextfieldx.VModel = vmodel
+	vtextfieldx.SetData(vmodel, "")
+	vtextfieldx.SetTypeText
+	vtextfieldx.Solo = bSolo
+	vtextfieldx.Clearable = True
+	vtextfieldx.SingleLine = True
+	vtextfieldx.HideDetails = True
+	vtextfieldx.BindAllEvents
+	vtextfieldx.Shrink
+	vtextfieldx.AssignProps(props)
+	Return vtextfieldx
 End Sub
 
 Sub AddParallax(elID As String, sheight As String, src As String, alt As String, props As Map) As VueElement
 	Dim parentID As String = CleanID(mName)
 	elID = elID.ToLowerCase
-	Dim vparallax As VueElement = AddVueElement2(parentID, elID, "v-parallax", Null)
-	vparallax.Src = src
-	vparallax.Height = sheight
-	vparallax.Alt = alt
-	vparallax.AssignProps(props)
-	Return vparallax
+	Dim vparallaxx As VueElement = AddVueElement2(parentID, elID, "v-parallax", Null)
+	vparallaxx.Src = src
+	vparallaxx.Height = sheight
+	vparallaxx.Alt = alt
+	vparallaxx.AssignProps(props)
+	Return vparallaxx
 End Sub
 
 '<code>
@@ -9190,22 +9197,22 @@ End Sub
 Sub AddFileInput(elID As String, vmodel As String, slabel As String, splaceholder As String, bMultiple As Boolean, sHint As String, props As Map) As VueElement
 	Dim parentID As String = CleanID(mName)
 	elID = elID.ToLowerCase
-	Dim vfileinput As VueElement = AddVueElement2(parentID, elID, "v-file-input", Null)
-	vfileinput.Label = slabel
-	vfileinput.Placeholder = splaceholder
-	vfileinput.Hint = sHint
-	vfileinput.VModel = vmodel
-	vfileinput.AddAttrOnConditionTrue(":multiple", bMultiple, True)
-	vfileinput.BindAllEvents
-	vfileinput.AssignProps(props)
+	Dim vfileinputx As VueElement = AddVueElement2(parentID, elID, "v-file-input", Null)
+	vfileinputx.Label = slabel
+	vfileinputx.Placeholder = splaceholder
+	vfileinputx.Hint = sHint
+	vfileinputx.VModel = vmodel
+	vfileinputx.AddAttrOnConditionTrue(":multiple", bMultiple, True)
+	vfileinputx.BindAllEvents
+	vfileinputx.AssignProps(props)
 	If vmodel <> "" Then
 		If bMultiple Then
-			vfileinput.SetData(vmodel, NewList)
+			vfileinputx.SetData(vmodel, NewList)
 		Else
-			vfileinput.SetData(vmodel, Null)	
+			vfileinputx.SetData(vmodel, Null)	
 		End If
 	End If
-	Return vfileinput
+	Return vfileinputx
 End Sub
 
 
@@ -9265,20 +9272,20 @@ Sub AddSlider(elID As String, vmodel As String, slabel As String, iminvalue As O
 	Dim parentID As String = CleanID(mName)
 	elID = elID.ToLowerCase
 	'get the text field, there is only 1 element on the layout
-	Dim vslider As VueElement = AddVueElement2(parentID, elID, "v-slider", Null)
-	vslider.Label = slabel
-	vslider.VModel = vmodel
-	vslider.SetData(vmodel, 0)
+	Dim vsliderx As VueElement = AddVueElement2(parentID, elID, "v-slider", Null)
+	vsliderx.Label = slabel
+	vsliderx.VModel = vmodel
+	vsliderx.SetData(vmodel, 0)
 	If bShowThumb Then 
-		vslider.AddAttr("thumb-label", "always")
+		vsliderx.AddAttr("thumb-label", "always")
 	End If
-	vslider.AddAttr(":vertical", bVertical)
-	vslider.AddAttr("min", iminvalue)
-	vslider.AddAttr("max", imaxvalue)
-	If iStep > 0 Then vslider.AddAttr("step", iStep)
-	vslider.BindAllEvents
-	vslider.AssignProps(props)
-	Return vslider
+	vsliderx.AddAttr(":vertical", bVertical)
+	vsliderx.AddAttr("min", iminvalue)
+	vsliderx.AddAttr("max", imaxvalue)
+	If iStep > 0 Then vsliderx.AddAttr("step", iStep)
+	vsliderx.BindAllEvents
+	vsliderx.AssignProps(props)
+	Return vsliderx
 End Sub
 
 '<code>
@@ -9332,14 +9339,14 @@ End Sub
 Sub AddTextField1(elID As String, vModel As String, sLabel As String, props As Map) As VueElement
 	Dim parentID As String = CleanID(mName)
 	elID = elID.ToLowerCase
-	Dim vtextfield As VueElement = AddVueElement2(parentID, elID, "v-text-field", Null)
-	vtextfield.Label = sLabel
-	vtextfield.VModel = vModel
-	vtextfield.SetData(vModel, "")
-	vtextfield.SetTypeText
-	vtextfield.BindAllEvents
-	vtextfield.AssignProps(props)
-	Return vtextfield
+	Dim vtextfieldx As VueElement = AddVueElement2(parentID, elID, "v-text-field", Null)
+	vtextfieldx.Label = sLabel
+	vtextfieldx.VModel = vModel
+	vtextfieldx.SetData(vModel, "")
+	vtextfieldx.SetTypeText
+	vtextfieldx.BindAllEvents
+	vtextfieldx.AssignProps(props)
+	Return vtextfieldx
 End Sub
 
 
@@ -9351,21 +9358,21 @@ End Sub
 Sub AddTextField(elID As String, vmodel As String, slabel As String, splaceholder As String, bRequired As Boolean, sPrependIcon As String, iMaxLen As Int, sHint As String, props As Map) As VueElement
 	Dim parentID As String = CleanID(mName)
 	elID = elID.ToLowerCase
-	Dim vtextfield As VueElement = AddVueElement2(parentID, elID, "v-text-field", Null)
-	vtextfield.Label = slabel
-	vtextfield.Required = bRequired
-	vtextfield.PrependIcon = sPrependIcon
+	Dim vtextfieldx As VueElement = AddVueElement2(parentID, elID, "v-text-field", Null)
+	vtextfieldx.Label = slabel
+	vtextfieldx.Required = bRequired
+	vtextfieldx.PrependIcon = sPrependIcon
 	If iMaxLen > 0 Then
-		vtextfield.Counter = True
+		vtextfieldx.Counter = True
 	End If
-	vtextfield.Placeholder = splaceholder
-	vtextfield.Hint = sHint
-	vtextfield.VModel = vmodel
-	vtextfield.SetData(vmodel, "")
-	vtextfield.SetTypeText
-	vtextfield.BindAllEvents
-	vtextfield.AssignProps(props)
-	Return vtextfield
+	vtextfieldx.Placeholder = splaceholder
+	vtextfieldx.Hint = sHint
+	vtextfieldx.VModel = vmodel
+	vtextfieldx.SetData(vmodel, "")
+	vtextfieldx.SetTypeText
+	vtextfieldx.BindAllEvents
+	vtextfieldx.AssignProps(props)
+	Return vtextfieldx
 End Sub
 
 '<code>
@@ -9386,21 +9393,21 @@ End Sub
 Sub AddTextArea(elID As String, vmodel As String, slabel As String, splaceholder As String, bRequired As Boolean, sPrependIcon As String, iMaxLen As Int, sHint As String, props As Map) As VueElement
 	Dim parentID As String = CleanID(mName)
 	elID = elID.ToLowerCase
-	Dim vtextfield As VueElement = AddVueElement2(parentID, elID, "v-textarea", Null)
-	vtextfield.Label = slabel
-	vtextfield.Required = bRequired
-	vtextfield.PrependIcon = sPrependIcon
+	Dim vtextfieldx As VueElement = AddVueElement2(parentID, elID, "v-textarea", Null)
+	vtextfieldx.Label = slabel
+	vtextfieldx.Required = bRequired
+	vtextfieldx.PrependIcon = sPrependIcon
 	If iMaxLen > 0 Then
-		vtextfield.Counter = True
+		vtextfieldx.Counter = True
 	End If
-	vtextfield.Placeholder = splaceholder
-	vtextfield.Hint = sHint
-	vtextfield.VModel = vmodel
-	vtextfield.SetData(vmodel, "")
-	vtextfield.SetTypeText
-	vtextfield.BindAllEvents
-	vtextfield.AssignProps(props)
-	Return vtextfield
+	vtextfieldx.Placeholder = splaceholder
+	vtextfieldx.Hint = sHint
+	vtextfieldx.VModel = vmodel
+	vtextfieldx.SetData(vmodel, "")
+	vtextfieldx.SetTypeText
+	vtextfieldx.BindAllEvents
+	vtextfieldx.AssignProps(props)
+	Return vtextfieldx
 End Sub
 
 Sub AddPassword1(fldName As String, vmodel As String, title As String, maxLen As Int, props As Map) As VueElement
@@ -9412,53 +9419,53 @@ Sub AddPassword(elID As String, vmodel As String, slabel As String, splaceholder
 	elID = elID.ToLowerCase
 	Dim bshowPassword As String = $"${elID}ShowPassword"$
 	bshowPassword = bshowPassword.tolowercase
-	Dim vtextfield As VueElement = AddVueElement2(parentID, elID, "v-text-field", Null)
-	vtextfield.Label = slabel
-	vtextfield.Required = bRequired
-	vtextfield.PrependIcon = sPrependIcon
+	Dim vtextfieldx As VueElement = AddVueElement2(parentID, elID, "v-text-field", Null)
+	vtextfieldx.Label = slabel
+	vtextfieldx.Required = bRequired
+	vtextfieldx.PrependIcon = sPrependIcon
 	If iMaxLen > 0 Then
-		vtextfield.Counter = True
+		vtextfieldx.Counter = True
 	End If
-	vtextfield.Placeholder = splaceholder
-	vtextfield.Hint = sHint
-	vtextfield.VModel = vmodel
-	vtextfield.SetData(vmodel, "")
-	vtextfield.SetTypePassword
-	vtextfield.BindAllEvents
-	vtextfield.AddAttr(":type", $"${bshowPassword} ? 'text' : 'password'"$)
-	vtextfield.AddAttr(":append-icon", $"${bshowPassword} ? 'mdi-eye' : 'mdi-eye-off'"$)
-	vtextfield.AddAttr("v-on:click:append", $"${bshowPassword} = !${bshowPassword}"$)
-	vtextfield.AddAttr("autocomplete", "off")
-	vtextfield.AssignProps(props)
-	vtextfield.SetData(bshowPassword, False)
-	Return vtextfield
+	vtextfieldx.Placeholder = splaceholder
+	vtextfieldx.Hint = sHint
+	vtextfieldx.VModel = vmodel
+	vtextfieldx.SetData(vmodel, "")
+	vtextfieldx.SetTypePassword
+	vtextfieldx.BindAllEvents
+	vtextfieldx.AddAttr(":type", $"${bshowPassword} ? 'text' : 'password'"$)
+	vtextfieldx.AddAttr(":append-icon", $"${bshowPassword} ? 'mdi-eye' : 'mdi-eye-off'"$)
+	vtextfieldx.AddAttr("v-on:click:append", $"${bshowPassword} = !${bshowPassword}"$)
+	vtextfieldx.AddAttr("autocomplete", "off")
+	vtextfieldx.AssignProps(props)
+	vtextfieldx.SetData(bshowPassword, False)
+	Return vtextfieldx
 End Sub
 
 
 Sub AddSwitch(sid As String, vmodel As String, slabel As String, truevalue As Object, falsevalue As Object, color As String, bInset As Boolean, props As Map) As VueElement
 	Dim parentID As String = CleanID(mName)
 	sid = sid.ToLowerCase
-	Dim vswitch As VueElement = AddVueElement2(parentID, sid, "v-switch", Null)
-	vswitch.VModel = vmodel
-	vswitch.label = slabel
+	Dim vswitchx As VueElement = AddVueElement2(parentID, sid, "v-switch", Null)
+	vswitchx.VModel = vmodel
+	vswitchx.label = slabel
 	If BANano.IsNull(truevalue) = False Or BANano.IsUndefined(truevalue) = False Then 
-		vswitch.AddAttr("true-value", truevalue)
+		vswitchx.AddAttr("true-value", truevalue)
 	End If
 	If BANano.IsNull(falsevalue) = False Or BANano.IsUndefined(truevalue) = False Then 
-		vswitch.AddAttr("false-value", falsevalue)
+		vswitchx.AddAttr("false-value", falsevalue)
 	End If
 	If bInset Then
-		vswitch.AddAttr(":inset", bInset)
+		vswitchx.AddAttr(":inset", bInset)
 	End If
 	If color <> "" Then 
-		vswitch.Color = color
+		vswitchx.Color = color
 	End If
-	vswitch.AssignProps(props)
-	vswitch.BindAllEvents
+	vswitchx.AssignProps(props)
+	vswitchx.BindAllEvents
 	If vmodel <> "" Then
-		vswitch.SetData(vmodel, falsevalue)
+		vswitchx.SetData(vmodel, falsevalue)
 	End If
-	Return vswitch
+	Return vswitchx
 End Sub
 
 Sub AddRating(sid As String, vmodel As String, slength As Int, ssize As Int, bHover As Boolean, color As String, props As Map) As VueElement
@@ -9485,24 +9492,24 @@ End Sub
 Sub AddCheckBox(sid As String, vmodel As String, slabel As String, truevalue As Object, falsevalue As Object, color As String, props As Map) As VueElement
 	Dim parentID As String = CleanID(mName)
 	sid = sid.ToLowerCase
-	Dim vcheckbox As VueElement = AddVueElement2(parentID, sid, "v-checkbox", Null)
-	vcheckbox.VModel = vmodel
-	vcheckbox.SetData(vmodel, Null)
-	vcheckbox.label = slabel
+	Dim vcheckboxx As VueElement = AddVueElement2(parentID, sid, "v-checkbox", Null)
+	vcheckboxx.VModel = vmodel
+	vcheckboxx.SetData(vmodel, Null)
+	vcheckboxx.label = slabel
 	If BANano.IsNull(truevalue) = False Or BANano.IsUndefined(truevalue) = False Then
-		vcheckbox.Value = truevalue
-		vcheckbox.AddAttr("true-value", truevalue)
+		vcheckboxx.Value = truevalue
+		vcheckboxx.AddAttr("true-value", truevalue)
 	End If
 	If BANano.IsNull(falsevalue) = False Or BANano.IsUndefined(truevalue) = False Then
-		vcheckbox.AddAttr("false-value", falsevalue)
+		vcheckboxx.AddAttr("false-value", falsevalue)
 	End If
-	If color <> "" Then vcheckbox.Color = color
-	vcheckbox.AssignProps(props)
-	vcheckbox.BindAllEvents
+	If color <> "" Then vcheckboxx.Color = color
+	vcheckboxx.AssignProps(props)
+	vcheckboxx.BindAllEvents
 	If vmodel <> "" Then 
-		vcheckbox.SetData(vmodel, truevalue)
+		vcheckboxx.SetData(vmodel, truevalue)
 	End If
-	Return vcheckbox
+	Return vcheckboxx
 End Sub
 
 '<code>
@@ -9974,6 +9981,7 @@ Sub AddSnackBar1(elID As String, vmodel As String, Caption As String, color As S
 	Dim elx As VueElement
 	elx.Initialize(mCallBack, elID, elID)
 	elx.BindAllEvents
+	elx.SetData(sIconValue, icon)
 	elx.SetData(vmodel, False)
 	elx.SetData(sContent, Caption)
 	elx.SetData(sColor, color)
@@ -10647,31 +10655,31 @@ Sub AtTheBottom As VueElement
 	Return Me
 End Sub
 
-Sub setOverflowHidden(b As Boolean)
+Sub setOverflowHidden(b As Boolean)  'ignore
 	AddClass("overflow-hidden")
 End Sub
 
-Sub setOverflowYHidden(b As Boolean)
+Sub setOverflowYHidden(b As Boolean)  'ignore
 	AddClass("overflow-y-hidden")
 End Sub
 
-Sub setOverflowXHidden(b As Boolean)
+Sub setOverflowXHidden(b As Boolean)   'ignore
 	AddClass("overflow-x-hidden")
 End Sub
 
-Sub setTextLGRight(b As Boolean)
+Sub setTextLGRight(b As Boolean)   'ignore
 	AddClass("text-lg-right")
 End Sub
 
-Sub setTextMDCenter(b As Boolean)
+Sub setTextMDCenter(b As Boolean)   'ignore
 	AddClass("text-md-center")
 End Sub
 
-Sub setTextSMLeft(b As Boolean)
+Sub setTextSMLeft(b As Boolean)   'ignore
 	AddClass("text-sm-left")
 End Sub
 
-Sub setTextXSRight(b As Boolean)
+Sub setTextXSRight(b As Boolean)  'ignore
 	AddClass("text-xs-right")
 End Sub
 
@@ -10683,23 +10691,23 @@ Sub setPrevIcon(pi As String)
 	AddAttr("prev-icon", pi)
 End Sub
 
-Sub setAlignStart(b As Boolean)
+Sub setAlignStart(b As Boolean)  'ignore
 	AddAttr("align", "start")
 End Sub
 
-Sub setAlignEnd(b As Boolean)
+Sub setAlignEnd(b As Boolean) 'ignore
 	AddAttr("align", "end")
 End Sub
 
-Sub setJustifySpaceAround(b As Boolean)
+Sub setJustifySpaceAround(b As Boolean)  'ignore
 	AddClass("justify-space-around")
 End Sub
 
-Sub setJustifySpaceBetween(b As Boolean)
+Sub setJustifySpaceBetween(b As Boolean)  'ignore
 	AddClass("justify-space-between")
 End Sub
 
-Sub setJustifyStart(b As Boolean)
+Sub setJustifyStart(b As Boolean)  'ignore
 	AddClass("justify-start")
 End Sub
 
@@ -10775,7 +10783,7 @@ Sub AddScaleTransition(elID As String) As VueElement
 	Return elx
 End Sub
 
-Sub setScrollXTransition(b As Boolean)
+Sub setScrollXTransition(b As Boolean)   'ignore
 	AddAttr("transition", "scroll-x-transition")
 End Sub
 
@@ -10790,7 +10798,7 @@ Sub AddScrollXReverseTransition(elID As String) As VueElement
 	Return elx
 End Sub
 
-Sub setScrollYReverseTransition(b As Boolean)
+Sub setScrollYReverseTransition(b As Boolean)  'ignore
 	AddAttr("transition", "scroll-y-reverse-transition")
 End Sub
 
@@ -10800,7 +10808,7 @@ Sub AddScrollYReverseTransition(elID As String) As VueElement
 	Return elx
 End Sub
 
-Sub setScrollYTransition(b As Boolean)
+Sub setScrollYTransition(b As Boolean)   'ignore
 	AddAttr("transition", "scroll-y-transition")
 End Sub
 
@@ -10809,7 +10817,7 @@ Sub AddScrollYTransition(elID As String) As VueElement
 	Return elx
 End Sub
 
-Sub setSlideYTransition(b As Boolean)
+Sub setSlideYTransition(b As Boolean)  'ignore
 	AddAttr("transition", "slide-y-transition")
 End Sub
 
@@ -10818,7 +10826,7 @@ Sub AddSlideYTransition(elID As String) As VueElement
 	Return elx
 End Sub
 
-Sub setSlideYReverseTransition(b As Boolean)
+Sub setSlideYReverseTransition(b As Boolean)   'ignore
 	AddAttr("transition", "slide-y-reverse-transition")
 End Sub
 
@@ -10841,11 +10849,11 @@ Sub AddKeyValue(key As String, value As String)
 	Records.Add(rec)
 End Sub
 
-Sub setNoBorder(b As Boolean)
+Sub setNoBorder(b As Boolean)  'ignore 
 	AddStyle("border", "none")
 End Sub
 
-Sub setBorderNone(b As Boolean)
+Sub setBorderNone(b As Boolean)  'ignore
 	AddStyle("border", "none")
 End Sub
 
@@ -10878,7 +10886,7 @@ Sub setShrinkOnScroll(v As Boolean)
 End Sub
 
 'overflow-y-auto
-Sub setOverFlowYAuto(b As Boolean)
+Sub setOverFlowYAuto(b As Boolean)  'ignore
 	AddClass("overflow-y-auto")
 End Sub
 
@@ -10894,25 +10902,25 @@ Sub setAspectRation(v As Object)
 End Sub
 
 'hide-overflow
-Sub setHideOverFlow(b As Boolean)
+Sub setHideOverFlow(b As Boolean)   'ignore
 	AddClass("hide-overflow")
 End Sub
 
 'float-left
-Sub setFloatLeft(b As Boolean)
+Sub setFloatLeft(b As Boolean)  'ignore
 	AddClass("float-left")
 End Sub
 
 'float-right
-Sub setFloatRight(b As Boolean)
+Sub setFloatRight(b As Boolean)  'ignore
 	AddClass("float-right")
 End Sub
 
-Sub setSecondary(b As Boolean)
+Sub setSecondary(b As Boolean)  'ignore
 	AddClass("secondary")
 End Sub
 
-Sub setTextNoWrap(b As Boolean)
+Sub setTextNoWrap(b As Boolean)  'ignore
 	AddClass("text-no-wrap")
 End Sub
 
@@ -10924,7 +10932,7 @@ Sub AddVueGCharts(elID As String) As VueGCharts
 	Return gc
 End Sub
 
-Sub setTextCapitalize(b As Boolean)
+Sub setTextCapitalize(b As Boolean)   'ignore
 	AddClass("text-capitalize")
 End Sub
 
@@ -10978,7 +10986,7 @@ Sub GetBase64Image As String
 	Return obj
 End Sub
 
-Sub setAcceptVideo(b As Boolean)
+Sub setAcceptVideo(b As Boolean) 'ignore
 	AddAttr("accept", "video/mp4")
 End Sub
 
@@ -11321,7 +11329,7 @@ Sub setRouteTo(r As String)
 	AddAttr("route", r)
 End Sub
 
-Sub setModeOutIn(b As Boolean)
+Sub setModeOutIn(b As Boolean)   'ignore
 	AddAttr("mode", "out-in")
 End Sub
 
@@ -11641,7 +11649,7 @@ Sub JustifyContentCenter As VueElement
 	Return Me
 End Sub
 
-Sub setVSlotActiveToggle(b As Boolean)
+Sub setVSlotActiveToggle(b As Boolean)   'ignore
 	AddAttr("v-slot", "{ active, toggle }")
 End Sub
 

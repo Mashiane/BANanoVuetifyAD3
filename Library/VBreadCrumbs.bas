@@ -1,11 +1,12 @@
 ﻿B4J=true
-Group=Default Group
+Group=Default Group\ToolBars
 ModulesStructureVersion=1
 Type=Class
 Version=8.9
 @EndOfDesignText@
 #IgnoreWarnings:12
 
+#DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: false, Description: Dark
 #DesignerProperty: Key: Divider, DisplayName: Divider, FieldType: String, DefaultValue: /, Description: Divider
 #DesignerProperty: Key: Items, DisplayName: Items, FieldType: String, DefaultValue: , Description: Items
@@ -39,6 +40,7 @@ Sub Class_Globals
 	Private sVIf As String
 	Private sVShow As String
 	Private xitems As List
+	Private bHidden As Boolean
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -54,6 +56,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 		End If
 	End If
 	xitems.Initialize 
+	sVShow = $"${mName}show"$
 	End Sub
 	
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
@@ -70,6 +73,7 @@ bLight = Props.Get("Light")
 sTextColor = Props.Get("TextColor")
 sTextColorIntensity = Props.Get("TextColorIntensity")
 sVIf = Props.Get("VIf")
+bHidden = Props.Get("Hidden")
 sVShow = Props.Get("VShow")
 	End If
 	'
@@ -95,6 +99,7 @@ VElement.TextColorIntensity = sTextColorIntensity
 VElement.VIf = sVIf
 VElement.VShow = sVShow
 VElement.SetData(sItems, VElement.NewList)
+velement.SetData(sVShow, Not(bHidden))
 VElement.BindAllEvents
 End Sub
 

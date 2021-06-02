@@ -1,13 +1,14 @@
 ﻿B4J=true
-Group=Default Group
+Group=Default Group\Tabs
 ModulesStructureVersion=1
 Type=Class
 Version=8.95
 @EndOfDesignText@
 #IgnoreWarnings:12
 
+#DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: ActiveClass, DisplayName: ActiveClass, FieldType: String, DefaultValue: , Description: ActiveClass
-#DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: String, DefaultValue: , Description: Disabled
+#DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: Boolean, DefaultValue: False , Description: Disabled
 #DesignerProperty: Key: Eager, DisplayName: Eager, FieldType: Boolean, DefaultValue: false, Description: Eager
 #DesignerProperty: Key: Key, DisplayName: Key, FieldType: String, DefaultValue: , Description: Key
 #DesignerProperty: Key: ReverseTransition, DisplayName: ReverseTransition, FieldType: String, DefaultValue: , Description: ReverseTransition
@@ -15,6 +16,7 @@ Version=8.95
 #DesignerProperty: Key: VBind, DisplayName: VBind, FieldType: String, DefaultValue: , Description: VBind
 #DesignerProperty: Key: VFor, DisplayName: VFor, FieldType: String, DefaultValue: , Description: VFor
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
+#DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VOn, DisplayName: VOn, FieldType: String, DefaultValue: , Description: VOn
 #DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue: , Description: VShow
 #DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: , Description: Value
@@ -45,6 +47,8 @@ Private sVIf As String
 Private sVOn As String
 Private sVShow As String
 Private sValue As String
+Private bDisabled As Boolean
+Private bHidden As Boolean
 	End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -59,7 +63,9 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey)
 		End If
 	End If
-	End Sub
+	sDisabled = $"${mName}disabled"$
+	sVShow = $"${mName}show"$
+End Sub
 	
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	mTarget = Target
@@ -68,7 +74,6 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mStyles = Props.Get("Styles")
 		mAttributes = Props.Get("Attributes")
 		sActiveClass = Props.Get("ActiveClass")
-sDisabled = Props.Get("Disabled")
 bEager = Props.Get("Eager")
 sKey = Props.Get("Key")
 sReverseTransition = Props.Get("ReverseTransition")
@@ -76,9 +81,11 @@ sTransition = Props.Get("Transition")
 sVBind = Props.Get("VBind")
 sVFor = Props.Get("VFor")
 sVIf = Props.Get("VIf")
-sVOn = Props.Get("VOn")
 sVShow = Props.Get("VShow")
+sVOn = Props.Get("VOn")
+bHidden = Props.Get("Hidden")
 sValue = Props.Get("Value")
+bDisabled = Props.Get("Disabled")
 	End If
 	'
 	'build and get the element
@@ -88,13 +95,18 @@ sValue = Props.Get("Value")
 		mElement = mTarget.Append($"<v-tab-item id="${mName}"></v-tab-item>"$).Get("#" & mName)
 	End If
 	'
+	If BANano.IsNull(bDisabled) Or BANano.IsUndefined(bDisabled) Then
+		bDisabled = False 
+	End If
+	
 	VElement.Initialize(mCallBack, mName, mName)
 	VElement.TagName = "v-tab-item"
 	VElement.Classes = mClasses
 	VElement.Styles = mStyles
 	VElement.Attributes = mAttributes
 	VElement.AddAttr("active-class", sActiveClass)
-VElement.AddAttr("disabled", sDisabled)
+VElement.AddAttr(":disabled", sDisabled)
+VElement.SetData(sDisabled, bDisabled)
 VElement.AddAttr(":eager", bEager)
 VElement.AddAttr("key", sKey)
 VElement.AddAttr("reverse-transition", sReverseTransition)
@@ -104,6 +116,7 @@ VElement.AddAttr("v-for", sVFor)
 VElement.AddAttr("v-if", sVIf)
 VElement.AddAttr("v-on", sVOn)
 VElement.AddAttr("v-show", sVShow)
+VElement.SetData(sVShow, Not(bHidden))
 VElement.AddAttr("value", sValue)
 VElement.BindAllEvents
 End Sub
@@ -153,3 +166,9 @@ End Sub
 Sub getHere As String
 	Return $"#${mName}"$
 End Sub
+
+Sub UpdateDisabled(VC As VueComponent, b As Boolean)
+	bDisabled = b
+	VC.SetData(sDisabled, b)
+End Sub
+

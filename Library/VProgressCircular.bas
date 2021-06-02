@@ -1,11 +1,12 @@
 ﻿B4J=true
-Group=Default Group
+Group=Default Group\Dashboard
 ModulesStructureVersion=1
 Type=Class
 Version=8.9
 @EndOfDesignText@
 #IgnoreWarnings:12
 
+#DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: Caption, DisplayName: Caption, FieldType: String, DefaultValue: {{ progress1 }}, Description: Caption
 #DesignerProperty: Key: Avatar, DisplayName: Avatar, FieldType: String, DefaultValue: , Description: Avatar
 #DesignerProperty: Key: Button, DisplayName: Button, FieldType: Boolean, DefaultValue: false, Description: Button
@@ -18,9 +19,9 @@ Version=8.9
 #DesignerProperty: Key: VBind, DisplayName: VBind, FieldType: String, DefaultValue: , Description: VBind
 #DesignerProperty: Key: VFor, DisplayName: VFor, FieldType: String, DefaultValue: , Description: VFor
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
+#DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: progress1 , Description: VModel
 #DesignerProperty: Key: VOn, DisplayName: VOn, FieldType: String, DefaultValue: , Description: VOn
-#DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue: , Description: VShow
 #DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: , Description: Width
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
@@ -52,6 +53,7 @@ Private sVOn As String
 Private sVShow As String
 Private sWidth As String
 Private sAvatar As String
+Private bHidden As Boolean
 	End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -66,6 +68,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey)
 		End If
 	End If
+	sVShow = $"${mName}show"$
 End Sub
 
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
@@ -85,9 +88,10 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sVBind = Props.Get("VBind")
 		sVFor = Props.Get("VFor")
 		sVIf = Props.Get("VIf")
+		sVShow = Props.Get("VShow")
 		sVModel = Props.Get("VModel")
 		sVOn = Props.Get("VOn")
-		sVShow = Props.Get("VShow")
+		bHidden = Props.Get("Hidden")
 		sWidth = Props.Get("Width")
 		sAvatar = Props.Get("Avatar")
 	End If
@@ -130,6 +134,7 @@ VElement.AddAttr("v-if", sVIf)
 VElement.AddAttr("v-model", sVModel)
 VElement.AddAttr("v-on", sVOn)
 VElement.AddAttr("v-show", sVShow)
+VElement.SetData(sVShow, Not(bHidden))
 VElement.AddAttr("width", sWidth)
 VElement.SetData(sVModel, 10)
 VElement.BindAllEvents
@@ -188,3 +193,4 @@ End Sub
 Sub getHere As String
 	Return $"#${mName}"$
 End Sub
+

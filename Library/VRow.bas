@@ -1,5 +1,5 @@
 ﻿B4J=true
-Group=Default Group
+Group=Default Group\Grid
 ModulesStructureVersion=1
 Type=Class
 Version=8.9
@@ -18,6 +18,13 @@ Version=8.9
 #DesignerProperty: Key: Align, DisplayName: Align, FieldType: String, DefaultValue: , Description: Align, List: normal|start|center|end|baseline|stretch
 #DesignerProperty: Key: Justify, DisplayName: Justify, FieldType: String, DefaultValue: , Description: Justify, List: normal|start|center|end|space-between|space-around
 #DesignerProperty: Key: NoGutters, DisplayName: NoGutters, FieldType: Boolean, DefaultValue: False, Description: No Gutters
+
+#DesignerProperty: Key: Border, DisplayName: Border, FieldType: String, DefaultValue:  , Description: 
+#DesignerProperty: Key: BorderColor, DisplayName: BorderColor, FieldType: String, DefaultValue:  , Description: , List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
+#DesignerProperty: Key: BorderRadius, DisplayName: Border Radius, FieldType: String, DefaultValue:  , Description: 
+#DesignerProperty: Key: BorderStyle, DisplayName: Border Style, FieldType: String, DefaultValue:  , Description: , List: none|hidden|dotted|dashed|solid|double|groove|ridge|inset|outset|initial|inherit
+#DesignerProperty: Key: BorderWidth, DisplayName: Border Width, FieldType: String, DefaultValue:  , Description: 
+
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
@@ -75,6 +82,11 @@ Private sPX As String
 Private sPY As String
 Private sVFor As String
 Private sKey As String
+	Private sBorder As String
+Private sBorderColor As String
+Private sBorderRadius As String
+Private sBorderStyle As String
+Private sBorderWidth As String
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -124,6 +136,11 @@ sPY = Props.Get("PY")
 sKey = Props.Get("Key")
 sVFor = Props.Get("VFor")
 bNoGutters = Props.Get("NoGutters")
+		sBorder = Props.Get("Border")
+sBorderColor = Props.Get("BorderColor")
+sBorderRadius = Props.Get("BorderRadius")
+sBorderStyle = Props.Get("BorderStyle")
+sBorderWidth = Props.Get("BorderWidth")
 	End If
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
@@ -160,6 +177,12 @@ VElement.PY = sPY
 VElement.SetAttrOnTrue(":no-gutters", bNoGutters, True)
 VElement.VFor = sVFor
 VElement.BindKey(sKey)
+	VElement.Border = sBorder
+VElement.BorderColor = sBorderColor
+VElement.BorderRadius = sBorderRadius
+VElement.BorderStyle = sBorderStyle
+VElement.BorderWidth = sBorderWidth
+VElement.bindallevents
 End Sub
 
 public Sub AddToParent(targetID As String)

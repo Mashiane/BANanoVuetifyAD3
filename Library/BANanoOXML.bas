@@ -1,5 +1,5 @@
 ﻿B4J=true
-Group=Default Group
+Group=Default Group\Excel
 ModulesStructureVersion=1
 Type=Class
 Version=8.9

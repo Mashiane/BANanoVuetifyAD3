@@ -1,5 +1,5 @@
 ﻿B4J=true
-Group=Default Group
+Group=Default Group\PDF
 ModulesStructureVersion=1
 Type=Class
 Version=8.9
@@ -31,7 +31,7 @@ Sub Class_Globals
 	Public CONST PAGE_BREAK_ALWAYS As String = "always"
 	Private mtableLineColor As List
 	Private mtableLineWidth As Double
-	Private BANano As BANano
+	Private BANano As BANano 'ignore
 	Type styleDef (font As String, lineWidth As Double, lineColor As List, fillColor As List, fontSize As Int, _
 	cellPadding As Int, fontStyle As String,overflow As String, textColor As List, halign As String, valign As String, _
 	fillStyle As String, rowHeight As Int, minCellWidth As Int, minCellHeight As Int, cellWidth As String)

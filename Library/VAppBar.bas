@@ -1,11 +1,12 @@
 ﻿B4J=true
-Group=Default Group
+Group=Default Group\ToolBars
 ModulesStructureVersion=1
 Type=Class
 Version=8.9
 @EndOfDesignText@
 #IgnoreWarnings:12
 
+#DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: Absolute, DisplayName: Absolute, FieldType: Boolean, DefaultValue: false, Description: Absolute
 #DesignerProperty: Key: App, DisplayName: App, FieldType: Boolean, DefaultValue: True, Description: App
 #DesignerProperty: Key: Bottom, DisplayName: Bottom, FieldType: Boolean, DefaultValue: false, Description: Bottom
@@ -47,7 +48,7 @@ Version=8.9
 #DesignerProperty: Key: TextColorIntensity, DisplayName: TextColorIntensity, FieldType: String, DefaultValue: , Description: TextColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: Tile, DisplayName: Tile, FieldType: Boolean, DefaultValue: false, Description: Tile
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
-#DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue: , Description: VShow
+#DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: , Description: Value
 #DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: , Description: Width
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
@@ -109,6 +110,7 @@ Private sValue As String
 Private sWidth As String
 Private sVShow As String
 Private xColor As String
+Private bHidden As Boolean
 	End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -123,7 +125,8 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey)
 		End If
 	End If
-	xColor = $"${mname}color"$
+	xColor = $"${mName}color"$
+	sVShow = $"${mName}show"$
 	End Sub
 	
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
@@ -173,9 +176,10 @@ sTextColor = Props.Get("TextColor")
 sTextColorIntensity = Props.Get("TextColorIntensity")
 bTile = Props.Get("Tile")
 sVIf = Props.Get("VIf")
+sVShow = Props.Get("VShow")
 sValue = Props.Get("Value")
 sWidth = Props.Get("Width")
-sVShow = Props.Get("VShow")
+bHidden = Props.Get("Hidden")
 	End If
 	'
 	'build and get the element
@@ -234,6 +238,7 @@ VElement.VIf = sVIf
 VElement.AddAttr(":value", sValue)
 VElement.Width = sWidth
 VElement.VShow = sVShow
+VElement.SetData(sVShow, Not(bHidden))
 VElement.BindAllEvents
 End Sub
 
@@ -276,7 +281,7 @@ End Sub
 
 Sub UpdateColor(VC As VueComponent, vColor As String, vIntensity As String)
 	sColor = VElement.BuildColor(vColor, vIntensity)
-	VElement.SetData(xColor, sColor)
+	VC.SetData(xColor, sColor)
 End Sub
 
 Sub getID As String
@@ -287,3 +292,4 @@ End Sub
 Sub getHere As String
 	Return $"#${mName}"$
 End Sub
+

@@ -1,5 +1,5 @@
 ﻿B4J=true
-Group=Default Group
+Group=Default Group\Images
 ModulesStructureVersion=1
 Type=Class
 Version=8.9
@@ -7,6 +7,8 @@ Version=8.9
 #IgnoreWarnings:12
 
 #Event: Change (i As Int)
+#DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
+
 #DesignerProperty: Key: ImagesSource, DisplayName: Images Source, FieldType: String, DefaultValue: , Description: ImageSource
 #DesignerProperty: Key: ImagesLink, DisplayName: Images Link, FieldType: Boolean, DefaultValue: false, Description: Images Link
 #DesignerProperty: Key: ImagesReverseTransition, DisplayName: Images ReverseTransition, FieldType: String, DefaultValue: , Description: Images ReverseTransition
@@ -88,6 +90,7 @@ Private sImagesRipple As String
 Private sImagesTarget As String
 Private sImagesTransition As String
 Private xItems As List
+private bHidden as boolean
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -103,6 +106,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 		End If
 	End If
 	xItems.Initialize 
+	sVShow = $"${mName}show"$
 End Sub
 	
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
@@ -135,6 +139,7 @@ bShowArrowsOnHover = Props.Get("ShowArrowsOnHover")
 bTouchless = Props.Get("Touchless")
 sVIf = Props.Get("VIf")
 sVShow = Props.Get("VShow")
+bHidden = Props.Get("Hidden")
 bVertical = Props.Get("Vertical")
 sVerticalDelimiters = Props.Get("VerticalDelimiters")
 mImagesSource = Props.Get("ImagesSource")
@@ -206,6 +211,7 @@ VElement.VIf = sVIf
 VElement.VShow = sVShow
 VElement.Vertical = bVertical
 VElement.AddAttr("vertical-delimiters", sVerticalDelimiters)
+VElement.SetData(sVShow, Not(bHidden))
 VElement.BindAllEvents
 End Sub
 
@@ -267,3 +273,4 @@ End Sub
 Sub getHere As String
 	Return $"#${mName}"$
 End Sub
+

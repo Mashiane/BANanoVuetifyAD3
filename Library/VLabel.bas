@@ -7,6 +7,7 @@ Version=8.9
 #IgnoreWarnings:12
 #Event: Click (e As BANanoEvent)
 
+#DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: Caption, DisplayName: Caption, FieldType: String, DefaultValue: , Description: Caption
 #DesignerProperty: Key: Size, DisplayName: Size, FieldType: String, DefaultValue: div, Description: Size, List: a|div|h1|h2|h3|h4|h5|h6|label|p|span|v-spacer|v-divider|v-subheader|v-main|slot|v-tabs-slider|router-view|router-link
 #DesignerProperty: Key: LoremIpsum, DisplayName: LoremIpsum, FieldType: Boolean, DefaultValue: false, Description: LoremIpsum
@@ -95,6 +96,7 @@ Private sVOn As String
 Private sVBind As String
 Private bSetName As Boolean
 Private bSetRef As Boolean
+Private bHidden As Boolean
 	End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -109,6 +111,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey)
 		End If
 	End If
+	sVShow = $"${mName}show"$
 	End Sub
 	
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
@@ -148,6 +151,7 @@ sTextColorIntensity = Props.Get("TextColorIntensity")
 sTo = Props.Get("To")
 sVIf = Props.Get("VIf")
 sVShow = Props.Get("VShow")
+bHidden = Props.Get("Hidden")
 bVertical = Props.Get("Vertical")
 bInset = Props.Get("Inset")
 sVOn = Props.Get("VOn")
@@ -207,6 +211,7 @@ VElement.Vertical = bVertical
 VElement.Inset = bInset
 VElement.AddAttr("v-on", sVOn)
 	VElement.AddAttr("v-bind", sVBind)
+	VElement.SetData(sVShow, Not(bHidden))
 VElement.BindAllEvents
 End Sub
 public Sub AddToParent(targetID As String)

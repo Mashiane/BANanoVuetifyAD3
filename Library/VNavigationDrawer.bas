@@ -1,5 +1,5 @@
 ﻿B4J=true
-Group=Default Group
+Group=Default Group\ToolBars
 ModulesStructureVersion=1
 Type=Class
 Version=8.9
@@ -8,6 +8,7 @@ Version=8.9
 #Event: Input (b As Boolean)
 #Event: TransitionEnd(obj As Map)
 
+#DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: App, DisplayName: App, FieldType: Boolean, DefaultValue: True, Description: App
 #DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: drawer1, Description: VModel
 #DesignerProperty: Key: Absolute, DisplayName: Absolute, FieldType: Boolean, DefaultValue: false, Description: Absolute
@@ -84,8 +85,9 @@ Private bTouchless As Boolean
 Private sVIf As String
 Private sVModel As String
 Private sWidth As String
-private sVShow as string
-	End Sub
+Private sVShow As String
+Private bHidden As Boolean
+End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	mName = Name.tolowercase
@@ -99,6 +101,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey)
 		End If
 	End If
+	sVShow = $"${mName}show"$
 End Sub
 	
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
@@ -135,9 +138,10 @@ bStateles = Props.Get("Stateles")
 bTemporary = Props.Get("Temporary")
 bTouchless = Props.Get("Touchless")
 sVIf = Props.Get("VIf")
+svshow = Props.Get("VShow")
 sVModel = Props.Get("VModel")
 sWidth = Props.Get("Width")
-sVShow = Props.Get("VShow")
+bHidden = Props.Get("Hidden")
 	End If
 	'
 	'build and get the element
@@ -180,6 +184,7 @@ VElement.AddAttr(":touchless", bTouchless)
 VElement.AddAttr("v-if", sVIf)
 VElement.AddAttr("v-model", sVModel)
 VElement.AddAttr("v-show", sVShow)
+VElement.SetData(sVShow, Not(bHidden))
 VElement.AddAttr("width", sWidth)
 VElement.SetData(sVModel, False)
 VElement.BindAllEvents

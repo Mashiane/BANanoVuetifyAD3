@@ -1,5 +1,5 @@
 ﻿B4J=true
-Group=Default Group
+Group=Default Group\ToolBars
 ModulesStructureVersion=1
 Type=Class
 Version=8.9
@@ -12,7 +12,7 @@ Version=8.9
 #DesignerProperty: Key: CloseDelay, DisplayName: CloseDelay, FieldType: String, DefaultValue: , Description: CloseDelay
 #DesignerProperty: Key: ContentClass, DisplayName: ContentClass, FieldType: String, DefaultValue: , Description: ContentClass
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: false, Description: Dark
-#DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: String, DefaultValue: , Description: Disabled
+#DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: Boolean, DefaultValue: False, Description: Disabled
 #DesignerProperty: Key: Eager, DisplayName: Eager, FieldType: Boolean, DefaultValue: false, Description: Eager
 #DesignerProperty: Key: Fullscreen, DisplayName: Fullscreen, FieldType: Boolean, DefaultValue: false, Description: Fullscreen
 #DesignerProperty: Key: HideOverlay, DisplayName: HideOverlay, FieldType: Boolean, DefaultValue: false, Description: HideOverlay
@@ -34,6 +34,7 @@ Version=8.9
 #DesignerProperty: Key: Scrollable, DisplayName: Scrollable, FieldType: Boolean, DefaultValue: false, Description: Scrollable
 #DesignerProperty: Key: Transition, DisplayName: Transition, FieldType: String, DefaultValue: , Description: Transition, List: none|fab-transition|fade-transition|expand-transition|scale-transition|scroll-x-transition|scroll-x-reverse-transition|scroll-y-transition|scroll-y-reverse-transition|slide-x-transition|slide-x-reverse-transition|slide-y-transition|slide-y-reverse-transition
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
+#DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: , Description: Value
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
@@ -76,8 +77,10 @@ Private sReturnValue As String
 Private bScrollable As Boolean
 Private sTransition As String
 Private sVIf As String
+Private sVShow as String
 Private sValue As String
 Private sWidth As String
+Private bDisabled As Boolean
 	End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -92,6 +95,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey)
 		End If
 	End If
+	sDisabled = $"${mName}disabled"$
 	End Sub
 	
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
@@ -105,7 +109,6 @@ bAttach = Props.Get("Attach")
 sCloseDelay = Props.Get("CloseDelay")
 sContentClass = Props.Get("ContentClass")
 bDark = Props.Get("Dark")
-sDisabled = Props.Get("Disabled")
 bEager = Props.Get("Eager")
 bFullscreen = Props.Get("Fullscreen")
 bHideOverlay = Props.Get("HideOverlay")
@@ -127,10 +130,15 @@ sReturnValue = Props.Get("ReturnValue")
 bScrollable = Props.Get("Scrollable")
 sTransition = Props.Get("Transition")
 sVIf = Props.Get("VIf")
+sVShow = Props.Get("VShow")
 sValue = Props.Get("Value")
 sWidth = Props.Get("Width")
+bDisabled = Props.Get("Disabled")
 	End If
 	'
+	If BANano.IsNull(bDisabled) Or BANano.IsUndefined(bDisabled) Then
+		bDisabled = False 
+	End If
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
 		mElement = BANano.GetElement($"#${mName}"$)
@@ -147,7 +155,8 @@ VElement.AddAttr(":attach", bAttach)
 VElement.AddAttr("close-delay", sCloseDelay)
 VElement.AddAttr("content-class", sContentClass)
 VElement.AddAttr(":dark", bDark)
-VElement.AddAttr("disabled", sDisabled)
+VElement.AddAttr(":disabled", sDisabled)
+VElement.SetData(sDisabled, bDisabled)
 VElement.AddAttr(":eager", bEager)
 VElement.AddAttr(":fullscreen", bFullscreen)
 VElement.AddAttr(":hide-overlay", bHideOverlay)
@@ -171,6 +180,7 @@ VElement.AddAttr("transition", sTransition)
 VElement.AddAttr("v-if", sVIf)
 VElement.AddAttr(":value", sValue)
 VElement.AddAttr("width", sWidth)
+VElement.AddAttr("v-show", sVShow)
 VElement.SetData(sValue, False)
 VElement.BindAllEvents
 End Sub
@@ -213,6 +223,7 @@ End Sub
 
 
 Sub UpdateDisabled(VC As VueComponent, b As Boolean) As VBottomSheet
+	bdisabled = b
 	VC.SetData(sDisabled, b)
 	Return Me
 End Sub

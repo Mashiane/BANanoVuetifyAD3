@@ -106,6 +106,8 @@ Sub Init
 	drwlist.AddItemParentChild("home", ViewPDFView.name, "",  "", "PDF View", ViewPDFView.path)
 	
 	drwlist.AddItemParentChild("", "ad", "mdi-cog", "", "Abstracts", "")
+	drwlist.AddItemParentChild("", "frm", "mdi-cog", "", "Abstracts - Forms", "")
+	
 	drwlist.AddItemParentChild("ad", ViewADLogin.name, "",  "", "AD Login", ViewADLogin.path)
 	drwlist.AddItemParentChild("ad", ViewADAlerts.name, "",  "", "AD Alerts", ViewADAlerts.path)
 	drwlist.AddItemParentChild("ad", ViewADAvatars.name, "",  "", "AD Avatars", ViewADAvatars.path)
@@ -130,17 +132,20 @@ Sub Init
 	drwlist.AddItemParentChild("ad", ViewADIcons.name, "",  "", "AD Icons", ViewADIcons.path)
 	drwlist.AddItemParentChild("ad", ViewADImages.name, "",  "", "AD Images", ViewADImages.path)
 	
-	drwlist.AddItemParentChild("ad", ViewADInputs.name, "",  "", "AD Rating", ViewADInputs.path)
-	drwlist.AddItemParentChild("ad", ViewADTextField.name, "",  "", "AD TextField", ViewADTextField.path)
-	drwlist.AddItemParentChild("ad", ViewADSwitch.name, "",  "", "AD Switch", ViewADSwitch.path)
-	drwlist.AddItemParentChild("ad", ViewADSliders.name, "",  "", "AD Sliders", ViewADSliders.path)
-	drwlist.AddItemParentChild("ad", ViewADSelects.name, "",  "", "AD Selects", ViewADSelects.path)
-	drwlist.AddItemParentChild("ad", ViewADAutoComplete.name, "",  "", "AD AutoComplete", ViewADAutoComplete.path)
-	drwlist.AddItemParentChild("ad", ViewAdCombo.name, "",  "", "AD ComboBox", ViewAdCombo.path)
+	drwlist.AddItemParentChild("frm", ViewADInputs.name, "",  "", "AD Rating", ViewADInputs.path)
+	drwlist.AddItemParentChild("frm", ViewADTextField.name, "",  "", "AD TextField", ViewADTextField.path)
+	drwlist.AddItemParentChild("frm", ViewADSelects.name, "",  "", "AD Selects", ViewADSelects.path)
+	drwlist.AddItemParentChild("frm", ViewADAutoComplete.name, "",  "", "AD AutoComplete", ViewADAutoComplete.path)
+	drwlist.AddItemParentChild("frm", ViewADCombo.name, "",  "", "AD ComboBox", ViewADCombo.path)
+	drwlist.AddItemParentChild("frm", ViewADCheckBoxes.name, "",  "", "AD CheckBoxes", ViewADCheckBoxes.path)
+	drwlist.AddItemParentChild("frm", ViewADSliders.name, "",  "", "AD Sliders", ViewADSliders.path)
+	drwlist.AddItemParentChild("frm", ViewADSwitch.name, "",  "", "AD Switch", ViewADSwitch.path)
+	drwlist.AddItemParentChild("frm", ViewADFileInput.name, "",  "", "AD File Input", ViewADFileInput.path)
+	drwlist.AddItemParentChild("frm", ViewADForm.name, "",  "", "AD Form", ViewADForm.path)
 	
 	
+	drwlist.AddItemParentChild("ad", ViewADMenus.name, "",  "", "AD Menu", ViewADMenus.path)
 	drwlist.AddItemParentChild("ad", ViewADOverlay.name, "",  "", "AD Overlay", ViewADOverlay.path)
-	
 	drwlist.AddItemParentChild("ad", ViewADProgress.name, "",  "", "AD Progress", ViewADProgress.path)
 	
 	drwlist.AddItemParentChild("ad", ViewADSheet.name, "",  "", "AD Sheets", ViewADSheet.path)
@@ -265,6 +270,11 @@ End Sub
 Sub AddRouters
 	'ViewContacts.Initialize
 	'ViewCRUDBuilder.Initialize
+	ViewADForm.Initialize 
+	ViewADForm.Initialize 
+	ViewADFileInput.Initialize
+	ViewADCheckBoxes.Initialize 
+	ViewADMenus.Initialize 
 	ViewADCombo.Initialize 
 	ViewADAutoComplete.Initialize 
 	ViewADSelects.Initialize 

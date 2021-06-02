@@ -1,5 +1,5 @@
 ﻿B4J=true
-Group=Default Group
+Group=Default Group\Forms
 ModulesStructureVersion=1
 Type=Class
 Version=8.95
@@ -20,6 +20,13 @@ Version=8.95
 #DesignerProperty: Key: InputValue, DisplayName: InputValue, FieldType: String, DefaultValue: , Description: InputValue
 #DesignerProperty: Key: Inset, DisplayName: Inset, FieldType: Boolean, DefaultValue: false, Description: Inset
 #DesignerProperty: Key: SetRef, DisplayName: SetRef, FieldType: Boolean, DefaultValue: false, Description: SetRef
+#DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: Boolean, DefaultValue: False, Description: Disabled
+#DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
+#DesignerProperty: Key: Loading, DisplayName: Loading, FieldType: Boolean, DefaultValue: False, Description: Loading
+#DesignerProperty: Key: Readonly, DisplayName: Readonly, FieldType: Boolean, DefaultValue: False, Description: Readonly
+#DesignerProperty: Key: Required, DisplayName: Required, FieldType: Boolean, DefaultValue: False, Description: Required 
+
+
 #DesignerProperty: Key: ValidateOnBlur, DisplayName: ValidateOnBlur, FieldType: Boolean, DefaultValue: false, Description: ValidateOnBlur
 
 #DesignerProperty: Key: AppendIcon, DisplayName: AppendIcon, FieldType: String, DefaultValue: , Description: AppendIcon
@@ -29,31 +36,22 @@ Version=8.95
 #DesignerProperty: Key: ColorIntensity, DisplayName: ColorIntensity, FieldType: String, DefaultValue: , Description: ColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: false, Description: Dark
 #DesignerProperty: Key: Dense, DisplayName: Dense, FieldType: Boolean, DefaultValue: false, Description: Dense
-'#DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: String, DefaultValue: , Description: Disabled
-'#DesignerProperty: Key: Error, DisplayName: Error, FieldType: String, DefaultValue: , Description: Error
 #DesignerProperty: Key: ErrorCount, DisplayName: ErrorCount, FieldType: String, DefaultValue: , Description: ErrorCount
-'#DesignerProperty: Key: ErrorMessages, DisplayName: ErrorMessages, FieldType: String, DefaultValue: , Description: ErrorMessages
 #DesignerProperty: Key: Filled, DisplayName: Filled, FieldType: Boolean, DefaultValue: false, Description: Filled
 #DesignerProperty: Key: Flat, DisplayName: Flat, FieldType: Boolean, DefaultValue: false, Description: Flat
 #DesignerProperty: Key: HideDetails, DisplayName: HideDetails, FieldType: Boolean, DefaultValue: false, Description: HideDetails
 #DesignerProperty: Key: Hint, DisplayName: Hint, FieldType: String, DefaultValue: , Description: Hint
 #DesignerProperty: Key: Key, DisplayName: Key, FieldType: String, DefaultValue: , Description: Key
 #DesignerProperty: Key: Light, DisplayName: Light, FieldType: Boolean, DefaultValue: false, Description: Light
-'#DesignerProperty: Key: Loading, DisplayName: Loading, FieldType: String, DefaultValue: , Description: Loading
-'#DesignerProperty: Key: Messages, DisplayName: Messages, FieldType: String, DefaultValue: , Description: Messages
 #DesignerProperty: Key: Multiple, DisplayName: Multiple, FieldType: Boolean, DefaultValue: false, Description: Multiple
 #DesignerProperty: Key: PersistentHint, DisplayName: PersistentHint, FieldType: Boolean, DefaultValue: false, Description: PersistentHint
 #DesignerProperty: Key: PrependIcon, DisplayName: PrependIcon, FieldType: String, DefaultValue: , Description: PrependIcon
-#DesignerProperty: Key: Readonly, DisplayName: Readonly, FieldType: String, DefaultValue: , Description: Readonly
 #DesignerProperty: Key: Ripple, DisplayName: Ripple, FieldType: Boolean, DefaultValue: false, Description: Ripple
-'#DesignerProperty: Key: Rules, DisplayName: Rules, FieldType: String, DefaultValue: , Description: Rules
-'#DesignerProperty: Key: Success, DisplayName: Success, FieldType: String, DefaultValue: , Description: Success
-'#DesignerProperty: Key: SuccessMessages, DisplayName: SuccessMessages, FieldType: String, DefaultValue: , Description: SuccessMessages
 #DesignerProperty: Key: VBind, DisplayName: VBind, FieldType: String, DefaultValue: , Description: VBind
 #DesignerProperty: Key: VFor, DisplayName: VFor, FieldType: String, DefaultValue: , Description: VFor
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
+#DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VOn, DisplayName: VOn, FieldType: String, DefaultValue: , Description: VOn
-#DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue: , Description: VShow
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
@@ -110,6 +108,12 @@ Private sVOn As String
 Private sVShow As String
 Private bValidateOnBlur As Boolean
 Private sRequired As String
+'
+Private bDisabled As Boolean
+Private bHidden As Boolean
+Private bLoading As Boolean
+Private bReadonly As Boolean
+Private bRequired As Boolean
 	End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -140,6 +144,11 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	mTarget = Target
 	If Props <> Null Then
+		bDisabled = Props.Get("Disabled")
+bHidden = Props.Get("Hidden")
+bLoading = Props.Get("Loading")
+bReadonly = Props.Get("Readonly")
+bRequired = Props.Get("Required")
 		mClasses = Props.Get("Classes")
 		mStyles = Props.Get("Styles")
 		mAttributes = Props.Get("Attributes")
@@ -150,10 +159,7 @@ sColor = Props.Get("Color")
 sColorIntensity = Props.Get("ColorIntensity")
 bDark = Props.Get("Dark")
 bDense = Props.Get("Dense")
-sDisabled = Props.Get("Disabled")
-'sError = Props.Get("Error")
 sErrorCount = Props.Get("ErrorCount")
-'sErrorMessages = Props.Get("ErrorMessages")
 sFalseValue = Props.Get("FalseValue")
 bFilled = Props.Get("Filled")
 bFlat = Props.Get("Flat")
@@ -164,24 +170,19 @@ bInset = Props.Get("Inset")
 sKey = Props.Get("Key")
 sLabel = Props.Get("Label")
 bLight = Props.Get("Light")
-'sLoading = Props.Get("Loading")
-'sMessages = Props.Get("Messages")
 bMultiple = Props.Get("Multiple")
 bPersistentHint = Props.Get("PersistentHint")
 sPrependIcon = Props.Get("PrependIcon")
 sReadonly = Props.Get("Readonly")
 bRipple = Props.Get("Ripple")
-'sRules = Props.Get("Rules")
 bSetRef = Props.Get("SetRef")
-'sSuccess = Props.Get("Success")
-'sSuccessMessages = Props.Get("SuccessMessages")
 sTrueValue = Props.Get("TrueValue")
 sVBind = Props.Get("VBind")
 sVFor = Props.Get("VFor")
 sVIf = Props.Get("VIf")
+sVShow = Props.Get("VShow")
 sVModel = Props.Get("VModel")
 sVOn = Props.Get("VOn")
-sVShow = Props.Get("VShow")
 bValidateOnBlur = Props.Get("ValidateOnBlur")
 	End If
 	'
@@ -202,6 +203,15 @@ bValidateOnBlur = Props.Get("ValidateOnBlur")
 		VElement.Ref = mName
 	End If
 	
+	If BANano.IsNull(bDisabled) Or BANano.IsUndefined(bDisabled) Then
+		bDisabled = False 
+	End If
+	If BANano.IsNull(bRequired) Or BANano.IsUndefined(bRequired) Then
+		bRequired = False 
+	End If
+	If BANano.IsNull(bLoading) Or BANano.IsUndefined(bLoading) Then
+		bLoading = False 
+	End If
 	VElement.Classes = mClasses
 	VElement.Styles = mStyles
 	VElement.Attributes = mAttributes
@@ -211,9 +221,9 @@ VElement.Color = VElement.BuildColor(sColor, sColorIntensity)
 VElement.AddAttr(":dark", bDark)
 VElement.AddAttr(":dense", bDense)
 VElement.AddAttr(":required", sRequired)
-VElement.SetData(sRequired, False)
+VElement.SetData(sRequired, bRequired)
 VElement.AddAttr(":disabled", sDisabled)
-VElement.SetData(sDisabled, False)
+VElement.SetData(sDisabled, bDisabled)
 VElement.AddAttr(":error", sError)
 VElement.SetData(sError, False)
 VElement.AddAttr("error-count", sErrorCount)
@@ -230,14 +240,14 @@ VElement.AddAttr("key", sKey)
 VElement.AddAttr("label", sLabel)
 VElement.AddAttr(":light", bLight)
 VElement.AddAttr(":loading", sLoading)
-VElement.SetData(sLoading, False)
+VElement.SetData(sLoading, bLoading)
 VElement.AddAttr(":messages", sMessages)
 VElement.SetData(sMessages, VElement.newlist)
 VElement.AddAttr(":multiple", bMultiple)
 VElement.AddAttr(":persistent-hint", bPersistentHint)
 VElement.AddAttr("prepend-icon", sPrependIcon)
 VElement.AddAttr(":readonly", sReadonly)
-VElement.SetData(sReadonly, False)
+VElement.SetData(sReadonly, bReadonly)
 VElement.AddAttr(":ripple", bRipple)
 VElement.AddAttr(":rules", sRules)
 VElement.SetData(sRules, VElement.NewList)
@@ -252,8 +262,8 @@ VElement.AddAttr("v-if", sVIf)
 VElement.AddAttr("v-model", sVModel)
 VElement.AddAttr("v-on", sVOn)
 VElement.AddAttr("v-show", sVShow)
+VElement.SetData(sVShow, Not(bHidden))
 VElement.AddAttr(":validate-on-blur", bValidateOnBlur)
-VElement.SetData(sVModel, "No")
 VElement.BindAllEvents
 End Sub
 
@@ -314,6 +324,7 @@ Sub ClearMessages(VC As VueComponent)
 End Sub
 
 Sub UpdateDisabled(VC As VueComponent, b As Boolean)
+	bDisabled = b
 	VC.SetData(sDisabled, b)
 End Sub
 
@@ -371,3 +382,4 @@ End Sub
 Sub getVModel As String
 	Return sVModel
 End Sub
+
