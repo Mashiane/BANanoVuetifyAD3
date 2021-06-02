@@ -283,6 +283,6 @@ ModuleClosedNodes91=
 ModuleClosedNodes92=
 ModuleClosedNodes93=
 ModuleClosedNodes94=
-NavigationStack=VSelect,DesignerCreateView,319,0,VSlider,DesignerCreateView,238,0,VSwitch,DesignerCreateView,207,0,VTextField,DesignerCreateView,279,0,VueTable,DesignerCreateView,423,0,VBtn,Class_Globals,93,4,VBtn,Initialize,112,3,VBtn,DesignerCreateView,217,6,VBtn,UpdateDisabled,284,0,Main,AppStart,23,0,Main,Process_Globals,11,0
+NavigationStack=VueComponent,ClearInterval,1525,0,VueComponent,RealTimeRemoveItem,1569,0,VueComponent,SetDataRemoveWhere,917,0,VueComponent,SetDataRemoveAtPosition,932,0,VueComponent,SetDataSpliceRemove,948,0,VueComponent,RealTimeUpdateItemAtPosition,1538,2,VMenu,AddClass,415,0,VMenu,Initialize,147,0,VMenu,Class_Globals,75,0,VMenu,DesignerCreateView,219,1,VMenu,Icon,346,0
 SelectedBuild=0
 VisibleModules=

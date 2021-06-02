@@ -143,9 +143,8 @@ Private sButtonText As String
 Private sIconName As String
 Private sTextColor As String
 Private sTextColorIntensity As String
- Public MenuItems As VList
- Private bDisabled As Boolean
- Private sVShow As String
+Public MenuItems As VList
+Private bDisabled As Boolean
 	End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -180,7 +179,7 @@ sCloseOnContentClick = Props.Get("CloseOnContentClick")
 sContentClass = Props.Get("ContentClass")
 bDark = Props.Get("Dark")
 bDisableKeys = Props.Get("DisableKeys")
-bDisabled = Props.Get("Disabled")
+bDisabled = Props.GetDefault("Disabled", False)
 bEager = Props.Get("Eager")
 bFixed = Props.Get("Fixed")
 bInternalActivator = Props.Get("InternalActivator")
@@ -211,7 +210,6 @@ sTransition = Props.Get("Transition")
 sVBind = Props.Get("VBind")
 sVFor = Props.Get("VFor")
 sVIf = Props.Get("VIf")
-svshow = Props.Get("VShow")
 sVModel = Props.Get("VModel")
 sVOn = Props.Get("VOn")
 sZIndex = Props.Get("ZIndex")
@@ -283,11 +281,7 @@ sTextColorIntensity = Props.Get("TextColorIntensity")
 		iconx.Caption = sIconName
 		VElement.BindVueElement(iconx)
 	End Select
-	
-	If BANano.IsNull(bDisabled) Or BANano.IsUndefined(bDisabled) Then
-		bDisabled = False 
-	End If
-	
+		
 	VElement.Classes = mClasses 
 	VElement.Styles = mStyles 
 	VElement.Attributes = mAttributes 
@@ -348,7 +342,7 @@ VElement.AddAttr("v-if", sVIf)
 VElement.AddAttr("v-model", sVModel)
 VElement.AddAttr("v-on", sVOn)
 VElement.AddAttr("z-index", sZIndex)
-VElement.AddAttr("v-show", sVShow)
+'VElement.AddAttr("v-show", sVShow)
 VElement.BindAllEvents
 '	
 Dim skey As String = $"${mName}list"$

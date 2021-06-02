@@ -1541,7 +1541,13 @@ End Sub
 'update item where
 Sub RealTimeUpdateItemAtPosition(lstName As String, pos As Int, item As Map)
 	If pos >= 0 Then
-		SetDataSplice(lstName, pos, 1, item)
+		Dim recs As List = GetData(lstName)
+		Dim rec As Map = recs.Get(pos)
+		For Each k As String In item.Keys
+			Dim v As Object = item.Get(k)
+			rec.Put(k, v)
+		Next
+		SetDataSplice(lstName, pos, 1, rec)
 	End If
 End Sub
 
@@ -1578,7 +1584,14 @@ Sub RealTimeUpdateItem(lstName As String, prop As String, value As String, item 
 	'find the record at a position
 	Dim mpos As Int = GetDataPositionWhere(lstName, m)
 	If mpos >= 0 Then
-		SetDataSplice(lstName, mpos, 1, item)
+		'get existing record
+		Dim recs As List = GetData(lstName)
+		Dim rec As Map = recs.Get(mpos)
+		For Each k As String In item.Keys
+			Dim v As Object = item.Get(k)
+			rec.Put(k, v)
+		Next
+		SetDataSplice(lstName, mpos, 1, rec)
 	End If
 End Sub
 

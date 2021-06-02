@@ -14,6 +14,8 @@ Sub Process_Globals
 	Private VBottomNavigation1 As VBottomNavigation
 	Private VBottomNavigation2 As VBottomNavigation
 	Private VBottomNavigation3 As VBottomNavigation
+	Private badge As Int
+	private counter as int
 End Sub
 
 Sub Initialize
@@ -29,9 +31,14 @@ Sub Initialize
 	about.BindVueElement(VBottomNavigation3.VElement)
 	
 	about.SetMounted(Me, "onmounted", Null)
+	about.SetDestroyed(Me, "killcounter", Null)
 	
 	'add the component as a router
 	vuetify.AddRoute(about) 
+End Sub
+
+Sub killcounter
+	about.ClearInterval(counter)
 End Sub
 
 Sub onmounted
@@ -51,8 +58,17 @@ Sub onmounted
 	VBottomNavigation3.AddItem("recent", "Recent", "", "mdi-history", "")
 	VBottomNavigation3.AddItem("favorites", "Favourates", "", "mdi-heart", "")
 	VBottomNavigation3.AddItem("nearby", "Nearby", "", "mdi-map-marker", "")
+	VBottomNavigation3.AddItem1("shop", "Basket", "", "mdi-cart-outline", 5, "red", "")
 	VBottomNavigation3.Refresh(about)
-	
+	'
+	badge = 5
+	about.ClearInterval(counter)
+	counter = about.SetInterval("updatebadge", 1000, Null)
+End Sub
+
+Sub updatebadge
+	badge = badge + 1
+	VBottomNavigation3.UpdateBadge(about, "shop", badge)
 End Sub
 
 

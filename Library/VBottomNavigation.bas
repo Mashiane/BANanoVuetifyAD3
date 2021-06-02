@@ -78,7 +78,7 @@ Sub Class_Globals
 	Private sWidth As String
 	Private xitems As List
 	Private itemsName As String
-	private bHidden as boolean
+	Private bHidden As Boolean
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -127,7 +127,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sScrollThreshold = Props.Get("ScrollThreshold")
 		bShift = Props.Get("Shift")
 		sVIf = Props.Get("VIf")
-		svshow = Props.Get("VShow")
+		sVShow = Props.Get("VShow")
 		bHidden = Props.Get("Hidden")
 		sValue = Props.Get("Value")
 		sWidth = Props.Get("Width")
@@ -144,11 +144,21 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.TagName = "v-bottom-navigation"
 	'
 	'add buttons for navigation
-	VElement.Append($"<v-btn :key="item.id" :value="item.value" :to="item.to" :color="item.color" id="${mName}button" v-for="(item, i) in ${itemsName}">
-	<span id="${mName}text">{{ item.caption }}</span>
-	<v-icon id="${mName}icon">{{ item.icon }}</v-icon>
-	</v-btn>"$)
+	'VElement.Append($"<v-btn :key="item.id" :value="item.value" :to="item.to" :color="item.color" id="${mName}button" v-for="(item, i) in ${itemsName}">
+	'<span id="${mName}text">{{ item.caption }}</span><v-icon id="${mName}icon">{{ item.icon }}</v-icon></v-btn>"$)
 	
+	VElement.Append($"<v-template v-for="(item, i) in ${itemsName}">
+	<v-btn :key="item.id" v-if="item.badge == 0" :value="item.value" :to="item.to" :color="item.color" id="${mName}button">
+	<span id="${mName}text">{{ item.caption }}</span><v-icon id="${mName}icon">{{ item.icon }}</v-icon></v-btn>
+	
+	<v-btn :key="item.id" v-if="item.badge > 0" :value="item.value" :to="item.to" :color="item.color" id="${mName}button">
+    <span id="${mName}text">{{ item.caption }}</span>
+	<v-badge id="${mName}badge" right :color="item.badgecolor">
+    <span slot="badge">{{ item.badge }}</span><v-icon id="${mName}icon"> {{ item.icon }}</v-icon>
+    </v-badge>
+    </v-btn>
+	</v-template>"$)
+		
 	VElement.Classes = mClasses
 	VElement.Styles = mStyles
 	VElement.Attributes = mAttributes
@@ -231,9 +241,31 @@ Sub AddItem(elID As String, caption As String, color As String, iconName As Stri
 	If goTo <> "" Then nm.Put("to", goTo)
 	If iconName <> "" Then nm.Put("icon", iconName)
 	nm.Put("caption", caption)
+	nm.Put("badge", 0)
 	xitems.Add(nm)
 	Return Me
 End Sub
+
+Sub AddItem1(elID As String, caption As String, color As String, iconName As String, badge As String, badgeColor As String, goTo As String) As VBottomNavigation
+	Dim nm As Map = CreateMap()
+	nm.Put("id", elID)
+	nm.Put("value", elID)
+	If color <> "" Then nm.Put("color", color)
+	If goTo <> "" Then nm.Put("to", goTo)
+	If iconName <> "" Then nm.Put("icon", iconName)
+	nm.Put("caption", caption)
+	nm.Put("badge", badge)
+	nm.Put("badgecolor", badgeColor)
+	xitems.Add(nm)
+	Return Me
+End Sub
+
+Sub UpdateBadge(VC As VueComponent, key As String, badge As Int)
+	Dim ni As Map = CreateMap()
+	ni.Put("badge", badge)
+	VC.RealTimeUpdateItem(itemsName, "id", key, ni)
+End Sub
+
 
 Sub Refresh(VC As VueComponent)
 	VC.SetData(itemsName, xitems)
