@@ -1,0 +1,90 @@
+﻿AppType=JavaFX
+Build1=Default,b4j.example
+File1=workarea.bjl
+FileGroup1=Default Group
+Group=Default Group
+Library1=jcore
+Library2=jfx
+NumberOfFiles=1
+NumberOfLibraries=2
+NumberOfModules=0
+Version=9
+@EndOfDesignText@
+#Region Project Attributes 
+	#MainFormWidth: 700
+	#MainFormHeight: 700
+#End Region
+
+Sub Process_Globals
+	Private fx As JFX
+	Dim MainForm As Form
+	Private btnBindCode As Button
+	Private txtCode As TextArea
+	Private txtResult As TextArea
+	Private txtComponentName As TextField
+End Sub
+
+Sub AppStart (Form1 As Form, Args() As String)
+	MainForm = Form1
+	MainForm.Title = "BVAD3 BindVueElement"	
+	MainForm.RootPane.LoadLayout("workarea")
+	MainForm.Show
+End Sub
+
+'Return true to allow the default exceptions handler to handle the uncaught exception.
+Sub Application_Error (Error As Exception, StackTrace As String) As Boolean
+	Return True
+End Sub
+
+private Sub FixDelimiter(sValue As String) As String
+	If sValue = "|" Then sValue = "\|"
+	If sValue = "." Then sValue = "\."
+	If sValue = "\" Then sValue = "\\"
+	If sValue = "^" Then sValue = "\^"
+	If sValue = "$" Then sValue = "\$"
+	If sValue = "?" Then sValue = "\?"
+	If sValue = "*" Then sValue = "\*"
+	If sValue = "+" Then sValue = "\+"
+	If sValue = "(" Then sValue = "\("
+	If sValue = ")" Then sValue = "\)"
+	If sValue = "[" Then sValue = "\["
+	If sValue = "{" Then sValue = "\{"
+	If sValue = ";" Then sValue = "\;"
+	If sValue = "$" Then sValue = "\$"
+	Return sValue
+End Sub
+
+private Sub StrParse(Delimiter As String, MV As String) As String()
+	Delimiter = FixDelimiter(Delimiter)
+	Return Regex.Split(Delimiter, MV)
+End Sub
+
+Sub MvField(data As String, pos As Int, delim As String) As String
+	Dim xlines() As String = StrParse(delim, data)
+	Dim dTot As Int = xlines.Length
+	If pos > dTot Then Return ""
+	If pos < 0 Then Return "" 
+	Dim xpart As String = xlines(pos - 1)
+	Return xpart
+End Sub
+
+Private Sub btnBindCode_Click
+	Dim compName As String = txtComponentName.Text
+	Dim scode As String = txtCode.Text
+	scode = scode.Trim
+	
+	txtResult.Text = ""
+	Dim sb As StringBuilder
+	sb.Initialize 
+	'
+	Dim lines() As String = StrParse(CRLF, scode)
+	For Each strLine As String In lines
+		strLine = strLine.Trim
+		If strLine = "" Then Continue
+		Dim varName As String = MvField(strLine, 2, " ")
+		varName = varName.trim
+		sb.Append($"${compName}.BindVueElement(${varName}.VElement)"$).append(CRLF)
+	Next
+	txtResult.Text = sb.ToString
+End Sub
+
