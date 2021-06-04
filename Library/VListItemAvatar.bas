@@ -17,6 +17,7 @@ Version=8.95
 #DesignerProperty: Key: MinWidth, DisplayName: MinWidth, FieldType: String, DefaultValue: , Description: MinWidth
 #DesignerProperty: Key: Position, DisplayName: Position, FieldType: String, DefaultValue: , Description: Position, List: none|left|right
 #DesignerProperty: Key: Rounded, DisplayName: Rounded, FieldType: String, DefaultValue: , Description: Rounded, List: none|rounded-0|rounded|rounded-sm|rounded-lg|rounded-xl|rounded-t-xl|rounded-r-xl|rounded-b-xl|rounded-l-xl|rounded-tl-xl|rounded-tr-xl|rounded-br-xl|rounded-bl-xl|rounded-pill|rounded-circle
+#DesignerProperty: Key: Elevation, DisplayName: Elevation, FieldType: String, DefaultValue: , Description: Elevation
 #DesignerProperty: Key: Size, DisplayName: Size, FieldType: String, DefaultValue: , Description: Size
 #DesignerProperty: Key: TextColor, DisplayName: TextColor, FieldType: String, DefaultValue: , Description: TextColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: TextColorIntensity, DisplayName: TextColorIntensity, FieldType: String, DefaultValue: , Description: TextColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
@@ -64,7 +65,8 @@ Private sVIf As String
 Private sVOn As String
 Private sVShow As String
 Private sWidth As String
-private bHidden as boolean
+Private bHidden As Boolean
+private sElevation as string
 	End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -106,10 +108,11 @@ bTile = Props.Get("Tile")
 sVBind = Props.Get("VBind")
 sVFor = Props.Get("VFor")
 sVIf = Props.Get("VIf")
-svshow = Props.Get("VShow")
+sVShow = Props.Get("VShow")
 sVOn = Props.Get("VOn")
 bHidden = Props.Get("Hidden")
 sWidth = Props.Get("Width")
+sElevation = Props.GetDefault("Elevation", "")
 	End If
 	'
 	'build and get the element
@@ -149,6 +152,7 @@ VElement.AddAttr("v-on", sVOn)
 VElement.AddAttr("v-show", sVShow)
 VElement.SetData(sVShow, Not(bHidden))
 VElement.AddAttr("width", sWidth)
+VElement.Elevation = sElevation
 VElement.BindAllEvents
 End Sub
 

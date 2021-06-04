@@ -9,7 +9,7 @@ Version=8.9
 
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: Caption, DisplayName: Caption, FieldType: String, DefaultValue: , Description: Caption
-#DesignerProperty: Key: Size, DisplayName: Tag, FieldType: String, DefaultValue: div, Description: Size, List: a|div|h1|h2|h3|h4|h5|h6|label|p|span|v-spacer|v-divider|v-subheader|v-main|slot|v-tabs-slider|router-view|router-link
+#DesignerProperty: Key: Size, DisplayName: Tag, FieldType: String, DefaultValue: div, Description: Size, List: a|div|h1|h2|h3|h4|h5|h6|label|p|span|v-spacer|v-responsive|v-divider|v-subheader|v-main|slot|v-tabs-slider|router-view|router-link
 #DesignerProperty: Key: OwnTag, DisplayName: OwnTag, FieldType: String, DefaultValue: , Description: OwnTag
 #DesignerProperty: Key: LoremIpsum, DisplayName: LoremIpsum, FieldType: Boolean, DefaultValue: false, Description: LoremIpsum
 #DesignerProperty: Key: SetName, DisplayName: SetName, FieldType: Boolean, DefaultValue: false, Description: SetName

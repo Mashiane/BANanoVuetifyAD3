@@ -82,6 +82,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	End If
 	sVShow = $"${mName}show"$
 	End Sub
+	
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	mTarget = Target
 	If Props <> Null Then
@@ -107,7 +108,7 @@ sTextColorIntensity = Props.Get("TextColorIntensity")
 bTile = Props.Get("Tile")
 sVFor = Props.Get("VFor")
 sVIf = Props.Get("VIf")
-svshow = Props.Get("VShow")
+sVShow = Props.Get("VShow")
 bHidden = Props.Get("Hidden")
 sWidth = Props.Get("Width")
 sVOn = Props.Get("VOn")
