@@ -7,22 +7,23 @@ Version=8.9
 #IgnoreWarnings:12
 
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
-#DesignerProperty: Key: Caption, DisplayName: Caption, FieldType: String, DefaultValue: {{ progress1 }}, Description: Caption
-#DesignerProperty: Key: Avatar, DisplayName: Avatar, FieldType: String, DefaultValue: , Description: Avatar
+#DesignerProperty: Key: Caption, DisplayName: Caption, FieldType: String, DefaultValue: {{ progress1 }}%, Description: Caption
+#DesignerProperty: Key: Rotate, DisplayName: Rotate, FieldType: String, DefaultValue: , Description: Rotate
+#DesignerProperty: Key: Size, DisplayName: Size, FieldType: String, DefaultValue: 32, Description: Size
+#DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: 4, Description: Width
+#DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: progress1 , Description: VModel
+#DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: 10 , Description: Value
+#DesignerProperty: Key: Indeterminate, DisplayName: Indeterminate, FieldType: Boolean, DefaultValue: true, Description: Indeterminate
+#DesignerProperty: Key: Avatar, DisplayName: Avatar Image, FieldType: String, DefaultValue: , Description: Avatar Image
 #DesignerProperty: Key: Button, DisplayName: Button, FieldType: Boolean, DefaultValue: false, Description: Button
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue: primary, Description: Color, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: ColorIntensity, DisplayName: ColorIntensity, FieldType: String, DefaultValue: , Description: ColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
-#DesignerProperty: Key: Indeterminate, DisplayName: Indeterminate, FieldType: Boolean, DefaultValue: true, Description: Indeterminate
 #DesignerProperty: Key: Key, DisplayName: Key, FieldType: String, DefaultValue: , Description: Key
-#DesignerProperty: Key: Rotate, DisplayName: Rotate, FieldType: String, DefaultValue: , Description: Rotate
-#DesignerProperty: Key: Size, DisplayName: Size, FieldType: String, DefaultValue: 55, Description: Size
 #DesignerProperty: Key: VBind, DisplayName: VBind, FieldType: String, DefaultValue: , Description: VBind
 #DesignerProperty: Key: VFor, DisplayName: VFor, FieldType: String, DefaultValue: , Description: VFor
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
 #DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
-#DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: progress1 , Description: VModel
 #DesignerProperty: Key: VOn, DisplayName: VOn, FieldType: String, DefaultValue: , Description: VOn
-#DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: , Description: Width
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
@@ -54,6 +55,7 @@ Private sVShow As String
 Private sWidth As String
 Private sAvatar As String
 Private bHidden As Boolean
+Private sValue As String
 	End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -94,6 +96,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bHidden = Props.Get("Hidden")
 		sWidth = Props.Get("Width")
 		sAvatar = Props.Get("Avatar")
+		sValue = Props.GetDefault("Value", 10)
 	End If
 	'
 	If BANano.IsNull(sAvatar) Or BANano.IsUndefined(sAvatar) Then
@@ -136,7 +139,7 @@ VElement.AddAttr("v-on", sVOn)
 VElement.AddAttr("v-show", sVShow)
 VElement.SetData(sVShow, Not(bHidden))
 VElement.AddAttr("width", sWidth)
-VElement.SetData(sVModel, 10)
+VElement.SetData(sVModel, sValue)
 VElement.BindAllEvents
 End Sub
 

@@ -63,7 +63,7 @@ Sub onmounted
 	'
 	badge = 5
 	about.ClearInterval(counter)
-	counter = about.SetInterval("updatebadge", 1000, Null)
+	counter = about.SetInterval("updatebadge", 2000, Null)
 End Sub
 
 Sub updatebadge

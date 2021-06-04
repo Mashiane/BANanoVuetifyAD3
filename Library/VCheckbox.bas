@@ -21,9 +21,10 @@ Version=7
 
 #DesignerProperty: Key: Label, DisplayName: Label, FieldType: String, DefaultValue: CheckBox1, Description: Label
 #DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: checkbox1, Description: VModel
+#DesignerProperty: Key: Checked, DisplayName: Checked, FieldType: Boolean, DefaultValue: False, Description: Checked
 #DesignerProperty: Key: TrueValue, DisplayName: TrueValue, FieldType: String, DefaultValue: True, Description: TrueValue
 #DesignerProperty: Key: FalseValue, DisplayName: FalseValue, FieldType: String, DefaultValue: False, Description: FalseValue
-#DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: , Description: Value
+#DesignerProperty: Key: Value, DisplayName: Value (Multiple), FieldType: String, DefaultValue: , Description: Value
 #DesignerProperty: Key: OffIcon, DisplayName: OffIcon, FieldType: String, DefaultValue: , Description: OffIcon
 #DesignerProperty: Key: OnIcon, DisplayName: OnIcon, FieldType: String, DefaultValue: , Description: OnIcon
 #DesignerProperty: Key: PrependIcon, DisplayName: PrependIcon, FieldType: String, DefaultValue: , Description: PrependIcon
@@ -120,6 +121,7 @@ Private bHidden As Boolean
 Private bReadonly As Boolean
 Private bRequired As Boolean
 Private sRequired As String
+private bChecked as boolean
 	End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -143,7 +145,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 Sub DesignerCreateView (Target As BANanoElement, Props As Map) 
 	mTarget = Target 
 	If Props <> Null Then 
-		bDisabled = Props.Get("Disabled")
+		bDisabled = Props.GetDefault("Disabled",false)
 bHidden = Props.Get("Hidden")
 bReadonly = Props.Get("Readonly")
 bRequired = Props.Get("Required")
@@ -187,6 +189,7 @@ sVModel = Props.Get("VModel")
 sVOn = Props.Get("VOn")
 bValidateOnBlur = Props.Get("ValidateOnBlur")
  sValue = Props.Get("Value")
+ bChecked = Props.GetDefault("Checked", False)
 	End If 
 	' 
 	'build and get the element 
@@ -202,6 +205,11 @@ bValidateOnBlur = Props.Get("ValidateOnBlur")
 	If BANano.IsNull(bRequired) Or BANano.IsUndefined(bRequired) Then
 		bRequired = False 
 	End If
+	
+If BANano.IsNull(bMultiple) Or BANano.IsUndefined(bMultiple) Then
+	bMultiple = False
+End If
+
 	VElement.Initialize(mCallBack, mName, mName) 
 	VElement.TagName = "v-checkbox" 
 	VElement.Classes = mClasses 
@@ -264,13 +272,12 @@ VElement.AddAttr("v-for", sVFor)
 VElement.AddAttr("v-if", sVIf)
 VElement.AddAttr("v-model", sVModel)
 VElement.AddAttr("value", sValue)
-
-If BANano.IsNull(bMultiple) Or BANano.IsUndefined(bMultiple) Then
-	bMultiple = False
-End If
 '
 If bMultiple = False Then
 	VElement.SetData(sVModel, sValue)
+	If bChecked Then
+		VElement.SetData(sVModel, True)
+	End If
 Else
 	VElement.SetData(sVModel, VElement.NewList)
 End If

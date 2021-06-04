@@ -77,7 +77,7 @@ sVShow = Props.Get("VShow")
 sVOn = Props.Get("VOn")
 sVModel = Props.Get("VModel")
 bHoverSlot = Props.Get("HoverSlot")
-bDisabled = Props.Get("Disabled")
+bDisabled = Props.GetDefault("Disabled",false)
 	End If
 	'
 	Dim sbHover As String = ""

@@ -15,6 +15,8 @@ Sub Process_Globals
 	Private VFAB2 As VFAB
 	Private VFAB3 As VFAB
 	Private VFAB4 As VFAB
+	Private VCard1 As VCard
+	Private VContainer1 As VContainer
 End Sub
 
 Sub Initialize
@@ -31,6 +33,8 @@ Sub Initialize
 	about.BindVueElement(VFAB2.VElement)
 	about.BindVueElement(VFAB3.VElement)
 	about.BindVueElement(VFAB4.VElement)
+	about.BindVueElement(VCard1.VElement)
+	about.BindVueElement(VContainer1.VElement)
 	
 	'add the component as a router
 	vuetify.AddRoute(about) 

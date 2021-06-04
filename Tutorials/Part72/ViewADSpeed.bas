@@ -12,6 +12,7 @@ Sub Process_Globals
 	Public name As String = "adspeed"
 	Private banano As BANano
 	Private VSpeedDial1 As VSpeedDial
+	Private VSpeedDial2 As VSpeedDial
 End Sub
 
 Sub Initialize
@@ -26,6 +27,7 @@ Sub Initialize
 	
 	'*IMPORTANT
 	about.BindVueElement(VSpeedDial1.VElement)
+	about.BindVueElement(VSpeedDial2.VElement)
 	
 	'add the component as a router
 	vuetify.AddRoute(about) 

@@ -5149,35 +5149,35 @@ Sub AddRadioGroup(Module As Object, parentID As String, elID As String, vmodel A
 	value = value.ToLowerCase
 	
 	colorField = colorField.tolowercase
-	Dim vradiogroup As VueElement
-	vradiogroup.Initialize(Module, elID, elID)
-	vradiogroup.label = sLabel
-	vradiogroup.Multiple = bMultiple
-	vradiogroup.AddAttr(":row", bRow)
-	vradiogroup.AddAttr(":column", Not(bRow))
-	vradiogroup.VModel = vmodel
-	vradiogroup.AssignProps(radiogroupprops)
+	Dim vradiogroupx As VueElement
+	vradiogroupx.Initialize(Module, elID, elID)
+	vradiogroupx.label = sLabel
+	vradiogroupx.Multiple = bMultiple
+	vradiogroupx.AddAttr(":row", bRow)
+	vradiogroupx.AddAttr(":column", Not(bRow))
+	vradiogroupx.VModel = vmodel
+	vradiogroupx.AssignProps(radiogroupprops)
 	'
-	Dim vradio As VueElement
-	vradio.Initialize(Module, radioID, radioID)
-	vradio.VFor = $"item in ${sourceTable}"$
-	vradio.BindKey($"item.${key}"$)
-	vradio.Bind("label", $"item.${value}"$)
-	vradio.Bind("value", $"item.${key}"$)
-	If colorField <> "" Then vradio.Bind("color", $"item.${colorField}"$)
-	vradio.AssignProps(radioprops)
+	Dim vradiox As VueElement
+	vradiox.Initialize(Module, radioID, radioID)
+	vradiox.VFor = $"item in ${sourceTable}"$
+	vradiox.BindKey($"item.${key}"$)
+	vradiox.Bind("label", $"item.${value}"$)
+	vradiox.Bind("value", $"item.${key}"$)
+	If colorField <> "" Then vradiox.Bind("color", $"item.${colorField}"$)
+	vradiox.AssignProps(radioprops)
 	If bMultiple Then
 		Dim lst As List = NewList
-		vradiogroup.SetData(vmodel, lst)
+		vradiogroupx.SetData(vmodel, lst)
 	Else
-		vradiogroup.SetData(vmodel, Null)
+		vradiogroupx.SetData(vmodel, Null)
 	End If
 	Dim lst As List = NewList
-	vradiogroup.SetData(sourceTable, lst)
-	vradiogroup.BindAllEvents
-	vradiogroup.SetOnEvent(Module, "change", $"item.${key}"$)
-	vradiogroup.BindVueElement(vradio)
-	Return vradiogroup
+	vradiogroupx.SetData(sourceTable, lst)
+	vradiogroupx.BindAllEvents
+	vradiogroupx.SetOnEvent(Module, "change", $"item.${key}"$)
+	vradiogroupx.BindVueElement(vradiox)
+	Return vradiogroupx
 End Sub
 
 Sub AddFab(Module As Object, parentID As String, elID As String, eIcon As String, eColor As String, bOutlined As Boolean, btnprops As Map, iconprops As Map) As VueElement

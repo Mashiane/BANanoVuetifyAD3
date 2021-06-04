@@ -26,8 +26,13 @@ Version=8.5
 #Event: CancelItem (item As Map) 
 #Event: OpenItem (item As Map)
 #Event: CloseItem (item As Map)
-#Event: ItemSelected (item As Map)
+
 #Event: ClickRow (e As BANanoEvent)
+#Event: CurrentItems(items As List)
+#Event: DblClickRow (e As BANanoEvent)
+#Event: ItemExpanded (item As Map)
+#Event: ToggleSelectAll (e As BANanoEvent)
+
 #Event: ClearSort_Click (e As BANanoEvent)
 #Event: ClearFilter_Click (e As BANanoEvent)
 #Event: FilterChange(e As BANanoEvent)
@@ -47,6 +52,63 @@ Version=8.5
 #DesignerProperty: Key: MultiSort, DisplayName: Multi Sort, FieldType: Boolean, DefaultValue:  False, Description: 
 #DesignerProperty: Key: MustSort, DisplayName: Must Sort, FieldType: Boolean, DefaultValue:  False, Description: 
 #DesignerProperty: Key: Loading, DisplayName: Loading, FieldType: Boolean, DefaultValue:  False, Description: 
+'
+#DesignerProperty: Key: DateFormat, DisplayName: DateFormat, FieldType: String, DefaultValue: , Description: DateFormat
+#DesignerProperty: Key: DateTimeFormat, DisplayName: DateTimeFormat, FieldType: String, DefaultValue: , Description: DateTimeFormat
+#DesignerProperty: Key: MoneyFormat, DisplayName: MoneyFormat, FieldType: String, DefaultValue: , Description: MoneyFormat
+#DesignerProperty: Key: TimeFormat, DisplayName: TimeFormat, FieldType: String, DefaultValue: HH:MM, Description: TimeFormat
+
+#DesignerProperty: Key: HasAddnew, DisplayName: HasAddnew, FieldType: Boolean, DefaultValue: False, Description: HasAddnew
+#DesignerProperty: Key: HasClearSort, DisplayName: HasClearSort, FieldType: Boolean, DefaultValue: False, Description: HasClearSort
+#DesignerProperty: Key: HasFilter, DisplayName: HasFilter, FieldType: Boolean, DefaultValue: False, Description: HasFilter
+#DesignerProperty: Key: HasPdf, DisplayName: HasPdf, FieldType: Boolean, DefaultValue: False, Description: HasPdf
+#DesignerProperty: Key: HasExcel, DisplayName: HasExcel, FieldType: Boolean, DefaultValue: False, Description: HasExcel
+#DesignerProperty: Key: HasRefresh, DisplayName: HasRefresh, FieldType: Boolean, DefaultValue: False, Description: HasRefresh
+#DesignerProperty: Key: HasBack, DisplayName: HasBack, FieldType: Boolean, DefaultValue: False, Description: HasBack
+'
+#DesignerProperty: Key: HasEdit, DisplayName: HasEdit, FieldType: Boolean, DefaultValue: False, Description: HasEdit
+#DesignerProperty: Key: EditColor, DisplayName: EditColor, FieldType: String, DefaultValue: green, Description: EditColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
+#DesignerProperty: Key: HasDelete, DisplayName: HasDelete, FieldType: Boolean, DefaultValue: False, Description: HasDelete
+#DesignerProperty: Key: DeleteColor, DisplayName: DeleteColor, FieldType: String, DefaultValue: red, Description: DeleteColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
+#DesignerProperty: Key: HasClone, DisplayName: HasClone, FieldType: Boolean, DefaultValue: False, Description: HasClone
+#DesignerProperty: Key: CloneColor, DisplayName: CloneColor, FieldType: String, DefaultValue: amber, Description: CloneColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
+#DesignerProperty: Key: HasPrint, DisplayName: HasPrint, FieldType: Boolean, DefaultValue: False, Description: HasPrint
+#DesignerProperty: Key: PrintColor, DisplayName: PrintColor, FieldType: String, DefaultValue: print, Description: PrintColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
+#DesignerProperty: Key: HasSave, DisplayName: HasSave, FieldType: Boolean, DefaultValue: False, Description: HasSave
+#DesignerProperty: Key: SaveColor, DisplayName: SaveColor, FieldType: String, DefaultValue: blue-grey, Description: SaveColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
+#DesignerProperty: Key: HasCancel, DisplayName: HasCancel, FieldType: Boolean, DefaultValue: False, Description: HasCancel
+#DesignerProperty: Key: CancelColor, DisplayName: CancelColor, FieldType: String, DefaultValue: brown, Description: CancelColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
+#DesignerProperty: Key: HasDownload, DisplayName: HasDownload, FieldType: Boolean, DefaultValue: False, Description: HasDownload
+#DesignerProperty: Key: DownloadColor, DisplayName: DownloadColor, FieldType: String, DefaultValue: cyan, Description: DownloadColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
+#DesignerProperty: Key: HasMenu, DisplayName: HasMenu, FieldType: Boolean, DefaultValue: False, Description: HasMenu
+#DesignerProperty: Key: MenuColor, DisplayName: MenuColor, FieldType: String, DefaultValue: indigo, Description: MenuColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
+'
+#DesignerProperty: Key: ColumnFields, DisplayName: ColumnFields (;), FieldType: String, DefaultValue: , Description: ColumnFields
+#DesignerProperty: Key: ColumnTitles, DisplayName: ColumnTitles (;), FieldType: String, DefaultValue: , Description: ColumnTitles
+#DesignerProperty: Key: ColumnWidths, DisplayName: ColumnWidths (;), FieldType: String, DefaultValue: , Description: ColumnWidths
+#DesignerProperty: Key: ColumIcons, DisplayName: ColumIcons (;), FieldType: String, DefaultValue: , Description: ColumIcons
+#DesignerProperty: Key: ColumnAutoComplete, DisplayName: ColumnAutoComplete (;), FieldType: String, DefaultValue: , Description: ColumnAutoComplete
+#DesignerProperty: Key: ColumnAvatar, DisplayName: ColumnAvatar (;), FieldType: String, DefaultValue: , Description: ColumnAvatar
+#DesignerProperty: Key: ColumnButton, DisplayName: ColumnButton (;), FieldType: String, DefaultValue: , Description: ColumnButton
+#DesignerProperty: Key: ColumnCheckbox, DisplayName: ColumnCheckbox (;), FieldType: String, DefaultValue: , Description: ColumnCheckbox
+#DesignerProperty: Key: ColumnChip, DisplayName: ColumnChip (;), FieldType: String, DefaultValue: , Description: ColumnChip
+#DesignerProperty: Key: ColumnCircularProgress, DisplayName: ColumnCircularProgress (;), FieldType: String, DefaultValue: , Description: ColumnCircularProgress
+#DesignerProperty: Key: ColumnCombobox, DisplayName: ColumnCombobox (;), FieldType: String, DefaultValue: , Description: ColumnCombobox
+#DesignerProperty: Key: ColumnDate, DisplayName: ColumnDate (;), FieldType: String, DefaultValue: , Description: ColumnDate
+#DesignerProperty: Key: ColumnDateTime, DisplayName: ColumnDateTime (;), FieldType: String, DefaultValue: , Description: ColumnDateTime
+#DesignerProperty: Key: ColumnFileSize, DisplayName: ColumnFileSize (;), FieldType: String, DefaultValue: , Description: ColumnFileSize
+#DesignerProperty: Key: ColumnImage, DisplayName: ColumnImage (;), FieldType: String, DefaultValue: , Description: ColumnImage
+#DesignerProperty: Key: ColumnLinearProgress, DisplayName: ColumnLinearProgress (;), FieldType: String, DefaultValue: , Description: ColumnLinearProgress
+#DesignerProperty: Key: ColumnLink, DisplayName: ColumnLink (;), FieldType: String, DefaultValue: , Description: ColumnLink
+#DesignerProperty: Key: ColumnMoney, DisplayName: ColumnMoney (;), FieldType: String, DefaultValue: , Description: ColumnMoney
+#DesignerProperty: Key: ColumnRating, DisplayName: ColumnRating (;), FieldType: String, DefaultValue: , Description: ColumnRating
+#DesignerProperty: Key: ColumnSortable, DisplayName: ColumnSortable (;), FieldType: String, DefaultValue: , Description: ColumnSortable
+#DesignerProperty: Key: ColumnFilterable, DisplayName: ColumnFilterable (;), FieldType: String, DefaultValue: , Description: ColumnFilterable
+#DesignerProperty: Key: ColumnSwitch, DisplayName: ColumnSwitch (;), FieldType: String, DefaultValue: , Description: ColumnSwitch
+#DesignerProperty: Key: ColumnTextarea, DisplayName: ColumnTextarea (;), FieldType: String, DefaultValue: , Description: ColumnTextarea
+#DesignerProperty: Key: ColumnTextfield, DisplayName: ColumnTextfield (;), FieldType: String, DefaultValue: , Description: ColumnTextfield
+#DesignerProperty: Key: ColumnTime, DisplayName: ColumnTime (;), FieldType: String, DefaultValue: , Description: ColumnTime
+
 #DesignerProperty: Key: FixedHeader, DisplayName: Fixed Header, FieldType: Boolean, DefaultValue:  False, Description: 
 #DesignerProperty: Key: HideDefaultHeader, DisplayName: Hide Default Header, FieldType: Boolean, DefaultValue:  False, Description: 
 #DesignerProperty: Key: HideDefaultFooter, DisplayName: Hide Default Footer, FieldType: Boolean, DefaultValue:  False, Description: 
@@ -174,7 +236,62 @@ Sub Class_Globals
 	Private filterList As List
 	Private allcolumns As String
 	Private sloading As String
-	Public VC As VueComponent	
+	Public VC As VueComponent
+	'
+	Private sCancelColor As String
+Private sCloneColor As String
+Private sDeleteColor As String
+Private sDownloadColor As String
+Private sEditColor As String
+Private bHasAddnew As Boolean
+Private bHasBack As Boolean
+Private bHasCancel As Boolean
+Private bHasClearSort As Boolean
+Private bHasClone As Boolean
+Private bHasDelete As Boolean
+Private bHasDownload As Boolean
+Private bHasEdit As Boolean
+Private bHasExcel As Boolean
+Private bHasFilter As Boolean
+Private bHasMenu As Boolean
+Private bHasPdf As Boolean
+Private bHasPrint As Boolean
+Private bHasRefresh As Boolean
+Private bHasSave As Boolean
+Private sMenuColor As String
+Private sPrintColor As String
+Private sSaveColor As String
+'
+Private sColumIcons As String
+Private sColumnAutoComplete As String
+Private sColumnAvatar As String
+Private sColumnButton As String
+Private sColumnCheckbox As String
+Private sColumnChip As String
+Private sColumnCircularProgress As String
+Private sColumnCombobox As String
+Private sColumnDate As String
+Private sColumnDateTime As String
+Private sColumnFields As String
+Private sColumnFileSize As String
+Private sColumnImage As String
+Private sColumnLinearProgress As String
+Private sColumnLink As String
+Private sColumnMoney As String
+Private sColumnRating As String
+Private sColumnSortable As String
+Private sColumnSwitch As String
+Private sColumnTextarea As String
+Private sColumnTextfield As String
+Private sColumnTime As String
+Private sColumnTitles As String
+Private sColumnWidths As String
+Private sDateFormat As String
+Private sDateTimeFormat As String
+Private sMoneyFormat As String
+Private sTimeFormat As String
+Private sColumnFilterable As String
+	
 End Sub
 
 'initialize the custom view
@@ -335,6 +452,20 @@ Sub SetExpanded(varExpanded As List)
 	VC.SetData(expanded, varExpanded)
 End Sub
 
+'set group-desc
+Sub UpdateGroupDesc(varGroupDesc As List)
+	VC.SetData(groupdesc, varGroupDesc)
+End Sub
+
+Sub UpdateSortDesc(varSortDesc As List)
+	VC.SetData(sortdesc, varSortDesc)
+End Sub
+
+'set expanded
+Sub UpdateExpanded(varExpanded As List)
+	VC.SetData(expanded, varExpanded)
+End Sub
+
 'return a list of selected primary keys
 Sub GetItemKeys(lst As List) As List
 	Dim xlist As List
@@ -409,8 +540,63 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bHideDefaultHeader = Props.Get("HideDefaultHeader")
 		bHideDefaultFooter = Props.Get("HideDefaultFooter")
 		bShowExpand = Props.Get("ShowExpand")
-		bLoading = Props.Get("Loading")
+		bLoading = Props.GetDefault("Loading",False)
 		bDark = Props.Get("Dark")
+		'
+		sCancelColor = Props.GetDefault("CancelColor", "brown")
+		sCloneColor = Props.GetDefault("CloneColor", "amber")
+		sDeleteColor = Props.GetDefault("DeleteColor", "red")
+		sDownloadColor = Props.GetDefault("DownloadColor", "cyan")
+		sEditColor = Props.GetDefault("EditColor", "green")
+		bHasAddnew = Props.GetDefault("HasAddnew", False)
+		bHasBack = Props.GetDefault("HasBack", False)
+		bHasCancel = Props.GetDefault("HasCancel", False)
+		bHasClearSort = Props.GetDefault("HasClearSort", False)
+		bHasClone = Props.GetDefault("HasClone", False)
+		bHasDelete = Props.GetDefault("HasDelete", False)
+		bHasDownload = Props.GetDefault("HasDownload", False)
+		bHasEdit = Props.GetDefault("HasEdit", False)
+		bHasExcel = Props.GetDefault("HasExcel", False)
+		bHasFilter = Props.GetDefault("HasFilter", False)
+		bHasMenu = Props.GetDefault("HasMenu", False)
+		bHasPdf = Props.GetDefault("HasPdf", False)
+		bHasPrint = Props.GetDefault("HasPrint", False)
+		bHasRefresh = Props.GetDefault("HasRefresh", False)
+		bHasSave = Props.GetDefault("HasSave", False)
+		sMenuColor = Props.GetDefault("MenuColor", "indigo")
+		sPrintColor = Props.GetDefault("PrintColor", "blue")
+		sSaveColor = Props.GetDefault("SaveColor", "blue-grey")	
+		'
+		sColumIcons = Props.GetDefault("ColumIcons", "")
+		sColumnAutoComplete = Props.GetDefault("ColumnAutoComplete", "")
+		sColumnAvatar = Props.GetDefault("ColumnAvatar", "")
+		sColumnButton = Props.GetDefault("ColumnButton", "")
+		sColumnCheckbox = Props.GetDefault("ColumnCheckbox", "")
+		sColumnChip = Props.GetDefault("ColumnChip", "")
+		sColumnCircularProgress = Props.GetDefault("ColumnCircularProgress", "")
+		sColumnCombobox = Props.GetDefault("ColumnCombobox", "")
+		sColumnDate = Props.GetDefault("ColumnDate", "")
+		sColumnDateTime = Props.GetDefault("ColumnDateTime", "")
+		sColumnFields = Props.GetDefault("ColumnFields", "")
+		sColumnFileSize = Props.GetDefault("ColumnFileSize", "")
+		sColumnImage = Props.GetDefault("ColumnImage", "")
+		sColumnLinearProgress = Props.GetDefault("ColumnLinearProgress", "")
+		sColumnLink = Props.GetDefault("ColumnLink", "")
+		sColumnMoney = Props.GetDefault("ColumnMoney", "")
+		sColumnRating = Props.GetDefault("ColumnRating", "")
+		sColumnSortable = Props.GetDefault("ColumnSortable", "")
+		sColumnSwitch = Props.GetDefault("ColumnSwitch", "")
+		sColumnTextarea = Props.GetDefault("ColumnTextarea", "")
+		sColumnTextfield = Props.GetDefault("ColumnTextfield", "")
+		sColumnTime = Props.GetDefault("ColumnTime", "")
+		sColumnTitles = Props.GetDefault("ColumnTitles", "")
+		sColumnWidths = Props.GetDefault("ColumnWidths", "")
+		sDateFormat = Props.GetDefault("DateFormat", "")
+		sDateTimeFormat = Props.GetDefault("DateTimeFormat", "")
+		sMoneyFormat = Props.GetDefault("MoneyFormat", "")
+		sTimeFormat = Props.GetDefault("TimeFormat", "")
+		sColumnFilterable = Props.GetDefault("ColumnFilterable", "")
+		'	
 	End If
 	
 	setLoading(bLoading)
@@ -452,10 +638,380 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	setStates(mStates)
 	setTitle(mTitle)
 	'
+	Dim myTable As VueElement
+	myTable.Initialize(mCallBack, mName, mName)
+	'
 	If mHasSearch = True Then
 		AddSpacer
 		AddSearch
+		'
+		AddDivider
+		'
+		Dim txtSearch As VueElement = GetSearchText
+		txtSearch.Rounded = True
+		txtSearch.BindAllEvents
+		txtSearch.Dense = True
+		txtSearch.Solo = True
+		myTable.BindVueElement(txtSearch)
 	End If
+	'
+	
+	If bHasAddnew Then
+		AddNew
+		AddDivider
+	End If
+	
+	If bHasClearSort Then
+		AddClearSort
+		AddDivider
+	End If
+	
+	If bHasFilter Then
+		AddFilter("primary--text")
+		AddDivider
+		AddClearFilter
+		AddDivider
+	End If
+	
+	If bHasPdf Then
+		AddPDF
+		AddDivider
+	End If
+	'
+	If bHasExcel Then
+		AddExcel
+		AddDivider
+	End If
+	
+	If bHasRefresh Then
+		AddRefresh
+		AddDivider
+	End If
+	
+	If bHasBack Then
+		AddBack
+		AddDivider
+	End If
+	'
+	
+	If bHasEdit Then
+		AddEdit
+	End If
+	
+	If bHasDelete Then
+		AddDelete
+	End If
+	
+	If bHasClone Then
+		AddClone
+	End If
+	
+	If bHasPrint Then
+		AddPrint
+	End If
+	
+	If bHasSave Then
+		AddSave
+	End If
+	
+	If bHasCancel Then
+		AddCancel
+	End If
+	
+	If bHasDownload Then
+		AddDownload
+	End If
+	
+	If bHasMenu Then
+		AddMenuV
+	End If
+	'
+	If bHasEdit Then
+		SetIconDimensions("edit", "", sEditColor)
+	End If
+	
+	If bHasDelete Then
+		SetIconDimensions("delete", "", sDeleteColor)
+	End If
+	
+	If bHasClone Then
+		SetIconDimensions("clone", "", sCloneColor)
+	End If
+	
+	If bHasPrint Then
+		SetIconDimensions("print", "", sPrintColor)
+	End If
+	
+	If bHasSave Then
+		SetIconDimensions("save", "", sSaveColor)
+	End If
+	
+	If bHasCancel Then
+		SetIconDimensions("cancel", "", sCancelColor)
+	End If
+	
+	If bHasDownload Then
+		SetIconDimensions("download", "", sDownloadColor)
+	End If
+	
+	If bHasMenu Then
+		SetIconDimensions("menu", "", sMenuColor)
+	End If
+	
+	'***** DEPENDING ON WHAT HAS BEEN SPECIFIED, CREATE COLUMNS
+	Dim lsColumnAutoComplete As List = BANanoShared.StrParse(";", sColumnAutoComplete)
+	Dim lsColumnAvatar As List = BANanoShared.StrParse(";", sColumnAvatar)
+	Dim lsColumnButton As List = BANanoShared.StrParse(";", sColumnButton)
+	Dim lsColumnCheckbox As List = BANanoShared.StrParse(";", sColumnCheckbox)
+	Dim lsColumnChip As List = BANanoShared.StrParse(";", sColumnChip)
+	Dim lsColumnCircularProgress As List = BANanoShared.StrParse(";", sColumnCircularProgress)
+	Dim lsColumnCombobox As List = BANanoShared.strparse(";", sColumnCombobox)
+	Dim lsColumnDate As List = BANanoShared.strparse(";", sColumnDate)
+	Dim lsColumnDateTime As List = BANanoShared.StrParse(";", sColumnDateTime)
+	Dim lsColumnFields As List = BANanoShared.StrParse(";", sColumnFields)
+	Dim lsColumnFileSize As List = BANanoShared.StrParse(";", sColumnFileSize)
+	Dim lsColumnImage As List = BANanoShared.StrParse(";", sColumnImage)
+	Dim lsColumnLinearProgress As List = BANanoShared.StrParse(";", sColumnLinearProgress)
+	Dim lsColumnLink As List = BANanoShared.StrParse(";", sColumnLink)
+	Dim lsColumnMoney As List = BANanoShared.StrParse(";", sColumnMoney)
+	Dim lsColumnRating As List = BANanoShared.StrParse(";", sColumnRating)
+	Dim lsColumnSortable As List = BANanoShared.StrParse(";", sColumnSortable)
+	Dim lsColumnSwitch As List = BANanoShared.StrParse(";", sColumnSwitch)
+	Dim lsColumnTextarea As List = BANanoShared.StrParse(";", sColumnTextarea)
+	Dim lsColumnTextfield As List = BANanoShared.StrParse(";", sColumnTextfield)
+	Dim lsColumnTime As List = BANanoShared.StrParse(";", sColumnTime)
+	Dim lsColumnTitles As List = BANanoShared.StrParse(";", sColumnTitles)
+	Dim lsColumnWidths As List = BANanoShared.StrParse(";", sColumnWidths)
+	Dim lsColumnFilterable As List = BANanoShared.StrParse(";", sColumnFilterable)
+	'
+	Dim colTot As Int = lsColumnFields.Size - 1
+	Dim colCnt As Int
+	Dim f As String = ""
+	Dim h As String = ""
+	
+	'add columns
+	For colCnt = 0 To colTot
+		'
+		f = lsColumnFields.Get(colCnt)
+		h = lsColumnTitles.Get(colCnt)
+		'
+		f = f.trim
+		h = h.trim
+		
+		AddColumn(f, h)
+	Next
+	'circular progress
+	colTot = lsColumnCircularProgress.Size - 1
+	For colCnt = 0 To colTot
+		f = lsColumnCircularProgress.Get(colCnt)
+		If lsColumnFields.IndexOf(f) >= 0 Then
+			SetColumnType(f, COLUMN_PROGRESS_CIRCULAR)
+		Else
+			Log($"DataTable Error: ${mName}.${f} progress-circular column not found on column fields!"$)
+		End If
+	Next
+	'linear progress
+	colTot = lsColumnLinearProgress.Size - 1
+	For colCnt = 0 To colTot
+		f = lsColumnLinearProgress.Get(colCnt)
+		If lsColumnFields.IndexOf(f) >= 0 Then
+			SetColumnType(f, COLUMN_PROGRESS_LINEAR)
+		Else
+			Log($"DataTable Error: ${mName}.${f} progress-linear column not found on column fields!"$)
+		End If
+	Next
+	'auto-complete
+	colTot = lsColumnAutoComplete.Size - 1
+	For colCnt = 0 To colTot
+		f = lsColumnAutoComplete.Get(colCnt)
+		If lsColumnFields.IndexOf(f) >= 0 Then
+			SetColumnType(f, COLUMN_AUTOCOMPLETE)
+		Else
+			Log($"DataTable Error: ${mName}.${f} auto-complete column not found on column fields!"$)
+		End If
+	Next
+	'link
+	colTot = lsColumnLink.Size - 1
+	For colCnt = 0 To colTot
+		f = lsColumnLink.Get(colCnt)
+		If lsColumnFields.IndexOf(f) >= 0 Then
+			SetColumnType(f, COLUMN_LINK)
+		Else
+			Log($"DataTable Error: ${mName}.${f} link column not found on column fields!"$)
+		End If
+	Next
+	'combobox
+	colTot = lsColumnCombobox.Size - 1
+	For colCnt = 0 To colTot
+		f = lsColumnCombobox.Get(colCnt)
+		If lsColumnFields.IndexOf(f) >= 0 Then
+			SetColumnType(f, COLUMN_COMBOBOX)
+		Else
+			Log($"DataTable Error: ${mName}.${f} combo-box column not found on column fields!"$)
+		End If
+	Next
+	'time
+	colTot = lsColumnTime.Size - 1
+	For colCnt = 0 To colTot
+		f = lsColumnTime.Get(colCnt)
+		If lsColumnFields.IndexOf(f) >= 0 Then
+			SetColumnType(f, COLUMN_TIME)
+		Else
+			Log($"DataTable Error: ${mName}.${f} text-field column not found on column fields!"$)
+		End If
+	Next
+	'text-field
+	colTot = lsColumnTextfield.Size - 1
+	For colCnt = 0 To colTot
+		f = lsColumnTextfield.Get(colCnt)
+		If lsColumnFields.IndexOf(f) >= 0 Then
+			SetTextField(f, False)
+		Else
+			Log($"DataTable Error: ${mName}.${f} text-field column not found on column fields!"$)
+		End If
+	Next
+	'text-area
+	colTot = lsColumnTextarea.Size - 1
+	For colCnt = 0 To colTot
+		f = lsColumnTextarea.Get(colCnt)
+		If lsColumnFields.IndexOf(f) >= 0 Then
+			SetTextArea(f, True)
+		Else
+			Log($"DataTable Error: ${mName}.${f} text-area column not found on column fields!"$)
+		End If
+	Next
+	'switch
+	colTot = lsColumnSwitch.Size - 1
+	For colCnt = 0 To colTot
+		f = lsColumnSwitch.Get(colCnt)
+		If lsColumnFields.IndexOf(f) >= 0 Then
+			SetColumnType(f, COLUMN_SWITCH)
+		Else
+			Log($"DataTable Error: ${mName}.${f} switch column not found on column fields!"$)
+		End If
+	Next
+	'rating
+	colTot = lsColumnRating.Size - 1
+	For colCnt = 0 To colTot
+		f = lsColumnRating.Get(colCnt)
+		If lsColumnFields.IndexOf(f) >= 0 Then
+			SetColumnType(f, COLUMN_RATING)
+		Else
+			Log($"DataTable Error: ${mName}.${f} rating column not found on column fields!"$)
+		End If
+	Next
+	'image
+	colTot = lsColumnImage.Size - 1
+	For colCnt = 0 To colTot
+		f = lsColumnImage.Get(colCnt)
+		If lsColumnFields.IndexOf(f) >= 0 Then
+			SetColumnType(f, COLUMN_IMAGE)
+		Else
+			Log($"DataTable Error: ${mName}.${f} image column not found on column fields!"$)
+		End If
+	Next
+	'chip
+	colTot = lsColumnChip.Size - 1
+	For colCnt = 0 To colTot
+		f = lsColumnChip.Get(colCnt)
+		If lsColumnFields.IndexOf(f) >= 0 Then
+			SetColumnType(f, COLUMN_CHIP)
+		Else
+			Log($"DataTable Error: ${mName}.${f} chip column not found on column fields!"$)
+		End If
+	Next
+	'checkbox
+	colTot = lsColumnCheckbox.Size - 1
+	For colCnt = 0 To colTot
+		f = lsColumnCheckbox.Get(colCnt)
+		If lsColumnFields.IndexOf(f) >= 0 Then
+			SetColumnType(f, COLUMN_CHECKBOX)
+		Else
+			Log($"DataTable Error: ${mName}.${f} check-box column not found on column fields!"$)
+		End If
+	Next	
+	'avatar
+	colTot = lsColumnAvatar.Size - 1
+	For colCnt = 0 To colTot
+		f = lsColumnAvatar.Get(colCnt)
+		If lsColumnFields.IndexOf(f) >= 0 Then
+			SetColumnType(f, COLUMN_AVATARIMG)
+		Else
+			Log($"DataTable Error: ${mName}.${f} avatar column not found on column fields!"$)
+		End If
+	Next
+	'button
+	colTot = lsColumnButton.Size - 1
+	For colCnt = 0 To colTot
+		f = lsColumnButton.Get(colCnt)
+		If lsColumnFields.IndexOf(f) >= 0 Then
+			SetColumnType(f, COLUMN_BUTTON)
+		Else
+			Log($"DataTable Error: ${mName}.${f} button column not found on column fields!"$)
+		End If
+	Next	
+	'money
+	colTot = lsColumnMoney.Size - 1
+	For colCnt = 0 To colTot
+		f = lsColumnMoney.Get(colCnt)
+		If lsColumnFields.IndexOf(f) >= 0 Then
+			SetColumnType(f, COLUMN_MONEY)
+		Else
+			Log($"DataTable Error: ${mName}.${f} money column not found on column fields!"$)
+		End If
+	Next
+	'file sizes
+	colTot = lsColumnFileSize.Size - 1
+	For colCnt = 0 To colTot
+		f = lsColumnFileSize.Get(colCnt)
+		If lsColumnFields.IndexOf(f) >= 0 Then
+			SetColumnType(f, COLUMN_FILESIZE)
+		Else
+			Log($"DataTable Error: ${mName}.${f} file size column not found on column fields!"$)
+		End If
+	Next
+	'datetime columns
+	colTot = lsColumnDateTime.Size - 1
+	For colCnt = 0 To colTot
+		f = lsColumnDateTime.Get(colCnt)
+		If lsColumnFields.IndexOf(f) >= 0 Then
+			SetColumnType(f, COLUMN_DATETIME)
+		Else
+			Log($"DataTable Error: ${mName}.${f} date-time column not found on column fields!"$)
+		End If
+	Next
+	'dates
+	colTot = lsColumnDate.Size - 1
+	For colCnt = 0 To colTot
+		f = lsColumnDate.Get(colCnt)
+		If lsColumnFields.IndexOf(f) >= 0 Then
+			SetColumnType(f, COLUMN_DATE)
+		Else
+			Log($"DataTable Error: ${mName}.${f} date column not found on column fields!"$)
+		End If
+	Next
+	'sortable
+	colTot = lsColumnSortable.Size - 1
+	For colCnt = 0 To colTot
+		f = lsColumnSortable.Get(colCnt)
+		f = f.trim
+		If lsColumnFields.IndexOf(f) >= 0 Then
+			SetColumnSortable(f, True)
+		Else
+			Log($"DataTable Error: ${mName}.${f} sortable column not found on column fields!"$)
+		End If	
+	Next
+	'filterable
+	colTot = lsColumnFilterable.Size - 1
+	For colCnt = 0 To colTot
+		f = lsColumnFilterable.Get(colCnt)
+		f = f.trim
+		If lsColumnFields.IndexOf(f) >= 0 Then
+			SetColumnFilterable(f, True) 
+		Else
+			Log($"DataTable Error: ${mName}.${f} filterable column not found on column fields!"$)
+		End If
+	Next	
 End Sub
 
 Sub getShowGroupBy As Boolean
@@ -752,37 +1308,37 @@ public Sub setStates(varBindings As String)
 	Next
 End Sub
 
-'add an element to the text
-Sub AddElement(elID As String, tag As String, props As Map, styleProps As Map, classNames As List, loose As List, Text As String)
-	elID = elID.tolowercase
-	elID = elID.Replace("#","")
-	Dim elIT As VueElement
-	elIT.Initialize(mCallBack, elID, tag)
-	elIT.Append(Text)
-	If loose <> Null Then
-		For Each k As String In loose
-			elIT.SetAttr(k, True)
-		Next
-	End If
-	If props <> Null Then
-		For Each k As String In props.Keys
-			Dim v As String = props.Get(k)
-			elIT.SetAttr(k, v)
-		Next
-	End If
-	If styleProps <> Null Then
-		For Each k As String In styleProps.Keys
-			Dim v As String = styleProps.Get(k)
-			elIT.SetAttr(k, v)
-		Next
-	End If
-	If classNames <> Null Then
-		elIT.AddClasses(classNames)
-	End If
-	'convert to string
-	Dim sElement As String = elIT.tostring
-	mElement.Append(sElement)
-End Sub
+''add an element to the text
+'Sub AddElement(elID As String, tag As String, props As Map, styleProps As Map, classNames As List, loose As List, Text As String)
+'	elID = elID.tolowercase
+'	elID = elID.Replace("#","")
+'	Dim elIT As VueElement
+'	elIT.Initialize(mCallBack, elID, tag)
+'	elIT.Append(Text)
+'	If loose <> Null Then
+'		For Each k As String In loose
+'			elIT.SetAttr(k, True)
+'		Next
+'	End If
+'	If props <> Null Then
+'		For Each k As String In props.Keys
+'			Dim v As String = props.Get(k)
+'			elIT.SetAttr(k, v)
+'		Next
+'	End If
+'	If styleProps <> Null Then
+'		For Each k As String In styleProps.Keys
+'			Dim v As String = styleProps.Get(k)
+'			elIT.SetAttr(k, v)
+'		Next
+'	End If
+'	If classNames <> Null Then
+'		elIT.AddClasses(classNames)
+'	End If
+'	'convert to string
+'	Dim sElement As String = elIT.tostring
+'	mElement.Append(sElement)
+'End Sub
 
 'returns the BANanoElement
 public Sub getElement() As BANanoElement
@@ -828,7 +1384,7 @@ public Sub AddClass(varClass As String)
 		Next
 	End If
 End Sub
-
+'
 Sub AddClasses(listOfClasses As List)
 	Dim strClass As String = BANanoShared.Join(" ", listOfClasses)
 	AddClass(strClass)
@@ -1162,39 +1718,39 @@ Sub IsValidID(idName As String) As Boolean
 	Next
 	Return True
 End Sub
-
-
-Sub AppendElement(parent As String, tag As String, id As String, text As String) As BANanoElement
-	parent = parent.ToLowerCase
-	parent = parent.Replace("#","")
-	Dim item As String = $"<${tag} id="${id}"></${tag}>"$
-	Dim el As BANanoElement = BANano.GetElement($"#${parent}"$).Append(item).Get($"#${id}"$)
-	el.SetText(text)
-	Return el
-End Sub
-
-'banano helper class
-Sub AppendElement1(parentID As String, tag As String, id As String, text As String, props As Map, styles As Map, classes As String) As BANanoElement
-	parentID = parentID.ToLowerCase
-	parentID = parentID.Replace("#","")
-	id = id.tolowercase
-	Dim el As BANanoElement = BANano.GetElement($"#${parentID}"$).Append($"<${tag} id="${id}"></${tag}>"$).Get($"#${id}"$)
-	If BANano.IsNull(props) = False Then
-		For Each k As String In props.Keys
-			Dim v As String = props.Get(k)
-			el.SetAttr(k, v)
-		Next
-	End If
-	'
-	If BANano.IsNull(styles) = False Then
-		Dim strStyle As String = BANano.ToJson(styles)
-		el.SetStyle(strStyle)
-	End If
-	'
-	If classes <> "" Then el.AddClass(classes)
-	el.settext(text)
-	Return el
-End Sub
+'
+'
+'Sub AppendElement(parent As String, tag As String, id As String, text As String) As BANanoElement
+'	parent = parent.ToLowerCase
+'	parent = parent.Replace("#","")
+'	Dim item As String = $"<${tag} id="${id}"></${tag}>"$
+'	Dim el As BANanoElement = BANano.GetElement($"#${parent}"$).Append(item).Get($"#${id}"$)
+'	el.SetText(text)
+'	Return el
+'End Sub
+'
+''banano helper class
+'Sub AppendElement1(parentID As String, tag As String, id As String, text As String, props As Map, styles As Map, classes As String) As BANanoElement
+'	parentID = parentID.ToLowerCase
+'	parentID = parentID.Replace("#","")
+'	id = id.tolowercase
+'	Dim el As BANanoElement = BANano.GetElement($"#${parentID}"$).Append($"<${tag} id="${id}"></${tag}>"$).Get($"#${id}"$)
+'	If BANano.IsNull(props) = False Then
+'		For Each k As String In props.Keys
+'			Dim v As String = props.Get(k)
+'			el.SetAttr(k, v)
+'		Next
+'	End If
+'	'
+'	If BANano.IsNull(styles) = False Then
+'		Dim strStyle As String = BANano.ToJson(styles)
+'		el.SetStyle(strStyle)
+'	End If
+'	'
+'	If classes <> "" Then el.AddClass(classes)
+'	el.settext(text)
+'	Return el
+'End Sub
 
 Sub CStr(o As Object) As String
 	If BANano.isnull(o) Or BANano.IsUndefined(o) Then o = ""
@@ -1578,6 +2134,7 @@ Sub Reset
 	'
 	columnsM.Initialize
 End Sub
+
 
 'set own filter
 Sub ApplyFilter1(fltrs As List)

@@ -14,6 +14,13 @@ Sub Process_Globals
 	Private VBtn1 As VBtn
 	Private VNavigationDrawer1 As VNavigationDrawer
 	Private btnCloseDrawer As VBtn
+	Private VBtn2 As VBtn
+	Private VContainer1 As VContainer
+	Private VLabel1 As VLabel
+	Private VLabel2 As VLabel
+	Private VRow1 As VRow
+	Private VTemplate1 As VTemplate
+	Private VToolBar1 As VToolBar
 End Sub
 
 Sub Initialize
@@ -24,10 +31,18 @@ Sub Initialize
 	path = about.path
 	
 	banano.LoadLayout(about.Here, "mydrawer")
-	
+	'
 	about.BindVueElement(VBtn1.VElement)
 	about.BindVueElement(VNavigationDrawer1.VElement)
 	about.BindVueElement(btnCloseDrawer.VElement)
+	about.BindVueElement(VBtn2.VElement)
+	about.BindVueElement(VContainer1.VElement)
+	about.BindVueElement(VLabel1.VElement)
+	about.BindVueElement(VLabel2.VElement)
+	about.BindVueElement(VRow1.VElement)
+	about.BindVueElement(VTemplate1.VElement)
+	about.BindVueElement(VToolBar1.VElement)
+	
 	about.SetCreated(Me, "oncreated", Null)
 	'add the component as a router
 	vuetify.AddRoute(about) 

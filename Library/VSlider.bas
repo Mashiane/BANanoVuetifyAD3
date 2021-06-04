@@ -25,6 +25,7 @@ Version=7
 #DesignerProperty: Key: MaxValue, DisplayName: MaxValue, FieldType: String, DefaultValue: 100, Description: MaxValue
 #DesignerProperty: Key: StepValue, DisplayName: StepValue, FieldType: String, DefaultValue: 1, Description: StepValue
 #DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: slider1, Description: VModel
+#DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: , Description: Value
 #DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: Boolean, DefaultValue: False, Description: Disabled
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: Loading, DisplayName: Loading, FieldType: Boolean, DefaultValue: False, Description: Loading
@@ -144,6 +145,7 @@ Private bLoading As Boolean
 Private bReadonly As Boolean
 Private bRequired As Boolean
 Private sRequired As String
+Private sValue As String
 	End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -168,11 +170,11 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 Sub DesignerCreateView (Target As BANanoElement, Props As Map) 
 	mTarget = Target 
 	If Props <> Null Then 
-		bDisabled = Props.Get("Disabled")
-bHidden = Props.Get("Hidden")
-bLoading = Props.Get("Loading")
-bReadonly = Props.Get("Readonly")
-bRequired = Props.Get("Required")
+		bDisabled = Props.GetDefault("Disabled",False)
+bHidden = Props.GetDefault("Hidden",False)
+bLoading = Props.GetDefault("Loading",False)
+bReadonly = Props.GetDefault("Readonly",False)
+bRequired = Props.GetDefault("Required",False)
 		mClasses = Props.Get("Classes") 
 		mStyles = Props.Get("Styles") 
 		mAttributes = Props.Get("Attributes") 
@@ -224,7 +226,7 @@ sVModel = Props.Get("VModel")
 sVOn = Props.Get("VOn")
 bValidateOnBlur = Props.Get("ValidateOnBlur")
 bVertical = Props.Get("Vertical")
- 
+ sValue = Props.GetDefault("Value", 1)
 	End If 
 	' 
 	'build and get the element 
@@ -310,7 +312,7 @@ VElement.AddAttr("v-bind", sVBind)
 VElement.AddAttr("v-for", sVFor)
 VElement.AddAttr("v-if", sVIf)
 VElement.AddAttr("v-model", sVModel)
-VElement.SetData(sVModel, 10)
+VElement.SetData(sVModel, sValue)
 
 VElement.AddAttr("v-on", sVOn)
 VElement.AddAttr("v-show", sVShow)

@@ -17,6 +17,13 @@ Sub Process_Globals
 	Private VBottomSheet2 As VBottomSheet
 	Private VBtn4 As VBtn
 	Private VBtn3 As VBtn
+	Private VContainer1 As VContainer
+	Private VLabel1 As VLabel
+	Private VLabel2 As VLabel
+	Private VSheet1 As VSheet
+	Private VSheet2 As VSheet
+	Private VToolBar1 As VToolBar
+	Private VToolBar2 As VToolBar
 End Sub
 
 Sub Initialize
@@ -34,6 +41,15 @@ Sub Initialize
 	about.BindVueElement(VBtn2.VElement)
 	about.BindVueElement(VBtn4.VElement)
 	about.BindVueElement(VBtn3.VElement)
+	'
+	about.BindVueElement(VContainer1.VElement)
+	about.BindVueElement(VLabel1.VElement)
+	about.BindVueElement(VLabel2.VElement)
+	about.BindVueElement(VSheet1.VElement)
+	about.BindVueElement(VSheet2.VElement)
+	about.BindVueElement(VToolBar1.VElement)
+	about.BindVueElement(VToolBar2.VElement)
+		
 	'add the component as a router
 	vuetify.AddRoute(about) 
 End Sub

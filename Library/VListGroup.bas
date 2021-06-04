@@ -88,7 +88,7 @@ bSubGroup = Props.Get("SubGroup")
 sTextColor = Props.Get("TextColor")
 sTextColorIntensity = Props.Get("TextColorIntensity")
 sVModel = Props.Get("VModel")
-bDisabled = Props.Get("Disabled")
+bDisabled = Props.GetDefault("Disabled",false)
 	End If
 	'
 	'build and get the element
@@ -120,6 +120,7 @@ VElement.AddAttr(":ripple", bRipple)
 VElement.AddAttr(":sub-group", bSubGroup)
 VElement.TextColor = VElement.BuildColor(sTextColor, sTextColorIntensity)
 VElement.AddAttr("v-model", sVModel)
+VElement.SetData(sVModel, Null)
 VElement.BindAllEvents
 End Sub
 

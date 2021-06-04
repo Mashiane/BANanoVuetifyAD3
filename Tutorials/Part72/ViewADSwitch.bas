@@ -14,6 +14,16 @@ Sub Process_Globals
 	Private VSwitch1 As VSwitch
 	Private VSwitch2 As VSwitch
 	Private VSwitch3 As VSwitch
+	Private VCol1 As VCol
+	Private VCol2 As VCol
+	Private VCol3 As VCol
+	Private VCol4 As VCol
+	Private VCol5 As VCol
+	Private VCol6 As VCol
+	Private VCol7 As VCol
+	Private VCol8 As VCol
+	Private VContainer1 As VContainer
+	Private VRow1 As VRow
 End Sub
 
 Sub Initialize
@@ -26,8 +36,18 @@ Sub Initialize
 	banano.LoadLayout(about.Here, "myswitch")
 	
 	about.BindVueElement(VSwitch1.VElement)
-	about.BindVueElement(VSwitch2.VElement)
-	about.BindVueElement(VSwitch3.VElement)
+about.BindVueElement(VSwitch2.VElement)
+about.BindVueElement(VSwitch3.VElement)
+about.BindVueElement(VCol1.VElement)
+about.BindVueElement(VCol2.VElement)
+about.BindVueElement(VCol3.VElement)
+about.BindVueElement(VCol4.VElement)
+about.BindVueElement(VCol5.VElement)
+about.BindVueElement(VCol6.VElement)
+about.BindVueElement(VCol7.VElement)
+about.BindVueElement(VCol8.VElement)
+about.BindVueElement(VContainer1.VElement)
+about.BindVueElement(VRow1.VElement)
 
 	VSwitch3.UpdateLoading(about, True)
 	'add the component as a router

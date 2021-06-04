@@ -118,6 +118,28 @@ function BANanoMSSQLDynamic($command, $query, $args, $types, $host, $username, $
 } 
  
  
+ini_set('display_errors', 1); 
+ini_set('display_startup_errors', 1); 
+error_reporting(E_ALL); 
+ 
+function get_result(\mysqli_stmt $statement) 
+{ 
+    $result = array(); 
+    $statement->store_result(); 
+    for ($i = 0; $i < $statement->num_rows; $i++) 
+    { 
+        $metadata = $statement->result_metadata(); 
+        $params = array(); 
+        while ($field = $metadata->fetch_field()) 
+        { 
+            $params[] = &$result[$i][$field->name]; 
+        } 
+        call_user_func_array(array($statement, 'bind_result'), $params); 
+        $statement->fetch(); 
+    } 
+    return $result; 
+} 
+ 
 function prepareMySQL($conn, $query, $types, $args) { 
 	//paramater types to execute 
 	/* Bind parameters. Types: s = string, i = integer, d = double,  b = blob */ 
@@ -141,11 +163,11 @@ function prepareMySQL($conn, $query, $types, $args) {
  
 function BANanoMySQL($command, $query, $args, $types) { 
 	$resp = array(); 
-	//header('Access-Control-Allow-Origin: *'); 
-	//header('content-type: application/json; charset=utf-8'); 
-	//header("Access-Control-Allow-Credentials: true"); 
-	//header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS'); 
-	//header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token , Authorization'); 
+	header('Access-Control-Allow-Origin: *'); 
+	header('content-type: application/json; charset=utf-8'); 
+	header("Access-Control-Allow-Credentials: true"); 
+	header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS'); 
+	header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token , Authorization'); 
 	require_once './assets/mysqlconfig.php'; 
     //connect To MySQL 
 	mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT); 
@@ -195,23 +217,8 @@ function BANanoMySQL($command, $query, $args, $types) {
 			$output = json_encode($resp); 
 	        die($output); 
 		} 
- 
-		//use meta data 
-		$meta = $stmt->result_metadata(); 
-    	while ($field = $meta->fetch_field()) 
-    		{ 
-        		$params[] = &$row[$field->name]; 
-    		} 
-	    call_user_func_array(array($stmt, 'bind_result'), $params); 
-		$rows = array(); 
-    	while ($stmt->fetch()) { 
-        	foreach($row as $key => $val) 
-        	{ 
-            	$c[$key] = $val; 
-        	} 
-        	$rows[] = $c; 
-    	} 
 		 
+		$rows = get_result($stmt); 
 		$affRows = $conn->affected_rows; 
     	$resp['response'] = "Success"; 
 		$resp['error'] = ''; 
@@ -227,11 +234,11 @@ function BANanoMySQL($command, $query, $args, $types) {
  
 function BANanoMySQL1($command, $query, $args, $types) { 
 	$resp = array(); 
-	//header('Access-Control-Allow-Origin: *'); 
-	//header('content-type: application/json; charset=utf-8'); 
-	//header("Access-Control-Allow-Credentials: true"); 
-	//header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS'); 
-	//header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token , Authorization'); 
+	header('Access-Control-Allow-Origin: *'); 
+	header('content-type: application/json; charset=utf-8'); 
+	header("Access-Control-Allow-Credentials: true"); 
+	header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS'); 
+	header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token , Authorization'); 
 	require_once './assets/mysqlconfig.php'; 
     //connect To MySQL 
 	mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT); 
@@ -313,10 +320,10 @@ function BANanoMySQL1($command, $query, $args, $types) {
 function BANanoMySQLDynamic($command, $query, $args, $types, $host, $username, $password, $dbname) { 
 	$resp = array(); 
 	header('Access-Control-Allow-Origin: *'); 
-	//header('content-type: application/json; charset=utf-8'); 
-	//header("Access-Control-Allow-Credentials: true"); 
-	//header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS'); 
-	//header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token , Authorization'); 
+	header('content-type: application/json; charset=utf-8'); 
+	header("Access-Control-Allow-Credentials: true"); 
+	header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS'); 
+	header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token , Authorization'); 
 	//connect To MySQL 
     $conn = new mysqli($host, $username, $password); 
     //we cannot connect Return an error 
@@ -386,23 +393,7 @@ function BANanoMySQLDynamic($command, $query, $args, $types, $host, $username, $
 			$output = json_encode($resp); 
 	        die($output); 
 		} 
-		 
-		//use meta data 
-		$meta = $stmt->result_metadata(); 
-    	while ($field = $meta->fetch_field()) 
-    		{ 
-        		$params[] = &$row[$field->name]; 
-    		} 
-	    call_user_func_array(array($stmt, 'bind_result'), $params); 
-		$rows = array(); 
-    	while ($stmt->fetch()) { 
-        	foreach($row as $key => $val) 
-        	{ 
-            	$c[$key] = $val; 
-        	} 
-        	$rows[] = $c; 
-    	} 
-		 
+		$rows = get_result($stmt); 
 		$affRows = $conn->affected_rows; 
     	$resp['response'] = "Success"; 
 		$resp['error'] = ''; 
@@ -460,23 +451,7 @@ function BANanoMySQLDynamic($command, $query, $args, $types, $host, $username, $
 			$output = json_encode($resp); 
 	        die($output); 
 		} 
-		 
-		//use meta data 
-		$meta = $stmt->result_metadata(); 
-    	while ($field = $meta->fetch_field()) 
-    		{ 
-        		$params[] = &$row[$field->name]; 
-    		} 
-	    call_user_func_array(array($stmt, 'bind_result'), $params); 
-		$rows = array(); 
-    	while ($stmt->fetch()) { 
-        	foreach($row as $key => $val) 
-        	{ 
-            	$c[$key] = $val; 
-        	} 
-        	$rows[] = $c; 
-    	} 
-		 
+		$rows = get_result($stmt); 
 		$affRows = $conn->affected_rows; 
     	$resp['response'] = "Success"; 
 		$resp['error'] = ''; 

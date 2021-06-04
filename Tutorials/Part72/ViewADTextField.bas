@@ -21,6 +21,19 @@ Sub Process_Globals
 	Private VTextField8 As VTextField
 	Private VTextField9 As VTextField
 	Private VTextField10 As VTextField
+	Private VCol1 As VCol
+	Private VCol10 As VCol
+	Private VCol2 As VCol
+	Private VCol3 As VCol
+	Private VCol4 As VCol
+	Private VCol5 As VCol
+	Private VCol6 As VCol
+	Private VCol7 As VCol
+	Private VCol8 As VCol
+	Private VCol9 As VCol
+	Private VContainer1 As VContainer
+	Private VForm1 As VForm
+	Private VRow1 As VRow
 End Sub
 
 Sub Initialize
@@ -33,15 +46,29 @@ Sub Initialize
 	banano.LoadLayout(about.Here, "mytextfields")
 	'
 	about.BindVueElement(VTextField1.VElement)
-	about.BindVueElement(VTextField2.VElement)
-	about.BindVueElement(VTextField3.VElement)
-	about.BindVueElement(VTextField4.VElement)
-	about.BindVueElement(VTextField5.VElement)
-	about.BindVueElement(VTextField6.VElement)
-	about.BindVueElement(VTextField7.VElement)
-	about.BindVueElement(VTextField8.VElement)
-	about.BindVueElement(VTextField9.VElement)
-	about.BindVueElement(VTextField10.VElement)
+about.BindVueElement(VTextField2.VElement)
+about.BindVueElement(VTextField3.VElement)
+about.BindVueElement(VTextField4.VElement)
+about.BindVueElement(VTextField5.VElement)
+about.BindVueElement(VTextField6.VElement)
+about.BindVueElement(VTextField7.VElement)
+about.BindVueElement(VTextField8.VElement)
+about.BindVueElement(VTextField9.VElement)
+about.BindVueElement(VTextField10.VElement)
+about.BindVueElement(VCol1.VElement)
+about.BindVueElement(VCol10.VElement)
+about.BindVueElement(VCol2.VElement)
+about.BindVueElement(VCol3.VElement)
+about.BindVueElement(VCol4.VElement)
+about.BindVueElement(VCol5.VElement)
+about.BindVueElement(VCol6.VElement)
+about.BindVueElement(VCol7.VElement)
+about.BindVueElement(VCol8.VElement)
+about.BindVueElement(VCol9.VElement)
+about.BindVueElement(VContainer1.VElement)
+about.BindVueElement(VForm1.VElement)
+about.BindVueElement(VRow1.VElement)
+
 	
 		
 	'add the component as a router

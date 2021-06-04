@@ -9,6 +9,7 @@ Version=8.9
 #Event: ok_click (e As BANanoEvent)
 #Event: cancel_click (e As BANanoEvent)
 
+#DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: True, Description: Hidden
 #DesignerProperty: Key: HasToolbar, DisplayName: HasToolbar, FieldType: Boolean, DefaultValue: true, Description: HasToolbar
 #DesignerProperty: Key: ToolBarColor, DisplayName: ToolBarColor, FieldType: String, DefaultValue: , Description: ToolBarColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: ToolBarColorIntensity, DisplayName: ToolBarColorIntensity, FieldType: String, DefaultValue: , Description: ToolBarColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
@@ -161,6 +162,7 @@ Private bCancelDisabled As Boolean
 Private bCardTextAppend As Boolean
 Private sDisabled As String
 Private sVShow As String
+private bHidden as boolean
 	End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -218,7 +220,7 @@ sCardTitleCaption = Props.Get("CardTitleCaption")
 sCloseDelay = Props.Get("CloseDelay")
 sContentClass = Props.Get("ContentClass")
 bDark = Props.Get("Dark")
-bDisabled = Props.Get("Disabled")
+bDisabled = Props.GetDefault("Disabled",False)
 bEager = Props.Get("Eager")
 bFullscreen = Props.Get("Fullscreen")
 bHasCancel = Props.Get("HasCancel")
@@ -256,6 +258,7 @@ bFullscreenOnMobile = Props.Get("FullscreenOnMobile")
 sToolBarColor = Props.Get("ToolBarColor")
 sToolBarColorIntensity = Props.Get("ToolBarColorIntensity")
 bToolbarDark = Props.Get("ToolBarDark")
+bHidden = Props.GetDefault("Hidden", True)
 	End If
 	'
 	'build and get the element
@@ -372,7 +375,7 @@ VElement.AddAttr("v-if", sVIf)
 VElement.AddAttr("v-model", sVModel)
 VElement.AddAttr("width", sWidth)
 VElement.FullScreenOnMobile = bFullscreenOnMobile
-VElement.SetData(sVModel, False)
+VElement.SetData(sVModel, Not(bHidden))
 VElement.BindAllEvents
 '
 If bHasOk Then

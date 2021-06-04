@@ -10,7 +10,7 @@ Version=8.9
 #DesignerProperty: Key: HeadLine, DisplayName: HeadLine, FieldType: Boolean, DefaultValue: false, Description: HeadLine
 #DesignerProperty: Key: Icon, DisplayName: Icon, FieldType: String, DefaultValue: , Description: Icon
 #DesignerProperty: Key: IconDark, DisplayName: IconDark, FieldType: Boolean, DefaultValue: True, Description: IconDark
-#DesignerProperty: Key: Image, DisplayName: Image, FieldType: String, DefaultValue: , Description: Image
+#DesignerProperty: Key: Image, DisplayName: Image, FieldType: String, DefaultValue: ./assets/bvad31.png, Description: Image
 #DesignerProperty: Key: Elevation, DisplayName: Elevation, FieldType: String, DefaultValue: , Description: Elevation
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue: primary, Description: Color, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: ColorIntensity, DisplayName: Color Intensity, FieldType: String, DefaultValue:  normal, Description: , List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4

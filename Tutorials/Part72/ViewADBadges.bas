@@ -17,6 +17,13 @@ Sub Process_Globals
 	Private VBadge4 As VBadge
 	Private VBadge5 As VBadge
 	Private VBtn1 As VBtn
+	Private badger1 As VRow
+	Private VBadge3 As VBadge
+	Private VCol1 As VCol
+	Private VCol2 As VCol
+	Private VCol3 As VCol
+	Private VRow1 As VRow
+	Private VRow2 As VRow
 End Sub
 
 Sub Initialize
@@ -28,12 +35,23 @@ Sub Initialize
 	
 	banano.LoadLayout(about.Here, "mybadges")
 	'
+	about.BindVueElement(VContainer1.VElement)
+	about.BindVueElement(VBadge1.VElement)
 	about.BindVueElement(VBadge2.VElement)
+	about.BindVueElement(VBadge4.VElement)
 	about.BindVueElement(VBadge5.VElement)
 	about.BindVueElement(VBtn1.VElement)
+	about.BindVueElement(badger1.VElement)
+	about.BindVueElement(VBadge3.VElement)
+	about.BindVueElement(VCol1.VElement)
+	about.BindVueElement(VCol2.VElement)
+	about.BindVueElement(VCol3.VElement)
+	about.BindVueElement(VRow1.VElement)
+	about.BindVueElement(VRow2.VElement)
+
 	
-	VBadge2.UpdateContent(about, 3)
-	VBadge5.UpdateContent(about, 1)
+	VBadge2.UpdateValue(about, 5)
+	VBadge5.UpdateValue(about, 6)
 		
 	'add the component as a router
 	vuetify.AddRoute(about) 

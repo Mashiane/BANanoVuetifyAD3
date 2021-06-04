@@ -24,6 +24,7 @@ Version=8.95
 
 #DesignerProperty: Key: Label, DisplayName: Label, FieldType: String, DefaultValue: Label1, Description: Label
 #DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: Label1, Description: VModel
+#DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: , Description: Value
 #DesignerProperty: Key: SetRef, DisplayName: SetRef, FieldType: Boolean, DefaultValue: false, Description: SetRef
 #DesignerProperty: Key: TypeOf, DisplayName: TypeOf, FieldType: String, DefaultValue: text, Description: TypeOf, List: text|password|email|tel|email|url|number|search|time|button|hidden|reset|submit
 #DesignerProperty: Key: ShowEyes, DisplayName: ShowEyes, FieldType: Boolean, DefaultValue: false, Description: ShowEyes
@@ -164,6 +165,7 @@ Private bHidden As Boolean
 Private bLoading As Boolean
 Private bReadonly As Boolean
 Private bRequired As Boolean
+private sValue as string
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -196,9 +198,9 @@ End Sub
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	mTarget = Target
 	If Props <> Null Then
-		bDisabled = Props.Get("Disabled")
+		bDisabled = Props.GetDefault("Disabled",False)
 bHidden = Props.Get("Hidden")
-bLoading = Props.Get("Loading")
+bLoading = Props.GetDefault("Loading",False)
 bReadonly = Props.Get("Readonly")
 bRequired = Props.Get("Required")
 		mClasses = Props.Get("Classes")
@@ -256,6 +258,7 @@ sVModel = Props.Get("VModel")
 sVOn = Props.Get("VOn")
 bValidateOnBlur = Props.Get("ValidateOnBlur")
 bShowEyes = Props.Get("ShowEyes")
+sValue = Props.GetDefault("Value", "")
 	End If
 	'
 	Dim stagName As String = "v-text-field"
@@ -362,7 +365,7 @@ VElement.AddAttr("v-bind", sVBind)
 VElement.AddAttr("v-for", sVFor)
 VElement.AddAttr("v-if", sVIf)
 VElement.AddAttr("v-model", sVModel)
-VElement.SetData(sVModel, "")
+VElement.SetData(sVModel, sValue)
 VElement.AddAttr("v-on", sVOn)
 VElement.AddAttr("v-show", sVShow)
 VElement.SetData(sVShow, Not(bHidden))

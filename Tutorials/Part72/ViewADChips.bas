@@ -17,6 +17,9 @@ Sub Process_Globals
 	Private VChip2 As VChip
 	Private VChip3 As VChip
 	Private VChip4 As VChip
+	Private chipsadr1 As VRow
+	Private chipscontainer As VueElement
+	Private VChip5 As VChip
 End Sub
 
 Sub Initialize
@@ -34,6 +37,12 @@ Sub Initialize
 	
 	about.BindVueElement(chipad1.VElement)
 	about.BindVueElement(VChip1.VElement)
+	about.BindVueElement(VChip2.VElement)
+	about.BindVueElement(VChip3.VElement)
+	about.BindVueElement(VChip4.VElement)
+	about.BindVueElement(chipsadr1.VElement)
+	about.BindVueElement(chipscontainer)
+	about.BindVueElement(VChip5.VElement)
 	'	
 	about.SetCreated(Me, "oncreated", Null)
 

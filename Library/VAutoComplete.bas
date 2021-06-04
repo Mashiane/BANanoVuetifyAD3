@@ -30,6 +30,7 @@ Version=7
 
 #DesignerProperty: Key: Label, DisplayName: Label, FieldType: String, DefaultValue: autocomplete1, Description: Label
 #DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: autocomplete1, Description: VModel
+#DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: , Description: Value
 #DesignerProperty: Key: ItemText, DisplayName: ItemText, FieldType: String, DefaultValue: text, Description: ItemText
 #DesignerProperty: Key: ItemValue, DisplayName: ItemValue, FieldType: String, DefaultValue: value, Description: ItemValue
 #DesignerProperty: Key: ItemDisabled, DisplayName: ItemDisabled, FieldType: String, DefaultValue: disabled, Description: ItemDisabled
@@ -211,6 +212,7 @@ Private bLoading As Boolean
 Private bReadonly As Boolean
 Private bRequired As Boolean
 Private sRequired As String
+Private sValue As String
 	End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -237,11 +239,11 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 Sub DesignerCreateView (Target As BANanoElement, Props As Map) 
 	mTarget = Target 
 	If Props <> Null Then 
-		bDisabled = Props.Get("Disabled")
-bHidden = Props.Get("Hidden")
-bLoading = Props.Get("Loading")
-bReadonly = Props.Get("Readonly")
-bRequired = Props.Get("Required")
+		bDisabled = Props.GetDefault("Disabled",False)
+bHidden = Props.GetDefault("Hidden",False)
+bLoading = Props.GetDefault("Loading",False)
+bReadonly = Props.GetDefault("Readonly",False)
+bRequired = Props.GetDefault("Required",False)
 		mClasses = Props.Get("Classes") 
 		mStyles = Props.Get("Styles") 
 		mAttributes = Props.Get("Attributes") 
@@ -341,6 +343,12 @@ bValidateOnBlur = Props.Get("ValidateOnBlur")
 	If BANano.IsNull(bLoading) Or BANano.IsUndefined(bLoading) Then
 		bLoading = False 
 	End If
+	'
+	
+If BANano.IsNull(bMultiple) Or BANano.IsUndefined(bMultiple) Then
+	bMultiple = False
+End If
+
 	VElement.Initialize(mCallBack, mName, mName) 
 	VElement.TagName = "v-autocomplete" 
 	VElement.Classes = mClasses 
@@ -448,12 +456,9 @@ VElement.AddAttr("v-for", sVFor)
 VElement.AddAttr("v-if", sVIf)
 VElement.AddAttr("v-model", sVModel)
 
-If BANano.IsNull(bMultiple) Or BANano.IsUndefined(bMultiple) Then
-	bMultiple = False
-End If
 '
 If bMultiple = False Then
-	VElement.SetData(sVModel, Null)
+	VElement.SetData(sVModel, sValue)
 Else
 	VElement.SetData(sVModel, VElement.NewList)
 End If

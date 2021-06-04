@@ -133,7 +133,7 @@ sVIf = Props.Get("VIf")
 sVShow = Props.Get("VShow")
 sValue = Props.Get("Value")
 sWidth = Props.Get("Width")
-bDisabled = Props.Get("Disabled")
+bDisabled = Props.GetDefault("Disabled",false)
 	End If
 	'
 	If BANano.IsNull(bDisabled) Or BANano.IsUndefined(bDisabled) Then

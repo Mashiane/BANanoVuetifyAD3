@@ -213,7 +213,7 @@ sBorderWidth = Props.Get("BorderWidth")
 	VElement.FillHeight = bFillHeight
 	VElement.AddAttr(":dense", bDense)
 	VElement.AddAttr("v-for", sVFor)
-	VElement.AddAttr(":key", sKey)
+	VElement.AddAttr("key", sKey)
 	VElement.AddAttr("sm", sSM)
 	VElement.SetAttr("md", sMD)
 	VElement.SetAttr("lg", sLG)

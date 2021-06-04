@@ -211,6 +211,7 @@ Sub Class_Globals
 	Private mStates As String
 	Public bindings As Map
 	Public methods As Map
+	Public watches As Map
 	Private eOnClick As String = ""
 	Private eOnClickStop As String = ""
 	Private eOnDblClick As String = ""
@@ -385,6 +386,7 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	HasRules = False
 	Gradients.Initialize 
 	computed.Initialize 
+	watches.Initialize 
 	extm.Initialize
 	extm.Put("html", "mdi-language-html5")
 	extm.Put("js", "mdi-nodejs")
@@ -7904,6 +7906,18 @@ Sub BindAllEvents
 	SetOnEvent(mCallBack, "transitionend", "")
 	SetOnEvent(mCallBack, "update:mini-variant", "")
 	SetOnEvent(mCallBack, "update:indeterminate", "")
+	SetOnEvent(mCallBack, "dblclick:date", "")
+	SetOnEvent(mCallBack, "click:row", "")
+	SetOnEvent(mCallBack, "current-items", "")
+	SetOnEvent(mCallBack, "dblclick:row", "")
+	SetOnEvent(mCallBack, "item-expanded", "")
+	SetOnEvent(mCallBack, "toggle-select-all", "")
+	SetOnEvent(mCallBack, "click:hour", "")
+	SetOnEvent(mCallBack, "click:minute", "")
+	SetOnEvent(mCallBack, "click:second", "")
+	SetOnEvent(mCallBack, "update:period", "")
+	SetOnEvent(mCallBack, "update:color", "")
+	SetOnEvent(mCallBack, "update:mode", "")
 End Sub
 
 'get the chip ref from the chip group
@@ -9724,35 +9738,35 @@ Sub AddRadioGroup(elID As String, vmodel As String, sLabel As String, bRow As Bo
 	value = value.ToLowerCase
 	
 	colorField = colorField.tolowercase
-	Dim vradiogroup As VueElement = AddVueElement2(parentID, elID, "v-radio-group", Null)
-	vradiogroup.label = sLabel
-	vradiogroup.Multiple = bMultiple
-	vradiogroup.AddAttr(":row", bRow)
-	vradiogroup.AddAttr(":column", Not(bRow))
-	vradiogroup.VModel = vmodel
-	vradiogroup.AssignProps(radiogroupprops)
+	Dim vradiogroupx As VueElement = AddVueElement2(parentID, elID, "v-radio-group", Null)
+	vradiogroupx.label = sLabel
+	vradiogroupx.Multiple = bMultiple
+	vradiogroupx.AddAttr(":row", bRow)
+	vradiogroupx.AddAttr(":column", Not(bRow))
+	vradiogroupx.VModel = vmodel
+	vradiogroupx.AssignProps(radiogroupprops)
 	'
-	Dim vradio As VueElement = AddVueElement2(elID, radioID, "v-radio", Null)
-	vradio.VFor = $"item in ${sourceTable}"$
-	vradio.BindKey($"item.${key}"$)
-	vradio.Bind("label", $"item.${value}"$)
-	vradio.Bind("value", $"item.${key}"$)
+	Dim vradiox As VueElement = AddVueElement2(elID, radioID, "v-radio", Null)
+	vradiox.VFor = $"item in ${sourceTable}"$
+	vradiox.BindKey($"item.${key}"$)
+	vradiox.Bind("label", $"item.${value}"$)
+	vradiox.Bind("value", $"item.${key}"$)
 	If colorField <> "" Then 
-		vradio.Bind("color", $"item.${colorField}"$)
+		vradiox.Bind("color", $"item.${colorField}"$)
 	End If
-	vradio.AssignProps(radioprops)
+	vradiox.AssignProps(radioprops)
 	If bMultiple Then
 		Dim lst As List = NewList
-		vradiogroup.SetData(vmodel, lst)
+		vradiogroupx.SetData(vmodel, lst)
 	Else
-		vradiogroup.SetData(vmodel, Null)
+		vradiogroupx.SetData(vmodel, Null)
 	End If
 	Dim lst As List = NewList
-	vradiogroup.SetData(sourceTable, lst)
-	vradiogroup.BindAllEvents
-	vradiogroup.SetOnEvent(mCallBack, "change", $"item.${key}"$)
-	vradiogroup.BindVueElement(vradio)
-	Return vradiogroup
+	vradiogroupx.SetData(sourceTable, lst)
+	vradiogroupx.BindAllEvents
+	vradiogroupx.SetOnEvent(mCallBack, "change", $"item.${key}"$)
+	vradiogroupx.BindVueElement(vradiox)
+	Return vradiogroupx
 End Sub
 
 Sub AddFab(elID As String, eIcon As String, eColor As String, bOutlined As Boolean, btnprops As Map, iconprops As Map) As VueElement
@@ -11848,4 +11862,19 @@ End Sub
 
 Sub SetCloseIcon(s As String)
 	AddAttr("close-icon", s)
+End Sub
+
+'set watches 
+Sub SetWatch(k As String, bImmediate As Boolean, bDeep As Boolean, methodName As String, args As List) 
+	methodName = methodName.tolowercase
+	k = k.tolowercase
+	If SubExists(mCallBack, methodName) Then
+		Dim cb As BANanoObject = BANano.CallBack(mCallBack, methodName, args)
+		Dim deepit As Map = CreateMap()
+		deepit.Put("handler", methodName)
+		deepit.Put("deep", bDeep)
+		deepit.Put("immediate", bImmediate)
+		watches.Put(k, deepit)
+		methods.Put(methodName, cb)
+	End If
 End Sub

@@ -6,7 +6,10 @@ Version=8.9
 @EndOfDesignText@
 #IgnoreWarnings:12
 
-#DesignerProperty: Key: Avatar, DisplayName: Avatar, FieldType: Boolean, DefaultValue: false, Description: Avatar
+#DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: badge1, Description: VModel
+#DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
+#DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: 10, Description: Value
+#DesignerProperty: Key: Avatar, DisplayName: ShowAvatar, FieldType: Boolean, DefaultValue: false, Description: Avatar
 #DesignerProperty: Key: AvatarImg, DisplayName: AvatarImg, FieldType: String, DefaultValue: , Description: AvatarImg
 #DesignerProperty: Key: AvatarSize, DisplayName: AvatarSize, FieldType: String, DefaultValue: 48, Description: AvatarSize
 #DesignerProperty: Key: Bordered, DisplayName: Bordered, FieldType: Boolean, DefaultValue: false, Description: Bordered
@@ -14,7 +17,6 @@ Version=8.9
 #DesignerProperty: Key: ColorIntensity, DisplayName: Color Intensity, FieldType: String, DefaultValue:  normal, Description: , List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: Left, DisplayName: Left, FieldType: Boolean, DefaultValue: False, Description: Left
 #DesignerProperty: Key: Bottom, DisplayName: Bottom, FieldType: Boolean, DefaultValue: False, Description: Bottom
-#DesignerProperty: Key: Content, DisplayName: Content, FieldType: String, DefaultValue: badge1, Description: Content
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: false, Description: Dark
 #DesignerProperty: Key: Dot, DisplayName: Dot, FieldType: Boolean, DefaultValue: false, Description: Dot
 #DesignerProperty: Key: Icon, DisplayName: Icon, FieldType: String, DefaultValue: , Description: Icon
@@ -25,7 +27,6 @@ Version=8.9
 #DesignerProperty: Key: Overlap, DisplayName: Overlap, FieldType: Boolean, DefaultValue: false, Description: Overlap
 #DesignerProperty: Key: Tile, DisplayName: Tile, FieldType: Boolean, DefaultValue: false, Description: Tile
 #DesignerProperty: Key: Transition, DisplayName: Transition, FieldType: String, DefaultValue: , Description: Transition
-#DesignerProperty: Key: Value, DisplayName: Value/Visible, FieldType: String, DefaultValue: , Description: Value/Visible
 #DesignerProperty: Key: VIf, DisplayName: V-If, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
@@ -38,7 +39,6 @@ Sub Class_Globals
 	Private bBordered As Boolean
 	Private sColor As String
 	Private sColorintensity As String
-	Private sContent As String
 	Private bDark As Boolean
 	Private bDot As Boolean
 	Private sIcon As String
@@ -49,7 +49,6 @@ Sub Class_Globals
 	Private bOverlap As Boolean
 	Private bTile As Boolean
 	Private sTransition As String
-	Private sValue As String
 	Private mName As String 'ignore
 	Private mEventName As String 'ignore
 	Private mCallBack As Object 'ignore
@@ -65,6 +64,10 @@ Sub Class_Globals
 	Private mVIf As String = ""
 	Private sAvatarImg As String = ""
 	Private sAvatarSize As String = ""
+	Private bHidden As Boolean
+	Private svModel As String = ""
+	Private sValue As String
+	Private xHidden As String 
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -79,6 +82,7 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey)
 		End If
 	End If
+	xHidden = $"${mName}hidden"$
 End Sub
 
 ' this is the place where you create the view in html and run initialize javascript
@@ -93,7 +97,6 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bBordered = Props.Get("Bordered")
 		sColor = Props.Get("Color")
 		sColorintensity = Props.Get("ColorIntensity")
-		sContent = Props.Get("Content")
 		bDark = Props.Get("Dark")
 		bDot = Props.Get("Dot")
 		sIcon = Props.Get("Icon")
@@ -104,11 +107,13 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bOverlap = Props.Get("Overlap")
 		bTile = Props.Get("Tile")
 		sTransition = Props.Get("Transition")
-		sValue = Props.Get("Value")
+		sValue = Props.GetDefault("Value","10")
 		bBottom = Props.Get("Bottom")
 		bLeft = Props.Get("Left")
 		sAvatarImg = Props.Get("AvatarImg")
 		sAvatarSize = Props.Get("AvatarSize")
+		bHidden = Props.GetDefault("Hidden", False)
+		svModel = Props.GetDefault("VModel", "badge1")
 	End If
 	'
 	'build and get the element
@@ -133,7 +138,6 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.setAvatar(bAvatar)
 	VElement.Bordered = bBordered
 	VElement.Color = VElement.BuildColor(sColor, sColorintensity)
-	VElement.SetAttr(":content", sContent)
 	VElement.Dark = bDark
 	VElement.Dot = bDot
 	VElement.SetAttr("icon", sIcon)
@@ -144,15 +148,17 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.Overlap = bOverlap
 	VElement.Tile = bTile
 	VElement.Transition = sTransition
-	VElement.AddAttr(":value", sValue)
-	VElement.SetData(sValue, True)
-	VElement.SetData(sContent, 0)
+	VElement.Bind("content", svModel)
+	VElement.SetData(svModel, sValue)
 	VElement.VIf = mVIf
 	VElement.Classes = mClasses
 	VElement.Styles = mStyles
 	VElement.Attributes = mAttributes	
 	VElement.Left = bLeft
 	VElement.Bottom = bBottom
+	'hidden / visible
+	VElement.Bind(":value", xHidden)
+	VElement.SetData(xHidden, Not(bHidden))
 	VElement.BindAllEvents
 End Sub	
 
@@ -168,27 +174,25 @@ public Sub Remove()
 End Sub
 
 Sub UpdateVisible(VC As VueComponent, b As Boolean)
-	VC.SetData(sValue, b)
+	VC.SetData(xHidden, b)
 	VC.SetData(mVIf, b)
 End Sub
 
-Sub UpdateContent(VC As VueComponent, b As Boolean)
-	VC.SetData(sContent, b)
+Sub UpdateValue(VC As VueComponent, sv As String)
+	VC.SetData(svModel, sv)
 End Sub
 
 Sub Increment(VC As VueComponent)
-	VC.Increment(sContent)
+	VC.Increment(svModel)
 End Sub
 
 Sub Decrement(VC As VueComponent)
-	VC.Decrement(sContent)
+	VC.Decrement(svModel)
 End Sub
-
 
 Sub getID As String
 	Return mName
 End Sub
-
 
 Sub getHere As String
 	Return $"#${mName}"$

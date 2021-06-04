@@ -1794,3 +1794,17 @@ Sub SetTimeOut(MethodName As String, ms As Int)
 	Dim cb As BANanoObject = BANano.callback(mCallBack, MethodName, Null)
 	BANano.Window.SetTimeout(cb, ms)
 End Sub
+
+
+Sub GetBindingCode(sVariables As String) As String
+	Dim sb As StringBuilder
+	sb.Initialize 
+	Dim splines As List = BANanoShared.StrParse(CRLF, sVariables)
+	For Each strLine As String In splines
+		strLine = strLine.Trim
+		Dim strIT As String = BANanoShared.MvField(strLine, 2, " ")
+		strIT = strIT.Trim
+		sb.Append($"${mName}.BindVueElement(${strIT}.VElement)"$).append(CRLF)
+	Next
+	Return sb.tostring
+End Sub

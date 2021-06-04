@@ -14,6 +14,13 @@ Sub Process_Globals
 	Private VDialog1 As VDialog
 	Private txtPassword As VTextField
 	Private txtUserName As VTextField
+	Private VContainer1 As VContainer
+	Private logincontainer As VContainer
+	Private loginform As VForm
+	Private loginr1 As VRow
+	Private loginr1c1 As VCol
+	Private loginr2 As VRow
+	Private loginr2c1 As VCol
 End Sub
 
 Sub Initialize
@@ -35,7 +42,13 @@ Sub Initialize
 	about.BindVueElement(VDialog1.VElement)	
 	about.BindVueElement(txtPassword.VElement)
 	about.BindVueElement(txtUserName.VElement)
-	
+	about.BindVueElement(VContainer1.VElement)
+	about.BindVueElement(logincontainer.VElement)
+	about.BindVueElement(loginform.VElement)
+	about.BindVueElement(loginr1.VElement)
+	about.BindVueElement(loginr1c1.VElement)
+	about.BindVueElement(loginr2.VElement)
+	about.BindVueElement(loginr2c1.VElement)
 	
 	'this will be fired each time we navigate to the page
 	about.SetCreated(Me, "oncreated", Null)

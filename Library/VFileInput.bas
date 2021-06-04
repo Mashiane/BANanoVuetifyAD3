@@ -80,7 +80,7 @@ Version=7
 #DesignerProperty: Key: Rounded, DisplayName: Rounded, FieldType: Boolean, DefaultValue: False, Description: Rounded
 #DesignerProperty: Key: Rules, DisplayName: Rules, FieldType: String, DefaultValue: , Description: Rules
 #DesignerProperty: Key: Shaped, DisplayName: Shaped, FieldType: Boolean, DefaultValue: False, Description: Shaped
-#DesignerProperty: Key: ShowSize, DisplayName: ShowSize, FieldType: String, DefaultValue: , Description: ShowSize
+#DesignerProperty: Key: ShowSize, DisplayName: ShowSize, FieldType: Boolean, DefaultValue: False , Description: ShowSize
 #DesignerProperty: Key: SingleLine, DisplayName: SingleLine, FieldType: Boolean, DefaultValue: False, Description: SingleLine
 #DesignerProperty: Key: SmallChips, DisplayName: SmallChips, FieldType: Boolean, DefaultValue: False, Description: SmallChips
 #DesignerProperty: Key: Solo, DisplayName: Solo, FieldType: Boolean, DefaultValue: False, Description: Solo
@@ -156,7 +156,7 @@ Private bRipple As Boolean
 Private bRounded As Boolean
 Private sRules As String
 Private bShaped As Boolean
-Private sShowSize As String
+Private bShowSize As String
 Private bSingleLine As Boolean
 Private bSmallChips As Boolean
 Private bSolo As Boolean
@@ -209,9 +209,9 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 Sub DesignerCreateView (Target As BANanoElement, Props As Map) 
 	mTarget = Target 
 	If Props <> Null Then 
-		bDisabled = Props.Get("Disabled")
+		bDisabled = Props.GetDefault("Disabled",false)
 bHidden = Props.Get("Hidden")
-bLoading = Props.Get("Loading")
+bLoading = Props.GetDefault("Loading",False)
 bReadonly = Props.Get("Readonly")
 bRequired = Props.Get("Required")
 		mClasses = Props.Get("Classes") 
@@ -261,7 +261,7 @@ bRipple = Props.Get("Ripple")
 bRounded = Props.Get("Rounded")
 sRules = Props.Get("Rules")
 bShaped = Props.Get("Shaped")
-sShowSize = Props.Get("ShowSize")
+bShowSize = Props.Get("ShowSize")
 bSingleLine = Props.Get("SingleLine")
 bSmallChips = Props.Get("SmallChips")
 bSolo = Props.Get("Solo")
@@ -399,8 +399,7 @@ VElement.AddAttr(":rules", sRules)
 VElement.SetData(sRules, VElement.NewList)
 
 VElement.AddAttr(":shaped", bShaped)
-VElement.AddAttr(":show-size", sShowSize)
-VElement.SetData(sShowSize, False)
+VElement.AddAttr(":show-size", bShowSize)
 
 VElement.AddAttr(":single-line", bSingleLine)
 VElement.AddAttr(":small-chips", bSmallChips)
@@ -417,7 +416,7 @@ VElement.AddAttr("truncate-length", sTruncateLength)
 VElement.AddAttr("v-bind", sVBind)
 VElement.AddAttr("v-for", sVFor)
 VElement.AddAttr("v-if", sVIf)
-VElement.AddAttr(":v-model", sVModel)
+VElement.AddAttr("v-model", sVModel)
 VElement.SetData(sVModel, Null)
 
 VElement.AddAttr("v-on", sVOn)
@@ -516,11 +515,6 @@ Sub ClearRules(VC As VueComponent)
 VC.SetData(sRules, VC.NewList)
 End Sub
 
-'Update ShowSize
-Sub UpdateShowSize(VC As VueComponent, vShowSize As Object)
-VC.SetData(sShowSize, vShowSize)
-End Sub
-
 'Update Success
 Sub UpdateSuccess(VC As VueComponent, vSuccess As Object)
 VC.SetData(sSuccess, vSuccess)
@@ -534,11 +528,6 @@ End Sub
 'Clear SuccessMessages
 Sub ClearSuccessMessages(VC As VueComponent)
 VC.SetData(sSuccessMessages, VC.NewList)
-End Sub
-
-'Update VModel
-Sub UpdateVModel(VC As VueComponent, vVModel As Object)
-VC.SetData(sVModel, vVModel)
 End Sub
 
 'get value

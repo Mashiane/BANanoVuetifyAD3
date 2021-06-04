@@ -26,6 +26,7 @@ Version=7
 #DesignerProperty: Key: MaxValue, DisplayName: MaxValue, FieldType: String, DefaultValue: 100 , Description: MaxValue
 #DesignerProperty: Key: StepValue, DisplayName: StepValue, FieldType: String, DefaultValue: 1, Description: StepValue
 #DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: rangeslider1, Description: VModel
+#DesignerProperty: Key: Value, DisplayName: Values (;), FieldType: String, DefaultValue: 10; 20, Description: Values
 #DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: Boolean, DefaultValue: False, Description: Disabled
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: Loading, DisplayName: Loading, FieldType: Boolean, DefaultValue: False, Description: Loading
@@ -144,6 +145,7 @@ Private bLoading As Boolean
 Private bReadonly As Boolean
 Private bRequired As Boolean
 Private sRequired As String
+private sValue as string
 	End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -168,11 +170,11 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 Sub DesignerCreateView (Target As BANanoElement, Props As Map) 
 	mTarget = Target 
 	If Props <> Null Then 
-		bDisabled = Props.Get("Disabled")
+		bDisabled = Props.GetDefault("Disabled",False)
 bHidden = Props.Get("Hidden")
-bLoading = Props.Get("Loading")
-bReadonly = Props.Get("Readonly")
-bRequired = Props.Get("Required")
+bLoading = Props.GetDefault("Loading",False)
+bReadonly = Props.GetDefault("Readonly",False)
+bRequired = Props.GetDefault("Required",False)
 		mClasses = Props.Get("Classes") 
 		mStyles = Props.Get("Styles") 
 		mAttributes = Props.Get("Attributes") 
@@ -224,7 +226,7 @@ sVModel = Props.Get("VModel")
 sVOn = Props.Get("VOn")
 bValidateOnBlur = Props.Get("ValidateOnBlur")
 bVertical = Props.Get("Vertical")
- 
+ sValue = Props.GetDefault("Value","10;20")
 	End If 
 	' 
 	'build and get the element 
@@ -311,10 +313,24 @@ VElement.AddAttr("v-bind", sVBind)
 VElement.AddAttr("v-for", sVFor)
 VElement.AddAttr("v-if", sVIf)
 VElement.AddAttr("v-model", sVModel)
+
+Dim sval1 As String = "10"
+Dim sval2 As String = "50"
+'
+If sValue.Contains(";") Then
+	sval1 = BANanoShared.MvField(sValue, 1, ";")
+	sval1 = sval1.trim
+	sval1 = BANano.parseInt(sval1)
+	'
+	sval2 = BANanoShared.MvField(sValue, 2, ";")
+	sval2 = sval2.trim
+	sval2 = BANano.parseInt(sval2)
+End If
+
 Dim vals As List
 vals.Initialize 
-vals.Add(10)
-vals.Add(50)
+vals.Add(sval1)
+vals.Add(sval2)
 VElement.SetData(sVModel, vals)
 
 VElement.AddAttr("v-on", sVOn)
@@ -322,7 +338,6 @@ VElement.AddAttr("v-show", sVShow)
 VElement.SetData(sVShow, Not(bHidden))
 VElement.AddAttr(":validate-on-blur", bValidateOnBlur)
 VElement.AddAttr(":vertical", bVertical)
-
 
 VElement.BindAllEvents
 End Sub

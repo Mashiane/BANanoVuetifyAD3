@@ -63,30 +63,17 @@ Sub Init
 	vuetify.SnackBarInitialize
 	'1 second
 	vuetify.SnackBarTimeOut(500)
-	
-	'load the menu to a placeholder
-	BANano.LoadLayout(vuetify.PlaceHolderName, "vbuttonmenu")
-	'define the menu list
-	menulistitem.vfor = "item in links"
-	menulistitem.Key = ":item.title"
-	menulistitem.To = ":item.to"
-	menulistitem.ActiveClass = "border"
-	menulistitemtitle.Caption = "{{ item.title }}"
-	
+		
 	'add the menu to the v-app-bar
 	vappbar.AppendPlaceHolder
-	'add logout button to v-app-bar
-	BANano.LoadLayout(vuetify.PlaceHolderName, "vbuttoniconright")
-	vappbar.AppendPlaceholder
-	'
+	
 	'bind the drawer
 	vuetify.BindVueElement(vappdrawer)
 	'bind the hamburger
 	vuetify.BindVueElement(vappbarnavicon)
 	'
 	'add the drawer profile
-	BANano.LoadLayout(vuetify.PlaceHolderName, "vdrawerprofile")
-	vappdrawer.AppendPlaceHolder
+	BANano.LoadLayoutAppend(vappdrawer.Here, "vdrawerprofile")
 	
 	'inject a list to the vapp drawer
 	Dim drwlist As VueElement = vuetify.AddList(Me, vappdrawer.id, "drwlist", True, False, True, Null)
@@ -142,7 +129,10 @@ Sub Init
 	drwlist.AddItemParentChild("frm", ViewADSwitch.name, "",  "", "AD Switch", ViewADSwitch.path)
 	drwlist.AddItemParentChild("frm", ViewADFileInput.name, "",  "", "AD File Input", ViewADFileInput.path)
 	drwlist.AddItemParentChild("frm", ViewADForm.name, "",  "", "AD Form", ViewADForm.path)
-	
+	drwlist.AddItemParentChild("frm", ViewADRadio.name, "",  "", "AD Radios", ViewADRadio.path)
+	drwlist.AddItemParentChild("frm", ViewADDatePicker.name, "",  "", "AD DatePicker", ViewADDatePicker.path)
+	drwlist.AddItemParentChild("frm", ViewADTimePicker.name, "",  "", "AD TimePicker", ViewADTimePicker.path)
+	drwlist.AddItemParentChild("frm", ViewADColorPicker.name, "",  "", "AD ColorPicker", ViewADColorPicker.path)
 	
 	drwlist.AddItemParentChild("ad", ViewADMenus.name, "",  "", "AD Menu", ViewADMenus.path)
 	drwlist.AddItemParentChild("ad", ViewADOverlay.name, "",  "", "AD Overlay", ViewADOverlay.path)
@@ -270,6 +260,10 @@ End Sub
 Sub AddRouters
 	'ViewContacts.Initialize
 	'ViewCRUDBuilder.Initialize
+	ViewADColorPicker.Initialize
+	ViewADTimePicker.Initialize 
+	ViewADDatePicker.Initialize 
+	ViewADRadio.Initialize 
 	ViewADForm.Initialize 
 	ViewADForm.Initialize 
 	ViewADFileInput.Initialize

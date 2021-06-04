@@ -23,6 +23,7 @@ Sub Process_Globals
 	Private VIcon1 As VIcon
 	Private VRow1 As VRow
 	Private VRow2 As VRow
+	Private VLabel1 As VLabel
 End Sub
 
 Sub Initialize
@@ -43,9 +44,19 @@ Sub Initialize
 	about.SetData("icons", icons)
 	
 	about.BindVueElement(VBtn1.VElement)
-	about.BindVueElement(VBtn2.VElement)
-	
-	
+about.BindVueElement(VBtn2.VElement)
+about.BindVueElement(VCard1.VElement)
+about.BindVueElement(VCard2.VElement)
+about.BindVueElement(VCard3.VElement)
+about.BindVueElement(VCardTitle1.VElement)
+about.BindVueElement(VContainer1.VElement)
+about.BindVueElement(VFooter1.VElement)
+about.BindVueElement(VFooter2.VElement)
+about.BindVueElement(VIcon1.VElement)
+about.BindVueElement(VRow1.VElement)
+about.BindVueElement(VRow2.VElement)
+about.BindVueElement(VLabel1.VElement)
+
 	
 	'add the component as a router
 	vuetify.AddRoute(about) 

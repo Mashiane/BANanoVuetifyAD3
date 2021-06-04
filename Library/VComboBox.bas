@@ -28,6 +28,7 @@ Version=7
 
 #DesignerProperty: Key: Label, DisplayName: Label, FieldType: String, DefaultValue: combobox, Description: Label
 #DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: combobox, Description: VModel
+#DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: , Description: Value
 #DesignerProperty: Key: ItemText, DisplayName: ItemText, FieldType: String, DefaultValue: text, Description: ItemText
 #DesignerProperty: Key: ItemValue, DisplayName: ItemValue, FieldType: String, DefaultValue: value, Description: ItemValue
 #DesignerProperty: Key: ItemDisabled, DisplayName: ItemDisabled, FieldType: String, DefaultValue: disabled , Description: ItemDisabled
@@ -212,6 +213,7 @@ Private bLoading As Boolean
 Private bReadonly As Boolean
 Private bRequired As Boolean
 Private sRequired As String
+private sValue as string
 	End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -238,11 +240,11 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 Sub DesignerCreateView (Target As BANanoElement, Props As Map) 
 	mTarget = Target 
 	If Props <> Null Then 
-		bDisabled = Props.Get("Disabled")
-bHidden = Props.Get("Hidden")
-bLoading = Props.Get("Loading")
-bReadonly = Props.Get("Readonly")
-bRequired = Props.Get("Required")
+		bDisabled = Props.GetDefault("Disabled",False)
+bHidden = Props.GetDefault("Hidden",False)
+bLoading = Props.GetDefault("Loading",False)
+bReadonly = Props.GetDefault("Readonly",False)
+bRequired = Props.GetDefault("Required",False)
 		mClasses = Props.Get("Classes") 
 		mStyles = Props.Get("Styles") 
 		mAttributes = Props.Get("Attributes") 
@@ -324,8 +326,8 @@ sVShow = Props.Get("VShow")
 sVModel = Props.Get("VModel")
 sVOn = Props.Get("VOn")
 bValidateOnBlur = Props.Get("ValidateOnBlur")
- 
-	End If 
+ sValue = Props.GetDefault("Value", "")
+ 	End If 
 	' 
 	'build and get the element 
 	If BANano.Exists($"#${mName}"$) Then 
@@ -454,8 +456,7 @@ VElement.AddAttr("v-bind", sVBind)
 VElement.AddAttr("v-for", sVFor)
 VElement.AddAttr("v-if", sVIf)
 VElement.AddAttr("v-model", sVModel)
-VElement.SetData(sVModel, Null)
-
+VElement.SetData(sVModel, sValue)
 VElement.AddAttr("v-on", sVOn)
 VElement.AddAttr("v-show", sVShow)
 VElement.SetData(sVShow, Not(bHidden))

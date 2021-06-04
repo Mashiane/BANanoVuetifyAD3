@@ -28,6 +28,7 @@ Version=7
 
 #DesignerProperty: Key: Label, DisplayName: Label, FieldType: String, DefaultValue: Select1, Description: Label
 #DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: select1, Description: VModel
+#DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: , Description: Value
 #DesignerProperty: Key: ItemText, DisplayName: ItemText, FieldType: String, DefaultValue: text, Description: ItemText
 #DesignerProperty: Key: ItemValue, DisplayName: ItemValue, FieldType: String, DefaultValue: value, Description: ItemValue
 #DesignerProperty: Key: ItemDisabled, DisplayName: ItemDisabled, FieldType: String, DefaultValue: disabled, Description: ItemDisabled
@@ -199,6 +200,7 @@ Private bLoading As Boolean
 Private bReadonly As Boolean
 Private bRequired As Boolean
 Private sRequired As String
+Private sValue As String
 	End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -225,9 +227,9 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 Sub DesignerCreateView (Target As BANanoElement, Props As Map) 
 	mTarget = Target 
 	If Props <> Null Then 
-		bDisabled = Props.Get("Disabled")
+		bDisabled = Props.GetDefault("Disabled",False)
 bHidden = Props.Get("Hidden")
-bLoading = Props.Get("Loading")
+bLoading = Props.GetDefault("Loading",False)
 bReadonly = Props.Get("Readonly")
 bRequired = Props.Get("Required")
 		mClasses = Props.Get("Classes") 
@@ -305,7 +307,7 @@ sVShow = Props.Get("VShow")
 sVModel = Props.Get("VModel")
 sVOn = Props.Get("VOn")
 bValidateOnBlur = Props.Get("ValidateOnBlur")
- 
+ sValue = Props.GetDefault("Value", "")
 	End If 
 	' 
 	'build and get the element 
@@ -324,6 +326,11 @@ bValidateOnBlur = Props.Get("ValidateOnBlur")
 	If BANano.IsNull(bLoading) Or BANano.IsUndefined(bLoading) Then
 		bLoading = False 
 	End If
+	'
+If BANano.IsNull(bMultiple) Or BANano.IsUndefined(bMultiple) Then
+	bMultiple = False
+End If
+
 	
 	VElement.Initialize(mCallBack, mName, mName) 
 	VElement.TagName = "v-select" 
@@ -426,12 +433,8 @@ VElement.AddAttr("v-for", sVFor)
 VElement.AddAttr("v-if", sVIf)
 VElement.AddAttr("v-model", sVModel)
 '
-If BANano.IsNull(bMultiple) Or BANano.IsUndefined(bMultiple) Then
-	bMultiple = False
-End If
-'
 If bMultiple = False Then
-	VElement.SetData(sVModel, Null)
+	VElement.SetData(sVModel, sValue)
 Else
 	VElement.SetData(sVModel, VElement.NewList)
 End If

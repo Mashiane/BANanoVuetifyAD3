@@ -12,6 +12,12 @@ Sub Process_Globals
 	Public name As String = "adinputs"
 	Private banano As BANano
 	Private VRating1 As VRating
+	Private VCol1 As VCol
+	Private VCol2 As VCol
+	Private VContainer1 As VContainer
+	Private VRating2 As VRating
+	Private VRow1 As VRow
+	Private VRow2 As VRow
 End Sub
 
 Sub Initialize
@@ -24,6 +30,13 @@ Sub Initialize
 	banano.LoadLayout(about.Here, "myinputs")
 	'
 	about.BindVueElement(VRating1.VElement)
+about.BindVueElement(VCol1.VElement)
+about.BindVueElement(VCol2.VElement)
+about.BindVueElement(VContainer1.VElement)
+about.BindVueElement(VRating2.VElement)
+about.BindVueElement(VRow1.VElement)
+about.BindVueElement(VRow2.VElement)
+
 
 	'add the component as a router
 	vuetify.AddRoute(about) 

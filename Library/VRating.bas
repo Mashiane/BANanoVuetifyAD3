@@ -8,11 +8,14 @@ Version=8.9
 #Event: Input (num As Double)
 
 #DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: rating1, Description: VModel
+#DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: , Description: Value
 #DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: Boolean, DefaultValue: False, Description: Disabled
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: Readonly, DisplayName: Readonly, FieldType: Boolean, DefaultValue: False, Description: Readonly
 #DesignerProperty: Key: Required, DisplayName: Required, FieldType: Boolean, DefaultValue: False, Description: Required 
-
+#DesignerProperty: Key: Length, DisplayName: Length, FieldType: String, DefaultValue: 5, Description: Length
+#DesignerProperty: Key: Size, DisplayName: Size, FieldType: String, DefaultValue: , Description: Size
+#DesignerProperty: Key: Size1, DisplayName: Own Size, FieldType: String, DefaultValue: , Description: Size1, List: none|large|small|x-large|x-small
 
 #DesignerProperty: Key: BackgroundColor, DisplayName: BackgroundColor, FieldType: String, DefaultValue: , Description: BackgroundColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: BackgroundColorIntensity, DisplayName: BackgroundColorIntensity, FieldType: String, DefaultValue: , Description: BackgroundColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
@@ -28,12 +31,9 @@ Version=8.9
 #DesignerProperty: Key: HalfIncrements, DisplayName: HalfIncrements, FieldType: Boolean, DefaultValue: false, Description: HalfIncrements
 #DesignerProperty: Key: Hover, DisplayName: Hover, FieldType: Boolean, DefaultValue: false, Description: Hover
 #DesignerProperty: Key: IconLabel, DisplayName: IconLabel, FieldType: String, DefaultValue: , Description: IconLabel
-#DesignerProperty: Key: Length, DisplayName: Length, FieldType: String, DefaultValue: 5, Description: Length
 #DesignerProperty: Key: Light, DisplayName: Light, FieldType: Boolean, DefaultValue: false, Description: Light
 #DesignerProperty: Key: OpenDelay, DisplayName: OpenDelay, FieldType: String, DefaultValue: , Description: OpenDelay
 #DesignerProperty: Key: Ripple, DisplayName: Ripple, FieldType: Boolean, DefaultValue: false, Description: Ripple
-#DesignerProperty: Key: Size, DisplayName: Size, FieldType: String, DefaultValue: , Description: Size
-#DesignerProperty: Key: Size1, DisplayName: Own Size, FieldType: String, DefaultValue: , Description: Size1, List: none|large|small|x-large|x-small
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
 #DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
@@ -87,6 +87,7 @@ Private bRequired As Boolean
 Private sRequired As String
 Private sDisabled As String
 Private sReadonly As String
+private sValue as string
 	End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -106,13 +107,14 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	sReadonly = $"${mName}readonly"$
 	sVShow = $"${mName}show"$
 	End Sub
+	
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	mTarget = Target
 	If Props <> Null Then
-		bDisabled = Props.Get("Disabled")
-bHidden = Props.Get("Hidden")
-bReadonly = Props.Get("Readonly")
-bRequired = Props.Get("Required")
+		bDisabled = Props.GetDefault("Disabled",False)
+bHidden = Props.GetDeFault("Hidden",False)
+bReadonly = Props.GetDeFault("Readonly",False)
+bRequired = Props.GetDeFault("Required",False)
 		mClasses = Props.Get("Classes")
 		mStyles = Props.Get("Styles")
 		mAttributes = Props.Get("Attributes")
@@ -142,6 +144,7 @@ sVShow = Props.Get("VShow")
 sVModel = Props.Get("VModel")
 sVOn = Props.Get("VOn")
 		sVBind = Props.Get("VBind")
+		sValue = Props.GetDefault("Value", 0)
 	End If
 	'
 	'build and get the element
@@ -201,7 +204,7 @@ VElement.AddAttr("v-if", sVIf)
 VElement.AddAttr("v-model", sVModel)
 VElement.AddAttr("v-show", sVShow)
 VElement.SetData(sVShow, Not(bHidden))
-VElement.SetData(sVModel, 2)
+VElement.SetData(sVModel, sValue)
 VElement.AddAttr("v-on", sVOn)
 	VElement.AddAttr("v-bind", sVBind)
 VElement.BindAllEvents

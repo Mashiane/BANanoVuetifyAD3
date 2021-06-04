@@ -145,7 +145,7 @@ sVShow = Props.Get("VShow")
 sVOn = Props.Get("VOn")
 bHidden = Props.Get("Hidden")
 sValue = Props.Get("Value")
-bDisabled = Props.Get("Disabled")
+bDisabled = Props.GetDefault("Disabled",false)
 	End If
 	'
 	'build and get the element

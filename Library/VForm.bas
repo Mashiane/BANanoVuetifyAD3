@@ -70,7 +70,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 Sub DesignerCreateView (Target As BANanoElement, Props As Map) 
 	mTarget = Target 
 	If Props <> Null Then 
-		bDisabled = Props.Get("Disabled")
+		bDisabled = Props.GetDefault("Disabled",false)
 bReadonly = Props.Get("Readonly")
 		mClasses = Props.Get("Classes") 
 		mStyles = Props.Get("Styles") 

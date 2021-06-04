@@ -7,6 +7,13 @@ Version=8.9
 #IgnoreWarnings:12
 
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
+#DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: progress2, Description: VModel
+#DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: 10 , Description: Value
+#DesignerProperty: Key: Indeterminate, DisplayName: Indeterminate, FieldType: Boolean, DefaultValue: false, Description: Indeterminate
+#DesignerProperty: Key: Height, DisplayName: Height, FieldType: String, DefaultValue: 5, Description: Height
+#DesignerProperty: Key: ShowCaption, DisplayName: ShowCaption, FieldType: Boolean, DefaultValue: False, Description: ShowCaption
+#DesignerProperty: Key: Caption, DisplayName: Caption, FieldType: String, DefaultValue: {{ Math.ceil(value) }}%, Description: Caption
+'
 #DesignerProperty: Key: Absolute, DisplayName: Absolute, FieldType: Boolean, DefaultValue: false, Description: Absolute
 #DesignerProperty: Key: Active, DisplayName: Active, FieldType: Boolean, DefaultValue: false, Description: Active
 #DesignerProperty: Key: BackgroundColor, DisplayName: BackgroundColor, FieldType: String, DefaultValue: , Description: BackgroundColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
@@ -17,8 +24,6 @@ Version=8.9
 #DesignerProperty: Key: ColorIntensity, DisplayName: ColorIntensity, FieldType: String, DefaultValue: , Description: ColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: false, Description: Dark
 #DesignerProperty: Key: Fixed, DisplayName: Fixed, FieldType: Boolean, DefaultValue: false, Description: Fixed
-#DesignerProperty: Key: Height, DisplayName: Height, FieldType: String, DefaultValue: , Description: Height
-#DesignerProperty: Key: Indeterminate, DisplayName: Indeterminate, FieldType: Boolean, DefaultValue: false, Description: Indeterminate
 #DesignerProperty: Key: Key, DisplayName: Key, FieldType: String, DefaultValue: , Description: Key
 #DesignerProperty: Key: Light, DisplayName: Light, FieldType: Boolean, DefaultValue: false, Description: Light
 #DesignerProperty: Key: Position, DisplayName: Position, FieldType: String, DefaultValue: , Description: Position, List: bottom|none|top
@@ -29,7 +34,6 @@ Version=8.9
 #DesignerProperty: Key: VFor, DisplayName: VFor, FieldType: String, DefaultValue: , Description: VFor
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
 #DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
-#DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: , Description: VModel
 #DesignerProperty: Key: VOn, DisplayName: VOn, FieldType: String, DefaultValue: , Description: VOn
 #DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue: , Description: VShow
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
@@ -72,6 +76,9 @@ Private sVModel As String
 Private sVOn As String
 Private sVShow As String
 Private bHidden As Boolean
+Private sValue As String
+Private sCaption As String
+private bShowCaption as boolean
 	End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -116,10 +123,13 @@ bStriped = Props.Get("Striped")
 sVBind = Props.Get("VBind")
 sVFor = Props.Get("VFor")
 sVIf = Props.Get("VIf")
-svshow = Props.Get("VShow")
+sVShow = Props.Get("VShow")
 sVModel = Props.Get("VModel")
 sVOn = Props.Get("VOn")
 bHidden = Props.Get("Hidden")
+bShowCaption = Props.GetDefault("ShowCaption", False)
+sCaption = Props.GetDefault("Caption", "")
+sValue = Props.GetDefault("Value", "")
 	End If
 	'
 	'build and get the element
@@ -131,6 +141,11 @@ bHidden = Props.Get("Hidden")
 	'
 	VElement.Initialize(mCallBack, mName, mName)
 	VElement.TagName = "v-progress-linear"
+	
+	If bShowCaption Then
+		VElement.Append($"<v-template id="${mName}template" v-slot:default="{ value }"><strong>${sCaption}</strong></v-template>"$)
+	End If	
+	
 	VElement.Classes = mClasses
 	VElement.Styles = mStyles
 	VElement.Attributes = mAttributes
@@ -163,7 +178,7 @@ VElement.AddAttr("v-model", sVModel)
 VElement.AddAttr("v-on", sVOn)
 VElement.AddAttr("v-show", sVShow)
 VElement.SetData(sVShow, Not(bHidden))
-VElement.SetData(sVModel, 10)
+VElement.SetData(sVModel, sValue)
 VElement.BindAllEvents
 End Sub
 

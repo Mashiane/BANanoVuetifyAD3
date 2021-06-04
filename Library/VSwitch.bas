@@ -15,8 +15,9 @@ Version=8.95
 
 #DesignerProperty: Key: Label, DisplayName: Label, FieldType: String, DefaultValue: Switch1, Description: Label
 #DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: Switch1, Description: VModel
-#DesignerProperty: Key: TrueValue, DisplayName: TrueValue, FieldType: String, DefaultValue: Yes, Description: TrueValue
-#DesignerProperty: Key: FalseValue, DisplayName: FalseValue, FieldType: String, DefaultValue: No, Description: FalseValue
+#DesignerProperty: Key: Checked, DisplayName: Checked, FieldType: Boolean, DefaultValue: False, Description: Checked
+#DesignerProperty: Key: TrueValue, DisplayName: TrueValue, FieldType: String, DefaultValue: True, Description: TrueValue
+#DesignerProperty: Key: FalseValue, DisplayName: FalseValue, FieldType: String, DefaultValue: False, Description: FalseValue
 #DesignerProperty: Key: InputValue, DisplayName: InputValue, FieldType: String, DefaultValue: , Description: InputValue
 #DesignerProperty: Key: Inset, DisplayName: Inset, FieldType: Boolean, DefaultValue: false, Description: Inset
 #DesignerProperty: Key: SetRef, DisplayName: SetRef, FieldType: Boolean, DefaultValue: false, Description: SetRef
@@ -114,6 +115,7 @@ Private bHidden As Boolean
 Private bLoading As Boolean
 Private bReadonly As Boolean
 Private bRequired As Boolean
+private bChecked as boolean
 	End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -144,11 +146,11 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	mTarget = Target
 	If Props <> Null Then
-		bDisabled = Props.Get("Disabled")
-bHidden = Props.Get("Hidden")
-bLoading = Props.Get("Loading")
-bReadonly = Props.Get("Readonly")
-bRequired = Props.Get("Required")
+		bDisabled = Props.GetDefault("Disabled",False)
+bHidden = Props.GetDefault("Hidden",False)
+bLoading = Props.GetDefault("Loading",False)
+bReadonly = Props.GetDefault("Readonly",False)
+bRequired = Props.GetDefault("Required",False)
 		mClasses = Props.Get("Classes")
 		mStyles = Props.Get("Styles")
 		mAttributes = Props.Get("Attributes")
@@ -184,6 +186,7 @@ sVShow = Props.Get("VShow")
 sVModel = Props.Get("VModel")
 sVOn = Props.Get("VOn")
 bValidateOnBlur = Props.Get("ValidateOnBlur")
+bChecked = Props.GetDefault("Checked", False)
 	End If
 	'
 	'build and get the element
@@ -260,6 +263,7 @@ VElement.AddAttr("v-bind", sVBind)
 VElement.AddAttr("v-for", sVFor)
 VElement.AddAttr("v-if", sVIf)
 VElement.AddAttr("v-model", sVModel)
+VElement.SetData(sVModel, bChecked)
 VElement.AddAttr("v-on", sVOn)
 VElement.AddAttr("v-show", sVShow)
 VElement.SetData(sVShow, Not(bHidden))
