@@ -2276,6 +2276,11 @@ Public Sub AddAttr(varProp As String, varValue As String)
 	If varValue = "" Then Return
 	If varProp = "align" And varValue.EqualsIgnoreCase("false") Then Return
 	If varProp = "justify" And varValue.EqualsIgnoreCase("false") Then Return
+	Select Case varProp
+	Case "v-model", "v-show", "v-if"
+		varValue = CStr(varValue)
+		varValue = varValue.tolowercase	
+	End Select
 	'we are adding a boolean
 	If BANano.IsBoolean(varValue) Then
 		If varValue = True Then

@@ -87,6 +87,7 @@ Private sVModel As String
 Private sWidth As String
 Private sVShow As String
 Private bHidden As Boolean
+Private xMiniVariant As String
 End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -102,6 +103,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 		End If
 	End If
 	sVShow = $"${mName}show"$
+	xMiniVariant = $"${mName}mini"$
 End Sub
 	
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
@@ -138,7 +140,7 @@ bStateles = Props.Get("Stateles")
 bTemporary = Props.Get("Temporary")
 bTouchless = Props.Get("Touchless")
 sVIf = Props.Get("VIf")
-svshow = Props.Get("VShow")
+sVShow = Props.Get("VShow")
 sVModel = Props.Get("VModel")
 sWidth = Props.Get("Width")
 bHidden = Props.Get("Hidden")
@@ -170,7 +172,8 @@ VElement.AddAttr(":floating", bFloating)
 VElement.AddAttr("height", sHeight)
 VElement.AddAttr(":hide-overlay", bHideOverlay)
 VElement.AddAttr(":light", bLight)
-VElement.AddAttr(":mini-variant.sync", bMiniVariant)
+VElement.AddAttr(":mini-variant.sync", xMiniVariant)
+VElement.SetData(xMiniVariant, bMiniVariant)
 VElement.AddAttr("mini-variant-width", sMiniVariantWidth)
 VElement.AddAttr("mobile-breakpoint", sMobileBreakpoint)
 VElement.OverlayColor = VElement.BuildColor(sOverlayColor, sOverlayColorIntensity)

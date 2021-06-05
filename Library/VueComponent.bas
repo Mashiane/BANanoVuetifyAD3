@@ -701,11 +701,14 @@ End Sub
 
 'import a component, the module should have the Initilize method without parameters
 Sub Import(Vue As BANanoObject, comp As VueComponent)
-	comp.AppendPlaceHolder
 	Dim compname As String = comp.mName
 	compname = compname.tolowercase
+	If compname = "" Then
+		Log("Import: Please specify the name of the Component!")
+	End If
+	comp.AppendPlaceHolder
 	If components.ContainsKey(compname) = True Then Return
-	Dim compx As BANanoObject = Vue.RunMethod("component", Array(comp.mname, comp.component))
+	Dim compx As BANanoObject = Vue.RunMethod("component", Array(compname, comp.component))
 	'Dim compx As Map = comp.Component
 	components.Put(compname, compx)
 End Sub

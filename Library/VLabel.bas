@@ -9,8 +9,11 @@ Version=8.9
 
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: Caption, DisplayName: Caption, FieldType: String, DefaultValue: , Description: Caption
-#DesignerProperty: Key: Size, DisplayName: Tag, FieldType: String, DefaultValue: div, Description: Size, List: a|div|h1|h2|h3|h4|h5|h6|label|p|span|v-spacer|v-responsive|v-divider|v-subheader|v-main|slot|v-tabs-slider|router-view|router-link
+#DesignerProperty: Key: Size, DisplayName: Tag, FieldType: String, DefaultValue: div, Description: Size, List: a|div|h1|h2|h3|h4|h5|h6|label|p|span|v-spacer|v-responsive|v-divider|nav|v-subheader|v-main|slot|v-tabs-slider|router-view|router-link|v-list-item-action|v-list-item-title|v-list-item-subtitle|v-list-item-icon|v-list-item-content|v-list-item-action-text
 #DesignerProperty: Key: OwnTag, DisplayName: OwnTag, FieldType: String, DefaultValue: , Description: OwnTag
+#DesignerProperty: Key: Elevation, DisplayName: Elevation, FieldType: String, DefaultValue: , Description: Elevation
+#DesignerProperty: Key: Tile, DisplayName: Tile, FieldType: Boolean, DefaultValue: false, Description: Tile
+#DesignerProperty: Key: Rounded, DisplayName: Rounded, FieldType: String, DefaultValue: , Description: Rounded, List: none|rounded-0|rounded|rounded-sm|rounded-lg|rounded-xl|rounded-t-xl|rounded-r-xl|rounded-b-xl|rounded-l-xl|rounded-tl-xl|rounded-tr-xl|rounded-br-xl|rounded-bl-xl|rounded-pill|rounded-circle
 #DesignerProperty: Key: LoremIpsum, DisplayName: LoremIpsum, FieldType: Boolean, DefaultValue: false, Description: LoremIpsum
 #DesignerProperty: Key: SetName, DisplayName: SetName, FieldType: Boolean, DefaultValue: false, Description: SetName
 #DesignerProperty: Key: SetRef, DisplayName: SetRef, FieldType: Boolean, DefaultValue: false, Description: SetRef
@@ -60,6 +63,9 @@ Sub Class_Globals
 	Private mStyles As String = ""
 	Private mAttributes As String = ""
 	Public VElement As VueElement
+	Private sElevation As String = ""
+	Private bTile As Boolean
+	Private sRounded As String
 	Private sBorder As String
 Private sBorderColor As String
 Private sBorderRadius As String
@@ -161,6 +167,9 @@ sVOn = Props.Get("VOn")
 		bSetName = Props.Get("SetName")
 		bSetRef = Props.Get("SetRef")
 		sOwnTag = Props.GetDefault("OwnTag", "")
+		sElevation = Props.GetDefault("Elevation", "")
+		bTile = Props.GetDefault("Tile", False)
+		sRounded = Props.GetDefault("Rounded", "")
 	End If
 	'
 	If sOwnTag <> "" Then
@@ -208,6 +217,9 @@ VElement.PR = sPR
 VElement.PT = sPT
 VElement.PX = sPX
 VElement.PY = sPY
+VElement.AddClass(sRounded)
+VElement.AddAttr(":tile", bTile)
+VElement.Elevation = sElevation
 VElement.Target = sTarget
 VElement.TextColor = VElement.BuildColor(sTextColor, sTextColorIntensity)
 VElement.TextColorIntensity = sTextColorIntensity
@@ -221,41 +233,46 @@ VElement.AddAttr("v-on", sVOn)
 	VElement.SetData(sVShow, Not(bHidden))
 VElement.BindAllEvents
 End Sub
+
 public Sub AddToParent(targetID As String)
 	mTarget = BANano.GetElement("#" & targetID.ToLowerCase)
 	DesignerCreateView(mTarget, Null)
 End Sub
+
 public Sub Remove()
 	mTarget.Empty
 	BANano.SetMeToNull
 End Sub
+
 Sub AddClass(s As String) As VLabel
 	VElement.AddClass(s)
 	Return Me
 End Sub
+
 Sub AddAttr(p As String, v As Object) As VLabel
 	VElement.SetAttr(p, v)
 	Return Me
 End Sub
+
 Sub AddStyle(p As String, v As String) As VLabel
 	VElement.AddStyle(p, v)
 	Return Me
 End Sub
+
 Sub RemoveAttr(p As String) As VLabel
 	VElement.RemoveAttr(p)
 	Return Me
 End Sub
+
 Sub UpdateVisible(VC As VueComponent, b As Boolean) As VLabel
 	VC.SetData(sVIf, b)
 	VC.SetData(sVShow, b)
 	Return Me
 End Sub
 
-
 Sub getID As String
 	Return mName
 End Sub
-
 
 Sub getHere As String
 	Return $"#${mName}"$

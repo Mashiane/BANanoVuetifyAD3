@@ -329,7 +329,7 @@ VElement.MaxWidth = sMaxWidth
 VElement.MinHeight = sMinHeight
 VElement.MinWidth = sMinWidth
 VElement.Outlined = bOutlined
-VElement.Raised = bRaised
+VElement.AddAttr(":raised", bRaised)
 VElement.AddClass(sRounded)
 VElement.Shaped = bShaped
 VElement.Target = sTarget

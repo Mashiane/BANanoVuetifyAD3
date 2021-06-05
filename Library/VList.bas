@@ -11,6 +11,7 @@ Version=8.95
 #Event: LeftClick (e As BANanoEvent)
 
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
+#DesignerProperty: Key: PlaceAtBottom, DisplayName: PlaceAtBottom, FieldType: Boolean, DefaultValue: False, Description: PlaceAtBottom
 #DesignerProperty: Key: TwoLine, DisplayName: TwoLine, FieldType: Boolean, DefaultValue: false, Description: TwoLine
 #DesignerProperty: Key: ThreeLine, DisplayName: ThreeLine, FieldType: Boolean, DefaultValue: false, Description: ThreeLine
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue: , Description: Color, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
@@ -96,6 +97,7 @@ Private numLines As Int
 Private xTemplate As String
 Private bDisabled As Boolean
 Private bHidden As Boolean
+private bPlaceAtBottom as boolean
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -128,7 +130,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 sColorIntensity = Props.Get("ColorIntensity")
 bDark = Props.Get("Dark")
 bDense = Props.Get("Dense")
-bDisabled = Props.GetDefault("Disabled",false)
+bDisabled = Props.GetDefault("Disabled",False)
 sElevation = Props.Get("Elevation")
 bExpand = Props.Get("Expand")
 bFlat = Props.Get("Flat")
@@ -156,6 +158,7 @@ sVShow = Props.Get("VShow")
 sVOn = Props.Get("VOn")
 bHidden = Props.Get("Hidden")
 sWidth = Props.Get("Width")
+bPlaceAtBottom = Props.GetDefault("PlaceAtBottom", False)
 	End If
 	'
 	'build and get the element
@@ -208,7 +211,12 @@ VElement.AddAttr("width", sWidth)
 numLines = 0
 If bThreeLine Then numLines = 3
 If bTwoLine Then numLines = 2
-	VElement.BindAllEvents
+If bPlaceAtBottom Then
+	VElement.AddStyle("position", "absolute")
+	VElement.AddStyle("bottom", "0")
+	VElement.AddClass("ml-3")
+End If
+VElement.BindAllEvents
 End Sub
 
 'set options from definition
