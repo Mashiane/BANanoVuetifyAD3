@@ -9,9 +9,10 @@ Version=8.9
 
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: Caption, DisplayName: Caption, FieldType: String, DefaultValue: , Description: Caption
-#DesignerProperty: Key: Size, DisplayName: Tag, FieldType: String, DefaultValue: div, Description: Size, List: a|div|h1|h2|h3|h4|h5|h6|label|p|span|v-spacer|v-responsive|v-divider|nav|v-subheader|v-main|slot|v-tabs-slider|router-view|router-link|v-list-item-action|v-list-item-title|v-list-item-subtitle|v-list-item-icon|v-list-item-content|v-list-item-action-text
+#DesignerProperty: Key: Size, DisplayName: Tag, FieldType: String, DefaultValue: div, Description: Size, List: a|div|h1|h2|h3|h4|h5|h6|label|p|span|v-spacer|v-responsive|v-divider|nav|v-subheader|v-main|slot|v-tabs-slider|router-view|router-link|v-list-item-action|v-list-item-title|v-list-item-subtitle|v-list-item-icon|v-list-item-content|v-list-item-action-text|strong|blockquote|i|img|a|ul|li|ol|v-stepper-content|v-stepper-header|v-stepper-items|small
 #DesignerProperty: Key: OwnTag, DisplayName: OwnTag, FieldType: String, DefaultValue: , Description: OwnTag
 #DesignerProperty: Key: Elevation, DisplayName: Elevation, FieldType: String, DefaultValue: , Description: Elevation
+#DesignerProperty: Key: StepValue, DisplayName: StepValue, FieldType: String, DefaultValue: , Description: StepValue
 #DesignerProperty: Key: Tile, DisplayName: Tile, FieldType: Boolean, DefaultValue: false, Description: Tile
 #DesignerProperty: Key: Rounded, DisplayName: Rounded, FieldType: String, DefaultValue: , Description: Rounded, List: none|rounded-0|rounded|rounded-sm|rounded-lg|rounded-xl|rounded-t-xl|rounded-r-xl|rounded-b-xl|rounded-l-xl|rounded-tl-xl|rounded-tr-xl|rounded-br-xl|rounded-bl-xl|rounded-pill|rounded-circle
 #DesignerProperty: Key: LoremIpsum, DisplayName: LoremIpsum, FieldType: Boolean, DefaultValue: false, Description: LoremIpsum
@@ -104,7 +105,8 @@ Private sVBind As String
 Private bSetName As Boolean
 Private bSetRef As Boolean
 Private bHidden As Boolean
-private sOwnTag as string
+Private sOwnTag As String
+private sStepValue as string
 	End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -170,6 +172,7 @@ sVOn = Props.Get("VOn")
 		sElevation = Props.GetDefault("Elevation", "")
 		bTile = Props.GetDefault("Tile", False)
 		sRounded = Props.GetDefault("Rounded", "")
+		sStepValue = Props.GetDefault("StepValue", "")
 	End If
 	'
 	If sOwnTag <> "" Then
@@ -228,6 +231,7 @@ VElement.VIf = sVIf
 VElement.VShow = sVShow
 VElement.Vertical = bVertical
 VElement.Inset = bInset
+VElement.AddAttr("step", sStepValue)
 VElement.AddAttr("v-on", sVOn)
 	VElement.AddAttr("v-bind", sVBind)
 	VElement.SetData(sVShow, Not(bHidden))

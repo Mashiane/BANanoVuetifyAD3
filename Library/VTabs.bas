@@ -7,9 +7,14 @@ Version=8.95
 #IgnoreWarnings:12
 
 'Custom BANano View class
-#Event: Change (num As Integer)
+#Event: Change (item As Int)
 
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
+#DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: tabs1, Description: VModel
+#DesignerProperty: Key: Grow, DisplayName: Grow, FieldType: Boolean, DefaultValue: false, Description: Grow
+#DesignerProperty: Key: IconsAndText, DisplayName: IconsAndText, FieldType: Boolean, DefaultValue: false, Description: IconsAndText
+#DesignerProperty: Key: Vertical, DisplayName: Vertical, FieldType: Boolean, DefaultValue: false, Description: Vertical
+
 #DesignerProperty: Key: ActiveClass, DisplayName: ActiveClass, FieldType: String, DefaultValue: , Description: ActiveClass
 #DesignerProperty: Key: AlignWithTitle, DisplayName: AlignWithTitle, FieldType: Boolean, DefaultValue: false, Description: AlignWithTitle
 #DesignerProperty: Key: BackgroundColor, DisplayName: BackgroundColor, FieldType: String, DefaultValue: , Description: BackgroundColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
@@ -20,11 +25,9 @@ Version=8.95
 #DesignerProperty: Key: ColorIntensity, DisplayName: ColorIntensity, FieldType: String, DefaultValue: , Description: ColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: false, Description: Dark
 #DesignerProperty: Key: FixedTabs, DisplayName: FixedTabs, FieldType: Boolean, DefaultValue: false, Description: FixedTabs
-#DesignerProperty: Key: Grow, DisplayName: Grow, FieldType: Boolean, DefaultValue: false, Description: Grow
 #DesignerProperty: Key: Height, DisplayName: Height, FieldType: String, DefaultValue: , Description: Height
-#DesignerProperty: Key: HideSlider, DisplayName: HideSlider, FieldType: Boolean, DefaultValue: false, Description: HideSlider
-#DesignerProperty: Key: IconsAndText, DisplayName: IconsAndText, FieldType: Boolean, DefaultValue: false, Description: IconsAndText
-#DesignerProperty: Key: Key, DisplayName: Key, FieldType: String, DefaultValue: , Description: Key
+
+
 #DesignerProperty: Key: Light, DisplayName: Light, FieldType: Boolean, DefaultValue: false, Description: Light
 #DesignerProperty: Key: MobileBreakpoint, DisplayName: MobileBreakpoint, FieldType: String, DefaultValue: , Description: MobileBreakpoint
 #DesignerProperty: Key: NextIcon, DisplayName: NextIcon, FieldType: String, DefaultValue: , Description: NextIcon
@@ -32,19 +35,21 @@ Version=8.95
 #DesignerProperty: Key: PrevIcon, DisplayName: PrevIcon, FieldType: String, DefaultValue: , Description: PrevIcon
 #DesignerProperty: Key: Right, DisplayName: Right, FieldType: Boolean, DefaultValue: false, Description: Right
 #DesignerProperty: Key: ShowArrows, DisplayName: ShowArrows, FieldType: Boolean, DefaultValue: false, Description: ShowArrows
+
+#DesignerProperty: Key: HideSlider, DisplayName: HideSlider, FieldType: Boolean, DefaultValue: false, Description: HideSlider
 #DesignerProperty: Key: SliderColor, DisplayName: SliderColor, FieldType: String, DefaultValue: , Description: SliderColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: SliderColorIntensity, DisplayName: SliderColorIntensity, FieldType: String, DefaultValue: , Description: SliderColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: SliderSize, DisplayName: SliderSize, FieldType: String, DefaultValue: , Description: SliderSize
 #DesignerProperty: Key: VBind, DisplayName: VBind, FieldType: String, DefaultValue: , Description: VBind
 #DesignerProperty: Key: VFor, DisplayName: VFor, FieldType: String, DefaultValue: , Description: VFor
+#DesignerProperty: Key: Key, DisplayName: Key, FieldType: String, DefaultValue: , Description: Key
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
 #DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
-#DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: , Description: VModel
 #DesignerProperty: Key: VOn, DisplayName: VOn, FieldType: String, DefaultValue: , Description: VOn
-#DesignerProperty: Key: Vertical, DisplayName: Vertical, FieldType: Boolean, DefaultValue: false, Description: Vertical
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
+
 Sub Class_Globals
     Private BANano As BANano 'ignore
 	Private mName As String 'ignore
@@ -89,7 +94,8 @@ Private sVShow As String
 Private bVertical As Boolean
 Private sSliderColorIntensity As String
 Private bHidden As Boolean
-	End Sub
+Private xTabs As Int
+End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	mName = Name.tolowercase
@@ -104,6 +110,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 		End If
 	End If
 	sVShow = $"${mName}show"$
+	xTabs = 0
 	End Sub
 	
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
@@ -139,14 +146,15 @@ sSliderSize = Props.Get("SliderSize")
 sVBind = Props.Get("VBind")
 sVFor = Props.Get("VFor")
 sVIf = Props.Get("VIf")
-svshow = Props.Get("VShow")
+sVShow = Props.Get("VShow")
 sVModel = Props.Get("VModel")
 sVOn = Props.Get("VOn")
 bHidden = Props.Get("Hidden")
-bVertical = Props.Get("Vertical")
+bVertical = Props.GetDefault("Vertical",False)
 sSliderColorIntensity= Props.Get("SliderColorIntensity")
 	End If
 	'
+	
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
 		mElement = BANano.GetElement($"#${mName}"$)
@@ -156,41 +164,76 @@ sSliderColorIntensity= Props.Get("SliderColorIntensity")
 	'
 	VElement.Initialize(mCallBack, mName, mName)
 	VElement.TagName = "v-tabs"
+	
 	VElement.Classes = mClasses
 	VElement.Styles = mStyles
 	VElement.Attributes = mAttributes
 	VElement.AddAttr("active-class", sActiveClass)
-VElement.AddAttr(":align-with-title", bAlignWithTitle)
-VElement.BackgroundColor = VElement.BuildColor(sBackgroundColor, sBackgroundColorIntensity)
-VElement.AddAttr(":center-active", bCenterActive)
-VElement.AddAttr(":centered", bCentered)
-VElement.Color = VElement.BuildColor(sColor, sColorIntensity)
-VElement.AddAttr(":dark", bDark)
-VElement.AddAttr(":fixed-tabs", bFixedTabs)
-VElement.AddAttr(":grow", bGrow)
-VElement.AddAttr("height", sHeight)
-VElement.AddAttr(":hide-slider", bHideSlider)
-VElement.AddAttr(":icons-and-text", bIconsAndText)
-VElement.AddAttr("key", sKey)
-VElement.AddAttr(":light", bLight)
-VElement.AddAttr("mobile-breakpoint", sMobileBreakpoint)
-VElement.AddAttr("next-icon", sNextIcon)
-VElement.AddAttr(":optional", bOptional)
-VElement.AddAttr("prev-icon", sPrevIcon)
-VElement.AddAttr(":right", bRight)
-VElement.AddAttr(":show-arrows", bShowArrows)
-VElement.SliderColor = VElement.BuildColor(sSliderColor, sSliderColorIntensity)
-VElement.AddAttr("slider-size", sSliderSize)
-VElement.AddAttr("v-bind", sVBind)
-VElement.AddAttr("v-for", sVFor)
-VElement.AddAttr("v-if", sVIf)
-VElement.AddAttr("v-model", sVModel)
-VElement.SetData(sVModel, Null)
-VElement.AddAttr("v-on", sVOn)
-VElement.AddAttr("v-show", sVShow)
-VElement.SetData(sVShow, Not(bHidden))
-VElement.AddAttr(":vertical", bVertical)
-VElement.BindAllEvents
+	VElement.AddAttr(":align-with-title", bAlignWithTitle)
+	VElement.BackgroundColor = VElement.BuildColor(sBackgroundColor, sBackgroundColorIntensity)
+	VElement.AddAttr(":center-active", bCenterActive)
+	VElement.AddAttr(":centered", bCentered)
+	VElement.Color = VElement.BuildColor(sColor, sColorIntensity)
+	VElement.AddAttr(":dark", bDark)
+	VElement.AddAttr(":fixed-tabs", bFixedTabs)
+	VElement.AddAttr(":grow", bGrow)
+	VElement.AddAttr("height", sHeight)
+	VElement.AddAttr(":hide-slider", bHideSlider)
+	VElement.AddAttr(":icons-and-text", bIconsAndText)
+	VElement.AddAttr("key", sKey)
+	VElement.AddAttr(":light", bLight)
+	VElement.AddAttr("mobile-breakpoint", sMobileBreakpoint)
+	VElement.AddAttr("next-icon", sNextIcon)
+	VElement.AddAttr(":optional", bOptional)
+	VElement.AddAttr("prev-icon", sPrevIcon)
+	VElement.AddAttr(":right", bRight)
+	VElement.AddAttr(":show-arrows", bShowArrows)
+	VElement.SliderColor = VElement.BuildColor(sSliderColor, sSliderColorIntensity)
+	VElement.AddAttr("slider-size", sSliderSize)
+	VElement.AddAttr("v-bind", sVBind)
+	VElement.AddAttr("v-for", sVFor)
+	VElement.AddAttr("v-if", sVIf)
+	VElement.AddAttr("v-model", sVModel)
+	VElement.SetData(sVModel, Null)
+	VElement.AddAttr("v-on", sVOn)
+	VElement.AddAttr("v-show", sVShow)
+	VElement.SetData(sVShow, Not(bHidden))
+	VElement.AddAttr(":vertical", bVertical)
+	VElement.BindAllEvents
+End Sub
+
+Sub AddItem(sTitle As String, sIcon As String)
+	xTabs = xTabs + 1
+	Dim tabID As String = $"${mName}${xTabs}tab"$
+	'add a tab
+	VElement.Append($"<v-tab href="#${tabID}item" id="${tabID}"></v-tab>"$)
+	'
+	Dim vTabx As VueElement
+	vTabx.Initialize(mCallBack, tabID, tabID)
+	If bVertical Then
+		If bIconsAndText Then
+			vTabx.Append($"<v-icon left id="${tabID}icon">${sIcon}</v-icon>"$)
+			vTabx.Append($"<span id="${tabID}title">${sTitle}</span>"$)
+		Else
+			vTabx.Append($"<span id="${tabID}title">${sTitle}</span>"$)
+		End If
+	Else
+		If bIconsAndText Then
+			vTabx.Append($"<span id="${tabID}title">${sTitle}</span>"$)
+			vTabx.Append($"<v-icon id="${tabID}icon">${sIcon}</v-icon>"$)
+		Else
+			vTabx.Append($"<span id="${tabID}title">${sTitle}</span>"$)
+		End If
+	End If
+	
+	'manually add item
+	VElement.Initialize(mCallBack, mName, mName)
+	VElement.Append($"<v-tab-item id="${tabID}item" value="${tabID}item"></v-tab-item>"$)	
+End Sub
+
+Sub Item(sID As String) As String
+	Dim sitem As String = $"#${mName}${sID}tabitem"$
+	Return sitem
 End Sub
 
 public Sub AddToParent(targetID As String)

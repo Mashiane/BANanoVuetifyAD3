@@ -53,6 +53,19 @@ Sub Class_Globals
 End Sub
 
 'get a count of all records
+'<code>
+'dbConnect.GetCount
+'dbConnect.JSON = BANano.CallInlinePHPWait(dbConnect.MethodName, dbConnect.Build)
+'dbConnect.FromJSON
+'Select Case dbConnect.OK
+'Case False
+'Dim strError As String = dbConnect.Error
+'Log(strError)
+'End Select
+'for each rec As Map in dbConnect.Result
+'log(rec)
+'next
+'</code>
 Sub GetCount As BANanoMySQLE
 	query = $"select count(*) as records from ${TableName}"$
 	command = "select"
@@ -208,7 +221,7 @@ Sub SchemaAddField(fldName As String, fldType As String)
 End Sub
 
 
-'get maximum
+'get maximum of the primary key
 '<code>
 'dbConnect.GetMax
 'dbConnect.JSON = BANano.CallInlinePHPWait(dbConnect.MethodName, dbConnect.Build)
@@ -218,6 +231,9 @@ End Sub
 'Dim strError As String = dbConnect.Error
 'Log(strError)
 'End Select
+'for each rec As Map in dbConnect.Result
+'log(rec)
+'next
 '</code>
 Sub GetMax As BANanoMySQLE
 	query = $"SELECT MAX(${PrimaryKey}) As ${PrimaryKey} FROM ${EscapeField(TableName)}"$
@@ -225,7 +241,7 @@ Sub GetMax As BANanoMySQLE
 	Return Me
 End Sub
 
-'get minimum
+'get minimum of the primary key
 '<code>
 'dbConnect.GetMin
 'dbConnect.JSON = BANano.CallInlinePHPWait(dbConnect.MethodName, dbConnect.Build)
@@ -235,6 +251,9 @@ End Sub
 'Dim strError As String = dbConnect.Error
 'Log(strError)
 'End Select
+'for each rec As Map in dbConnect.Result
+'log(rec)
+'next
 '</code>
 Sub GetMin As BANanoMySQLE
 	query = $"SELECT MIN(${PrimaryKey}) As ${PrimaryKey} FROM ${EscapeField(TableName)}"$
@@ -244,6 +263,19 @@ End Sub
 
 
 'get databases
+'<code>
+'dbConnect.GetDatabases
+'dbConnect.JSON = BANano.CallInlinePHPWait(dbConnect.MethodName, dbConnect.Build)
+'dbConnect.FromJSON
+'Select Case dbConnect.OK
+'Case False
+'Dim strError As String = dbConnect.Error
+'Log(strError)
+'End Select
+'for each rec As Map in dbConnect.Result
+'log(rec)
+'next
+'</code>
 Sub GetDatabases As BANanoMySQLE
 	query = $"SHOW DATABASES"$
 	command = "databases"
@@ -260,6 +292,9 @@ End Sub
 'Dim strError As String = dbConnect.Error
 'Log(strError)
 'End Select
+'for each rec As Map in dbConnect.Result
+'log(rec)
+'next
 '</code>
 Sub GetTableNames As BANanoMySQLE
 	query = $"select table_name from information_schema.tables where table_schema = '${DBase}' order by table_name"$
@@ -268,18 +303,57 @@ Sub GetTableNames As BANanoMySQLE
 End Sub
 
 'show indexes
+'<code>
+'dbConnect.ShowIndexes
+'dbConnect.JSON = BANano.CallInlinePHPWait(dbConnect.MethodName, dbConnect.Build)
+'dbConnect.FromJSON
+'Select Case dbConnect.OK
+'Case False
+'Dim strError As String = dbConnect.Error
+'Log(strError)
+'End Select
+'for each rec As Map in dbConnect.Result
+'log(rec)
+'next
+'</code>
 Sub ShowIndexes
 	query = $"SELECT INDEX_NAME AS `idxname`, IF (NON_UNIQUE = 0 AND INDEX_NAME = 'PRIMARY', 1, 0) AS `idxprimary`, IF (NON_UNIQUE = 0 AND INDEX_NAME <> 'PRIMARY', 1, 0) AS `idxunique`, GROUP_CONCAT(COLUMN_NAME ORDER BY SEQ_IN_INDEX) AS `idxcolumns` FROM information_schema.STATISTICS WHERE TABLE_SCHEMA = '${DBase}' AND TABLE_NAME = '${TableName}' GROUP BY INDEX_NAME, NON_UNIQUE"$
 	command = "select"
 End Sub
 
 'show foreign keys
+'<code>
+'dbConnect.ShowForeignKeys
+'dbConnect.JSON = BANano.CallInlinePHPWait(dbConnect.MethodName, dbConnect.Build)
+'dbConnect.FromJSON
+'Select Case dbConnect.OK
+'Case False
+'Dim strError As String = dbConnect.Error
+'Log(strError)
+'End Select
+'for each rec As Map in dbConnect.Result
+'log(rec)
+'next
+'</code>
 Sub ShowForeignKeys
 	query = $"SELECT i.CONSTRAINT_NAME as `fkname`, k.COLUMN_NAME AS `column`, k.REFERENCED_TABLE_NAME AS `reftable`, k.REFERENCED_COLUMN_NAME AS `refcolumn`, c.UPDATE_RULE AS `onupdate`, c.DELETE_RULE AS `ondelete` FROM information_schema.TABLE_CONSTRAINTS AS i JOIN information_schema.KEY_COLUMN_USAGE AS k ON i.CONSTRAINT_NAME = k.CONSTRAINT_NAME JOIN information_schema.REFERENTIAL_CONSTRAINTS AS c ON c.CONSTRAINT_NAME = i.CONSTRAINT_NAME WHERE i.TABLE_SCHEMA = '${DBase}' AND i.TABLE_NAME = '${TableName}' AND i.CONSTRAINT_TYPE = 'FOREIGN KEY' GROUP BY i.CONSTRAINT_NAME, k.COLUMN_NAME, k.REFERENCED_TABLE_NAME, k.REFERENCED_COLUMN_NAME, c.UPDATE_RULE, c.DELETE_RULE"$
 	command = "select"
 End Sub
 
 'get table structure
+'<code>
+'dbConnect.ShowColumns
+'dbConnect.JSON = BANano.CallInlinePHPWait(dbConnect.MethodName, dbConnect.Build)
+'dbConnect.FromJSON
+'Select Case dbConnect.OK
+'Case False
+'Dim strError As String = dbConnect.Error
+'Log(strError)
+'End Select
+'for each rec As Map in dbConnect.Result
+'log(rec)
+'next
+'</code>
 Sub ShowColumns As BANanoMySQLE
 	query = $"SHOW COLUMNS FROM ${TableName.touppercase}"$
 	command = "select"
@@ -296,6 +370,9 @@ End Sub
 'Dim strError As String = dbConnect.Error
 'Log(strError)
 'End Select
+'for each rec As Map in dbConnect.Result
+'log(rec)
+'next
 '</code>
 Sub DescribeTable As BANanoMySQLE
 	query = $"DESCRIBE ${TableName.ToUpperCase}"$
@@ -525,6 +602,8 @@ End Sub
 'Dim strError As String = dbConnect.Error
 'Log(strError)
 'End Select
+'for each rec As Map in dbConnect.Result
+'next
 '</code>
 Sub Execute(strSQL As String) As BANanoMySQLE
 	query = strSQL
@@ -693,6 +772,9 @@ End Sub
 'insert current record
 '<code>
 ''insert current record
+'dbConnect.Record.Initialize
+'dbConnect.Record.put("id", "1")
+'dbConnect.Record.put("name", "Mashy")
 'dbConnect.Insert
 'dbConnect.JSON = BANano.CallInlinePHPWait(dbConnect.MethodName, dbConnect.Build)
 'dbConnect.FromJSON
@@ -710,7 +792,10 @@ End Sub
 'insert a record using own record
 '<code>
 ''insert a record using own record
-'dbConnect.Insert1(Record)
+'Dim rec As Map = CreateMap()
+'rec.put("id", "1")
+'rec.put("name", "Mashy")
+'dbConnect.Insert1(rec)
 'dbConnect.JSON = BANano.CallInlinePHPWait(dbConnect.MethodName, dbConnect.Build)
 'dbConnect.FromJSON
 'Select Case dbConnect.OK
@@ -757,7 +842,7 @@ End Sub
 
 
 
-'insert replace a record
+'insert replace a record using current record
 '<code>
 ''insert replace a record
 'dbConnect.InsertReplace
@@ -1591,6 +1676,8 @@ Sub SelectAllAscDesc(tblfields As List, orderBy As List, AscDesc As List)
 	affectedRows = 0
 End Sub
 
+
+'**** DONT EVER USE
 Sub CallInlinePHPWait(req As String, params As Map) As String
 	Dim data As Map = CreateMap()
 	data.Put("request", req)

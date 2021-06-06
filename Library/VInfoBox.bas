@@ -171,3 +171,7 @@ public Sub Remove()
 	mTarget.Empty
 	BANano.SetMeToNull
 End Sub
+
+Sub getHere As String
+	Return $"#${mName}"$
+End Sub

@@ -3149,8 +3149,8 @@ Sub AddStepperHorizontal(Module As Object, parentID As String, elID As String, v
 	elID = elID.tolowercase
 	parentID = CleanID(parentID)
 	'
-	Dim stepperHeader As String = $"${elID}headers"$
-	Dim stepperItems As String = $"${elID}items"$
+	Dim stepperHeader As String = $"${elID}stepperheader"$
+	Dim stepperItems As String = $"${elID}stepperitems"$
 	'
 	Dim sTemplate As StringBuilder
 	sTemplate.Initialize 
@@ -3162,18 +3162,18 @@ Sub AddStepperHorizontal(Module As Object, parentID As String, elID As String, v
 	BANano.GetElement(parentID).Append(sTemplate.tostring)
 		
 	'
-	Dim vstepper As VueElement
-	vstepper.Initialize(Module, elID, elID)
-	vstepper.VModel = vmodel
-	vstepper.SetData(vmodel, "")
-	vstepper.AddAttr(":alt-labels", altLabels)
-	vstepper.AddAttr(":non-linear", nonLinear)
-	vstepper.BindAllEvents
-	vstepper.AssignProps(props)
+	Dim vstepperx As VueElement
+	vstepperx.Initialize(Module, elID, elID)
+	vstepperx.VModel = vmodel
+	vstepperx.SetData(vmodel, "")
+	vstepperx.AddAttr(":alt-labels", altLabels)
+	vstepperx.AddAttr(":non-linear", nonLinear)
+	vstepperx.BindAllEvents
+	vstepperx.AssignProps(props)
 	
 	'open the first item
-	vstepper.SetData(vmodel, 1)
-	Return vstepper
+	vstepperx.SetData(vmodel, 1)
+	Return vstepperx
 End Sub
 
 
@@ -4251,9 +4251,9 @@ End Sub
 Sub GetDateTimePicker(Module As Object, dpID As String) As VueElement
 	Dim dtpicker As String = $"${dpID}dp"$
 	dtpicker = dtpicker.tolowercase
-	Dim vdatepicker As VueElement
-	vdatepicker.Initialize(Module, dtpicker, dtpicker)
-	Return vdatepicker
+	Dim vdatepickerx As VueElement
+	vdatepickerx.Initialize(Module, dtpicker, dtpicker)
+	Return vdatepickerx
 End Sub
 
 'add date picker input

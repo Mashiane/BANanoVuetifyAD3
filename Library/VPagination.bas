@@ -11,14 +11,17 @@ Version=8.95
 #Event: Previous (e As BANanoEvent)
 
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
+#DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: pagination1, Description: VModel
+#DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: 1, Description: Value
+#DesignerProperty: Key: Length, DisplayName: Length, FieldType: String, DefaultValue: 10, Description: Total Buttons
+#DesignerProperty: Key: TotalVisible, DisplayName: TotalVisible, FieldType: String, DefaultValue: 5, Description: Total Visible
 #DesignerProperty: Key: Circle, DisplayName: Circle, FieldType: Boolean, DefaultValue: false, Description: Circle
+#DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: Boolean, DefaultValue: false, Description: Disabled
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue: , Description: Color, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: ColorIntensity, DisplayName: ColorIntensity, FieldType: String, DefaultValue: , Description: ColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: CurrentPageAriaLabel, DisplayName: CurrentPageAriaLabel, FieldType: String, DefaultValue: , Description: CurrentPageAriaLabel
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: false, Description: Dark
-#DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: Boolean, DefaultValue: false, Description: Disabled
 #DesignerProperty: Key: Key, DisplayName: Key, FieldType: String, DefaultValue: , Description: Key
-#DesignerProperty: Key: Length, DisplayName: Length, FieldType: String, DefaultValue: , Description: Length
 #DesignerProperty: Key: Light, DisplayName: Light, FieldType: Boolean, DefaultValue: false, Description: Light
 #DesignerProperty: Key: NextAriaLabel, DisplayName: NextAriaLabel, FieldType: String, DefaultValue: , Description: NextAriaLabel
 #DesignerProperty: Key: NextIcon, DisplayName: NextIcon, FieldType: String, DefaultValue: , Description: NextIcon
@@ -27,12 +30,11 @@ Version=8.95
 #DesignerProperty: Key: PreviousAriaLabel, DisplayName: PreviousAriaLabel, FieldType: String, DefaultValue: , Description: PreviousAriaLabel
 #DesignerProperty: Key: TextColor, DisplayName: TextColor, FieldType: String, DefaultValue: , Description: TextColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: TextColorIntensity, DisplayName: TextColorIntensity, FieldType: String, DefaultValue: , Description: TextColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
-#DesignerProperty: Key: TotalVisible, DisplayName: TotalVisible, FieldType: String, DefaultValue: , Description: TotalVisible
+
 #DesignerProperty: Key: VBind, DisplayName: VBind, FieldType: String, DefaultValue: , Description: VBind
 #DesignerProperty: Key: VFor, DisplayName: VFor, FieldType: String, DefaultValue: , Description: VFor
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
 #DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
-#DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: , Description: VModel
 #DesignerProperty: Key: VOn, DisplayName: VOn, FieldType: String, DefaultValue: , Description: VOn
 #DesignerProperty: Key: WrapperAriaLabel, DisplayName: WrapperAriaLabel, FieldType: String, DefaultValue: , Description: WrapperAriaLabel
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
@@ -74,7 +76,8 @@ Private sVModel As String
 Private sVOn As String
 Private sVShow As String
 Private sWrapperAriaLabel As String
-private bHidden as boolean
+Private bHidden As Boolean
+Private sDisabled As String
 	End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -90,6 +93,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 		End If
 	End If
 	sVShow = $"${mName}show"$
+	sDisabled = $"${mName}disabled"$
 End Sub
 
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
@@ -103,7 +107,7 @@ sColor = Props.Get("Color")
 sColorIntensity = Props.Get("ColorIntensity")
 sCurrentPageAriaLabel = Props.Get("CurrentPageAriaLabel")
 bDark = Props.Get("Dark")
-bDisabled = Props.GetDefault("Disabled",false)
+bDisabled = Props.GetDefault("Disabled",False)
 sKey = Props.Get("Key")
 sLength = Props.Get("Length")
 bLight = Props.Get("Light")
@@ -140,7 +144,8 @@ sWrapperAriaLabel = Props.Get("WrapperAriaLabel")
 VElement.Color = VElement.BuildColor(sColor, sColorIntensity)
 VElement.AddAttr("current-page-aria-label", sCurrentPageAriaLabel)
 VElement.AddAttr(":dark", bDark)
-VElement.AddAttr(":disabled", bDisabled)
+VElement.AddAttr(":disabled", sDisabled)
+VElement.SetData(sDisabled, bDisabled)
 VElement.AddAttr("key", sKey)
 VElement.AddAttr("length", sLength)
 VElement.AddAttr(":light", bLight)
@@ -196,6 +201,12 @@ End Sub
 Sub UpdateVisible(VC As VueComponent, b As Boolean) As VPagination
 	VC.SetData(sVIf, b)
 	VC.SetData(sVShow, b)
+	Return Me
+End Sub
+
+
+Sub UpdateDisabled(VC As VueComponent, b As Boolean) As VPagination
+	VC.SetData(sDisabled, b)
 	Return Me
 End Sub
 

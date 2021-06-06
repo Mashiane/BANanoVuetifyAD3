@@ -618,14 +618,34 @@ private Sub CleanID(v As String) As String
 End Sub
 
 'get an embedded avatar
-Sub GetStepperHeaders As VueElement
-	Dim avarID As String = $"${mName}headers"$
+Sub GetStepperHeader As VueElement
+	Dim avarID As String = $"${mName}stepperheader"$
+	Return GetVueElement(avarID)
+End Sub
+
+Sub GetStep(stepN As Int) As VueElement
+	Dim avarID As String = $"${mName}${stepN}step"$
+	Return GetVueElement(avarID)
+End Sub
+
+Sub GetPanel(stepN As Int) As VueElement
+	Dim avarID As String = $"${mName}${stepN}panel"$
+	Return GetVueElement(avarID)
+End Sub
+
+Sub GetPanelHeader(stepN As Int) As VueElement
+	Dim avarID As String = $"${mName}${stepN}header"$
+	Return GetVueElement(avarID)
+End Sub
+
+Sub GetPanelContent(stepN As Int) As VueElement
+	Dim avarID As String = $"${mName}${stepN}content"$
 	Return GetVueElement(avarID)
 End Sub
 
 'get an embedded avatar
 Sub GetStepperItems As VueElement
-	Dim avarID As String = $"${mName}items"$
+	Dim avarID As String = $"${mName}stepperitems"$
 	Dim elx As VueElement = GetVueElement(avarID)
 	Return elx
 End Sub
@@ -636,8 +656,8 @@ Sub AddStepHorizontal(stepID As String, stepLabel As String, stepComplete As Str
 	Dim parentID As String = mName
 	stepID = stepID.ToLowerCase
 	'
-	Dim stepperHeader As String = $"${parentID}headers"$
-	Dim stepperItems As String = $"${parentID}items"$
+	Dim stepperHeader As String = $"${parentID}stepperheader"$
+	Dim stepperItems As String = $"${parentID}stepperitems"$
 	'
 	Dim childKey As String = $"${parentID}${stepID}"$
 	'
@@ -649,14 +669,14 @@ Sub AddStepHorizontal(stepID As String, stepLabel As String, stepComplete As Str
 	stepperItems = CleanID(stepperItems)
 	
 	'add child to header
-	Dim vstepperstep As VueElement = AddVueElement2(stepperHeader, childHeaderKey, "v-stepper-step", Null)
-	vstepperstep.AddAttr("step", Steps)
+	Dim vstepperstepx As VueElement = AddVueElement2(stepperHeader, childHeaderKey, "v-stepper-step", Null)
+	vstepperstepx.AddAttr("step", Steps)
 	If stepComplete <> "" Then 
-		vstepperstep.AddAttr("complete", stepComplete)
+		vstepperstepx.AddAttr("complete", stepComplete)
 	End If
-	vstepperstep.Caption = stepLabel
+	vstepperstepx.Caption = stepLabel
 	If stepEditable <> "" Then 
-		vstepperstep.AddAttr("editable", stepEditable)
+		vstepperstepx.AddAttr("editable", stepEditable)
 	End If
 	'
 	If bHasDivider Then
@@ -666,7 +686,7 @@ Sub AddStepHorizontal(stepID As String, stepLabel As String, stepComplete As Str
 	Dim vsteppercontent As VueElement = AddVueElement2(stepperItems, childContentKey, "v-stepper-content", Null)
 	vsteppercontent.AddAttr("step", Steps)
 	'
-	vsteppercontent.BindVueElement(vstepperstep)
+	vsteppercontent.BindVueElement(vstepperstepx)
 	Return vsteppercontent
 End Sub
 
@@ -695,16 +715,16 @@ Sub AddStep(stepID As String, stepLabel As String, stepComplete As String, stepE
 	parentID = CleanID(parentID)
 	
 	'add child to header
-	Dim vstepperstep As VueElement = AddVueElement2(parentID, childHeaderKey, "v-stepper-step", Null)
-	vstepperstep.AddAttr("step", Steps)
-	If stepComplete <> "" Then vstepperstep.AddAttr("complete", stepComplete)
-	vstepperstep.Caption = stepLabel
-	If stepEditable <> "" Then vstepperstep.AddAttr("editable", stepEditable)
+	Dim vstepperstepx As VueElement = AddVueElement2(parentID, childHeaderKey, "v-stepper-step", Null)
+	vstepperstepx.AddAttr("step", Steps)
+	If stepComplete <> "" Then vstepperstepx.AddAttr("complete", stepComplete)
+	vstepperstepx.Caption = stepLabel
+	If stepEditable <> "" Then vstepperstepx.AddAttr("editable", stepEditable)
 		
 	Dim vsteppercontent As VueElement = AddVueElement2(parentID, childContentKey, "v-stepper-content", Null)
 	vsteppercontent.AddAttr("step", Steps)
 	'
-	vsteppercontent.BindVueElement(vstepperstep)
+	vsteppercontent.BindVueElement(vstepperstepx)
 	Return vsteppercontent
 End Sub
 
@@ -2290,7 +2310,13 @@ Public Sub AddAttr(varProp As String, varValue As String)
 			xAttributes.Put(varProp, varValue)
 		Else
 			'value is false
-			If varProp.Contains("return-object") Then
+			If varProp.Contains("return-object") Or varProp.Contains("fill") Then
+				If mElement <> Null Then 
+					mElement.SetAttr(varProp, varValue)
+				End If
+				xAttributes.Put(varProp, varValue)
+			End If
+			If varProp.Contains("auto-line-width") Then
 				If mElement <> Null Then 
 					mElement.SetAttr(varProp, varValue)
 				End If
@@ -7923,6 +7949,21 @@ Sub BindAllEvents
 	SetOnEvent(mCallBack, "update:period", "")
 	SetOnEvent(mCallBack, "update:color", "")
 	SetOnEvent(mCallBack, "update:mode", "")
+	SetOnEvent(mCallBack, "click:day", "")
+	SetOnEvent(mCallBack, "click:day-category", "")
+	SetOnEvent(mCallBack, "click:event", "")
+	SetOnEvent(mCallBack, "click:interval","")
+	SetOnEvent(mCallBack, "click:more", "")
+	SetOnEvent(mCallBack, "click:time", "")
+	SetOnEvent(mCallBack, "click:time-category", "")
+	SetOnEvent(mCallBack, "contextmenu:date", "")
+	SetOnEvent(mCallBack, "contextmenu:day", "")
+	SetOnEvent(mCallBack, "contextmenu:day-category", "")
+	SetOnEvent(mCallBack, "contextmenu:event", "")
+	SetOnEvent(mCallBack, "contextmenu:interval", "")
+	SetOnEvent(mCallBack, "contextmenu:time", "")
+	SetOnEvent(mCallBack, "contextmenu:time-category", "")
+	SetOnEvent(mCallBack, "moved", "")
 End Sub
 
 'get the chip ref from the chip group
@@ -11882,4 +11923,9 @@ Sub SetWatch(k As String, bImmediate As Boolean, bDeep As Boolean, methodName As
 		watches.Put(k, deepit)
 		methods.Put(methodName, cb)
 	End If
+End Sub
+
+Sub getHere As String
+	Dim sHere As String = $"#${mName}"$
+	Return sHere
 End Sub
