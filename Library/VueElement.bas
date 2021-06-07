@@ -618,6 +618,19 @@ private Sub CleanID(v As String) As String
 End Sub
 
 'get an embedded avatar
+Sub GetMenu1 As VueElement
+	Dim avarID As String = $"${mName}menu"$
+	Return GetVueElement(avarID)
+End Sub
+
+'get an embedded avatar
+Sub GetPicker As VueElement
+	Dim avarID As String = $"${mName}picker"$
+	Return GetVueElement(avarID)
+End Sub
+
+
+'get an embedded avatar
 Sub GetStepperHeader As VueElement
 	Dim avarID As String = $"${mName}stepperheader"$
 	Return GetVueElement(avarID)

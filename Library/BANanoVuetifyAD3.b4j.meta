@@ -328,6 +328,6 @@ ModuleClosedNodes96=
 ModuleClosedNodes97=
 ModuleClosedNodes98=
 ModuleClosedNodes99=
-NavigationStack=VSparkline,UpdateLabels,211,2,VSparkline,Class_Globals,67,6,VSparkline,Initialize,86,4,VSparkline,DesignerCreateView,120,0,VSparkline,UpdateGradient,229,3,VSparkline,Clear,233,6,VSparkline,Refresh,245,4,VSparkline,AddXY,241,6,VSparkline,getHere,201,0,VueElement,AddAttr,2313,6
+NavigationStack=VTextField,TogglePassword,462,0,VueElement,GetOK,619,0,VueElement,AddDatePickerInput,9046,0,VueElement,GetClear,627,0,VueElement,GetCancel,9076,0,VueElement,GetOK1,614,0,VueElement,CleanID,613,0,VueElement,GetMenu1,619,0,VueElement,GetPicker,620,0,VTextField,DesignerCreateView,443,6
 SelectedBuild=0
 VisibleModules=

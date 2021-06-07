@@ -34,6 +34,8 @@ Version=8.95
 #DesignerProperty: Key: Loading, DisplayName: Loading, FieldType: Boolean, DefaultValue: False, Description: Loading
 #DesignerProperty: Key: Readonly, DisplayName: Readonly, FieldType: Boolean, DefaultValue: False, Description: Readonly
 #DesignerProperty: Key: Required, DisplayName: Required, FieldType: Boolean, DefaultValue: False, Description: Required
+#DesignerProperty: Key: DatePicker, DisplayName: DatePicker, FieldType: Boolean, DefaultValue: False, Description: DatePicker
+#DesignerProperty: Key: TimePicker, DisplayName: TimePicker, FieldType: Boolean, DefaultValue: False, Description: TimePicker
 
 #DesignerProperty: Key: AppendIcon, DisplayName: AppendIcon, FieldType: String, DefaultValue: , Description: AppendIcon
 #DesignerProperty: Key: AppendOuterIcon, DisplayName: AppendOuterIcon, FieldType: String, DefaultValue: , Description: AppendOuterIcon
@@ -165,7 +167,9 @@ Private bHidden As Boolean
 Private bLoading As Boolean
 Private bReadonly As Boolean
 Private bRequired As Boolean
-private sValue as string
+Private sValue As String
+Private bDatePicker As Boolean
+Private bTimePicker As Boolean
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -259,20 +263,86 @@ sVOn = Props.Get("VOn")
 bValidateOnBlur = Props.Get("ValidateOnBlur")
 bShowEyes = Props.Get("ShowEyes")
 sValue = Props.GetDefault("Value", "")
+bDatePicker = Props.getDefault("DatePicker", False)
+bTimePicker = Props.getdefault("TimePicker", False)
 	End If
 	'
 	Dim stagName As String = "v-text-field"
 	If BANano.IsNull(bTextArea) Or BANano.IsUndefined(bTextArea) Then
 		bTextArea = False
 	End If
+	
 	If bTextArea Then
 		stagName = "v-textarea"
 	End If
-	'build and get the element
-	If BANano.Exists($"#${mName}"$) Then
-		mElement = BANano.GetElement($"#${mName}"$)
-	Else	
-		mElement = mTarget.Append($"<${stagName} id="${mName}"></${stagName}>"$).Get("#" & mName)
+	'
+	Dim menuref As String = $"${mName}menu"$
+	Dim btnok As String = $"${mName}ok"$
+	Dim btncancel As String = $"${mName}cancel"$
+	Dim dtpicker As String = $"${mName}picker"$
+	Dim btnclear As String = $"${mName}clear"$
+	Dim spacer As String = $"${mName}spacer"$
+	Dim tempID As String = $"${mName}template"$
+	
+	If bDatePicker = True Or bTimePicker = True Then
+		If bDatePicker Then
+			sVOn = "on"
+			sVBind = "attrs"
+			Dim sbTemplate As String = $"<v-menu id="${menuref}" :close-on-content-click="false" transition="scale-transition" :offset-y="true"
+			ref="${menuref}" :return-value.sync="${sVModel}" v-model="${menuref}" min-width="460px" max-width="460px" :nudge-right="40">
+			<v-template id="${tempID}" v-slot:activator="{ on, attrs }">
+			<v-text-field id="${mName}" v-on="on" v-bind="attrs" v-model="${sVModel}" ref="${sVModel}" autocomplete="off"></v-text-field>
+			</v-template>
+			<v-date-picker id="${dtpicker}" :scrollable="true" v-model="${sVModel}" :landscape="true">
+			<v-btn id="${btnclear}" color="error" :text="true" v-on:click="${sVModel} = ''" :outlined="true">Clear</v-btn>
+			<v-spacer id="${spacer}"></v-spacer>
+			<v-btn id="${btncancel}" color="primary" :text="true" v-on:click="${menuref} = false" :outlined="true">
+			Cancel</v-btn>
+			<v-btn id="${btnok}" color="primary" :text="true" v-on:click="~refs.${menuref}.save(${sVModel})" :outlined="true">
+			Ok</v-btn>
+			</v-date-picker>
+			</v-menu>"$
+			'fix the refs
+			sbTemplate = sbTemplate.Replace("~","$")
+			If BANano.Exists($"#${mName}"$) Then
+				mElement = BANano.GetElement($"#${mName}"$)
+			Else	
+				mElement = mTarget.Append(sbTemplate)
+			End If
+		End If
+		'
+		If bTimePicker Then
+			sVOn = "on"
+			sVBind = "attrs"
+			Dim sbTemplate As String = $"<v-menu id="${menuref}" :close-on-content-click="false" transition="scale-transition" :offset-y="true"
+			ref="${menuref}" :return-value.sync="${sVModel}" v-model="${menuref}" min-width="460px" max-width="460px" :nudge-right="40">
+			<v-template id="${tempID}" v-slot:activator="{ on, attrs }">
+			<v-text-field id="${mName}" v-on="on" v-bind="attrs" v-model="${sVModel}" ref="${sVModel}" autocomplete="off"></v-text-field>
+			</v-template>
+			<v-time-picker id="${dtpicker}" :scrollable="true" v-model="${sVModel}" :landscape="true">
+			<v-btn id="${btnclear}" color="error" :text="true" v-on:click="${sVModel} = ''" :outlined="true">Clear</v-btn>
+			<v-spacer id="${spacer}"></v-spacer>
+			<v-btn id="${btncancel}" color="primary" :text="true" v-on:click="${menuref} = false" :outlined="true">
+			Cancel</v-btn>
+			<v-btn id="${btnok}" color="primary" :text="true" v-on:click="~refs.${menuref}.save(${sVModel})" :outlined="true">
+			Ok</v-btn>
+			</v-time-picker>
+			</v-menu>"$
+			'fix the refs
+			sbTemplate = sbTemplate.Replace("~","$")
+			If BANano.Exists($"#${mName}"$) Then
+				mElement = BANano.GetElement($"#${mName}"$)
+			Else	
+				mElement = mTarget.Append(sbTemplate)
+			End If
+		End If
+	Else
+		'build and get the element
+		If BANano.Exists($"#${mName}"$) Then
+			mElement = BANano.GetElement($"#${mName}"$)
+		Else	
+			mElement = mTarget.Append($"<${stagName} id="${mName}"></${stagName}>"$).Get("#" & mName)
+		End If
 	End If
 	'
 	VElement.Initialize(mCallBack, mName, mName)
@@ -301,82 +371,95 @@ sValue = Props.GetDefault("Value", "")
 	VElement.Styles = mStyles
 	VElement.Attributes = mAttributes
 	VElement.AddAttr("append-icon", sAppendIcon)
-VElement.AddAttr("append-outer-icon", sAppendOuterIcon)
-VElement.AddAttr(":auto-grow", bAutoGrow)
-VElement.AddAttr(":autofocus", bAutofocus)
-VElement.BackgroundColor = VElement.BuildColor(sBackgroundColor, sBackgroundColorIntensity)
-VElement.AddAttr("clear-icon", sClearIcon)
-VElement.AddAttr(":clearable", bClearable)
-VElement.Color = VElement.BuildColor(sColor, sColorIntensity)
-VElement.AddAttr("counter", sCounter)
-VElement.AddAttr(":dark", bDark)
-VElement.AddAttr(":dense", bDense)
-VElement.AddAttr(":required", sRequired)
-VElement.SetData(sRequired, bRequired)
-VElement.AddAttr(":disabled", sDisabled)
-VElement.SetData(sDisabled, bDisabled)
-VElement.AddAttr(":error", sError)
-VElement.SetData(sError, False)
-VElement.AddAttr("error-count", sErrorCount)
-VElement.AddAttr(":error-messages", sErrorMessages)
-VElement.SetData(sErrorMessages, VElement.NewList)
-VElement.AddAttr(":filled", bFilled)
-VElement.AddAttr(":flat", bFlat)
-VElement.AddAttr(":full-width", bFullWidth)
-VElement.AddAttr("height", sHeight)
-VElement.AddAttr(":hide-details", bHideDetails)
-VElement.AddAttr("hint", sHint)
-VElement.AddAttr("key", sKey)
-VElement.AddAttr("label", sLabel)
-VElement.AddAttr(":light", bLight)
-VElement.AddAttr("loader-height", sLoaderHeight)
-VElement.AddAttr(":loading", sLoading)
-VElement.SetData(sLoading, bLoading)
-VElement.AddAttr(":messages", sMessages)
-VElement.SetData(sMessages, VElement.newlist)
-VElement.AddAttr(":no-resize", bNoResize)
-VElement.AddAttr(":outlined", bOutlined)
-VElement.AddAttr(":persistent-hint", bPersistentHint)
-VElement.AddAttr(":persistent-placeholder", bPersistentPlaceholder)
-VElement.AddAttr("placeholder", sPlaceholder)
-VElement.AddAttr("prefix", sPrefix)
-VElement.AddAttr("prepend-icon", sPrependIcon)
-VElement.AddAttr("prepend-inner-icon", sPrependInnerIcon)
-VElement.AddAttr(":readonly", sReadonly)
-VElement.SetData(sReadonly, bReadonly)
-VElement.AddAttr(":reverse", bReverse)
-VElement.AddAttr(":rounded", bRounded)
-VElement.AddAttr("row-height", sRowHeight)
-VElement.AddAttr("rows", sRows)
-VElement.AddAttr(":rules", sRules)
-VElement.SetData(sRules, VElement.NewList)
-VElement.AddAttr(":set-ref", bSetRef)
-VElement.AddAttr(":shaped", bShaped)
-VElement.AddAttr(":single-line", bSingleLine)
-VElement.AddAttr(":solo", bSolo)
-VElement.AddAttr(":solo-inverted", bSoloInverted)
-VElement.AddAttr(":success", sSuccess)
-VElement.SetData(sSuccess, False)
-VElement.AddAttr(":success-messages", sSuccessMessages)
-VElement.SetData(sSuccessMessages, VElement.NewList)
-VElement.AddAttr("suffix", sSuffix)
-VElement.AddAttr("type", sTypeOf)
-VElement.AddAttr("v-bind", sVBind)
-VElement.AddAttr("v-for", sVFor)
-VElement.AddAttr("v-if", sVIf)
-VElement.AddAttr("v-model", sVModel)
-VElement.SetData(sVModel, sValue)
-VElement.AddAttr("v-on", sVOn)
-VElement.AddAttr("v-show", sVShow)
-VElement.SetData(sVShow, Not(bHidden))
-VElement.AddAttr(":validate-on-blur", bValidateOnBlur)
+		VElement.AddAttr("append-outer-icon", sAppendOuterIcon)
+		VElement.AddAttr(":auto-grow", bAutoGrow)
+		VElement.AddAttr(":autofocus", bAutofocus)
+		VElement.BackgroundColor = VElement.BuildColor(sBackgroundColor, sBackgroundColorIntensity)
+		VElement.AddAttr("clear-icon", sClearIcon)
+		VElement.AddAttr(":clearable", bClearable)
+		VElement.Color = VElement.BuildColor(sColor, sColorIntensity)
+		VElement.AddAttr("counter", sCounter)
+		VElement.AddAttr(":dark", bDark)
+		VElement.AddAttr(":dense", bDense)
+		VElement.AddAttr(":required", sRequired)
+		VElement.SetData(sRequired, bRequired)
+		VElement.AddAttr(":disabled", sDisabled)
+		VElement.SetData(sDisabled, bDisabled)
+		VElement.AddAttr(":error", sError)
+		VElement.SetData(sError, False)
+		VElement.AddAttr("error-count", sErrorCount)
+		VElement.AddAttr(":error-messages", sErrorMessages)
+		VElement.SetData(sErrorMessages, VElement.NewList)
+		VElement.AddAttr(":filled", bFilled)
+		VElement.AddAttr(":flat", bFlat)
+		VElement.AddAttr(":full-width", bFullWidth)
+		VElement.AddAttr("height", sHeight)
+		VElement.AddAttr(":hide-details", bHideDetails)
+		VElement.AddAttr("hint", sHint)
+		VElement.AddAttr("key", sKey)
+		VElement.AddAttr("label", sLabel)
+		VElement.AddAttr(":light", bLight)
+		VElement.AddAttr("loader-height", sLoaderHeight)
+		VElement.AddAttr(":loading", sLoading)
+		VElement.SetData(sLoading, bLoading)
+		VElement.AddAttr(":messages", sMessages)
+		VElement.SetData(sMessages, VElement.newlist)
+		VElement.AddAttr(":no-resize", bNoResize)
+		VElement.AddAttr(":outlined", bOutlined)
+		VElement.AddAttr(":persistent-hint", bPersistentHint)
+		VElement.AddAttr(":persistent-placeholder", bPersistentPlaceholder)
+		VElement.AddAttr("placeholder", sPlaceholder)
+		VElement.AddAttr("prefix", sPrefix)
+		VElement.AddAttr("prepend-icon", sPrependIcon)
+		VElement.AddAttr("prepend-inner-icon", sPrependInnerIcon)
+		VElement.AddAttr(":readonly", sReadonly)
+		VElement.SetData(sReadonly, bReadonly)
+		VElement.AddAttr(":reverse", bReverse)
+		VElement.AddAttr(":rounded", bRounded)
+		VElement.AddAttr("row-height", sRowHeight)
+		VElement.AddAttr("rows", sRows)
+		VElement.AddAttr(":rules", sRules)
+		VElement.SetData(sRules, VElement.NewList)
+		VElement.AddAttr(":set-ref", bSetRef)
+		VElement.AddAttr(":shaped", bShaped)
+		VElement.AddAttr(":single-line", bSingleLine)
+		VElement.AddAttr(":solo", bSolo)
+		VElement.AddAttr(":solo-inverted", bSoloInverted)
+		VElement.AddAttr(":success", sSuccess)
+		VElement.SetData(sSuccess, False)
+		VElement.AddAttr(":success-messages", sSuccessMessages)
+		VElement.SetData(sSuccessMessages, VElement.NewList)
+		VElement.AddAttr("suffix", sSuffix)
+		VElement.AddAttr("type", sTypeOf)
+		VElement.AddAttr("v-bind", sVBind)
+		VElement.AddAttr("v-for", sVFor)
+		VElement.AddAttr("v-if", sVIf)
+		VElement.AddAttr("v-model", sVModel)
+		VElement.SetData(sVModel, sValue)
+		VElement.AddAttr("v-on", sVOn)
+		VElement.AddAttr("v-show", sVShow)
+		VElement.SetData(sVShow, Not(bHidden))
+		VElement.AddAttr(":validate-on-blur", bValidateOnBlur)
 '
-If bShowEyes Then
-	VElement.Bind("append-icon", $"${sShowEyes} ? 'mdi-eye' : 'mdi-eye-off'"$)
-	VElement.Bind("type", $"${sShowEyes} ? 'text' : 'password'"$)
-	VElement.SetData(sShowEyes, False)
-End If
-VElement.BindAllEvents
+	If bShowEyes Then
+		VElement.Bind("append-icon", $"${sShowEyes} ? 'mdi-eye' : 'mdi-eye-off'"$)
+		VElement.Bind("type", $"${sShowEyes} ? 'text' : 'password'"$)
+		VElement.SetData(sShowEyes, False)
+	End If
+	'
+	If bDatePicker = True Or bTimePicker = True Then
+		Dim vmenux As VueElement
+		vmenux.Initialize(mCallBack, menuref, menuref)
+		'
+		Dim vdatepickerx As VueElement
+		vdatepickerx.Initialize(mCallBack, dtpicker, dtpicker)
+		'
+		VElement.BindVueElement(vmenux)
+		VElement.BindVueElement(vdatepickerx)
+		VElement.SetData(menuref, False)
+	End If
+	'
+	VElement.BindAllEvents
 End Sub
 
 'toggle the password
