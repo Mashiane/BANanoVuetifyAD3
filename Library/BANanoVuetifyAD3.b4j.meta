@@ -328,6 +328,6 @@ ModuleClosedNodes96=
 ModuleClosedNodes97=
 ModuleClosedNodes98=
 ModuleClosedNodes99=
-NavigationStack=VTextField,TogglePassword,462,0,VueElement,GetOK,619,0,VueElement,AddDatePickerInput,9046,0,VueElement,GetClear,627,0,VueElement,GetCancel,9076,0,VueElement,GetOK1,614,0,VueElement,CleanID,613,0,VueElement,GetMenu1,619,0,VueElement,GetPicker,620,0,VTextField,DesignerCreateView,443,6
+NavigationStack=VueElement,AddDatePickerInput,9046,0,VueElement,GetClear,627,0,VueElement,GetCancel,9076,0,VueElement,GetOK1,614,0,VueElement,CleanID,613,0,VueElement,GetMenu1,619,0,VueElement,GetPicker,620,0,VTextField,DesignerCreateView,443,6,VRow,AddClass,191,0,Main,Process_Globals,12,0,Main,AppStart,30,0
 SelectedBuild=0
 VisibleModules=

@@ -27,8 +27,8 @@ Version=8.9
 #DesignerProperty: Key: TextColor, DisplayName: Text Color, FieldType: String, DefaultValue:  , Description: , List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: TextColorIntensity, DisplayName: Text Color Intensity, FieldType: String, DefaultValue:  normal, Description: , List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: AlignSelf, DisplayName: Align Self, FieldType: String, DefaultValue: , Description: AlignSelf, List: normal|left|center|right|start|end
-#DesignerProperty: Key: Align, DisplayName: Align, FieldType: String, DefaultValue: , Description: Align, List: normal|start|center|end|baseline|stretch
-#DesignerProperty: Key: Justify, DisplayName: Justify, FieldType: String, DefaultValue: , Description: Justify, List: normal|start|center|end|space-between|space-around
+#DesignerProperty: Key: Align, DisplayName: Vertical Align, FieldType: String, DefaultValue: , Description: Align, List: normal|start|center|end|baseline|stretch
+#DesignerProperty: Key: Justify, DisplayName: Horizontal Align, FieldType: String, DefaultValue: , Description: Justify, List: normal|start|center|end|space-between|space-around
 #DesignerProperty: Key: Dense, DisplayName: Dense, FieldType: Boolean, DefaultValue: False, Description: Dense
 
 #DesignerProperty: Key: Border, DisplayName: Border, FieldType: String, DefaultValue:  , Description: 

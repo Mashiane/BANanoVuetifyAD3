@@ -65,7 +65,9 @@ Version=7
 #DesignerProperty: Key: SetColorByAttribute, DisplayName: Set Color By Attribute, FieldType: Boolean, DefaultValue: True, Description:
 #DesignerProperty: Key: LoremIpsum, DisplayName: Lorem Ipsum, FieldType: Boolean, DefaultValue: False, Description: Lorem ipsum.
 #DesignerProperty: Key: ActiveClass, DisplayName: Active Class, FieldType: String, DefaultValue: , Description: ActiveClass.
-#DesignerProperty: Key: Align, DisplayName: Align, FieldType: String, DefaultValue: , Description: Align, List: start|center|end|baseline|stretch|none
+#DesignerProperty: Key: Align, DisplayName: Vertical Align, FieldType: String, DefaultValue: , Description: Align, List: start|center|end|baseline|stretch|none
+#DesignerProperty: Key: Justify, DisplayName: Horizontal Align, FieldType: String, DefaultValue: , Description: Justify, List: start|center|end|space-around|space-between|none
+
 #DesignerProperty: Key: AlignCenter, DisplayName: Align Center, FieldType: Boolean, DefaultValue: False, Description: AlignCenter
 #DesignerProperty: Key: Alt, DisplayName: Alt, FieldType: String, DefaultValue: , Description: Alt
 #DesignerProperty: Key: AppendIcon, DisplayName: Append Icon, FieldType: String, DefaultValue:  , Description: 
@@ -127,7 +129,6 @@ Version=7
 #DesignerProperty: Key: ItemText, DisplayName: Item Text, FieldType: String, DefaultValue: , Description: 
 #DesignerProperty: Key: ItemValue, DisplayName: Item Value, FieldType: String, DefaultValue: , Description: 
 #DesignerProperty: Key: Items, DisplayName: Items, FieldType: String, DefaultValue: , Description: 
-#DesignerProperty: Key: Justify, DisplayName: Justify, FieldType: String, DefaultValue: , Description: Justify, List: start|center|end|space-around|space-between|none
 #DesignerProperty: Key: JustifyCenter, DisplayName: Justify Center, FieldType: Boolean, DefaultValue: False, Description: JustifyCenter
 #DesignerProperty: Key: Key, DisplayName: Key, FieldType: String, DefaultValue:  , Description:
 #DesignerProperty: Key: Label, DisplayName: Label, FieldType: String, DefaultValue: , Description: Label of the element
