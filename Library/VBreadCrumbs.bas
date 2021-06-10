@@ -73,7 +73,7 @@ bLight = Props.Get("Light")
 sTextColor = Props.Get("TextColor")
 sTextColorIntensity = Props.Get("TextColorIntensity")
 sVIf = Props.Get("VIf")
-bHidden = Props.Get("Hidden")
+bHidden = Props.GetDefault("Hidden", False)
 sVShow = Props.Get("VShow")
 	End If
 	'

@@ -65,8 +65,8 @@ Version=7
 #DesignerProperty: Key: SetColorByAttribute, DisplayName: Set Color By Attribute, FieldType: Boolean, DefaultValue: True, Description:
 #DesignerProperty: Key: LoremIpsum, DisplayName: Lorem Ipsum, FieldType: Boolean, DefaultValue: False, Description: Lorem ipsum.
 #DesignerProperty: Key: ActiveClass, DisplayName: Active Class, FieldType: String, DefaultValue: , Description: ActiveClass.
-#DesignerProperty: Key: Align, DisplayName: Vertical Align, FieldType: String, DefaultValue: , Description: Align, List: start|center|end|baseline|stretch|none
-#DesignerProperty: Key: Justify, DisplayName: Horizontal Align, FieldType: String, DefaultValue: , Description: Justify, List: start|center|end|space-around|space-between|none
+#DesignerProperty: Key: Align, DisplayName: Vertical Align, FieldType: String, DefaultValue: normal, Description: Align, List: start|center|end|baseline|stretch|none
+#DesignerProperty: Key: Justify, DisplayName: Horizontal Align, FieldType: String, DefaultValue: normal, Description: Justify, List: start|center|end|space-around|space-between|none
 
 #DesignerProperty: Key: AlignCenter, DisplayName: Align Center, FieldType: Boolean, DefaultValue: False, Description: AlignCenter
 #DesignerProperty: Key: Alt, DisplayName: Alt, FieldType: String, DefaultValue: , Description: Alt

@@ -100,7 +100,7 @@ sVIf = Props.Get("VIf")
 svshow = Props.Get("VShow")
 sVModel = Props.Get("VModel")
 sVOn = Props.Get("VOn")
-bHidden = Props.Get("Hidden")
+bHidden = Props.GetDefault("Hidden", False)
 sValue = Props.Get("Value")
 	End If
 	'

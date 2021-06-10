@@ -103,7 +103,7 @@ sTransition = Props.Get("Transition")
 sVFor = Props.Get("VFor")
 sVIf = Props.Get("VIf")
 sVShow = Props.Get("VShow")
-bHidden = Props.Get("Hidden")
+bHidden = Props.GetDefault("Hidden", False)
 sValue = Props.Get("Value")
 	End If
 	'

@@ -112,7 +112,7 @@ sTextColor = Props.Get("TextColor")
 sTextColorIntensity = Props.Get("TextColorIntensity")
 sVIf = Props.Get("VIf")
 sVShow = Props.Get("VShow")
-bHidden = Props.Get("Hidden")
+bHidden = Props.GetDefault("Hidden", False)
 sKey = Props.Get("Key")
 sVFor = Props.Get("VFor")
 	End If

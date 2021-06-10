@@ -177,7 +177,7 @@ bShaped = Props.Get("Shaped")
 bTransition = Props.Get("Transition")
 sVIf = Props.Get("VIf")
 svshow = Props.Get("VShow")
-bHidden = Props.Get("Hidden")
+bHidden = Props.GetDefault("Hidden", False)
 sValue = Props.Get("Value")
 	End If
 	'

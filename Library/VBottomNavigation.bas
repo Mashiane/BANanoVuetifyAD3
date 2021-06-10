@@ -128,7 +128,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bShift = Props.Get("Shift")
 		sVIf = Props.Get("VIf")
 		sVShow = Props.Get("VShow")
-		bHidden = Props.Get("Hidden")
+		bHidden = Props.GetDefault("Hidden", False)
 		sValue = Props.Get("Value")
 		sWidth = Props.Get("Width")
 	End If
@@ -154,7 +154,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	<v-btn :key="item.id" v-if="item.badge > 0" :value="item.value" :to="item.to" :color="item.color" id="${mName}button">
     <span id="${mName}text">{{ item.caption }}</span>
 	<v-badge id="${mName}badge" right :color="item.badgecolor">
-    <span slot="badge">{{ item.badge }}</span><v-icon id="${mName}icon"> {{ item.icon }}</v-icon>
+    <span slot="badge">{{ item.badge }}</span><v-icon id="${mName}icon">{{ item.icon }}</v-icon>
     </v-badge>
     </v-btn>
 	</v-template>"$)

@@ -9,6 +9,8 @@ Version=8.9
 
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: Caption, DisplayName: Caption, FieldType: String, DefaultValue: , Description: Caption
+#DesignerProperty: Key: VHtml, DisplayName: VHtml, FieldType: String, DefaultValue: , Description: VHtml
+#DesignerProperty: Key: VText, DisplayName: VText, FieldType: String, DefaultValue: , Description: VText
 #DesignerProperty: Key: Size, DisplayName: Tag, FieldType: String, DefaultValue: div, Description: Size, List: a|div|h1|h2|h3|h4|h5|h6|label|p|span|v-spacer|v-responsive|v-divider|nav|v-subheader|v-main|slot|v-tabs-slider|router-view|router-link|v-list-item-action|v-list-item-title|v-list-item-subtitle|v-list-item-icon|v-list-item-content|v-list-item-action-text|strong|blockquote|i|img|a|ul|li|ol|v-stepper-content|v-stepper-header|v-stepper-items|small
 #DesignerProperty: Key: OwnTag, DisplayName: OwnTag, FieldType: String, DefaultValue: , Description: OwnTag
 #DesignerProperty: Key: Elevation, DisplayName: Elevation, FieldType: String, DefaultValue: , Description: Elevation
@@ -34,6 +36,8 @@ Version=8.9
 #DesignerProperty: Key: ColorIntensity, DisplayName: ColorIntensity, FieldType: String, DefaultValue: , Description: ColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: TextColor, DisplayName: TextColor, FieldType: String, DefaultValue: , Description: TextColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: TextColorIntensity, DisplayName: TextColorIntensity, FieldType: String, DefaultValue: , Description: TextColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
+#DesignerProperty: Key: TextAlign, DisplayName: Text Align, FieldType: String, DefaultValue:  , Description: , List: left|center|right|justify|none
+#DesignerProperty: Key: TextDecoration, DisplayName: Text Decoration, FieldType: String, DefaultValue: none , Description: , List: none|underline|line-through|overline
 #DesignerProperty: Key: MA, DisplayName: MA, FieldType: String, DefaultValue: , Description: MA
 #DesignerProperty: Key: MB, DisplayName: MB, FieldType: String, DefaultValue: , Description: MB
 #DesignerProperty: Key: ML, DisplayName: ML, FieldType: String, DefaultValue: , Description: ML
@@ -49,6 +53,8 @@ Version=8.9
 #DesignerProperty: Key: PX, DisplayName: PX, FieldType: String, DefaultValue: , Description: PX
 #DesignerProperty: Key: PY, DisplayName: PY, FieldType: String, DefaultValue: , Description: PY
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
+#DesignerProperty: Key: VFor, DisplayName: VFor, FieldType: String, DefaultValue: , Description: VFor
+#DesignerProperty: Key: Key, DisplayName: Key, FieldType: String, DefaultValue: , Description: Key
 #DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue: , Description: VShow
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
@@ -106,7 +112,13 @@ Private bSetName As Boolean
 Private bSetRef As Boolean
 Private bHidden As Boolean
 Private sOwnTag As String
-private sStepValue as string
+Private sStepValue As String
+Private sTextAlign As String
+Private sTextDecoration As String
+Private sVHtml As String
+Private sVText As String
+Private sVFor As String
+Private sKey As String
 	End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -161,7 +173,7 @@ sTextColorIntensity = Props.Get("TextColorIntensity")
 sTo = Props.Get("To")
 sVIf = Props.Get("VIf")
 sVShow = Props.Get("VShow")
-bHidden = Props.Get("Hidden")
+bHidden = Props.GetDefault("Hidden", False)
 bVertical = Props.Get("Vertical")
 bInset = Props.Get("Inset")
 sVOn = Props.Get("VOn")
@@ -173,6 +185,12 @@ sVOn = Props.Get("VOn")
 		bTile = Props.GetDefault("Tile", False)
 		sRounded = Props.GetDefault("Rounded", "")
 		sStepValue = Props.GetDefault("StepValue", "")
+		sTextAlign = Props.GetDefault("TextAlign", "")
+		sTextDecoration = Props.GetDefault("TextDecoration", "")
+		sVHtml = Props.GetDefault("VHtml", "")
+		sVText = Props.GetDefault("VText", "")
+		sVFor = Props.GetDefault("VFor", "")
+		sKey = Props.GetDefault("Key", "")
 	End If
 	'
 	If sOwnTag <> "" Then
@@ -225,12 +243,19 @@ VElement.AddAttr(":tile", bTile)
 VElement.Elevation = sElevation
 VElement.Target = sTarget
 VElement.TextColor = VElement.BuildColor(sTextColor, sTextColorIntensity)
-VElement.TextColorIntensity = sTextColorIntensity
 VElement.To = sTo
 VElement.VIf = sVIf
 VElement.VShow = sVShow
 VElement.Vertical = bVertical
 VElement.Inset = bInset
+VElement.VText = sVText
+VElement.VHtml = sVHtml
+VElement.VFor = sVFor
+VElement.Key = sKey
+VElement.AddStyle("text-align", sTextAlign)
+If sTextDecoration <> "none" Then
+	VElement.AddStyle("text-decoration", sTextDecoration)
+End If
 VElement.AddAttr("step", sStepValue)
 VElement.AddAttr("v-on", sVOn)
 	VElement.AddAttr("v-bind", sVBind)

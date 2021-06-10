@@ -6,8 +6,8 @@ Version=8.9
 @EndOfDesignText@
 #IgnoreWarnings:12
 
-#DesignerProperty: Key: Align, DisplayName: Vertical Align, FieldType: String, DefaultValue: , Description: Align, List: normal|start|center|end|baseline|stretch
-#DesignerProperty: Key: Justify, DisplayName: Horizontal Align, FieldType: String, DefaultValue: , Description: Justify, List: normal|start|center|end|space-between|space-around
+#DesignerProperty: Key: Align, DisplayName: Vertical Align, FieldType: String, DefaultValue: normal, Description: Align, List: normal|start|center|end|baseline|stretch
+#DesignerProperty: Key: Justify, DisplayName: Horizontal Align, FieldType: String, DefaultValue: normal, Description: Justify, List: normal|start|center|end|space-between|space-around
 #DesignerProperty: Key: Fluid, DisplayName: Fluid, FieldType: Boolean, DefaultValue: false, Description: Fluid
 #DesignerProperty: Key: FillHeight, DisplayName: FillHeight, FieldType: Boolean, DefaultValue: false, Description: FillHeight
 #DesignerProperty: Key: BackgroundImage, DisplayName: BackgroundImage, FieldType: String, DefaultValue:  , Description: BackgroundImage

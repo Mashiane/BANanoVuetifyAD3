@@ -110,7 +110,7 @@ sVFor = Props.Get("VFor")
 sVIf = Props.Get("VIf")
 sVShow = Props.Get("VShow")
 sVOn = Props.Get("VOn")
-bHidden = Props.Get("Hidden")
+bHidden = Props.GetDefault("Hidden", False)
 sWidth = Props.Get("Width")
 sElevation = Props.GetDefault("Elevation", "")
 	End If

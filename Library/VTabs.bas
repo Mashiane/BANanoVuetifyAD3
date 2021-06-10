@@ -149,7 +149,7 @@ sVIf = Props.Get("VIf")
 sVShow = Props.Get("VShow")
 sVModel = Props.Get("VModel")
 sVOn = Props.Get("VOn")
-bHidden = Props.Get("Hidden")
+bHidden = Props.GetDefault("Hidden", False)
 bVertical = Props.GetDefault("Vertical",False)
 sSliderColorIntensity= Props.Get("SliderColorIntensity")
 	End If

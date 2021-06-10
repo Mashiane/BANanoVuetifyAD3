@@ -107,7 +107,7 @@ bShaped = Props.Get("Shaped")
 bTile = Props.Get("Tile")
 sVIf = Props.Get("VIf")
 svshow = Props.Get("VShow")
-bHidden = Props.Get("Hidden")
+bHidden = Props.GetDefault("Hidden", False)
 bWidth = Props.Get("Width")
 	End If
 	'

@@ -593,6 +593,7 @@ Sub Import(comp As VueComponent)
 	comp.AppendPlaceHolder
 	If components.ContainsKey(compname) = True Then Return
 	Dim compx As BANanoObject = Vue.RunMethod("component", Array(compname, comp.component))
+	comp.This = compx
 	components.Put(compname, compx)
 End Sub
 
@@ -1504,7 +1505,8 @@ Sub AddRoute(comp As VueComponent)
 	'ensure content in the placeholder is added
 	comp.AppendPlaceHolder
 	Dim compx As BANanoObject = Vue.RunMethod("component", Array(comp.mname, comp.component))
-	
+	comp.This = compx
+	'
 	Dim eachroute As Map = CreateMap()
 	eachroute.Put("path", comp.path)
 	eachroute.Put("name", comp.mname)
@@ -5357,6 +5359,22 @@ Sub nextTick
 	Vue.RunMethod("nextTick", Null)
 End Sub
 
+
+Sub UseArcCounter
+	If components.ContainsKey("arc-counter") = False Then
+		Dim arcCounter As BANanoObject = BANano.Window.GetField("arcCounter")
+		components.Put("arc-counter", arcCounter)
+	End If
+End Sub
+
+Sub UseVueClipBoard
+	If ModuleExist("VueClipboard") = False Then
+		Dim VueClipboard As BANanoObject = BANano.Window.GetField("VueClipboard")
+		Use(VueClipboard)
+		AddModule("VueClipboard")
+	End If
+End Sub
+
 Sub UseVJSF
 	If components.ContainsKey("v-jsf") = False Then
 		Dim VJsf As BANanoObject
@@ -5374,6 +5392,14 @@ Sub UseFlowy
 		components.Put("flowy", FlowyVue)
 	End If	
 End Sub	
+
+Sub UsePrism
+	If components.ContainsKey("prism") = False Then
+		Dim PC As BANanoObject
+		PC.Initialize("PrismComponent")
+		components.Put("prism", PC)
+	End If
+End Sub
 
 Sub UseVueSocialChat
 	If components.ContainsKey("vue-social-chat") = False Then

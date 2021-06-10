@@ -171,7 +171,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	mTarget = Target 
 	If Props <> Null Then 
 		bDisabled = Props.GetDefault("Disabled",False)
-bHidden = Props.Get("Hidden")
+bHidden = Props.GetDefault("Hidden", False)
 bLoading = Props.GetDefault("Loading",False)
 bReadonly = Props.GetDefault("Readonly",False)
 bRequired = Props.GetDefault("Required",False)

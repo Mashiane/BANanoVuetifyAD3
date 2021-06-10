@@ -179,7 +179,7 @@ sVIf = Props.Get("VIf")
 sVShow = Props.Get("VShow")
 sValue = Props.Get("Value")
 sWidth = Props.Get("Width")
-bHidden = Props.Get("Hidden")
+bHidden = Props.GetDefault("Hidden", False)
 	End If
 	'
 	'build and get the element

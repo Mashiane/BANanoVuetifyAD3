@@ -27,6 +27,7 @@ Version=8.95
 #DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: , Description: Value
 #DesignerProperty: Key: SetRef, DisplayName: SetRef, FieldType: Boolean, DefaultValue: false, Description: SetRef
 #DesignerProperty: Key: TypeOf, DisplayName: TypeOf, FieldType: String, DefaultValue: text, Description: TypeOf, List: text|password|email|tel|email|url|number|search|time|button|hidden|reset|submit
+#DesignerProperty: Key: AutoComplete, DisplayName: AutoComplete, FieldType: String, DefaultValue: none, Description: AutoComplete, List: none|on|off|username|new-password|current-password|cc-name|cc-number|cc-csc|cc-exp|name|email|shipping street-address|shipping locality|shipping region|shipping postal-code|shipping country|tel
 #DesignerProperty: Key: ShowEyes, DisplayName: ShowEyes, FieldType: Boolean, DefaultValue: false, Description: ShowEyes
 #DesignerProperty: Key: TextArea, DisplayName: TextArea, FieldType: Boolean, DefaultValue: false, Description: TextArea
 #DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: Boolean, DefaultValue: False, Description: Disabled
@@ -99,77 +100,78 @@ Sub Class_Globals
 	Private mAttributes As String = ""
 	Public VElement As VueElement
 	Private sAppendIcon As String
-Private sAppendOuterIcon As String
-Private bAutoGrow As Boolean
-Private bAutofocus As Boolean
-Private sBackgroundColor As String
-Private sBackgroundColorIntensity As String
-Private sClearIcon As String
-Private bClearable As Boolean
-Private sColor As String
-Private sColorIntensity As String
-Private sCounter As String
-Private bDark As Boolean
-Private bDense As Boolean
-Private sDisabled As String
-Private sError As String
-Private sErrorCount As String
-Private sErrorMessages As String
-Private bFilled As Boolean
-Private bFlat As Boolean
-Private bFullWidth As Boolean
-Private sHeight As String
-Private bHideDetails As Boolean
-Private sHint As String
-Private sKey As String
-Private sLabel As String
-Private bLight As Boolean
-Private sLoaderHeight As String
-Private sLoading As String
-Private sMessages As String
-Private bNoResize As Boolean
-Private bOutlined As Boolean
-Private bPersistentHint As Boolean
-Private bPersistentPlaceholder As Boolean
-Private sPlaceholder As String
-Private sPrefix As String
-Private sPrependIcon As String
-Private sPrependInnerIcon As String
-Private sReadonly As String
-Private bReverse As Boolean
-Private bRounded As Boolean
-Private sRowHeight As String
-Private sRows As String
-Private sRules As String
-Private bSetRef As Boolean
-Private bShaped As Boolean
-Private bSingleLine As Boolean
-Private bSolo As Boolean
-Private bSoloInverted As Boolean
-Private sSuccess As String
-Private sSuccessMessages As String
-Private sSuffix As String
-Private bTextArea As Boolean
-Private sTypeOf As String
-Private sVBind As String
-Private sVFor As String
-Private sVIf As String
-Private sVModel As String
-Private sVOn As String
-Private sVShow As String
-Private bValidateOnBlur As Boolean
-Private sRequired As String
-Private bShowEyes As Boolean
-Private sShowEyes As String
-'
-Private bDisabled As Boolean
-Private bHidden As Boolean
-Private bLoading As Boolean
-Private bReadonly As Boolean
-Private bRequired As Boolean
-Private sValue As String
-Private bDatePicker As Boolean
-Private bTimePicker As Boolean
+	Private sAppendOuterIcon As String
+	Private bAutoGrow As Boolean
+	Private bAutofocus As Boolean
+	Private sBackgroundColor As String
+	Private sBackgroundColorIntensity As String
+	Private sClearIcon As String
+	Private bClearable As Boolean
+	Private sColor As String
+	Private sColorIntensity As String
+	Private sCounter As String
+	Private bDark As Boolean
+	Private bDense As Boolean
+	Private sDisabled As String
+	Private sError As String
+	Private sErrorCount As String
+	Private sErrorMessages As String
+	Private bFilled As Boolean
+	Private bFlat As Boolean
+	Private bFullWidth As Boolean
+	Private sHeight As String
+	Private bHideDetails As Boolean
+	Private sHint As String
+	Private sKey As String
+	Private sLabel As String
+	Private bLight As Boolean
+	Private sLoaderHeight As String
+	Private sLoading As String
+	Private sMessages As String
+	Private bNoResize As Boolean
+	Private bOutlined As Boolean
+	Private bPersistentHint As Boolean
+	Private bPersistentPlaceholder As Boolean
+	Private sPlaceholder As String
+	Private sPrefix As String
+	Private sPrependIcon As String
+	Private sPrependInnerIcon As String
+	Private sReadonly As String
+	Private bReverse As Boolean
+	Private bRounded As Boolean
+	Private sRowHeight As String
+	Private sRows As String
+	Private sRules As String
+	Private bSetRef As Boolean
+	Private bShaped As Boolean
+	Private bSingleLine As Boolean
+	Private bSolo As Boolean
+	Private bSoloInverted As Boolean
+	Private sSuccess As String
+	Private sSuccessMessages As String
+	Private sSuffix As String
+	Private bTextArea As Boolean
+	Private sTypeOf As String
+	Private sVBind As String
+	Private sVFor As String
+	Private sVIf As String
+	Private sVModel As String
+	Private sVOn As String
+	Private sVShow As String
+	Private bValidateOnBlur As Boolean
+	Private sRequired As String
+	Private bShowEyes As Boolean
+	Private sShowEyes As String
+	'
+	Private bDisabled As Boolean
+	Private bHidden As Boolean
+	Private bLoading As Boolean
+	Private bReadonly As Boolean
+	Private bRequired As Boolean
+	Private sValue As String
+	Private bDatePicker As Boolean
+	Private bTimePicker As Boolean
+	Private sAutoComplete As String
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -203,68 +205,69 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	mTarget = Target
 	If Props <> Null Then
 		bDisabled = Props.GetDefault("Disabled",False)
-bHidden = Props.Get("Hidden")
-bLoading = Props.GetDefault("Loading",False)
-bReadonly = Props.Get("Readonly")
-bRequired = Props.Get("Required")
+		bHidden = Props.GetDefault("Hidden", False)
+		bLoading = Props.GetDefault("Loading",False)
+		bReadonly = Props.Get("Readonly")
+		bRequired = Props.Get("Required")
 		mClasses = Props.Get("Classes")
 		mStyles = Props.Get("Styles")
 		mAttributes = Props.Get("Attributes")
 		sAppendIcon = Props.Get("AppendIcon")
-sAppendOuterIcon = Props.Get("AppendOuterIcon")
-bAutoGrow = Props.Get("AutoGrow")
-bAutofocus = Props.Get("Autofocus")
-sBackgroundColor = Props.Get("BackgroundColor")
-sBackgroundColorIntensity = Props.Get("BackgroundColorIntensity")
-sClearIcon = Props.Get("ClearIcon")
-bClearable = Props.Get("Clearable")
-sColor = Props.Get("Color")
-sColorIntensity = Props.Get("ColorIntensity")
-sCounter = Props.Get("Counter")
-bDark = Props.Get("Dark")
-bDense = Props.Get("Dense")
-sErrorCount = Props.Get("ErrorCount")
-bFilled = Props.Get("Filled")
-bFlat = Props.Get("Flat")
-bFullWidth = Props.Get("FullWidth")
-sHeight = Props.Get("Height")
-bHideDetails = Props.Get("HideDetails")
-sHint = Props.Get("Hint")
-sKey = Props.Get("Key")
-sLabel = Props.Get("Label")
-bLight = Props.Get("Light")
-sLoaderHeight = Props.Get("LoaderHeight")
-bNoResize = Props.Get("NoResize")
-bOutlined = Props.Get("Outlined")
-bPersistentHint = Props.Get("PersistentHint")
-bPersistentPlaceholder = Props.Get("PersistentPlaceholder")
-sPlaceholder = Props.Get("Placeholder")
-sPrefix = Props.Get("Prefix")
-sPrependIcon = Props.Get("PrependIcon")
-sPrependInnerIcon = Props.Get("PrependInnerIcon")
-bReverse = Props.Get("Reverse")
-bRounded = Props.Get("Rounded")
-sRowHeight = Props.Get("RowHeight")
-sRows = Props.Get("Rows")
-bSetRef = Props.Get("SetRef")
-bShaped = Props.Get("Shaped")
-bSingleLine = Props.Get("SingleLine")
-bSolo = Props.Get("Solo")
-bSoloInverted = Props.Get("SoloInverted")
-sSuffix = Props.Get("Suffix")
-bTextArea = Props.Get("TextArea")
-sTypeOf = Props.Get("TypeOf")
-sVBind = Props.Get("VBind")
-sVFor = Props.Get("VFor")
-sVIf = Props.Get("VIf")
-sVShow = Props.Get("VShow")
-sVModel = Props.Get("VModel")
-sVOn = Props.Get("VOn")
-bValidateOnBlur = Props.Get("ValidateOnBlur")
-bShowEyes = Props.Get("ShowEyes")
-sValue = Props.GetDefault("Value", "")
-bDatePicker = Props.getDefault("DatePicker", False)
-bTimePicker = Props.getdefault("TimePicker", False)
+		sAppendOuterIcon = Props.Get("AppendOuterIcon")
+		bAutoGrow = Props.Get("AutoGrow")
+		bAutofocus = Props.Get("Autofocus")
+		sBackgroundColor = Props.Get("BackgroundColor")
+		sBackgroundColorIntensity = Props.Get("BackgroundColorIntensity")
+		sClearIcon = Props.Get("ClearIcon")
+		bClearable = Props.Get("Clearable")
+		sColor = Props.Get("Color")
+		sColorIntensity = Props.Get("ColorIntensity")
+		sCounter = Props.Get("Counter")
+		bDark = Props.Get("Dark")
+		bDense = Props.Get("Dense")
+		sErrorCount = Props.Get("ErrorCount")
+		bFilled = Props.Get("Filled")
+		bFlat = Props.Get("Flat")
+		bFullWidth = Props.Get("FullWidth")
+		sHeight = Props.Get("Height")
+		bHideDetails = Props.Get("HideDetails")
+		sHint = Props.Get("Hint")
+		sKey = Props.Get("Key")
+		sLabel = Props.Get("Label")
+		bLight = Props.Get("Light")
+		sLoaderHeight = Props.Get("LoaderHeight")
+		bNoResize = Props.Get("NoResize")
+		bOutlined = Props.Get("Outlined")
+		bPersistentHint = Props.Get("PersistentHint")
+		bPersistentPlaceholder = Props.Get("PersistentPlaceholder")
+		sPlaceholder = Props.Get("Placeholder")
+		sPrefix = Props.Get("Prefix")
+		sPrependIcon = Props.Get("PrependIcon")
+		sPrependInnerIcon = Props.Get("PrependInnerIcon")
+		bReverse = Props.Get("Reverse")
+		bRounded = Props.Get("Rounded")
+		sRowHeight = Props.Get("RowHeight")
+		sRows = Props.Get("Rows")
+		bSetRef = Props.Get("SetRef")
+		bShaped = Props.Get("Shaped")
+		bSingleLine = Props.Get("SingleLine")
+		bSolo = Props.Get("Solo")
+		bSoloInverted = Props.Get("SoloInverted")
+		sSuffix = Props.Get("Suffix")
+		bTextArea = Props.Get("TextArea")
+		sTypeOf = Props.Get("TypeOf")
+		sVBind = Props.Get("VBind")
+		sVFor = Props.Get("VFor")
+		sVIf = Props.Get("VIf")
+		sVShow = Props.Get("VShow")
+		sVModel = Props.Get("VModel")
+		sVOn = Props.Get("VOn")
+		bValidateOnBlur = Props.Get("ValidateOnBlur")
+		bShowEyes = Props.Get("ShowEyes")
+		sValue = Props.GetDefault("Value", "")
+		bDatePicker = Props.getDefault("DatePicker", False)
+		bTimePicker = Props.getdefault("TimePicker", False)
+		sAutoComplete = Props.GetDefault("AutoComplete", "none")
 	End If
 	'
 	Dim stagName As String = "v-text-field"
@@ -440,6 +443,9 @@ bTimePicker = Props.getdefault("TimePicker", False)
 		VElement.AddAttr("v-show", sVShow)
 		VElement.SetData(sVShow, Not(bHidden))
 		VElement.AddAttr(":validate-on-blur", bValidateOnBlur)
+		If sAutoComplete <> "none" Then
+			VElement.AddAttr("autocomplete", sAutoComplete)
+		End If
 '
 	If bShowEyes Then
 		VElement.Bind("append-icon", $"${sShowEyes} ? 'mdi-eye' : 'mdi-eye-off'"$)

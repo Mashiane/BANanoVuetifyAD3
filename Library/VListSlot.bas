@@ -111,7 +111,7 @@ sTextColor = Props.Get("TextColor")
 sTextColorIntensity = Props.Get("TextColorIntensity")
 sVIf = Props.Get("VIf")
 svshow = Props.Get("VShow")
-bHidden = Props.Get("Hidden")
+bHidden = Props.GetDefault("Hidden", False)
 	End If
 	'
 	'build and get the element

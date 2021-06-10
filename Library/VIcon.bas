@@ -86,7 +86,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sVIf = Props.Get("VIf")
 		sVShow = Props.Get("VShow")
 		sVModel = Props.Get("VModel")
-		bHidden = Props.Get("Hidden")
+		bHidden = Props.GetDefault("Hidden", False)
 		sVOn = Props.Get("VOn")
 		sVBind = Props.Get("VBind")
 	End If

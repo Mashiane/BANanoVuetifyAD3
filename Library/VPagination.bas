@@ -124,7 +124,7 @@ sVFor = Props.Get("VFor")
 sVIf = Props.Get("VIf")
 sVModel = Props.Get("VModel")
 sVOn = Props.Get("VOn")
-bHidden = Props.Get("Hidden")
+bHidden = Props.GetDefault("Hidden", False)
 sWrapperAriaLabel = Props.Get("WrapperAriaLabel")
 	End If
 	'
