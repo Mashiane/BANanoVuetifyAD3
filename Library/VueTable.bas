@@ -2154,6 +2154,7 @@ Sub Reload(records As List)
 	'VC.SetData(keyID, DateTime.Now)
 End Sub
 
+'update all rows at runtime
 Sub SetRows(records As List)
 	VC.SetData(itemsname, records)
 End Sub
@@ -2599,10 +2600,12 @@ Sub GetHeaders As List
 	Return lst
 End Sub
 
+'add row at runtime
 Sub AddItem(rowData As Map)
 	VC.SetDataPush(itemsname, rowData)
 End Sub
 
+'remove item at position
 Sub RemoveItemAtPosition(pos As Int)
 	If pos >= 0 Then
 		VC.SetDataSpliceRemove(itemsname, pos, 1)
@@ -2627,14 +2630,18 @@ Sub UpdateItem(prop As String, value As String, item As Map)
 	'find the record at a position
 	Dim mpos As Int = VC.GetDataPositionWhere(itemsname, m)
 	If mpos >= 0 Then
-		VC.SetDataSplice(itemsname, mpos, 1, item)
+		Dim oldm As Map = FindItemAtPosition(mpos)
+		oldm = BANanoShared.Merge(oldm, item)
+		VC.SetDataSplice(itemsname, mpos, 1, oldm)
 	End If
 End Sub
 
 'update item where
 Sub UpdateItemAtPosition(pos As Int, item As Map)
 	If pos >= 0 Then
-		VC.SetDataSplice(itemsname, pos, 1, item)
+		Dim oldm As Map = FindItemAtPosition(pos)
+		oldm = BANanoShared.Merge(oldm, item)
+		VC.SetDataSplice(itemsname, pos, 1, oldm)
 	End If
 End Sub
 
@@ -2649,6 +2656,14 @@ Sub FindItem(whereMap As Map) As Map
 	Return rec
 End Sub
 
+'find item at position
+Sub FindItemAtPosition(pos As Int) As Map
+	Dim recs As List = VC.GetData(itemsname)
+	Dim rec As Map = recs.Get(pos)
+	Return rec
+End Sub
+
+'find item position
 Sub FindItemPosition(whereMap As Map) As Int
 	Dim mpos As Int = VC.GetDataPositionWhere(itemsname, whereMap)
 	Return mpos

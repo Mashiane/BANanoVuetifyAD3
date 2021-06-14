@@ -1912,10 +1912,10 @@ private Sub CreateDialogCode
 	End If
 	'
 	AddComment($"initialize the ${Singular}"$)
-	AddCode($"Dim ${SingularClean.tolowercase} As Map = CreateMap()"$)
-	sb.Append(BuildDefaults(SingularClean.tolowercase))
+	AddCode($"Dim nt As Map = CreateMap()"$)
+	sb.Append(BuildDefaults("nt"))
 	sb.append(CRLF)
-	AddCode($"${ComponentName}.SetData("${SingularClean.tolowercase}", ${SingularClean.tolowercase})"$)
+	AddCode($"${ComponentName}.SetData("${SingularClean.tolowercase}", nt)"$)
 	
 	AddCode("End Sub")
 	sb.Append(CRLF).Append(CRLF)

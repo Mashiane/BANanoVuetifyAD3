@@ -272,7 +272,7 @@ Sub UpdateVisible(VC As VueComponent, b As Boolean) As VList
 End Sub
 
 Sub UpdateDisabled(VC As VueComponent, b As Boolean)
-	bdisabled = b
+	bDisabled = b
 	VC.SetData(sDisabled, b)
 End Sub
 
@@ -1524,4 +1524,73 @@ End Sub
 
 Sub BindVueElement(VE As VueElement)
 	VElement.BindVueElement(VE)
+End Sub
+
+'add an item at realtime
+Sub AddItem3(VC As VueComponent, rowData As Map)
+	VC.SetDataPush(DataSource, rowData)
+End Sub
+
+'remove item at position
+Sub RemoveItemAtPosition(VC As VueComponent, pos As Int)
+	If pos >= 0 Then
+		VC.SetDataSpliceRemove(DataSource, pos, 1)
+	End If
+End Sub
+
+'remove an item where
+Sub RemoveItem(VC As VueComponent, prop As String, value As String)
+	Dim m As Map = CreateMap()
+	m.Put(prop, value)
+	'find the record at a position
+	Dim mpos As Int = VC.GetDataPositionWhere(DataSource, m)
+	If mpos >= 0 Then
+		VC.SetDataSpliceRemove(DataSource, mpos, 1)
+	End If
+End Sub
+
+'update item where
+Sub UpdateItem(VC As VueComponent, prop As String, value As String, item As Map)
+	Dim m As Map = CreateMap()
+	m.Put(prop, value)
+	'find the record at a position
+	Dim mpos As Int = VC.GetDataPositionWhere(DataSource, m)
+	If mpos >= 0 Then
+		Dim oldm As Map = FindItemAtPosition(VC, mpos)
+		oldm = BANanoShared.Merge(oldm, item)
+		VC.SetDataSplice(DataSource, mpos, 1, oldm)
+	End If
+End Sub
+
+'update item where
+Sub UpdateItemAtPosition(VC As VueComponent, pos As Int, item As Map)
+	If pos >= 0 Then
+		Dim oldm As Map = FindItemAtPosition(VC, pos)
+		oldm = BANanoShared.Merge(oldm, item)
+		VC.SetDataSplice(DataSource, pos, 1, oldm)
+	End If
+End Sub
+
+'get data where
+Sub FindItem(VC As VueComponent, whereMap As Map) As Map
+	Dim rm As Map = CreateMap()
+	'find the item
+	Dim recpos As Int = VC.GetDataPositionWhere(DataSource, whereMap)
+	If recpos = -1 Then Return rm
+	Dim recs As List = VC.GetData(DataSource)
+	Dim rec As Map = recs.Get(recpos)
+	Return rec
+End Sub
+
+'find item at position
+Sub FindItemAtPosition(VC As VueComponent, pos As Int) As Map
+	Dim recs As List = VC.GetData(DataSource)
+	Dim rec As Map = recs.Get(pos)
+	Return rec
+End Sub
+
+'find item position
+Sub FindItemPosition(VC As VueComponent, whereMap As Map) As Int
+	Dim mpos As Int = VC.GetDataPositionWhere(DataSource, whereMap)
+	Return mpos
 End Sub

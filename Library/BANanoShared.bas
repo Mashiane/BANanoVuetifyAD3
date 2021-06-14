@@ -1828,6 +1828,15 @@ Sub SortMap(m As Map) As Map
 End Sub
 
 'merge maps
+Sub Merge(oldm As Map, newm As Map) As Map
+	For Each k As String In newm.Keys
+		Dim v As Object = newm.Get(k)
+		oldm.Put(k, v)
+	Next
+	Return oldm
+End Sub
+
+'merge maps
 Sub MergeMaps(oldm As Map, newm As Map) As Map
 	Dim om As Map = CreateMap()
 	For Each k As String In oldm.Keys

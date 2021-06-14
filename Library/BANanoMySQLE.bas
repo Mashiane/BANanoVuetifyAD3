@@ -67,7 +67,28 @@ End Sub
 'next
 '</code>
 Sub GetCount As BANanoMySQLE
-	query = $"select count(*) as records from ${TableName}"$
+	query = $"select count(${PrimaryKey}) as records from ${TableName}"$
+	command = "select"
+	Return Me
+End Sub
+
+'select sum(receiptamount) as amount from receipts
+'get a sum of all records
+'<code>
+'dbConnect.GetSum
+'dbConnect.JSON = BANano.CallInlinePHPWait(dbConnect.MethodName, dbConnect.Build)
+'dbConnect.FromJSON
+'Select Case dbConnect.OK
+'Case False
+'Dim strError As String = dbConnect.Error
+'Log(strError)
+'End Select
+'for each rec As Map in dbConnect.Result
+'log(rec)
+'next
+'</code>
+Sub GetSum As BANanoMySQLE
+	query = $"select sum(${PrimaryKey}) as ${PrimaryKey} from ${TableName}"$
 	command = "select"
 	Return Me
 End Sub

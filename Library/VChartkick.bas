@@ -8,25 +8,27 @@ Version=7
 'Created with BANano Custom View Creator 1.00 by TheMash
 'https://github.com/Mashiane/BANano-Custom-View-Creator
 'Custom BANano View class
-#DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
-#DesignerProperty: Key: Xtitle, DisplayName: Xtitle, FieldType: String, DefaultValue: , Description: Xtitle
-#DesignerProperty: Key: Ytitle, DisplayName: Ytitle, FieldType: String, DefaultValue: , Description: Ytitle
+#DesignerProperty: Key: ChartType, DisplayName: ChartType, FieldType: String, DefaultValue: line-chart, Description: ChartType, List: area-chart|bubble-chart|bar-chart|column-chart|line-chart|pie-chart|scatter-chart|geo-chart
+#DesignerProperty: Key: TitleText, DisplayName: TitleText, FieldType: String, DefaultValue: Chart, Description: TitleText
 #DesignerProperty: Key: TitleDisplay, DisplayName: TitleDisplay, FieldType: Boolean, DefaultValue: True, Description: TitleDisplay
 #DesignerProperty: Key: TitlePosition, DisplayName: TitlePosition, FieldType: String, DefaultValue: top, Description: TitlePosition, List: top|left|bottom|right
-#DesignerProperty: Key: TitleText, DisplayName: TitleText, FieldType: String, DefaultValue: , Description: TitleText
+#DesignerProperty: Key: Xtitle, DisplayName: Xtitle, FieldType: String, DefaultValue: Categories, Description: Xtitle
+#DesignerProperty: Key: Ytitle, DisplayName: Ytitle, FieldType: String, DefaultValue: Values, Description: Ytitle
+#DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: Bytes, DisplayName: Bytes, FieldType: Boolean, DefaultValue: False, Description: Bytes
-#DesignerProperty: Key: ChartType, DisplayName: ChartType, FieldType: String, DefaultValue: , Description: ChartType, List: area-chart|bar-chart|column-chart|line-chart|pie-chart|scatter-chart
 #DesignerProperty: Key: Curve, DisplayName: Curve, FieldType: Boolean, DefaultValue: False, Description: Curve
-#DesignerProperty: Key: Decimal, DisplayName: Decimal, FieldType: String, DefaultValue: , Description: Decimal
+#DesignerProperty: Key: Decimal, DisplayName: Decimal, FieldType: String, DefaultValue: . , Description: Decimal
+#DesignerProperty: Key: Thousands, DisplayName: Thousands, FieldType: String, DefaultValue: ,, Description: Thousands
+#DesignerProperty: Key: UseColors, DisplayName: Use Own Colors, FieldType: Boolean, DefaultValue: False, Description: Use Own Colors
 #DesignerProperty: Key: DifferentColors, DisplayName: DifferentColors, FieldType: Boolean, DefaultValue: False, Description: DifferentColors
 #DesignerProperty: Key: DifferentColorsCurveSeries, DisplayName: DifferentColorsCurveSeries, FieldType: Boolean, DefaultValue: False, Description: DifferentColorsCurveSeries
 #DesignerProperty: Key: Discrete, DisplayName: Discrete, FieldType: Boolean, DefaultValue: False, Description: Discrete
 #DesignerProperty: Key: Donut, DisplayName: Donut, FieldType: Boolean, DefaultValue: False, Description: Donut
 #DesignerProperty: Key: Download, DisplayName: Download, FieldType: Boolean, DefaultValue: False, Description: Download
-#DesignerProperty: Key: Height, DisplayName: Height, FieldType: String, DefaultValue: , Description: Height
-#DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: , Description: Width
+#DesignerProperty: Key: Height, DisplayName: Height, FieldType: String, DefaultValue: 500px, Description: Height
+#DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: 100%, Description: Width
 #DesignerProperty: Key: Label, DisplayName: Label, FieldType: String, DefaultValue: , Description: Label
-#DesignerProperty: Key: Legend, DisplayName: Legend, FieldType: String, DefaultValue: , Description: Legend, List: bottom|left|right|top
+#DesignerProperty: Key: Legend, DisplayName: Legend Position, FieldType: String, DefaultValue: bottom, Description: Legend Position, List: none|bottom|left|right|top
 #DesignerProperty: Key: Max, DisplayName: Max, FieldType: String, DefaultValue: , Description: Max
 #DesignerProperty: Key: Min, DisplayName: Min, FieldType: String, DefaultValue: , Description: Min
 #DesignerProperty: Key: Precision, DisplayName: Precision, FieldType: String, DefaultValue: , Description: Precision
@@ -35,7 +37,6 @@ Version=7
 #DesignerProperty: Key: Round, DisplayName: Round, FieldType: String, DefaultValue: , Description: Round
 #DesignerProperty: Key: Stacked, DisplayName: Stacked, FieldType: Boolean, DefaultValue: False, Description: Stacked
 #DesignerProperty: Key: Suffix, DisplayName: Suffix, FieldType: String, DefaultValue: , Description: Suffix
-#DesignerProperty: Key: Thousands, DisplayName: Thousands, FieldType: String, DefaultValue: , Description: Thousands
 #DesignerProperty: Key: XAxisDisplay, DisplayName: XAxisDisplay, FieldType: Boolean, DefaultValue: True, Description: XAxisDisplay
 #DesignerProperty: Key: XAxisGridCircular, DisplayName: XAxisGridCircular, FieldType: Boolean, DefaultValue: False, Description: XAxisGridCircular
 #DesignerProperty: Key: XAxisGridDisplay, DisplayName: XAxisGridDisplay, FieldType: Boolean, DefaultValue: True, Description: XAxisGridDisplay
@@ -54,6 +55,7 @@ Version=7
 #DesignerProperty: Key: XTicksMinValue, DisplayName: XTicksMinValue, FieldType: String, DefaultValue: , Description: XTicksMinValue
 #DesignerProperty: Key: XTicksStepSize, DisplayName: XTicksStepSize, FieldType: String, DefaultValue: , Description: XTicksStepSize
 #DesignerProperty: Key: Xmax, DisplayName: Xmax, FieldType: String, DefaultValue: , Description: Xmax
+#DesignerProperty: Key: Xmin, DisplayName: XMin, FieldType: String, DefaultValue: , Description: XMin
 #DesignerProperty: Key: YAxisDisplay, DisplayName: YAxisDisplay, FieldType: Boolean, DefaultValue: True, Description: YAxisDisplay
 #DesignerProperty: Key: YAxisGridCircular, DisplayName: YAxisGridCircular, FieldType: Boolean, DefaultValue: False, Description: YAxisGridCircular
 #DesignerProperty: Key: YAxisGridDisplay, DisplayName: YAxisGridDisplay, FieldType: Boolean, DefaultValue: True, Description: YAxisGridDisplay
@@ -134,6 +136,7 @@ Sub Class_Globals
 		Private sXTicksMinValue As String
 		Private sXTicksStepSize As String
 		Private sXmax As String
+		Private sXmin As String
 		Private sXtitle As String
 		Private bYAxisDisplay As Boolean
 		Private bYAxisGridCircular As Boolean
@@ -155,6 +158,7 @@ Sub Class_Globals
 		Private sYtitle As String
 		Private bZeros As Boolean 
 		Private sVShow As String
+		Private bUseColors As Boolean
 		'
 		Private series As Map
 		Private data As Map
@@ -213,7 +217,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bDownload = Props.GetDefault("Download", False)
 		sHeight = Props.GetDefault("Height", "")
 		sLabel = Props.GetDefault("Label", "")
-		sLegend = Props.GetDefault("Legend", "")
+		sLegend = Props.GetDefault("Legend", "bottom")
 		sMax = Props.GetDefault("Max", "")
 		sMin = Props.GetDefault("Min", "")
 		sPrecision = Props.GetDefault("Precision", "")
@@ -245,6 +249,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sXTicksMinValue = Props.GetDefault("XTicksMinValue", "")
 		sXTicksStepSize = Props.GetDefault("XTicksStepSize", "")
 		sXmax = Props.GetDefault("Xmax", "")
+		sXmin = Props.GetDefault("Xmin", "")
 		sXtitle = Props.GetDefault("Xtitle", "")
 		bYAxisDisplay = Props.GetDefault("YAxisDisplay", False)
 		bYAxisGridCircular = Props.GetDefault("YAxisGridCircular", False)
@@ -265,6 +270,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sYTicksStepSize = Props.GetDefault("YTicksStepSize", "")
 		sYtitle = Props.GetDefault("Ytitle", "")
 		bZeros = Props.GetDefault("Zeros", False) 
+		bUseColors = Props.GetDefault("UseColors", False)
 	End If 
 	' 
 	'build and get the element 
@@ -274,9 +280,6 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mElement = mTarget.Append($"<${sChartType} id="${mName}"></${sChartType}>"$).Get("#" & mName) 
 	End If 
 	'
-	Reset 
-	SetDownload
-	
 	VElement.Initialize(mCallBack, mName, mName) 
 	VElement.TagName = sChartType 
 	VElement.Classes = mClasses 
@@ -286,8 +289,10 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.AddAttr(":curve", bCurve)
 	VElement.AddAttr(":data", sData)
 	VElement.SetData(sData, VElement.NewList)
-	VElement.AddAttr(":colors", sColors)
-	VElement.SetData(sColors, VElement.NewList)
+	If bUseColors Then
+		VElement.AddAttr(":colors", sColors)
+		VElement.SetData(sColors, VElement.NewList)
+	End If
 	VElement.AddAttr("decimal", sDecimal)
 	VElement.AddAttr(":discrete", bDiscrete)
 	VElement.AddAttr(":donut", bDonut)
@@ -305,6 +310,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.AddStyle("width", sWidth)
 	VElement.AddStyle("height", sHeight)
 	VElement.AddAttr("xmax", sXmax)
+	VElement.AddAttr("xmin", sXmin)
 	VElement.AddAttr("xtitle", sXtitle)
 	VElement.AddAttr("ytitle", sYtitle)
 	VElement.AddAttr("zeros", bZeros)
@@ -312,6 +318,9 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.SetData(sVShow, Not(bHidden))
 	VElement.AddAttr(":library", coptions)
 	VElement.BindAllEvents
+	
+	SetDownload
+	Reset 
 End Sub
 
 private Sub SetDownload
@@ -320,7 +329,6 @@ private Sub SetDownload
 	Dim objJSON As String = BANano.ToJson(obj)
 	objJSON = objJSON.Replace(QUOTE,"'")
 	VElement.AddAttr(":download", objJSON)
-	Return Me
 End Sub
 
 Sub Clear(VC As VueComponent)
@@ -329,6 +337,7 @@ Sub Clear(VC As VueComponent)
 End Sub
 
 Sub Refresh(VC As VueComponent)
+	Update
 	BuildOptions
 	If series.Size > 0 Then
 		Dim seriesList As List
@@ -430,167 +439,14 @@ Sub getHere As String
 	Return $"#${mName}"$ 
 End Sub
 
-'Update Bytes
-Sub UpdateBytes(VC As VueComponent, vBytes As Object)
-VC.SetData(bBytes, vBytes)
-End Sub
-
-
-'Update Colors
-Sub UpdateColors(VC As VueComponent, vColors As Object)
-VC.SetData(sColors, vColors)
-End Sub
-
-'Update Curve
-Sub UpdateCurve(VC As VueComponent, vCurve As Object)
-VC.SetData(bCurve, vCurve)
-End Sub
-
-'Update Data
-Sub UpdateData(VC As VueComponent, vData As Object)
-VC.SetData(sData, vData)
-End Sub
-
-'Update Decimal
-Sub UpdateDecimal(VC As VueComponent, vDecimal As Object)
-VC.SetData(sDecimal, vDecimal)
-End Sub
-
-'Update DifferentColors
-Sub UpdateDifferentColors(VC As VueComponent, vDifferentColors As Object)
-VC.SetData(bDifferentColors, vDifferentColors)
-End Sub
-
-'Update Discrete
-Sub UpdateDiscrete(VC As VueComponent, vDiscrete As Object)
-VC.SetData(bDiscrete, vDiscrete)
-End Sub
-
-'Update Donut
-Sub UpdateDonut(VC As VueComponent, vDonut As Object)
-VC.SetData(bDonut, vDonut)
-End Sub
-
-'Update Download
-Sub UpdateDownload(VC As VueComponent, vDownload As Object)
-VC.SetData(bDownload, vDownload)
-End Sub
-
-'Update Height
-Sub UpdateHeight(VC As VueComponent, vHeight As Object)
-VC.SetData(sHeight, vHeight)
-End Sub
-
-'Update Label
-Sub UpdateLabel(VC As VueComponent, vLabel As Object)
-VC.SetData(sLabel, vLabel)
-End Sub
-
-'Update Legend
-Sub UpdateLegend(VC As VueComponent, vLegend As Object)
-VC.SetData(sLegend, vLegend)
-End Sub
-
-'Update Max
-Sub UpdateMax(VC As VueComponent, vMax As Object)
-VC.SetData(sMax, vMax)
-End Sub
-
-'Update Min
-Sub UpdateMin(VC As VueComponent, vMin As Object)
-VC.SetData(sMin, vMin)
-End Sub
-
-'Update Precision
-Sub UpdatePrecision(VC As VueComponent, vPrecision As Object)
-VC.SetData(sPrecision, vPrecision)
-End Sub
-
-'Update Prefix
-Sub UpdatePrefix(VC As VueComponent, vPrefix As Object)
-VC.SetData(sPrefix, vPrefix)
-End Sub
-
-'Update Refresh
-Sub UpdateRefresh(VC As VueComponent, vRefresh As Object)
-VC.SetData(sRefresh, vRefresh)
-End Sub
-
-'Update Round
-Sub UpdateRound(VC As VueComponent, vRound As Object)
-VC.SetData(sRound, vRound)
-End Sub
-
-'Update Stacked
-Sub UpdateStacked(VC As VueComponent, vStacked As Object)
-VC.SetData(bStacked, vStacked)
-End Sub
-
-'Update Suffix
-Sub UpdateSuffix(VC As VueComponent, vSuffix As Object)
-VC.SetData(sSuffix, vSuffix)
-End Sub
-
-'Update Thousands
-Sub UpdateThousands(VC As VueComponent, vThousands As Object)
-VC.SetData(sThousands, vThousands)
-End Sub
-
-'Update TitleDisplay
-Sub UpdateTitleDisplay(VC As VueComponent, vTitleDisplay As Object)
-VC.SetData(bTitleDisplay, vTitleDisplay)
-End Sub
-
-'Update TitlePosition
-Sub UpdateTitlePosition(VC As VueComponent, vTitlePosition As Object)
-VC.SetData(sTitlePosition, vTitlePosition)
-End Sub
-
-'Update TitleText
-Sub UpdateTitleText(VC As VueComponent, vTitleText As Object)
-VC.SetData(sTitleText, vTitleText)
-End Sub
-
-'Update Width
-Sub UpdateWidth(VC As VueComponent, vWidth As Object)
-VC.SetData(sWidth, vWidth)
-End Sub
-
-'Update XAxisDisplay
-Sub UpdateXAxisDisplay(VC As VueComponent, vXAxisDisplay As Object)
-VC.SetData(bXAxisDisplay, vXAxisDisplay)
-End Sub
-
-'Update Xmax
-Sub UpdateXmax(VC As VueComponent, vXmax As Object)
-VC.SetData(sXmax, vXmax)
-End Sub
-
-'Update Xtitle
-Sub UpdateXtitle(VC As VueComponent, vXtitle As Object)
-VC.SetData(sXtitle, vXtitle)
-End Sub
-
-'Update YAxisDisplay
-Sub UpdateYAxisDisplay(VC As VueComponent, vYAxisDisplay As Object)
-VC.SetData(bYAxisDisplay, vYAxisDisplay)
-End Sub
-
-'Update Ytitle
-Sub UpdateYtitle(VC As VueComponent, vYtitle As Object)
-VC.SetData(sYtitle, vYtitle)
-End Sub
-
-'Update Zeros
-Sub UpdateZeros(VC As VueComponent, vZeros As Object)
-VC.SetData(bZeros, vZeros)
-End Sub
-
 'reset the chart
 private Sub Reset
 	series.Initialize
 	data.Initialize
 	colors.Initialize
+	'
+	Title.Initialize 
+	
 	Dim sl As List
 	sl.Initialize
 	data.Put("a",sl)
@@ -713,13 +569,14 @@ private Sub BuildOptions
 	titObj.Put("text", Title.text)
 	chartOptions.Put("title", titObj)
 	'
-	If bDifferentColors Then
-		SetDifferentColors(bDifferentColorsCurveSeries)
-	End If
+'	If bDifferentColors Then
+'		SetDifferentColors(bDifferentColorsCurveSeries)
+'	End If
 	
-	If colors.Size > 0 Then 
-		chartOptions.Put("colors", colors)
-	End If
+	'If colors.Size > 0 Then 
+	'	chartOptions.Put("colors", colors)
+	'End If
+	'chartOptions.Put("curve", bCurve)
 	VElement.SetData(coptions, chartOptions)
 End Sub
 
@@ -733,8 +590,19 @@ Sub AddSeries(seriesCaption As String, seriesColor As String, seriesCurve As Boo
 	If seriesColor <> "" Then
 		Dim xColor As String = GetColorHex(seriesColor)
 		obj.Put("color", xColor)
+		colors.Add(xColor)
 	End If
 	series.Put(seriesCaption, obj)
+End Sub
+
+Sub UpdateSeriesData(seriesCaption As String, X As String, Y As String)
+	If series.ContainsKey(seriesCaption) Then
+		Dim m As Map = series.Get(seriesCaption)
+		Dim mdata As Map = m.Get("data")
+		mdata.Put(X, Y)
+		m.Put("data", mdata)
+		series.Put(seriesCaption, m)
+	End If	
 End Sub
 
 'add xy values to a chart
@@ -761,29 +629,41 @@ Sub AddXYColor(X As String, y As String, color As String)
 	data.Put("a",exdata)
 	If color <> "" Then
 		Dim xColor As String = GetColorHex(color)
-		colors.Add(xColor)
+		Dim mc As List
+		mc.Initialize 
+		mc.Add(xColor)
+		colors.Add(mc)
 	End If
 End Sub
 
 private Sub SetDifferentColors(seriesCurve As Boolean)
-	series.Initialize 
 	Dim exdata As List = data.Get("a")
-	Dim colCnt As Int = 0
-	For Each cudata As List In exdata
-		If cudata.Size = 2 Then
-			Dim c As String = ""
-			Dim x As String = cudata.get(0)
-			Dim y As String = cudata.get(1)
-			If colors.size > 0 Then
-				c = colors.get(colCnt)
-			End If
-			Dim xd As Map = CreateMap()
-			xd.put(x, y)
-			AddSeries(x, c, seriesCurve, xd)
-		End If
-		colCnt = colCnt + 1
+	colors.Initialize 
+	Dim tItems As Int = exdata.Size - 1
+	Dim cItems As Int
+	For cItems = 0 To tItems
+		Dim cColor As String = ColorMap.GetValueAt(cItems)
+		colors.Add(cColor)
 	Next
-	colors.initialize
+	
+	'old way
+	'series.Initialize 
+'	Dim colCnt As Int = 0
+'	For Each cudata As List In exdata
+'		If cudata.Size = 2 Then
+'			Dim c As String = ""
+'			Dim x As String = cudata.get(0)
+'			Dim y As String = cudata.get(1)
+'			If colors.size > 0 Then
+'				c = colors.get(colCnt)
+'			End If
+'			Dim xd As Map = CreateMap()
+'			xd.put(x, y)
+'			AddSeries(x, c, seriesCurve, xd)
+'		End If
+'		colCnt = colCnt + 1
+'	Next
+'	colors.initialize
 End Sub
 
 'add xy map
@@ -809,7 +689,7 @@ End Sub
 
 
 'get a hex color from provided colors
-Sub GetColorHex(sColor As String) As String
+private Sub GetColorHex(sColor As String) As String
 	sColor = sColor.tolowercase
 	If ColorMap.ContainsKey(sColor) Then
 		Dim xColor As String = ColorMap.Get(sColor)
@@ -842,6 +722,4 @@ private Sub InitColors
 	ColorMap.put("grey", "#9e9e9e")
 	ColorMap.put("blue-grey", "#607d8b")
 	ColorMap.put("black", "#000000")
-	ColorMap.put("white", "#ffffff")
-	ColorMap.put("transparent", "transparent")
 End Sub
