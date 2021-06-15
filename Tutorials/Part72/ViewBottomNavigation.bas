@@ -25,11 +25,11 @@ Sub Initialize
 	contBN.AddRows5.AddColumns12
 	contBN.BuildGrid
 	
-	BN1
-	BN2
-	BN3
-	BN4
-	BN5
+	'BN1
+	'BN2
+	'BN3
+	'BN4
+	'BN5
 	'
 	'watch when the selected color changes
 	bottomnav.SetWatch("bnav5select", True, True, Me, "getcolor", Null)

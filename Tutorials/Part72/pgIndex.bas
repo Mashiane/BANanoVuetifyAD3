@@ -92,61 +92,6 @@ Sub Init
 	drwlist.AddItemParentChild("", "home", "mdi-home", "", "Home", "/")
 	drwlist.AddItemParentChild("home", ViewPDFView.name, "",  "", "PDF View", ViewPDFView.path)
 	
-	drwlist.AddItemParentChild("", "ad", "mdi-cog", "", "Abstracts", "")
-	drwlist.AddItemParentChild("", "frm", "mdi-cog", "", "Abstracts - Forms", "")
-	
-	drwlist.AddItemParentChild("ad", ViewADLogin.name, "",  "", "AD Login", ViewADLogin.path)
-	drwlist.AddItemParentChild("ad", ViewADAlerts.name, "",  "", "AD Alerts", ViewADAlerts.path)
-	drwlist.AddItemParentChild("ad", ViewADAvatars.name, "",  "", "AD Avatars", ViewADAvatars.path)
-	drwlist.AddItemParentChild("ad", ViewADAppBar.name, "",  "", "AD AppBar", ViewADAppBar.path)
-	
-	drwlist.AddItemParentChild("ad", ViewADBadges.name, "",  "", "AD Badges", ViewADBadges.path)
-	drwlist.AddItemParentChild("ad", ViewADBottomNav.name, "",  "", "AD BottomNav", ViewADBottomNav.path)
-	drwlist.AddItemParentChild("ad", ViewADBottomSheet.name, "",  "", "AD BottomSheet", ViewADBottomSheet.path)
-	drwlist.AddItemParentChild("ad", ViewADBreadCrumbs.name, "",  "", "AD BreadCrumbs", ViewADBreadCrumbs.path)
-	drwlist.AddItemParentChild("ad", ViewAD.name, "",  "", "AD Buttons", ViewAD.path)
-	
-	drwlist.AddItemParentChild("ad", ViewADCards.name, "",  "", "AD Cards", ViewADCards.path)
-	drwlist.AddItemParentChild("ad", ViewADCarousel.name, "",  "", "AD Carousel", ViewADCarousel.path)
-	drwlist.AddItemParentChild("ad", ViewADChips.name, "",  "", "AD Chips", ViewADChips.path)
-	
-	drwlist.AddItemParentChild("ad", ViewADDialog.name, "",  "", "AD Dialog", ViewADDialog.path)
-	drwlist.AddItemParentChild("ad", ViewADDrawer.name, "",  "", "AD Drawer", ViewADDrawer.path)
-	'
-	drwlist.AddItemParentChild("ad", ViewADFAB.name, "",  "", "AD FAB", ViewADFAB.path)
-	drwlist.AddItemParentChild("ad", ViewADFooters.name, "",  "", "AD Footers", ViewADFooters.path)
-	'
-	drwlist.AddItemParentChild("ad", ViewADIcons.name, "",  "", "AD Icons", ViewADIcons.path)
-	drwlist.AddItemParentChild("ad", ViewADImages.name, "",  "", "AD Images", ViewADImages.path)
-	
-	drwlist.AddItemParentChild("frm", ViewADInputs.name, "",  "", "AD Rating", ViewADInputs.path)
-	drwlist.AddItemParentChild("frm", ViewADTextField.name, "",  "", "AD TextField", ViewADTextField.path)
-	drwlist.AddItemParentChild("frm", ViewADSelects.name, "",  "", "AD Selects", ViewADSelects.path)
-	drwlist.AddItemParentChild("frm", ViewADAutoComplete.name, "",  "", "AD AutoComplete", ViewADAutoComplete.path)
-	drwlist.AddItemParentChild("frm", ViewADCombo.name, "",  "", "AD ComboBox", ViewADCombo.path)
-	drwlist.AddItemParentChild("frm", ViewADCheckBoxes.name, "",  "", "AD CheckBoxes", ViewADCheckBoxes.path)
-	drwlist.AddItemParentChild("frm", ViewADSliders.name, "",  "", "AD Sliders", ViewADSliders.path)
-	drwlist.AddItemParentChild("frm", ViewADSwitch.name, "",  "", "AD Switch", ViewADSwitch.path)
-	drwlist.AddItemParentChild("frm", ViewADFileInput.name, "",  "", "AD File Input", ViewADFileInput.path)
-	drwlist.AddItemParentChild("frm", ViewADForm.name, "",  "", "AD Form", ViewADForm.path)
-	drwlist.AddItemParentChild("frm", ViewADRadio.name, "",  "", "AD Radios", ViewADRadio.path)
-	drwlist.AddItemParentChild("frm", ViewADDatePicker.name, "",  "", "AD DatePicker", ViewADDatePicker.path)
-	drwlist.AddItemParentChild("frm", ViewADTimePicker.name, "",  "", "AD TimePicker", ViewADTimePicker.path)
-	drwlist.AddItemParentChild("frm", ViewADColorPicker.name, "",  "", "AD ColorPicker", ViewADColorPicker.path)
-	
-	drwlist.AddItemParentChild("ad", ViewADMenus.name, "",  "", "AD Menu", ViewADMenus.path)
-	drwlist.AddItemParentChild("ad", ViewADOverlay.name, "",  "", "AD Overlay", ViewADOverlay.path)
-	drwlist.AddItemParentChild("ad", ViewADProgress.name, "",  "", "AD Progress", ViewADProgress.path)
-	
-	drwlist.AddItemParentChild("ad", ViewADSheet.name, "",  "", "AD Sheets", ViewADSheet.path)
-	'	
-	drwlist.AddItemParentChild("ad", ViewADSkeletons.name, "",  "", "AD SkeletonLoaders", ViewADSkeletons.path)
-	drwlist.AddItemParentChild("ad", ViewADSnackBars.name, "",  "", "AD SnackBar", ViewADSnackBars.path)
-	drwlist.AddItemParentChild("ad", ViewADSpeed.name, "",  "", "AD SpeedDial", ViewADSpeed.path)
-	
-	drwlist.AddItemParentChild("ad", ViewADTooltips.name, "",  "", "AD ToolTips", ViewADTooltips.path)
-	drwlist.AddItemParentChild("ad", ViewADTreeView.name, "",  "", "AD TreeView", ViewADTreeView.path)
-	'
 	drwlist.AddItemParentChild("", "components", "mdi-cog", "", "Components", "")
 	drwlist.AddItemParentChild("components", ViewSwal.name, "",  "", "Sweet Alert", ViewSwal.path)
 	drwlist.AddItemParentChild("components", ViewInfoBox.name, "",  "", "InfoBox", ViewInfoBox.path)
@@ -167,7 +112,6 @@ Sub Init
 	drwlist.AddItemParentChild("components", ViewBottomSheet.name, "", "", "Bottom Sheet", ViewBottomSheet.path)
 	drwlist.AddItemParentChild("components", ViewFAB.name, "", "", "Floating Action Button", ViewFAB.path)
 	drwlist.AddItemParentChild("components", ViewToolTip.name, "", "", "ToolTips", ViewToolTip.path)
-	drwlist.AddItemParentChild("components", ViewExcel.name, "", "", "Excel", ViewExcel.path)
 	drwlist.AddItemParentChild("components", pgVuetifyFormWizard.name, "", "", "Vuetify Form Wizard", pgVuetifyFormWizard.path)
 	drwlist.AddItemParentChild("components", ViewFlowy.name, "", "", "Flowy", ViewFlowy.path)
 	drwlist.AddItemParentChild("components", ViewStaff.name, "", "", "Employees", ViewStaff.path)
@@ -260,48 +204,6 @@ End Sub
 Sub AddRouters
 	'ViewContacts.Initialize
 	'ViewCRUDBuilder.Initialize
-	ViewADColorPicker.Initialize
-	ViewADTimePicker.Initialize 
-	ViewADDatePicker.Initialize 
-	ViewADRadio.Initialize 
-	ViewADForm.Initialize 
-	ViewADForm.Initialize 
-	ViewADFileInput.Initialize
-	ViewADCheckBoxes.Initialize 
-	ViewADMenus.Initialize 
-	ViewADCombo.Initialize 
-	ViewADAutoComplete.Initialize 
-	ViewADSelects.Initialize 
-	ViewADSliders.Initialize 
-	ViewADSwitch.Initialize 
-	ViewADTextField.Initialize 
-	ViewADLogin.initialize
-	ViewADImages.Initialize 
-	ViewADIcons.Initialize 
-	ViewADOverlay.Initialize 
-	ViewADProgress.Initialize 
-	ViewADSheet.Initialize 
-	ViewADTooltips.Initialize
-	ViewADInputs.Initialize 
-	ViewADFooters.Initialize 
-	ViewADSkeletons.Initialize 
-	ViewADDrawer.Initialize 
-	ViewADSnackBars.Initialize 
-	ViewADDialog.Initialize 
-	ViewADBottomSheet.Initialize 
-	ViewADBottomNav.Initialize 
-	ViewADTreeView.Initialize 
-	ViewADCarousel.Initialize 
-	ViewADBreadCrumbs.Initialize 
-	ViewADAppBar.Initialize 
-	ViewADAlerts.Initialize
-	ViewADCards.Initialize 
-	ViewADAvatars.Initialize
-	ViewADBadges.Initialize 
-	ViewADSpeed.Initialize 
-	ViewADFAB.Initialize 
-	ViewADChips.Initialize 
-	ViewAD.Initialize 
 	ViewSwal.Initialize 
 	ViewInfoBox.Initialize 
 	VueAnimeJSTimeLines.Initialize 
@@ -355,7 +257,6 @@ Sub AddRouters
 	ViewFormWizard.Initialize 
 	ViewTreeView.Initialize 
 	ViewBottomNavigation.Initialize
-	ViewExcel.Initialize 
 End Sub
 
 Sub vappbarnavicon_ClickStop (e As BANanoEvent)
