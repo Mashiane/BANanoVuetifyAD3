@@ -293,7 +293,7 @@ Private sDateTimeFormat As String
 Private sMoneyFormat As String
 Private sTimeFormat As String
 Private sColumnFilterable As String
-	
+Public VElement As VueElement	
 End Sub
 
 'initialize the custom view
@@ -598,9 +598,45 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sMoneyFormat = Props.GetDefault("MoneyFormat", "")
 		sTimeFormat = Props.GetDefault("TimeFormat", "")
 		sColumnFilterable = Props.GetDefault("ColumnFilterable", "")
-		'	
 	End If
+	'
+	Dim strHTML As String = ToString
+	mElement = mTarget.Append(strHTML).Get("#" & mName)
+	VElement.Initialize(mCallBack, mName, mName)
 	
+	AddAttr(":loading", sloading)
+	AddAttr(":items", itemsname)
+	AddAttr(":headers", headers)
+	AddAttr(":value", selected)
+	AddAttr(":group-by", groupby)
+	AddAttr(":sort-by", sortby)
+	AddAttr(":group-desc", groupdesc)
+	AddAttr(":sort-desc", sortdesc)
+	AddAttr(":expanded.sync", expanded)
+	'AddAttr(":key", keyID)
+	AddAttr(":search", search)
+	
+	setNoDataText("Working on it, please wait...")
+	'
+	Dim sb As StringBuilder
+	sb.Initialize
+	sb.Append($"${headers}=array;"$)
+	sb.Append($"${selected}=array;"$)
+	sb.Append($"${groupby}=array;"$)
+	sb.Append($"${sortby}=array;"$)
+	sb.Append($"${groupdesc}=array;"$)
+	sb.Append($"${sortdesc}=array;"$)
+	sb.Append($"${expanded}=array;"$)
+	sb.Append($"${itemsname}=array;"$)
+	sb.Append($"${search}=string;"$)
+	sb.Append($"${filters}=array;"$)
+	sb.Append($"${allcolumns}=array;"$)
+	sb.Append($"${titleText}=string;"$)
+	sb.Append($"${filtershow}=false;"$)
+	sb.Append($"${sloading}=false"$)
+	setStates(sb.ToString)
+	
+	SetData(filtershow, False)
 	setLoading(bLoading)
 	setMultiSort(bMultiSort)
 	setMustSort(bMustSort)
@@ -635,13 +671,8 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	SetOnClickRow($"${mName}_ClickRow"$)
 
 	'build and get the element
-	Dim strHTML As String = ToString
-	mElement = mTarget.Append(strHTML).Get("#" & mName)
 	setStates(mStates)
 	setTitle(mTitle)
-	'
-	Dim myTable As VueElement
-	myTable.Initialize(mCallBack, mName, mName)
 	'
 	If mHasSearch = True Then
 		AddSpacer
@@ -654,7 +685,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		txtSearch.BindAllEvents
 		txtSearch.Dense = True
 		txtSearch.Solo = True
-		myTable.BindVueElement(txtSearch)
+		VElement.BindVueElement(txtSearch)
 	End If
 	'
 	
@@ -695,70 +726,6 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		AddDivider
 	End If
 	'
-	
-	If bHasEdit Then
-		AddEdit
-	End If
-	
-	If bHasDelete Then
-		AddDelete
-	End If
-	
-	If bHasClone Then
-		AddClone
-	End If
-	
-	If bHasPrint Then
-		AddPrint
-	End If
-	
-	If bHasSave Then
-		AddSave
-	End If
-	
-	If bHasCancel Then
-		AddCancel
-	End If
-	
-	If bHasDownload Then
-		AddDownload
-	End If
-	
-	If bHasMenu Then
-		AddMenuV
-	End If
-	'
-	If bHasEdit Then
-		SetIconDimensions("edit", "", sEditColor)
-	End If
-	
-	If bHasDelete Then
-		SetIconDimensions("delete", "", sDeleteColor)
-	End If
-	
-	If bHasClone Then
-		SetIconDimensions("clone", "", sCloneColor)
-	End If
-	
-	If bHasPrint Then
-		SetIconDimensions("print", "", sPrintColor)
-	End If
-	
-	If bHasSave Then
-		SetIconDimensions("save", "", sSaveColor)
-	End If
-	
-	If bHasCancel Then
-		SetIconDimensions("cancel", "", sCancelColor)
-	End If
-	
-	If bHasDownload Then
-		SetIconDimensions("download", "", sDownloadColor)
-	End If
-	
-	If bHasMenu Then
-		SetIconDimensions("menu", "", sMenuColor)
-	End If
 	
 	'***** DEPENDING ON WHAT HAS BEEN SPECIFIED, CREATE COLUMNS
 	Dim lsColumnAutoComplete As List = BANanoShared.StrParse(";", sColumnAutoComplete)
@@ -1013,7 +980,73 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		Else
 			Log($"DataTable Error: ${mName}.${f} filterable column not found on column fields!"$)
 		End If
-	Next	
+	Next
+	'
+	
+	If bHasEdit Then
+		AddEdit
+	End If
+	
+	If bHasDelete Then
+		AddDelete
+	End If
+	
+	If bHasClone Then
+		AddClone
+	End If
+	
+	If bHasPrint Then
+		AddPrint
+	End If
+	
+	If bHasSave Then
+		AddSave
+	End If
+	
+	If bHasCancel Then
+		AddCancel
+	End If
+	
+	If bHasDownload Then
+		AddDownload
+	End If
+	
+	If bHasMenu Then
+		AddMenuV
+	End If
+	'
+	If bHasEdit Then
+		SetIconDimensions("edit", "", sEditColor)
+	End If
+	
+	If bHasDelete Then
+		SetIconDimensions("delete", "", sDeleteColor)
+	End If
+	
+	If bHasClone Then
+		SetIconDimensions("clone", "", sCloneColor)
+	End If
+	
+	If bHasPrint Then
+		SetIconDimensions("print", "", sPrintColor)
+	End If
+	
+	If bHasSave Then
+		SetIconDimensions("save", "", sSaveColor)
+	End If
+	
+	If bHasCancel Then
+		SetIconDimensions("cancel", "", sCancelColor)
+	End If
+	
+	If bHasDownload Then
+		SetIconDimensions("download", "", sDownloadColor)
+	End If
+	
+	If bHasMenu Then
+		SetIconDimensions("menu", "", sMenuColor)
+	End If
+		
 End Sub
 
 Sub getShowGroupBy As Boolean
@@ -1183,7 +1216,7 @@ Sub AddTitleIcon(elID As String, eIcon As String, btnColor As String)
 	
 	vbtnright.BindAllEvents
 	vbtnright.BindVueElement(viconright)
-	VC.BindVueElement(vbtnright)
+	VElement.BindVueElement(vbtnright)
 End Sub
 
 'add a filter, after all columns are added
@@ -1222,7 +1255,7 @@ Sub AddFilter(activeClass As String)
 	vchipx.AddAttr(":value", "item.value")
 	vchipx.Outlined = True
 	vchipgroupx.BindVueElement(vchipx)
-	VC.BindVueElement(vchipgroupx)
+	VElement.BindVueElement(vchipgroupx)
 End Sub
 
 
@@ -1245,12 +1278,7 @@ End Sub
 
 'update the state
 Sub SetData(prop As String, value As Object)
-	If BANano.IsNull(prop) Or BANano.IsUndefined(prop) Then
-		prop = ""
-	End If
-	If prop = "" Then Return
-	prop = prop.tolowercase
-	bindings.put(prop, value)
+	VElement.SetData(prop, value)
 End Sub
 
 Sub NewList As List
@@ -1269,42 +1297,42 @@ public Sub setStates(varBindings As String)
 		Dim v As String = BANanoShared.MvField(mt,2,"=")
 		If v.EqualsIgnoreCase("false") Then
 			If k <> "" Then
-				bindings.Put(k, False)
+				SetData(k, False)
 			End If
 		else if v.EqualsIgnoreCase("true") Then
 			If k <> "" Then
-				bindings.Put(k, True)
+				SetData(k, True)
 			End If
 		else if v.EqualsIgnoreCase("array") Then
 			If k <> "" Then
 				Dim nl As List = NewList
-				bindings.Put(k, nl)
+				SetData(k, nl)
 			End If
 		else if v.EqualsIgnoreCase("object") Then
 			If k <> "" Then
 				Dim nm As Map = CreateMap()
-				bindings.Put(k, nm)
+				SetData(k, nm)
 			End If
 		else if v.EqualsIgnoreCase("map") Then
 			If k <> "" Then
 				Dim nm As Map = CreateMap()
-				bindings.Put(k, nm)
+				SetData(k, nm)
 			End If
 		else if v.EqualsIgnoreCase("string") Then
 			If k <> "" Then
-				bindings.Put(k, "")
+				SetData(k, "")
 			End If
 		else if v.EqualsIgnoreCase("boolean") Then
 			If k <> "" Then
-				bindings.Put(k, False)
+				SetData(k, False)
 			End If
 		else if v.EqualsIgnoreCase("int") Then
 			If k <> "" Then
-				bindings.Put(k, 0)
+				SetData(k, 0)
 			End If
 		Else
 			If k <> "" Then
-				bindings.put(k, v)
+				SetData(k, v)
 			End If
 		End If
 	Next
@@ -1373,87 +1401,41 @@ End Sub
 
 'add a class
 public Sub AddClass(varClass As String)
-	If BANano.IsUndefined(varClass) Or BANano.IsNull(varClass) Then Return
-	If BANano.IsNumber(varClass) Then varClass = BANanoShared.CStr(varClass)
-	varClass = varClass.trim
-	If varClass = "" Then Return
-	If mElement <> Null Then
-		mElement.AddClass(varClass)
-	Else
-		Dim mxItems As List = BANanoShared.StrParse(" ", varClass)
-		For Each mt As String In mxItems
-			classList.put(mt, mt)
-		Next
-	End If
+	VElement.AddClass(varClass)
 End Sub
 '
 Sub AddClasses(listOfClasses As List)
-	Dim strClass As String = BANanoShared.Join(" ", listOfClasses)
-	AddClass(strClass)
+	VElement.AddClasses(listOfClasses)
 End Sub
 
 'add a class on condition
 public Sub AddClassOnCondition(varClass As String, varCondition As Boolean, varShouldBe As Boolean)
-	If BANano.IsUndefined(varCondition) Or BANano.IsNull(varCondition) Then Return
-	If varShouldBe <> varCondition Then Return
-	If BANano.IsUndefined(varClass) Or BANano.IsNull(varClass) Then Return
-	If BANano.IsNumber(varClass) Then varClass = BANanoShared.CStr(varClass)
-	varClass = varClass.trim
-	If varClass = "" Then Return
-	If mElement <> Null Then
-		mElement.AddClass(varClass)
-	Else
-		Dim mxItems As List = BANanoShared.StrParse(" ", varClass)
-		For Each mt As String In mxItems
-			classList.put(mt, mt)
-		Next
-	End If
+	VElement.AddClassOnCondition(varClass, varCondition, varShouldBe)
 End Sub
 
 'add an attr on condition
 public Sub AddAttrOnCondition(varClass As String, varCondition As Boolean, varShouldBe As Boolean)
-	If BANano.IsUndefined(varCondition) Or BANano.IsNull(varCondition) Then Return
-	If BANano.IsUndefined(varClass) Or BANano.IsNull(varClass) Then Return
-	If BANano.IsUndefined(varShouldBe) Or BANano.IsNull(varShouldBe) Then Return
-	If varShouldBe <> varCondition Then Return
-	If BANano.IsNumber(varClass) Then varClass = BANanoShared.CStr(varClass)
-	varClass = varClass.trim
-	If varClass = "" Then Return
-	AddAttr(varClass, varShouldBe)
+	VElement.AddAttrOnCondition(varClass, varCondition, varShouldBe)
 End Sub
 
 
 'add a style
 public Sub AddStyle(varProp As String, varStyle As String)
-	If BANano.IsUndefined(varStyle) Or BANano.IsNull(varStyle) Then Return
-	If BANano.IsNumber(varStyle) Then varStyle = BANanoShared.CStr(varStyle)
-	If mElement <> Null Then
-		Dim aStyle As Map = CreateMap()
-		aStyle.put(varProp, varStyle)
-		Dim sStyle As String = BANano.ToJSON(aStyle)
-		mElement.SetStyle(sStyle)
-	Else
-		styleList.put(varProp, varStyle)
-	End If
+	VElement.AddStyle(varProp, varStyle)
 End Sub
 
 
 'add an attr on condition
 public Sub AddStyleOnCondition(varClass As String, varCondition As Boolean, varShouldBe As Object)
-	If BANano.IsUndefined(varShouldBe) Or BANano.IsNull(varShouldBe) Then Return
-	If BANano.IsUndefined(varCondition) Or BANano.IsNull(varCondition) Then Return
-	If varShouldBe <> varCondition Then Return
-	AddStyle(varClass, varCondition)
+	VElement.AddStyleOnCondition(varClass, varCondition, varShouldBe)
 End Sub
 
 public Sub AddStyleOnConditionTrue(varClass As String, varCondition As Boolean, varShouldBe As Boolean)
-	If BANano.IsUndefined(varShouldBe) Or BANano.IsNull(varShouldBe) Then Return
-	If BANano.IsUndefined(varCondition) Or BANano.IsNull(varCondition) Then Return
-	If varShouldBe Then AddStyle(varClass, varCondition)
+	VElement.AddStyleOnConditionTrue(varClass, varCondition, varShouldBe)
 End Sub
 
 Sub SetAttr(varProp As String, varValue As String)
-	AddAttr(varProp, varValue)
+	VElement.SetAttr(varProp, varValue)
 End Sub
 
 'change the text of the element
@@ -1487,58 +1469,7 @@ End Sub
 
 'add an attribute
 Public Sub AddAttr(varProp As String, varValue As String)
-	If BANano.IsUndefined(varValue) Or BANano.IsNull(varValue) Then Return
-	If BANano.IsNumber(varValue) Then varValue = BANanoShared.CStr(varValue)
-	If varValue = "none" Then varValue = ""
-	If varValue = "" Then Return
-	If varProp = "align" And varValue.EqualsIgnoreCase("false") Then Return
-	If varProp = "justify" And varValue.EqualsIgnoreCase("false") Then Return
-	'we are adding a boolean
-	If BANano.IsBoolean(varValue) Then
-		If varValue = True Then
-			If mElement <> Null Then
-				mElement.SetAttr(varProp, varValue)
-			Else
-				attributeList.put(varProp, varValue)
-			End If
-		End If
-	Else
-		'varValue = varValue.Replace("~","=")
-		'varValue = varValue.Replace("#","$")
-		'we are adding a string
-		If varValue.StartsWith(":") Then
-			Dim rname As String = BANanoShared.MidS(varValue, 2)
-			If rname.Contains(".") = False Then
-				bindings.Put(rname, Null)
-			End If
-			If mElement <> Null Then
-				mElement.SetAttr($":${varProp}"$, rname)
-			Else
-				attributeList.put($":${varProp}"$, rname)
-			End If
-		Else
-			'we have a binding on the property
-			If varProp.StartsWith(":") Then
-				If varValue.Contains(".") = False Then
-					bindings.Put(varValue, Null)
-				End If
-			End If
-			
-			If mElement <> Null Then
-				mElement.SetAttr(varProp, varValue)
-			Else
-				attributeList.put(varProp, varValue)
-			End If
-		End If
-		'
-		Select Case varProp
-			Case "v-model", "v-show", "v-if", "v-else-if", "required", "disabled", "readonly"
-				If varValue <> "" Then
-					bindings.Put(varValue, Null)
-				End If
-		End Select
-	End If
-	Return
+	VElement.AddAttr(varProp, varValue)
 End Sub
 
 Sub RemoveCodeBindings(b As List)
@@ -4052,11 +3983,7 @@ End Sub
 
 
 public Sub setElevation(varElevation As String)
-	If BANano.IsNull(varElevation) Then varElevation = ""
-	If varElevation = "" Then Return
-	AddAttr("elevation", varElevation)
-	'AddClass("elevation-" & varElevation)
-	stElevation = varElevation
+	VElement.setelevation(varElevation)
 End Sub
 
 public Sub getElevation() As String
@@ -4078,16 +4005,7 @@ End Sub
 
 'set direct method
 Sub SetMethod(Module As Object,methodName As String, args As List)
-	methodName = methodName.tolowercase
-	methodName = methodName.Replace(":","")
-	methodName = methodName.Replace(".","")
-	methodName = methodName.Replace("-","")
-	If SubExists(Module, methodName) Then
-		Dim cb As BANanoObject = BANano.CallBack(Module, methodName, args)
-		methods.Put(methodName, cb)
-	Else
-		Log("SetMethod: " & methodName & ", callback is missing.")
-	End If
+	VElement.SetMethod(Module, methodName, args)
 End Sub
 
 Sub HiddenXSOnly

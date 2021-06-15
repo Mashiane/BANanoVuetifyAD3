@@ -661,6 +661,7 @@ Sub BindVueTable(el As VueTable)
 		Dim cb As BANanoObject = mmethods.Get(k)
 		SetCallBack(k, cb)
 	Next
+	BindVueElement(el.VElement)
 End Sub
 
 Sub BindVueGMap(el As VueGMap)
