@@ -11,6 +11,7 @@ Version=7
 
 #Event: Copy (e As BANanoEvent)
 #Event: Download (e As BANanoEvent)
+#Event: Close (e As BANanoEvent)
 
 #DesignerProperty: Key: Title, DisplayName: Title, FieldType: String, DefaultValue: Prism Code, Description: Title
 #DesignerProperty: Key: FileName, DisplayName: FileName, FieldType: String, DefaultValue: code.txt, Description: FileName
@@ -34,7 +35,6 @@ Sub Class_Globals
 	Private xlanguage As String
 	Private xinline As String
 	Private sTitle As String
-	Private sCode As String
 	Private xCode As String
 	Private xTitle As String
 	Private sFileName As String
@@ -86,6 +86,10 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	<v-btn id="${mName}download" color="blue" dark icon>
 	<v-icon>mdi-cloud-download-outline</v-icon>
 	</v-btn>
+	<v-divider class="mx-2" vertical></v-divider>
+	<v-btn id="${mName}close" color="red" dark icon>
+	<v-icon>mdi-window-close</v-icon>
+	</v-btn>
 	</v-toolbar>
 	<v-card-text>
 	<prism id="${mName}"></prism>
@@ -115,7 +119,8 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	'
 	Dim sDownload As String = $"${mName}download"$
 	Dim sCopy As String = $"${mName}copy"$
-	
+	Dim sClose As String = $"${mName}close"$
+	'
 	Dim btnCopy As VueElement
 	btnCopy.Initialize(mCallBack, sCopy, sCopy)
 	btnCopy.AddAttr("v-clipboard:copy", xCode)
@@ -126,6 +131,11 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	Dim btnDownload As VueElement
 	btnDownload.Initialize(mCallBack, sDownload, sDownload)
 	btnDownload.SetOnEventOwn(mCallBack, $"${mName}_download"$, "click", Null)
+	VElement.BindVueElement(btnDownload)
+	'
+	Dim btnClose As VueElement
+	btnClose.Initialize(mCallBack, sClose, sClose)
+	btnClose.SetOnEventOwn(mCallBack, $"${mName}_close"$, "click", Null)
 	VElement.BindVueElement(btnDownload)
 	'
 	VElement.BindAllEvents

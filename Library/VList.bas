@@ -934,8 +934,8 @@ Sub AddListViewTemplate(props As ListViewItemOptions)
 	
 	'
 	Dim sTemplate As String = $"<v-template id="${templateID}" v-for="(item, index) in ${DataSource}">
-<v-subheader id="${headerID}" v-if="item.header" :key="item.header">{{ item.header }}</v-subheader>
-<v-divider id="${dividerID}" v-else-if="item.divider" :key="index" :inset="item.inset"></v-divider>
+<v-subheader id="${headerID}" v-if="item.header">{{ item.header }}</v-subheader>
+<v-divider id="${dividerID}" v-else-if="item.divider" :inset="item.inset"></v-divider>
 <v-list-item id="${listitemID}" v-else="true" :key="item.${key}" :to="item.${xurl}" active-class="${xactiveclass}">
 <v-list-item-action id="${leftactionID}" v-if="item.${xlefticon} || ${xshowleftcheckboxes} || ${xshowleftswitch}">
 <v-btn id="${leftactionBtnID}" :icon="true" v-if="item.${xlefticon}">

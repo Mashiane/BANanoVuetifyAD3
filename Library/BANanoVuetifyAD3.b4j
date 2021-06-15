@@ -245,12 +245,13 @@ Version=9
 	#LibraryAuthor: Anele Mbanga (Mashiane)
 	#IgnoreWarnings:15
 	#IgnoreWarnings:12
+	#IgnoreWarnings:9
 #End Region
 
 
 Sub Process_Globals
 	Private BANano As BANano 'ignore
-	Public Version As String = "5.28"
+	Public Version As String = "5.30"
 	Public AppName As String = "BANanoVuetifyAD3"
 End Sub
 

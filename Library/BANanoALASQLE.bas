@@ -61,8 +61,8 @@ public Sub Initialize(dbName As String, tblName As String, PK As String, AI As S
 	response = ""
 	result.initialize
 	command = ""
-	types = Null
-	args = Null
+	types.Initialize 
+	args.Initialize 
 	query = ""
 	json = ""
 	error = ""
@@ -404,8 +404,6 @@ public Sub CreateTable(tblFields As Map) As BANanoALASQLE
 	sb.Append(")")
 	'define the qry to execute
 	query = "CREATE TABLE IF NOT EXISTS " & EscapeField(TableName) & " " & sb.ToString
-	args = Null
-	types = Null
 	command = "createtable"
 	response = ""
 	error = ""
@@ -440,7 +438,6 @@ Sub InsertBulk(recs As List) As BANanoALASQLE
 	Dim sSQL As String = $"SELECT * INTO [${TableName}] FROM ?"$
 	query = sSQL
 	args = Array(recs)
-	types = Null
 	command = "insert"
 	response = ""
 	error = ""
@@ -468,8 +465,6 @@ End Sub
 Sub InsertList As BANanoALASQLE
 	Dim sSQL As String = $"SELECT * INTO [${TableName}] FROM ?"$
 	query = sSQL
-	args = Null
-	types = Null
 	command = "insert"
 	response = ""
 	error = ""
@@ -494,8 +489,6 @@ End Sub
 Sub GetMax As BANanoALASQLE
 	Dim sb As String = $"SELECT MAX([${PrimaryKey}]) As [${PrimaryKey}] FROM ${EscapeField(TableName)}"$
 	query = sb
-	args = Null
-	types = Null
 	command = "select"
 	response = ""
 	error = ""
@@ -520,8 +513,6 @@ End Sub
 Sub GetMin As BANanoALASQLE
 	Dim sb As String = $"SELECT MIN([${PrimaryKey}]) As [${PrimaryKey}] FROM ${EscapeField(TableName)}"$
 	query = sb
-	args = Null
-	types = Null
 	command = "select"
 	response = ""
 	error = ""
@@ -546,8 +537,6 @@ End Sub
 public Sub DropTable As BANanoALASQLE
 	'define the qry to execute
 	query = "DROP TABLE " & EscapeField(TableName)
-	args = Null
-	types = Null
 	response = ""
 	error = ""
 	command = "droptable"
@@ -572,8 +561,6 @@ End Sub
 Sub Execute(strSQL As String) As BANanoALASQLE
 	strSQL = strSQL.trim
 	query = strSQL
-	args = Null
-	types = Null
 	command = "execute"
 	response = ""
 	error = ""
@@ -730,7 +717,7 @@ Sub UpdateWhere(tblfields As Map, tblWhere As Map, operators As List) As BANanoA
 	If Schema.Size = 0 Then
 		Log($"BANanoAlaSQLE.UpdateWhere: '${TableName}' schema is not set!"$)
 	End If
-	If operators = Null Then operators = EQOperators(tblWhere)
+	If BANano.IsNull(operators) Then operators = EQOperators(tblWhere)
 	Dim listOfTypes As List = GetMapTypes(tblfields)
 	Dim listOfTypes1 As List = GetMapTypes(tblWhere)
 	listOfTypes.AddAll(listOfTypes1)
@@ -792,7 +779,7 @@ Sub DeleteWhere(tblWhere As Map, operators As List) As BANanoALASQLE
 	If Schema.Size = 0 Then
 		Log($"BANanoAlaSQLE.DeleteWhere: '${TableName}' schema is not set!"$)
 	End If
-	If operators = Null Then operators = EQOperators(tblWhere)
+	If BANano.IsNull(operators) Then operators = EQOperators(tblWhere)
 	Dim listOfTypes As List = GetMapTypes(tblWhere)
 	Dim listOfValues As List = GetMapValues(tblWhere)
 	Dim sb As StringBuilder
@@ -836,8 +823,6 @@ End Sub
 Sub DeleteAll As BANanoALASQLE
 	Dim sb As String = $"DELETE FROM ${EscapeField(TableName)} WHERE 1=1"$
 	query = sb
-	args = Null
-	types = Null
 	command = "delete"
 	response = ""
 	error = ""
@@ -988,7 +973,7 @@ Sub GetMaxWhere(fldName As String, tblWhere As Map, operators As List) As BANano
 	If Schema.Size = 0 Then
 		Log($"BANanoAlaSQLE.GetMaxWhere: '${TableName}' schema is not set!"$)
 	End If
-	If operators = Null Then operators = EQOperators(tblWhere)
+	If BANano.IsNull(operators) Then operators = EQOperators(tblWhere)
 	Dim listOfTypes As List = GetMapTypes(tblWhere)
 	Dim listOfValues As List = GetMapValues(tblWhere)
 	'
@@ -1080,7 +1065,7 @@ Sub SelectDistinctWhere(tblfields As List, tblWhere As Map, operators As List, o
 	If Schema.Size = 0 Then
 		Log($"BANanoMSSQLE.SelectDistinctWhere: '${TableName}' schema is not set!"$)
 	End If
-	If operators = Null Then operators = EQOperators(tblWhere)
+	If BANano.IsNull(operators) Then operators = EQOperators(tblWhere)
 	Dim listOfTypes As List = GetMapTypes(tblWhere)
 	Dim listOfValues As List = GetMapValues(tblWhere)
 	'are we selecting all fields or just some
@@ -1148,7 +1133,7 @@ Sub SelectWhere(tblfields As List, tblWhere As Map, operators As List, orderBy A
 	If Schema.Size = 0 Then
 		Log($"BANanoAlaSQLE.SelectWhere: '${TableName}' schema is not set!"$)
 	End If
-	If operators = Null Then operators = EQOperators(tblWhere)
+	If BANano.IsNull(operators) Then operators = EQOperators(tblWhere)
 	Dim listOfTypes As List = GetMapTypes(tblWhere)
 	Dim listOfValues As List = GetMapValues(tblWhere)
 	'are we selecting all fields or just some
@@ -1215,7 +1200,7 @@ Sub SelectMaxWhere(fld As String, tblWhere As Map, operators As List) As BANanoA
 	If Schema.Size = 0 Then
 		Log($"BANanoAlaSQLE.SelectMaxWhere: '${TableName}' schema is not set!"$)
 	End If
-	If operators = Null Then operators = EQOperators(tblWhere)
+	If BANano.IsNull(operators) Then operators = EQOperators(tblWhere)
 	Dim listOfTypes As List = GetMapTypes(tblWhere)
 	Dim listOfValues As List = GetMapValues(tblWhere)
 	'are we selecting all fields or just some
@@ -1276,8 +1261,8 @@ Sub SelectWhere1(tblfields As List, tblWhere As Map, operators As List, AndOr As
 	If Schema.Size = 0 Then
 		Log($"BANanoAlaSQLE.SelectWhere1: '${TableName}' schema is not set!"$)
 	End If
-	If operators = Null Then operators = EQOperators(tblWhere)
-	If AndOr = Null Then AndOr = AndOrOperators(tblWhere)
+	If BANano.IsNull(operators) Then operators = EQOperators(tblWhere)
+	If BANano.IsNull(AndOr) Then AndOr = AndOrOperators(tblWhere)
 	Dim listOfTypes As List = GetMapTypes(tblWhere)
 	Dim listOfValues As List = GetMapValues(tblWhere)
 	'are we selecting all fields or just some
@@ -1345,7 +1330,7 @@ Sub SelectWhereAscDesc(tblfields As List, tblWhere As Map, operators As List, or
 	If Schema.Size = 0 Then
 		Log($"BANanoALASQLE.SelectWhereAscDesc: '${TableName}' schema is not set!"$)
 	End If
-	If operators = Null Then operators = EQOperators(tblWhere)
+	If BANano.IsNull(operators) Then operators = EQOperators(tblWhere)
 	Dim listOfTypes As List = GetMapTypes(tblWhere)
 	Dim listOfValues As List = GetMapValues(tblWhere)
 	'are we selecting all fields or just some
@@ -1455,8 +1440,6 @@ Sub SelectAll(tblfields As List, orderBy As List) As BANanoALASQLE
 		End If
 	End If
 	query = sb.tostring
-	args = Null
-	types = Null
 	command = "select"
 	response = ""
 	error = ""
@@ -1520,8 +1503,6 @@ Sub SelectAllAscDesc(tblfields As List, orderBy As List, AscDesc As List)
 	End If
 	query = sb.tostring
 	command =  "select"
-	args = Null
-	types = Null
 	response = ""
 	error = ""
 	result = NewList

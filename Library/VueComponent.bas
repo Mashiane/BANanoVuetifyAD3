@@ -1320,7 +1320,7 @@ End Sub
 
 Sub NotState(stateName As String) As Boolean
 	Dim bcurrent As Boolean = GetState(stateName,False)
-	If bcurrent = Null Then bcurrent = True
+	If BANano.IsNull(bcurrent) Then bcurrent = True
 	bcurrent = Not(bcurrent)
 	Return bcurrent
 End Sub

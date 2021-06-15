@@ -49,6 +49,20 @@ Version=8.9
 #DesignerProperty: Key: Key, DisplayName: Key, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VOn, DisplayName: V-On, FieldType: String, DefaultValue:  , Description: V-On
 #DesignerProperty: Key: VBind, DisplayName: V-Bind, FieldType: String, DefaultValue:  , Description: V-Bind
+#DesignerProperty: Key: MA, DisplayName: MA, FieldType: String, DefaultValue: , Description: MA
+#DesignerProperty: Key: MB, DisplayName: MB, FieldType: String, DefaultValue: , Description: MB
+#DesignerProperty: Key: ML, DisplayName: ML, FieldType: String, DefaultValue: , Description: ML
+#DesignerProperty: Key: MR, DisplayName: MR, FieldType: String, DefaultValue: , Description: MR
+#DesignerProperty: Key: MT, DisplayName: MT, FieldType: String, DefaultValue: , Description: MT
+#DesignerProperty: Key: MX, DisplayName: MX, FieldType: String, DefaultValue: , Description: MX
+#DesignerProperty: Key: MY, DisplayName: MY, FieldType: String, DefaultValue: , Description: MY
+#DesignerProperty: Key: PA, DisplayName: PA, FieldType: String, DefaultValue: , Description: PA
+#DesignerProperty: Key: PB, DisplayName: PB, FieldType: String, DefaultValue: , Description: PB
+#DesignerProperty: Key: PL, DisplayName: PL, FieldType: String, DefaultValue: , Description: PL
+#DesignerProperty: Key: PR, DisplayName: PR, FieldType: String, DefaultValue: , Description: PR
+#DesignerProperty: Key: PT, DisplayName: PT, FieldType: String, DefaultValue: , Description: PT
+#DesignerProperty: Key: PX, DisplayName: PX, FieldType: String, DefaultValue: , Description: PX
+#DesignerProperty: Key: PY, DisplayName: PY, FieldType: String, DefaultValue: , Description: PY
 
 Sub Class_Globals
     Private BANano As BANano 'ignore
@@ -98,6 +112,20 @@ Sub Class_Globals
 	Private xLoading As String
 	Private xDisabled As String
 	Private bHidden As Boolean
+	Private sMA As String
+Private sMB As String
+Private sML As String
+Private sMR As String
+Private sMT As String
+Private sMX As String
+Private sMY As String
+Private sPA As String
+Private sPB As String
+Private sPL As String
+Private sPR As String
+Private sPT As String
+Private sPX As String
+Private sPY As String
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -137,7 +165,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bBlock = Props.Get("Block")
 		bDark = Props.Get("Dark")
 		bDepressed = Props.Get("Depressed")
-		bDisabled = Props.GetDefault("Disabled",false)
+		bDisabled = Props.GetDefault("Disabled",False)
 		bFAB = Props.Get("FAB")
 		sHREF = Props.Get("HREF")
 		bIcon = Props.Get("Icon")
@@ -159,6 +187,20 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sKey = Props.Get("Key")
 		sVOn = Props.Get("VOn")
 		sVBind = Props.Get("VBind")
+		sMA = Props.Get("MA")
+		sMB = Props.GetDefault("MB","")
+		sML = Props.GetDefault("ML","")
+		sMR = Props.GetDefault("MR","")
+		sMT = Props.GetDefault("MT","")
+		sMX = Props.GetDefault("MX","")
+		sMY = Props.GetDefault("MY","")
+		sPA = Props.GetDefault("PA","")
+		sPB = Props.GetDefault("PB","")
+		sPL = Props.GetDefault("PL","")
+		sPR = Props.GetDefault("PR","")
+		sPT = Props.GetDefault("PT","")
+		sPX = Props.GetDefault("PX","")
+		sPY = Props.GetDefault("PY","")
 	End If
 	
 	'build and get the element
@@ -267,6 +309,20 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	Case "x-large"	
 		VElement.XLarge = True
 	End Select
+	VElement.MA = sMA
+	VElement.MB = sMB
+	VElement.ML = sML
+	VElement.MR = sMR
+	VElement.MT = sMT
+	VElement.MX = sMX
+	VElement.MY = sMY
+	VElement.PA = sPA
+	VElement.PB = sPB
+	VElement.PL = sPL
+	VElement.PR = sPR
+	VElement.PT = sPT
+	VElement.PX = sPX
+	VElement.PY = sPY
 	VElement.BindAllEvents
 End Sub
 

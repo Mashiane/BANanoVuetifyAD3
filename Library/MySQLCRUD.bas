@@ -244,7 +244,7 @@ Sub Diag_SetRounded(fldName As String, b As Boolean)
 End Sub
 
 'set properties
-private Sub SetProperties(fldNAme As String, svmodel as string)   'ignore
+private Sub SetProperties(fldNAme As String, svmodel As String)   'ignore
 	If HideDetailsM.ContainsKey(fldNAme) Then
 		dtCont.Append($"${Prefix}${fldNAme}.HideDetails = True"$).Append(CRLF)
 	End If

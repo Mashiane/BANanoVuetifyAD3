@@ -230,6 +230,22 @@ Sub UpdateVisible(VC As VueComponent, b As Boolean) As VNavigationDrawer
 	Return Me
 End Sub
 
+Sub Open(VC As VueComponent)
+	VC.SetData(sVModel, True)
+End Sub
+
+Sub Close(VC As VueComponent)
+	VC.SetData(sVModel, False)
+End Sub
+
+Sub OpenOnApp(V As VuetifyApp)
+	V.SetData(sVModel, True)
+End Sub
+
+Sub CloseOnApp(V As VuetifyApp)
+	V.SetData(sVModel, False)
+End Sub
+
 'toggle the drawer on app
 Sub ToggleOnApp(v As VuetifyApp)
 	v.Toggle(sVModel)

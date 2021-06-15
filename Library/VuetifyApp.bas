@@ -1637,7 +1637,7 @@ End Sub
 'copy a state from one to another
 Sub State2Another(source As String, target As String, defaultValue As Object) 
 	Dim readObj As Object = GetData(source)
-	If readObj = Null Then readObj = defaultValue
+	If BANano.IsNull(readObj) Then readObj = defaultValue
 	SetStateSingle(target, readObj)
 End Sub
 
@@ -2302,7 +2302,7 @@ End Sub
 
 Sub NotState(stateName As String) As Boolean
 	Dim bcurrent As Boolean = GetData(stateName)
-	If bcurrent = Null Then bcurrent = True
+	If BANano.IsNull(bcurrent) Then bcurrent = True
 	bcurrent = Not(bcurrent)
 	Return bcurrent
 End Sub
@@ -2378,8 +2378,8 @@ Sub ScrollTo(elID As String, duration As Int, offset As Int, easing As String)
 		Dim rKey As String = "$refs"
 		refs = Vue.GetField(rKey)
 		Dim el As BANanoObject = refs.GetField(elID)
-		If duration = Null Then duration = 300
-		If offset = Null Then offset = 0
+		If BANano.IsNull(duration) Then duration = 300
+		If BANano.IsNull(offset) Then offset = 0
 		If easing = "" Then easing = "easeInOutCubic"
 		Dim opt As Map = CreateMap()
 		opt.Put("duration", duration)

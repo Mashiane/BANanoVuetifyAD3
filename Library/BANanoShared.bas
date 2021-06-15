@@ -3691,7 +3691,7 @@ Sub MapLowerKeys(m As Map) As Map
 	nm.initialize
 	For Each strKey As String In m.Keys
 		Dim objValue As Object = m.Get(strKey)
-		If objValue = Null Then objValue = ""
+		If BANano.IsNull(objValue) Then objValue = ""
 		nm.Put(strKey.ToLowerCase,objValue)
 	Next
 	Return nm
@@ -4214,3 +4214,14 @@ Sub ListToMap(lst As List) As Map
 	Return nm
 End Sub
  
+Sub CleanNulls(m As Map) As Map
+	Dim nm As Map = CreateMap()
+	For Each k As String In m.Keys
+		Dim v As String = m.GetDefault(k, "")
+		v = CStr(v)
+		v = v.Replace("null", "")
+		v = v.Replace("undefined", "")
+		nm.Put(k, v)
+	Next
+	Return nm
+End Sub

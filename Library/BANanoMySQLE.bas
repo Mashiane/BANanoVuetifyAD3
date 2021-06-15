@@ -145,8 +145,8 @@ Sub SelectWhere1(tblfields As List, tblWhere As Map, operators As List, AndOr As
 	If Schema.Size = 0 Then
 		Log($"BANanoMySQLE.SelectWhere1: '${TableName}' schema is not set!"$)
 	End If
-	If operators = Null Then operators = EQOperators(tblWhere)
-	If AndOr = Null Then AndOr = AndOrOperators(tblWhere)
+	If BANano.IsNull(operators) Then operators = EQOperators(tblWhere)
+	If BANano.IsNull(AndOr) Then AndOr = AndOrOperators(tblWhere)
 	Dim listOfTypes As List = GetMapTypes(tblWhere)
 	Dim listOfValues As List = GetMapValues(tblWhere)
 	'are we selecting all fields or just some
@@ -447,8 +447,6 @@ Public Sub Initialize(dbName As String, tblName As String, PK As String, AI As S
 	TableName = tblName
 	types.Initialize
 	args.Initialize
-	types = Null
-	args = Null
 	query = ""
 	response = ""
 	error = ""
@@ -1037,7 +1035,7 @@ Sub SelectWhere(tblfields As List, tblWhere As Map, operators As List, orderBy A
 	If Schema.Size = 0 Then
 		Log($"BANanoMySQL.SelectWhere: '${TableName}' schema is not set!"$)
 	End If
-	If operators = Null Then operators = EQOperators(tblWhere)
+	If BANano.IsNull(operators) Then operators = EQOperators(tblWhere)
 	Dim listOfTypes As List = GetMapTypes(tblWhere)
 	Dim listOfValues As List = GetMapValues(tblWhere)
 	'are we selecting all fields or just some
@@ -1100,7 +1098,7 @@ Sub SelectMaxWhere(fld As String, tblWhere As Map, operators As List) As BANanoM
 	If Schema.Size = 0 Then
 		Log($"BANanoMySQL.SelectMaxWhere: '${TableName}' schema is not set!"$)
 	End If
-	If operators = Null Then operators = EQOperators(tblWhere)
+	If BANano.IsNull(operators) Then operators = EQOperators(tblWhere)
 	Dim listOfTypes As List = GetMapTypes(tblWhere)
 	Dim listOfValues As List = GetMapValues(tblWhere)
 	Dim sb As StringBuilder
@@ -1147,7 +1145,7 @@ Sub SelectWhereAscDesc(tblfields As List, tblWhere As Map, operators As List, or
 	If Schema.Size = 0 Then
 		Log($"BANanoMySQLE.SelectWhereAscDesc: '${TableName}' schema is not set!"$)
 	End If
-	If operators = Null Then operators = EQOperators(tblWhere)
+	If BANano.IsNull(operators) Then operators = EQOperators(tblWhere)
 	Dim listOfTypes As List = GetMapTypes(tblWhere)
 	Dim listOfValues As List = GetMapValues(tblWhere)
 	'are we selecting all fields or just some
@@ -1227,7 +1225,7 @@ Sub SelectDistinctWhere(tblfields As List, tblWhere As Map, operators As List, o
 	If Schema.Size = 0 Then
 		Log($"BANanoMySQL.SelectDistinctWhere: '${TableName}' schema is not set!"$)
 	End If
-	If operators = Null Then operators = EQOperators(tblWhere)
+	If banano.IsNull(operators) Then operators = EQOperators(tblWhere)
 	Dim listOfTypes As List = GetMapTypes(tblWhere)
 	Dim listOfValues As List = GetMapValues(tblWhere)
 	'are we selecting all fields or just some
@@ -1315,7 +1313,7 @@ Sub DeleteWhere(tblWhere As Map, operators As List) As BANanoMySQLE
 	If Schema.Size = 0 Then
 		Log($"BANanoMySQL.DeleteWhere: '${TableName}' schema is not set!"$)
 	End If
-	If operators = Null Then operators = EQOperators(tblWhere)
+	If banano.IsNull(operators) Then operators = EQOperators(tblWhere)
 	Dim listOfTypes As List = GetMapTypes(tblWhere)
 	Dim listOfValues As List = GetMapValues(tblWhere)
 	Dim sb As StringBuilder
@@ -1421,21 +1419,29 @@ End Sub
 
 'build qry
 Sub Build As Map
+	Dim largs As List
+	Dim ltypes As List
+	largs = BANano.IIf(args.Size=0, Null, args)
+	ltypes = BANano.IIf(types.Size=0,Null, types)
 	Dim b As Map = CreateMap()
 	b.Put("command", command)
 	b.Put("query", query)
-	b.Put("args", args)
-	b.Put("types", types)
+	b.Put("args", largs)
+	b.Put("types", ltypes)
 	Return b
 End Sub
 
 'build qry
 Sub Build1 As Map
+	Dim largs As List
+	Dim ltypes As List
+	largs = BANano.IIf(args.Size=0, Null, args)
+	ltypes = BANano.IIf(types.Size=0,Null, types)
 	Dim b As Map = CreateMap()
 	b.Put("command", command)
 	b.Put("query", query)
-	b.Put("args", args)
-	b.Put("types", types)
+	b.Put("args", largs)
+	b.Put("types", ltypes)
 	b.Put("view", view)
 	b.Put("action", action)
 	b.Put("noresult", NoResult)
@@ -1444,11 +1450,15 @@ End Sub
 
 'build qry for dynamic connection
 Sub BuildDynamic(isPHP As Boolean) As Map
+	Dim largs As List
+	Dim ltypes As List
+	largs = BANano.IIf(args.Size=0, Null, args)
+	ltypes = BANano.IIf(types.Size=0,Null, types)
 	Dim b As Map = CreateMap()
 	b.Put("command", command)
 	b.Put("query", query)
-	b.Put("args", args)
-	b.Put("types", types)
+	b.Put("args", largs)
+	b.Put("types", ltypes)
 	b.put("host", host)
 	b.Put("username", username)
 	b.Put("password", password)
@@ -1552,7 +1562,7 @@ Sub UpdateWhere(tblfields As Map, tblWhere As Map, operators As List) As BANanoM
 	If Schema.Size = 0 Then
 		Log($"BANanoMySQL.UpdateWhere: '${TableName}' schema is not set!"$)
 	End If
-	If operators = Null Then operators = EQOperators(tblWhere)
+	If banano.IsNull(operators) Then operators = EQOperators(tblWhere)
 	Dim listOfTypes As List = GetMapTypes(tblfields)
 	Dim listOfTypes1 As List = GetMapTypes(tblWhere)
 	listOfTypes.AddAll(listOfTypes1)
@@ -1688,8 +1698,6 @@ Sub SelectAllAscDesc(tblfields As List, orderBy As List, AscDesc As List)
 	End If
 	query = sb.tostring
 	command =  "select"
-	args = Null
-	types = Null
 	response = ""
 	error = ""
 	result = NewList

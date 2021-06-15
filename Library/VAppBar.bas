@@ -36,6 +36,9 @@ Version=8.9
 #DesignerProperty: Key: MinWidth, DisplayName: MinWidth, FieldType: String, DefaultValue: , Description: MinWidth
 #DesignerProperty: Key: Outlined, DisplayName: Outlined, FieldType: Boolean, DefaultValue: false, Description: Outlined
 #DesignerProperty: Key: Prominent, DisplayName: Prominent, FieldType: Boolean, DefaultValue: false, Description: Prominent
+#DesignerProperty: Key: ProgressLoader, DisplayName: ProgressLoader, FieldType: Boolean, DefaultValue: false, Description: ProgressLoader
+#DesignerProperty: Key: ProgressLoaderColor, DisplayName: ProgressLoaderColor, FieldType: String, DefaultValue: amber, Description: ProgressLoaderColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
+#DesignerProperty: Key: ProgressLoaderColorIntensity, DisplayName: ProgressLoaderColorIntensity, FieldType: String, DefaultValue: darken-4, Description: ProgressLoaderColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: Rounded, DisplayName: Rounded, FieldType: String, DefaultValue: none, Description: Rounded, List: none|rounded-0|rounded|rounded-sm|rounded-lg|rounded-xl|rounded-t-xl|rounded-r-xl|rounded-b-xl|rounded-l-xl|rounded-tl-xl|rounded-tr-xl|rounded-br-xl|rounded-bl-xl|rounded-pill|rounded-circle
 #DesignerProperty: Key: ScrollOffScreen, DisplayName: ScrollOffScreen, FieldType: Boolean, DefaultValue: false, Description: ScrollOffScreen
 #DesignerProperty: Key: ScrollTarget, DisplayName: ScrollTarget, FieldType: String, DefaultValue: , Description: ScrollTarget
@@ -111,7 +114,12 @@ Private sWidth As String
 Private sVShow As String
 Private xColor As String
 Private bHidden As Boolean
-	End Sub
+Private bProgressLoader As Boolean
+Private sProgressLoaderColor As String
+Private sProgressLoaderColorIntensity As String
+Private sProgressloader As String
+Public ProgressLoader As String
+End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	mName = Name.tolowercase
@@ -127,7 +135,9 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	End If
 	xColor = $"${mName}color"$
 	sVShow = $"${mName}show"$
-	End Sub
+	ProgressLoader = $"${mName}progressshow"$
+	sProgressloader = $"${mName}progress"$
+End Sub
 	
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	mTarget = Target
@@ -180,6 +190,9 @@ sVShow = Props.Get("VShow")
 sValue = Props.Get("Value")
 sWidth = Props.Get("Width")
 bHidden = Props.GetDefault("Hidden", False)
+bProgressLoader = Props.GetDefault("ProgressLoader", False)
+sProgressLoaderColor = Props.GetDefault("ProgressLoaderColor", "")
+sProgressLoaderColorIntensity = Props.GetDefault("ProgressLoaderColorIntensity", "")
 	End If
 	'
 	'build and get the element
@@ -191,6 +204,14 @@ bHidden = Props.GetDefault("Hidden", False)
 	'
 	VElement.Initialize(mCallBack, mName, mName)
 	VElement.TagName = "v-app-bar"
+	
+	If bProgressLoader Then
+		Dim pColor As String = VElement.BuildColor(sProgressLoaderColor, sProgressLoaderColorIntensity)
+		VElement.Append($"<v-progress-linear id="${sProgressloader}" :active="${ProgressLoader}" :indeterminate="${ProgressLoader}" absolute bottom color="${pColor}"
+      ></v-progress-linear>"$)
+	  VElement.SetData(ProgressLoader, False)
+	End If
+		
 	VElement.Classes = mClasses
 	VElement.Styles = mStyles
 	VElement.Attributes = mAttributes
@@ -240,6 +261,22 @@ VElement.Width = sWidth
 VElement.VShow = sVShow
 VElement.SetData(sVShow, Not(bHidden))
 VElement.BindAllEvents
+End Sub
+
+Sub Pause(VC As VueComponent)
+	  VC.SetData(ProgressLoader, True)
+End Sub
+
+Sub Resume(VC As VueComponent)
+	VC.SetData(ProgressLoader, False)
+End Sub
+
+Sub PauseOnApp(V As VuetifyApp)
+	  V.SetData(ProgressLoader, True)
+End Sub
+
+Sub ResumeOnApp(V As VuetifyApp)
+	V.SetData(ProgressLoader, False)
 End Sub
 
 public Sub AddToParent(targetID As String)

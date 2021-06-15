@@ -26,6 +26,8 @@ Version=8.5
 #Event: CancelItem (item As Map) 
 #Event: OpenItem (item As Map)
 #Event: CloseItem (item As Map)
+#Event: ColumnName (item As Map)
+#Event: ColumnName_Change (item As Map)
 
 #Event: ClickRow (e As BANanoEvent)
 #Event: CurrentItems(items As List)
@@ -2142,6 +2144,12 @@ Sub ApplyFilter1(fltrs As List)
 	ApplyFilter
 End Sub
 
+Sub Clear
+	Dim records As List
+	records.Initialize 
+	Reload(records)
+End Sub
+
 'update the records
 Sub Reload(records As List)
 	VC.SetData(itemsname, records)
@@ -2908,6 +2916,8 @@ private Sub BuildSlots
 		Dim methodName As String = $"${mName}_${value}"$
 		Dim changeEvent As String = $"${mName}_${value}_change"$
 		'
+		Dim sbThisEvent As String = ""
+		
 		'does it have a total
 		If hasTotals Then
 			Select Case bindTotals
@@ -2931,17 +2941,20 @@ private Sub BuildSlots
 					itemValue = $"props.item.${value}"$
 					itemValue = $"${nf.predisplay}(${itemValue})"$
 				End If
-				
-				Dim temp As String = $"<v-template v-slot:item.${value}="props">
-<v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" @open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy> {{ ${itemValue} }}
-<v-template v-slot:input><v-select :items="${nf.sourceTable}" item-text="${nf.displayField}" item-value="${nf.sourcefield}" clearable v-model="props.item.${value}" :label="props.header.text" @change="${changeEvent}(props.item.${value})"></v-Select></v-template>
-</v-edit-dialog></v-template>"$
-				sb.Append(temp)
 				'
 				If SubExists(mCallBack, changeEvent) Then
 					Dim args As List
 					SetMethod(mCallBack, changeEvent, args)
+					sbThisEvent = $"@change="${changeEvent}(props.item)""$
 				End If
+				
+				Dim temp As String = $"<v-template v-slot:item.${value}="props">
+<v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" @open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy> {{ ${itemValue} }}
+<v-template v-slot:input><v-select :items="${nf.sourceTable}" item-text="${nf.displayField}" item-value="${nf.sourcefield}" clearable v-model="props.item.${value}" :label="props.header.text" dense class="mt-2" outlined ${sbThisEvent}></v-select></v-template>
+</v-edit-dialog></v-template>"$
+				sb.Append(temp)
+				'
+				
 
 			Case COLUMN_COMBOBOX
 				bHasEditDialog = True
@@ -2954,16 +2967,19 @@ private Sub BuildSlots
 					itemValue = $"props.item.${value}"$
 					itemValue = $"${nf.predisplay}(${itemValue})"$
 				End If
-				Dim temp As String = $"<v-template v-slot:item.${value}="props">
-<v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" @open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy> {{ ${itemValue} }}
-<v-template v-slot:input><v-combobox :items="${nf.SourceTable}" item-text="${nf.DisplayField}" item-value="${nf.sourcefield}" clearable :return-object=false v-model="props.item.${value}" :label="props.header.text" @change="${changeEvent}(props.item.${value})"></v-combobox></v-template>
-</v-edit-dialog></v-template>"$
-				sb.Append(temp)
-				'
+				
 				If SubExists(mCallBack, changeEvent) Then
 					Dim args As List
 					SetMethod(mCallBack, changeEvent, args)
+					sbThisEvent = $"@change="${changeEvent}(props.item)""$
 				End If
+				
+				
+				Dim temp As String = $"<v-template v-slot:item.${value}="props">
+<v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" @open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy> {{ ${itemValue} }}
+<v-template v-slot:input><v-combobox :items="${nf.SourceTable}" item-text="${nf.DisplayField}" item-value="${nf.sourcefield}" clearable :return-object=false v-model="props.item.${value}" :label="props.header.text" dense class="mt-2" outlined ${sbThisEvent}></v-combobox></v-template>
+</v-edit-dialog></v-template>"$
+				sb.Append(temp)
 
 			Case COLUMN_AUTOCOMPLETE
 				bHasEditDialog = True
@@ -2977,16 +2993,18 @@ private Sub BuildSlots
 					itemValue = $"${nf.predisplay}(${itemValue})"$
 				End If
 				
-				Dim temp As String = $"<v-template v-slot:item.${value}="props">
-<v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" @open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy> {{ ${itemValue} }}
-<v-template v-slot:input><v-autocomplete :items="${nf.SourceTable}" item-text="${nf.DisplayField}" item-value="${nf.sourcefield}" clearable v-model="props.item.${value}" :label="props.header.text" @change="${changeEvent}(props.item.${value})"></v-autocomplete></v-template>
-</v-edit-dialog></v-template>"$
-				sb.Append(temp)
-				'
 				If SubExists(mCallBack, changeEvent) Then
 					Dim args As List
 					SetMethod(mCallBack, changeEvent, args)
+					sbThisEvent = $"@change="${changeEvent}(props.item)""$
 				End If
+				
+				
+				Dim temp As String = $"<v-template v-slot:item.${value}="props">
+<v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" @open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy> {{ ${itemValue} }}
+<v-template v-slot:input><v-autocomplete :items="${nf.SourceTable}" item-text="${nf.DisplayField}" item-value="${nf.sourcefield}" clearable v-model="props.item.${value}" :label="props.header.text" dense class="mt-2" outlined ${sbThisEvent}></v-autocomplete></v-template>
+</v-edit-dialog></v-template>"$
+				sb.Append(temp)
 
 			Case COLUMN_TEXTFIELD
 				bHasEditDialog = True
@@ -3000,11 +3018,20 @@ private Sub BuildSlots
 					itemValue = $"${nf.predisplay}(${itemValue})"$
 				End If				
 				
+				If SubExists(mCallBack, changeEvent) Then
+					Dim args As List
+					SetMethod(mCallBack, changeEvent, args)
+					sbThisEvent = $"@change="${changeEvent}(props.item)""$
+				End If
+				
+				
 Dim temp As String = $"<v-template v-slot:item.${value}="props">
 <v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" 
 @open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy> {{ ${itemValue} }}
-<v-template v-slot:input><v-text-field v-model="props.item.${value}" :label="props.header.text" counter></v-text-field></v-template></v-edit-dialog></v-template>"$
+<v-template v-slot:input><v-text-field dense class="mt-2" outlined v-model="props.item.${value}" ${sbThisEvent} :label="props.header.text" counter></v-text-field></v-template></v-edit-dialog></v-template>"$
 sb.Append(temp)
+
+				
 			Case COLUMN_TEXTAREA
 				bHasEditDialog = True
 				Dim slarge As String = "large"
@@ -3016,31 +3043,66 @@ sb.Append(temp)
 				Else
 					itemValue = $"props.item.${value}"$
 					itemValue = $"${nf.predisplay}(${itemValue})"$
-				End If				
+				End If		
+				
+				If SubExists(mCallBack, changeEvent) Then
+					Dim args As List
+					SetMethod(mCallBack, changeEvent, args)
+					sbThisEvent = $"@change="${changeEvent}(props.item)""$
+				End If
+						
 				
 				Dim temp As String = $"<v-template v-slot:item.${value}="props">
 <v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" @open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy> {{ ${itemValue} }}
-<v-template v-slot:input><v-textarea v-model="props.item.${value}" :label="props.header.text" counter></v-textarea></v-template>
+<v-template v-slot:input><v-textarea dense class="mt-2" outlined v-model="props.item.${value}" ${sbThisEvent} :label="props.header.text" counter></v-textarea></v-template>
 </v-edit-dialog></v-template>"$
 				sb.Append(temp)
+
 			Case COLUMN_DATE, COLUMN_DATETIME, COLUMN_TIME
-				Dim akey As String = $"${mName}_${value}"$
+				
+				'OLD START
+				'Dim akey As String = $"${mName}_${value}"$
 				'get the date format
-				Dim df As String = nf.valueFormat
+				'Dim df As String = nf.valueFormat
 				'
-				Dim span As VueElement
-				span.Initialize(mCallBack, akey, akey)
-				span.TagName = "span"
-				span.Append($"{{ getdateformat(item.${value}, "${df}") }}"$)
+				'Dim span As VueElement
+				'span.Initialize(mCallBack, akey, akey)
+				'span.TagName = "span"
+				'span.Append($"{{ getdateformat(item.${value}, "${df}") }}"$)
 				
 				'define template
-				Dim tmp As VueElement
-				tmp.Initialize(mCallBack, "" , "")
-				tmp.TagName = "v-template"
-				tmp.AddAttr($"v-slot:item.${value}"$, "{ item }")
+				'Dim tmp As VueElement
+				'tmp.Initialize(mCallBack, "" , "")
+				'tmp.TagName = "v-template"
+				'tmp.AddAttr($"v-slot:item.${value}"$, "{ item }")
 		
-				tmp.Append(span.ToString)
-				sb.Append(tmp.ToString)
+				'tmp.Append(span.ToString)
+				'sb.Append(tmp.ToString)
+				'OLD END
+				
+				bHasEditDialog = True
+				Dim slarge As String = "large"
+				If nf.Large = False Then slarge = ""
+				Dim itemValue As String = ""
+				'get the date format
+				Dim df As String = nf.valueFormat
+				
+				itemValue = $"props.item.${value}"$
+				itemValue = $"getdateformat(${itemValue}, "${df}")"$
+				
+				If SubExists(mCallBack, changeEvent) Then
+					Dim args As List
+					SetMethod(mCallBack, changeEvent, args)
+					sbThisEvent = $"@change="${changeEvent}(props.item)""$
+				End If
+				
+				
+				Dim temp As String = $"<v-template v-slot:item.${value}="props">
+<v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" 
+@open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy> {{ ${itemValue} }}
+<v-template v-slot:input><v-text-field dense class="mt-2" outlined v-model="props.item.${value}" ${sbThisEvent} :label="props.header.text" counter></v-text-field></v-template></v-edit-dialog></v-template>"$
+sb.Append(temp)
+
 			Case COLUMN_LINK1
 				Dim akey As String = $"${mName}_${value}"$
 				Dim aLink As VueElement
@@ -3082,30 +3144,46 @@ sb.Append(temp)
 				tmp.Append(aLink.ToString)
 				sb.Append(tmp.ToString)
 			Case COLUMN_MONEY, COLUMN_NUMBER
-				Dim akey As String = $"${mName}_${value}"$
-				'get the date format
-				Dim mf As String = nf.valueFormat
 				'*** OPEN OLD CODE
-				Dim span As VueElement
-				span.Initialize(mCallBack, akey, akey)
-				span.TagName = "span"
-				span.Append($"{{ getmoneyformat(item.${value}, "${mf}") }}"$)
+				'Dim akey As String = $"${mName}_${value}"$
+				'get the date format
+				'Dim mf As String = nf.valueFormat
+				'Dim span As VueElement
+				'span.Initialize(mCallBack, akey, akey)
+				'span.TagName = "span"
+				'span.Append($"{{ getmoneyformat(item.${value}, "${mf}") }}"$)
 				'define template
-				Dim tmp As VueElement
-				tmp.Initialize(mCallBack, "", "")
-				tmp.TagName = "v-template"
-				tmp.AddAttr($"v-slot:item.${value}"$, "{ item }")
-				tmp.Append(span.ToString)
-				sb.Append(tmp.ToString)
+				'Dim tmp As VueElement
+				'tmp.Initialize(mCallBack, "", "")
+				'tmp.TagName = "v-template"
+				'tmp.AddAttr($"v-slot:item.${value}"$, "{ item }")
+				'tmp.Append(span.ToString)
+				'sb.Append(tmp.ToString)
 				'*** CLOSE OLD CODE
 				'
-'				Dim itemValue As String = $"{{ getmoneyformat(item.${value}, "${mf}") }}"$
-'				
-'				Dim temp As String = $"<v-template v-slot:item.${value}="props">
-'<v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" 
-'@open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy> {{ ${itemValue} }}
-'<v-template v-slot:input><v-text-field v-model="props.item.${value}" :label="props.header.text" counter></v-text-field></v-template></v-edit-dialog></v-template>"$
-'sb.Append(temp)
+				bHasEditDialog = True
+				Dim slarge As String = "large"
+				If nf.Large = False Then slarge = ""
+				
+				Dim itemValue As String = ""
+				'get the date format
+				Dim df As String = nf.valueFormat
+				
+				itemValue = $"props.item.${value}"$
+				itemValue = $"getmoneyformat(${itemValue}, "${df}")"$
+				
+				If SubExists(mCallBack, changeEvent) Then
+					Dim args As List
+					SetMethod(mCallBack, changeEvent, args)
+					sbThisEvent = $"@change="${changeEvent}(props.item)""$
+				End If
+				
+				
+				Dim temp As String = $"<v-template v-slot:item.${value}="props">
+<v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" 
+@open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy> {{ ${itemValue} }}
+<v-template v-slot:input><v-text-field dense class="mt-2" outlined v-model="props.item.${value}" ${sbThisEvent} :label="props.header.text" counter></v-text-field></v-template></v-edit-dialog></v-template>"$
+sb.Append(temp)
 
 			Case COLUMN_FILESIZE
 				Dim akey As String = $"${mName}_${value}"$

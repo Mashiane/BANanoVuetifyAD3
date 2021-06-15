@@ -6316,9 +6316,9 @@ Sub AddListViewTemplate(numLines As Int, props As ListViewItemOptions) As VueEle
 	Dim xrightitemavatarclass As String = props.rightitemavatarclass
 	
 	'
-	Dim sTemplate As String = $"<v-template id="${templateID}" v-for="(item, index) in ${datasource}" :key="item.${key}">
-<v-subheader id="${headerID}" v-if="item.header" :key="item.header">{{ item.header }}</v-subheader>
-<v-divider id="${dividerID}" v-else-if="item.divider" :key="index" :inset="item.inset"></v-divider>
+	Dim sTemplate As String = $"<v-template id="${templateID}" v-for="(item, index) in ${datasource}">
+<v-subheader id="${headerID}" v-if="item.header">{{ item.header }}</v-subheader>
+<v-divider id="${dividerID}" v-else-if="item.divider" :inset="item.inset"></v-divider>
 <v-list-item id="${listitemID}" v-else="true" :key="item.${key}" :to="item.${xurl}" active-class="${xactiveclass}">
 <v-list-item-action id="${leftactionID}" v-if="item.${xlefticon} || ${xshowleftcheckboxes} || ${xshowleftswitch}">
 <v-btn id="${leftactionBtnID}" :icon="true" v-if="item.${xlefticon}">
