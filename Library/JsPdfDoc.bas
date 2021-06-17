@@ -32,9 +32,11 @@ Version=7
 #DesignerProperty: Key: MarginRight, DisplayName: MarginRight, FieldType: String, DefaultValue: 0, Description: MarginRight
 #DesignerProperty: Key: MarginTop, DisplayName: MarginTop, FieldType: String, DefaultValue: 0, Description: MarginTop
 #DesignerProperty: Key: Orientation, DisplayName: Orientation, FieldType: String, DefaultValue: potrait, Description: Orientation, List: landscape|potrait
-#DesignerProperty: Key: OwnerPassword, DisplayName: OwnerPassword, FieldType: String, DefaultValue: , Description: OwnerPassword
 #DesignerProperty: Key: PageNumbers, DisplayName: PageNumbers, FieldType: Boolean, DefaultValue: False, Description: PageNumbers
 #DesignerProperty: Key: PageSize, DisplayName: PageSize, FieldType: String, DefaultValue: a4, Description: PageSize, List: a0|a1|a10|a2|a3|a4|a5|a6|a7|a8|a9|a10|b0|b1|b10|b2|b3|b4|b5|b6|b7|b8|b9|b10|c0|c1|c10|c2|c3|c4|c5|c6|c7|c8|c9|c10|credit-card|dl|government-letter|junior-legal|ledger|legal|letter|tabloid
+
+#DesignerProperty: Key: OwnerPassword, DisplayName: OwnerPassword, FieldType: String, DefaultValue: , Description: OwnerPassword
+#DesignerProperty: Key: UserPassword, DisplayName: UserPassword, FieldType: String, DefaultValue: , Description: UserPassword
 #DesignerProperty: Key: PermissionAnnotForms, DisplayName: PermissionAnnotForms, FieldType: Boolean, DefaultValue: False, Description: PermissionAnnotForms
 #DesignerProperty: Key: PermissionCopy, DisplayName: PermissionCopy, FieldType: Boolean, DefaultValue: False, Description: PermissionCopy
 #DesignerProperty: Key: PermissionModify, DisplayName: PermissionModify, FieldType: Boolean, DefaultValue: False, Description: PermissionModify
@@ -43,7 +45,6 @@ Version=7
 #DesignerProperty: Key: floatPrecision, DisplayName: FloatPrecision, FieldType: String, DefaultValue: 16, Description: floatPrecision
 #DesignerProperty: Key: PutOnlyUsedFonts, DisplayName: PutOnlyUsedFonts, FieldType: Boolean, DefaultValue: False, Description: PutOnlyUsedFonts
 #DesignerProperty: Key: Unit, DisplayName: Unit, FieldType: String, DefaultValue: mm, Description: Unit, List: cm|in|m|mm|pt|px
-#DesignerProperty: Key: UserPassword, DisplayName: UserPassword, FieldType: String, DefaultValue: , Description: UserPassword
 #DesignerProperty: Key: UserUnit, DisplayName: UserUnit, FieldType: String, DefaultValue: 1.0, Description: UserUnit
 #DesignerProperty: Key: OutputType, DisplayName: OutputType, FieldType: String, DefaultValue: dataurl, Description: OutputType, List: arraybuffer|blob|bloburi|bloburl|datauristring|dataurlstring|datauri|dataurl|dataurlnewwindow|pdfobjectnewwindow|pdfjsnewwindow
 
@@ -200,42 +201,13 @@ Sub Go
 	'get the pdf document
 	Dim doc As BANanoElement
 	doc.Initialize(getHere)
-	'get the children in the document
-	Dim children() As BANanoElement = doc.Children("")
-	Dim pgTot As Int = children.Length - 1
-	Dim pgCnt As Int
-	For pgCnt = 0 To pgTot
-		'get the banano element
-		Dim child As BANanoElement = children(pgCnt)
-		'get the data-type
-		Dim edt As String = child.GetData("type")
-		'validate the element
-		If BANano.IsNull(edt) Then edt = ""
-		
-		'we have a page
-		Select Case edt
-		Case "page"	
-			pdf.BEToPage(child) 
-		Case "text"
-			pdf.BEToText(child)
-		Case "image"
-			pdf.BEToImage(child)
-		Case "line"
-			pdf.BEToLine(child)			
-		Case "circle"
-			pdf.BEToCircle(child)			
-		Case "ellipse"
-			pdf.BEToellipse(child)
-		Case "rect"
-			pdf.BEToRect(child)
-		Case "triangle"
-			pdf.BETotriangle(child)	
-		Case "curveto"
-			pdf.BEToCurveTo(child)
-		Case "roundedrect"
-			pdf.BEToroundedrect(child)			
-		End Select
-	Next
+	'pre import images
+	pdf.ClearImages
+	'
+	'Dim bDone As Boolean = BANano.Await(pdf.BEScanImages(doc))
+	'Log(bDone)
+	
+	pdf.BEToPageChildren(doc)
 	'add page numbers
 	If bPageNumbers Then
 		pdf.SetPageNumbers

@@ -140,6 +140,7 @@ Sub Class_Globals
 	Public const OUTPUT_DATA_URL_NEW_WINDOW As String = "dataurlnewwindow"
 	Public const OUTPUT_PDF_OBJECT_NEW_WINDOW As String = "pdfobjectnewwindow"
 	Public const OUTPUT_PDFJS_NEW_WINDOW As String = "pdfjsnewwindow"
+	Public images As Map
 End Sub
 
 'new text options
@@ -175,6 +176,7 @@ Public Sub Initialize(eventHandler As Object, fileName As String) As BANanoJSPDF
 	Margin.bottom = 0
 	Margin.right = 0  
 	dOptions.Initialize 
+	images.Initialize 
 	Return Me
 End Sub
 
@@ -209,12 +211,14 @@ End Sub
 
 'set user password
 Sub SetUserPassword(pwd As String) As BANanoJSPDF
+	If pwd = "" Then Return Me
 	encryption.put("userPassword", pwd)
 	Return Me
 End Sub
 
 'set owner password
 Sub SetOwnerPassword(pwd As String) As BANanoJSPDF
+	If pwd = "" Then Return Me
 	encryption.Put("ownerPassword", pwd)
 	Return Me
 End Sub
@@ -427,6 +431,59 @@ Sub circle(x As String, y As String, r As String, style As String) As BANanoJSPD
 	Return Me
 End Sub	
 
+Sub BEToLink(be As BANanoElement)
+	Try
+		Dim sDataFontName As String = be.GetData("fontname")
+		If BANano.IsNull(sDataFontName) Then sDataFontName = ""
+
+		Dim sDataFontSize As String = be.GetData("fontsize")
+		If BANano.IsNull(sDataFontSize) Then sDataFontSize = ""
+
+		Dim sDataFontStyle As String = be.GetData("fontstyle")
+		If BANano.IsNull(sDataFontStyle) Then sDataFontStyle = ""
+
+		Dim sDataFontWeight As String = be.GetData("fontweight")
+		If BANano.IsNull(sDataFontWeight) Then sDataFontWeight = ""
+
+		Dim sDataH As String = be.GetData("h")
+		If BANano.IsNull(sDataH) Then sDataH = ""
+		sDataH = BANano.parseInt(sDataH)
+
+		Dim sDataPageNumber As String = be.GetData("pagenumber")
+		If BANano.IsNull(sDataPageNumber) Then sDataPageNumber = ""
+		sDataPageNumber = BANano.parseInt(sDataPageNumber)
+
+		Dim sDataTextColor As String = be.GetData("textcolor")
+		If BANano.IsNull(sDataTextColor) Then sDataTextColor = ""
+
+		Dim sDataUrl As String = be.GetData("url")
+		If BANano.IsNull(sDataUrl) Then sDataUrl = ""
+
+		Dim sDataW As String = be.GetData("w")
+		If BANano.IsNull(sDataW) Then sDataW = ""
+		sDataW = BANano.parseInt(sDataW)
+		
+		Dim sDataX As String = be.GetData("x")
+		If BANano.IsNull(sDataX) Then sDataX = ""
+		sDataX = BANano.parseInt(sDataX)
+		
+		Dim sDataY As String = be.GetData("y")
+		If BANano.IsNull(sDataY) Then sDataY = ""
+		sDataY = BANano.parseInt(sDataY)
+		'
+		'set the font name
+		SetFontStyleWeight(sDataFontName, sDataFontStyle, sDataFontWeight)
+		'set the font size
+		SetFontSize(sDataFontSize)
+		'set text color using rgb
+		SetTextColor(sDataTextColor)
+		'
+		link(sDataX, sDataY, sDataW,sDataH, sDataPageNumber, sDataUrl)
+	Catch
+		Log(LastException)
+	End Try
+End Sub
+
 'set page from BANanoElement
 Sub BEToPage(be As BANanoElement)
 	Dim sDataFormat As String = be.getdata("format")
@@ -480,11 +537,37 @@ Sub BEToPage(be As BANanoElement)
 	BEToPageChildren(be)
 End Sub
 
-private Sub BEToPageChildren(be As BANanoElement)
-	Dim doc As BANanoElement
-	doc.Initialize($"#${be.name}"$)
+'clear all images
+Sub ClearImages
+	images.Initialize 
+End Sub
+
+'Sub BEScanImages(be As BANanoElement) As Boolean
+'	'get the children in the document
+'	Dim children() As BANanoElement = be.Children("")
+'	Dim pgTot As Int = children.Length - 1
+'	Dim pgCnt As Int
+'	For pgCnt = 0 To pgTot
+'		'get the banano element
+'		Dim child As BANanoElement = children(pgCnt)
+'		'get the data-type
+'		Dim edt As String = child.GetData("type")
+'		'validate the element
+'		If BANano.IsNull(edt) Then edt = ""
+'		'
+'		Select Case edt
+'		Case "image"
+'			BANano.Await(BEPreloadImage(child))
+'		Case "page"	
+'			BANano.Await(BEScanImages(child))
+'		End Select
+'	Next
+'	BANano.ReturnThen(True)
+'End Sub
+
+Sub BEToPageChildren(BE As BANanoElement)
 	'get the children in the document
-	Dim children() As BANanoElement = doc.Children("")
+	Dim children() As BANanoElement = BE.Children("")
 	Dim pgTot As Int = children.Length - 1
 	Dim pgCnt As Int
 	For pgCnt = 0 To pgTot
@@ -497,6 +580,8 @@ private Sub BEToPageChildren(be As BANanoElement)
 		
 		'we have a page
 		Select Case edt
+		Case "page"
+			BEToPage(child)
 		Case "text"
 			BEToText(child)
 		Case "image"
@@ -514,7 +599,11 @@ private Sub BEToPageChildren(be As BANanoElement)
 		Case "curveto"
 			BEToCurveTo(child)	
 		Case "roundedrect"
-			BEToRoundedRect(child)		
+			BEToRoundedRect(child)
+		Case "link"
+			BEToLink(child)		
+		Case "annotation"
+			BEToAnnotation(child)		
 		End Select
 	Next
 End Sub
@@ -781,54 +870,58 @@ Sub BEToLine(be As BANanoElement)
 	line(sDataX1, sDataY1, sDataX2, sDataY2, sDataStyle)
 End Sub
 
+'Sub BEPreloadImage(BE As BANanoElement) As Boolean   'ignore
+'	Dim sDataAlias As String = BE.GetData("alias")
+'	If BANano.IsNull(sDataAlias) Then sDataAlias = ""
+'	sDataAlias = sDataAlias.tolowercase
+'	
+'	'path of the file
+'	Dim sDataImageData As String = BE.GetData("imagedata")
+'	If BANano.IsNull(sDataImageData) Then sDataImageData = ""
+'	If sDataImageData = "" Then BANano.ReturnThen(True)
+'	
+'	Dim logoDataURL As String = BANano.Await(BANano.GetFileAsDataURL(sDataImageData, Null))
+'	images.Put(sDataAlias, logoDataURL)
+'	BANano.ReturnThen(True)
+'End Sub
 
-
-Sub BEToImage(be As BANanoElement)
+Sub BEToImage(BE As BANanoElement)
 	Try
-	Dim sDataAlias As String = be.GetData("alias")
-	If BANano.IsNull(sDataAlias) Then sDataAlias = ""
+		Dim sDataAlias As String = BE.GetData("alias")
+		If BANano.IsNull(sDataAlias) Then sDataAlias = ""
+		
+		Dim sDataCompression As String = BE.GetData("compression")
+		If BANano.IsNull(sDataCompression) Then sDataCompression = ""
 
-	Dim sDataCompression As String = be.GetData("compression")
-	If BANano.IsNull(sDataCompression) Then sDataCompression = ""
+		Dim sDataFormat As String = BE.GetData("format")
+		If BANano.IsNull(sDataFormat) Then sDataFormat = ""
 
-	Dim sDataFormat As String = be.GetData("format")
-	If BANano.IsNull(sDataFormat) Then sDataFormat = ""
+		Dim sDataHeight As String = BE.GetData("height")
+		If BANano.IsNull(sDataHeight) Then sDataHeight = 0
+		sDataHeight = BANano.parseInt(sDataHeight)
 
-	Dim sDataHeight As String = be.GetData("height")
-	If BANano.IsNull(sDataHeight) Then sDataHeight = 0
-	sDataHeight = BANano.parseInt(sDataHeight)
+		Dim sDataImageData As String = BE.GetData("imagedata")
+		If BANano.IsNull(sDataImageData) Then sDataImageData = ""
+		'
+		'Dim logoDataURL As String = BANano.Await(BANano.GetFileAsDataURL(sDataImageData, Null))
+		'
+		Dim sDataRotation As String = BE.GetData("rotation")
+		If BANano.IsNull(sDataRotation) Then sDataRotation = 0
+		sDataRotation = BANano.parseInt(sDataRotation)
 
-	Dim sDataImageData As String = be.GetData("imagedata")
-	If BANano.IsNull(sDataImageData) Then sDataImageData = ""
-	If sDataImageData = "" Then Return
-	
-	Dim sgetfileasdataurl As String = be.GetData("getfileasdataurl")
-	If BANano.IsNull(sgetfileasdataurl) Then sgetfileasdataurl = ""
-	Dim logoDataURL As BANanoObject
-	
-	If sgetfileasdataurl = "true" Then
-		logoDataURL = BANano.Await(BANano.GetFileAsDataURL(sDataImageData, Null))
-	Else
-		Return
-	End If
-	
-	Dim sDataRotation As String = be.GetData("rotation")
-	If BANano.IsNull(sDataRotation) Then sDataRotation = 0
-	sDataRotation = BANano.parseInt(sDataRotation)
+		Dim sDataWidth As String = BE.GetData("width")
+		If BANano.IsNull(sDataWidth) Then sDataWidth = 0
+		sDataWidth = BANano.parseInt(sDataWidth)
 
-	Dim sDataWidth As String = be.GetData("width")
-	If BANano.IsNull(sDataWidth) Then sDataWidth = 0
-	sDataWidth = BANano.parseInt(sDataWidth)
+		Dim sDataX As String = BE.GetData("x")
+		If BANano.IsNull(sDataX) Then sDataX = 0
+		sDataX = BANano.parseInt(sDataX)
 
-	Dim sDataX As String = be.GetData("x")
-	If BANano.IsNull(sDataX) Then sDataX = 0
-	sDataX = BANano.parseInt(sDataX)
-
-	Dim sDataY As String = be.GetData("y")
-	If BANano.IsNull(sDataY) Then sDataY = 0
-	sDataY = BANano.parseInt(sDataY)
-	'		
-	jsPDF.RunMethod("addImage", Array(logoDataURL, sDataFormat, sDataX, sDataY, sDataWidth, sDataHeight, sDataAlias, sDataCompression, sDataRotation))
+		Dim sDataY As String = BE.GetData("y")
+		If BANano.IsNull(sDataY) Then sDataY = 0
+		sDataY = BANano.parseInt(sDataY)
+				
+		jsPDF.RunMethod("addImage", Array(sDataImageData, sDataFormat, sDataX, sDataY, sDataWidth, sDataHeight, sDataAlias, sDataCompression, sDataRotation))
 	Catch ExitApplication
 		Log(LastException)
 	End Try
@@ -906,11 +999,17 @@ Sub BEToText(BE As BANanoElement)
 	Dim sDataY As Int = BE.getdata("y")
 	If BANano.IsNull(sDataY) Then sDataY = 0
 	sDataY = BANano.parseint(sDataY)
+	'
+	Dim bDataWithLink As String = BE.GetData("withlink")
+	If BANano.IsNull(bDataWithLink) Then bDataWithLink = False
+	'
+	Dim sDataPageNumber As String = BE.GetData("pagenumber")
+	If BANano.IsNull(sDataPageNumber) Then sDataPageNumber = 0
+	sDataPageNumber = BANano.parseInt(sDataPageNumber)
+
+	Dim sDataUrl As String = BE.GetData("url")
+	If BANano.IsNull(sDataUrl) Then sDataUrl = ""
 	
-	'set the font name
-	'SetFont(sDataFontName)
-	'set font type
-	'SetFontType(sDataFontStyle)
 	'set the font name
 	SetFontStyleWeight(sDataFontName, sDataFontStyle, sDataFontWeight)
 	'set the font size
@@ -932,16 +1031,93 @@ Sub BEToText(BE As BANanoElement)
 	opt.Put("flags", flags)
 	opt.Put("maxWidth", sDataMaxWidth)
 	opt.Put("renderingMode", sDataRenderingMode)
+	If sDataUrl <> "" Then
+		opt.Put("url", sDataUrl)
+	End If
+	If sDataPageNumber > 0 Then
+		opt.put("pageNumber", sDataPageNumber)
+	End If
 	sDataTransform = BANano.IIf(sDataTransform="", Null, sDataTransform)
 	'
 	sDataX = BANano.parseInt(sDataX)
 	sDataY = BANano.parseInt(sDataY)
 	
-	jsPDF.RunMethod("text", Array(sDataText, sDataX, sDataY, opt, sDataTransform))
+	If bDataWithLink Then
+		jsPDF.RunMethod("textWithLink", Array(sDataText, sDataX, sDataY, opt, sDataTransform))
+	Else
+		jsPDF.RunMethod("text", Array(sDataText, sDataX, sDataY, opt, sDataTransform))
+	End If	
 	Catch
 		Log(LastException)
 	End Try	
 End Sub
+
+
+
+Sub BEToAnnotation(be As BANanoElement)
+	Try
+		Dim sDataColorHex As String = be.GetData("colorhex")
+		If BANano.IsNull(sDataColorHex) Then sDataColorHex = ""
+
+		Dim sDataContents As String = be.GetData("contents")
+		If BANano.IsNull(sDataContents) Then sDataContents = ""
+
+		Dim sDataFontName As String = be.GetData("fontname")
+		If BANano.IsNull(sDataFontName) Then sDataFontName = ""
+
+		Dim sDataFontSize As String = be.GetData("fontsize")
+		If BANano.IsNull(sDataFontSize) Then sDataFontSize = ""
+		sDataFontSize = BANano.parseint(sDataFontSize)
+
+		Dim sDataFontStyle As String = be.GetData("fontstyle")
+		If BANano.IsNull(sDataFontStyle) Then sDataFontStyle = ""
+
+		Dim sDataFontWeight As String = be.GetData("fontweight")
+		If BANano.IsNull(sDataFontWeight) Then sDataFontWeight = ""
+
+		Dim sDataH As String = be.GetData("h")
+		If BANano.IsNull(sDataH) Then sDataH = 0
+		sDataH = BANano.parseInt(sDataH)
+
+		Dim bDataOpen As String = be.GetData("open")
+		If BANano.IsNull(bDataOpen) Then bDataOpen = False
+
+		Dim sDataTextColor As String = be.GetData("textcolor")
+		If BANano.IsNull(sDataTextColor) Then sDataTextColor = ""
+
+		Dim sDataTitle As String = be.GetData("title")
+		If BANano.IsNull(sDataTitle) Then sDataTitle = ""
+
+		Dim sDataType As String = be.GetData("annottype")
+		If BANano.IsNull(sDataType) Then sDataType = ""
+
+		Dim sDataW As String = be.GetData("w")
+		If BANano.IsNull(sDataW) Then sDataW = 0
+		sDataW = BANano.parseInt(sDataW)
+
+		Dim sDataX As String = be.GetData("x")
+		If BANano.IsNull(sDataX) Then sDataX = 0
+		sDataX = BANano.parseInt(sDataX)
+
+		Dim sDataY As String = be.GetData("y")
+		If BANano.IsNull(sDataY) Then sDataY = 0
+		sDataY = BANano.parseInt(sDataY)
+
+		'set the font name
+		SetFontStyleWeight(sDataFontName, sDataFontStyle, sDataFontWeight)
+		'set the font size
+		SetFontSize(sDataFontSize)
+		'set text color using rgb
+		SetTextColor(sDataTextColor)
+		'
+		createAnnotation(sDataTitle, sDataContents, sDataType, sDataX, _
+		sDataY, sDataW, sDataH, bDataOpen, sDataColorHex)
+	Catch
+		Log(LastException)
+	End Try
+End Sub
+
+
 
 
 'set text
@@ -1432,4 +1608,70 @@ End Sub
 'stroke
 Sub stroke
 	jsPDF.RunMethod("stroke", Null)
+End Sub
+
+'link
+Sub link(x As String, y As String, w As String, h As String, pageNumber As String, url As String)
+	Try
+		url = url.trim
+		'
+		x = BANano.parseInt(x)
+		y = BANano.parseInt(y)
+		h = BANano.parseInt(h)
+		w = BANano.parseInt(w)
+		'
+		Dim opt As Map = CreateMap()
+		If url <> "" Then
+			opt.Put("url", url)
+		End If
+		If pageNumber <> "" Then
+			opt.put("pageNumber", pageNumber)
+		End If
+		
+		jsPDF.RunMethod("link", Array(x, y, w, h, opt))
+	Catch
+		Log(LastException)
+	End Try	
+End Sub
+
+'createAnnotation
+Sub createAnnotation(annotTitle As String, contents As String, annotType As String,  x As String, y As String, w As String, h As String,  bOpen As String, annotColor As String)
+	Try
+		annotType = annotType.Trim
+		annotTitle = annotTitle.Trim
+		annotColor = annotColor.trim
+		annotTitle = annotTitle.trim
+		'
+		x = BANano.parseInt(x)
+		y = BANano.parseInt(y)
+		w = BANano.parseInt(w)
+		h = BANano.parseInt(h)
+		'
+		Dim bounds As Map = CreateMap()
+		bounds.Put("x", x)
+		bounds.Put("y", y)
+		bounds.Put("w", w)
+        bounds.Put("h", h)
+		'
+		Dim opt As Map = CreateMap()
+		opt.Put("type", annotType)
+		If annotTitle <> "" Then 
+			opt.Put("title",  annotTitle)
+		End If
+		opt.Put("contents", contents)
+		opt.Put("open", bOpen)
+		opt.Put("bounds", bounds)
+		If annotColor <> "" Then 
+			opt.Put("color", annotColor)
+		End If
+		'
+		jsPDF.RunMethod("createAnnotation", Array(opt))		
+	Catch
+		Log(LastException)
+	End Try
+End Sub
+
+'addSvgAsImage
+Sub addSvgAsImage
+	
 End Sub

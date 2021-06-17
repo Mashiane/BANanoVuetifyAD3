@@ -8,7 +8,6 @@ Version=7
 'Created with BANano Custom View Creator 1.00 by TheMash
 'https://github.com/Mashiane/BANano-Custom-View-Creator
 'Custom BANano View class
-#DesignerProperty: Key: DataPosition, DisplayName: Position, FieldType: String, DefaultValue: 1, Description: DataPosition
 #DesignerProperty: Key: DataFormat, DisplayName: Format, FieldType: String, DefaultValue: a4, Description: DataFormat, List: a0|a1|a10|a10|a2|a3|a4|a5|a6|a7|a8|a9|b0|b1|b10|b10|b2|b3|b4|b5|b6|b7|b8|b9|c0|c1|c10|c10|c2|c3|c4|c5|c6|c7|c8|c9|credit-card|dl|government-letter|junior-legal|ledger|legal|letter|tabloid
 #DesignerProperty: Key: DataOrientation, DisplayName: Orientation, FieldType: String, DefaultValue: potrait, Description: DataOrientation, List: landscape|potrait
 #DesignerProperty: Key: DataFontName, DisplayName: FontName, FieldType: String, DefaultValue: , Description: DataFontName
@@ -32,7 +31,6 @@ Sub Class_Globals
 	Public VElement As VueElement 
 	Private sDataFormat As String
 	Private sDataOrientation As String
-	Private sDataPosition As String
 	Private sDataFontName As String
 	Private sDataFontSize As String
 	Private sDataFontStyle As String
@@ -62,7 +60,6 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	If Props <> Null Then 
 		sDataFormat = Props.GetDefault("DataFormat", "a4")
 		sDataOrientation = Props.GetDefault("DataOrientation", "potrait")
-		sDataPosition = Props.GetDefault("DataPosition", "1")
 		sDataFontName = Props.GetDefault("DataFontName", "")
 		sDataFontSize = Props.GetDefault("DataFontSize", "16")
 		sDataFontStyle = Props.GetDefault("DataFontStyle", "none")
@@ -84,7 +81,6 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.TagName = "div" 
 	VElement.AddAttr("data-format", sDataFormat)
 	VElement.AddAttr("data-orientation", sDataOrientation)
-	VElement.AddAttr("data-position", sDataPosition)
 	VElement.AddAttr("data-fontname", sDataFontName)
 	VElement.AddAttr("data-fontsize", sDataFontSize)
 	VElement.AddAttr("data-fontstyle", sDataFontStyle)

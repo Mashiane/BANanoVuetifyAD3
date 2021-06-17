@@ -26,6 +26,9 @@ Version=7
 #DesignerProperty: Key: DataRenderingMode, DisplayName: RenderingMode, FieldType: String, DefaultValue: fill, Description: DataRenderingMode, List: addToPathForClipping|fill|fillAndAddForClipping|fillThenStroke|fillThenStrokeAndAddToPathForClipping|invisible|stroke|strokeAndAddPathForClipping
 #DesignerProperty: Key: DataRotationDirection, DisplayName: RotationDirection, FieldType: String, DefaultValue: counterclockwise, Description: DataRotationDirection, List: clockwise|counterclockwise
 #DesignerProperty: Key: DataTransform, DisplayName: Transform, FieldType: String, DefaultValue: , Description: DataTransform
+#DesignerProperty: Key: DataWithLink, DisplayName: WithLink, FieldType: Boolean, DefaultValue: False, Description: DataWithLink
+#DesignerProperty: Key: DataUrl, DisplayName: Url, FieldType: String, DefaultValue: , Description: DataUrl
+#DesignerProperty: Key: DataPageNumber, DisplayName: PageNumber, FieldType: String, DefaultValue: , Description: DataPageNumber
 
 Sub Class_Globals 
     Private BANano As BANano 'ignore 
@@ -52,6 +55,9 @@ Private sDataX As String
 Private sDataY As String
 Private sDataFontWeight As String
 Private sDataTextColor As String
+Private sDataPageNumber As String
+Private sDataUrl As String
+Private bDataWithLink As Boolean	
 	End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -88,6 +94,9 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sDataX = Props.GetDefault("DataX", "")
 		sDataY = Props.GetDefault("DataY", "")
 		sDataFontWeight = Props.GetDefault("DataFontWeight", "")
+		sDataPageNumber = Props.GetDefault("DataPageNumber", "")
+		sDataUrl = Props.GetDefault("DataUrl", "")
+		bDataWithLink = Props.GetDefault("DataWithLink", False)
 	End If 
 	' 
 	'build and get the element 
@@ -117,4 +126,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.AddAttr("data-x", sDataX)
 	VElement.AddAttr("data-y", sDataY)
 	VElement.AddAttr("data-fontweight", sDataFontWeight)
+	VElement.AddAttr("data-pagenumber", sDataPageNumber)
+	VElement.AddAttr("data-url", sDataUrl)
+	VElement.AddAttr("data-withlink", bDataWithLink)
 End Sub

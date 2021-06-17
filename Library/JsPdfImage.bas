@@ -8,14 +8,13 @@ Version=7
 'Created with BANano Custom View Creator 1.00 by TheMash
 'https://github.com/Mashiane/BANano-Custom-View-Creator
 'Custom BANano View class
+#DesignerProperty: Key: DataAlias, DisplayName: Alias*, FieldType: String, DefaultValue: , Description: DataAlias
 #DesignerProperty: Key: DataImageData, DisplayName: URL*, FieldType: String, DefaultValue: , Description: URL
-#DesignerProperty: Key: GetFileAsDataURL, DisplayName: GetFileAsDataURL, FieldType: Boolean, DefaultValue: True, Description: GetFileAsDataURL
 #DesignerProperty: Key: DataFormat, DisplayName: Format*, FieldType: String, DefaultValue: JPEG, Description: DataFormat, List: JPEG|NONE|PNG|WEBP
 #DesignerProperty: Key: DataX, DisplayName: X*, FieldType: String, DefaultValue: 60, Description: DataX
 #DesignerProperty: Key: DataY, DisplayName: Y*, FieldType: String, DefaultValue: 60, Description: DataY
 #DesignerProperty: Key: DataWidth, DisplayName: Width*, FieldType: String, DefaultValue: 100, Description: DataWidth
 #DesignerProperty: Key: DataHeight, DisplayName: Height*, FieldType: String, DefaultValue: 100, Description: DataHeight
-#DesignerProperty: Key: DataAlias, DisplayName: Alias, FieldType: String, DefaultValue: , Description: DataAlias
 #DesignerProperty: Key: DataCompression, DisplayName: Compression, FieldType: String, DefaultValue: NONE, Description: DataCompression, List: FAST|MEDIUM|NONE|SLOW
 #DesignerProperty: Key: DataRotation, DisplayName: Rotation, FieldType: String, DefaultValue: , Description: DataRotation
 
@@ -36,7 +35,6 @@ Sub Class_Globals
 	Private sDataWidth As String
 	Private sDataX As String
 	Private sDataY As String
-	Private bGetFileAsDataURL As Boolean 
 End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -65,7 +63,6 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sDataWidth = Props.GetDefault("DataWidth", "100")
 		sDataX = Props.GetDefault("DataX", "60")
 		sDataY = Props.GetDefault("DataY", "60")
-		bGetFileAsDataURL = Props.GetDefault("GetFileAsDataURL", True)
 	End If 
 	' 
 	'build and get the element 
@@ -87,6 +84,5 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.AddAttr("data-width", sDataWidth)
 	VElement.AddAttr("data-x", sDataX)
 	VElement.AddAttr("data-y", sDataY)
-	VElement.AddAttr("data-getfileasdataurl", bGetFileAsDataURL)
 End Sub
 
