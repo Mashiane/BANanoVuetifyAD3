@@ -90,7 +90,7 @@ Private sImagesRipple As String
 Private sImagesTarget As String
 Private sImagesTransition As String
 Private xItems As List
-private bHidden as boolean
+Private bHidden As Boolean
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)

@@ -2343,7 +2343,7 @@ Public Sub AddAttr(varProp As String, varValue As String)
 		'we are adding a string
 		If varValue.StartsWith(":") Then
 			Dim rname As String = BANanoShared.MidS(varValue, 2)
-			If rname.Contains(".") = False Or rname.Contains("(") = False Or varValue.Contains("||") = False Then
+			If rname.Contains(".") = False Or rname.Contains("(") = False Or varValue.Contains("||") = False Or varProp <> "key" Then
 				bindings.Put(rname, Null)
 			End If
 			varProp = varProp.Replace(":", "")
@@ -2354,7 +2354,7 @@ Public Sub AddAttr(varProp As String, varValue As String)
 		Else
 			'we have a binding on the property
 			If varProp.StartsWith(":") Then
-				If varValue.Contains(".") = False Or varValue.Contains("(") = False Or varValue.Contains("||") = False Then
+				If varValue.Contains(".") = False Or varValue.Contains("(") = False Or varValue.Contains("||") = False Or varProp <> "key" Then
 					bindings.Put(varValue, Null)
 				End If
 			End If
@@ -2365,6 +2365,9 @@ Public Sub AddAttr(varProp As String, varValue As String)
 			xAttributes.Put(varProp, varValue)
 		End If			
 		'
+		If bindings.ContainsKey("true") Then bindings.Remove("true")
+		If bindings.ContainsKey("false") Then bindings.Remove("false")
+		
 '		Select Case varProp
 '		Case "v-model", "v-show", "v-if", "v-else-if", "required", "disabled", "readonly"
 '			If varValue <> "" Then
@@ -11416,8 +11419,12 @@ Sub setLazy(b As Boolean)
 End Sub
 
 Sub RemoveBinding(v As String)  As VueElement
-	v = v.ToLowerCase
-	bindings.Remove(v)
+	Try
+		v = v.ToLowerCase
+		bindings.Remove(v)
+	Catch
+		Log(LastException)
+	End Try	
 	Return Me
 End Sub
 

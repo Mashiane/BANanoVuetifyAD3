@@ -1057,6 +1057,9 @@ End Sub
 
 'initialize the app with where to render and where to .GetHTML
 Sub Initialize(Module As Object, myapp As String) 
+	Dim pdf As BANanoObject = BANano.Window.GetField("jspdf").GetField("jsPDF")
+	BANano.Window.SetField("jsPDF", pdf)
+
 	AppName = myapp.ToLowerCase
 	'get the body of the page
 	Body = BANano.GetElement("#body")

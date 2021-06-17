@@ -3462,7 +3462,6 @@ sb.Append(temp)
 			Case COLUMN_ACTION, COLUMN_EDIT, COLUMN_DELETE, COLUMN_SAVE, COLUMN_CANCEL
 				Dim abtn As VueElement
 				Dim akey As String = $"${mName}_${value}"$
-				Log(akey)
 				abtn.Initialize(mCallBack, akey, akey)
 				abtn.TagName = "v-btn"
 				abtn.Elevation = "4"
