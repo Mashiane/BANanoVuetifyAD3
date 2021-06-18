@@ -1180,6 +1180,7 @@ Sub SetComputed(k As String, Module As Object, methodName As String, args As Lis
 		Dim cb As BANanoObject = BANano.CallBack(Module, methodName, args)
 		computed.Put(k, cb.Result)
 		methods.Put(methodName, cb)
+		data.Remove(methodName)
 	End If
 End Sub
 
@@ -1195,6 +1196,7 @@ Sub SetWatch(k As String, bImmediate As Boolean, bDeep As Boolean, Module As Obj
 		deepit.Put("immediate", bImmediate)
 		watches.Put(k, deepit)
 		methods.Put(methodName, cb)
+		data.Remove(methodName)
 	End If
 End Sub
 
@@ -1207,6 +1209,7 @@ Sub SetMethod(Module As Object, methodName As String, args As List)
 	If SubExists(Module, methodName) Then
 		Dim cb As BANanoObject = BANano.CallBack(Module, methodName, args)
 		methods.Put(methodName, cb)
+		data.Remove(methodName)
 	End If
 End Sub
 
@@ -1214,6 +1217,7 @@ End Sub
 Sub SetCallBack(methodName As String, cb As BANanoObject)
 	methodName = methodName.ToLowerCase
 	methods.Put(methodName, cb)
+	data.Remove(methodName)
 End Sub
 
 

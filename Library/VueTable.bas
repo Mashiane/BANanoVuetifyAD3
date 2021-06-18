@@ -215,7 +215,7 @@ Sub Class_Globals
 	Private search As String
 	Type DataTableColumn(value As String, text As String, align As String, sortable As Boolean, filterable As Boolean, divider As Boolean, _
 	className As String, width As String, filter As String, sort As String, ColType As String, extra As String, icon As String, Disabled As Boolean, imgWidth As String, imgHeight As String, avatarSize As String, iconSize As String, ReadOnly As Boolean, progressColor As String, progressRotate As String, progressSize As String, progressWidth As String, progressHeight As String, progressShowValue As Boolean, valueFormat As String, bindTotals As String, hasTotal As Boolean, depressed As Boolean, rounded As Boolean, dark As Boolean, label As String, color As String, outlined As Boolean, shaped As Boolean, target As String, prefix As String, colprops As Map, visible As Boolean, _
-	Large As Boolean, SourceTable As String, SourceField As String, DisplayField As String, ReturnObject As Boolean, PreDisplay As String, href As String)
+	Large As Boolean, SourceTable As String, SourceField As String, DisplayField As String, ReturnObject As Boolean, PreDisplay As String, href As String, ConditionalClass As String, ConditionalColor As String)
 	Private hasTotals As Boolean
 	Private hasExternalPagination As Boolean
 	Private totalVisible As String
@@ -766,6 +766,9 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		'
 		f = f.trim
 		h = h.trim
+		'
+		lsColumnFields.Set(colCnt, f)
+		lsColumnTitles.Set(colCnt, h)
 		
 		AddColumn(f, h)
 	Next
@@ -773,6 +776,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	colTot = lsColumnCircularProgress.Size - 1
 	For colCnt = 0 To colTot
 		f = lsColumnCircularProgress.Get(colCnt)
+		f = f.trim
 		If lsColumnFields.IndexOf(f) >= 0 Then
 			SetColumnType(f, COLUMN_PROGRESS_CIRCULAR)
 		Else
@@ -783,6 +787,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	colTot = lsColumnLinearProgress.Size - 1
 	For colCnt = 0 To colTot
 		f = lsColumnLinearProgress.Get(colCnt)
+		f = f.trim
 		If lsColumnFields.IndexOf(f) >= 0 Then
 			SetColumnType(f, COLUMN_PROGRESS_LINEAR)
 		Else
@@ -793,6 +798,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	colTot = lsColumnAutoComplete.Size - 1
 	For colCnt = 0 To colTot
 		f = lsColumnAutoComplete.Get(colCnt)
+		f = f.trim
 		If lsColumnFields.IndexOf(f) >= 0 Then
 			SetColumnType(f, COLUMN_AUTOCOMPLETE)
 		Else
@@ -803,6 +809,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	colTot = lsColumnLink.Size - 1
 	For colCnt = 0 To colTot
 		f = lsColumnLink.Get(colCnt)
+		f = f.trim
 		If lsColumnFields.IndexOf(f) >= 0 Then
 			SetColumnType(f, COLUMN_LINK)
 		Else
@@ -813,6 +820,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	colTot = lsColumnCombobox.Size - 1
 	For colCnt = 0 To colTot
 		f = lsColumnCombobox.Get(colCnt)
+		f = f.trim
 		If lsColumnFields.IndexOf(f) >= 0 Then
 			SetColumnType(f, COLUMN_COMBOBOX)
 		Else
@@ -823,6 +831,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	colTot = lsColumnTime.Size - 1
 	For colCnt = 0 To colTot
 		f = lsColumnTime.Get(colCnt)
+		f = f.trim
 		If lsColumnFields.IndexOf(f) >= 0 Then
 			SetColumnType(f, COLUMN_TIME)
 		Else
@@ -833,7 +842,9 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	colTot = lsColumnTextfield.Size - 1
 	For colCnt = 0 To colTot
 		f = lsColumnTextfield.Get(colCnt)
+		f = f.trim
 		If lsColumnFields.IndexOf(f) >= 0 Then
+			Log(f)
 			SetTextField(f, False)
 		Else
 			Log($"DataTable Error: ${mName}.${f} text-field column not found on column fields!"$)
@@ -843,6 +854,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	colTot = lsColumnTextarea.Size - 1
 	For colCnt = 0 To colTot
 		f = lsColumnTextarea.Get(colCnt)
+		f = f.trim
 		If lsColumnFields.IndexOf(f) >= 0 Then
 			SetTextArea(f, True)
 		Else
@@ -853,6 +865,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	colTot = lsColumnSwitch.Size - 1
 	For colCnt = 0 To colTot
 		f = lsColumnSwitch.Get(colCnt)
+		f = f.trim
 		If lsColumnFields.IndexOf(f) >= 0 Then
 			SetColumnType(f, COLUMN_SWITCH)
 		Else
@@ -863,6 +876,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	colTot = lsColumnRating.Size - 1
 	For colCnt = 0 To colTot
 		f = lsColumnRating.Get(colCnt)
+		f = f.trim
 		If lsColumnFields.IndexOf(f) >= 0 Then
 			SetColumnType(f, COLUMN_RATING)
 		Else
@@ -873,6 +887,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	colTot = lsColumnImage.Size - 1
 	For colCnt = 0 To colTot
 		f = lsColumnImage.Get(colCnt)
+		f = f.trim
 		If lsColumnFields.IndexOf(f) >= 0 Then
 			SetColumnType(f, COLUMN_IMAGE)
 		Else
@@ -883,6 +898,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	colTot = lsColumnChip.Size - 1
 	For colCnt = 0 To colTot
 		f = lsColumnChip.Get(colCnt)
+		f = f.trim
 		If lsColumnFields.IndexOf(f) >= 0 Then
 			SetColumnType(f, COLUMN_CHIP)
 		Else
@@ -893,6 +909,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	colTot = lsColumnCheckbox.Size - 1
 	For colCnt = 0 To colTot
 		f = lsColumnCheckbox.Get(colCnt)
+		f = f.trim
 		If lsColumnFields.IndexOf(f) >= 0 Then
 			SetColumnType(f, COLUMN_CHECKBOX)
 		Else
@@ -903,6 +920,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	colTot = lsColumnAvatar.Size - 1
 	For colCnt = 0 To colTot
 		f = lsColumnAvatar.Get(colCnt)
+		f = f.trim
 		If lsColumnFields.IndexOf(f) >= 0 Then
 			SetColumnType(f, COLUMN_AVATARIMG)
 		Else
@@ -913,6 +931,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	colTot = lsColumnButton.Size - 1
 	For colCnt = 0 To colTot
 		f = lsColumnButton.Get(colCnt)
+		f = f.trim
 		If lsColumnFields.IndexOf(f) >= 0 Then
 			SetColumnType(f, COLUMN_BUTTON)
 		Else
@@ -923,6 +942,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	colTot = lsColumnMoney.Size - 1
 	For colCnt = 0 To colTot
 		f = lsColumnMoney.Get(colCnt)
+		f = f.trim
 		If lsColumnFields.IndexOf(f) >= 0 Then
 			SetColumnType(f, COLUMN_MONEY)
 		Else
@@ -933,6 +953,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	colTot = lsColumnFileSize.Size - 1
 	For colCnt = 0 To colTot
 		f = lsColumnFileSize.Get(colCnt)
+		f = f.trim
 		If lsColumnFields.IndexOf(f) >= 0 Then
 			SetColumnType(f, COLUMN_FILESIZE)
 		Else
@@ -943,6 +964,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	colTot = lsColumnDateTime.Size - 1
 	For colCnt = 0 To colTot
 		f = lsColumnDateTime.Get(colCnt)
+		f = f.trim
 		If lsColumnFields.IndexOf(f) >= 0 Then
 			SetColumnType(f, COLUMN_DATETIME)
 		Else
@@ -953,6 +975,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	colTot = lsColumnDate.Size - 1
 	For colCnt = 0 To colTot
 		f = lsColumnDate.Get(colCnt)
+		f = f.trim
 		If lsColumnFields.IndexOf(f) >= 0 Then
 			SetColumnType(f, COLUMN_DATE)
 		Else
@@ -2145,7 +2168,59 @@ private Sub NewDataTableColumn(colname As String, coltitle As String) As DataTab
 	nf.DisplayField = ""
 	nf.ReturnObject = False
 	nf.PreDisplay = ""
+	nf.ConditionalClass = ""
+	nf.ConditionalColor = ""
 	Return nf
+End Sub
+
+'apply a class to a row based on a method result
+Sub SetRowColorOnCondition(MethodName As String)
+	MethodName = MethodName.tolowercase
+	AddAttr(":item-class", MethodName)
+	Dim item As Map 
+	SetMethod(mCallBack, MethodName, Array(item))
+	VElement.RemoveBinding(MethodName)
+End Sub
+
+'apply a class to a column based on a method result
+Sub SetColumnTextColorOnCondition(colName As String, MethodName As String)
+	colName = colName.tolowercase
+	MethodName = MethodName.tolowercase
+	If columnsM.ContainsKey(colName) Then
+		Dim nf As DataTableColumn = columnsM.Get(colName)
+		nf.ConditionalClass = MethodName
+		columnsM.Put(colName, nf)
+		Dim item As Map 
+		SetMethod(mCallBack, MethodName, Array(item))
+		VElement.RemoveBinding(MethodName)
+	End If
+End Sub
+
+'apply a class to a column based on a method result
+Sub SetColumnColorOnCondition(colName As String, MethodName As String)
+	colName = colName.tolowercase
+	MethodName = MethodName.tolowercase
+	If columnsM.ContainsKey(colName) Then
+		Dim nf As DataTableColumn = columnsM.Get(colName)
+		nf.ConditionalColor = MethodName
+		columnsM.Put(colName, nf)
+		Dim item As Map 
+		SetMethod(mCallBack, MethodName, Array(item))
+	End If
+End Sub
+
+'apply a class to a column based on a method result
+Sub SetColumnClassOnConditional(colName As String, ConditionalClass As String)
+	colName = colName.tolowercase
+	ConditionalClass = ConditionalClass.tolowercase
+	If columnsM.ContainsKey(colName) Then
+		Dim nf As DataTableColumn = columnsM.Get(colName)
+		nf.ConditionalClass = ConditionalClass
+		columnsM.Put(colName, nf)
+		Dim item As Map
+		SetMethod(mCallBack, ConditionalClass, Array(item))
+		VElement.RemoveBinding(ConditionalClass)
+	End If
 End Sub
 
 'set colum properties
@@ -2156,6 +2231,9 @@ Sub SetColumnPreDisplay(colName As String, PreDisplay As String)
 		Dim nf As DataTableColumn = columnsM.Get(colName)
 		nf.PreDisplay = PreDisplay
 		columnsM.Put(colName, nf)
+		Dim item As Map
+		SetMethod(mCallBack, PreDisplay, Array(item))
+		VElement.RemoveBinding(PreDisplay)
 	End If
 End Sub
 
@@ -2848,7 +2926,17 @@ private Sub BuildSlots
 		Dim changeEvent As String = $"${mName}_${value}_change"$
 		'
 		Dim sbThisEvent As String = ""
+		Dim sbConditionalClass As String = ""
+		Dim sbConditionalColor As String = ""
 		
+		If nf.ConditionalClass <> "" Then
+			sbConditionalClass = $":class="${nf.ConditionalClass}(props.item)""$
+		End If
+		'
+		If nf.ConditionalColor <> "" Then
+			sbConditionalColor = $":color="${nf.ConditionalColor}(props.item)""$
+		End If
+		'
 		'does it have a total
 		If hasTotals Then
 			Select Case bindTotals
@@ -2879,8 +2967,9 @@ private Sub BuildSlots
 					sbThisEvent = $"@change="${changeEvent}(props.item)""$
 				End If
 				
+				
 				Dim temp As String = $"<v-template v-slot:item.${value}="props">
-<v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" @open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy> {{ ${itemValue} }}
+<v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" @open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy><span ${sbConditionalClass} ${sbConditionalColor}>{{ ${itemValue} }}</span>
 <v-template v-slot:input><v-select :items="${nf.sourceTable}" item-text="${nf.displayField}" item-value="${nf.sourcefield}" clearable v-model="props.item.${value}" :label="props.header.text" dense class="mt-2" outlined ${sbThisEvent}></v-select></v-template>
 </v-edit-dialog></v-template>"$
 				sb.Append(temp)
@@ -2907,7 +2996,7 @@ private Sub BuildSlots
 				
 				
 				Dim temp As String = $"<v-template v-slot:item.${value}="props">
-<v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" @open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy> {{ ${itemValue} }}
+<v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" @open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy><span ${sbConditionalClass} ${sbConditionalColor}>{{ ${itemValue} }}</span>
 <v-template v-slot:input><v-combobox :items="${nf.SourceTable}" item-text="${nf.DisplayField}" item-value="${nf.sourcefield}" clearable :return-object=false v-model="props.item.${value}" :label="props.header.text" dense class="mt-2" outlined ${sbThisEvent}></v-combobox></v-template>
 </v-edit-dialog></v-template>"$
 				sb.Append(temp)
@@ -2932,7 +3021,7 @@ private Sub BuildSlots
 				
 				
 				Dim temp As String = $"<v-template v-slot:item.${value}="props">
-<v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" @open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy> {{ ${itemValue} }}
+<v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" @open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy><span ${sbConditionalClass} ${sbConditionalColor}>{{ ${itemValue} }}</span>
 <v-template v-slot:input><v-autocomplete :items="${nf.SourceTable}" item-text="${nf.DisplayField}" item-value="${nf.sourcefield}" clearable v-model="props.item.${value}" :label="props.header.text" dense class="mt-2" outlined ${sbThisEvent}></v-autocomplete></v-template>
 </v-edit-dialog></v-template>"$
 				sb.Append(temp)
@@ -2958,7 +3047,7 @@ private Sub BuildSlots
 				
 Dim temp As String = $"<v-template v-slot:item.${value}="props">
 <v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" 
-@open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy> {{ ${itemValue} }}
+@open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy><span ${sbConditionalClass} ${sbConditionalColor}>{{ ${itemValue} }}</span>
 <v-template v-slot:input><v-text-field dense class="mt-2" outlined v-model="props.item.${value}" ${sbThisEvent} :label="props.header.text" counter></v-text-field></v-template></v-edit-dialog></v-template>"$
 sb.Append(temp)
 
@@ -2984,7 +3073,7 @@ sb.Append(temp)
 						
 				
 				Dim temp As String = $"<v-template v-slot:item.${value}="props">
-<v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" @open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy> {{ ${itemValue} }}
+<v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" @open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy><span ${sbConditionalClass} ${sbConditionalColor}>{{ ${itemValue} }}</span>
 <v-template v-slot:input><v-textarea dense class="mt-2" outlined v-model="props.item.${value}" ${sbThisEvent} :label="props.header.text" counter></v-textarea></v-template>
 </v-edit-dialog></v-template>"$
 				sb.Append(temp)
@@ -3030,7 +3119,7 @@ sb.Append(temp)
 				
 				Dim temp As String = $"<v-template v-slot:item.${value}="props">
 <v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" 
-@open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy> {{ ${itemValue} }}
+@open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy><span ${sbConditionalClass} ${sbConditionalColor}>{{ ${itemValue} }}</span>
 <v-template v-slot:input><v-text-field dense class="mt-2" outlined v-model="props.item.${value}" ${sbThisEvent} :label="props.header.text" counter></v-text-field></v-template></v-edit-dialog></v-template>"$
 sb.Append(temp)
 
@@ -3039,6 +3128,12 @@ sb.Append(temp)
 				Dim aLink As VueElement
 				aLink.Initialize(mCallBack, akey, akey)
 				aLink.TagName = "a"
+				If nf.ConditionalClass <> "" Then
+					aLink.Bind("class", $"${nf.ConditionalClass}(item)"$)
+				End If
+				If nf.ConditionalColor <> "" Then
+					aLink.Bind("color", $"${nf.ConditionalColor}(item)"$)
+				End If
 				Dim sLink As String = $"item.${nf.href}"$
 				aLink.AddAttr(":href", "'" & nf.prefix & "' + " & sLink)
 				aLink.AddAttr("target", nf.target)
@@ -3059,6 +3154,12 @@ sb.Append(temp)
 				Dim aLink As VueElement
 				aLink.Initialize(mCallBack, akey, akey)
 				aLink.TagName = "a"
+				If nf.ConditionalClass <> "" Then
+					aLink.Bind("class", $"${nf.ConditionalClass}(item)"$)
+				End If
+				If nf.ConditionalColor <> "" Then
+					aLink.Bind("color", $"${nf.ConditionalColor}(item)"$)
+				End If
 				Dim sLink As String = $"item.${value}"$
 				aLink.AddAttr(":href", "'" & nf.prefix & "' + " & sLink)
 				aLink.AddAttr("target", nf.target)
@@ -3112,7 +3213,7 @@ sb.Append(temp)
 				
 				Dim temp As String = $"<v-template v-slot:item.${value}="props">
 <v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" 
-@open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy> {{ ${itemValue} }}
+@open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy><span ${sbConditionalClass} ${sbConditionalColor}>{{ ${itemValue} }}</span>
 <v-template v-slot:input><v-text-field dense class="mt-2" outlined v-model="props.item.${value}" ${sbThisEvent} :label="props.header.text" counter></v-text-field></v-template></v-edit-dialog></v-template>"$
 sb.Append(temp)
 
@@ -3121,6 +3222,12 @@ sb.Append(temp)
 				Dim span As VueElement
 				span.Initialize(mCallBack, akey, akey)
 				span.TagName = "span"
+				If nf.ConditionalClass <> "" Then
+					span.Bind("class", $"${nf.ConditionalClass}(item)"$)
+				End If
+				If nf.ConditionalColor <> "" Then
+					span.Bind("color", $"${nf.ConditionalColor}(item)"$)
+				End If
 				span.Append($"{{ getfilesize(item.${value}) }}"$)
 				
 				'define template
@@ -3138,6 +3245,9 @@ sb.Append(temp)
 				pl.VModel = $"item.${value}"$
 				pl.Reactive = True
 				pl.Rounded = True
+				If nf.ConditionalClass <> "" Then
+					pl.Bind("class", $"${nf.ConditionalClass}(item)"$)
+				End If
 				If nf.progressColor <> "" Then pl.Color = nf.progressColor
 				If nf.progressheight <> "" Then pl.Height = nf.progressheight
 				If nf.progressShowValue Then
@@ -3146,6 +3256,9 @@ sb.Append(temp)
 					tmpx.TagName = "strong"
 					tmpx.Append($"{{ Math.ceil(item.${value}) }}%"$)
 					pl.Append(tmpx.ToString)
+				End If
+				If nf.ConditionalColor <> "" Then
+					pl.Bind("color", $"${nf.ConditionalColor}(item)"$)
 				End If
 				'
 				Dim methodName As String = $"${mName}_change"$
@@ -3185,6 +3298,12 @@ sb.Append(temp)
 				If nf.progressSize <> "" Then pc.Size = nf.progressSize
 				If nf.progressWidth <> "" Then pc.Width = nf.progressWidth
 				If nf.progressColor <> "" Then pc.Color = nf.progressColor
+				If nf.ConditionalClass <> "" Then
+					pc.Bind("class", $"${nf.ConditionalClass}(item)"$)
+				End If
+				If nf.ConditionalColor <> "" Then
+					pc.Bind("color", $"${nf.ConditionalColor}(item)"$)
+				End If
 				
 '				Dim props As Map = nf.props
 '				For Each k As String In props.Keys
@@ -3218,6 +3337,12 @@ sb.Append(temp)
 					If nf.color <> "" Then 
 						rat.Color = nf.color
 					End If
+				End If
+				If nf.ConditionalClass <> "" Then
+					rat.Bind("class", $"${nf.ConditionalClass}(item)"$)
+				End If
+				If nf.ConditionalColor <> "" Then
+					rat.Bind("color", $"${nf.ConditionalColor}(item)"$)
 				End If
 '				Dim props As Map = nf.props
 '				For Each k As String In props.Keys
@@ -3267,6 +3392,12 @@ sb.Append(temp)
 					avtimg.Width = nf.imgWidth
 					avtimg.MaxWidth = nf.imgWidth
 				End If
+				If nf.ConditionalClass <> "" Then
+					avt.Bind("class", $"${nf.ConditionalClass}(item)"$)
+				End If
+				If nf.ConditionalColor <> "" Then
+					avt.Bind("color", $"${nf.ConditionalColor}(item)"$)
+				End If
 				'
 '				Dim props As Map = nf.props
 '				For Each k As String In props.Keys
@@ -3300,6 +3431,12 @@ sb.Append(temp)
 				swt.FalseValue = "No"
 				swt.VModel = $"item.${value}"$
 				If nf.Disabled Then swt.Disabled = True
+				If nf.ConditionalClass <> "" Then
+					swt.Bind("class", $"${nf.ConditionalClass}(item)"$)
+				End If
+				If nf.ConditionalColor <> "" Then
+					swt.Bind("color", $"${nf.ConditionalColor}(item)"$)
+				End If
 				'
 '				Dim props As Map = nf.props
 '				For Each k As String In props.Keys
@@ -3339,6 +3476,12 @@ sb.Append(temp)
 				Else
 					If nf.color <> "" Then aicon.Color = nf.color
 				End If
+				If nf.ConditionalClass <> "" Then
+					aicon.Bind("class", $"${nf.ConditionalClass}(item)"$)
+				End If
+				If nf.ConditionalColor <> "" Then
+					aicon.Bind("color", $"${nf.ConditionalColor}(item)"$)
+				End If
 				'
 '				Dim props As Map = nf.props
 '				For Each k As String In props.Keys
@@ -3376,6 +3519,12 @@ sb.Append(temp)
 					avtimg.MaxWidth = nf.imgWidth
 				End If
 				avtimg.AddClass("rounded-lg")
+				If nf.ConditionalClass <> "" Then
+					avtimg.Bind("class", $"${nf.ConditionalClass}(item)"$)
+				End If
+				If nf.ConditionalColor <> "" Then
+					avtimg.Bind("color", $"${nf.ConditionalColor}(item)"$)
+				End If
 				'
 '				Dim props As Map = nf.props
 '				For Each k As String In props.Keys
@@ -3410,7 +3559,14 @@ sb.Append(temp)
 						chp.Color = nf.color
 					End If
 				End If
-				'
+				'conditional formatting
+				If nf.ConditionalClass <> "" Then
+					chp.Bind("class", $"${nf.ConditionalClass}(item)"$)
+				End If
+				If nf.ConditionalColor <> "" Then
+					chp.Bind("color", $"${nf.ConditionalColor}(item)"$)
+				End If
+
 '				Dim colprops As Map = nf.colprops
 '				For Each k As String In colprops.Keys
 '					Dim v As String = colprops.Get(k)
@@ -3438,6 +3594,12 @@ sb.Append(temp)
 				abtn.Color = nf.color
 				abtn.Outlined = nf.outlined
 				abtn.Shaped = nf.shaped
+				If nf.ConditionalClass <> "" Then
+					abtn.Bind("class", $"${nf.ConditionalClass}(item)"$)
+				End If
+				If nf.ConditionalColor <> "" Then
+					abtn.Bind("color", $"${nf.ConditionalColor}(item)"$)
+				End If
 				'
 '				Dim props As Map = nf.props
 '				For Each k As String In props.Keys
@@ -3475,6 +3637,12 @@ sb.Append(temp)
 					If nf.color <> "" Then abtn.Color = nf.color
 				End If
 				If nf.Disabled Then abtn.disabled = True
+				If nf.ConditionalClass <> "" Then
+					abtn.Bind("class", $"${nf.ConditionalClass}(item)"$)
+				End If
+				If nf.ConditionalColor <> "" Then
+					abtn.Bind("color", $"${nf.ConditionalColor}(item)"$)
+				End If
 				'
 '				Dim props As Map = nf.props
 '				For Each k As String In props.Keys
@@ -3507,21 +3675,45 @@ sb.Append(temp)
 				tmp.Append(abtn.ToString)
 				sb.Append(tmp.ToString)
 			Case Else
-				'*** OPEN OLD CODE
-				If nf.PreDisplay <> "" Then
-					Dim akey As String = $"${mName}_${value}"$
-					Dim span As VueElement
-					span.Initialize(mCallBack, akey, akey)
-					span.TagName = "span"
-					span.Append($"{{ ${nf.predisplay}(item.${value}) }}"$)
-					'define template
-					Dim tmp As VueElement
-					tmp.Initialize(mCallBack, "" , "")
-					tmp.TagName = "v-template"
-					tmp.AddAttr($"v-slot:item.${value}"$, "{ item }")
-					tmp.Append(span.ToString)
-					sb.Append(tmp.ToString)
+				Dim akey As String = $"${mName}_${value}"$
+				Dim pc As VueElement
+				pc.Initialize(mCallBack, akey, akey)
+				pc.TagName = "span"
+				If nf.PreDisplay = "" Then
+					pc.Append($"{{ item.${value} }}"$)
+				Else
+					pc.Append($"{{ ${nf.predisplay}(item.${value}) }}"$)
 				End If
+				If nf.ConditionalClass <> "" Then
+					pc.Bind("class", $"${nf.ConditionalClass}(item)"$)
+				End If
+				If nf.ConditionalColor <> "" Then
+					pc.Bind("color", $"${nf.ConditionalColor}(item)"$)
+				End If
+				'define template
+				Dim tmp As VueElement
+				tmp.Initialize(mCallBack, "" ,"")
+				tmp.TagName = "v-template"
+				tmp.AddAttr($"v-slot:item.${value}"$, "{ item }")
+				tmp.Append(pc.ToString)
+				sb.Append(tmp.ToString)
+				
+				
+				'*** OPEN OLD CODE
+'				If nf.PreDisplay <> "" Then
+'					Dim akey As String = $"${mName}_${value}"$
+'					Dim span As VueElement
+'					span.Initialize(mCallBack, akey, akey)
+'					span.TagName = "span"
+'					span.Append($"{{ ${nf.predisplay}(item.${value}) }}"$)
+'					'define template
+'					Dim tmp As VueElement
+'					tmp.Initialize(mCallBack, "" , "")
+'					tmp.TagName = "v-template"
+'					tmp.AddAttr($"v-slot:item.${value}"$, "{ item }")
+'					tmp.Append(span.ToString)
+'					sb.Append(tmp.ToString)
+'				End If
 				'*** CLOSE OLD CODE
 				'
 '				Dim itemValue As String
@@ -4005,6 +4197,7 @@ End Sub
 'set direct method
 Sub SetMethod(Module As Object,methodName As String, args As List)
 	VElement.SetMethod(Module, methodName, args)
+	VElement.RemoveBinding(methodName)
 End Sub
 
 Sub HiddenXSOnly

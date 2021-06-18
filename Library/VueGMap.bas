@@ -1033,6 +1033,7 @@ Sub SetMethod(methodName As String, args As List)
 	If SubExists(mCallBack, methodName) Then
 		Dim cb As BANanoObject = BANano.CallBack(mCallBack, methodName, args)
 		methods.Put(methodName, cb)
+		bindings.Remove(methodName)
 	Else
 		Log("SetMethod: " & methodName & ", callback is missing.")
 	End If

@@ -3659,6 +3659,7 @@ Sub SetMethod(Module As Object, methodName As String, args As List)
 	If SubExists(Module, methodName) Then
 		Dim cb As BANanoObject = BANano.CallBack(Module, methodName, args)
 		methods.Put(methodName, cb)
+		bindings.Remove(methodName)
 	Else
 		Log("SetMethod: " & methodName & ", callback is missing.")
 	End If
@@ -11858,6 +11859,30 @@ Sub SnackBarTopRight As VueElement
 	SetData($"${sid}centered"$,False)
 	Return Me
 End Sub
+
+Sub BuildTextColor(s As String, i As String) As String
+	If BANano.IsNull(s) Then s = ""
+	If BANano.IsNull(i) Then i = ""
+	If BANano.IsUndefined(s) Then s = ""
+	If BANano.IsUndefined(i) Then i = ""
+	'
+	s = s.Replace("none", "")
+	s = s.replace("normal", "")
+	'
+	i = i.replace("none", "")
+	i = i.replace("normal", "")
+	'
+	s = $"${s}--text"$
+	If s = "--text" Then s = ""
+	'
+	i = $"text--${i}"$
+	If i= "text--" Then i = ""
+	'
+	Dim res As String = $"${s} ${i}"$
+	res = res.Trim
+	Return res
+End Sub
+
 
 Sub BuildColor(s As String, i As String) As String
 	If BANano.IsNull(s) Then s = ""

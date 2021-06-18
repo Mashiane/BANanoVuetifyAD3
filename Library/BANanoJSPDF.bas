@@ -1458,6 +1458,12 @@ Sub getOutput(objType As String) As String
 	Return res
 End Sub
 
+'return data url
+Sub DataURL As String
+	Dim res As String = getOutput("dataurl")
+	Return res
+End Sub
+
 'add base 64 image
 Sub addImage(imgData As String, imgType As String, X As Int, Y As Int, iWidth As Int, iHeight As Int) As BANanoJSPDF
 	jsPDF.RunMethod("addImage", Array(imgData, imgType, X, Y, iWidth, iHeight))

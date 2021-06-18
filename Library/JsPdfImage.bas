@@ -74,7 +74,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	' 
 	VElement.Initialize(mCallBack, mName, mName) 
 	VElement.TagName = "div" 
-	'VElement.AddStyle("display", "none")
+	VElement.AddStyle("display", "none")
 	VElement.AddAttr("data-alias", sDataAlias)
 	VElement.AddAttr("data-compression", sDataCompression)
 	VElement.AddAttr("data-format", sDataFormat)

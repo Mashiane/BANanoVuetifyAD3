@@ -140,7 +140,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	End If 
 	VElement.Initialize(mCallBack, mName, mName) 
 	VElement.TagName = "div"
-	'VElement.AddStyle("display", "none")
+	VElement.AddStyle("display", "none")
 End Sub
 
 Sub getID As String
@@ -219,7 +219,13 @@ Sub Save
 	pdf.Save
 End Sub
 
-'print the document
-Sub Print
-	pdf.autoPrint
+'get base 64 that you can view
+Sub ToViewer As String
+	Dim res As String = pdf.ToBase64
+	Return res
+End Sub
+
+'return the data url
+Sub DataURL As String
+	Return pdf.DataURL
 End Sub

@@ -89,6 +89,6 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.AddAttr("data-y1", sDataY1)
 	VElement.AddAttr("data-y2", sDataY2)
 	VElement.AddAttr("data-y3", sDataY3)
-	'VElement.AddStyle("display", "none")
+	VElement.AddStyle("display", "none")
 End Sub
 

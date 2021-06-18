@@ -90,7 +90,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	' 
 	VElement.Initialize(mCallBack, mName, mName) 
 	VElement.TagName = "div" 
-	'VElement.AddStyle("display", "none")
+	VElement.AddStyle("display", "none")
 	VElement.AddAttr("data-colorhex", sDataColorHex)
 	VElement.AddAttr("data-contents", sDataContents)
 	VElement.AddAttr("data-fontname", sDataFontName)

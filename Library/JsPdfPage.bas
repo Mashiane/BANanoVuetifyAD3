@@ -89,7 +89,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.AddAttr("data-layout", sLayout)
 	VElement.AddAttr("data-pmode", sPMode)
 	VElement.AddAttr("data-textcolor", sDataTextColor)
-	'VElement.AddStyle("display", "none")
+	VElement.AddStyle("display", "none")
 End Sub
 
 'the target for this document
