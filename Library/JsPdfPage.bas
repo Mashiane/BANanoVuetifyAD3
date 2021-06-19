@@ -16,9 +16,9 @@ Version=7
 #DesignerProperty: Key: DataFontSize, DisplayName: FontSize, FieldType: String, DefaultValue: 16 , Description: DataFontSize
 #DesignerProperty: Key: DataTextColor, DisplayName: Text Color RGBA, FieldType: String, DefaultValue: 0; 0; 0 , Description: Text Color RGBA
 #DesignerProperty: Key: ColorChooser, DisplayName: ColorChooser, FieldType: Color, DefaultValue: Null, Description: Use this to select RGB color
-#DesignerProperty: Key: Zoom, DisplayName: Zoom, FieldType: String, DefaultValue: , Description: Zoom
-#DesignerProperty: Key: Layout, DisplayName: Layout, FieldType: String, DefaultValue: , Description: Layout, List: single|twoleft|tworight
-#DesignerProperty: Key: PMode, DisplayName: PMode, FieldType: String, DefaultValue: , Description: PMode, List: UseOutlines|UseThumbs|FullScreen
+#DesignerProperty: Key: Zoom, DisplayName: Zoom, FieldType: String, DefaultValue: fullpage, Description: Zoom, List: fullwidth|fullheight|fullpage|original
+#DesignerProperty: Key: Layout, DisplayName: Layout, FieldType: String, DefaultValue: single, Description: Layout, List: single|twoleft|tworight
+#DesignerProperty: Key: PMode, DisplayName: PMode, FieldType: String, DefaultValue: UseThumbs, Description: PMode, List: UseOutlines|UseThumbs|FullScreen
 
 
 Sub Class_Globals 

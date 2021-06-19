@@ -99,7 +99,7 @@ Sub Class_Globals
 	Private mpageSize As String
 	Private pdfOptions As Map
 	Private marginM As Map
-	Public Margin As MarginObj
+	Public margin As MarginObj
 	Public putOnlyUsedFonts As Boolean = False
 	Public compress As Boolean = False
 	Public precision As Int = 16
@@ -140,7 +140,8 @@ Sub Class_Globals
 	Public const OUTPUT_DATA_URL_NEW_WINDOW As String = "dataurlnewwindow"
 	Public const OUTPUT_PDF_OBJECT_NEW_WINDOW As String = "pdfobjectnewwindow"
 	Public const OUTPUT_PDFJS_NEW_WINDOW As String = "pdfjsnewwindow"
-	Public images As Map
+	Public ParentComponent As VueComponent
+	Public ShowLog As Boolean
 End Sub
 
 'new text options
@@ -169,14 +170,14 @@ Public Sub Initialize(eventHandler As Object, fileName As String) As BANanoJSPDF
 	mpageSize = PAGE_A4
 	mOrientation = ORIENTATION_POTRAIT
 	marginM.Initialize
-	Margin.Initialize
-	Margin.top = 0
-	Margin.left = 0
-	Margin.width = 0
-	Margin.bottom = 0
-	Margin.right = 0  
+	margin.Initialize
+	margin.top = 0
+	margin.left = 0
+	margin.width = 0
+	margin.bottom = 0
+	margin.right = 0  
 	dOptions.Initialize 
-	images.Initialize 
+	ShowLog = True
 	Return Me
 End Sub
 
@@ -235,6 +236,9 @@ End Sub
 
 'move to
 Sub moveTo(x As String, y As String) As BANanoJSPDF
+	If ShowLog Then
+		Log($"pdf.moveTo(${x}, ${y})"$)
+	End If
 	Try
 		x = x.Trim
 		y = y.Trim
@@ -250,6 +254,9 @@ End Sub
 
 'draw a line to
 Sub lineTo(x As String, y As String) As BANanoJSPDF
+	If ShowLog Then
+		Log($"pdf.lineTo(${x}, ${y})"$)
+	End If
 	Try
 		x = x.Trim
 		y = y.Trim
@@ -265,18 +272,27 @@ End Sub
 
 'add a page
 Sub addPage As BANanoJSPDF
+	If ShowLog Then
+		Log($"pdf.addPage"$)
+	End If
 	jsPDF.RunMethod("addPage", Null)
 	Return Me
 End Sub
 
 'add a page
 Sub addPage1(sFormat As String, sOrientation As String) As BANanoJSPDF
+	If ShowLog Then
+		Log($"pdf.addPage("${sFormat}", "${sOrientation}")"$)
+	End If
 	jsPDF.RunMethod("addPage", Array(sFormat, sOrientation))
 	Return Me
 End Sub
 
 'draw a rect
 Sub rect(x As String, y As String, w As String, h As String, style As String) As BANanoJSPDF
+	If ShowLog Then
+		Log($"pdf.rect(${x}, ${y}, ${w}, ${h}, "${style}")"$)
+	End If
 	Try
 		x = x.Trim
 		y = y.Trim
@@ -297,6 +313,9 @@ End Sub
 
 'draw a rounded rect
 Sub roundedRect(x As String, y As String, w As String, h As String, rx As String, ry As String, style As String) As BANanoJSPDF
+	If ShowLog Then
+		Log($"pdf.roundedRect(${x}, ${y}, ${w}, ${h}, ${rx}, ${ry}, "${style}")"$)
+	End If
 	Try
 		x = x.Trim
 		y = y.Trim
@@ -322,11 +341,14 @@ End Sub
 
 'setDisplayMode
 Sub setDisplayMode(z As String, l As String, p As String)
+	If ShowLog Then
+		Log($"pdf.setDisplayMode("${z}", "${l}", "${l}")"$)
+	End If
 	Try
 		z = z.Trim
 		l = l.Trim
 		p = p.Trim
-		If z ="" Or l = "" Or p = "" Then Return 
+		If z = "" Or l = "" Or p = "" Then Return 
 		jsPDF.RunMethod("setDisplayMode", Array(z, l, p))
 	Catch
 		Log(LastException)
@@ -336,6 +358,9 @@ End Sub
 
 'draw a line
 Sub line(x1 As String, y1 As String, x2 As String, y2 As String, style As String) As BANanoJSPDF
+	If ShowLog Then
+		Log($"pdf.line(${x1}, ${y1}, ${x2}, ${y2}, "${style}")"$)
+	End If
 	Try
 		x1 = x1.trim
 		y1 = y1.trim
@@ -357,6 +382,9 @@ End Sub
 
 'draw an ellipse
 Sub ellipse(x As String, y As String, rx As String, ry As String, style As String) As BANanoJSPDF
+	If ShowLog Then
+		Log($"pdf.ellipse(${x}, ${y}, ${rx}, ${ry}, "${style}")"$)
+	End If
 	Try
 		x = x.Trim
 		y = y.Trim
@@ -377,6 +405,9 @@ End Sub
 
 'draw a triangle
 Sub triangle(x1 As String, y1 As String, x2 As String, y2 As String, x3 As String, y3 As String, style As String) As BANanoJSPDF
+	If ShowLog Then
+		Log($"pdf.triangle(${x1}, ${y1}, ${x2}, ${y2}, ${x3}, ${y3}, "${style}")"$)
+	End If
 	Try
 		x1 = x1.Trim
 		x2 = x2.Trim
@@ -402,6 +433,9 @@ End Sub
 
 'set line width
 Sub SetLineWidth(l As String) As BANanoJSPDF
+	If ShowLog Then
+		Log($"pdf.setLineWidth(${l})"$)
+	End If
 	Try
 		l = l.Trim
 		If l = "" Then Return Me
@@ -415,6 +449,9 @@ End Sub
 
 'draw a circle
 Sub circle(x As String, y As String, r As String, style As String) As BANanoJSPDF
+	If ShowLog Then
+		Log($"pdf.circle(${x}, ${y}, ${r}, "${style}")"$)
+	End If
 	Try
 		x = x.Trim
 		y = y.Trim
@@ -432,6 +469,9 @@ Sub circle(x As String, y As String, r As String, style As String) As BANanoJSPD
 End Sub	
 
 Sub BEToLink(be As BANanoElement)
+	If ShowLog Then
+		Log($"pdf.BEToLink.${be.name}"$)
+	End If
 	Try
 		Dim sDataFontName As String = be.GetData("fontname")
 		If BANano.IsNull(sDataFontName) Then sDataFontName = ""
@@ -486,6 +526,9 @@ End Sub
 
 'set page from BANanoElement
 Sub BEToPage(be As BANanoElement)
+	If ShowLog Then
+		Log($"pdf.BEToPage.${be.name}"$)
+	End If
 	Dim sDataFormat As String = be.getdata("format")
 	If BANano.IsNull(sDataFormat) Then sDataFormat = ""
 	'
@@ -537,11 +580,6 @@ Sub BEToPage(be As BANanoElement)
 	BEToPageChildren(be)
 End Sub
 
-'clear all images
-Sub ClearImages
-	images.Initialize 
-End Sub
-
 'Sub BEScanImages(be As BANanoElement) As Boolean
 '	'get the children in the document
 '	Dim children() As BANanoElement = be.Children("")
@@ -566,6 +604,9 @@ End Sub
 'End Sub
 
 Sub BEToPageChildren(BE As BANanoElement)
+	If ShowLog Then
+		Log($"pdf.BEToPageChildren.${BE.name}"$)
+	End If
 	'get the children in the document
 	Dim children() As BANanoElement = BE.Children("")
 	Dim pgTot As Int = children.Length - 1
@@ -603,12 +644,245 @@ Sub BEToPageChildren(BE As BANanoElement)
 		Case "link"
 			BEToLink(child)		
 		Case "annotation"
-			BEToAnnotation(child)		
+			BEToAnnotation(child)
+		Case "pdfautotable"
+			BEToPDFAutoTable(child)			
 		End Select
 	Next
 End Sub
 
+Sub BEToPDFAutoTable(be As BANanoElement)
+	If ShowLog Then
+		Log($"pdf.BEToPDFAutoTable.${be.name}"$)
+	End If
+	Dim sDataID As String = be.Name
+	'
+	Dim bDataAllSectionHooks As String = be.GetData("allsectionhooks")
+	If BANano.IsNull(bDataAllSectionHooks) Then bDataAllSectionHooks = ""
+
+	'column keys
+	Dim sDataDataKey As String = be.GetData("keys")
+	If BANano.IsNull(sDataDataKey) Then sDataDataKey = ""
+
+	Dim sDataFontName As String = be.GetData("fontname")
+	If BANano.IsNull(sDataFontName) Then sDataFontName = ""
+
+	Dim sDataFontSize As String = be.GetData("fontsize")
+	If BANano.IsNull(sDataFontSize) Then sDataFontSize = ""
+
+	Dim sDataFontStyle As String = be.GetData("fontstyle")
+	If BANano.IsNull(sDataFontStyle) Then sDataFontStyle = ""
+
+	Dim sDataHeader As String = be.GetData("header")
+	If BANano.IsNull(sDataHeader) Then sDataHeader = ""
+
+	Dim sDataHorizontalPageBreak As String = be.GetData("horizontalpagebreak")
+	If BANano.IsNull(sDataHorizontalPageBreak) Then sDataHorizontalPageBreak = ""
+
+	Dim sDataHorizontalPageBreakRepeat As String = be.GetData("horizontalpagebreakrepeat")
+	If BANano.IsNull(sDataHorizontalPageBreakRepeat) Then sDataHorizontalPageBreakRepeat = ""
+
+	Dim sDataHtml As String = be.GetData("html")
+	If BANano.IsNull(sDataHtml) Then sDataHtml = ""
+
+	Dim bDataIncludeHiddenHtml As String = be.GetData("includehiddenhtml")
+	If BANano.IsNull(bDataIncludeHiddenHtml) Then bDataIncludeHiddenHtml = ""
+
+	Dim sDataMarginBottom As String = be.GetData("marginbottom")
+	If BANano.IsNull(sDataMarginBottom) Then sDataMarginBottom = ""
+	sDataMarginBottom = BANano.parseInt(sDataMarginBottom)
+	
+	Dim sDataMarginLeft As String = be.GetData("marginleft")
+	If BANano.IsNull(sDataMarginLeft) Then sDataMarginLeft = ""
+	sDataMarginLeft = BANano.parseInt(sDataMarginLeft)
+	
+	Dim sDataMarginRight As String = be.GetData("marginright")
+	If BANano.IsNull(sDataMarginRight) Then sDataMarginRight = ""
+	sDataMarginRight = BANano.parseInt(sDataMarginRight)
+	
+	Dim sDataMarginTop As String = be.GetData("margintop")
+	If BANano.IsNull(sDataMarginTop) Then sDataMarginTop = ""
+	sDataMarginTop = BANano.parseInt(sDataMarginTop)
+	
+	Dim sDataPaddingBottom As String = be.GetData("paddingbottom")
+	If BANano.IsNull(sDataPaddingBottom) Then sDataPaddingBottom = ""
+	sDataPaddingBottom = BANano.parseInt(sDataPaddingBottom)
+	
+	Dim sDataPaddingLeft As String = be.GetData("paddingleft")
+	If BANano.IsNull(sDataPaddingLeft) Then sDataPaddingLeft = ""
+	sDataPaddingLeft = BANano.parseInt(sDataPaddingLeft)
+	
+	Dim sDataPaddingRight As String = be.GetData("paddingright")
+	If BANano.IsNull(sDataPaddingRight) Then sDataPaddingRight = ""
+	sDataPaddingRight = BANano.parseInt(sDataPaddingRight)
+	
+	Dim sDataPaddingTop As String = be.GetData("paddingtop")
+	If BANano.IsNull(sDataPaddingTop) Then sDataPaddingTop = ""
+	sDataPaddingTop = BANano.parseInt(sDataPaddingTop)
+	
+	Dim sDataPageBreak As String = be.GetData("pagebreak")
+	If BANano.IsNull(sDataPageBreak) Then sDataPageBreak = ""
+
+	Dim sDataRowPageBreak As String = be.GetData("rowpagebreak")
+	If BANano.IsNull(sDataRowPageBreak) Then sDataRowPageBreak = ""
+
+	Dim sDataShowFoot As String = be.GetData("showfoot")
+	If BANano.IsNull(sDataShowFoot) Then sDataShowFoot = ""
+
+	Dim sDataShowHead As String = be.GetData("showhead")
+	If BANano.IsNull(sDataShowHead) Then sDataShowHead = ""
+
+	Dim sDataStartY As String = be.GetData("starty")
+	If BANano.IsNull(sDataStartY) Then sDataStartY = ""
+
+	Dim sDataStartyFinalYPlus As String = be.GetData("startyfinalyplus")
+	If BANano.IsNull(sDataStartyFinalYPlus) Then sDataStartyFinalYPlus = 0
+	sDataStartyFinalYPlus = BANano.parseInt(sDataStartyFinalYPlus)
+	
+	Dim sDataTableLineColor As String = be.GetData("tablelinecolor")
+	If BANano.IsNull(sDataTableLineColor) Then sDataTableLineColor = ""
+
+	Dim sDataTableLineWidth As String = be.GetData("tablelinewidth")
+	If BANano.IsNull(sDataTableLineWidth) Then sDataTableLineWidth = ""
+	sDataTableLineWidth = BANano.parseFloat(sDataTableLineWidth)
+
+	Dim sDataTableWidth As String = be.GetData("tablewidth")
+	If BANano.IsNull(sDataTableWidth) Then sDataTableWidth = ""
+
+	Dim sDataTextColor As String = be.GetData("textcolor")
+	If BANano.IsNull(sDataTextColor) Then sDataTextColor = ""
+
+	Dim sDataTheme As String = be.GetData("theme")
+	If BANano.IsNull(sDataTheme) Then sDataTheme = ""
+	If sDataTheme = "none" Then sDataTheme = ""
+
+	Dim bDataUseCss As String = be.GetData("usecss")
+	If BANano.IsNull(bDataUseCss) Then bDataUseCss = ""
+	'
+	Dim sDataFontWeight As String = be.GetData("fontweight")
+	If BANano.IsNull(sDataFontWeight) Then sDataFontWeight = ""
+	'
+	Dim sDataSource As String = be.GetData("datasource")
+	If BANano.IsNull(sDataSource) Then sDataSource = ""
+	'
+	'set the font name
+	SetFontStyleWeight(sDataFontName, sDataFontStyle, sDataFontWeight)
+	'set the font size
+	SetFontSize(sDataFontSize)
+	'set text color using rgb
+	SetTextColor(sDataTextColor)
+	'
+	'GENERATE THE TABLE
+	Dim pdfTable As BANanoJSPDFTable
+	pdfTable.Initialize(mCallBack)
+	pdfTable.ShowLog = ShowLog
+	'
+	If sDataStartY <> "" Then
+		sDataStartY = BANano.parseInt(sDataStartY)
+		pdfTable.StartY = sDataStartY
+	End If
+	
+	'get the last position
+	If sDataStartyFinalYPlus <> 0 Then
+		'get the last position
+		sDataStartY = GetLastAutoTableFinalY
+		sDataStartY = BANano.parseInt(sDataStartY) + BANano.parseInt(sDataStartyFinalYPlus)
+		pdfTable.starty = sDataStartY	
+	End If
+	
+	pdfTable.theme = sDataTheme
+	pdfTable.showHead = sDataShowHead
+	pdfTable.showFoot = sDataShowFoot
+	pdfTable.rowPageBreak = sDataRowPageBreak
+	pdfTable.PageBreak = sDataPageBreak
+	pdfTable.Margin.Top = sDataMarginTop
+	pdfTable.Margin.left = sDataMarginLeft
+	pdfTable.Margin.right = sDataMarginRight
+	pdfTable.Margin.bottom = sDataMarginBottom
+	pdfTable.tableWidth = sDataTableWidth
+	pdfTable.IncludeHiddenHtml = bDataIncludeHiddenHtml
+    pdfTable.horizontalPageBreak = sDataHorizontalPageBreak
+	pdfTable.horizontalPageBreakRepeat = sDataHorizontalPageBreakRepeat
+	pdfTable.UseCss = bDataUseCss
+	pdfTable.TableLineWidth = sDataTableLineWidth
+	pdfTable.TableLineColor1(sDataTableLineColor)
+	'
+	If sDataHtml <> "" Then
+		'draw from html
+		pdfTable.HTML = sDataHtml
+	End If
+	'
+	'add the columns
+	Dim k As String
+	Dim h As String
+	If sDataDataKey <> "" And sDataHeader <> "" Then
+		Dim lKeys As List = BANanoShared.StrParse(";", sDataDataKey)
+		Dim lHeaders As List = BANanoShared.StrParse(";", sDataHeader)
+		'
+		Dim kTot As Int = lKeys.Size
+		Dim hTot As Int = lHeaders.Size
+		'
+		If kTot <> hTot Then
+			Log("BEToPDFAutoTable.The dataKeys do not match with the Header!")
+			Return
+		End If
+		'
+		Dim kCnt As Int
+		For kCnt = 0 To kTot - 1
+			k = lKeys.Get(kCnt)
+			h = lHeaders.Get(kCnt)
+			k = k.trim
+			h = h.trim
+			pdfTable.addColumn(k, h) 
+		Next
+	Else
+		Log("BEToPDFAutoTable.You need to specify the column names and titles!")
+		Return
+	End If
+	'add the data
+	If sDataSource <> "" Then
+		'get the data from the source
+		Dim dRows As List = ParentComponent.GetData(sDataSource)
+		pdfTable.SetRows(dRows)
+	End If
+	'
+	'do we have any styles inside this table
+	Dim children() As BANanoElement = be.Children("")
+	Dim pgTot As Int = children.Length - 1
+	Dim pgCnt As Int
+	For pgCnt = 0 To pgTot
+		'get the banano element
+		Dim child As BANanoElement = children(pgCnt)
+		'get the data-type
+		Dim edt As String = child.GetData("type")
+		'validate the element
+		If BANano.IsNull(edt) Then edt = ""
+		Select Case edt
+		Case "pdfstyle"
+			'we have found a style, then apply it	
+			pdfTable.BEToStyle(child)
+		End Select
+	Next
+	'
+	Dim data As Map
+	Dim sDidDrawPage As String = $"${sDataID}_didDrawPage"$
+	pdfTable.didDrawPage(mCallBack, sDidDrawPage, data)
+	Dim sdidParseCell As String = $"${sDataID}_didParseCell"$
+	pdfTable.didParseCell(mCallBack, sdidParseCell, data)
+	Dim swillDrawCell As String = $"${sDataID}_willDrawCell"$
+	pdfTable.willDrawCell(mCallBack, swillDrawCell, data)
+	Dim sdidDrawCell As String = $"${sDataID}_didDrawCell"$
+	pdfTable.didDrawCell(mCallBack, sdidDrawCell, data)
+	'plot the table
+	autoTable(pdfTable)
+	
+End Sub
+
+
 Sub BEToRoundedRect(be As BANanoElement)
+	If ShowLog Then
+		Log($"pdf.BEToRoundedRect.${be.name}"$)
+	End If
 	Try
 
 		Dim sDataDrawColor As String = be.GetData("drawcolor")
@@ -652,9 +926,10 @@ Sub BEToRoundedRect(be As BANanoElement)
 End Sub
 
 
-
-
 Sub BEToCurveTo(be As BANanoElement)
+	If ShowLog Then
+		Log($"pdf.BEToCurveTo.${be.name}"$)
+	End If
 	Try
 		Dim sDataDrawColor As String = be.GetData("drawcolor")
 		If BANano.IsNull(sDataDrawColor) Then sDataDrawColor = ""
@@ -694,6 +969,9 @@ Sub BEToCurveTo(be As BANanoElement)
 End Sub
 
 Sub BEToTriangle(be As BANanoElement)
+	If ShowLog Then
+		Log($"pdf.BEToTriangle.${be.name}"$)
+	End If
 	Try
 		Dim sDataDrawColor As String = be.GetData("drawcolor")
 		If BANano.IsNull(sDataDrawColor) Then sDataDrawColor = ""
@@ -737,6 +1015,9 @@ End Sub
 
 
 Sub BEToRect(be As BANanoElement)
+	If ShowLog Then
+		Log($"pdf.BEToRect.${be.name}"$)
+	End If
 	Try
 		Dim sDataDrawColor As String = be.GetData("drawcolor")
 		If BANano.IsNull(sDataDrawColor) Then sDataDrawColor = ""
@@ -775,6 +1056,9 @@ End Sub
 
 
 Sub BEToEllipse(be As BANanoElement)
+	If ShowLog Then
+		Log($"pdf.BEToEllipse.${be.name}"$)
+	End If
 	Dim sDataDrawColor As String = be.GetData("drawcolor")
 	If BANano.IsNull(sDataDrawColor) Then sDataDrawColor = ""
 
@@ -808,6 +1092,9 @@ End Sub
 
 
 Sub BEToCircle(be As BANanoElement)
+	If ShowLog Then
+		Log($"pdf.BEToCircle.${be.name}"$)
+	End If
 	Dim sDataDrawColor As String = be.GetData("drawcolor")
 	If BANano.IsNull(sDataDrawColor) Then sDataDrawColor = ""
 
@@ -839,6 +1126,9 @@ End Sub
 
 
 Sub BEToLine(be As BANanoElement)
+	If ShowLog Then
+		Log($"pdf.BEToLine.${be.name}"$)
+	End If
 	Dim sDataDrawColor As String = be.GetData("drawcolor")
 	If BANano.IsNull(sDataDrawColor) Then sDataDrawColor = ""
 
@@ -870,22 +1160,10 @@ Sub BEToLine(be As BANanoElement)
 	line(sDataX1, sDataY1, sDataX2, sDataY2, sDataStyle)
 End Sub
 
-'Sub BEPreloadImage(BE As BANanoElement) As Boolean   'ignore
-'	Dim sDataAlias As String = BE.GetData("alias")
-'	If BANano.IsNull(sDataAlias) Then sDataAlias = ""
-'	sDataAlias = sDataAlias.tolowercase
-'	
-'	'path of the file
-'	Dim sDataImageData As String = BE.GetData("imagedata")
-'	If BANano.IsNull(sDataImageData) Then sDataImageData = ""
-'	If sDataImageData = "" Then BANano.ReturnThen(True)
-'	
-'	Dim logoDataURL As String = BANano.Await(BANano.GetFileAsDataURL(sDataImageData, Null))
-'	images.Put(sDataAlias, logoDataURL)
-'	BANano.ReturnThen(True)
-'End Sub
-
 Sub BEToImage(BE As BANanoElement)
+	If ShowLog Then
+		Log($"pdf.BEToImage.${BE.name}"$)
+	End If
 	Try
 		Dim sDataAlias As String = BE.GetData("alias")
 		If BANano.IsNull(sDataAlias) Then sDataAlias = ""
@@ -903,8 +1181,6 @@ Sub BEToImage(BE As BANanoElement)
 		Dim sDataImageData As String = BE.GetData("imagedata")
 		If BANano.IsNull(sDataImageData) Then sDataImageData = ""
 		'
-		'Dim logoDataURL As String = BANano.Await(BANano.GetFileAsDataURL(sDataImageData, Null))
-		'
 		Dim sDataRotation As String = BE.GetData("rotation")
 		If BANano.IsNull(sDataRotation) Then sDataRotation = 0
 		sDataRotation = BANano.parseInt(sDataRotation)
@@ -920,7 +1196,10 @@ Sub BEToImage(BE As BANanoElement)
 		Dim sDataY As String = BE.GetData("y")
 		If BANano.IsNull(sDataY) Then sDataY = 0
 		sDataY = BANano.parseInt(sDataY)
-				
+		
+		If ShowLog Then
+			Log($"pdf.addImage("${sDataImageData}", "${sDataFormat}", ${sDataX}, ${sDataY}, ${sDataWidth}, ${sDataHeight}, "${sDataAlias}", "${sDataCompression}", ${sDataRotation})"$)
+		End If		
 		jsPDF.RunMethod("addImage", Array(sDataImageData, sDataFormat, sDataX, sDataY, sDataWidth, sDataHeight, sDataAlias, sDataCompression, sDataRotation))
 	Catch ExitApplication
 		Log(LastException)
@@ -929,6 +1208,10 @@ End Sub
 
 'set text from bananoElement
 Sub BEToText(BE As BANanoElement)
+	If ShowLog Then
+		Log($"pdf.BEToText.${BE.name}"$)
+	End If
+
 	Try
 	Dim sDataAlign As String = BE.GetData("align")
 	If BANano.IsNull(sDataAlign) Then sDataAlign = ""
@@ -1043,8 +1326,14 @@ Sub BEToText(BE As BANanoElement)
 	sDataY = BANano.parseInt(sDataY)
 	
 	If bDataWithLink Then
+		If ShowLog Then
+		Log($"pdf.textWithLink("${sDataText}", ${sDataX}, ${sDataY}, ${opt}, ${sDataTransform})"$)
+	End If
 		jsPDF.RunMethod("textWithLink", Array(sDataText, sDataX, sDataY, opt, sDataTransform))
 	Else
+		If ShowLog Then
+			Log($"pdf.text("${sDataText}", ${sDataX}, ${sDataY}, ${BANano.ToJson(opt)}, ${sDataTransform})"$)
+		End If
 		jsPDF.RunMethod("text", Array(sDataText, sDataX, sDataY, opt, sDataTransform))
 	End If	
 	Catch
@@ -1055,6 +1344,9 @@ End Sub
 
 
 Sub BEToAnnotation(be As BANanoElement)
+	If ShowLog Then
+		Log($"pdf.BEToAnnotation.${be.name}"$)
+	End If
 	Try
 		Dim sDataColorHex As String = be.GetData("colorhex")
 		If BANano.IsNull(sDataColorHex) Then sDataColorHex = ""
@@ -1117,23 +1409,47 @@ Sub BEToAnnotation(be As BANanoElement)
 	End Try
 End Sub
 
-
-
-
 'set text
 Sub SetText(X As Int, Y As Int, txt As String) As BANanoJSPDF
+	If ShowLog Then
+		Log($"pdf.text(${x}, ${y}, "${txt}")"$)
+	End If
 	jsPDF.RunMethod("text", Array(x, y, txt))
+	Return Me
+End Sub
+
+'set text 1
+Sub SetText1(txt As String, X As Int, Y As Int) As BANanoJSPDF
+	If ShowLog Then
+		Log($"pdf.text("${txt}", ${x}, ${y})"$)
+	End If
+	jsPDF.RunMethod("text", Array(txt, x, y))
+	Return Me
+End Sub
+
+'set text 1
+Sub addText1(txt As String, X As Int, Y As Int) As BANanoJSPDF
+	If ShowLog Then
+		Log($"pdf.text("${txt}", ${x}, ${y})"$)
+	End If
+	jsPDF.RunMethod("text", Array(txt, x, y))
 	Return Me
 End Sub
 
 'set text with alignment
 Sub SetTextAlignRight(X As Int, Y As Int, txt As String) As BANanoJSPDF
+	If ShowLog Then
+		Log($"pdf.text(${x}, ${y}, "${txt}", "right")"$)
+	End If
 	jsPDF.RunMethod("text", Array(x, y, txt, "right"))
 	Return Me
 End Sub
 
 'set text with alignment
 Sub SetTextAlignCenter(X As Int, Y As Int, txt As String) As BANanoJSPDF
+	If ShowLog Then
+		Log($"pdf.text(${x}, ${y}, "${txt}", "center")"$)
+	End If
 	jsPDF.RunMethod("text", Array(x, y, txt, "center"))
 	Return Me
 End Sub
@@ -1149,6 +1465,9 @@ Sub SetTextOptions(txt As String, x As Int, y As Int, opt As TextOptions) As BAN
 	options.Put("lineHeightFactor", opt.lineHeightFactor)
 	options.Put("maxWidth", opt.maxWidth)
 	options.Put("renderingMode", opt.renderingMode)
+	If ShowLog Then
+		Log($"pdf.text("${txt}", ${x}, ${y}, ${BANano.ToJson(options)})"$)
+	End If
 	jsPDF.RunMethod("text", Array(txt, x, y, options))
 	Return Me
 End Sub
@@ -1161,26 +1480,26 @@ Sub SetTextColor(rgba As String) As BANanoJSPDF
 	Dim strcol3 As String
 	Dim strcol4 As String
 	'
-	rgba = rgba.Replace(";", ",")
-	Dim cols As List = BANanoShared.StrParse(",", rgba)
-	Dim colTot As Int = cols.Size - 1
-	Dim colCnt As Int
-	For colCnt = 0 To colTot
-		Dim strcol As String = cols.Get(colCnt)
-		strcol = strcol.Trim
-		cols.Set(colCnt, strcol)
-	Next
-	colTot = cols.size
+	rgba = rgba.Replace(",", ";")
+	Dim cols As List = BANanoShared.StrParse(";", rgba)
+	cols = BANanoShared.ListItemsToInt(cols)
+	Dim colTot As Int = cols.size
 	Select Case colTot
 	Case 1
 		strcol1 = cols.Get(0)
 		strcol1 = BANano.parseInt(strcol1)
+		If ShowLog Then
+			Log($"pdf.setTextColor(${strcol1})"$)
+		End If
 		jsPDF.RunMethod("setTextColor", Array(strcol1))
 	Case 2
 		strcol1 = cols.Get(0)
 		strcol2 = cols.Get(1)
 		strcol1 = BANano.parseInt(strcol1)
 		strcol2 = BANano.parseInt(strcol2)
+		If ShowLog Then
+			Log($"pdf.setTextColor(${strcol1}, ${strcol2})"$)
+		End If
 		jsPDF.RunMethod("setTextColor", Array(strcol1, strcol2))
 	Case 3
 		strcol1 = cols.Get(0)
@@ -1189,6 +1508,9 @@ Sub SetTextColor(rgba As String) As BANanoJSPDF
 		strcol1 = BANano.parseInt(strcol1)
 		strcol2 = BANano.parseInt(strcol2)
 		strcol3 = BANano.parseInt(strcol3)
+		If ShowLog Then
+			Log($"pdf.setTextColor(${strcol1}, ${strcol2}, ${strcol3})"$)
+		End If
 		jsPDF.RunMethod("setTextColor", Array(strcol1, strcol2, strcol3))
 	Case 4				
 		strcol1 = cols.Get(0)
@@ -1199,6 +1521,9 @@ Sub SetTextColor(rgba As String) As BANanoJSPDF
 		strcol2 = BANano.parseInt(strcol2)
 		strcol3 = BANano.parseInt(strcol3)
 		strcol4 = BANano.parseInt(strcol4)
+		If ShowLog Then
+			Log($"pdf.setTextColor(${strcol1}, ${strcol2}, ${strcol3}, ${strcol4})"$)
+		End If
 		jsPDF.RunMethod("setTextColor", Array(strcol1, strcol2, strcol3, strcol4))
 	End Select
 	Return Me
@@ -1212,20 +1537,17 @@ Sub SetFillColor(rgba As String) As BANanoJSPDF
 	Dim strcol3 As String
 	Dim strcol4 As String
 	'
-	rgba = rgba.Replace(";", ",")
-	Dim cols As List = BANanoShared.StrParse(",", rgba)
-	Dim colTot As Int = cols.Size - 1
-	Dim colCnt As Int
-	For colCnt = 0 To colTot
-		Dim strcol As String = cols.Get(colCnt)
-		strcol = strcol.Trim
-		cols.Set(colCnt, strcol)
-	Next
-	colTot = cols.size
+	rgba = rgba.Replace(",", ";")
+	Dim cols As List = BANanoShared.StrParse(";", rgba)
+	cols = BANanoShared.ListItemsToInt(cols)
+	Dim colTot As Int = cols.size
 	Select Case colTot
 	Case 1
 		strcol1 = cols.Get(0)
 		strcol1 = BANano.parseInt(strcol1)
+		If ShowLog Then
+			Log($"pdf.setFillColor(${strcol1})"$)
+		End If
 		jsPDF.RunMethod("setFillColor", Array(strcol1))
 	Case 2
 		strcol1 = cols.Get(0)
@@ -1233,6 +1555,9 @@ Sub SetFillColor(rgba As String) As BANanoJSPDF
 		strcol1 = BANano.parseInt(strcol1)
 		strcol2 = BANano.parseInt(strcol2)
 		jsPDF.RunMethod("setFillColor", Array(strcol1, strcol2))
+		If ShowLog Then
+			Log($"pdf.setFillColor(${strcol1}, ${strcol2})"$)
+		End If
 	Case 3
 		strcol1 = cols.Get(0)
 		strcol2 = cols.Get(1)
@@ -1241,6 +1566,9 @@ Sub SetFillColor(rgba As String) As BANanoJSPDF
 		strcol2 = BANano.parseInt(strcol2)
 		strcol3 = BANano.parseInt(strcol3)
 		jsPDF.RunMethod("setFillColor", Array(strcol1, strcol2, strcol3))
+		If ShowLog Then
+			Log($"pdf.setFillColor(${strcol1}, ${strcol2}, ${strcol3})"$)
+		End If
 	Case 4				
 		strcol1 = cols.Get(0)
 		strcol2 = cols.Get(1)
@@ -1250,6 +1578,9 @@ Sub SetFillColor(rgba As String) As BANanoJSPDF
 		strcol2 = BANano.parseInt(strcol2)
 		strcol3 = BANano.parseInt(strcol3)
 		strcol4 = BANano.parseInt(strcol4)
+		If ShowLog Then
+			Log($"pdf.setFillColor(${strcol1}, ${strcol2}, ${strcol3}, ${strcol4})"$)
+		End If
 		jsPDF.RunMethod("setFillColor", Array(strcol1, strcol2, strcol3, strcol4))
 	End Select
 	Return Me
@@ -1264,26 +1595,26 @@ Sub SetDrawColor(rgba As String) As BANanoJSPDF
 	Dim strcol3 As String
 	Dim strcol4 As String
 	'
-	rgba = rgba.Replace(";", ",")
-	Dim cols As List = BANanoShared.StrParse(",", rgba)
-	Dim colTot As Int = cols.Size - 1
-	Dim colCnt As Int
-	For colCnt = 0 To colTot
-		Dim strcol As String = cols.Get(colCnt)
-		strcol = strcol.Trim
-		cols.Set(colCnt, strcol)
-	Next
-	colTot = cols.size
+	rgba = rgba.Replace(",", ";")
+	Dim cols As List = BANanoShared.StrParse(";", rgba)
+	cols = BANanoShared.ListItemsToInt(cols)
+	Dim colTot As Int = cols.size
 	Select Case colTot
 	Case 1
 		strcol1 = cols.Get(0)
 		strcol1 = BANano.parseInt(strcol1)
 		jsPDF.RunMethod("setDrawColor", Array(strcol1))
+		If ShowLog Then
+			Log($"pdf.setDrawColor(${strcol1})"$)
+		End If
 	Case 2
 		strcol1 = cols.Get(0)
 		strcol2 = cols.Get(1)
 		strcol1 = BANano.parseInt(strcol1)
 		strcol2 = BANano.parseInt(strcol2)
+		If ShowLog Then
+			Log($"pdf.setDrawColor(${strcol1}, ${strcol2})"$)
+		End If
 		jsPDF.RunMethod("setDrawColor", Array(strcol1, strcol2))
 	Case 3
 		strcol1 = cols.Get(0)
@@ -1292,6 +1623,9 @@ Sub SetDrawColor(rgba As String) As BANanoJSPDF
 		strcol1 = BANano.parseInt(strcol1)
 		strcol2 = BANano.parseInt(strcol2)
 		strcol3 = BANano.parseInt(strcol3)
+		If ShowLog Then
+			Log($"pdf.setDrawColor(${strcol1}, ${strcol2}, ${strcol3})"$)
+		End If
 		jsPDF.RunMethod("setDrawColor", Array(strcol1, strcol2, strcol3))
 	Case 4				
 		strcol1 = cols.Get(0)
@@ -1302,6 +1636,9 @@ Sub SetDrawColor(rgba As String) As BANanoJSPDF
 		strcol2 = BANano.parseInt(strcol2)
 		strcol3 = BANano.parseInt(strcol3)
 		strcol4 = BANano.parseInt(strcol4)
+		If ShowLog Then
+			Log($"pdf.setDrawColor(${strcol1}, ${strcol2}, ${strcol3}, ${strcol4})"$)
+		End If
 		jsPDF.RunMethod("setDrawColor", Array(strcol1, strcol2, strcol3, strcol4))
 	End Select
 	Return Me
@@ -1323,6 +1660,9 @@ Sub curveTo(x1 As String, y1 As String, x2 As String, y2 As String, x3 As String
 		y1 = BANano.parseInt(y1)
 		y2 = BANano.parseInt(y2)
 		y3 = BANano.parseInt(y3)
+		If ShowLog Then
+			Log($"pdf.curveTo(${x1}, ${y1}, ${x2}, ${y2}, ${x3}, ${y3})"$)
+		End If
 		jsPDF.RunMethod("curveTo", Array(x1, y1, x2, y2, x3, y3))
 		
 	Catch
@@ -1345,16 +1685,32 @@ Sub SetFontSize(fs As String) As BANanoJSPDF
 	fs = BANano.parseInt(fs)
 	If fs = 0 Then Return Me
 	fs = BANano.parseInt(fs)
+	If ShowLog Then
+		Log($"pdf.setFontSize(${fs})"$)
+	End If
 	jsPDF.runmethod("setFontSize", Array(fs))
 	Return Me
 End Sub
 
-''set the font
-'Sub SetFont(fs As String) As BANanoJSPDF
-'	If fs = "" Then Return Me
-'	jsPDF.runmethod("setFont", Array(fs))
-'	Return Me
-'End Sub
+'set the font
+Sub SetFont(fs As String) As BANanoJSPDF
+	If fs = "" Then Return Me
+	If ShowLog Then
+		Log($"pdf.setFont(${fs})"$)
+	End If
+	jsPDF.runmethod("setFont", Array(fs))
+	Return Me
+End Sub
+
+'set the font name and style
+Sub SetFontStyle(fn As String, fs As String) As BANanoJSPDF
+	If fn = "" Then Return Me
+	If ShowLog Then
+		Log($"pdf.setFont("${fn}", "${fs}")"$)
+	End If
+	jsPDF.runmethod("setFont", Array(fn, fs))
+	Return Me
+End Sub
 
 ''set the font And style
 Sub SetFontStyleWeight(fn As String, fs As String, fw As String) As BANanoJSPDF
@@ -1363,7 +1719,10 @@ Sub SetFontStyleWeight(fn As String, fs As String, fw As String) As BANanoJSPDF
 		fs = fs.Trim
 		fw = fw.Trim
 		'
-		If fn = "" Or fs = "" Or fw = "" Then Return Me
+		If fn = "" Then Return Me
+		If ShowLog Then
+			Log($"pdf.setFont("${fn}", "${fs}", "${fw}")"$)
+		End If
 		jsPDF.runmethod("setFont", Array(fn, fs, fw))
 	Catch
 		Log(LastException)
@@ -1392,6 +1751,9 @@ End Sub
 
 'initialize the pdf engine
 Sub Start As BANanoJSPDF
+	If ShowLog Then
+		Log($"pdf.Start"$)
+	End If
 	userUnit = BANano.parseFloat(userUnit)
 	precision = BANano.parseInt(precision)
 	'
@@ -1414,19 +1776,28 @@ Sub Start As BANanoJSPDF
 	If marginM.Size > 0 Then
 		pdfOptions.put("margin", marginM)
 	End If
+	If ShowLog Then
+		Log($"pdf.new jsPDF(${banano.ToJson(pdfOptions)})"$)
+	End If
 	jsPDF.Initialize2("jsPDF", Array(pdfOptions))
 	autoTableSetDefaults
 	Return Me
 End Sub
 
+'autoTableSetDefaults
 Sub autoTableSetDefaults
+	If ShowLog Then
+		Log($"pdf.autoTableSetDefaults"$)
+	End If
 	jsPDF.RunMethod("autoTableSetDefaults", Null)
 End Sub
 
 'add table from BANanoJSPDFTable
 Sub autoTable(tbl As BANanoJSPDFTable) As BANanoJSPDF
 	tbl.buildoptions
-	'jsPDF.RunMethod("autoTable", Array(tbl.columns, tbl.rows, tbl.options))
+	If ShowLog Then
+		Log($"pdf.autoTable(${BANano.ToJson(tbl.options)})"$)
+	End If
 	jsPDF.RunMethod("autoTable", Array(tbl.options))
 	Return Me
 End Sub
@@ -1436,17 +1807,18 @@ Sub autoTable1(tableID As String) As BANanoJSPDF
 	tableID = tableID.ToLowerCase
 	Dim opt As Map = CreateMap()
 	opt.Put("html", $"#${tableID}"$)
+	If ShowLog Then
+		Log($"pdf.autoTable(${BANano.ToJson(opt)})"$)
+	End If
 	jsPDF.RunMethod("autoTable", Array(opt))
 	Return Me
 End Sub
 
-private Sub ApplyProperties
-	dOptions.Put("title", Title)
-	jsPDF.RunMethod("setDocumentProperties", dOptions)
-End Sub
-
 'save the pdf document
 Sub Save
+	If ShowLog Then
+		Log($"pdf.save"$)
+	End If
 	jsPDF.RunMethod("save", Array(fname))
 End Sub
 
@@ -1454,6 +1826,9 @@ End Sub
 Sub getOutput(objType As String) As String
 	Dim opt As Map = CreateMap()
 	opt.Put("filename", fname)
+	If ShowLog Then
+		Log($"res = pdf.output("${objType}", ${opt})"$)
+	End If
 	Dim res As String = jsPDF.RunMethod("output", Array(objType, opt)).Result
 	Return res
 End Sub
@@ -1466,6 +1841,9 @@ End Sub
 
 'add base 64 image
 Sub addImage(imgData As String, imgType As String, X As Int, Y As Int, iWidth As Int, iHeight As Int) As BANanoJSPDF
+	If ShowLog Then
+		Log($"pdf.addImage("${imgData}", "${imgType}", ${x}, ${y}, ${iWidth}, ${iHeight})"$)
+	End If
 	jsPDF.RunMethod("addImage", Array(imgData, imgType, X, Y, iWidth, iHeight))
 	Return Me
 End Sub
@@ -1481,17 +1859,26 @@ End Sub
 
 'autoprint
 Sub autoPrint
+	If ShowLog Then
+		Log($"pdf.autoPrint"$)
+	End If
 	jsPDF.RunMethod("autoPrint", Null)
 End Sub
 
 'add a font
 Sub addFont(url As String, fontName As String, fontType As String) As BANanoJSPDF
+	If ShowLog Then
+		Log($"pdf.addFont("${url}", "${fontName}", "${fontType}")"$)
+	End If
 	jsPDF.RunMethod("addFont", Array(url, fontName, fontType))
 	Return Me
 End Sub
 
 'set active page
 Sub SetPage(pg As Int) As BANanoJSPDF
+	If ShowLog Then
+		Log($"pdf.setPage(${pg})"$)
+	End If
 	jsPDF.RunMethod("setPage", Array(pg))
 	Return Me
 End Sub
@@ -1508,30 +1895,45 @@ End Sub
 
 'get number of pages
 Sub GetNumberOfPages As Int
+	If ShowLog Then
+		Log($"noOfPages = pdf.internal.getNumberOfPages()"$)
+	End If
 	Dim noOfPages As Int = jsPDF.GetField("internal").RunMethod("getNumberOfPages", Null).Result
 	Return noOfPages
 End Sub
 
 'get current page width
 Sub GetPageWidth As Int
+	If ShowLog Then
+		Log($"pw = pdf.internal.pageSize.width()"$)
+	End If
 	Dim pw As Int = jsPDF.GetField("internal").GetField("pageSize").getfield("width").result
 	Return pw
 End Sub
 
 'get current page height
 Sub GetPageHeight As Int
+	If ShowLog Then
+		Log($"ph = pdf.internal.pageSize.height()"$)
+	End If
 	Dim pw As Int = jsPDF.GetField("internal").GetField("pageSize").Getfield("height").result
 	Return pw
 End Sub
 
 'get finalY after table insert
 Sub GetPreviousAutoTableFinalY As Int
+	If ShowLog Then
+		Log($"fY = pdf.previousAutoTable.finalY"$)
+	End If
 	Dim res As Int = jsPDF.GetField("previousAutoTable").GetField("finalY").Result
 	Return res
 End Sub
 
 'set the footer page numbers
 Sub SetPageNumbers As BANanoJSPDF
+	If ShowLog Then
+		Log($"pdf.SetPageNumbers"$)
+	End If
 	Dim pageCount As Int = GetNumberOfPages
 	SetFontSize(8)
 	Dim pgCnt As Int 
@@ -1549,36 +1951,57 @@ End Sub
 
 'delete a particular page
 Sub deletePage(pg As Int)
+	If ShowLog Then
+		Log($"pdf.deletePage(${pg})"$)
+	End If
 	jsPDF.RunMethod("deletePage", Array(pg))
 End Sub
 
 'clip
 Sub clip
+	If ShowLog Then
+		Log($"pdf.clip("evenodd")"$)
+	End If
 	jsPDF.RunMethod("clip", Array("evenodd"))
 End Sub
 
 'clipEvenOdd
 Sub clipEvenOdd
+	If ShowLog Then
+		Log($"pdf.clipEvenOdd()"$)
+	End If
 	jsPDF.runmethod("clipEvenOdd", Null)
 End Sub
 
 'close
 Sub close
+	If ShowLog Then
+		Log($"pdf.close()"$)
+	End If
 	jsPDF.RunMethod("close", Null)
 End Sub
 
 'comment
 Sub comment(txt As String)
+	If ShowLog Then
+		Log($"pdf.comment("${txt}")"$)
+	End If
 	jsPDF.RunMethod("comment", Array(txt))
 End Sub
 
 'discardPath
 Sub discardPath
+	If ShowLog Then
+		Log($"pdf.discardPath()"$)
+	End If
 	jsPDF.RunMethod("discardPath", Null)
 End Sub
 
 'insertPage
 Sub insertPage(pg As Int)
+	If ShowLog Then
+		Log($"pdf.insertPage(${pg})"$)
+	End If
 	jsPDF.RunMethod("insertPage", Array(pg))
 End Sub
 
@@ -1588,6 +2011,9 @@ Sub movePage(targetPage As String, beforePage As String)
 		targetPage = targetPage.Trim
 		beforePage = beforePage.Trim
 		If targetPage = "" Or beforePage = "" Then Return
+		If ShowLog Then
+			Log($"pdf.movePage(${targetPage}, ${beforePage})"$)
+		End If
 		jsPDF.RunMethod("movePage", Array(targetPage, beforePage))		 
 	Catch
 		Log(LastException)
@@ -1600,6 +2026,9 @@ Sub setLineHeightFactor(lf As String)
 	Try
 		lf = lf.Trim
 		If lf = "" Then Return
+		If ShowLog Then
+			Log($"pdf.setLineHeightFactor(${lf})"$)
+		End If
 		jsPDF.RunMethod("setLineHeightFactor", Array(lf))
 	Catch
 		Log(LastException)
@@ -1608,11 +2037,17 @@ End Sub
 
 'setR2L
 Sub setR2L(b As Boolean)
+	If ShowLog Then
+		Log($"pdf.setR2L"$)
+	End If
 	jsPDF.RunMethod("setR2L", Array(b))
 End Sub
 
 'stroke
 Sub stroke
+	If ShowLog Then
+		Log($"pdf.stroke"$)
+	End If
 	jsPDF.RunMethod("stroke", Null)
 End Sub
 
@@ -1633,7 +2068,9 @@ Sub link(x As String, y As String, w As String, h As String, pageNumber As Strin
 		If pageNumber <> "" Then
 			opt.put("pageNumber", pageNumber)
 		End If
-		
+		If ShowLog Then
+			Log($"pdf.link(${x}, ${y}, ${h}, ${opt})"$)
+		End If
 		jsPDF.RunMethod("link", Array(x, y, w, h, opt))
 	Catch
 		Log(LastException)
@@ -1671,6 +2108,9 @@ Sub createAnnotation(annotTitle As String, contents As String, annotType As Stri
 			opt.Put("color", annotColor)
 		End If
 		'
+		If ShowLog Then
+			Log($"pdf.createAnnotation(${BANano.ToJson(opt)})"$)
+		End If
 		jsPDF.RunMethod("createAnnotation", Array(opt))		
 	Catch
 		Log(LastException)
@@ -1681,3 +2121,146 @@ End Sub
 Sub addSvgAsImage
 	
 End Sub
+
+'get last auto table
+Sub GetLastAutoTableFinalY As Int
+	If ShowLog Then
+		Log($"fY = pdf.lastAutoTable.finalY"$)
+	End If
+	Dim res As Int = jsPDF.GetField("lastAutoTable").GetField("finalY").Result
+	Return res
+End Sub
+
+'data.settings.margin.left
+Sub GetDataSettingsMarginLeft(data As Map) As Int
+	Dim xsettings As Map = data.Get("settings")
+	Dim xmargin As Map = xsettings.Get("margin")
+	Dim xleft As Int = xmargin.Get("left")
+	xleft = BANano.parseint(xleft)
+	Return xleft 
+End Sub
+
+
+'get DataRow
+private Sub getDataRow(data As Map) As pdfRow
+	Dim xrow As Map = data.Get("row")
+	Dim c As pdfRow
+	c.Initialize
+	c.spansMultiplePages = xrow.Get("spansMultiplePages")
+	c.height = xrow.Get("height")
+	c.index = xrow.Get("index")
+	c.section = xrow.Get("section")
+	c.raw = xrow.Get("raw")
+	Return c
+End Sub
+
+'get DataSettings
+private Sub getDataSettings(data As Map) As pdfSettings
+	Dim xsetting As Map = data.Get("settings")
+	Dim xmargin As Map = xsetting.Get("margin")
+	Dim c As pdfSettings
+	c.Initialize 
+	c.margin.Initialize 
+	c.horizontalPageBreak = xsetting.Get("horizontalPageBreak")
+	c.includeHiddenHtml = xsetting.Get("includeHiddenHtml")
+	c.pageBreak = xsetting.Get("pageBreak")
+	c.rowPageBreak = xsetting.Get("rowPageBreak")
+	c.showFoot = xsetting.Get("showFoot")
+	c.showHead = xsetting.Get("showHead")
+	c.startY = xsetting.Get("startY")
+	c.tableLineColor = xsetting.Get("tableLineColor")
+	c.tableLineWidth = xsetting.Get("tableLineWidth")
+	c.tableWidth = xsetting.Get("tableWidth")
+	c.theme = xsetting.Get("theme")
+	c.useCss = xsetting.Get("useCss")
+	c.margin.bottom = xmargin.Get("bottom")
+	c.margin.right = xmargin.Get("right")
+	c.margin.left = xmargin.Get("left")
+	c.margin.top = xmargin.Get("top")
+	Return c
+End Sub
+
+'get DataCursor
+private Sub getDataCursor(data As Map) As pdfCursor
+	Dim c As pdfCursor
+	c.Initialize 
+	Dim xcursor As Map = data.Get("cursor")
+	If BANano.IsNull(xcursor) = False Then
+		c.x = xcursor.Get("x")
+		c.y = xcursor.Get("y")
+	End If
+	Return c
+End Sub
+
+'get DataColumn
+private Sub getDataColumn(data As Map) As pdfColumn
+	Dim xcolumn As Map = data.get("column")
+	Dim c As pdfColumn
+	c.initialize
+	c.dataKey = xcolumn.get("dataKey")
+	c.index = xcolumn.get("index")
+	c.minReadableWidth = xcolumn.get("minReadableWidth")
+	c.minWidth = xcolumn.get("minWidth")
+	c.width = xcolumn.get("width")
+	c.wrappedWidth = xcolumn.get("wrappedWidth")
+	Return c
+End Sub
+
+'get DataCell
+private Sub getDataCell(data As Map) As pdfCell
+	Dim xcell As Map = data.Get("cell")
+	Dim xstyles As Map = xcell.Get("styles")
+	Dim c As pdfCell
+	c.Initialize
+	c.styles.initialize 
+	c.colSpan = xcell.Get("colSpan")
+	c.contentHeight = xcell.Get("contentHeight")
+	c.contentWidth = xcell.Get("contentWidth")
+	c.height = xcell.Get("height")
+	c.minReadableWidth = xcell.Get("minReadableWidth")
+	c.minWidth = xcell.Get("minWidth")
+	c.raw = xcell.Get("raw")
+	c.rowSpan = xcell.Get("rowSpan")
+	c.section = xcell.Get("section")
+	c.x = xcell.get("x")
+	c.y = xcell.get("y")
+	c.text = xcell.Get("text")
+	c.styles.cellPadding = xstyles.Get("cellPadding")
+	c.styles.cellWidth = xstyles.Get("cellWidth")
+	c.styles.fillColor = xstyles.Get("fillColor")
+	c.styles.font = xstyles.Get("font")
+	c.styles.fontSize = xstyles.Get("fontSize")
+	c.styles.fontStyle = xstyles.Get("fontStyle")
+	c.styles.halign = xstyles.Get("halign")
+	c.styles.lineColor = xstyles.Get("lineColor")
+	c.styles.lineWidth = xstyles.Get("lineWidth")
+	c.styles.minCellHeight = xstyles.Get("minCellHeight")
+	c.styles.minCellWidth = xstyles.Get("minCellWidth")
+	c.styles.overflow = xstyles.Get("overflow")
+	c.styles.textColor = xstyles.Get("textColor")
+	c.styles.valign = xstyles.Get("valign")
+	Return c
+End Sub
+
+'get the data on the table
+Sub getData(data As Map) As pdfData
+	Dim c As pdfData
+	c.Initialize 
+	c.cell.Initialize
+	c.cell = getDataCell(data)
+	' 
+	c.column.Initialize 
+	c.column = getDataColumn(data)
+	'
+	c.cursor.Initialize 
+	c.cursor = getDataCursor(data)
+	'
+	c.row.Initialize 
+	c.row = getDataRow(data)
+	'
+	c.settings.Initialize 
+	c.settings = getDataSettings(data)
+	'
+	Return c	
+End Sub
+

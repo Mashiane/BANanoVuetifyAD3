@@ -1,5 +1,5 @@
 ﻿B4J=true
-Group=Default Group
+Group=Default Group\PDF
 ModulesStructureVersion=1
 Type=Class
 Version=7
@@ -96,6 +96,13 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	iframe.AddStyle("max-width", "100%")
 	iframe.AddStyle("max-height", "100%")
 	iframe.AddAttr("scrolling", "no")
+	iframe.AddAttr("frameborder", "0")
+	iframe.AddStyle("border", "0")
+	iframe.AddStyle("top", "0px")
+	iframe.AddStyle("left", "0px")
+	iframe.AddStyle("bottom", "0px")
+	iframe.AddStyle("right", "0px")
+	iframe.AddAttr(":allowfullscreen", True)
 	iframe.Bind("src", sVModel)
 	iframe.SetData(sVModel, sFileName )
 	VElement.BindVueElement(iframe)

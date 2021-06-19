@@ -33,7 +33,7 @@ Sub Class_Globals
 	Private mtableLineWidth As Double
 	Private BANano As BANano 'ignore
 	Type styleDef (font As String, lineWidth As Double, lineColor As List, fillColor As List, fontSize As Int, _
-	cellPadding As Int, fontStyle As String,overflow As String, textColor As List, halign As String, valign As String, _
+	cellPadding As Object, fontStyle As String,overflow As String, textColor As List, halign As String, valign As String, _
 	fillStyle As String, rowHeight As Int, minCellWidth As Int, minCellHeight As Int, cellWidth As String)
 	Public styles As styleDef
 	Public headerStyles As styleDef
@@ -47,6 +47,31 @@ Sub Class_Globals
 	Private FooterStyleM As Map
 	Public footerStyles As styleDef
 	Private ColumnAlign As Map
+	Public ShowLog As Boolean
+	Public includeHiddenHtml As Boolean
+		'
+	Type pdfStyle(cellPadding As Int, cellWidth As String, fillColor As Object, _
+	font As String, fontSize As Int, fontStyle As String, halign As String, lineColor As Object, _
+	lineWidth As Int, minCellHeight As Int, minCellWidth As Int, overflow As String, textColor As Object, _
+	valign As String)
+	'
+	Type pdfCell(colSpan As Int, contentHeight As Float, contentWidth As Float, height As Float, _
+minReadableWidth As Float, minWidth As Int, raw As String, rowSpan As Int, section As String, x As Int, y As Int, styles As pdfStyle, text As Object)
+	'
+	Type pdfColumn(dataKey As String, index As Int, minReadableWidth As Float, minWidth As Float, _
+	width As Float, wrappedWidth As Float)
+	'
+	Type pdfCursor(x As Float, y As Float)
+	'
+	Type pdfRow(height As Float, index As Int, section As String, spansMultiplePages As Boolean, raw As Map)
+	'
+	Type pdfMargin(bottom As Int, top As Int, right As Int, left As Int)
+	'
+	Type pdfSettings(horizontalPageBreak As Boolean, includeHiddenHtml As Boolean, PageBreak As String, _
+	rowPageBreak As String, showFoot As String, showHead As String, StartY As Float, _
+	TableLineColor As Object, tableLineWidth As Int, TableWidth As String, Theme As String, useCss As Boolean, Margin As pdfMargin)
+	'
+	Type pdfData(cell As pdfCell, column As pdfColumn, cursor As pdfCursor, row As pdfRow, settings As pdfSettings)
 End Sub
 
 'initialize the autoTable
@@ -82,6 +107,12 @@ Public Sub Initialize(eventHandler As Object)
 	ColumnAlign.Initialize
 	rows.Initialize 
 	columns.Initialize
+	includeHiddenHtml = False
+	'
+	TableWidth = "wrap"
+    styles.overflow = "linebreak"
+	styles.cellWidth = "auto"
+	ShowLog = True
 	Dim table As Object
 	didParseCell(Me, "didParseCellInternal", table) 
 End Sub
@@ -97,7 +128,7 @@ Sub NewStyleDef As styleDef
 	stylesx.fontSize = 10
 	stylesx.cellPadding = 10
 	stylesx.fontStyle = "normal"
-	stylesx.overflow = "normal"
+	stylesx.overflow = "linebreak"
 	stylesx.textColor.Initialize 
 	stylesx.halign = "left"
 	stylesx.valign = "top"
@@ -105,8 +136,225 @@ Sub NewStyleDef As styleDef
 	stylesx.rowHeight = 0
 	stylesx.minCellWidth = 10
 	stylesx.minCellHeight = 0
-	stylesx.cellWidth = ""
+	stylesx.cellWidth = "wrap"
 	Return stylesx
+End Sub
+
+'convert a BE to a style
+Sub BEToStyle(be As BANanoElement)
+	If ShowLog Then
+		Log($"BEToStyle.${be.name}"$)
+	End If
+	Dim ns As styleDef
+	ns.Initialize
+	ns.fillColor.Initialize  
+	ns.lineColor.Initialize
+	ns.textColor.Initialize  
+	
+	Dim sDataApplyTo As String = be.GetData("applyto")
+	If BANano.IsNull(sDataApplyTo) Then sDataApplyTo = ""
+	
+	Dim sDataColumnName As String = be.GetData("columnname")
+	If BANano.IsNull(sDataColumnName) Then sDataColumnName = ""
+
+	Dim sDataCellWidth As String = be.GetData("cellwidth")
+	If BANano.IsNull(sDataCellWidth) Then sDataCellWidth = ""
+	If sDataCellWidth <> "" Then
+		If ShowLog Then
+			Log($"BEToStyle.${be.name}.cellWidth.${sDataCellWidth}"$)
+		End If
+		ns.cellWidth = sDataCellWidth
+	End If
+	'
+	Dim sDataCellWidthOwn As String = be.GetData("cellwidthown")
+	If BANano.IsNull(sDataCellWidthOwn) Then sDataCellWidthOwn = ""
+	If sDataCellWidthOwn <> "" Then
+		If ShowLog Then
+			Log($"BEToStyle.${be.name}.cellWidth.${sDataCellWidthOwn}"$)
+		End If
+		sDataCellWidthOwn = BANano.parseInt(sDataCellWidthOwn)
+		ns.cellWidth = sDataCellWidthOwn
+	End If
+	'	
+	Dim sDataFillColor As String = be.GetData("fillcolor")
+	If BANano.IsNull(sDataFillColor) Then sDataFillColor = ""
+	If sDataFillColor <> "" Then
+		If ShowLog Then
+			Log($"BEToStyle.${be.name}.fillColor.${sDataFillColor}"$)
+		End If
+		sDataFillColor = sDataFillColor.Replace(",", ";")
+		Dim fc As List = BANanoShared.StrParse(";", sDataFillColor)
+		fc = BANanoShared.ListItemsToInt(fc)
+		ns.fillColor = fc
+	End If
+
+	Dim sDataFontSize As String = be.GetData("fontsize")
+	If BANano.IsNull(sDataFontSize) Then sDataFontSize = ""
+	If sDataFontSize <> "" Then
+		If ShowLog Then
+			Log($"BEToStyle.${be.name}.fontSize.${sDataFontSize}"$)
+		End If
+		sDataFontSize = BANano.parseInt(sDataFontSize)
+		ns.fontSize = sDataFontSize
+	End If
+
+	Dim sDataFontName As String = be.GetData("fontname")
+	If BANano.IsNull(sDataFontName) Then sDataFontName = ""
+	If sDataFontName <> "" Then
+		If ShowLog Then
+			Log($"BEToStyle.${be.name}.font.${sDataFontName}"$)
+		End If
+		ns.font = sDataFontName
+	End If
+	'
+	Dim sDataFontStyle As String = be.GetData("fontstyle")
+	If BANano.IsNull(sDataFontStyle) Then sDataFontStyle = ""
+	If sDataFontStyle <> "" Then
+		If ShowLog Then
+			Log($"BEToStyle.${be.name}.fontStyle.${sDataFontStyle}"$)
+		End If
+		ns.fontStyle = sDataFontStyle
+	End If
+	'
+	Dim sDataHAlign As String = be.GetData("halign")
+	If BANano.IsNull(sDataHAlign) Then sDataHAlign = ""
+	If sDataHAlign <> "" Then
+		If ShowLog Then
+			Log($"BEToStyle.${be.name}.hAlign.${sDataHAlign}"$)
+		End If
+		ns.halign = sDataHAlign
+	End If
+	
+	'
+	Dim sDataLineColor As String = be.GetData("linecolor")
+	If BANano.IsNull(sDataLineColor) Then sDataLineColor = ""
+	If sDataLineColor <> "" Then
+		If ShowLog Then
+			Log($"BEToStyle.${be.name}.lineColor.${sDataLineColor}"$)
+		End If
+		sDataLineColor = sDataLineColor.Replace(",", ";")
+		Dim lc As List = BANanoShared.StrParse(";", sDataLineColor)
+		lc = BANanoShared.ListItemsToInt(lc)
+		ns.lineColor = lc
+	End If
+		
+	Dim sDataLineWidth As String = be.GetData("linewidth")
+	If BANano.IsNull(sDataLineWidth) Then sDataLineWidth = ""
+	If sDataLineWidth <> "" Then
+		If ShowLog Then
+			Log($"BEToStyle.${be.name}.lineWidth.${sDataLineWidth}"$)
+		End If
+		sDataLineWidth = BANano.parseInt(sDataLineWidth)
+		ns.lineWidth = sDataLineWidth
+	End If
+	'
+	Dim sDataMinCellHeight As String = be.GetData("mincellheight")
+	If BANano.IsNull(sDataMinCellHeight) Then sDataMinCellHeight = ""
+	If sDataMinCellHeight <> "" Then
+		If ShowLog Then
+			Log($"BEToStyle.${be.name}.minCellHeight.${sDataMinCellHeight}"$)
+		End If
+		sDataMinCellHeight = BANano.parseInt(sDataMinCellHeight)
+		ns.minCellHeight = sDataMinCellHeight
+	End If
+	'
+	Dim sDataMinCellWidth As String = be.GetData("mincellwidth")
+	If BANano.IsNull(sDataMinCellWidth) Then sDataMinCellWidth = ""
+	If sDataMinCellWidth <> "" Then
+		If ShowLog Then
+			Log($"BEToStyle.${be.name}.minCellWidth.${sDataMinCellWidth}"$)
+		End If
+		sDataMinCellWidth = BANano.parseInt(sDataMinCellWidth)
+		ns.minCellWidth = sDataMinCellWidth
+	End If
+	'
+	Dim sDataOverFlow As String = be.GetData("overflow")
+	If BANano.IsNull(sDataOverFlow) Then sDataOverFlow = ""
+	If sDataOverFlow <> "" Then
+		If ShowLog Then
+			Log($"BEToStyle.${be.name}.overflow.${sDataOverFlow}"$)
+		End If
+		ns.overflow = sDataOverFlow
+	End If
+	'
+	Dim sDataPadding As String = be.GetData("padding")
+	If BANano.IsNull(sDataPadding) Then sDataPadding = ""
+	If sDataPadding <> "" Then
+		If ShowLog Then
+			Log($"BEToStyle.${be.name}.cellPadding.${sDataPadding}"$)
+		End If
+		sDataPadding = sDataPadding.Replace(",", ";")
+		Dim pd As List = BANanoShared.StrParse(";", sDataPadding)
+		pd = BANanoShared.ListItemsToFloat(pd)
+		Select Case pd.Size
+		Case 1
+			sDataPadding = BANano.parseFloat(sDataPadding)
+			ns.cellPadding = sDataPadding
+		Case 4
+			Dim t As Float = pd.Get(0)
+			Dim r As Float = pd.Get(1)
+			Dim b As Float = pd.Get(2)
+			Dim l As Float = pd.Get(3)
+			'
+			Dim t As Float = BANano.parseFloat(t)
+			Dim r As Float = BANano.parseFloat(r)
+			Dim b As Float = BANano.parseFloat(b)
+			Dim l As Float = BANano.parseFloat(l)
+			'
+			Dim po As Map = CreateMap()
+			po.Put("top",  t)
+			po.Put("right",  r)
+			po.Put("bottom", b)
+			po.Put("left", l)	
+			ns.cellPadding = po
+		Case Else
+			Log($"BEToStyle.You need to fix margins for ${be.Name} it's ${pd.size}, but can be 1 or 4."$)	
+		End Select
+	End If
+
+	Dim sDataTextColor As String = be.GetData("textcolor")
+	If BANano.IsNull(sDataTextColor) Then sDataTextColor = ""
+	If sDataTextColor <> "" Then
+		If ShowLog Then
+			Log($"BEToStyle.${be.name}.textColor.${sDataTextColor}"$)
+		End If
+		sDataTextColor = sDataTextColor.Replace(",", ";")
+		Dim tc As List = BANanoShared.StrParse(";", sDataTextColor)
+		tc = BANanoShared.ListItemsToInt(tc)
+		ns.textColor = tc
+	End If
+	
+	Dim sDataVAlign As String = be.GetData("valign")
+	If BANano.IsNull(sDataVAlign) Then sDataVAlign = ""
+	If sDataVAlign <> "" Then
+		If ShowLog Then
+			Log($"BEToStyle.${be.name}.valign.${sDataVAlign}"$)
+		End If
+		ns.valign = sDataVAlign
+	End If
+	'
+	Select Case sDataApplyTo
+	Case "alternaterows"
+		alternateRowStyles = ns
+	Case "body"
+	    bodyStyles = ns
+	Case "column"
+		If sDataColumnName = "" Then
+			Log($"BEToStyle.${be.name} - You need to specify the column name."$)	
+		Else
+			If headRows.ContainsKey(sDataColumnName) Then
+				addColumnStyle(sDataColumnName, ns)
+			Else
+				Log($"BEToStyle.${be.name} - Column does not exist: '${sDataColumnName}'"$)	
+			End If		
+		End If
+	Case "footer"
+		footerStyles = ns
+	Case "header"
+		headerStyles = ns
+	Case "table"
+		styles = ns
+	End Select
 End Sub
 
 'will right align columns
@@ -163,9 +411,22 @@ Sub setFillColor(s As styleDef, r As Int, g As Int, b As Int)
 	S.fillColor.Add(b)
 End Sub
 
+'set useCSS
+Sub setHTML(s As String)
+	s = s.Replace("#", "")
+	s = s.ToLowerCase
+	options.Put("html", $"#${s}"$)
+End Sub
+
+'set useCSS
+Sub setuseCSS(b As Boolean)
+	If b Then options.Put("useCss", b)
+End Sub
+
 'set table line width
 Sub setTableLineWidth(t As Double)
 	mtableLineWidth = t
+	mtableLineWidth = BANano.parseFloat(mtableLineWidth)
 	options.Put("tableLineWidth", mtableLineWidth)
 End Sub
 
@@ -174,6 +435,55 @@ Sub TableLineColor(r As Int, g As Int, b As Int)
 	mtableLineColor.AddAll(Array As Int(r, g, b))
 	options.Put("tableLineColor", mtableLineColor)
 End Sub
+
+'set table line color using rgb string
+Sub TableLineColor1(rgb As String)
+	If rgb = "" Then Return
+	Dim strcol1 As String
+	Dim strcol2 As String
+	Dim strcol3 As String
+	'
+	rgb = rgb.Replace(";", ",")
+	Dim cols As List = BANanoShared.StrParse(",", rgb)
+	Dim colTot As Int = cols.Size - 1
+	Dim colCnt As Int
+	For colCnt = 0 To colTot
+		Dim strcol As String = cols.Get(colCnt)
+		strcol = strcol.Trim
+		cols.Set(colCnt, strcol)
+	Next
+	colTot = cols.size
+	Select Case colTot
+	Case 1
+		strcol1 = cols.Get(0)
+		strcol1 = BANano.parseInt(strcol1)
+		options.Put("tableLineColor", strcol1)
+	Case 2
+		strcol1 = cols.Get(0)
+		strcol2 = cols.Get(1)
+		strcol1 = BANano.parseInt(strcol1)
+		strcol2 = BANano.parseInt(strcol2)
+		Dim colours As List
+		colours.Initialize 
+		colours.Add(strcol1)
+		colours.Add(strcol2)
+		options.Put("tableLineColor", colours)
+	Case 3
+		strcol1 = cols.Get(0)
+		strcol2 = cols.Get(1)
+		strcol3 = cols.Get(2)
+		strcol1 = BANano.parseInt(strcol1)
+		strcol2 = BANano.parseInt(strcol2)
+		strcol3 = BANano.parseInt(strcol3)
+		Dim colours As List
+		colours.Initialize 
+		colours.Add(strcol1)
+		colours.Add(strcol2)
+		colours.Add(strcol3)
+		options.Put("tableLineColor", colours)
+	End Select	
+End Sub
+
 
 'set rows from a data-table
 Sub SetRows(xrows As List)
@@ -232,26 +542,34 @@ End Sub
 
 'event on didDrawPage
 Sub didDrawPage(Module As Object, methodName As String, data As Object)
-	Dim cb As BANanoObject = BANano.CallBack(Module, methodName, Array(data))
-	options.Put("didDrawPage", cb)
+	If SubExists(Module, methodName) Then
+		Dim cb As BANanoObject = BANano.CallBack(Module, methodName, Array(data))
+		options.Put("didDrawPage", cb)
+	End If
 End Sub
 '
-'event on didParseCell 
-Sub didParseCell(Module As Object, methodName As String, table As Object)
-	Dim cb As BANanoObject = BANano.CallBack(Module, methodName, Array(table))
-	options.Put("didParseCell", cb)
+'This hook is called just before the column width and other features are computed.
+Sub didParseCell(Module As Object, methodName As String, data As Object)
+	If SubExists(Module, methodName) Then
+		Dim cb As BANanoObject = BANano.CallBack(Module, methodName, Array(data))
+		options.Put("didParseCell", cb)
+	End If
 End Sub
 '	
 'event on willDrawCell	
-Sub willDrawCell(Module As Object, methodName As String, cell As Object, data As Object)
-	Dim cb As BANanoObject = BANano.CallBack(Module, methodName, Array(cell, data))
-	options.Put("willDrawCell", cb)
+Sub willDrawCell(Module As Object, methodName As String, data As Object)
+	If SubExists(Module, methodName) Then
+		Dim cb As BANanoObject = BANano.CallBack(Module, methodName, Array(data))
+		options.Put("willDrawCell", cb)
+	End If
 End Sub	
 '
-'event on didDrawCell
-Sub didDrawCell(Module As Object, methodName As String, row As Object, data As Object)
-	Dim cb As BANanoObject = BANano.CallBack(Module, methodName, Array(row, data))
-	options.Put("didDrawCell", cb)
+'Use for adding content to the cells after they are drawn. This could be images or links.
+Sub didDrawCell(Module As Object, methodName As String, data As Object)
+	If SubExists(Module, methodName) Then
+		Dim cb As BANanoObject = BANano.CallBack(Module, methodName, Array(data))
+		options.Put("didDrawCell", cb)
+	End If
 End Sub	
 
 'event on beforePageContent
@@ -273,16 +591,26 @@ private Sub CopyStyles(source As styleDef, target As Map)
 	If source.linewidth <> 0 Then 
 		target.Put("lineWidth", source.lineWidth)
 	End If
-	If source.lineColor.Size > 0 Then 
-		target.Put("lineColor", source.lineColor)
+	If source.lineColor.Size > 0 Then
+		If source.lineColor.Size = 1 Then
+			Dim lc As String = source.lineColor.Get(0)
+			target.Put("lineColor", lc)
+		Else	 
+			target.Put("lineColor", source.lineColor)
+		End If
 	End If
 	If source.fontSize <> 0 Then
 		target.Put("fontSize", source.fontSize)
 	End If
 	If source.fillColor.Size > 0 Then
-		target.Put("fillColor", source.fillColor)
+		If source.fillColor.Size = 1 Then
+			Dim fc As String = source.fillColor.Get(0)
+			target.Put("fillColor", fc)
+		Else
+			target.Put("fillColor", source.fillColor)
+		End If
 	End If
-	If source.cellPadding <> 0 Then
+	If source.cellPadding <> Null Then
 		target.Put("cellPadding", source.cellPadding)
 	End If
 	If source.cellWidth <> "" Then
@@ -307,7 +635,12 @@ private Sub CopyStyles(source As styleDef, target As Map)
 		target.Put("fillStyle", source.fillStyle)
 	End If
 	If source.textColor.Size > 0 Then
-		target.Put("textColor", source.textColor)
+		If source.textColor.Size = 1 Then
+			Dim tc As String = source.textColor.Get(0)
+			target.Put("textColor", tc)
+		Else
+			target.Put("textColor", source.textColor)
+		End If
 	End If
 	target.Put("minCellWidth", source.minCellWidth)
 	target.Put("minCellHeight", source.minCellHeight)
@@ -326,11 +659,6 @@ End Sub
 'set body
 Sub setBody(body As List)
 	options.Put("body", body)
-End Sub
-
-'use CSS
-Sub useCss(b As Boolean)
-	options.Put("useCss", b)
 End Sub
 
 'set padding
@@ -379,6 +707,7 @@ Sub BuildOptions
 	'
 	head.Add(headRows)
 	'
+	options.Put("includeHiddenHtml", includeHiddenHtml)
 	options.Put("head", head)
 	options.Put("columns", columns)
 	options.Put("body", rows)
@@ -461,3 +790,5 @@ Sub SetBorders(width As Int, r As Int, g As Int, b As Int)
 	bodyStyles.lineColor.Add(b)
 	bodyStyles.lineWidth = width
 End Sub
+
+

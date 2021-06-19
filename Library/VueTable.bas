@@ -150,7 +150,7 @@ Sub Class_Globals
 	Private stVIf As String = ""
 	Private stVShow As String = ""
 	Private bDense As Boolean = False
-	Private stItemsPerPage As String = ""
+	Private stItemsPerPage As String = "10"
 	Private stElevation As String = ""
 	Private stGroupBy As String = ""
 	Private bShowGroupBy As Boolean = False
@@ -293,7 +293,8 @@ Private sDateTimeFormat As String
 Private sMoneyFormat As String
 Private sTimeFormat As String
 Private sColumnFilterable As String
-Public VElement As VueElement	
+Public VElement As VueElement
+Private sitemsperpage As String
 End Sub
 
 'initialize the custom view
@@ -330,16 +331,18 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	filters = $"${mName}filters"$
 	allcolumns = $"${mName}allcolumns"$
 	sloading = $"${mName}loading"$
+	sitemsperpage = $"${mName}itemsperpage"$
 	'
 	AddAttr(":loading", sloading)
 	AddAttr(":items", itemsname)
 	AddAttr(":headers", headers)
 	AddAttr(":value", selected)
-	AddAttr(":group-by", groupby)
-	AddAttr(":sort-by", sortby)
-	AddAttr(":group-desc", groupdesc)
-	AddAttr(":sort-desc", sortdesc)
+	AddAttr(":group-by.sync", groupby)
+	AddAttr(":sort-by.sync", sortby)
+	AddAttr(":group-desc.sync", groupdesc)
+	AddAttr(":sort-desc.sync", sortdesc)
 	AddAttr(":expanded.sync", expanded)
+	AddAttr(":items-per-page.sync", sitemsperpage)
 	'AddAttr(":key", keyID)
 	AddAttr(":search", search)
 	
@@ -495,12 +498,12 @@ Sub AddRow(rowData As Map)
 	Items.Add(rowData)
 End Sub
 
-'add a new row at the end of the items
+'add a new row at the end of the items in realtime
 Sub AddRow1(rowdata As Map)
 	VC.SetDataPush(itemsname, rowdata)
 End Sub
 
-'realtime removal of item
+'realtime removal of item in realtime
 Sub RemoveRow(whereMap As Map)
 	'find the item
 	Dim recpos As Int = VC.GetDataPositionWhere(itemsname, whereMap)
@@ -603,19 +606,31 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	Dim strHTML As String = ToString
 	mElement = mTarget.Append(strHTML).Get("#" & mName)
 	VElement.Initialize(mCallBack, mName, mName)
-	
-	AddAttr(":loading", sloading)
-	AddAttr(":items", itemsname)
-	AddAttr(":headers", headers)
-	AddAttr(":value", selected)
-	AddAttr(":group-by", groupby)
-	AddAttr(":sort-by", sortby)
-	AddAttr(":group-desc", groupdesc)
-	AddAttr(":sort-desc", sortdesc)
-	AddAttr(":expanded.sync", expanded)
+	VElement.AddAttr(":loading", sloading)
+	VElement.AddAttr(":items", itemsname)
+	VElement.AddAttr(":headers", headers)
+	VElement.AddAttr(":value", selected)
+	VElement.AddAttr(":group-by.sync", groupby)
+	VElement.AddAttr(":sort-by.sync", sortby)
+	VElement.AddAttr(":group-desc.sync", groupdesc)
+	VElement.AddAttr(":sort-desc.sync", sortdesc)
+	VElement.AddAttr(":expanded.sync", expanded)
+	VElement.AddAttr(":items-per-page.sync", sitemsperpage)
+	VElement.SetData(sitemsperpage, stItemsPerPage)
 	'AddAttr(":key", keyID)
-	AddAttr(":search", search)
-	
+	VElement.AddAttr(":search", search)
+	VElement.AddAttr("ref", stRef)
+	VElement.AddAttr("v-else", stVElse)
+	VElement.AddAttr("v-else-if", stVElseIf)
+	VElement.AddAttr("v-if", stVIf)
+	VElement.AddAttr("v-show", stVShow)
+	VElement.AddAttr("item-key", PrimaryKey)
+	VElement.AddAttr(":dense", bDense)
+	setElevation(stElevation)
+	VElement.AddAttr(":show-select", bShowSelect)
+	VElement.AddAttr(":single-select", bSingleSelect)
+	VElement.AddAttr(":show-group-by", bShowGroupBy)
+		
 	setNoDataText("Working on it, please wait...")
 	'
 	Dim sb As StringBuilder
@@ -646,22 +661,10 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	setShowExpand(bShowExpand)
 	setDark(bDark)
 	
-	AddAttr("ref", stRef)
-	AddAttr("v-else", stVElse)
-	AddAttr("v-else-if", stVElseIf)
-	AddAttr("v-if", stVIf)
-	AddAttr("v-show", stVShow)
-	AddAttr("item-key", PrimaryKey)
-	AddAttr(":dense", bDense)
-	AddAttr("items-per-page.sync", stItemsPerPage)
-	setElevation(stElevation)
-	AddAttr(":show-select", bShowSelect)
-	AddAttr(":single-select", bSingleSelect)
 	If BANano.IsNull(stGroupBy) = False Then
 		Dim gb As List = BANanoShared.StrParse(",",  stGroupBy)
 		SetData(groupby, gb)
 	End If
-	AddAttr(":show-group-by", bShowGroupBy)
 	'
 	AddClass(mClasses)
 	setAttributes(mAttributes)
@@ -1977,7 +1980,8 @@ End Sub
 
 'update from a list of existing recods
 Sub SetDataSource(ds As List)
-	Items.Initialize 
+	Items.Initialize
+	Items = ds 
 	SetData(itemsname, ds)
 End Sub
 
@@ -2076,18 +2080,18 @@ End Sub
 
 'reset everything about data-table 
 Sub Reset
-	VC.SetData(itemsname, NewList)
-	VC.SetData(selected, NewList)
-	VC.SetData(groupby, NewList)
-	VC.SetData(sortby, NewList)
-	VC.SetData(groupdesc, NewList)
-	VC.SetData(sortdesc, NewList)
-	VC.SetData(expanded, NewList)
-	VC.SetData(headers, NewList)
-	VC.SetData(filters, NewList)
-	VC.SetData(allcolumns, NewList)
+	Dim args As List = NewList
+	VC.SetData(itemsname, args)
+	VC.SetData(selected, args)
+	VC.SetData(groupby, args)
+	VC.SetData(sortby, args)
+	VC.SetData(groupdesc, args)
+	VC.SetData(sortdesc, args)
+	VC.SetData(expanded, args)
+	VC.SetData(headers, args)
+	VC.SetData(filters, args)
+	VC.SetData(allcolumns, args)
 	'VC.SetData(keyID, DateTime.Now)
-	'
 	columnsM.Initialize
 End Sub
 
@@ -2099,25 +2103,27 @@ Sub ApplyFilter1(fltrs As List)
 End Sub
 
 Sub Clear
-	Dim records As List
-	records.Initialize 
-	Reload(records)
+	Items.Initialize 
+	Reload(Items)
 End Sub
 
 'update the records
 Sub Reload(records As List)
+	Dim args As List = NewList
+	Items = records
 	VC.SetData(itemsname, records)
-	VC.SetData(selected, NewList)
-	VC.SetData(groupby, NewList)
-	VC.SetData(sortby, NewList)
-	VC.SetData(groupdesc, NewList)
-	VC.SetData(sortdesc, NewList)
-	VC.SetData(expanded, NewList)
+	VC.SetData(selected, args)
+	VC.SetData(groupby, args)
+	VC.SetData(sortby, args)
+	VC.SetData(groupdesc, args)
+	VC.SetData(sortdesc, args)
+	VC.SetData(expanded, args)
 	'VC.SetData(keyID, DateTime.Now)
 End Sub
 
 'update all rows at runtime
 Sub SetRows(records As List)
+	Items = records
 	VC.SetData(itemsname, records)
 End Sub
 
@@ -2718,15 +2724,16 @@ Sub ResetColumns
 		hdr.Add(header)
 		filterList.Add(k)
 	Next
+	Dim args As List = NewList
 	VC.SetData(headers, hdr)
 	VC.SetData(allcolumns, hdr)
 	VC.SetData(filters, filterList)
-	VC.SetData(selected, NewList)
-	VC.SetData(groupby, NewList)
-	VC.SetData(sortby, NewList)
-	VC.SetData(groupdesc, NewList)
-	VC.SetData(sortdesc, NewList)
-	VC.SetData(expanded, NewList)
+	VC.SetData(selected, args)
+	VC.SetData(groupby, args)
+	VC.SetData(sortby, args)
+	VC.SetData(groupdesc, args)
+	VC.SetData(sortdesc, args)
+	VC.SetData(expanded, args)
 	'VC.SetData(keyID, DateTime.Now)
 End Sub
 
@@ -3780,13 +3787,27 @@ Sub SetTotalVisible(varTotalVisible As String)
 	totalVisible = varTotalVisible
 End Sub
 
-'update the data, dont call this direct
-Sub Refresh	
+'update the data, dont call this directly
+Sub Build	
 	'build the headers
 	BuildHeaders(columnsM)	
 	BuildSlots
 	
 	'SetData(keyID, DateTime.Now)
+	If Items.Size > 0 Then
+		SetData(itemsname, Items)
+	End If
+End Sub
+
+'refresh when having used AddRow, AddRow2
+Sub Refresh
+	Dim args As List = NewList
+	VC.SetData(selected, args)
+	VC.SetData(groupby, args)
+	VC.SetData(sortby, args)
+	VC.SetData(groupdesc, args)
+	VC.SetData(sortdesc, args)
+	VC.SetData(expanded, args)
 	If Items.Size > 0 Then
 		SetData(itemsname, Items)
 	End If
@@ -3925,8 +3946,8 @@ End Sub
 
 'set items-per-page
 Sub setItemsPerPage(varItemsPerPage As String)
-	AddAttr("items-per-page", varItemsPerPage)
 	stItemsPerPage = varItemsPerPage
+	SetData(sitemsperpage, varItemsPerPage)
 End Sub
 
 Sub getItemsPerPage As String
@@ -4306,4 +4327,20 @@ End Sub
 
 Sub VisibleOnlyOnXL
 	AddClass("d-none d-xl-flex")
+End Sub
+
+
+'add row list using data keys
+Sub AddRow2(rowList As List)
+	Dim dk As List = BANanoShared.StrParse(";", sColumnFields)
+	Dim nr As Map = CreateMap()
+	Dim dkTot As Int = dk.Size - 1
+	Dim dkCnt As Int
+	For dkCnt = 0 To dkTot
+		Dim k As String = dk.Get(dkCnt)
+		Dim v As String = rowList.Get(dkCnt)
+		k = k.Trim
+		nr.Put(k, v)
+	Next
+	Items.Add(nr)
 End Sub

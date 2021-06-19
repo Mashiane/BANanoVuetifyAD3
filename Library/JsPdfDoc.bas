@@ -13,6 +13,7 @@ Version=7
 #DesignerProperty: Key: Author, DisplayName: Author, FieldType: String, DefaultValue: , Description: Author
 #DesignerProperty: Key: Creator, DisplayName: Creator, FieldType: String, DefaultValue: , Description: Creator
 #DesignerProperty: Key: KeyWords, DisplayName: KeyWords, FieldType: String, DefaultValue: , Description: KeyWords
+#DesignerProperty: Key: ShowLog, DisplayName: ShowLog, FieldType: Boolean, DefaultValue: True, Description: ShowLog
 
 #DesignerProperty: Key: Compress, DisplayName: Compress, FieldType: Boolean, DefaultValue: False, Description: Compress
 #DesignerProperty: Key: FileName, DisplayName: FileName, FieldType: String, DefaultValue: bvad3pdf1, Description: FileName
@@ -87,6 +88,8 @@ Sub Class_Globals
 	Private sLayout As String
 	Private sPMode As String
 	Private sDataTextColor As String
+	Public ParentComponent As VueComponent
+	Public ShowLog As Boolean
 End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -130,6 +133,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sLayout = Props.GetDefault("Layout", "")
 		sPMode = Props.GetDefault("PMode", "")
 		sDataTextColor = Props.GetDefault("DataTextColor", "0; 0; 0")
+		ShowLog = Props.GetDefault("ShowLog", True)
 	End If 
 	'
 	'create an invisible div
@@ -157,6 +161,8 @@ Sub Ready
 	If sFontStyle = "none" Then sFontStyle = ""
 	'initialize the class and do something
 	pdf.Initialize(mCallBack, sFileName)
+	pdf.ParentComponent = ParentComponent
+	pdf.ShowLog = ShowLog
 	pdf.Margin.top = BANano.parseInt(sMarginTop)
 	pdf.Margin.left  = BANano.parseInt(sMarginTop)
 	pdf.Margin.right = BANano.parseInt(sMarginRight)
@@ -201,12 +207,7 @@ Sub Go
 	'get the pdf document
 	Dim doc As BANanoElement
 	doc.Initialize(getHere)
-	'pre import images
-	pdf.ClearImages
 	'
-	'Dim bDone As Boolean = BANano.Await(pdf.BEScanImages(doc))
-	'Log(bDone)
-	
 	pdf.BEToPageChildren(doc)
 	'add page numbers
 	If bPageNumbers Then
@@ -217,12 +218,6 @@ End Sub
 'after adding other elements
 Sub Save
 	pdf.Save
-End Sub
-
-'get base 64 that you can view
-Sub ToViewer As String
-	Dim res As String = pdf.ToBase64
-	Return res
 End Sub
 
 'return the data url

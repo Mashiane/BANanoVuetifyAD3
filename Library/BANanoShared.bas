@@ -29,6 +29,41 @@ Sub Process_Globals
 	Type sequencePair(value As Int, numTimes As Int)
 End Sub
 
+Sub ListTrimItems(cols As List) As List
+	Dim colTot As Int = cols.Size - 1
+	Dim colCnt As Int
+	For colCnt = 0 To colTot
+		Dim strcol As String = cols.Get(colCnt)
+		strcol = strcol.Trim
+		cols.Set(colCnt, strcol)
+	Next
+	Return cols
+End Sub
+
+Sub ListItemsToInt(cols As List) As List
+	Dim colTot As Int = cols.Size - 1
+	Dim colCnt As Int
+	For colCnt = 0 To colTot
+		Dim strcol As String = cols.Get(colCnt)
+		strcol = strcol.trim
+		strcol = BANano.parseInt(strcol)
+		cols.Set(colCnt, strcol)
+	Next
+	Return cols
+End Sub
+
+Sub ListItemsToFloat(cols As List) As List
+	Dim colTot As Int = cols.Size - 1
+	Dim colCnt As Int
+	For colCnt = 0 To colTot
+		Dim strcol As String = cols.Get(colCnt)
+		strcol = strcol.trim
+		strcol = BANano.parseFloat(strcol)
+		cols.Set(colCnt, strcol)
+	Next
+	Return cols
+End Sub
+
 
 Sub IncrementMap(m As Map, k As String)
 	If m.ContainsKey(k) Then
@@ -553,8 +588,12 @@ Sub StrParse(delim As String, inputString As String) As List
 	inputString = CStr(inputString)
 	If BANano.IsNull(inputString) Or BANano.IsUndefined(inputString) Then inputString = ""
 	If inputString = "" Then Return nl
-	Dim values() As String = BANano.Split(delim,inputString)
-	nl.AddAll(values)
+	If inputString.IndexOf(delim) = -1 Then
+		nl.Add(inputString)
+	Else	
+		Dim values() As String = BANano.Split(delim,inputString)
+		nl.AddAll(values)
+	End If
 	Return nl
 End Sub
 
@@ -4224,4 +4263,58 @@ Sub CleanNulls(m As Map) As Map
 		nm.Put(k, v)
 	Next
 	Return nm
+End Sub
+
+
+Sub GetRecursive(data As Map, path As String) As Object
+	Dim prevObj As BANanoObject = data
+	Dim items As List = BANano.Split(".", path)
+	Dim iTot As Int = items.Size
+	Dim iCnt As Int
+	'
+	Dim strprev As String = ""
+	Dim prtObj As BANanoObject
+	Dim litem As String = items.Get(iTot - 1)
+	'
+	For iCnt = 1 To iTot - 1
+		'get the previos path
+		strprev = items.Get(iCnt - 1)
+		'the parent object
+		prtObj = prevObj.GetField(strprev)
+		'this does not exist, return
+		If BANano.IsUndefined(prtObj) Then
+			Return Null
+		Else
+			prevObj = prtObj
+		End If
+	Next
+	Dim res As Object = prevObj.GetField(litem)
+	Return res
+End Sub
+
+Sub PutRecursive(data As Map, path As String, value As Object)
+	Dim prevObj As BANanoObject = data
+	Dim items As List = BANano.Split(".", path)
+	Dim iTot As Int = items.Size
+	Dim iCnt As Int
+	'
+	Dim strprev As String = ""
+	Dim prtObj As BANanoObject
+	Dim litem As String = items.Get(iTot - 1)
+	'
+	For iCnt = 1 To iTot - 1
+		'get the previos path
+		strprev = items.Get(iCnt - 1)
+		'the parent object
+		prtObj = prevObj.GetField(strprev)
+		'this does not exist, create it
+		If BANano.IsUndefined(prtObj) Then
+			Dim no As Object
+			prevObj.SetField(strprev, no)
+			prevObj = prevObj.GetField(strprev)
+		Else
+			prevObj = prtObj
+		End If
+	Next
+	prevObj.SetField(litem, value)
 End Sub
