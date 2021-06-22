@@ -13,7 +13,7 @@ Version=7
 'Custom BANano View class
 #Event: Change (e As BANanoEvent)
 
-
+#DesignerProperty: Key: Required, DisplayName: Required, FieldType: Boolean, DefaultValue: False, Description: Required
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue: , Description: Color, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: ColorIntensity, DisplayName: Colorintensity, FieldType: String, DefaultValue: , Description: Colorintensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: Complete, DisplayName: Complete, FieldType: Boolean, DefaultValue: False, Description: Complete
@@ -48,7 +48,9 @@ Private sRules As String
 Private sStepValue As String
  Private xComplete As String
   Private xEditable As String
-	End Sub
+  Private bRequired As Boolean
+  Private sRequired As String
+End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
 	mName = Name.tolowercase 
@@ -64,7 +66,8 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	End If 
 	xComplete = $"${mName}complete"$
 	xEditable = $"${mName}editable"$
-	sRules = $"${mname}rules"$
+	sRules = $"${mName}rules"$
+	sRequired = $"${mName}required"$
 	End Sub
 
 Sub DesignerCreateView (Target As BANanoElement, Props As Map) 
@@ -82,13 +85,14 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sErrorIcon = Props.GetDefault("ErrorIcon", "")
 		sRules = Props.GetDefault("Rules", "")
 		sStepValue = Props.GetDefault("StepValue", "")
+		bRequired = Props.GetDefault("Required", False)
 	End If 
 	' 
 	'build and get the element 
 	If BANano.Exists($"#${mName}"$) Then 
 		mElement = BANano.GetElement($"#${mName}"$) 
 	Else	 
-		mElement = mTarget.Append($"<v-stepper-step id="${mName}"></v-stepper-step>"$).Get("#" & mName) 
+		mElement = mTarget.Append($"<v-stepper-step ref="${mName}" id="${mName}"></v-stepper-step>"$).Get("#" & mName) 
 	End If 
 	' 
 	VElement.Initialize(mCallBack, mName, mName) 
@@ -107,6 +111,8 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.AddAttr(":rules", sRules)
 	VElement.SetData(sRules, VElement.NewList)
 	VElement.AddAttr("step", sStepValue)
+	VElement.AddAttr(":required", sRequired)
+	VElement.SetData(sRequired, bRequired)
 	VElement.BindAllEvents
 End Sub
 
@@ -169,4 +175,26 @@ End Sub
 '</code>
 Sub AddRule(methodName As String)
 	VElement.AddRule(methodName)
+		VElement.SetData(sRequired, True)
+	bRequired = True
+End Sub
+
+
+Sub BindState(VC As VueComponent)
+	Dim mbindings As Map = VElement.bindings
+	Dim mmethods As Map = VElement.methods
+	'apply the binding for the control
+	For Each k As String In mbindings.Keys
+		Dim v As Object = mbindings.Get(k)
+		Select Case k
+		Case "key"
+		Case Else
+			VC.SetData(k, v)
+		End Select
+	Next
+	'apply the events
+	For Each k As String In mmethods.Keys
+		Dim cb As BANanoObject = mmethods.Get(k)
+		VC.SetCallBack(k, cb)
+	Next
 End Sub

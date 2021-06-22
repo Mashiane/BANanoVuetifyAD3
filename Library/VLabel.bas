@@ -7,6 +7,7 @@ Version=8.9
 #IgnoreWarnings:12
 #Event: Click (e As BANanoEvent)
 
+#DesignerProperty: Key: SetName, DisplayName: SetName, FieldType: Boolean, DefaultValue: false, Description: SetName
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: Caption, DisplayName: Caption, FieldType: String, DefaultValue: , Description: Caption
 #DesignerProperty: Key: VHtml, DisplayName: VHtml, FieldType: String, DefaultValue: , Description: VHtml
@@ -18,8 +19,6 @@ Version=8.9
 #DesignerProperty: Key: Tile, DisplayName: Tile, FieldType: Boolean, DefaultValue: false, Description: Tile
 #DesignerProperty: Key: Rounded, DisplayName: Rounded, FieldType: String, DefaultValue: , Description: Rounded, List: none|rounded-0|rounded|rounded-sm|rounded-lg|rounded-xl|rounded-t-xl|rounded-r-xl|rounded-b-xl|rounded-l-xl|rounded-tl-xl|rounded-tr-xl|rounded-br-xl|rounded-bl-xl|rounded-pill|rounded-circle
 #DesignerProperty: Key: LoremIpsum, DisplayName: LoremIpsum, FieldType: Boolean, DefaultValue: false, Description: LoremIpsum
-#DesignerProperty: Key: SetName, DisplayName: SetName, FieldType: Boolean, DefaultValue: false, Description: SetName
-#DesignerProperty: Key: SetRef, DisplayName: SetRef, FieldType: Boolean, DefaultValue: false, Description: SetRef
 #DesignerProperty: Key: Vertical, DisplayName: Vertical, FieldType: Boolean, DefaultValue: false, Description: Vertical
 #DesignerProperty: Key: Inset, DisplayName: Inset, FieldType: Boolean, DefaultValue: false, Description: Inset
 #DesignerProperty: Key: VOn, DisplayName: V-On, FieldType: String, DefaultValue:  , Description: V-On
@@ -109,7 +108,6 @@ Private bInset As Boolean
 Private sVOn As String
 Private sVBind As String
 Private bSetName As Boolean
-Private bSetRef As Boolean
 Private bHidden As Boolean
 Private sOwnTag As String
 Private sStepValue As String
@@ -179,7 +177,6 @@ bInset = Props.Get("Inset")
 sVOn = Props.Get("VOn")
 		sVBind = Props.Get("VBind")
 		bSetName = Props.Get("SetName")
-		bSetRef = Props.Get("SetRef")
 		sOwnTag = Props.GetDefault("OwnTag", "")
 		sElevation = Props.GetDefault("Elevation", "")
 		bTile = Props.GetDefault("Tile", False)
@@ -201,15 +198,12 @@ sVOn = Props.Get("VOn")
 	If BANano.Exists($"#${mName}"$) Then
 		mElement = BANano.GetElement($"#${mName}"$)
 	Else	
-		mElement = mTarget.Append($"<${sSize} id="${mName}"></${sSize}>"$).Get("#" & mName)
+		mElement = mTarget.Append($"<${sSize} ref="${mName}" id="${mName}"></${sSize}>"$).Get("#" & mName)
 	End If
 	'
 	VElement.Initialize(mCallBack, mName, mName)
 	If bSetName Then
 		VElement.SetAttr("name", mName)
-	End If
-	If bSetRef Then 
-		VElement.SetAttr("ref", mName)
 	End If
 	VElement.TagName = sSize
 	VElement.Classes = mClasses
@@ -305,4 +299,24 @@ End Sub
 
 Sub getHere As String
 	Return $"#${mName}"$
+End Sub
+
+
+Sub BindState(VC As VueComponent)
+	Dim mbindings As Map = VElement.bindings
+	Dim mmethods As Map = VElement.methods
+	'apply the binding for the control
+	For Each k As String In mbindings.Keys
+		Dim v As Object = mbindings.Get(k)
+		Select Case k
+		Case "key"
+		Case Else
+			VC.SetData(k, v)
+		End Select
+	Next
+	'apply the events
+	For Each k As String In mmethods.Keys
+		Dim cb As BANanoObject = mmethods.Get(k)
+		VC.SetCallBack(k, cb)
+	Next
 End Sub

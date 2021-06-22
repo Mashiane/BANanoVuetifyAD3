@@ -92,7 +92,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	</v-btn>
 	</v-toolbar>
 	<v-card-text>
-	<prism id="${mName}"></prism>
+	<prism ref="${mName}" id="${mName}"></prism>
 	</v-card-text>
 	</v-card>"$
 	 
@@ -234,4 +234,24 @@ private Sub BeautifySourceCode(slang As String, sc As String) As String
 		Dim res As String = BANano.RunJavascriptMethod("html_beautify", Array(sc))
 	End Select
 	Return res
+End Sub
+
+
+Sub BindState(VC As VueComponent)
+	Dim mbindings As Map = VElement.bindings
+	Dim mmethods As Map = VElement.methods
+	'apply the binding for the control
+	For Each k As String In mbindings.Keys
+		Dim v As Object = mbindings.Get(k)
+		Select Case k
+		Case "key"
+		Case Else
+			VC.SetData(k, v)
+		End Select
+	Next
+	'apply the events
+	For Each k As String In mmethods.Keys
+		Dim cb As BANanoObject = mmethods.Get(k)
+		VC.SetCallBack(k, cb)
+	Next
 End Sub

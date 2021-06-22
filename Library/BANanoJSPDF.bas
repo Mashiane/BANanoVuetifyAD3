@@ -127,7 +127,8 @@ Sub Class_Globals
 	Public const TEXT_FILLTHENSTROKEANDADDTOPATHFORCLIPPING As String = "fillThenStrokeAndAddToPathForClipping"
 	Public const TEXT_ADDTOPATHFORCLIPPING As String = "addToPathForClipping"
 	
-	Type TextOptions(align As String, baseline As String, rotationDirection As String, charSpace As String, lineHeightFactor As String, maxWidth As String, renderingMode As String, angle As String)
+	Type flagsT(noBOM As Boolean, autoencode As Boolean)
+	Type TextOptions(align As String, baseline As String, rotationDirection As Int, charSpace As Int, lineHeightFactor As Double, maxWidth As Int, renderingMode As String, angle As Int, url As String, pageNumber As Int, flags As flagsT)
 	'
 	Public const OUTPUT_ARRAY_BUFFER As String = "arraybuffer"
 	Public const OUTPUT_BLOB As String = "blob"
@@ -146,16 +147,25 @@ End Sub
 
 'new text options
 Sub NewTextOptions As TextOptions
+	Dim flags As Map = CreateMap()
+	flags.Put("noBOM", True)
+	flags.Put("autoencode", True)
+	'
 	Dim nt As TextOptions
 	nt.Initialize 
 	nt.align = ALIGN_LEFT
 	nt.baseline = BASELINE_ALPHABETIC
-	nt.angle = "0"
+	nt.angle = 0
 	nt.rotationDirection = ROTATION_COUNTERCLOCKWISE
-	nt.charSpace = "0"
-	nt.lineHeightFactor = "1.15"
-	nt.maxWidth = "0"
+	nt.charSpace = 0
+	nt.lineHeightFactor = 1.15
+	nt.maxWidth = 0
 	nt.renderingMode = TEXT_FILL
+	nt.flags.Initialize 
+	nt.flags.noBOM = True
+	nt.flags.autoencode = True
+	nt.url = ""
+	nt.pageNumber = 0
 	Return nt
 End Sub
 
@@ -1300,41 +1310,29 @@ Sub BEToText(BE As BANanoElement)
 	'set text color using rgb
 	SetTextColor(sDataTextColor)
 	
-	Dim flags As Map = CreateMap()
-	flags.Put("noBOM", True)
-	flags.Put("autoencode", True)
+	Dim nto As TextOptions = NewTextOptions
+	nto.align = sDataAlign
+	nto.baseline = sDataBaseline
+	nto.angle = BANano.parseInt(sDataAngle)
+	nto.rotationDirection = BANano.parseInt(sDataRotationDirection)
+	nto.flags.autoencode = True
+	nto.flags.noBOM = True
+	nto.charSpace = sDataCharSpace
+	nto.lineHeightFactor = BANano.parseFloat(sDataLineHeightFactor)
+	nto.maxWidth = BANano.parseInt(sDataMaxWidth)
+	nto.renderingMode = sDataRenderingMode
+	nto.url = sDataUrl
+	nto.pageNumber = BANano.parseInt(sDataPageNumber)
 	'
-	Dim opt As Map = CreateMap()
-	opt.Put("align", sDataAlign)
-	opt.Put("baseline", sDataBaseline)
-	opt.Put("angle", sDataAngle)
-	opt.Put("rotationDirection", sDataRotationDirection)
-	opt.Put("charSpace", sDataCharSpace)
-	opt.Put("lineHeightFactor", sDataLineHeightFactor)
-	opt.Put("flags", flags)
-	opt.Put("maxWidth", sDataMaxWidth)
-	opt.Put("renderingMode", sDataRenderingMode)
-	If sDataUrl <> "" Then
-		opt.Put("url", sDataUrl)
-	End If
-	If sDataPageNumber > 0 Then
-		opt.put("pageNumber", sDataPageNumber)
-	End If
 	sDataTransform = BANano.IIf(sDataTransform="", Null, sDataTransform)
 	'
 	sDataX = BANano.parseInt(sDataX)
 	sDataY = BANano.parseInt(sDataY)
 	
 	If bDataWithLink Then
-		If ShowLog Then
-		Log($"pdf.textWithLink("${sDataText}", ${sDataX}, ${sDataY}, ${opt}, ${sDataTransform})"$)
-	End If
-		jsPDF.RunMethod("textWithLink", Array(sDataText, sDataX, sDataY, opt, sDataTransform))
+		SetTextWithLink1(sDataText, sDataX, sDataY, nto, sDataTransform)
 	Else
-		If ShowLog Then
-			Log($"pdf.text("${sDataText}", ${sDataX}, ${sDataY}, ${BANano.ToJson(opt)}, ${sDataTransform})"$)
-		End If
-		jsPDF.RunMethod("text", Array(sDataText, sDataX, sDataY, opt, sDataTransform))
+		SetText2(sDataText, sDataX, sDataY, nto, sDataTransform)
 	End If	
 	Catch
 		Log(LastException)
@@ -1409,53 +1407,50 @@ Sub BEToAnnotation(be As BANanoElement)
 	End Try
 End Sub
 
-'set text
-Sub SetText(X As Int, Y As Int, txt As String) As BANanoJSPDF
+'set text XY Text
+Sub SetText(X As String, Y As String, txt As String) As BANanoJSPDF
+	Try
+		x = BANano.parseInt(x)
+		y = BANano.parseInt(y)
 	If ShowLog Then
 		Log($"pdf.text(${x}, ${y}, "${txt}")"$)
 	End If
 	jsPDF.RunMethod("text", Array(x, y, txt))
+	Catch
+		Log(LastException)
+	End Try	
 	Return Me
 End Sub
 
-'set text 1
-Sub SetText1(txt As String, X As Int, Y As Int) As BANanoJSPDF
+'set text Text XY
+Sub SetText1(txt As String, X As String, Y As String) As BANanoJSPDF
+	Try
+	x = BANano.parseInt(x)
+	y = BANano.parseInt(y)
+		
 	If ShowLog Then
 		Log($"pdf.text("${txt}", ${x}, ${y})"$)
 	End If
 	jsPDF.RunMethod("text", Array(txt, x, y))
+	Catch
+		Log(LastException)
+	End Try	
 	Return Me
 End Sub
 
-'set text 1
-Sub addText1(txt As String, X As Int, Y As Int) As BANanoJSPDF
-	If ShowLog Then
-		Log($"pdf.text("${txt}", ${x}, ${y})"$)
-	End If
-	jsPDF.RunMethod("text", Array(txt, x, y))
-	Return Me
-End Sub
 
-'set text with alignment
-Sub SetTextAlignRight(X As Int, Y As Int, txt As String) As BANanoJSPDF
-	If ShowLog Then
-		Log($"pdf.text(${x}, ${y}, "${txt}", "right")"$)
-	End If
-	jsPDF.RunMethod("text", Array(x, y, txt, "right"))
-	Return Me
-End Sub
-
-'set text with alignment
-Sub SetTextAlignCenter(X As Int, Y As Int, txt As String) As BANanoJSPDF
-	If ShowLog Then
-		Log($"pdf.text(${x}, ${y}, "${txt}", "center")"$)
-	End If
-	jsPDF.RunMethod("text", Array(x, y, txt, "center"))
-	Return Me
-End Sub
-
-'set text with options
-Sub SetTextOptions(txt As String, x As Int, y As Int, opt As TextOptions) As BANanoJSPDF
+private Sub BuildTextOptions(opt As TextOptions) As Map
+	Dim flags As Map = CreateMap()
+	flags.Put("noBOM", opt.flags.noBOM)
+	flags.Put("autoencode", opt.flags.autoencode)
+	'
+	opt.angle = BANano.parseInt(opt.angle)
+	opt.rotationDirection = BANano.parseInt(opt.rotationDirection)
+	opt.charSpace = BANano.parseInt(opt.charSpace)
+	opt.lineHeightFactor = BANano.parseFloat(opt.lineHeightFactor)
+	opt.maxWidth = BANano.parseInt(opt.maxWidth)
+	opt.pageNumber = BANano.parseInt(opt.pageNumber)
+	'
 	Dim options As Map = CreateMap()
 	options.Put("align", opt.align)
 	options.Put("baseline", opt.baseline)
@@ -1463,18 +1458,84 @@ Sub SetTextOptions(txt As String, x As Int, y As Int, opt As TextOptions) As BAN
 	options.Put("rotationDirection", opt.rotationDirection)
 	options.Put("charSpace", opt.charSpace)
 	options.Put("lineHeightFactor", opt.lineHeightFactor)
+	options.Put("flags", flags)
 	options.Put("maxWidth", opt.maxWidth)
 	options.Put("renderingMode", opt.renderingMode)
+	'
+	If opt.url <> "" Then
+		options.Put("url", opt.url)
+	End If
+	If opt.pageNumber <> 0 Then
+		options.put("pageNumber", opt.pageNumber)
+	End If
+	Return options
+End Sub
+
+'set text with options and transform
+Sub SetText2(txt As String, x As String, y As String, opt As TextOptions, sDataTransform As String) As BANanoJSPDF
+	Try
+	Dim options As Map = BuildTextOptions(opt)
+	sDataTransform = BANano.IIf(sDataTransform="", Null, sDataTransform)
+	'
+	x = BANano.parseInt(x)
+	y = BANano.parseInt(y)
+	'	
 	If ShowLog Then
 		Log($"pdf.text("${txt}", ${x}, ${y}, ${BANano.ToJson(options)})"$)
 	End If
-	jsPDF.RunMethod("text", Array(txt, x, y, options))
+	jsPDF.RunMethod("text", Array(txt, x, y, options, sDataTransform))
+	Catch
+		Log(LastException)
+	End Try	
+	Return Me
+End Sub
+
+'set text with link extended
+Sub SetTextWithLink1(txt As String, x As String, y As String, opt As TextOptions, sDataTransform As String) As BANanoJSPDF
+	Try
+		Dim options As Map = BuildTextOptions(opt)
+				'
+		sDataTransform = BANano.IIf(sDataTransform="", Null, sDataTransform)
+		'
+		x = BANano.parseInt(x)
+		y = BANano.parseInt(y)
+		
+		If ShowLog Then
+			Log($"pdf.textWithLink("${txt}", ${x}, ${y}, ${BANano.ToJson(options)})"$)
+		End If
+		jsPDF.RunMethod("textWithLink", Array(txt, x, y, options, sDataTransform))
+	Catch
+		Log(LastException)
+	End Try	
+	Return Me
+End Sub
+
+'set text with link simple
+Sub SetTextWithLink(txt As String, x As String, y As String, sDataURL As String, sPageNumber As String) As BANanoJSPDF
+	Try
+		Dim nto As TextOptions = NewTextOptions
+		nto.url = sDataURL
+		nto.pageNumber = BANano.parseInt(sPageNumber)
+		'
+		Dim options As Map = BuildTextOptions(nto)
+		'
+		x = BANano.parseInt(x)
+		y = BANano.parseInt(y)
+		
+		If ShowLog Then
+			Log($"pdf.textWithLink("${txt}", ${x}, ${y}, ${BANano.ToJson(options)})"$)
+		End If
+		jsPDF.RunMethod("textWithLink", Array(txt, x, y, options))
+	Catch
+		Log(LastException)
+	End Try	
 	Return Me
 End Sub
 
 'set the text color
 Sub SetTextColor(rgba As String) As BANanoJSPDF
 	If rgba = "" Then Return Me
+	Try
 	Dim strcol1 As String
 	Dim strcol2 As String
 	Dim strcol3 As String
@@ -1526,12 +1587,16 @@ Sub SetTextColor(rgba As String) As BANanoJSPDF
 		End If
 		jsPDF.RunMethod("setTextColor", Array(strcol1, strcol2, strcol3, strcol4))
 	End Select
+	Catch
+		Log(LastException)
+	End Try	
 	Return Me
 End Sub
 
 'set the fill color
 Sub SetFillColor(rgba As String) As BANanoJSPDF
 	If rgba = "" Then Return Me
+	Try
 	Dim strcol1 As String
 	Dim strcol2 As String
 	Dim strcol3 As String
@@ -1583,6 +1648,9 @@ Sub SetFillColor(rgba As String) As BANanoJSPDF
 		End If
 		jsPDF.RunMethod("setFillColor", Array(strcol1, strcol2, strcol3, strcol4))
 	End Select
+	Catch
+		Log(LastException)
+	End Try	
 	Return Me
 End Sub
 
@@ -1590,6 +1658,7 @@ End Sub
 'set the draw color
 Sub SetDrawColor(rgba As String) As BANanoJSPDF
 	If rgba = "" Then Return Me
+	Try
 	Dim strcol1 As String
 	Dim strcol2 As String
 	Dim strcol3 As String
@@ -1641,6 +1710,9 @@ Sub SetDrawColor(rgba As String) As BANanoJSPDF
 		End If
 		jsPDF.RunMethod("setDrawColor", Array(strcol1, strcol2, strcol3, strcol4))
 	End Select
+	Catch
+		Log(LastException)
+	End Try	
 	Return Me
 End Sub
 
@@ -1681,6 +1753,7 @@ End Sub
 
 'set the font size
 Sub SetFontSize(fs As String) As BANanoJSPDF
+	Try
 	fs = fs & "" 
 	fs = BANano.parseInt(fs)
 	If fs = 0 Then Return Me
@@ -1689,26 +1762,37 @@ Sub SetFontSize(fs As String) As BANanoJSPDF
 		Log($"pdf.setFontSize(${fs})"$)
 	End If
 	jsPDF.runmethod("setFontSize", Array(fs))
+	Catch
+		Log(LastException)
+	End Try	
 	Return Me
 End Sub
 
 'set the font
 Sub SetFont(fs As String) As BANanoJSPDF
+	Try
 	If fs = "" Then Return Me
 	If ShowLog Then
 		Log($"pdf.setFont(${fs})"$)
 	End If
 	jsPDF.runmethod("setFont", Array(fs))
+	Catch
+		Log(LastException)
+	End Try	
 	Return Me
 End Sub
 
 'set the font name and style
 Sub SetFontStyle(fn As String, fs As String) As BANanoJSPDF
+	Try
 	If fn = "" Then Return Me
 	If ShowLog Then
 		Log($"pdf.setFont("${fn}", "${fs}")"$)
 	End If
 	jsPDF.runmethod("setFont", Array(fn, fs))
+	Catch
+		Log(LastException)
+	End Try	
 	Return Me
 End Sub
 
@@ -1751,6 +1835,7 @@ End Sub
 
 'initialize the pdf engine
 Sub Start As BANanoJSPDF
+	Try
 	If ShowLog Then
 		Log($"pdf.Start"$)
 	End If
@@ -1772,15 +1857,18 @@ Sub Start As BANanoJSPDF
 		End If
 		pdfOptions.Put("encryption", encryption)
 	End If
-	CopyMargin(Margin, marginM)
+	CopyMargin(margin, marginM)
 	If marginM.Size > 0 Then
 		pdfOptions.put("margin", marginM)
 	End If
 	If ShowLog Then
-		Log($"pdf.new jsPDF(${banano.ToJson(pdfOptions)})"$)
+		Log($"pdf.new jsPDF(${BANano.ToJson(pdfOptions)})"$)
 	End If
 	jsPDF.Initialize2("jsPDF", Array(pdfOptions))
 	autoTableSetDefaults
+	Catch
+		Log(LastException)
+	End Try	
 	Return Me
 End Sub
 
@@ -1794,16 +1882,21 @@ End Sub
 
 'add table from BANanoJSPDFTable
 Sub autoTable(tbl As BANanoJSPDFTable) As BANanoJSPDF
+	Try
 	tbl.buildoptions
 	If ShowLog Then
 		Log($"pdf.autoTable(${BANano.ToJson(tbl.options)})"$)
 	End If
 	jsPDF.RunMethod("autoTable", Array(tbl.options))
+	Catch
+		Log(LastException)
+	End Try	
 	Return Me
 End Sub
 
 'add table from html element
 Sub autoTable1(tableID As String) As BANanoJSPDF
+	Try
 	tableID = tableID.ToLowerCase
 	Dim opt As Map = CreateMap()
 	opt.Put("html", $"#${tableID}"$)
@@ -1811,15 +1904,22 @@ Sub autoTable1(tableID As String) As BANanoJSPDF
 		Log($"pdf.autoTable(${BANano.ToJson(opt)})"$)
 	End If
 	jsPDF.RunMethod("autoTable", Array(opt))
+	Catch
+		Log(LastException)
+	End Try	
 	Return Me
 End Sub
 
 'save the pdf document
 Sub Save
+	Try
 	If ShowLog Then
 		Log($"pdf.save"$)
 	End If
 	jsPDF.RunMethod("save", Array(fname))
+	Catch
+		Log(LastException)
+	End Try	
 End Sub
 
 'get the output of the document
@@ -1841,10 +1941,35 @@ End Sub
 
 'add base 64 image
 Sub addImage(imgData As String, imgType As String, X As Int, Y As Int, iWidth As Int, iHeight As Int) As BANanoJSPDF
+	Try
 	If ShowLog Then
 		Log($"pdf.addImage("${imgData}", "${imgType}", ${x}, ${y}, ${iWidth}, ${iHeight})"$)
 	End If
+	x = BANano.parseInt(X)
+	Y = BANano.parseInt(Y)
+	iHeight = BANano.parseInt(iHeight)
+	iWidth = BANano.parseInt(iWidth)
 	jsPDF.RunMethod("addImage", Array(imgData, imgType, X, Y, iWidth, iHeight))
+	Catch
+		Log(LastException)
+	End Try	
+	Return Me
+End Sub
+
+'add base 64 image
+Sub addImage1(imgData As String, imgType As String, X As Int, Y As Int, iWidth As Int, iHeight As Int, sAlias As String, sCompression As String, iRotation As Int) As BANanoJSPDF
+	Try
+	If ShowLog Then
+		Log($"pdf.addImage("${imgData}", "${imgType}", ${x}, ${y}, ${iWidth}, ${iHeight}, "${sAlias}", "${sCompression}", ${iRotation})"$)
+	End If
+	x = BANano.parseInt(X)
+	Y = BANano.parseInt(Y)
+	iHeight = BANano.parseInt(iHeight)
+	iWidth = BANano.parseInt(iWidth)
+	jsPDF.RunMethod("addImage", Array(imgData, imgType, X, Y, iWidth, iHeight, sAlias, sCompression, iRotation))
+	Catch
+		Log(LastException)
+	End Try	
 	Return Me
 End Sub
 
@@ -1941,10 +2066,9 @@ Sub SetPageNumbers As BANanoJSPDF
 		SetPage(pgCnt)
 		Dim halfWidth As Int = GetPageWidth / 2
 		Dim halfHeight As Int = GetPageHeight
-		Dim txtOpt As TextOptions
-		txtOpt = NewTextOptions
+		Dim txtOpt As TextOptions = NewTextOptions
 		txtOpt.align = ALIGN_CENTER
-		SetTextOptions($"Page ${pgCnt} of ${pageCount}"$, halfWidth, halfHeight - 15, txtOpt)	
+		SetText2($"Page ${pgCnt} of ${pageCount}"$, halfWidth, halfHeight - 15, txtOpt, Null)	
 	Next
 	Return Me
 End Sub
@@ -2066,6 +2190,7 @@ Sub link(x As String, y As String, w As String, h As String, pageNumber As Strin
 			opt.Put("url", url)
 		End If
 		If pageNumber <> "" Then
+			pageNumber = BANano.parseInt(pageNumber)
 			opt.put("pageNumber", pageNumber)
 		End If
 		If ShowLog Then

@@ -145,14 +145,14 @@ sVShow = Props.Get("VShow")
 sVOn = Props.Get("VOn")
 bHidden = Props.GetDefault("Hidden", False)
 sValue = Props.Get("Value")
-bDisabled = Props.GetDefault("Disabled",false)
+bDisabled = Props.GetDefault("Disabled",False)
 	End If
 	'
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
 		mElement = BANano.GetElement($"#${mName}"$)
 	Else	
-		mElement = mTarget.Append($"<v-list-item id="${mName}"></v-list-item>"$).Get("#" & mName)
+		mElement = mTarget.Append($"<v-list-item ref="${mName}" id="${mName}"></v-list-item>"$).Get("#" & mName)
 	End If
 	'
 	If BANano.IsNull(bDisabled) Or BANano.IsUndefined(bDisabled) Then
@@ -247,4 +247,24 @@ End Sub
 Sub UpdateDisabled(VC As VueComponent, b As Boolean)
 	bDisabled = b
 	VC.SetData(sDisabled, b)
+End Sub
+
+
+Sub BindState(VC As VueComponent)
+	Dim mbindings As Map = VElement.bindings
+	Dim mmethods As Map = VElement.methods
+	'apply the binding for the control
+	For Each k As String In mbindings.Keys
+		Dim v As Object = mbindings.Get(k)
+		Select Case k
+		Case "key"
+		Case Else
+			VC.SetData(k, v)
+		End Select
+	Next
+	'apply the events
+	For Each k As String In mmethods.Keys
+		Dim cb As BANanoObject = mmethods.Get(k)
+		VC.SetCallBack(k, cb)
+	Next
 End Sub

@@ -117,7 +117,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	End If
 	
 	'build and get the element
-	Dim strHTML As String = $"<div id="${mName}">
+	Dim strHTML As String = $"<div ref="${mName}" id="${mName}">
 <div id="${iconDiv}" class="icon">
 <i id="${iconID}" class="material-icons mdi"></i>
 </div>
@@ -586,5 +586,25 @@ Sub RemoveCodeBindings(b As List)
 		If k <> "" Then
 			bindings.Remove(k)
 		End If
+	Next
+End Sub
+
+
+Sub BindState(Vs As VueComponent)
+	Dim mbindings As Map = bindings
+	Dim mmethods As Map = methods
+	'apply the binding for the control
+	For Each k As String In mbindings.Keys
+		Dim v As Object = mbindings.Get(k)
+		Select Case k
+		Case "key"
+		Case Else
+			Vs.SetData(k, v)
+		End Select
+	Next
+	'apply the events
+	For Each k As String In mmethods.Keys
+		Dim cb As BANanoObject = mmethods.Get(k)
+		Vs.SetCallBack(k, cb)
 	Next
 End Sub

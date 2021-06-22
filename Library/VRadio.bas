@@ -24,6 +24,7 @@ Version=7
 #DesignerProperty: Key: Value, DisplayName: Value (Multiple), FieldType: String, DefaultValue: radio1, Description: Value
 #DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: Boolean, DefaultValue: False, Description: Disabled
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
+#DesignerProperty: Key: Required, DisplayName: Required, FieldType: Boolean, DefaultValue: False, Description: Required
 
 #DesignerProperty: Key: ActiveClass, DisplayName: ActiveClass, FieldType: String, DefaultValue: , Description: ActiveClass
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue: , Description: Color, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
@@ -76,7 +77,9 @@ Private sValue As String
  Private bDisabled As Boolean
  Private bReadOnly As Boolean
  Private bHidden As Boolean
- private bChecked as boolean
+ Private bChecked As Boolean
+ Private bRequired As Boolean
+ private sRequired as string
 	End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -94,6 +97,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	sDisabled = $"${mName}disabled"$
 	sReadonly = $"${mName}readonly"$
 	sVShow = $"${mName}show"$
+	sRequired = $"${mName}required"$
 	End Sub
 
 Sub DesignerCreateView (Target As BANanoElement, Props As Map) 
@@ -123,13 +127,14 @@ sVShow = Props.GetDefault("VShow", "")
 sValue = Props.GetDefault("Value", "")
 bHidden = Props.GetDefault("Hidden", False)
  bChecked = Props.GetDefault("Checked", False)
+ bRequired = Props.GetDefault("Required", False)
 	End If 
 	' 
 	'build and get the element 
 	If BANano.Exists($"#${mName}"$) Then 
 		mElement = BANano.GetElement($"#${mName}"$) 
 	Else	 
-		mElement = mTarget.Append($"<v-radio id="${mName}"></v-radio>"$).Get("#" & mName) 
+		mElement = mTarget.Append($"<v-radio ref="${mName}" id="${mName}"></v-radio>"$).Get("#" & mName) 
 	End If 
 	' 
 	VElement.Initialize(mCallBack, mName, mName) 
@@ -161,6 +166,8 @@ VElement.AddAttr("v-on", sVOn)
 VElement.AddAttr("v-show", sVShow)
 VElement.SetData(sVShow, Not(bHidden))
 VElement.AddAttr("value", sValue)
+VElement.AddAttr(":required", sRequired)
+VElement.SetData(sRequired, bRequired)
 VElement.BindAllEvents
 End Sub
 
@@ -237,6 +244,8 @@ End Sub
 '</code>
 Sub AddRule(methodName As String)
 	VElement.AddRule(methodName)
+		VElement.SetData(sRequired, True)
+	bRequired = True
 End Sub
 
 
@@ -263,4 +272,23 @@ End Sub
 
 Sub getHere As String
 	Return $"#${mName}"$
+End Sub
+
+Sub BindState(VC As VueComponent)
+	Dim mbindings As Map = VElement.bindings
+	Dim mmethods As Map = VElement.methods
+	'apply the binding for the control
+	For Each k As String In mbindings.Keys
+		Dim v As Object = mbindings.Get(k)
+		Select Case k
+		Case "key"
+		Case Else
+			VC.SetData(k, v)
+		End Select
+	Next
+	'apply the events
+	For Each k As String In mmethods.Keys
+		Dim cb As BANanoObject = mmethods.Get(k)
+		VC.SetCallBack(k, cb)
+	Next
 End Sub

@@ -59,7 +59,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bHidden = Props.GetDefault("Hidden", False)
 		sFileName = Props.GetDefault("FileName", "")
 		sVIf = Props.GetDefault("VIf", "")
-		sVShow = Props.GetDefault("VShow", "")
+		'sVShow = Props.GetDefault("VShow", "")
 	End If 
 	' 
 	'build and get the element 

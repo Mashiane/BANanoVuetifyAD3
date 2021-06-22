@@ -79,7 +79,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sColorIntensity = Props.Get("ColorIntensity")
 		bDark = Props.Get("Dark")
 		bDense = Props.Get("Dense")
-		bDisabled = Props.GetDefault("Disabled",false)
+		bDisabled = Props.GetDefault("Disabled",False)
 		sPosition = Props.Get("Position")
 		sSize = Props.Get("Size")
 		sSize1 = Props.Get("Size1")
@@ -95,7 +95,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	If BANano.Exists($"#${mName}"$) Then
 		mElement = BANano.GetElement($"#${mName}"$)
 	Else	
-		mElement = mTarget.Append($"<v-icon id="${mName}">${sCaption}</v-icon>"$).Get("#" & mName)
+		mElement = mTarget.Append($"<v-icon ref="${mName}" id="${mName}">${sCaption}</v-icon>"$).Get("#" & mName)
 	End If
 	'
 	VElement.Initialize(mCallBack, mName, mName)
@@ -182,4 +182,24 @@ End Sub
 
 Sub getHere As String
 	Return $"#${mName}"$
+End Sub
+
+
+Sub BindState(VC As VueComponent)
+	Dim mbindings As Map = VElement.bindings
+	Dim mmethods As Map = VElement.methods
+	'apply the binding for the control
+	For Each k As String In mbindings.Keys
+		Dim v As Object = mbindings.Get(k)
+		Select Case k
+		Case "key"
+		Case Else
+			VC.SetData(k, v)
+		End Select
+	Next
+	'apply the events
+	For Each k As String In mmethods.Keys
+		Dim cb As BANanoObject = mmethods.Get(k)
+		VC.SetCallBack(k, cb)
+	Next
 End Sub

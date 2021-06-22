@@ -333,7 +333,7 @@ bValidateOnBlur = Props.Get("ValidateOnBlur")
 	If BANano.Exists($"#${mName}"$) Then 
 		mElement = BANano.GetElement($"#${mName}"$) 
 	Else	 
-		mElement = mTarget.Append($"<v-combobox id="${mName}"></v-combobox>"$).Get("#" & mName) 
+		mElement = mTarget.Append($"<v-combobox ref="${mName}" id="${mName}"></v-combobox>"$).Get("#" & mName) 
 	End If 
 	' 
 	
@@ -554,6 +554,8 @@ End Sub
 '</code>
 Sub AddRule(methodName As String)
 	VElement.AddRule(methodName)
+		VElement.SetData(sRequired, True)
+	bRequired = true
 End Sub
 
 'Update Items
@@ -722,3 +724,21 @@ Sub getVModel As String
 	Return sVModel
 End Sub
 
+Sub BindState(VC As VueComponent)
+	Dim mbindings As Map = VElement.bindings
+	Dim mmethods As Map = VElement.methods
+	'apply the binding for the control
+	For Each k As String In mbindings.Keys
+		Dim v As Object = mbindings.Get(k)
+		Select Case k
+		Case "key"
+		Case Else
+			VC.SetData(k, v)
+		End Select
+	Next
+	'apply the events
+	For Each k As String In mmethods.Keys
+		Dim cb As BANanoObject = mmethods.Get(k)
+		VC.SetCallBack(k, cb)
+	Next
+End Sub

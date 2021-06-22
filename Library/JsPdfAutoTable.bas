@@ -84,7 +84,6 @@ Sub Class_Globals
 	Private sDataTableWidth As String
 	Private sDataTextColor As String
 	Private sDataTheme As String
-	Private sDataType As String
 	Private bDataUseCss As Boolean
 	Private sDataFontWeight As String
 	Public Rows As List
@@ -138,7 +137,6 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sDataTableWidth = Props.GetDefault("DataTableWidth", "auto")
 		sDataTextColor = Props.GetDefault("DataTextColor", "")
 		sDataTheme = Props.GetDefault("DataTheme", "striped")
-		sDataType = Props.GetDefault("DataType", "text")
 		bDataUseCss = Props.GetDefault("DataUseCss", False)
 		sDataFontWeight = Props.GetDefault("DataFontWeight", "400")
 		sDataSource = Props.GetDefault("DataSource", "")

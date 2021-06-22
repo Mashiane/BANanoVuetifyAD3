@@ -4,7 +4,7 @@ ModulesStructureVersion=1
 Type=Class
 Version=7
 @EndOfDesignText@
-#IgnoreWarnings:12
+#IgnoreWarnings:12, 9
 'Created with BANano Custom View Creator 1.00 by TheMash
 'https://github.com/Mashiane/BANano-Custom-View-Creator
 'Custom BANano View class
@@ -24,7 +24,10 @@ Version=7
 #DesignerProperty: Key: DifferentColorsCurveSeries, DisplayName: DifferentColorsCurveSeries, FieldType: Boolean, DefaultValue: False, Description: DifferentColorsCurveSeries
 #DesignerProperty: Key: Discrete, DisplayName: Discrete, FieldType: Boolean, DefaultValue: False, Description: Discrete
 #DesignerProperty: Key: Donut, DisplayName: Donut, FieldType: Boolean, DefaultValue: False, Description: Donut
-#DesignerProperty: Key: Download, DisplayName: Download, FieldType: Boolean, DefaultValue: False, Description: Download
+#DesignerProperty: Key: BorderWidth, DisplayName: BorderWidth, FieldType: String, DefaultValue: , Description: BorderWidth
+#DesignerProperty: Key: ShowLine, DisplayName: ShowLine, FieldType: Boolean, DefaultValue: False, Description: ShowLine
+#DesignerProperty: Key: XNumeric, DisplayName: XNumeric, FieldType: Boolean, DefaultValue: False, Description: XNumeric
+#DesignerProperty: Key: Download, DisplayName: Download, FieldType: Boolean, DefaultValue: True, Description: Download
 #DesignerProperty: Key: Height, DisplayName: Height, FieldType: String, DefaultValue: 500px, Description: Height
 #DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: 100%, Description: Width
 #DesignerProperty: Key: Label, DisplayName: Label, FieldType: String, DefaultValue: , Description: Label
@@ -36,6 +39,7 @@ Version=7
 #DesignerProperty: Key: Refresh, DisplayName: Refresh, FieldType: String, DefaultValue: , Description: Refresh
 #DesignerProperty: Key: Round, DisplayName: Round, FieldType: String, DefaultValue: , Description: Round
 #DesignerProperty: Key: Stacked, DisplayName: Stacked, FieldType: Boolean, DefaultValue: False, Description: Stacked
+#DesignerProperty: Key: Points, DisplayName: Points, FieldType: Boolean, DefaultValue: True, Description: Points
 #DesignerProperty: Key: Suffix, DisplayName: Suffix, FieldType: String, DefaultValue: , Description: Suffix
 #DesignerProperty: Key: XAxisDisplay, DisplayName: XAxisDisplay, FieldType: Boolean, DefaultValue: True, Description: XAxisDisplay
 #DesignerProperty: Key: XAxisGridCircular, DisplayName: XAxisGridCircular, FieldType: Boolean, DefaultValue: False, Description: XAxisGridCircular
@@ -91,6 +95,7 @@ Sub Class_Globals
 	Public VElement As VueElement 
 	Private bHidden As Boolean
 	Private ColorMap As Map
+	Private xtype As String = ""
 	Private bBytes As Boolean
 		Private sChartType As String
 		Private sColors As String
@@ -159,6 +164,7 @@ Sub Class_Globals
 		Private bZeros As Boolean 
 		Private sVShow As String
 		Private bUseColors As Boolean
+		Private XNumeric As Boolean 
 		'
 		Private series As Map
 		Private data As Map
@@ -177,6 +183,9 @@ Sub Class_Globals
 		Public OverwriteOptions As Boolean
 		Type titleType(display As Boolean, text As String, position As String)
 		Public Title As titleType
+		Private bPoints As Boolean
+		Private sBorderWidth As String
+		Private bShowLine As Boolean
 End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -197,11 +206,14 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	coptions = $"${mName}options"$
 	OverwriteOptions = False
 	InitColors
+	xtype = ""
 End Sub
 
 Sub DesignerCreateView (Target As BANanoElement, Props As Map) 
 	mTarget = Target 
-	If Props <> Null Then 
+	If Props <> Null Then
+		sBorderWidth = Props.getdefault("BorderWidth", "") 
+		bShowLine = Props.GetDefault("ShowLine", False)
 		bHidden = Props.GetDefault("Hidden", False)
 		mClasses = Props.GetDefault("Classes", "") 
 		mStyles = Props.GetDefault("Styles", "") 
@@ -271,13 +283,15 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sYtitle = Props.GetDefault("Ytitle", "")
 		bZeros = Props.GetDefault("Zeros", False) 
 		bUseColors = Props.GetDefault("UseColors", False)
+		bPoints = Props.getDefault("Points", True)
+		XNumeric = Props.getDefault("XNumeric", False)
 	End If 
 	' 
 	'build and get the element 
 	If BANano.Exists($"#${mName}"$) Then 
 		mElement = BANano.GetElement($"#${mName}"$) 
 	Else	 
-		mElement = mTarget.Append($"<${sChartType} id="${mName}"></${sChartType}>"$).Get("#" & mName) 
+		mElement = mTarget.Append($"<${sChartType} ref="${mName}" id="${mName}"></${sChartType}>"$).Get("#" & mName) 
 	End If 
 	'
 	VElement.Initialize(mCallBack, mName, mName) 
@@ -305,6 +319,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.AddAttr("refresh", sRefresh)
 	VElement.AddAttr(":round", sRound)
 	VElement.AddAttr(":stacked", bStacked)
+	VElement.AddAttr(":points", bPoints)
 	VElement.AddAttr("suffix", sSuffix)
 	VElement.AddAttr("thousands", sThousands)
 	VElement.AddStyle("width", sWidth)
@@ -317,6 +332,11 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.AddAttr("v-show", sVShow)
 	VElement.SetData(sVShow, Not(bHidden))
 	VElement.AddAttr(":library", coptions)
+	VElement.AddAttr(":animation", True)
+	If XNumeric Then xtype = "number"
+	If xtype <> "" Then 
+		VElement.AddAttr("xtype",xtype)
+	End If
 	VElement.BindAllEvents
 	
 	SetDownload
@@ -596,6 +616,10 @@ Sub AddSeries(seriesCaption As String, seriesColor As String, seriesCurve As Boo
 End Sub
 
 Sub UpdateSeriesData(seriesCaption As String, X As String, Y As String)
+	AddSeriesXY(seriesCaption, X, Y)
+End Sub
+
+Sub AddSeriesXY(seriesCaption As String, X As String, Y As String)
 	If series.ContainsKey(seriesCaption) Then
 		Dim m As Map = series.Get(seriesCaption)
 		Dim mdata As Map = m.Get("data")
@@ -604,6 +628,15 @@ Sub UpdateSeriesData(seriesCaption As String, X As String, Y As String)
 		series.Put(seriesCaption, m)
 	End If	
 End Sub
+
+'add xy maps to a series
+Sub AddSeriesXYMap(seriesName As String, values As Map)
+	For Each strKey As String In values.Keys
+		Dim strVal As String = values.Get(strKey)
+		AddSeriesXY(seriesName,strKey,strVal)
+	Next
+End Sub
+
 
 'add xy values to a chart
 Sub AddXY(X As String, y As String)
@@ -722,4 +755,24 @@ private Sub InitColors
 	ColorMap.put("grey", "#9e9e9e")
 	ColorMap.put("blue-grey", "#607d8b")
 	ColorMap.put("black", "#000000")
+End Sub
+
+
+Sub BindState(VC As VueComponent)
+	Dim mbindings As Map = VElement.bindings
+	Dim mmethods As Map = VElement.methods
+	'apply the binding for the control
+	For Each k As String In mbindings.Keys
+		Dim v As Object = mbindings.Get(k)
+		Select Case k
+		Case "key"
+		Case Else
+			VC.SetData(k, v)
+		End Select
+	Next
+	'apply the events
+	For Each k As String In mmethods.Keys
+		Dim cb As BANanoObject = mmethods.Get(k)
+		VC.SetCallBack(k, cb)
+	Next
 End Sub

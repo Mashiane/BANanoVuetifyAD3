@@ -62,7 +62,7 @@ bEager = Props.GetDefault("Eager", False)
 	If BANano.Exists($"#${mName}"$) Then 
 		mElement = BANano.GetElement($"#${mName}"$) 
 	Else	 
-		mElement = mTarget.Append($"<v-expansion-panel-content id="${mName}"></v-expansion-panel-content>"$).Get("#" & mName) 
+		mElement = mTarget.Append($"<v-expansion-panel-content ref="${mName}" id="${mName}"></v-expansion-panel-content>"$).Get("#" & mName) 
 	End If 
 	' 
 	VElement.Initialize(mCallBack, mName, mName) 
@@ -120,4 +120,24 @@ End Sub
 
 Sub getHere As String 
 	Return $"#${mName}"$ 
+End Sub
+
+
+Sub BindState(VC As VueComponent)
+	Dim mbindings As Map = VElement.bindings
+	Dim mmethods As Map = VElement.methods
+	'apply the binding for the control
+	For Each k As String In mbindings.Keys
+		Dim v As Object = mbindings.Get(k)
+		Select Case k
+		Case "key"
+		Case Else
+			VC.SetData(k, v)
+		End Select
+	Next
+	'apply the events
+	For Each k As String In mmethods.Keys
+		Dim cb As BANanoObject = mmethods.Get(k)
+		VC.SetCallBack(k, cb)
+	Next
 End Sub

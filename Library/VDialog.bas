@@ -8,6 +8,7 @@ Version=8.9
 
 #Event: ok_click (e As BANanoEvent)
 #Event: cancel_click (e As BANanoEvent)
+#Event: ClickOutside (e as bananoevent)
 
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: True, Description: Hidden
 #DesignerProperty: Key: HasToolbar, DisplayName: HasToolbar, FieldType: Boolean, DefaultValue: true, Description: HasToolbar
@@ -16,6 +17,7 @@ Version=8.9
 #DesignerProperty: Key: ToolbarCaption, DisplayName: ToolbarCaption, FieldType: String, DefaultValue: Toolbar Title, Description: ToolbarCaption
 #DesignerProperty: Key: ToolbarDark, DisplayName: ToolbarDark, FieldType: Boolean, DefaultValue: False, Description: ToolbarDark
 '
+#DesignerProperty: Key: Rounded, DisplayName: Rounded, FieldType: String, DefaultValue: none, Description: Rounded, List: none|rounded-0|rounded|rounded-sm|rounded-lg|rounded-xl|rounded-t-xl|rounded-r-xl|rounded-b-xl|rounded-l-xl|rounded-tl-xl|rounded-tr-xl|rounded-br-xl|rounded-bl-xl|rounded-pill|rounded-circle
 #DesignerProperty: Key: HasCardTitle, DisplayName: HasCardTitle, FieldType: Boolean, DefaultValue: true, Description: HasCardTitle
 #DesignerProperty: Key: CardTitleCaption, DisplayName: CardTitleCaption, FieldType: String, DefaultValue: Dialog Title, Description: CardTitleCaption
 '
@@ -71,7 +73,6 @@ Version=8.9
 #DesignerProperty: Key: Transition, DisplayName: Transition, FieldType: String, DefaultValue: , Description: Transition, List: none|fab-transition|fade-transition|expand-transition|scale-transition|scroll-x-transition|scroll-x-reverse-transition|scroll-y-transition|scroll-y-reverse-transition|slide-x-transition|slide-x-reverse-transition|slide-y-transition|slide-y-reverse-transition
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
 #DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
-#DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: dialog, Description: VModel
 #DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: 700, Description: Width
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
@@ -152,7 +153,6 @@ Private xOkDisabled As String
 Private xCancelVisible As String
 Private xCancelLoading As String
 Private xCancelDisabled As String
-'
 Private bOkVisible As Boolean
 Private bOkLoading As Boolean
 Private bOkDisabled As Boolean
@@ -161,8 +161,8 @@ Private bCancelLoading As Boolean
 Private bCancelDisabled As Boolean
 Private bCardTextAppend As Boolean
 Private sDisabled As String
-Private sVShow As String
-private bHidden as boolean
+Private bHidden As Boolean
+Private sRounded As String
 	End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -194,6 +194,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	xCancelDisabled = $"${mName}cancel_disabled"$
 	'
 	sDisabled = $"${mName}disabled"$
+	sVModel = $"${mName}vmodel"$
 End Sub
 	
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
@@ -211,6 +212,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bCancelLoading = Props.Get("CancelLoading")
 		bCancelDisabled = Props.Get("CancelDisabled")
 		bCardTextAppend = Props.Get("CardTextAppend")
+		sRounded = Props.GetDefault("Rounded", "")
 sAttach = Props.Get("Attach")
 sCancelCaption = Props.Get("CancelCaption")
 sCancelColor = Props.Get("CancelColor")
@@ -250,8 +252,6 @@ sReturnValue = Props.Get("ReturnValue")
 bScrollable = Props.Get("Scrollable")
 sTransition = Props.Get("Transition")
 sVIf = Props.Get("VIf")
-sVShow = Props.Get("VShow")
-sVModel = Props.Get("VModel")
 sWidth = Props.Get("Width")
 sToolbarCaption = Props.Get("ToolbarCaption")
 bFullscreenOnMobile = Props.Get("FullscreenOnMobile")
@@ -265,7 +265,7 @@ bHidden = Props.GetDefault("Hidden", True)
 	If BANano.Exists($"#${mName}"$) Then
 		mElement = BANano.GetElement($"#${mName}"$)
 	Else	
-		mElement = mTarget.Append($"<v-dialog id="${mName}"></v-dialog>"$).Get("#" & mName)
+		mElement = mTarget.Append($"<v-dialog ref="${mName}" id="${mName}"></v-dialog>"$).Get("#" & mName)
 	End If
 	'
 	VElement.Initialize(mCallBack, mName, mName)
@@ -282,6 +282,7 @@ bHidden = Props.GetDefault("Hidden", True)
 	VElement.SetData(xCancelColor, sCancelColor)
 	VElement.SetData(xOkCaption, sOkCaption)
 	VElement.SetData(xCancelCaption, sCancelCaption)
+	VElement.ContentClass = sRounded
 	'
 	VElement.SetData(xOkVisible, bOkVisible)
 	VElement.SetData(xOkLoading, bOkLoading)
@@ -293,7 +294,7 @@ bHidden = Props.GetDefault("Hidden", True)
 	
 	'add the card
 	VElement.Append($"<v-card id="${mName}card"></v-card>"$)
-	'
+		'
 	If bHasToolbar Then
 		VElement.GetCard.Append($"<v-toolbar id="${mName}toolbar" flat></v-toolbar>"$)
 		VElement.GetToolBar1.Append($"<v-toolbar-title id="${mName}toolbartitle"></v-toolbar-title>"$)
@@ -536,7 +537,7 @@ End Sub
 'update the label of the cancel button
 Sub UpdateCancelLabel(VC As VueComponent, s As String)
 	sCancelCaption = s
-	VC.SetData(xCancelCaption, sOkCaption)
+	VC.SetData(xCancelCaption, sCancelCaption)
 End Sub
 
 'update the visibility of the ok button
@@ -586,4 +587,38 @@ End Sub
 
 Sub getHere As String
 	Return $"#${mName}"$
+End Sub
+
+
+Sub CancelButton As VBtn
+	Dim scard As String = $"${mName}_cancel"$
+	Dim elx As VBtn
+	elx.Initialize(mCallBack, scard, scard)
+	Return elx
+End Sub
+
+Sub OkButton As VBtn
+	Dim scard As String = $"${mName}_cancel"$
+	Dim elx As VBtn
+	elx.Initialize(mCallBack, scard, scard)
+	Return elx
+End Sub
+
+Sub BindState(VC As VueComponent)
+	Dim mbindings As Map = VElement.bindings
+	Dim mmethods As Map = VElement.methods
+	'apply the binding for the control
+	For Each k As String In mbindings.Keys
+		Dim v As Object = mbindings.Get(k)
+		Select Case k
+		Case "key"
+		Case Else
+			VC.SetData(k, v)
+		End Select
+	Next
+	'apply the events
+	For Each k As String In mmethods.Keys
+		Dim cb As BANanoObject = mmethods.Get(k)
+		VC.SetCallBack(k, cb)
+	Next
 End Sub

@@ -86,7 +86,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mAttributes = Props.Get("Attributes")
 		sActiveClass = Props.Get("ActiveClass")
 bAppend = Props.Get("Append")
-bDisabled = Props.GetDefault("Disabled",false)
+bDisabled = Props.GetDefault("Disabled",False)
 bEager = Props.Get("Eager")
 bExact = Props.Get("Exact")
 sExactActiveClass = Props.Get("ExactActiveClass")
@@ -111,7 +111,7 @@ sValue = Props.Get("Value")
 	If BANano.Exists($"#${mName}"$) Then
 		mElement = BANano.GetElement($"#${mName}"$)
 	Else	
-		mElement = mTarget.Append($"<v-carousel-item id="${mName}"></v-carousel-item>"$).Get("#" & mName)
+		mElement = mTarget.Append($"<v-carousel-item ref="${mName}" id="${mName}"></v-carousel-item>"$).Get("#" & mName)
 	End If
 	'
 	VElement.Initialize(mCallBack, mName, mName)
@@ -182,3 +182,22 @@ Sub getHere As String
 	Return $"#${mName}"$
 End Sub
 
+
+Sub BindState(VC As VueComponent)
+	Dim mbindings As Map = VElement.bindings
+	Dim mmethods As Map = VElement.methods
+	'apply the binding for the control
+	For Each k As String In mbindings.Keys
+		Dim v As Object = mbindings.Get(k)
+		Select Case k
+		Case "key"
+		Case Else
+			VC.SetData(k, v)
+		End Select
+	Next
+	'apply the events
+	For Each k As String In mmethods.Keys
+		Dim cb As BANanoObject = mmethods.Get(k)
+		VC.SetCallBack(k, cb)
+	Next
+End Sub

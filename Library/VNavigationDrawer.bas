@@ -10,7 +10,6 @@ Version=8.9
 
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: App, DisplayName: App, FieldType: Boolean, DefaultValue: True, Description: App
-#DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: drawer1, Description: VModel
 #DesignerProperty: Key: Absolute, DisplayName: Absolute, FieldType: Boolean, DefaultValue: false, Description: Absolute
 #DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: , Description: Width
 #DesignerProperty: Key: Bottom, DisplayName: Bottom, FieldType: Boolean, DefaultValue: false, Description: Bottom
@@ -104,6 +103,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	End If
 	sVShow = $"${mName}show"$
 	xMiniVariant = $"${mName}mini"$
+	sVModel = $"${mName}vmodel"$
 End Sub
 	
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
@@ -113,44 +113,43 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mStyles = Props.Get("Styles")
 		mAttributes = Props.Get("Attributes")
 		bAbsolute = Props.Get("Absolute")
-bApp = Props.Get("App")
-bBottom = Props.Get("Bottom")
-bClipped = Props.Get("Clipped")
-sColor = Props.Get("Color")
-sColorIntensity = Props.Get("ColorIntensity")
-bDark = Props.Get("Dark")
-bDisableResizeWatcher = Props.Get("DisableResizeWatcher")
-bDisableRouteWatcher = Props.Get("DisableRouteWatcher")
-bExpandOnHover = Props.Get("ExpandOnHover")
-bFixed = Props.Get("Fixed")
-bFloating = Props.Get("Floating")
-sHeight = Props.Get("Height")
-bHideOverlay = Props.Get("HideOverlay")
-bLight = Props.Get("Light")
-bMiniVariant = Props.Get("MiniVariant")
-sMiniVariantWidth = Props.Get("MiniVariantWidth")
-sMobileBreakpoint = Props.Get("MobileBreakpoint")
-sOverlayColor = Props.Get("OverlayColor")
-sOverlayColorIntensity = Props.Get("OverlayColorIntensity")
-sOverlayOpacity = Props.Get("OverlayOpacity")
-bPermanent = Props.Get("Permanent")
-bRight = Props.Get("Right")
-sSrc = Props.Get("Src")
-bStateles = Props.Get("Stateles")
-bTemporary = Props.Get("Temporary")
-bTouchless = Props.Get("Touchless")
-sVIf = Props.Get("VIf")
-sVShow = Props.Get("VShow")
-sVModel = Props.Get("VModel")
-sWidth = Props.Get("Width")
-bHidden = Props.GetDefault("Hidden", False)
+		bApp = Props.Get("App")
+		bBottom = Props.Get("Bottom")
+		bClipped = Props.Get("Clipped")
+		sColor = Props.Get("Color")
+		sColorIntensity = Props.Get("ColorIntensity")
+		bDark = Props.Get("Dark")
+		bDisableResizeWatcher = Props.Get("DisableResizeWatcher")
+		bDisableRouteWatcher = Props.Get("DisableRouteWatcher")
+		bExpandOnHover = Props.Get("ExpandOnHover")
+		bFixed = Props.Get("Fixed")
+		bFloating = Props.Get("Floating")
+		sHeight = Props.Get("Height")
+		bHideOverlay = Props.Get("HideOverlay")
+		bLight = Props.Get("Light")
+		bMiniVariant = Props.Get("MiniVariant")
+		sMiniVariantWidth = Props.Get("MiniVariantWidth")
+		sMobileBreakpoint = Props.Get("MobileBreakpoint")
+		sOverlayColor = Props.Get("OverlayColor")
+		sOverlayColorIntensity = Props.Get("OverlayColorIntensity")
+		sOverlayOpacity = Props.Get("OverlayOpacity")
+		bPermanent = Props.Get("Permanent")
+		bRight = Props.Get("Right")
+		sSrc = Props.Get("Src")
+		bStateles = Props.Get("Stateles")
+		bTemporary = Props.Get("Temporary")
+		bTouchless = Props.Get("Touchless")
+		sVIf = Props.Get("VIf")
+		sVShow = Props.Get("VShow")
+		sWidth = Props.Get("Width")
+		bHidden = Props.GetDefault("Hidden", False)
 	End If
 	'
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
 		mElement = BANano.GetElement($"#${mName}"$)
 	Else	
-		mElement = mTarget.Append($"<v-navigation-drawer id="${mName}"></v-navigation-drawer>"$).Get("#" & mName)
+		mElement = mTarget.Append($"<v-navigation-drawer ref="${mName}" id="${mName}"></v-navigation-drawer>"$).Get("#" & mName)
 	End If
 	'
 	VElement.Initialize(mCallBack, mName, mName)
@@ -271,4 +270,24 @@ End Sub
 
 Sub getHere As String
 	Return $"#${mName}"$
+End Sub
+
+
+Sub BindState(VC As VueComponent)
+	Dim mbindings As Map = VElement.bindings
+	Dim mmethods As Map = VElement.methods
+	'apply the binding for the control
+	For Each k As String In mbindings.Keys
+		Dim v As Object = mbindings.Get(k)
+		Select Case k
+		Case "key"
+		Case Else
+			VC.SetData(k, v)
+		End Select
+	Next
+	'apply the events
+	For Each k As String In mmethods.Keys
+		Dim cb As BANanoObject = mmethods.Get(k)
+		VC.SetCallBack(k, cb)
+	Next
 End Sub

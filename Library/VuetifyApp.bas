@@ -29,7 +29,7 @@ Sub Class_Globals
 	Public AppName As String
 	Public Root As BANanoObject
 	Public Route As BANanoObject
-	Public refs As BANanoObject
+	Private refs As BANanoObject
 	Public RouterView As BANanoObject
 	Public GoogleMapKey As String
 	Public Body As BANanoElement
@@ -422,6 +422,10 @@ Sub Class_Globals
 	Public RouterViewName As String
 	Public DatabaseName As String
 	Public ProgressLoaderName As String
+End Sub
+
+Sub FindProgressLoaderOn(appBar As VAppBar)
+	ProgressLoaderName = appBar.ProgressLoader
 End Sub
 
 Sub PagePause
@@ -990,9 +994,6 @@ End Sub
 'add html of component to app and this binds events and states
 Sub BindVueElement(elx As VueElement)
 	Dim mtag As String = elx.TagName
-	If mtag = "router-view" Then
-		RouterViewName = elx.ID
-	End If
 	Dim mbindings As Map = elx.bindings
 	Dim mmethods As Map = elx.methods
 	'apply the binding for the control
@@ -1673,8 +1674,7 @@ End Sub
 'focus on a ref
 Sub SetFocus(refID As String) 
 	Try
-		Dim rKey As String = "$refs"
-		refs = Vue.GetField(rKey)
+		refs = GetRefs
 		refID = refID.tolowercase
 		refs.GetField(refID).RunMethod("focus", Null)
 	Catch
@@ -1688,8 +1688,7 @@ Sub NullifyFileSelect(refID As String)
 End Sub
 
 Sub RefNull(refID As String)
-	Dim rKey As String = "$refs"
-	refs = Vue.GetField(rKey)
+	refs = GetRefs
 	refID = refID.tolowercase
 	refs.GetField(refID).SetField("value", Null)
 End Sub
@@ -1697,8 +1696,7 @@ End Sub
 
 'click a reference
 Sub Click(refID As String)
-	Dim rKey As String = "$refs"
-	refs = Vue.GetField(rKey)
+	refs = GetRefs
 	refID = refID.tolowercase
 	refs.GetField(refID).RunMethod("click", Null)
 End Sub
@@ -2064,6 +2062,11 @@ End Sub
 
 'render the ux, load from layout
 Sub Serve
+	If routes.Size > 0 Then
+		If RouterViewName = "" Then
+			BANano.Throw($"Serve.The RouterViewName has not been specified."$)
+		End If
+	End If
 	'get the content in the template
 	Template = BANanoGetHTML("apptemplate")
 	Template = Template.Replace("v-template", "template")
@@ -2136,24 +2139,21 @@ End Sub
 
 'reset a form
 Sub FormReset(formName As String)
-	Dim rKey As String = "$refs"
-	refs = Vue.GetField(rKey)
+	refs = GetRefs
 	formName = formName.ToLowerCase
 	refs.GetField(formName).runmethod("reset", Null)
 End Sub
 
 'resetValidation a form
 Sub FormResetValidation(formName As String)
-	Dim rKey As String = "$refs"
-	refs = Vue.GetField(rKey)
+	refs = GetRefs
 	formName = formName.ToLowerCase
 	refs.GetField(formName).runmethod("resetValidation", Null)
 End Sub
 
 'validate a form
 Sub FormValidate(formName As String) As Boolean
-	Dim rKey As String = "$refs"
-	refs = Vue.GetField(rKey)
+	refs = GetRefs
 	formName = formName.ToLowerCase
 	Dim b As Boolean = refs.GetField(formName).runmethod("validate", Null).Result
 	Return b
@@ -2403,8 +2403,7 @@ End Sub
 Sub ScrollTo(elID As String, duration As Int, offset As Int, easing As String)
 	Try
 		elID = elID.tolowercase
-		Dim rKey As String = "$refs"
-		refs = Vue.GetField(rKey)
+		refs = GetRefs
 		Dim el As BANanoObject = refs.GetField(elID)
 		If BANano.IsNull(duration) Then duration = 300
 		If BANano.IsNull(offset) Then offset = 0
@@ -2599,7 +2598,7 @@ End Sub
 
 'add html of component to app and this binds events and states
 Sub BindVueTable(el As VueTable)
-	el.Build
+	el.Refresh
 	Dim mbindings As Map = el.bindings
 	Dim mmethods As Map = el.methods
 	'apply the binding for the control

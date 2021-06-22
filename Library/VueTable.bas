@@ -43,7 +43,6 @@ Version=8.5
 
 #DesignerProperty: Key: Title, DisplayName: Title, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: AutoID, DisplayName: Auto ID/Name, FieldType: Boolean, DefaultValue: False, Description: Overrides the ID/Name with a random string.
-#DesignerProperty: Key: Ref, DisplayName: Ref, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: ItemKey, DisplayName: ItemKey, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: ItemsPerPage, DisplayName: ItemsPerPage, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Dense, DisplayName: Dense, FieldType: Boolean, DefaultValue:  False, Description: 
@@ -54,7 +53,10 @@ Version=8.5
 #DesignerProperty: Key: MultiSort, DisplayName: Multi Sort, FieldType: Boolean, DefaultValue:  False, Description: 
 #DesignerProperty: Key: MustSort, DisplayName: Must Sort, FieldType: Boolean, DefaultValue:  False, Description: 
 #DesignerProperty: Key: Loading, DisplayName: Loading, FieldType: Boolean, DefaultValue:  False, Description: 
-'
+#DesignerProperty: Key: ExternalPagination, DisplayName: ExternalPagination, FieldType: Boolean, DefaultValue:  True, Description: ExternalPagination
+#DesignerProperty: Key: MaxPages, DisplayName: Total Visible, FieldType: String, DefaultValue:  5, Description: Total Visible
+#DesignerProperty: Key: PageLength, DisplayName: Pager Length, FieldType: String, DefaultValue:  5, Description: PageLength
+#DesignerProperty: Key: PaginationPosition, DisplayName: PaginationPosition, FieldType: String, DefaultValue:  bottom, Description: PaginationPosition, List: top|bottom|both 
 #DesignerProperty: Key: DateFormat, DisplayName: DateFormat, FieldType: String, DefaultValue: , Description: DateFormat
 #DesignerProperty: Key: DateTimeFormat, DisplayName: DateTimeFormat, FieldType: String, DefaultValue: , Description: DateTimeFormat
 #DesignerProperty: Key: MoneyFormat, DisplayName: MoneyFormat, FieldType: String, DefaultValue: , Description: MoneyFormat
@@ -140,11 +142,10 @@ Sub Class_Globals
 	Private classList As Map
 	Private styleList As Map
 	Private attributeList As Map
-	Private mTagName As String = "v-data-table"
+	'Private mTagName As String = "v-data-table"
 	Private mStates As String
 	Public bindings As Map
 	Public methods As Map
-	Private stRef As String = ""
 	Private stVElse As String = ""
 	Private stVElseIf As String = ""
 	Private stVIf As String = ""
@@ -164,6 +165,7 @@ Sub Class_Globals
 	Private bShowExpand As Boolean = False
 	Private bDark As Boolean = False
 	Private bLoading As Boolean = False
+	private sPageLength as string 
 	'
 	Public Items As List
 	Public AppTemplateName As String = "#apptemplate"
@@ -204,6 +206,7 @@ Sub Class_Globals
 	Public COLUMN_TEXTFIELD As String = "textfield"
 	Public COLUMN_TEXTAREA As String = "textarea"
 	Public COLUMN_SELECT As String = "select"
+	Private sMaxPages As String = ""
 			
 	'alignment
 	Public ALIGN_CENTER As String = "center"
@@ -295,6 +298,12 @@ Private sTimeFormat As String
 Private sColumnFilterable As String
 Public VElement As VueElement
 Private sitemsperpage As String
+Private bExternalPagination As Boolean
+Private sPaginationPosition As String
+Private showpagination As String
+Private xPage As String
+Private xPageCount As String
+Private xPagination As String
 End Sub
 
 'initialize the custom view
@@ -314,7 +323,8 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	totalVisible = ""
 	hdr.Initialize
 	'keyID = $"${mName}key"$
-	'
+	xPage = $"${mName}page"$
+	xPageCount = $"${mName}pagecount"$
 	headers = $"${mName}headers"$
 	selected = $"${mName}selected"$
 	groupby = $"${mName}groupby"$
@@ -332,188 +342,10 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	allcolumns = $"${mName}allcolumns"$
 	sloading = $"${mName}loading"$
 	sitemsperpage = $"${mName}itemsperpage"$
-	'
-	AddAttr(":loading", sloading)
-	AddAttr(":items", itemsname)
-	AddAttr(":headers", headers)
-	AddAttr(":value", selected)
-	AddAttr(":group-by.sync", groupby)
-	AddAttr(":sort-by.sync", sortby)
-	AddAttr(":group-desc.sync", groupdesc)
-	AddAttr(":sort-desc.sync", sortdesc)
-	AddAttr(":expanded.sync", expanded)
-	AddAttr(":items-per-page.sync", sitemsperpage)
-	'AddAttr(":key", keyID)
-	AddAttr(":search", search)
-	
-	setNoDataText("Working on it, please wait...")
-	'
-	Dim sb As StringBuilder
-	sb.Initialize
-	sb.Append($"${headers}=array;"$)
-	sb.Append($"${selected}=array;"$)
-	sb.Append($"${groupby}=array;"$)
-	sb.Append($"${sortby}=array;"$)
-	sb.Append($"${groupdesc}=array;"$)
-	sb.Append($"${sortdesc}=array;"$)
-	sb.Append($"${expanded}=array;"$)
-	sb.Append($"${itemsname}=array;"$)
-	sb.Append($"${search}=string;"$)
-	sb.Append($"${filters}=array;"$)
-	sb.Append($"${allcolumns}=array;"$)
-	sb.Append($"${titleText}=string;"$)
-	sb.Append($"${filtershow}=false;"$)
-	sb.Append($"${sloading}=false"$)
-	setStates(sb.ToString)
-	SetData(filtershow, False)
-	filterList.Initialize 
-End Sub
-
-'get the original columns
-Sub GetColumns As List
-	Dim nl As List
-	nl.initialize
-	'get the sort order of the columns
-	Dim lst As List = GetHeaders
-	Dim colCnt As Int
-	Dim colTot As Int = lst.Size - 1
-	For colCnt = 0 To colTot
-		Dim hdrx As Map = lst.Get(colCnt)
-		Dim k As String = hdrx.Get("value")
-		Dim dt As DataTableColumn = columnsM.Get(k)
-		nl.Add(dt)
-	Next
-	Return nl
-End Sub
-
-'update the title of the table
-Sub setTitle(vTitle As String)
-	If BANano.IsNull(vTitle) Or BANano.IsUndefined(vTitle) Then vTitle = ""
-	mTitle = vTitle
-	SetData(titleText, vTitle)
-End Sub
-
-'set the parent component
-Sub setParentComponent(PVC As VueComponent)
-	VC = PVC
-End Sub
-
-'update the title
-Sub UpdateTitle(title As String)
-	VC.SetData(titleText, title)
-End Sub
-
-Sub UpdateLoading(b As Boolean)
-	VC.SetData(sloading, b)
-End Sub
-
-Sub setHasSearch(b As Boolean)
-	mHasSearch = b
-End Sub
-
-Sub getHasSearch As Boolean
-	Return mHasSearch
-End Sub
-
-Sub SetHeaders(hdrs As List)
-	VC.SetData(headers, hdrs)
-End Sub
-
-Sub SetSelected(varSortDesc As List)
-	VC.SetData(selected, varSortDesc)
-End Sub
-
-'set no-data-text
-Sub setNoDataText(varNoDataText As String)
-	AddAttr("no-data-text", varNoDataText)
-End Sub
-
-'set group-by
-Sub SetGroupBy(varGroupBy As List)
-	VC.SetData(groupby, varGroupBy)
-End Sub
-
-'set sort-by
-Sub SetSortBy(varSortBy As List)
-	VC.SetData(sortby, varSortBy)
-End Sub
-
-'clear any sort
-Sub ClearSort
-	SetSortBy(NewList)
-End Sub
-
-'set group-desc
-Sub SetGroupDesc(varGroupDesc As List)
-	VC.SetData(groupdesc, varGroupDesc)
-End Sub
-
-Sub SetSortDesc(varSortDesc As List)
-	VC.SetData(sortdesc, varSortDesc)
-End Sub
-
-'set expanded
-Sub SetExpanded(varExpanded As List)
-	VC.SetData(expanded, varExpanded)
-End Sub
-
-'set group-desc
-Sub UpdateGroupDesc(varGroupDesc As List)
-	VC.SetData(groupdesc, varGroupDesc)
-End Sub
-
-Sub UpdateSortDesc(varSortDesc As List)
-	VC.SetData(sortdesc, varSortDesc)
-End Sub
-
-'set expanded
-Sub UpdateExpanded(varExpanded As List)
-	VC.SetData(expanded, varExpanded)
-End Sub
-
-'return a list of selected primary keys
-Sub GetItemKeys(lst As List) As List
-	Dim xlist As List
-	xlist.Initialize
-	For Each m As Map In lst
-		Dim xkey As String = m.GetDefault(PrimaryKey, "")
-		xlist.Add(xkey)
-	Next
-	Return xlist
-End Sub
-
-'return a list of selected property values
-Sub GetItemProps(lst As List, prop As String) As List
-	Dim xlist As List
-	xlist.Initialize
-	For Each m As Map In lst
-		Dim xkey As String = m.GetDefault(prop, "")
-		xlist.Add(xkey)
-	Next
-	Return xlist
-End Sub
-
-'add a new record
-Sub AddRow(rowData As Map)
-	Items.Add(rowData)
-End Sub
-
-'add a new row at the end of the items in realtime
-Sub AddRow1(rowdata As Map)
-	VC.SetDataPush(itemsname, rowdata)
-End Sub
-
-'realtime removal of item in realtime
-Sub RemoveRow(whereMap As Map)
-	'find the item
-	Dim recpos As Int = VC.GetDataPositionWhere(itemsname, whereMap)
-	If recpos = -1 Then Return
-	VC.SetDataSpliceRemove(itemsname, recpos, 1)
-End Sub
-
-'add a row at the top of the list
-Sub AddRowTop(rowdata As Map)
-	VC.SetDataUnshift(itemsname, rowdata)
+	showpagination = $"${mName}paginationshow"$
+	xPagination = $"${mName}pagination"$
+	xPageCount = $"${mName}pagecount"$
+	xPage = $"${mName}page"$
 End Sub
 
 'Create view in the designer
@@ -524,7 +356,6 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mAttributes = Props.Get("Attributes")
 		mStyle = Props.Get("Style")
 		mStates = Props.Get("States")
-		stRef = Props.Get("Ref")
 		stVElse = Props.Get("VElse")
 		stVElseIf = Props.Get("VElseIf")
 		stVIf = Props.Get("VIf")
@@ -601,37 +432,72 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sMoneyFormat = Props.GetDefault("MoneyFormat", "")
 		sTimeFormat = Props.GetDefault("TimeFormat", "")
 		sColumnFilterable = Props.GetDefault("ColumnFilterable", "")
+		bExternalPagination = Props.GetDefault("ExternalPagination", True)
+		sPaginationPosition = Props.getdefault("PaginationPosition", "top")
+		sMaxPages = Props.GetDefault("MaxPages", "5")
+		sPageLength = Props.GetDefault("PageLength", 5)
+	End If
+	'		
+	Dim sb As StringBuilder
+	sb.Initialize 
+	sb.Append($"<v-card id="${mName}card">"$)
+	sb.Append($"<v-card-title id="${titleID}">"$)
+	sb.Append($"{{ ${titleText} }}"$)
+	sb.Append($"</v-card-title>"$)
+	sb.Append($"<v-divider v-show="${filtershow}"></v-divider>"$)
+	sb.Append($"<v-card-text id="${mName}cardtext" v-show="${filtershow}"><p>Choose Filter Columns</p><div id="${mName}filter"></div></v-card-text>"$)
+	sb.Append($"<v-data-table ref="${mName}" id="${mName}"></v-data-table>"$)
+	sb.Append($"<v-divider v-show="${showpagination}"></v-divider>"$)
+	sb.Append($"<div class="text-center pa-2" v-show="${showpagination}"><v-pagination id="${mName}pagination" circle></v-pagination></div>"$)
+	sb.Append($"</v-card>"$)
+	
+	mElement = mTarget.Append(sb.tostring).Get("#" & mName)
+	VElement.Initialize(mCallBack, mName, mName)
+	VElement.TagName = "v-data-table"
+	'we have external pagination
+	'
+	If bExternalPagination Then
+		bHideDefaultFooter = True
+		GetPagination.AddAttr(":length", $"${mName}pagecount"$)
+		'GetPagination.AddAttr("length", sPageLength)
+		GetPagination.AddAttr("v-model", $"${mName}page"$)
+		GetPagination.AddAttr(":total-visible", sMaxPages)
+		VElement.AddAttr(":page.sync", $"${mName}page"$)
+		'
+		Dim scode As String = mName & "pagecount = $event"
+		VElement.AddAttr("v-on:page-count", scode)
+	
+		VElement.SetData(showpagination, True)
+		VElement.SetData($"${mName}page"$, 1)
+		VElement.SetData($"${mName}pagecount"$, 0)
+	Else
+		VElement.SetData(showpagination, False)
 	End If
 	'
-	Dim strHTML As String = ToString
-	mElement = mTarget.Append(strHTML).Get("#" & mName)
-	VElement.Initialize(mCallBack, mName, mName)
-	VElement.AddAttr(":loading", sloading)
-	VElement.AddAttr(":items", itemsname)
-	VElement.AddAttr(":headers", headers)
-	VElement.AddAttr(":value", selected)
-	VElement.AddAttr(":group-by.sync", groupby)
-	VElement.AddAttr(":sort-by.sync", sortby)
-	VElement.AddAttr(":group-desc.sync", groupdesc)
-	VElement.AddAttr(":sort-desc.sync", sortdesc)
-	VElement.AddAttr(":expanded.sync", expanded)
-	VElement.AddAttr(":items-per-page.sync", sitemsperpage)
-	VElement.SetData(sitemsperpage, stItemsPerPage)
-	'AddAttr(":key", keyID)
-	VElement.AddAttr(":search", search)
-	VElement.AddAttr("ref", stRef)
-	VElement.AddAttr("v-else", stVElse)
-	VElement.AddAttr("v-else-if", stVElseIf)
-	VElement.AddAttr("v-if", stVIf)
-	VElement.AddAttr("v-show", stVShow)
-	VElement.AddAttr("item-key", PrimaryKey)
-	VElement.AddAttr(":dense", bDense)
+	AddAttr(":loading", sloading)
+	AddAttr(":items", itemsname)
+	AddAttr(":headers", headers)
+	AddAttr(":value", selected)
+	AddAttr(":group-by.sync", groupby)
+	AddAttr(":sort-by.sync", sortby)
+	AddAttr(":group-desc.sync", groupdesc)
+	AddAttr(":sort-desc.sync", sortdesc)
+	AddAttr(":expanded.sync", expanded)
+	AddAttr(":items-per-page.sync", sitemsperpage)
+	SetData(sitemsperpage, stItemsPerPage)
+	AddAttr(":search", search)
+	AddAttr("v-else", stVElse)
+	AddAttr("v-else-if", stVElseIf)
+	AddAttr("v-if", stVIf)
+	AddAttr("v-show", stVShow)
+	AddAttr("item-key", PrimaryKey)
+	AddAttr(":dense", bDense)
 	setElevation(stElevation)
-	VElement.AddAttr(":show-select", bShowSelect)
-	VElement.AddAttr(":single-select", bSingleSelect)
-	VElement.AddAttr(":show-group-by", bShowGroupBy)
-		
-	setNoDataText("Working on it, please wait...")
+	AddAttr(":show-select", bShowSelect)
+	If bSingleSelect Then
+		AddAttr(":single-select", bSingleSelect)
+	End If
+	AddAttr(":show-group-by", bShowGroupBy)
 	'
 	Dim sb As StringBuilder
 	sb.Initialize
@@ -650,8 +516,11 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	sb.Append($"${filtershow}=false;"$)
 	sb.Append($"${sloading}=false"$)
 	setStates(sb.ToString)
-	
 	SetData(filtershow, False)
+	filterList.Initialize 
+	
+	setNoDataText("Working on it, please wait...")
+	
 	setLoading(bLoading)
 	setMultiSort(bMultiSort)
 	setMustSort(bMustSort)
@@ -1075,35 +944,160 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		
 End Sub
 
+
+'get the original columns
+Sub GetColumns As List
+	Dim nl As List
+	nl.initialize
+	'get the sort order of the columns
+	Dim lst As List = GetHeaders
+	Dim colCnt As Int
+	Dim colTot As Int = lst.Size - 1
+	For colCnt = 0 To colTot
+		Dim hdrx As Map = lst.Get(colCnt)
+		Dim k As String = hdrx.Get("value")
+		Dim dt As DataTableColumn = columnsM.Get(k)
+		nl.Add(dt)
+	Next
+	Return nl
+End Sub
+
+'update the title of the table
+Sub setTitle(vTitle As String)
+	If BANano.IsNull(vTitle) Or BANano.IsUndefined(vTitle) Then vTitle = ""
+	mTitle = vTitle
+	SetData(titleText, vTitle)
+End Sub
+
+'set the parent component
+Sub setParentComponent(PVC As VueComponent)
+	VC = PVC
+End Sub
+
+'update the title
+Sub UpdateTitle(title As String)
+	VC.SetData(titleText, title)
+End Sub
+
+Sub UpdateLoading(b As Boolean)
+	VC.SetData(sloading, b)
+End Sub
+
+Sub setHasSearch(b As Boolean)
+	mHasSearch = b
+End Sub
+
+Sub getHasSearch As Boolean
+	Return mHasSearch
+End Sub
+
+Sub SetHeaders(hdrs As List)
+	VC.SetData(headers, hdrs)
+End Sub
+
+Sub SetSelected(varSortDesc As List)
+	VC.SetData(selected, varSortDesc)
+End Sub
+
+'set no-data-text
+Sub setNoDataText(varNoDataText As String)
+	AddAttr("no-data-text", varNoDataText)
+End Sub
+
+'set group-by
+Sub SetGroupBy(varGroupBy As List)
+	VC.SetData(groupby, varGroupBy)
+End Sub
+
+'set sort-by
+Sub SetSortBy(varSortBy As List)
+	VC.SetData(sortby, varSortBy)
+End Sub
+
+'clear any sort
+Sub ClearSort
+	SetSortBy(NewList)
+End Sub
+
+'set group-desc
+Sub SetGroupDesc(varGroupDesc As List)
+	VC.SetData(groupdesc, varGroupDesc)
+End Sub
+
+Sub SetSortDesc(varSortDesc As List)
+	VC.SetData(sortdesc, varSortDesc)
+End Sub
+
+'set expanded
+Sub SetExpanded(varExpanded As List)
+	VC.SetData(expanded, varExpanded)
+End Sub
+
+'set group-desc
+Sub UpdateGroupDesc(varGroupDesc As List)
+	VC.SetData(groupdesc, varGroupDesc)
+End Sub
+
+Sub UpdateSortDesc(varSortDesc As List)
+	VC.SetData(sortdesc, varSortDesc)
+End Sub
+
+'set expanded
+Sub UpdateExpanded(varExpanded As List)
+	VC.SetData(expanded, varExpanded)
+End Sub
+
+'return a list of selected primary keys
+Sub GetItemKeys(lst As List) As List
+	Dim xlist As List
+	xlist.Initialize
+	For Each m As Map In lst
+		Dim xkey As String = m.GetDefault(PrimaryKey, "")
+		xlist.Add(xkey)
+	Next
+	Return xlist
+End Sub
+
+'return a list of selected property values
+Sub GetItemProps(lst As List, prop As String) As List
+	Dim xlist As List
+	xlist.Initialize
+	For Each m As Map In lst
+		Dim xkey As String = m.GetDefault(prop, "")
+		xlist.Add(xkey)
+	Next
+	Return xlist
+End Sub
+
+'add a new record
+Sub AddRow(rowData As Map)
+	Items.Add(rowData)
+End Sub
+
+'add a new row at the end of the items in realtime
+Sub AddRow1(rowdata As Map)
+	VC.SetDataPush(itemsname, rowdata)
+End Sub
+
+'realtime removal of item in realtime
+Sub RemoveRow(whereMap As Map)
+	'find the item
+	Dim recpos As Int = VC.GetDataPositionWhere(itemsname, whereMap)
+	If recpos = -1 Then Return
+	VC.SetDataSpliceRemove(itemsname, recpos, 1)
+End Sub
+
+'add a row at the top of the list
+Sub AddRowTop(rowdata As Map)
+	VC.SetDataUnshift(itemsname, rowdata)
+End Sub
+
+
+
 Sub getShowGroupBy As Boolean
 	Return bShowGroupBy
 End Sub
 
-'return the generated html
-Sub ToString As String
-	'build the 'class' attribute
-	Dim className As String = BANanoShared.JoinMapKeys(classList, " ")
-	If className <> "" Then AddAttr("class", className)
-	'build the 'style' attribute
-	Dim styleName As String = BANanoShared.BuildStyle(styleList)
-	If styleName <> "" Then AddAttr("style", styleName)
-	'build element internal structure
-	Dim iStructure As String = BANanoShared.BuildAttributes(attributeList)
-	iStructure = iStructure.trim
-	'		
-	Dim rslt As String = $"<${mTagName} id="${mName}" ${iStructure}></${mTagName}>"$
-	Dim sb As StringBuilder
-	sb.Initialize 
-	sb.Append($"<v-card id="${mName}card">"$)
-	sb.Append($"<v-card-title id="${titleID}">"$)
-	sb.Append($"{{ ${titleText} }}"$)
-	sb.Append($"</v-card-title>"$)
-	sb.Append($"<v-divider v-show="${filtershow}"></v-divider>"$)
-	sb.Append($"<v-card-text id="${mName}cardtext" v-show="${filtershow}"><p>Choose Filter Columns</p><div id="${mName}filter"></div></v-card-text>"$)
-	sb.Append(rslt)
-	sb.Append($"</v-card>"$)
-	Return sb.tostring
-End Sub
 
 Sub GetCardText As VueElement
 	Dim sFilter As String = $"${mName}cardtext"$
@@ -1142,6 +1136,13 @@ End Sub
 
 Sub GetCard As VueElement
 	Dim sFilter As String = $"${mName}card"$
+	Dim elx As VueElement
+	elx.Initialize(mCallBack, sFilter, sFilter)
+	Return elx
+End Sub
+
+Sub GetPagination As VueElement
+	Dim sFilter As String = $"${mName}pagination"$
 	Dim elx As VueElement
 	elx.Initialize(mCallBack, sFilter, sFilter)
 	Return elx
@@ -1287,7 +1288,7 @@ End Sub
 
 'add a search to the card title
 Sub AddSearch
-	Dim str As String = $"<v-text-field id="${searchID}" v-model="${search}" append-icon="mdi-magnify" label="Search" single-line hide-details clearable class="shrink"></v-text-field>"$
+	Dim str As String = $"<v-text-field id="${searchID}" @keydown.native.escape="${search}=''" v-model="${search}" append-icon="mdi-magnify" label="Search" single-line hide-details clearable class="shrink"></v-text-field>"$
 	Dim ct As BANanoElement
 	ct.Initialize($"#${titleID}"$)
 	ct.Append(str)
@@ -2091,6 +2092,8 @@ Sub Reset
 	VC.SetData(headers, args)
 	VC.SetData(filters, args)
 	VC.SetData(allcolumns, args)
+	VC.SetData($"${mName}page"$, 1)
+	VC.SetData($"${mName}pagecount"$, 0)
 	'VC.SetData(keyID, DateTime.Now)
 	columnsM.Initialize
 End Sub
@@ -2118,8 +2121,11 @@ Sub Reload(records As List)
 	VC.SetData(groupdesc, args)
 	VC.SetData(sortdesc, args)
 	VC.SetData(expanded, args)
+	VC.SetData($"${mName}page"$, 1)
+	VC.SetData($"${mName}pagecount"$, 0)
 	'VC.SetData(keyID, DateTime.Now)
 End Sub
+
 
 'update all rows at runtime
 Sub SetRows(records As List)
@@ -2931,6 +2937,7 @@ private Sub BuildSlots
 		Dim bindTotals As String = nf.bindTotals
 		Dim methodName As String = $"${mName}_${value}"$
 		Dim changeEvent As String = $"${mName}_${value}_change"$
+		Dim aslot As String = $"${mName}${value}slot"$
 		'
 		Dim sbThisEvent As String = ""
 		Dim sbConditionalClass As String = ""
@@ -3151,7 +3158,7 @@ sb.Append(temp)
 				End If
 				'define template
 				Dim tmp As VueElement
-				tmp.Initialize(mCallBack, "" , "")
+				tmp.Initialize(mCallBack, aslot , aslot)
 				tmp.TagName = "v-template"
 				tmp.AddAttr($"v-slot:item.${value}"$, "{ item }")
 				tmp.Append(aLink.ToString)
@@ -3177,7 +3184,7 @@ sb.Append(temp)
 				End If
 				'define template
 				Dim tmp As VueElement
-				tmp.Initialize(mCallBack, "" , "")
+				tmp.Initialize(mCallBack, aslot , aslot)
 				tmp.TagName = "v-template"
 				tmp.AddAttr($"v-slot:item.${value}"$, "{ item }")
 				tmp.Append(aLink.ToString)
@@ -3239,7 +3246,7 @@ sb.Append(temp)
 				
 				'define template
 				Dim tmp As VueElement
-				tmp.Initialize(mCallBack, "" , "")
+				tmp.Initialize(mCallBack, aslot , aslot)
 				tmp.TagName = "v-template"
 				tmp.AddAttr($"v-slot:item.${value}"$, "{ item }")
 				tmp.Append(span.ToString)
@@ -3284,7 +3291,7 @@ sb.Append(temp)
 '				'
 				'define template
 				Dim tmp As VueElement
-				tmp.Initialize(mCallBack, "" , "")
+				tmp.Initialize(mCallBack, aslot , aslot)
 				tmp.TagName = "v-template"
 				tmp.AddAttr($"v-slot:item.${value}"$, "{ item }")
 				tmp.Append(pl.ToString)
@@ -3320,7 +3327,7 @@ sb.Append(temp)
 '				'
 				'define template
 				Dim tmp As VueElement
-				tmp.Initialize(mCallBack, "" ,"")
+				tmp.Initialize(mCallBack, aslot, aslot)
 				tmp.TagName = "v-template"
 				tmp.AddAttr($"v-slot:item.${value}"$, "{ item }")
 				tmp.Append(pc.ToString)
@@ -3367,7 +3374,7 @@ sb.Append(temp)
 				'
 				'define template
 				Dim tmp As VueElement
-				tmp.Initialize(mCallBack, "", "")
+				tmp.Initialize(mCallBack, aslot, aslot)
 				tmp.TagName = "v-template"
 				tmp.AddAttr($"v-slot:item.${value}"$, "{ item }")
 				tmp.Append(rat.ToString)
@@ -3416,7 +3423,7 @@ sb.Append(temp)
 				'
 				'define template
 				Dim tmp As VueElement
-				tmp.Initialize(mCallBack, "" , "")
+				tmp.Initialize(mCallBack, aslot , aslot)
 				tmp.TagName = "v-template"
 				tmp.AddAttr($"v-slot:item.${value}"$, "{ item }")
 				tmp.Append(avt.ToString)
@@ -3461,7 +3468,7 @@ sb.Append(temp)
 				'
 				'define template
 				Dim tmp As VueElement
-				tmp.Initialize(mCallBack, "" , "")
+				tmp.Initialize(mCallBack, aslot , aslot)
 				tmp.TagName = "v-template"
 				tmp.AddAttr($"v-slot:item.${value}"$, "{ item }")
 				tmp.Append(swt.ToString)
@@ -3498,7 +3505,7 @@ sb.Append(temp)
 '				'
 				'define template
 				Dim tmp As VueElement
-				tmp.Initialize(mCallBack, "", "")
+				tmp.Initialize(mCallBack, aslot, aslot)
 				tmp.TagName = "v-template"
 				tmp.AddAttr($"v-slot:item.${value}"$, "{ item }")
 				tmp.Append(aicon.ToString)
@@ -3541,7 +3548,7 @@ sb.Append(temp)
 '				
 				'define template
 				Dim tmp As VueElement
-				tmp.Initialize(mCallBack, "" , "")
+				tmp.Initialize(mCallBack, aslot , aslot)
 				tmp.TagName = "v-template"
 				tmp.AddAttr($"v-slot:item.${value}"$, "{ item }")
 				tmp.Append(avtimg.ToString)
@@ -3583,7 +3590,7 @@ sb.Append(temp)
 				'
 				'define template
 				Dim tmp As VueElement
-				tmp.Initialize(mCallBack, "" , "")
+				tmp.Initialize(mCallBack, aslot , aslot)
 				tmp.TagName = "v-template"
 				tmp.AddAttr($"v-slot:item.${value}"$, "{ item }")
 				tmp.Append(chp.ToString)
@@ -3623,7 +3630,7 @@ sb.Append(temp)
 				'
 				'define template
 				Dim tmp As VueElement
-				tmp.Initialize(mCallBack, "" ,"")
+				tmp.Initialize(mCallBack, aslot , aslot)
 				tmp.TagName = "v-template"
 				tmp.AddAttr($"v-slot:item.${value}"$, "{ item }")
 				tmp.Append(abtn.ToString)
@@ -3676,7 +3683,7 @@ sb.Append(temp)
 				'
 				'define template
 				Dim tmp As VueElement
-				tmp.Initialize(mCallBack, "" , "")
+				tmp.Initialize(mCallBack, aslot , aslot)
 				tmp.TagName = "v-template"
 				tmp.AddAttr($"v-slot:item.${value}"$, "{ item }")
 				tmp.Append(abtn.ToString)
@@ -3699,7 +3706,7 @@ sb.Append(temp)
 				End If
 				'define template
 				Dim tmp As VueElement
-				tmp.Initialize(mCallBack, "" ,"")
+				tmp.Initialize(mCallBack, aslot , aslot)
 				tmp.TagName = "v-template"
 				tmp.AddAttr($"v-slot:item.${value}"$, "{ item }")
 				tmp.Append(pc.ToString)
@@ -3788,26 +3795,12 @@ Sub SetTotalVisible(varTotalVisible As String)
 End Sub
 
 'update the data, dont call this directly
-Sub Build	
+Sub Refresh	
 	'build the headers
 	BuildHeaders(columnsM)	
 	BuildSlots
 	
 	'SetData(keyID, DateTime.Now)
-	If Items.Size > 0 Then
-		SetData(itemsname, Items)
-	End If
-End Sub
-
-'refresh when having used AddRow, AddRow2
-Sub Refresh
-	Dim args As List = NewList
-	VC.SetData(selected, args)
-	VC.SetData(groupby, args)
-	VC.SetData(sortby, args)
-	VC.SetData(groupdesc, args)
-	VC.SetData(sortdesc, args)
-	VC.SetData(expanded, args)
 	If Items.Size > 0 Then
 		SetData(itemsname, Items)
 	End If
@@ -3934,8 +3927,10 @@ End Sub
 
 'set single-select
 Sub setSingleSelect(varSingleSelect As Boolean)
-	AddAttr(":single-select", varSingleSelect)
-	bSingleSelect = varSingleSelect
+	If varSingleSelect Then
+		AddAttr(":single-select", varSingleSelect)
+		bSingleSelect = varSingleSelect
+	End If
 End Sub
 
 'set item-key and force usage
@@ -3957,23 +3952,6 @@ End Sub
 'set loading-text
 Sub setLoadingText(varLoadingText As String)
 	AddAttr("loading-text", varLoadingText)
-End Sub
-
-'set page
-Sub setPage(varPage As String)
-	If varPage = "" Then Return
-	varPage = BANano.parseInt(varPage)
-	AddAttr(":page.sync", varPage)
-End Sub
-
-'link a data-table to the pagination
-Sub SetExternalPagination
-	setPage("1")
-	SetData($"${mName}pagecount"$, "0")
-	Dim scode As String = mName & "pagecount = $event"
-	AddAttr("v-on:page-count", scode)
-	setHideDefaultFooter(True)
-	hasExternalPagination = True
 End Sub
 
 'set selectable-key
@@ -4343,4 +4321,26 @@ Sub AddRow2(rowList As List)
 		nr.Put(k, v)
 	Next
 	Items.Add(nr)
+End Sub
+
+
+Sub BindState(VS As VueComponent)
+	VC = VS
+	Refresh
+	Dim mbindings As Map = VElement.bindings
+	Dim mmethods As Map = VElement.methods
+	'apply the binding for the control
+	For Each k As String In mbindings.Keys
+		Dim v As Object = mbindings.Get(k)
+		Select Case k
+		Case "key"
+		Case Else
+			VC.SetData(k, v)
+		End Select
+	Next
+	'apply the events
+	For Each k As String In mmethods.Keys
+		Dim cb As BANanoObject = mmethods.Get(k)
+		VC.SetCallBack(k, cb)
+	Next
 End Sub

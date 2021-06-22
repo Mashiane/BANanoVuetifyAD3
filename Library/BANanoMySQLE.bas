@@ -690,6 +690,7 @@ End Sub
 'Dim strError As String = dbConnect.Error
 'Log(strError)
 'End Select
+'</code>
 public Sub DropTable As BANanoMySQLE
 	'define the qry to execute
 	query = "DROP TABLE " & EscapeField(TableName)
@@ -1225,7 +1226,7 @@ Sub SelectDistinctWhere(tblfields As List, tblWhere As Map, operators As List, o
 	If Schema.Size = 0 Then
 		Log($"BANanoMySQL.SelectDistinctWhere: '${TableName}' schema is not set!"$)
 	End If
-	If banano.IsNull(operators) Then operators = EQOperators(tblWhere)
+	If BANano.IsNull(operators) Then operators = EQOperators(tblWhere)
 	Dim listOfTypes As List = GetMapTypes(tblWhere)
 	Dim listOfValues As List = GetMapValues(tblWhere)
 	'are we selecting all fields or just some
@@ -1313,7 +1314,7 @@ Sub DeleteWhere(tblWhere As Map, operators As List) As BANanoMySQLE
 	If Schema.Size = 0 Then
 		Log($"BANanoMySQL.DeleteWhere: '${TableName}' schema is not set!"$)
 	End If
-	If banano.IsNull(operators) Then operators = EQOperators(tblWhere)
+	If BANano.IsNull(operators) Then operators = EQOperators(tblWhere)
 	Dim listOfTypes As List = GetMapTypes(tblWhere)
 	Dim listOfValues As List = GetMapValues(tblWhere)
 	Dim sb As StringBuilder
@@ -1562,7 +1563,7 @@ Sub UpdateWhere(tblfields As Map, tblWhere As Map, operators As List) As BANanoM
 	If Schema.Size = 0 Then
 		Log($"BANanoMySQL.UpdateWhere: '${TableName}' schema is not set!"$)
 	End If
-	If banano.IsNull(operators) Then operators = EQOperators(tblWhere)
+	If BANano.IsNull(operators) Then operators = EQOperators(tblWhere)
 	Dim listOfTypes As List = GetMapTypes(tblfields)
 	Dim listOfTypes1 As List = GetMapTypes(tblWhere)
 	listOfTypes.AddAll(listOfTypes1)

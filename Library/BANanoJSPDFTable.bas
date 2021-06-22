@@ -4,7 +4,7 @@ ModulesStructureVersion=1
 Type=Class
 Version=8.9
 @EndOfDesignText@
-#IgnoreWarnings:12
+#IgnoreWarnings:12, 9
 Sub Class_Globals
 	Public rows As List
 	Public columns As List

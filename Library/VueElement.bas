@@ -53,7 +53,6 @@ Version=7
 
 #DesignerProperty: Key: AutoID, DisplayName: Auto ID/Name, FieldType: Boolean, DefaultValue: False, Description: Overrides the ID/Name with a random string.
 #DesignerProperty: Key: App, DisplayName: App, FieldType: Boolean, DefaultValue: False, Description: 
-#DesignerProperty: Key: Ref, DisplayName: Ref, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: AssignName, DisplayName: Assign Name, FieldType: Boolean, DefaultValue: False
 #DesignerProperty: Key: TagName, DisplayName: Tag Name, FieldType: String, DefaultValue: div, Description: tag of the element
 #DesignerProperty: Key: OverwriteTag, DisplayName: Overwrite Tag, FieldType: String, DefaultValue: , Description: over write tag of the element with
@@ -225,7 +224,6 @@ Sub Class_Globals
 	Private eOnKeyUp As String = ""
 	Private eOnMouseOut As String = ""
 	Private stKey As String = ""
-	Private stRef As String = ""
 	Private stSlot As String = ""
 	Private stVBindClass As String = ""
 	Private stVBind As String = ""
@@ -1244,7 +1242,6 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		eOnKeyUp = Props.Get("OnKeyUp")
 		eOnMouseOut = Props.Get("OnMouseOut")
 		stKey = Props.Get("Key")
-		stRef = Props.Get("Ref")
 		stSlot = Props.Get("Slot")
 		stVBindClass = Props.Get("VBindClass")
 		stVBind = Props.Get("VBind")
@@ -1357,7 +1354,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	If BANano.Exists($"#${mName}"$) Then
 		mElement = BANano.GetElement($"#${mName}"$)
 	Else	
-		mElement = mTarget.Append($"<${mTagName} id="${mName}"></${mTagName}>"$).Get("#" & mName)
+		mElement = mTarget.Append($"<${mTagName} ref="${mName}" id="${mName}"></${mTagName}>"$).Get("#" & mName)
 	End If
 		
 	setLoremIpsum(bLoremIpsum)
@@ -1392,7 +1389,6 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	AddAttr("v-slot:default", stVSlotDefault)
 	AddAttr("href", stHref)
 	AddAttr("key", stKey)
-	AddAttr("ref", stRef)
 	AddAttr("slot", stSlot)
 	AddAttr("v-bind", stVBind)
 	AddAttr("v-bind:class", stVBindClass)
@@ -1895,7 +1891,7 @@ Sub ToString As String
 	Dim myAttributes As String = BANanoShared.BuildAttributes(xAttributes)
 	
 	'stext = stext.Replace("v-template", "template")
-	Dim rslt As String = $"<${mTagName} id="${mName}" ${myAttributes}>${mCaption}${sbText.tostring}</${mTagName}>"$
+	Dim rslt As String = $"<${mTagName} ref="${mName}" id="${mName}" ${myAttributes}>${mCaption}${sbText.tostring}</${mTagName}>"$
 	Return rslt
 End Sub
 
@@ -2584,16 +2580,6 @@ End Sub
 
 public Sub getVSlotDefault() As String
 	Return stVSlotDefault
-End Sub
-
-public Sub setRef(varRef As String)
-	varRef = varRef.tolowercase
-	AddAttr("ref", varRef)
-	stRef = varRef
-End Sub
-
-public Sub getRef() As String
-	Return stRef
 End Sub
 
 public Sub setChipLabel(varLabel As Boolean)
@@ -7982,6 +7968,7 @@ Sub BindAllEvents
 	SetOnEvent(mCallBack, "contextmenu:time", "")
 	SetOnEvent(mCallBack, "contextmenu:time-category", "")
 	SetOnEvent(mCallBack, "moved", "")
+	SetOnEvent(mCallBack, "click:outside", "")
 End Sub
 
 'get the chip ref from the chip group
@@ -11952,6 +11939,10 @@ Sub setSrcSet(s As String)
 	AddAttr("src-set", s)
 End Sub
 
+Sub setRef(s As String)
+	AddAttr("ref", s)
+End Sub
+
 Sub SetCloseIcon(s As String)
 	AddAttr("close-icon", s)
 End Sub
@@ -11974,4 +11965,23 @@ End Sub
 Sub getHere As String
 	Dim sHere As String = $"#${mName}"$
 	Return sHere
+End Sub
+
+Sub BindState(VC As VueComponent)
+	Dim mbindings As Map = bindings
+	Dim mmethods As Map = methods
+	'apply the binding for the control
+	For Each k As String In mbindings.Keys
+		Dim v As Object = mbindings.Get(k)
+		Select Case k
+		Case "key"
+		Case Else
+			VC.SetData(k, v)
+		End Select
+	Next
+	'apply the events
+	For Each k As String In mmethods.Keys
+		Dim cb As BANanoObject = mmethods.Get(k)
+		VC.SetCallBack(k, cb)
+	Next
 End Sub

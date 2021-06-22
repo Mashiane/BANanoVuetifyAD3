@@ -22,10 +22,9 @@ Version=8.95
 #Event: UpdateError (B As Boolean)
 #Event: KeyUpEnterPrevent (e As BANanoEvent)
 
-#DesignerProperty: Key: Label, DisplayName: Label, FieldType: String, DefaultValue: Label1, Description: Label
-#DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: Label1, Description: VModel
+#DesignerProperty: Key: Label, DisplayName: Label, FieldType: String, DefaultValue: fieldname, Description: Label
+#DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: tablename.fieldname, Description: VModel
 #DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: , Description: Value
-#DesignerProperty: Key: SetRef, DisplayName: SetRef, FieldType: Boolean, DefaultValue: false, Description: SetRef
 #DesignerProperty: Key: TypeOf, DisplayName: TypeOf, FieldType: String, DefaultValue: text, Description: TypeOf, List: text|password|email|tel|email|url|number|search|time|button|hidden|reset|submit
 #DesignerProperty: Key: AutoComplete, DisplayName: AutoComplete, FieldType: String, DefaultValue: none, Description: AutoComplete, List: none|on|off|username|new-password|current-password|cc-name|cc-number|cc-csc|cc-exp|name|email|shipping street-address|shipping locality|shipping region|shipping postal-code|shipping country|tel
 #DesignerProperty: Key: ShowEyes, DisplayName: ShowEyes, FieldType: Boolean, DefaultValue: false, Description: ShowEyes
@@ -142,7 +141,6 @@ Sub Class_Globals
 	Private sRowHeight As String
 	Private sRows As String
 	Private sRules As String
-	Private bSetRef As Boolean
 	Private bShaped As Boolean
 	Private bSingleLine As Boolean
 	Private bSolo As Boolean
@@ -248,7 +246,6 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bRounded = Props.Get("Rounded")
 		sRowHeight = Props.Get("RowHeight")
 		sRows = Props.Get("Rows")
-		bSetRef = Props.Get("SetRef")
 		bShaped = Props.Get("Shaped")
 		bSingleLine = Props.Get("SingleLine")
 		bSolo = Props.Get("Solo")
@@ -294,7 +291,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 			Dim sbTemplate As String = $"<v-menu id="${menuref}" :close-on-content-click="false" transition="scale-transition" :offset-y="true"
 			ref="${menuref}" :return-value.sync="${sVModel}" v-model="${menuref}" min-width="460px" max-width="460px" :nudge-right="40">
 			<v-template id="${tempID}" v-slot:activator="{ on, attrs }">
-			<v-text-field id="${mName}" v-on="on" v-bind="attrs" v-model="${sVModel}" ref="${sVModel}" autocomplete="off"></v-text-field>
+			<v-text-field id="${mName}" v-on="on" v-bind="attrs" v-model="${sVModel}" ref="${mName}" autocomplete="off"></v-text-field>
 			</v-template>
 			<v-date-picker id="${dtpicker}" :scrollable="true" v-model="${sVModel}" :landscape="true">
 			<v-btn id="${btnclear}" color="error" :text="true" v-on:click="${sVModel} = ''" :outlined="true">Clear</v-btn>
@@ -320,7 +317,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 			Dim sbTemplate As String = $"<v-menu id="${menuref}" :close-on-content-click="false" transition="scale-transition" :offset-y="true"
 			ref="${menuref}" :return-value.sync="${sVModel}" v-model="${menuref}" min-width="460px" max-width="460px" :nudge-right="40">
 			<v-template id="${tempID}" v-slot:activator="{ on, attrs }">
-			<v-text-field id="${mName}" v-on="on" v-bind="attrs" v-model="${sVModel}" ref="${sVModel}" autocomplete="off"></v-text-field>
+			<v-text-field ref="${mName}" id="${mName}" v-on="on" v-bind="attrs" v-model="${sVModel}" autocomplete="off"></v-text-field>
 			</v-template>
 			<v-time-picker id="${dtpicker}" :scrollable="true" v-model="${sVModel}" :landscape="true">
 			<v-btn id="${btnclear}" color="error" :text="true" v-on:click="${sVModel} = ''" :outlined="true">Clear</v-btn>
@@ -344,19 +341,13 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		If BANano.Exists($"#${mName}"$) Then
 			mElement = BANano.GetElement($"#${mName}"$)
 		Else	
-			mElement = mTarget.Append($"<${stagName} id="${mName}"></${stagName}>"$).Get("#" & mName)
+			mElement = mTarget.Append($"<${stagName} ref="${mName}" id="${mName}"></${stagName}>"$).Get("#" & mName)
 		End If
 	End If
 	'
 	VElement.Initialize(mCallBack, mName, mName)
 	VElement.TagName = stagName
 	'
-	If BANano.IsNull(bSetRef) Or BANano.IsUndefined(bSetRef) Then
-		bSetRef = False
-	End If
-	If bSetRef Then
-		VElement.Ref = mName
-	End If
 	If BANano.IsNull(bShowEyes) Or BANano.IsUndefined(bShowEyes) Then
 		bShowEyes = False
 	End If
@@ -423,7 +414,6 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		VElement.AddAttr("rows", sRows)
 		VElement.AddAttr(":rules", sRules)
 		VElement.SetData(sRules, VElement.NewList)
-		VElement.AddAttr(":set-ref", bSetRef)
 		VElement.AddAttr(":shaped", bShaped)
 		VElement.AddAttr(":single-line", bSingleLine)
 		VElement.AddAttr(":solo", bSolo)
@@ -584,6 +574,8 @@ End Sub
 '</code>
 Sub AddRule(methodName As String)
 	VElement.AddRule(methodName)
+	VElement.SetData(sRequired, True)
+	bRequired = True
 End Sub
 
 Sub getID As String
@@ -593,4 +585,24 @@ End Sub
 
 Sub getHere As String
 	Return $"#${mName}"$
+End Sub
+
+
+Sub BindState(VC As VueComponent)
+	Dim mbindings As Map = VElement.bindings
+	Dim mmethods As Map = VElement.methods
+	'apply the binding for the control
+	For Each k As String In mbindings.Keys
+		Dim v As Object = mbindings.Get(k)
+		Select Case k
+		Case "key"
+		Case Else
+			VC.SetData(k, v)
+		End Select
+	Next
+	'apply the events
+	For Each k As String In mmethods.Keys
+		Dim cb As BANanoObject = mmethods.Get(k)
+		VC.SetCallBack(k, cb)
+	Next
 End Sub

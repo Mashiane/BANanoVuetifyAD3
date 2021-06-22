@@ -644,7 +644,7 @@ End Sub
 
 'add html of component to app and this binds events and states
 Sub BindVueTable(el As VueTable)
-	el.Build
+	el.Refresh
 	Dim mbindings As Map = el.bindings
 	Dim mmethods As Map = el.methods
 	'apply the binding for the control

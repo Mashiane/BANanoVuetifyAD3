@@ -176,7 +176,7 @@ sSelectionType = Props.Get("SelectionType")
 bShaped = Props.Get("Shaped")
 bTransition = Props.Get("Transition")
 sVIf = Props.Get("VIf")
-svshow = Props.Get("VShow")
+sVShow = Props.Get("VShow")
 bHidden = Props.GetDefault("Hidden", False)
 sValue = Props.Get("Value")
 	End If
@@ -353,3 +353,23 @@ Sub getHere As String
 	Return $"#${mName}"$
 End Sub
 
+
+
+Sub BindState(VC As VueComponent)
+	Dim mbindings As Map = VElement.bindings
+	Dim mmethods As Map = VElement.methods
+	'apply the binding for the control
+	For Each k As String In mbindings.Keys
+		Dim v As Object = mbindings.Get(k)
+		Select Case k
+		Case "key"
+		Case Else
+			VC.SetData(k, v)
+		End Select
+	Next
+	'apply the events
+	For Each k As String In mmethods.Keys
+		Dim cb As BANanoObject = mmethods.Get(k)
+		VC.SetCallBack(k, cb)
+	Next
+End Sub

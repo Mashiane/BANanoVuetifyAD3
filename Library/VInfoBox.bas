@@ -88,7 +88,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	End If
 	'
 	Dim strHTML As String
-	strHTML = $"<v-card id="${mName}" class="ma-3 rounded-lg">
+	strHTML = $"<v-card ref="${mName}" id="${mName}" class="ma-3 rounded-lg">
 	<v-list-item id="${mName}listitem">
 	<v-list-item-avatar id="${mName}listitemavatar" class="mt-n7 rounded-lg elevation-10" size="80" elevation="10">
 	<v-sheet id="${mName}sheet" color="${mColor}" elevation="10" height="80px" width="80px">
@@ -174,4 +174,24 @@ End Sub
 
 Sub getHere As String
 	Return $"#${mName}"$
+End Sub
+
+
+Sub BindState(VC As VueComponent)
+	Dim mbindings As Map = VElement.bindings
+	Dim mmethods As Map = VElement.methods
+	'apply the binding for the control
+	For Each k As String In mbindings.Keys
+		Dim v As Object = mbindings.Get(k)
+		Select Case k
+		Case "key"
+		Case Else
+			VC.SetData(k, v)
+		End Select
+	Next
+	'apply the events
+	For Each k As String In mmethods.Keys
+		Dim cb As BANanoObject = mmethods.Get(k)
+		VC.SetCallBack(k, cb)
+	Next
 End Sub

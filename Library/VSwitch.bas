@@ -20,7 +20,6 @@ Version=8.95
 #DesignerProperty: Key: FalseValue, DisplayName: FalseValue, FieldType: String, DefaultValue: False, Description: FalseValue
 #DesignerProperty: Key: InputValue, DisplayName: InputValue, FieldType: String, DefaultValue: , Description: InputValue
 #DesignerProperty: Key: Inset, DisplayName: Inset, FieldType: Boolean, DefaultValue: false, Description: Inset
-#DesignerProperty: Key: SetRef, DisplayName: SetRef, FieldType: Boolean, DefaultValue: false, Description: SetRef
 #DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: Boolean, DefaultValue: False, Description: Disabled
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: Loading, DisplayName: Loading, FieldType: Boolean, DefaultValue: False, Description: Loading
@@ -97,7 +96,6 @@ Private sPrependIcon As String
 Private sReadonly As String
 Private bRipple As Boolean
 Private sRules As String
-Private bSetRef As Boolean
 Private sSuccess As String
 Private sSuccessMessages As String
 Private sTrueValue As String
@@ -115,7 +113,7 @@ Private bHidden As Boolean
 Private bLoading As Boolean
 Private bReadonly As Boolean
 Private bRequired As Boolean
-private bChecked as boolean
+Private bChecked As Boolean
 	End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -177,7 +175,6 @@ bPersistentHint = Props.Get("PersistentHint")
 sPrependIcon = Props.Get("PrependIcon")
 sReadonly = Props.Get("Readonly")
 bRipple = Props.Get("Ripple")
-bSetRef = Props.Get("SetRef")
 sTrueValue = Props.Get("TrueValue")
 sVBind = Props.Get("VBind")
 sVFor = Props.Get("VFor")
@@ -193,19 +190,12 @@ bChecked = Props.GetDefault("Checked", False)
 	If BANano.Exists($"#${mName}"$) Then
 		mElement = BANano.GetElement($"#${mName}"$)
 	Else	
-		mElement = mTarget.Append($"<v-switch id="${mName}"></v-switch>"$).Get("#" & mName)
+		mElement = mTarget.Append($"<v-switch ref="${mName}" id="${mName}"></v-switch>"$).Get("#" & mName)
 	End If
 	'
 	VElement.Initialize(mCallBack, mName, mName)
 	VElement.TagName = "v-switch"
 	'
-	If BANano.IsNull(bSetRef) Or BANano.IsUndefined(bSetRef) Then
-		bSetRef = False
-	End If
-	If bSetRef Then
-		VElement.Ref = mName
-	End If
-	
 	If BANano.IsNull(bDisabled) Or BANano.IsUndefined(bDisabled) Then
 		bDisabled = False 
 	End If
@@ -370,6 +360,8 @@ End Sub
 '</code>
 Sub AddRule(methodName As String)
 	VElement.AddRule(methodName)
+		VElement.SetData(sRequired, True)
+	bRequired = true
 End Sub
 
 
@@ -387,3 +379,22 @@ Sub getVModel As String
 	Return sVModel
 End Sub
 
+
+Sub BindState(VC As VueComponent)
+	Dim mbindings As Map = VElement.bindings
+	Dim mmethods As Map = VElement.methods
+	'apply the binding for the control
+	For Each k As String In mbindings.Keys
+		Dim v As Object = mbindings.Get(k)
+		Select Case k
+		Case "key"
+		Case Else
+			VC.SetData(k, v)
+		End Select
+	Next
+	'apply the events
+	For Each k As String In mmethods.Keys
+		Dim cb As BANanoObject = mmethods.Get(k)
+		VC.SetCallBack(k, cb)
+	Next
+End Sub

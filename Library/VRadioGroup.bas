@@ -21,6 +21,7 @@ Version=7
 #DesignerProperty: Key: Label, DisplayName: Label, FieldType: String, DefaultValue: RadioGroup1, Description: Label
 #DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: Boolean, DefaultValue: False, Description: Disabled
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
+#DesignerProperty: Key: Required, DisplayName: Required, FieldType: Boolean, DefaultValue: False, Description: Required
 #DesignerProperty: Key: Readonly, DisplayName: Readonly, FieldType: Boolean, DefaultValue: False, Description: Readonly
 #DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: rg1, Description: VModel
 #DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: , Description: Value
@@ -108,7 +109,9 @@ Private bValidateOnBlur As Boolean
  Private sItemText As String
  Private sItemValue As String
  Private sItemDisabled As String
- private sValue as string
+ Private sValue As String
+ Private sRequired As String
+ Private bRequired As Boolean
  	End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -126,6 +129,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	sDisabled = $"${mName}disabled"$
 	sReadOnly = $"${mName}readonly"$
 	sVShow = $"${mName}show"$
+	sRequired = $"${mName}required"$
 	xitems.Initialize 
 End Sub
 
@@ -171,13 +175,14 @@ sItemText = Props.GetDefault("ItemText","text")
 sItemValue = Props.GetDefault("ItemValue","value")
 sItems = Props.GetDefault("Items", "items")
  sValue = Props.GetDefault("Value", "")
-	End If 
+ bRequired = Props.GetDefault("Required", False)
+End If 
 	' 
 	'build and get the element 
 	If BANano.Exists($"#${mName}"$) Then 
 		mElement = BANano.GetElement($"#${mName}"$) 
 	Else	 
-		mElement = mTarget.Append($"<v-radio-group id="${mName}"></v-radio-group>"$).Get("#" & mName) 
+		mElement = mTarget.Append($"<v-radio-group ref="${mName}" id="${mName}"></v-radio-group>"$).Get("#" & mName) 
 	End If 
 	' 
 	VElement.Initialize(mCallBack, mName, mName) 
@@ -241,6 +246,8 @@ VElement.AddAttr("v-on", sVOn)
 VElement.AddAttr("v-show", sVShow)
 VElement.SetData(sVShow, Not(bHidden))
 VElement.AddAttr(":validate-on-blur", bValidateOnBlur)
+VElement.AddAttr(":required", sRequired)
+VElement.SetData(sRequired, bRequired)
 VElement.BindAllEvents
 End Sub
 
@@ -258,6 +265,8 @@ End Sub
 '</code>
 Sub AddRule(methodName As String)
 	VElement.AddRule(methodName)
+		VElement.SetData(sRequired, True)
+	bRequired = True
 End Sub
 
 
@@ -460,4 +469,23 @@ End Sub
 Sub UpdateItems1(VC As VueComponent, lst As List)
 	Dim nl As List = BANanoShared.ListToDataSource(sItemValue, sItemText, lst)
 	VC.SetData(sItems, nl)
+End Sub
+
+Sub BindState(VC As VueComponent)
+	Dim mbindings As Map = VElement.bindings
+	Dim mmethods As Map = VElement.methods
+	'apply the binding for the control
+	For Each k As String In mbindings.Keys
+		Dim v As Object = mbindings.Get(k)
+		Select Case k
+		Case "key"
+		Case Else
+			VC.SetData(k, v)
+		End Select
+	Next
+	'apply the events
+	For Each k As String In mmethods.Keys
+		Dim cb As BANanoObject = mmethods.Get(k)
+		VC.SetCallBack(k, cb)
+	Next
 End Sub

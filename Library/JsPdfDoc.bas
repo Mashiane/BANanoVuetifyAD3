@@ -4,7 +4,7 @@ ModulesStructureVersion=1
 Type=Class
 Version=7
 @EndOfDesignText@
-#IgnoreWarnings:12
+#IgnoreWarnings:12, 9
 'Created with BANano Custom View Creator 1.00 by TheMash
 'https://github.com/Mashiane/BANano-Custom-View-Creator
 'Custom BANano View class
@@ -223,4 +223,25 @@ End Sub
 'return the data url
 Sub DataURL As String
 	Return pdf.DataURL
+End Sub
+
+
+Sub BindState(VS As VueComponent)
+	ParentComponent = VS
+	Dim mbindings As Map = VElement.bindings
+	Dim mmethods As Map = VElement.methods
+	'apply the binding for the control
+	For Each k As String In mbindings.Keys
+		Dim v As Object = mbindings.Get(k)
+		Select Case k
+		Case "key"
+		Case Else
+			ParentComponent.SetData(k, v)
+		End Select
+	Next
+	'apply the events
+	For Each k As String In mmethods.Keys
+		Dim cb As BANanoObject = mmethods.Get(k)
+		ParentComponent.SetCallBack(k, cb)
+	Next
 End Sub

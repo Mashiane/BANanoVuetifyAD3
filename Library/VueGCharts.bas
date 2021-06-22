@@ -43,7 +43,6 @@ Version=8.9
 
 ' Properties that will be show in the ABStract Designer.  They will be passed in the props map in DesignerCreateView (Case Sensitive!)
 #DesignerProperty: Key: AutoID, DisplayName: Auto ID/Name, FieldType: Boolean, DefaultValue: False, Description: Overrides the ID/Name with a random string.
-#DesignerProperty: Key: Ref, DisplayName: Ref, FieldType: String, DefaultValue: , Description: Ref
 #DesignerProperty: Key: Title, DisplayName: Title, FieldType: String, DefaultValue: , Description: Title
 #DesignerProperty: Key: SubTitle, DisplayName: Sub Title, FieldType: String, DefaultValue: , Description: Sub Title
 #DesignerProperty: Key: ResizeDebounce, DisplayName: Resize Debounce, FieldType: Int, DefaultValue: 500, Description: Resize Debounce
@@ -77,7 +76,6 @@ Sub Class_Globals
 	Private mStates As String
 	Public bindings As Map
 	Public methods As Map
-	Private stRef As String = ""
 	Private stVElse As String = ""
 	Private stVElseIf As String = ""
 	Private stVIf As String = ""
@@ -141,7 +139,6 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mAttributes = Props.Get("Attributes")
 		mStyle = Props.Get("Style")
 		mStates = Props.Get("States")
-		stRef = Props.Get("Ref")
 		stVElse = Props.Get("VElse")
 		stVElseIf = Props.Get("VElseIf")
 		stVIf = Props.Get("VIf")
@@ -154,12 +151,11 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mWidth = Props.Get("Width")
 	End If
 	'
-	mElement = mTarget.Append($"<g-chart id="${mName}"></g-chart>"$).Get("#" & mName)
+	mElement = mTarget.Append($"<g-chart ref="${mName}" id="${mName}"></g-chart>"$).Get("#" & mName)
 	'
 	GChart.Initialize(mCallBack,mName,mName)
 	GChart.StyleHeight = mHeight
 	GChart.StyleWidth = mWidth
-	GChart.ref = stRef
 	GChart.velse = stVElse
 	GChart.velseif = stVElseIf
 	GChart.vif = stVIf
@@ -286,7 +282,7 @@ Sub ToString As String
 	'
 	Dim sb As StringBuilder
 	sb.Initialize
-	sb.Append($"<GChart id="${mName}"></GChart>"$)
+	sb.Append($"<GChart ref="${mName}" id="${mName}"></GChart>"$)
 	Return sb.tostring
 End Sub
 
@@ -428,4 +424,25 @@ End Sub
 
 Sub VisibleOnlyOnXL
 	AddClass("d-none d-xl-flex")
+End Sub
+
+
+Sub BindState(VS As VueComponent)
+	VC = VS
+	Dim mbindings As Map = bindings
+	Dim mmethods As Map = methods
+	'apply the binding for the control
+	For Each k As String In mbindings.Keys
+		Dim v As Object = mbindings.Get(k)
+		Select Case k
+		Case "key"
+		Case Else
+			VC.SetData(k, v)
+		End Select
+	Next
+	'apply the events
+	For Each k As String In mmethods.Keys
+		Dim cb As BANanoObject = mmethods.Get(k)
+		VC.SetCallBack(k, cb)
+	Next
 End Sub

@@ -163,7 +163,7 @@ sPY = Props.Get("PY")
 	If BANano.Exists($"#${mName}"$) Then
 		mElement = BANano.GetElement($"#${mName}"$)
 	Else	
-		mElement = mTarget.Append($"<v-avatar id="${mName}"></v-avatar>"$).Get("#" & mName)
+		mElement = mTarget.Append($"<v-avatar ref="${mName}" id="${mName}"></v-avatar>"$).Get("#" & mName)
 	End If
 	'
 	VElement.Initialize(mCallBack, mName, mName)
@@ -178,7 +178,7 @@ sPY = Props.Get("PY")
 		If bHeadLine = True Then
 			VElement.GetText.AddClass("headline")
 		End If
-	End If
+	End If 
 	If BANano.IsNull(mIcon) Or BANano.IsUndefined(mIcon) Then
 		mIcon = ""
 	End If
@@ -282,4 +282,24 @@ End Sub
 
 Sub getHere As String
 	Return $"#${mName}"$
+End Sub
+
+
+Sub BindState(VC As VueComponent)
+	Dim mbindings As Map = VElement.bindings
+	Dim mmethods As Map = VElement.methods
+	'apply the binding for the control
+	For Each k As String In mbindings.Keys
+		Dim v As Object = mbindings.Get(k)
+		Select Case k
+		Case "key"
+		Case Else
+			VC.SetData(k, v)
+		End Select
+	Next
+	'apply the events
+	For Each k As String In mmethods.Keys
+		Dim cb As BANanoObject = mmethods.Get(k)
+		VC.SetCallBack(k, cb)
+	Next
 End Sub

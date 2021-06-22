@@ -12,8 +12,7 @@ Version=7
 #Event: Input (B As Boolean)
 #Event: Submit (e As BANanoEvent)
 
-#DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: valid, Description: VModel
-#DesignerProperty: Key: LazyValidation, DisplayName: LazyValidation, FieldType: Boolean, DefaultValue: False, Description: LazyValidation
+#DesignerProperty: Key: LazyValidation, DisplayName: LazyValidation, FieldType: Boolean, DefaultValue: True, Description: LazyValidation
 #DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: Boolean, DefaultValue: False, Description: Disabled
 #DesignerProperty: Key: Readonly, DisplayName: Readonly, FieldType: Boolean, DefaultValue: False, Description: Readonly
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
@@ -38,18 +37,17 @@ Sub Class_Globals
 	Private mAttributes As String = "" 
 	Public VElement As VueElement 
 	Private sDisabled As String
-Private bLazyValidation As Boolean
-Private sReadonly As String
-Private sVBind As String
-Private sVFor As String
-Private sVIf As String
-Private sVModel As String
-Private sVOn As String
-Private sVShow As String
- '
+	Private bLazyValidation As Boolean
+	Private sReadonly As String
+	Private sVBind As String
+	Private sVFor As String
+	Private sVIf As String
+	Private sVModel As String
+	Private sVOn As String
+	Private sVShow As String
  	Private bDisabled As Boolean
 	Private bReadonly As Boolean
-	End Sub
+End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
 	mName = Name.tolowercase 
@@ -65,24 +63,23 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	End If 
 	sDisabled = $"${mName}disabled"$
 	sReadonly = $"${mName}readonly"$
-	End Sub
+	sVModel = $"${mName}vmodel"$
+End Sub
 
 Sub DesignerCreateView (Target As BANanoElement, Props As Map) 
 	mTarget = Target 
 	If Props <> Null Then 
-		bDisabled = Props.GetDefault("Disabled",false)
-bReadonly = Props.Get("Readonly")
+		bDisabled = Props.GetDefault("Disabled",False)
+		bReadonly = Props.Get("Readonly")
 		mClasses = Props.Get("Classes") 
 		mStyles = Props.Get("Styles") 
 		mAttributes = Props.Get("Attributes") 
-bLazyValidation = Props.Get("LazyValidation")
-sVBind = Props.Get("VBind")
-sVFor = Props.Get("VFor")
-sVIf = Props.Get("VIf")
-sVShow = Props.Get("VShow")
-sVModel = Props.Get("VModel")
-sVOn = Props.Get("VOn")
- 
+		bLazyValidation = Props.GetDefault("LazyValidation", False)
+		sVBind = Props.Get("VBind")
+		sVFor = Props.Get("VFor")
+		sVIf = Props.Get("VIf")
+		sVShow = Props.Get("VShow")
+		sVOn = Props.Get("VOn") 
 	End If 
 	' 
 	'build and get the element 
@@ -115,7 +112,7 @@ sVOn = Props.Get("VOn")
 	VElement.AddAttr("v-model", sVModel)
 	VElement.AddAttr("v-if", sVIf)
 	VElement.AddAttr("v-show", sVShow)
-	VElement.SetData(sVModel, True)
+	VElement.SetData(sVModel, False)
 	VElement.BindAllEvents
 End Sub
 
@@ -187,7 +184,7 @@ Sub Reset(VC As VueComponent)
 	refs.GetField(mName).runmethod("reset", Null)
 End Sub
 
-'reset validation
+'reset validation not state
 Sub ResetValidation(VC As VueComponent)
 	Dim refs As BANanoObject = VC.refs
 	refs.GetField(mName).runmethod("resetValidation", Null)
@@ -200,3 +197,21 @@ Sub Validate(VC As VueComponent) As Boolean
 	Return res
 End Sub
 
+Sub BindState(VC As VueComponent)
+	Dim mbindings As Map = VElement.bindings
+	Dim mmethods As Map = VElement.methods
+	'apply the binding for the control
+	For Each k As String In mbindings.Keys
+		Dim v As Object = mbindings.Get(k)
+		Select Case k
+		Case "key"
+		Case Else
+			VC.SetData(k, v)
+		End Select
+	Next
+	'apply the events
+	For Each k As String In mmethods.Keys
+		Dim cb As BANanoObject = mmethods.Get(k)
+		VC.SetCallBack(k, cb)
+	Next
+End Sub
