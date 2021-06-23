@@ -13,16 +13,22 @@ Version=9
 #DesignerProperty: Key: DialogType, DisplayName: DialogType, FieldType: String, DefaultValue: message, Description: DialogType, List: message|input
 #DesignerProperty: Key: ToolbarCaption, DisplayName: Title, FieldType: String, DefaultValue: Title, Description: Title
 #DesignerProperty: Key: CardTextCaption, DisplayName: Message, FieldType: String, DefaultValue: Message, Description: Message
+#DesignerProperty: Key: CustomActions, DisplayName: CustomActions, FieldType: Boolean, DefaultValue: False, Description: CustomActions
 #DesignerProperty: Key: OkCaption, DisplayName: OkCaption, FieldType: String, DefaultValue: Ok, Description: OkCaption
 #DesignerProperty: Key: CancelCaption, DisplayName: CancelCaption, FieldType: String, DefaultValue: Cancel, Description: CancelCaption
 
 #DesignerProperty: Key: Rounded, DisplayName: Rounded, FieldType: String, DefaultValue: none, Description: Rounded, List: none|rounded-0|rounded|rounded-sm|rounded-lg|rounded-xl|rounded-t-xl|rounded-r-xl|rounded-b-xl|rounded-l-xl|rounded-tl-xl|rounded-tr-xl|rounded-br-xl|rounded-bl-xl|rounded-pill|rounded-circle
 #DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: 700, Description: Width
+#DesignerProperty: Key: MinWidth, DisplayName: MinWidth, FieldType: String, DefaultValue: , Description: MinWidth
 #DesignerProperty: Key: MaxWidth, DisplayName: MaxWidth, FieldType: String, DefaultValue: , Description: MaxWidth
+#DesignerProperty: Key: Height, DisplayName: Height, FieldType: String, DefaultValue: , Description: Height
+#DesignerProperty: Key: MinHeight, DisplayName: MinHeight, FieldType: String, DefaultValue: 300, Description: MinHeight
+#DesignerProperty: Key: MaxHeight, DisplayName: MaxHeight, FieldType: String, DefaultValue: , Description: MaxHeight
 #DesignerProperty: Key: ToolBarColor, DisplayName: ToolBarColor, FieldType: String, DefaultValue: green, Description: ToolBarColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: ToolBarColorIntensity, DisplayName: ToolBarColorIntensity, FieldType: String, DefaultValue: normal, Description: ToolBarColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: ToolbarDark, DisplayName: ToolbarDark, FieldType: Boolean, DefaultValue: False, Description: ToolbarDark
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: True, Description: Hidden
+#DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 '
 #DesignerProperty: Key: OkVisible, DisplayName: OkVisible, FieldType: Boolean, DefaultValue: True, Description: OKVisible
 #DesignerProperty: Key: OkLoading, DisplayName: OkLoading, FieldType: Boolean, DefaultValue: False, Description: OkLoading
@@ -56,7 +62,6 @@ Version=9
 #DesignerProperty: Key: Scrollable, DisplayName: Scrollable, FieldType: Boolean, DefaultValue: false, Description: Scrollable
 #DesignerProperty: Key: Transition, DisplayName: Transition, FieldType: String, DefaultValue: fab-transition, Description: Transition, List: none|fab-transition|fade-transition|expand-transition|scale-transition|scroll-x-transition|scroll-x-reverse-transition|scroll-y-transition|scroll-y-reverse-transition|slide-x-transition|slide-x-reverse-transition|slide-y-transition|slide-y-reverse-transition
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
-#DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
@@ -131,7 +136,15 @@ Private sVShow As String
 Private bHidden As Boolean
 Private sToolbarCaption As String
 Private sRounded As String
-private sDialogType as string
+Private sDialogType As String
+Private bCustomActions As Boolean
+Private sShowActions As String
+Private sScrollable As String
+Private sMinHeight As String
+Private sMinWidth As String
+Private sMaxHeight As String
+Private sMaxWidth As String
+Private sHeight As String
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -162,6 +175,8 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	xCancelDisabled = $"${mName}cancel_disabled"$
 	sDisabled = $"${mName}disabled"$
 	sVModel = $"${mName}vmodel"$
+	sShowActions = $"${mName}actionsshow"$
+	sScrollable = $"${mName}scrollable"$
 End Sub
 	
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
@@ -212,6 +227,12 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bToolbarDark = Props.Get("ToolBarDark")
 		bHidden = Props.GetDefault("Hidden", True)
 		sDialogType = Props.GetDefault("DialogType", "message")
+		bCustomActions = Props.GetDefault("CustomActions", False)
+		sMinHeight = Props.GetDefault("MinHeight", False)
+		sMinWidth = Props.GetDefault("MinWidth", False)
+		sMaxHeight = Props.GetDefault("MaxHeight", False)
+		sMaxWidth = Props.GetDefault("MaxWidth", False)
+		sHeight = Props.GetDefault("Height", False)
 	End If
 	'
 	'build and get the element
@@ -243,6 +264,17 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.SetData(xCancelLoading, bCancelLoading)
 	VElement.SetData(xCancelDisabled, bCancelDisabled)
 	VElement.ContentClass = sRounded
+	'
+	If bCustomActions Then
+		'hide actions
+		VElement.SetData(sShowActions, False)
+		VElement.SetData(xOkVisible, False)
+		VElement.SetData(xCancelVisible, False)
+	Else
+		'show actions
+		VElement.SetData(sShowActions, True)	
+	End If
+	
 	'add the card
 	VElement.Append($"<v-card id="${mName}card"></v-card>"$)
 	'
@@ -251,6 +283,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.GetCardTitle.Bind("color", xToolBarColor)
 	VElement.GetCardTitle.Bind("dark", xToolBarDark)		
 	VElement.BindVueElement(VElement.GetCardTitle)
+	VElement.GetCard.Append($"<v-divider class="mx-2 mb-2"></v-divider>"$)
 	'
 	VElement.GetCard.Append($"<v-card-text id="${mName}cardtext"></v-card-text>"$)
 	Select Case sDialogType
@@ -260,15 +293,15 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	End Select
 	VElement.BindVueElement(VElement.GetCardText)
 	'
-	VElement.GetCard.Append($"<v-divider id="${mName}divider2" class="mx-2"></v-divider>"$)
+	VElement.GetCard.Append($"<v-divider id="${mName}divider2" v-show="${sShowActions}" class="mx-2"></v-divider>"$)
 	'
-	VElement.GetCard.Append($"<v-card-actions id="${mName}cardactions"></v-card-actions>"$)
-	VElement.GetCardActions.Append($"<v-btn id="${mName}_cancel" dark>{{${xCancelCaption} }}</v-btn>"$)
+	VElement.GetCard.Append($"<v-card-actions v-show="${sShowActions}" id="${mName}cardactions"></v-card-actions>"$)
+	VElement.GetCardActions.Append($"<v-spacer></v-spacer>"$)
+	VElement.GetCardActions.Append($"<v-btn id="${mName}_cancel" class="mr-2" dark>{{${xCancelCaption} }}</v-btn>"$)
 	VElement.GetCancel1.Bind("color", xCancelColor)
 	VElement.GetCancel1.Disabled = xCancelDisabled
 	VElement.GetCancel1.Vshow = xCancelVisible
 	VElement.GetCancel1.Loading = xCancelLoading
-	VElement.GetCardActions.Append($"<v-spacer></v-spacer>"$)
 	'
 	VElement.GetCardActions.Append($"<v-btn id="${mName}_ok" dark>{{ ${xOkCaption} }}</v-btn>"$)
 	VElement.GetOK1.Bind("color", xOkColor)
@@ -292,7 +325,6 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.AddAttr(":eager", bEager)
 	VElement.AddAttr(":fullscreen", bFullscreen)
 	VElement.AddAttr(":hide-overlay", bHideOverlay)
-	VElement.AddAttr("max-width", sMaxWidth)
 	VElement.AddAttr(":no-click-animation", bNoClickAnimation)
 	VElement.AddAttr("open-delay", sOpenDelay)
 	VElement.AddAttr("origin", sOrigin)
@@ -300,13 +332,22 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.AddAttr("overlay-opacity", sOverlayOpacity)
 	VElement.AddAttr(":persistent", bPersistent)
 	VElement.AddAttr(":retain-focus", bRetainFocus)
-	VElement.AddAttr(":scrollable", bScrollable)
+	VElement.AddAttr(":scrollable", sScrollable)
+	VElement.SetData(sScrollable, bScrollable)
 	VElement.AddAttr("transition", sTransition)
 	VElement.AddAttr("v-if", sVIf)
 	VElement.AddAttr("v-model", sVModel)
-	VElement.AddAttr("width", sWidth)
 	VElement.FullScreenOnMobile = bFullscreenOnMobile
 	VElement.SetData(sVModel, Not(bHidden))
+	'
+	VElement.GetCard.MinHeight = sMinHeight
+	VElement.GetCard.MaxHeight = sMaxHeight
+	VElement.GetCard.Height = sHeight
+	
+	VElement.Width = sWidth
+	VElement.MaxWidth =	sMaxWidth
+	VElement.MinWidth = sMinWidth
+	
 	VElement.BindAllEvents
 	'
 	Dim okb As VueElement = VElement.GetOK1
@@ -329,6 +370,7 @@ Sub Confirm(VC As VueComponent, process As String, Title As String, Message As S
 	UpdateCancelVisible(VC, True)
 	UpdateOkLoading(VC, False)
 	UpdateCancelLoading(VC, False)
+	UpdateScrollable(VC, False)
 	VC.SetData("confirmkey", process)
 	UpdateVisible(VC, True)
 End Sub
@@ -340,13 +382,19 @@ Sub Alert(VC As VueComponent, process As String, Title As String, Message As Str
 	UpdateMessage(VC, Message)
 	UpdateOkLabel(VC, ConfirmText)
 	UpdateOkVisible(VC, True)
+	UpdateScrollable(VC, False)
 	UpdateCancelVisible(VC, False)
 	VC.SetData("confirmkey", process)
 	UpdateVisible(VC, True)
 End Sub
 
 'update the card text
-private Sub UpdateMessage(VC As VueComponent, vCardTextx As String)
+Sub UpdateScrollable(VC As VueComponent, b As Boolean)
+	VC.SetData(sScrollable, b)
+End Sub
+
+'update the card text
+Sub UpdateMessage(VC As VueComponent, vCardTextx As String)
 	sCardTextCaption = vCardTextx
 	VC.SetData(xCardTextCaption, vCardTextx)
 End Sub
@@ -376,7 +424,7 @@ Sub UpdateCancelColor(VC As VueComponent, vColor As String, vIntensity As String
 End Sub
 
 'update the toolbar title
-private Sub UpdateTitle(VC As VueComponent, vToolbarCaption As String)
+Sub UpdateTitle(VC As VueComponent, vToolbarCaption As String)
 	sToolbarCaption = vToolbarCaption
 	VC.SetData(xToolbarCaption, vToolbarCaption)
 End Sub
@@ -454,6 +502,14 @@ End Sub
 
 'get the card text
 Sub CardText As VCardText
+	Dim scard As String = $"${mName}cardtext"$
+	Dim elx As VCardText
+	elx.Initialize(mCallBack, scard, scard)
+	Return elx
+End Sub
+
+'get the card text
+Sub Container As VCardText
 	Dim scard As String = $"${mName}cardtext"$
 	Dim elx As VCardText
 	elx.Initialize(mCallBack, scard, scard)
@@ -562,4 +618,13 @@ Sub BindState(VC As VueComponent)
 		Dim cb As BANanoObject = mmethods.Get(k)
 		VC.SetCallBack(k, cb)
 	Next
+End Sub
+
+'return html of the element
+Sub getHTML As String
+	If mElement <> Null Then
+		Return mElement.GetHTML
+	Else
+		Return ""
+	End If
 End Sub

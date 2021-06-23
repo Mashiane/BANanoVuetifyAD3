@@ -2105,6 +2105,8 @@ Sub ApplyFilter1(fltrs As List)
 	ApplyFilter
 End Sub
 
+
+'clear the rows
 Sub Clear
 	Items.Initialize 
 	Reload(Items)

@@ -90,6 +90,7 @@ Sub Class_Globals
 	Private sDataTextColor As String
 	Public ParentComponent As VueComponent
 	Public ShowLog As Boolean
+	Public IsBound As Boolean
 End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -145,6 +146,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.Initialize(mCallBack, mName, mName) 
 	VElement.TagName = "div"
 	VElement.AddStyle("display", "none")
+	IsBound = False
 End Sub
 
 Sub getID As String
@@ -158,6 +160,9 @@ End Sub
 
 'prepare the document, we can add fonts
 Sub Ready
+	If IsBound = False Then
+		BANano.Throw($"jsPDfDoc.${mName} has not been bound to the component!"$)
+	End If
 	If sFontStyle = "none" Then sFontStyle = ""
 	'initialize the class and do something
 	pdf.Initialize(mCallBack, sFileName)
@@ -189,6 +194,9 @@ End Sub
 
 'addFont
 Sub addFont(url As String, fontName As String, fontType As String)
+	If IsBound = False Then
+		BANano.Throw($"jsPDfDoc.${mName} has not been bound to the component!"$)
+	End If
 	Try
 		pdf.addFont(url, fontName, fontType)
 	Catch
@@ -198,6 +206,9 @@ End Sub
 
 'build the document
 Sub Go
+	If IsBound = False Then
+		BANano.Throw($"jsPDfDoc.${mName} has not been bound to the component!"$)
+	End If
 	'pdf.SetFontType(sFontStyle)
 	pdf.SetFontStyleWeight(sFontName, sFontStyle, sFontWeight)
 	'pdf.SetFontStyle(sFontStyle)
@@ -217,16 +228,23 @@ End Sub
 
 'after adding other elements
 Sub Save
+	If IsBound = False Then
+		BANano.Throw($"jsPDfDoc.${mName} has not been bound to the component!"$)
+	End If
 	pdf.Save
 End Sub
 
 'return the data url
 Sub DataURL As String
+	If IsBound = False Then
+		BANano.Throw($"jsPDfDoc.${mName} has not been bound to the component!"$)
+	End If
 	Return pdf.DataURL
 End Sub
 
 
 Sub BindState(VS As VueComponent)
+	IsBound = True
 	ParentComponent = VS
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods

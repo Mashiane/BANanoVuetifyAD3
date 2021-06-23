@@ -455,3 +455,11 @@ Sub BindState(VC As VueComponent)
 		VC.SetCallBack(k, cb)
 	Next
 End Sub
+
+'get the card text
+Sub Container As VCardText
+	Dim scard As String = $"${mName}cardtext"$
+	Dim elx As VCardText
+	elx.Initialize(mCallBack, scard, scard)
+	Return elx
+End Sub

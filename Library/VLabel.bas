@@ -29,7 +29,7 @@ Version=8.9
 #DesignerProperty: Key: Border, DisplayName: Border, FieldType: String, DefaultValue: , Description: Border
 #DesignerProperty: Key: BorderColor, DisplayName: BorderColor, FieldType: String, DefaultValue: , Description: BorderColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: BorderRadius, DisplayName: BorderRadius, FieldType: String, DefaultValue: , Description: BorderRadius
-#DesignerProperty: Key: BorderStyle, DisplayName: BorderStyle, FieldType: String, DefaultValue: , Description: BorderStyle, List: none|hidden|dotted|dashed|solid|double|groove|ridge|inset|outset|initial|inherit
+#DesignerProperty: Key: BorderStyle, DisplayName: BorderStyle, FieldType: String, DefaultValue: , Description: BorderStyle, List: none|hidden|dotted|dashed|solid|double|groove|ridge|inset|outset|initial|inherit|remove
 #DesignerProperty: Key: BorderWidth, DisplayName: BorderWidth, FieldType: String, DefaultValue: , Description: BorderWidth
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue: , Description: Color, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: ColorIntensity, DisplayName: ColorIntensity, FieldType: String, DefaultValue: , Description: ColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4

@@ -18,11 +18,11 @@ Version=8.9
 #DesignerProperty: Key: Align, DisplayName: Vertical Align, FieldType: String, DefaultValue: normal, Description: Align, List: normal|start|center|end|baseline|stretch
 #DesignerProperty: Key: Justify, DisplayName: Horizontal Align, FieldType: String, DefaultValue: normal, Description: Justify, List: normal|start|center|end|space-between|space-around
 #DesignerProperty: Key: NoGutters, DisplayName: NoGutters, FieldType: Boolean, DefaultValue: False, Description: No Gutters
-
+#DesignerProperty: Key: DebugBorder, DisplayName: DebugBorder, FieldType: Boolean, DefaultValue: False , Description: DebugBorder
 #DesignerProperty: Key: Border, DisplayName: Border, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: BorderColor, DisplayName: BorderColor, FieldType: String, DefaultValue:  , Description: , List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: BorderRadius, DisplayName: Border Radius, FieldType: String, DefaultValue:  , Description: 
-#DesignerProperty: Key: BorderStyle, DisplayName: Border Style, FieldType: String, DefaultValue:  , Description: , List: none|hidden|dotted|dashed|solid|double|groove|ridge|inset|outset|initial|inherit
+#DesignerProperty: Key: BorderStyle, DisplayName: Border Style, FieldType: String, DefaultValue:  , Description: , List: none|hidden|dotted|dashed|solid|double|groove|ridge|inset|outset|initial|inherit|remove
 #DesignerProperty: Key: BorderWidth, DisplayName: Border Width, FieldType: String, DefaultValue:  , Description: 
 
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
@@ -87,6 +87,7 @@ Private sBorderColor As String
 Private sBorderRadius As String
 Private sBorderStyle As String
 Private sBorderWidth As String
+Private bDebugBorder As Boolean
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -135,7 +136,8 @@ sPX = Props.Get("PX")
 sPY = Props.Get("PY")
 sKey = Props.Get("Key")
 sVFor = Props.Get("VFor")
-bNoGutters = Props.Get("NoGutters")
+bNoGutters = Props.GetDefault("NoGutters",False)
+bDebugBorder = Props.GetDefault("DebugBorder",False)
 		sBorder = Props.Get("Border")
 sBorderColor = Props.Get("BorderColor")
 sBorderRadius = Props.Get("BorderRadius")
@@ -182,6 +184,13 @@ VElement.BorderColor = sBorderColor
 VElement.BorderRadius = sBorderRadius
 VElement.BorderStyle = sBorderStyle
 VElement.BorderWidth = sBorderWidth
+If bDebugBorder Then
+	VElement.Border = ""
+	VElement.BorderColor = "red"
+	VElement.BorderRadius = ""
+	VElement.BorderStyle = "solid"
+	VElement.BorderWidth = "1px"
+End If
 VElement.bindallevents
 End Sub
 

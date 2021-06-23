@@ -22,36 +22,34 @@ Version=7
 #DesignerProperty: Key: Label, DisplayName: Label, FieldType: String, DefaultValue: CheckBox1, Description: Label
 #DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: checkbox1, Description: VModel
 #DesignerProperty: Key: Checked, DisplayName: Checked, FieldType: Boolean, DefaultValue: False, Description: Checked
-#DesignerProperty: Key: TrueValue, DisplayName: TrueValue, FieldType: String, DefaultValue: True, Description: TrueValue
-#DesignerProperty: Key: FalseValue, DisplayName: FalseValue, FieldType: String, DefaultValue: False, Description: FalseValue
-#DesignerProperty: Key: Value, DisplayName: Value (Multiple), FieldType: String, DefaultValue: , Description: Value
+#DesignerProperty: Key: TrueValue, DisplayName: TrueValue*, FieldType: String, DefaultValue: True, Description: TrueValue
+#DesignerProperty: Key: FalseValue, DisplayName: FalseValue*, FieldType: String, DefaultValue: False, Description: FalseValue
 #DesignerProperty: Key: OffIcon, DisplayName: OffIcon, FieldType: String, DefaultValue: , Description: OffIcon
 #DesignerProperty: Key: OnIcon, DisplayName: OnIcon, FieldType: String, DefaultValue: , Description: OnIcon
 #DesignerProperty: Key: PrependIcon, DisplayName: PrependIcon, FieldType: String, DefaultValue: , Description: PrependIcon
 #DesignerProperty: Key: AppendIcon, DisplayName: AppendIcon, FieldType: String, DefaultValue: , Description: AppendIcon
-#DesignerProperty: Key: InputValue, DisplayName: InputValue, FieldType: String, DefaultValue: , Description: InputValue
 #DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: Boolean, DefaultValue: False, Description: Disabled
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: Readonly, DisplayName: Readonly, FieldType: Boolean, DefaultValue: False, Description: Readonly
 #DesignerProperty: Key: Required, DisplayName: Required, FieldType: Boolean, DefaultValue: False, Description: Required 
-
-
+#DesignerProperty: Key: Dense, DisplayName: Dense, FieldType: Boolean, DefaultValue: False, Description: Dense
+#DesignerProperty: Key: HideDetails, DisplayName: HideDetails, FieldType: Boolean, DefaultValue: True, Description: HideDetails
+#DesignerProperty: Key: Hint, DisplayName: Hint, FieldType: String, DefaultValue: , Description: Hint
+#DesignerProperty: Key: PersistentHint, DisplayName: PersistentHint, FieldType: Boolean, DefaultValue: False, Description: PersistentHint
 #DesignerProperty: Key: BackgroundColor, DisplayName: BackgroundColor, FieldType: String, DefaultValue: , Description: BackgroundColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: BackgroundColorIntensity, DisplayName: Backgroundcolorintensity, FieldType: String, DefaultValue: , Description: Backgroundcolorintensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue: , Description: Color, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: ColorIntensity, DisplayName: Colorintensity, FieldType: String, DefaultValue: , Description: Colorintensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: False, Description: Dark
-#DesignerProperty: Key: Dense, DisplayName: Dense, FieldType: Boolean, DefaultValue: False, Description: Dense
 #DesignerProperty: Key: Error, DisplayName: Error, FieldType: String, DefaultValue: , Description: Error
 #DesignerProperty: Key: ErrorCount, DisplayName: ErrorCount, FieldType: String, DefaultValue: , Description: ErrorCount
 #DesignerProperty: Key: ErrorMessages, DisplayName: ErrorMessages, FieldType: String, DefaultValue: , Description: ErrorMessages
-#DesignerProperty: Key: HideDetails, DisplayName: HideDetails, FieldType: Boolean, DefaultValue: False, Description: HideDetails
-#DesignerProperty: Key: Hint, DisplayName: Hint, FieldType: String, DefaultValue: , Description: Hint
+
 #DesignerProperty: Key: Indeterminate, DisplayName: Indeterminate, FieldType: String, DefaultValue: , Description: Indeterminate
 #DesignerProperty: Key: Light, DisplayName: Light, FieldType: Boolean, DefaultValue: False, Description: Light
 #DesignerProperty: Key: Messages, DisplayName: Messages, FieldType: String, DefaultValue: , Description: Messages
 #DesignerProperty: Key: Multiple, DisplayName: Multiple, FieldType: Boolean, DefaultValue: False, Description: Multiple
-#DesignerProperty: Key: PersistentHint, DisplayName: PersistentHint, FieldType: Boolean, DefaultValue: False, Description: PersistentHint
+
 #DesignerProperty: Key: Ripple, DisplayName: Ripple, FieldType: Boolean, DefaultValue: False, Description: Ripple
 #DesignerProperty: Key: Rules, DisplayName: Rules, FieldType: String, DefaultValue: , Description: Rules
 #DesignerProperty: Key: Success, DisplayName: Success, FieldType: String, DefaultValue: , Description: Success
@@ -65,6 +63,20 @@ Version=7
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag. 
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use = 
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
+#DesignerProperty: Key: MA, DisplayName: MA, FieldType: String, DefaultValue: , Description: MA
+#DesignerProperty: Key: MB, DisplayName: MB, FieldType: String, DefaultValue: , Description: MB
+#DesignerProperty: Key: ML, DisplayName: ML, FieldType: String, DefaultValue: , Description: ML
+#DesignerProperty: Key: MR, DisplayName: MR, FieldType: String, DefaultValue: , Description: MR
+#DesignerProperty: Key: MT, DisplayName: MT, FieldType: String, DefaultValue: 0, Description: MT
+#DesignerProperty: Key: MX, DisplayName: MX, FieldType: String, DefaultValue: , Description: MX
+#DesignerProperty: Key: MY, DisplayName: MY, FieldType: String, DefaultValue: , Description: MY
+#DesignerProperty: Key: PA, DisplayName: PA, FieldType: String, DefaultValue: , Description: PA
+#DesignerProperty: Key: PB, DisplayName: PB, FieldType: String, DefaultValue: , Description: PB
+#DesignerProperty: Key: PL, DisplayName: PL, FieldType: String, DefaultValue: , Description: PL
+#DesignerProperty: Key: PR, DisplayName: PR, FieldType: String, DefaultValue: , Description: PR
+#DesignerProperty: Key: PT, DisplayName: PT, FieldType: String, DefaultValue: , Description: PT
+#DesignerProperty: Key: PX, DisplayName: PX, FieldType: String, DefaultValue: , Description: PX
+#DesignerProperty: Key: PY, DisplayName: PY, FieldType: String, DefaultValue: , Description: PY
 
 Sub Class_Globals 
     Private BANano As BANano 'ignore 
@@ -92,7 +104,7 @@ Private sFalseValue As String
 Private bHideDetails As Boolean
 Private sHint As String
 Private sIndeterminate As String
-Private sInputValue As String
+'Private sInputValue As String
 Private sLabel As String
 Private bLight As Boolean
 Private sMessages As String
@@ -114,14 +126,27 @@ Private sVModel As String
 Private sVOn As String
 Private sVShow As String
 Private bValidateOnBlur As Boolean
- Private sValue As String
- '
  Private bDisabled As Boolean
 Private bHidden As Boolean
 Private bReadonly As Boolean
 Private bRequired As Boolean
 Private sRequired As String
-private bChecked as boolean
+Private bChecked As Boolean
+Private sMB As String
+Private sML As String
+Private sMR As String
+Private sMT As String
+Private sMX As String
+Private sMY As String
+Private sPA As String
+Private sPB As String
+Private sPL As String
+Private sPR As String
+Private sPT As String
+Private sPX As String
+Private sPY As String
+Private sMA As String
+Private sValue As Object
 	End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -145,7 +170,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 Sub DesignerCreateView (Target As BANanoElement, Props As Map) 
 	mTarget = Target 
 	If Props <> Null Then 
-		bDisabled = Props.GetDefault("Disabled",false)
+		bDisabled = Props.GetDefault("Disabled",False)
 bHidden = Props.GetDefault("Hidden", False)
 bReadonly = Props.Get("Readonly")
 bRequired = Props.Get("Required")
@@ -162,11 +187,11 @@ bDense = Props.Get("Dense")
 sError = Props.Get("Error")
 sErrorCount = Props.Get("ErrorCount")
 sErrorMessages = Props.Get("ErrorMessages")
-sFalseValue = Props.Get("FalseValue")
+sFalseValue = Props.GetDefault("FalseValue",False)
 bHideDetails = Props.Get("HideDetails")
 sHint = Props.Get("Hint")
 sIndeterminate = Props.Get("Indeterminate")
-sInputValue = Props.Get("InputValue")
+'sInputValue = Props.Get("InputValue")
 sLabel = Props.Get("Label")
 bLight = Props.Get("Light")
 sMessages = Props.Get("Messages")
@@ -180,7 +205,7 @@ bRipple = Props.Get("Ripple")
 sRules = Props.Get("Rules")
 sSuccess = Props.Get("Success")
 sSuccessMessages = Props.Get("SuccessMessages")
-sTrueValue = Props.Get("TrueValue")
+sTrueValue = Props.GetDefault("TrueValue", True)
 sVBind = Props.Get("VBind")
 sVFor = Props.Get("VFor")
 sVIf = Props.Get("VIf")
@@ -188,8 +213,21 @@ sVShow = Props.Get("VShow")
 sVModel = Props.Get("VModel")
 sVOn = Props.Get("VOn")
 bValidateOnBlur = Props.Get("ValidateOnBlur")
- sValue = Props.Get("Value")
  bChecked = Props.GetDefault("Checked", False)
+ sMB = Props.Get("MB")
+sML = Props.Get("ML")
+sMR = Props.Get("MR")
+sMT = Props.Get("MT")
+sMX = Props.Get("MX")
+sMY = Props.Get("MY")
+sPA = Props.Get("PA")
+sPB = Props.Get("PB")
+sPL = Props.Get("PL")
+sPR = Props.Get("PR")
+sPT = Props.Get("PT")
+sPX = Props.Get("PX")
+sPY = Props.Get("PY")
+sMA = Props.Get("MA")
 	End If 
 	' 
 	'build and get the element 
@@ -240,8 +278,8 @@ VElement.AddAttr("hint", sHint)
 VElement.AddAttr(":indeterminate", sIndeterminate)
 VElement.SetData(sIndeterminate, False)
 
-VElement.AddAttr(":input-value", sInputValue)
-VElement.SetData(sInputValue, Null)
+'VElement.AddAttr(":input-value", sInputValue)
+'VElement.SetData(sInputValue, Null)
 
 VElement.AddAttr("label", sLabel)
 VElement.AddAttr(":light", bLight)
@@ -271,13 +309,26 @@ VElement.AddAttr("v-bind", sVBind)
 VElement.AddAttr("v-for", sVFor)
 VElement.AddAttr("v-if", sVIf)
 VElement.AddAttr("v-model", sVModel)
-VElement.AddAttr("value", sValue)
 '
+If BANano.IsNull(sTrueValue) Then 
+	sTrueValue = True
+End If
+'
+If BANano.IsNull(sFalseValue) Then 
+	sFalseValue = False
+End If
+'
+VElement.AddAttr("value", sTrueValue)
+
+
+If bChecked Then
+	sValue = sTrueValue
+Else
+	sValue = sFalseValue	
+End If
+
 If bMultiple = False Then
 	VElement.SetData(sVModel, sValue)
-	If bChecked Then
-		VElement.SetData(sVModel, True)
-	End If
 Else
 	VElement.SetData(sVModel, VElement.NewList)
 End If
@@ -286,6 +337,20 @@ VElement.AddAttr("v-on", sVOn)
 VElement.AddAttr("v-show", sVShow)
 VElement.SetData(sVShow, Not(bHidden))
 VElement.AddAttr(":validate-on-blur", bValidateOnBlur)
+VElement.MA = sMA
+VElement.MB = sMB
+VElement.ML = sML
+VElement.MR = sMR
+VElement.MT = sMT
+VElement.MX = sMX
+VElement.MY = sMY
+VElement.PA = sPA
+VElement.PB = sPB
+VElement.PL = sPL
+VElement.PR = sPR
+VElement.PT = sPT
+VElement.PX = sPX
+VElement.PY = sPY
 VElement.BindAllEvents
 End Sub
 
@@ -352,9 +417,9 @@ VC.SetData(sIndeterminate, vIndeterminate)
 End Sub
 
 'Update InputValue
-Sub UpdateInputValue(VC As VueComponent, vInputValue As Object)
-VC.SetData(sInputValue, vInputValue)
-End Sub
+'Sub UpdateInputValue(VC As VueComponent, vInputValue As Object)
+'VC.SetData(sInputValue, vInputValue)
+'End Sub
 
 'Update Messages
 Sub UpdateMessages(VC As VueComponent, vMessages As Object)
@@ -392,8 +457,12 @@ VC.SetData(sSuccessMessages, VC.NewList)
 End Sub
 
 'Update VModel
-Sub SetValue(VC As VueComponent, vVModel As Object)
-VC.SetData(sVModel, vVModel)
+Sub SetValue(VC As VueComponent, b As Boolean)
+	If b Then
+		VC.SetData(sVModel, sTrueValue)
+	Else
+		VC.SetData(sVModel, sFalseValue)
+	End If
 End Sub
 
 'get value

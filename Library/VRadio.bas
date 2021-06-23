@@ -20,11 +20,11 @@ Version=7
 #DesignerProperty: Key: Label, DisplayName: Label, FieldType: String, DefaultValue: Radio1, Description: Label
 #DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: radio1, Description: VModel
 #DesignerProperty: Key: Checked, DisplayName: Checked, FieldType: Boolean, DefaultValue: False, Description: Checked
-#DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue: , Description: VShow
-#DesignerProperty: Key: Value, DisplayName: Value (Multiple), FieldType: String, DefaultValue: radio1, Description: Value
+#DesignerProperty: Key: Value, DisplayName: Value (Multiple)*, FieldType: String, DefaultValue: radio1, Description: Value
 #DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: Boolean, DefaultValue: False, Description: Disabled
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: Required, DisplayName: Required, FieldType: Boolean, DefaultValue: False, Description: Required
+#DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue: , Description: VShow
 
 #DesignerProperty: Key: ActiveClass, DisplayName: ActiveClass, FieldType: String, DefaultValue: , Description: ActiveClass
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue: , Description: Color, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none

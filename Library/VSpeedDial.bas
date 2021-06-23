@@ -8,14 +8,15 @@ Version=8.9
 
 'Custom BANano View class
 #Event: Click (id As String)
+#Event: Main_Click(e As BananoEvent)
+
 ' Properties that will be show in the ABStract Designer.  They will be passed in the props map in DesignerCreateView (Case Sensitive!)
 #DesignerProperty: Key: AutoID, DisplayName: Auto ID/Name, FieldType: Boolean, DefaultValue: False, Description: Overrides the ID/Name with a random string.
-#DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: fab, Description: VModel
 #DesignerProperty: Key: OpenIcon, DisplayName: Open Icon, FieldType: String, DefaultValue: mdi-account-circle, Description: Open Icon
 #DesignerProperty: Key: CloseIcon, DisplayName: Close Icon, FieldType: String, DefaultValue: mdi-close, Description: Close Icon
 #DesignerProperty: Key: Direction, DisplayName: Direction, FieldType: String, DefaultValue: top, Description: Direction, List: top|right|bottom|left
 #DesignerProperty: Key: OpenOnHover, DisplayName: OpenOnHover, FieldType: Boolean, DefaultValue: True, Description: OpenOnHover
-#DesignerProperty: Key: Transition, DisplayName: Transition, FieldType: String, DefaultValue: , Description: Transition
+#DesignerProperty: Key: Transition, DisplayName: Transition, FieldType: String, DefaultValue: , Description: Transition, List: none|fab-transition|fade-transition|expand-transition|scale-transition|scroll-x-transition|scroll-x-reverse-transition|scroll-y-transition|scroll-y-reverse-transition|slide-x-transition|slide-x-reverse-transition|slide-y-transition|slide-y-reverse-transition
 #DesignerProperty: Key: Size, DisplayName: Size, FieldType: String, DefaultValue: x-large, Description: Size, List: x-small|small|normal|large|x-large
 #DesignerProperty: Key: Absolute, DisplayName: Absolute, FieldType: Boolean, DefaultValue: True, Description: Absolute
 #DesignerProperty: Key: Position, DisplayName: Position, FieldType: String, DefaultValue: bottom-right, Description: Position, List: normal|top-left|top-right|bottom-left|bottom-right
@@ -66,6 +67,7 @@ Sub Class_Globals
 	Private sItemIcons As String
 	Private sItemColors As String
 	Private sVModel As String
+	Private sOnHover As String
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -80,6 +82,8 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey)
 		End If
 	End If
+	sVModel = $"${mName}vmodel"$
+	sOnHover = $"${mName}hover"$
 End Sub
 
 ' this is the place where you create the view in html and run initialize javascript
@@ -93,10 +97,9 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mColorIntensity = Props.Get("ColorIntensity")
 		mTextColor = Props.Get("TextColor")
 		mTextColorIntensity = Props.Get("TextColorIntensity")
-		sVModel = Props.Get("VModel")
 		mVIf = Props.Get("VIf")
 		bDark = Props.Get("Dark")
-		bDisabled = Props.GetDefault("Disabled",false)
+		bDisabled = Props.GetDefault("Disabled",False)
 		bOutlined = Props.Get("Outlined")
 		sSize = Props.Get("Size")
 		bAbsolute = Props.Get("Absolute")
@@ -116,19 +119,24 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	Dim ds As String = $"${mName}ds"$
 	Dim rs As List
 	rs.Initialize 
+	'
+	sItemKeys = sItemKeys.Replace(",", ";")
+	sItemIcons = sItemIcons.Replace(",", ";")
+	sItemColors = sItemColors.Replace(",", ";")
+	
 	Dim xkeys As List = BANanoShared.StrParse(";", sItemKeys)
 	Dim xicons As List = BANanoShared.StrParse(";", sItemIcons)
 	Dim xcolors As List = BANanoShared.StrParse(";", sItemColors)
+	'
+	xkeys = BANanoShared.ListTrimItems(xkeys)
+	xicons = BANanoShared.ListTrimItems(xicons)
+	xcolors = BANanoShared.ListTrimItems(xcolors)
 	'
 	Dim tItems As Int = xkeys.Size - 1
 	For itemCnt = 0 To tItems
 		Dim iKey As String = xkeys.Get(itemCnt)
 		Dim iIco As String = xicons.Get(itemCnt)
 		Dim iCol As String = xcolors.Get(itemCnt)
-		'
-		iKey = iKey.Trim
-		iIco = iIco.Trim
-		iCol = iCol.Trim
 		'
 		Dim nm As Map = CreateMap()
 		nm.Put("id", iKey)
@@ -143,9 +151,10 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	Else	
 		mElement = mTarget.Append($"<v-speed-dial ref="${mName}" id="${mName}"></v-speed-dial>"$).Get("#" & mName)
 	End If
+	
 	'add the open and close icons
 	mElement.Append($"<v-template v-slot:activator>
-    <v-btn id="${mName}button" v-model="${sVModel}" fab>
+    <v-btn id="${mName}main" v-model="${sVModel}" fab>
       <v-icon v-if="${sVModel}">${sCloseIcon}</v-icon>
           <v-icon v-else>${sOpenIcon}</v-icon>
         </v-btn>
@@ -156,25 +165,28 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	
 	'
 	VElement.Initialize(mCallBack, mName, mName)
+	VElement.TagName = "v-speed-dial"
 	'save the data source
 	VElement.SetData(ds, rs)
 	'
-	VElement.GetButton.Dark = bDark
-	VElement.TagName = "v-speed-dial"
+	VElement.GetMain.Dark = bDark
+	VElement.GetMain.Color = VElement.BuildColor(mColor, mColorIntensity)
+	VElement.GetMain.TextColor = VElement.BuildColor(mTextColor, mTextColorIntensity)
+	VElement.GetMain.Outlined = bOutlined
+	'
 	VElement.Classes = mClasses
-	VElement.GetButton.Color = VElement.BuildColor(mColor, mColorIntensity)
 	VElement.Styles = mStyles
 	VElement.Attributes = mAttributes	
-	VElement.GetButton.TextColor = VElement.BuildColor(mTextColor, mTextColorIntensity)
 	VElement.VIf = mVIf
 	VElement.vmodel = sVModel
 	VElement.SetData(sVModel, False)
-	VElement.OpenOnHover = bOpenOnHover
+	VElement.OpenOnHover = sOnHover
+	VElement.SetData(sOnHover, bOpenOnHover)
 	VElement.Direction = sDirection
 	VElement.Transition = sTransition
 	VElement.Disabled = $"${mName}disabled"$
 	VElement.SetData($"${mName}disabled"$, bDisabled)
-	VElement.GetButton.Outlined = bOutlined
+	
 	VElement.Absolute = bAbsolute
 	'
 	Select Case sPosition

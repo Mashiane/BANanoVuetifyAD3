@@ -31,10 +31,10 @@ Version=7
 #DesignerProperty: Key: Label, DisplayName: Label, FieldType: String, DefaultValue: autocomplete1, Description: Label
 #DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: autocomplete1, Description: VModel
 #DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: , Description: Value
-#DesignerProperty: Key: ItemText, DisplayName: ItemText, FieldType: String, DefaultValue: text, Description: ItemText
-#DesignerProperty: Key: ItemValue, DisplayName: ItemValue, FieldType: String, DefaultValue: value, Description: ItemValue
-#DesignerProperty: Key: ItemDisabled, DisplayName: ItemDisabled, FieldType: String, DefaultValue: disabled, Description: ItemDisabled
 #DesignerProperty: Key: Items, DisplayName: Items, FieldType: String, DefaultValue: items1, Description: Items
+#DesignerProperty: Key: ItemValue, DisplayName: Item Value, FieldType: String, DefaultValue: value, Description: ItemValue
+#DesignerProperty: Key: ItemText, DisplayName: Item Text, FieldType: String, DefaultValue: text, Description: ItemText
+#DesignerProperty: Key: ItemDisabled, DisplayName: Item Disabled, FieldType: String, DefaultValue: disabled, Description: ItemDisabled
 #DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: Boolean, DefaultValue: False, Description: Disabled
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: Loading, DisplayName: Loading, FieldType: Boolean, DefaultValue: False, Description: Loading
@@ -534,7 +534,7 @@ End Sub
 Sub AddRule(methodName As String)
 	VElement.AddRule(methodName)
 		VElement.SetData(sRequired, True)
-	bRequired = true
+	bRequired = True
 End Sub
 
 
@@ -561,6 +561,11 @@ End Sub
 'Update Items
 Sub UpdateItems(VC As VueComponent, vItems As Object)
 VC.SetData(sItems, vItems)
+End Sub
+
+'Update Items
+Sub Reload(VC As VueComponent, vItems As Object)
+	VC.SetData(sItems, vItems)
 End Sub
 
 'Clear Items

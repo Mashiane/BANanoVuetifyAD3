@@ -300,6 +300,12 @@ Sub UpdateItems(VC As VueComponent, litems As List)
 	VC.SetData(sItems, litems)
 End Sub
 
+'Update Items
+Sub Reload(VC As VueComponent, vItems As Object)
+	VC.SetData(sItems, vItems)
+End Sub
+
+
 Sub Clear(VC As VueComponent)
 	VC.SetData(sActive, VC.NewList)
 	VC.SetData(sOpen, VC.NewList)

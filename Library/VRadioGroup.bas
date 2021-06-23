@@ -464,6 +464,16 @@ Sub AddObject(nm As Map)
 	xitems.Add(nm)
 End Sub
 
+'Update Items
+Sub Reload(VC As VueComponent, vItems As Object)
+	VC.SetData(sItems, vItems)
+End Sub
+
+'Update Items
+Sub UpdateItems(VC As VueComponent, vItems As Object)
+	VC.SetData(sItems, vItems)
+End Sub
+
 
 'convert a normal list to key value pairs
 Sub UpdateItems1(VC As VueComponent, lst As List)

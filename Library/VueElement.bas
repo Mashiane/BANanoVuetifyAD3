@@ -79,7 +79,7 @@ Version=7
 #DesignerProperty: Key: Border, DisplayName: Border, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: BorderColor, DisplayName: BorderColor, FieldType: String, DefaultValue:  , Description: , List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: BorderRadius, DisplayName: Border Radius, FieldType: String, DefaultValue:  , Description: 
-#DesignerProperty: Key: BorderStyle, DisplayName: Border Style, FieldType: String, DefaultValue:  , Description: , List: none|hidden|dotted|dashed|solid|double|groove|ridge|inset|outset|initial|inherit
+#DesignerProperty: Key: BorderStyle, DisplayName: Border Style, FieldType: String, DefaultValue:  , Description: , List: none|hidden|dotted|dashed|solid|double|groove|ridge|inset|outset|initial|inherit|remove
 #DesignerProperty: Key: BorderWidth, DisplayName: Border Width, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: BuildGrid, DisplayName: Build Grid, FieldType: Boolean, DefaultValue: False, Description: BuildGrid
 #DesignerProperty: Key: ShowGridDesign, DisplayName: Show Grid Design, FieldType: Boolean, DefaultValue: False, Description: ShowGridDesign
@@ -1409,7 +1409,9 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	AddStyle("border", stBorder)
 	AddStyle("border-color", stBorderColor)
 	AddStyle("border-radius", stBorderRadius)
-	AddStyle("border-style", stBorderStyle)
+	If stBorderStyle <> "remove" Then
+		AddStyle("border-style", stBorderStyle)
+	end if
 	AddStyle("border-width", stBorderWidth)
 	
 	AddAttrOnConditionTrue("color", stColor, bSetColorByAttribute)
@@ -2918,6 +2920,9 @@ public Sub getBorderRadius() As String
 End Sub
 
 public Sub setBorderStyle(varBorderStyle As String)
+	If varBorderStyle = "remove" Then 
+		varBorderStyle = ""
+	End If
 	AddStyle("border-style", varBorderStyle)
 	stBorderStyle = varBorderStyle
 End Sub
@@ -10097,6 +10102,15 @@ End Sub
 '	elx.SetData(sextension, nlx)
 '	Return elx
 'End Sub
+
+
+'get the main button of the speed dial
+Sub GetMain As VueElement
+	Dim sID As String = $"${mName}main"$
+	sID = sID.ToLowerCase
+	Dim elx As VueElement = GetVueElement(sID)
+	Return elx
+End Sub
 
 'get the main button of the speed dial
 Sub GetMainButton As VueElement

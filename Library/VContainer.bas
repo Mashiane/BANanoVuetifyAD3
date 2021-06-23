@@ -15,10 +15,12 @@ Version=8.9
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue:  , Description: , List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: ColorIntensity, DisplayName: Color Intensity, FieldType: String, DefaultValue:  normal, Description: , List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 
+#DesignerProperty: Key: NoGutters, DisplayName: NoGutters, FieldType: Boolean, DefaultValue: False, Description: No Gutters
+#DesignerProperty: Key: DebugBorder, DisplayName: DebugBorder, FieldType: Boolean, DefaultValue: False , Description: DebugBorder
 #DesignerProperty: Key: Border, DisplayName: Border, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: BorderColor, DisplayName: BorderColor, FieldType: String, DefaultValue:  , Description: , List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: BorderRadius, DisplayName: Border Radius, FieldType: String, DefaultValue:  , Description: 
-#DesignerProperty: Key: BorderStyle, DisplayName: Border Style, FieldType: String, DefaultValue:  , Description: , List: none|hidden|dotted|dashed|solid|double|groove|ridge|inset|outset|initial|inherit
+#DesignerProperty: Key: BorderStyle, DisplayName: Border Style, FieldType: String, DefaultValue:  , Description: , List: none|hidden|dotted|dashed|solid|double|groove|ridge|inset|outset|initial|inherit|remove
 #DesignerProperty: Key: BorderWidth, DisplayName: Border Width, FieldType: String, DefaultValue:  , Description: 
 
 #DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
@@ -115,7 +117,8 @@ Private sBorderColor As String
 Private sBorderRadius As String
 Private sBorderStyle As String
 Private sBorderWidth As String
-
+Private bNoGutters As Boolean
+Private bDebugBorder As Boolean
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -182,6 +185,8 @@ sBorderColor = Props.Get("BorderColor")
 sBorderRadius = Props.Get("BorderRadius")
 sBorderStyle = Props.Get("BorderStyle")
 sBorderWidth = Props.Get("BorderWidth")
+bNoGutters = Props.GetDefault("NoGutters",False)
+bDebugBorder = Props.GetDefault("DebugBorder",False)
 	End If
 	'
 	'build and get the element
@@ -249,6 +254,14 @@ sBorderWidth = Props.Get("BorderWidth")
 	VElement.BorderRadius = sBorderRadius
 	VElement.BorderStyle = sBorderStyle
 	VElement.BorderWidth = sBorderWidth
+	VElement.SetAttrOnTrue(":no-gutters", bNoGutters, True)
+	If bDebugBorder Then
+		VElement.Border = ""
+		VElement.BorderColor = "red"
+		VElement.BorderRadius = ""
+		VElement.BorderStyle = "solid"
+		VElement.BorderWidth = "1px"
+	End If
 	VElement.BindAllEvents	
 End Sub	
 

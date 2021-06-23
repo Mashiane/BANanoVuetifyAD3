@@ -13,6 +13,7 @@ Version=8.9
 #DesignerProperty: Key: IconDark, DisplayName: Icon Dark, FieldType: Boolean, DefaultValue: False, Description: Icon Dark
 #DesignerProperty: Key: Size, DisplayName: Size, FieldType: String, DefaultValue: large, Description: Size, List: x-small|small|normal|large|x-large
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: true, Description: Dark
+#DesignerProperty: Key: IsExtension, DisplayName: IsExtension, FieldType: Boolean, DefaultValue: False, Description: IsExtension
 #DesignerProperty: Key: Absolute, DisplayName: Absolute, FieldType: Boolean, DefaultValue: False, Description: Absolute
 #DesignerProperty: Key: Position, DisplayName: Position, FieldType: String, DefaultValue: , Description: Position, List: normal|top-left|top-right|bottom-left|bottom-right
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue:  , Description: , List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
@@ -62,6 +63,7 @@ Sub Class_Globals
 	Private sTo As String
 	Private bAbsolute As Boolean
 	Private sPosition As String
+	private bIsExtension as boolean
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -104,6 +106,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sTo = Props.Get("To")
 		bAbsolute = Props.Get("Absolute")
 		sPosition = Props.Get("Position")
+		bIsExtension = Props.GetDefault("IsExtension", False)
 	End If
 	
 	If BANano.IsNull(bLoading) Or BANano.IsUndefined(bLoading) Then
@@ -113,14 +116,21 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
 		mElement = BANano.GetElement($"#${mName}"$)
-	Else	
-		mElement = mTarget.Append($"<v-fab-transition><v-btn ref="${mName}" id="${mName}"></v-btn></v-fab-transition>"$).Get("#" & mName)
+	Else
+		If bIsExtension Then
+			'put inside a slot extension
+			mElement = mTarget.Append($"<v-template v-slot:extension><v-btn ref="${mName}" id="${mName}"></v-btn></v-template>"$).Get("#" & mName)
+		Else	
+			mElement = mTarget.Append($"<v-btn ref="${mName}" id="${mName}"></v-btn>"$).Get("#" & mName)
+		End If
 	End If
 		
 	VElement.Initialize(mCallBack, mName, mName)
 	VElement.TagName = "v-btn"
+	'
 	Dim siconID As String = $"${mName}icon"$
 	VElement.Append($"<v-icon id="${siconID}">${sIconName}</v-icon>"$)
+	'
 	VElement.GetIcon.Dark = bIconDark
 	VElement.Classes = mClasses
 	VElement.Color = VElement.BuildColor(mColor, mColorIntensity)
