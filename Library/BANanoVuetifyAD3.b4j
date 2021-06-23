@@ -1,51 +1,51 @@
 ﻿AppType=JavaFX
 Build1=Default,b4j.example
 File1=1.png
-File10=Chart.min.js
-File11=d3.js
-File12=dayjs.min.js
-File13=faker.min.js
-File14=fileSaver.min.js
-File15=flowy-vue.css
-File16=flowy-vue.umd.min.js
-File17=gray.png
-File18=green.png
-File19=happyface.png
+File10=Chart.min.css
+File11=chartjs-adapter-date-fns.bundle.min.js
+File12=chartkick.min.js
+File13=dayjs.min.js
+File14=faker.min.js
+File15=fileSaver.min.js
+File16=flowy-vue.css
+File17=flowy-vue.umd.min.js
+File18=gray.png
+File19=green.png
 File2=2.png
-File20=helpers.min.css
-File21=html2canvas.js
-File22=info-box.min.css
-File23=jspdf.plugin.autotable.min.js
-File24=jspdf.umd.min.js
-File25=jszip.min.js
-File26=leaflet.min.css
-File27=leaflet.min.js
-File28=lodash.min.js
-File29=material-ui.min.css
+File20=happyface.png
+File21=helpers.min.css
+File22=html2canvas.min.js
+File23=info-box.min.css
+File24=jspdf.plugin.autotable.min.js
+File25=jspdf.umd.min.js
+File26=jszip.min.js
+File27=leaflet.min.css
+File28=leaflet.min.js
+File29=lodash.min.js
 File3=arcCounter.umd.min.js
-File30=microtip.min.css
-File31=moment.js
-File32=nedb.min.js
-File33=neutralface.png
-File34=numeral.min.js
-File35=orange.png
-File36=oxml.min.js
-File37=prism.min.css
-File38=prism.min.js
-File39=qrcode.min.js
+File30=material-ui.min.css
+File31=microtip.min.css
+File32=moment.min.js
+File33=nedb.min.js
+File34=neutralface.png
+File35=numeral.min.js
+File36=orange.png
+File37=oxml.min.js
+File38=prism.min.css
+File39=prism.min.js
 File4=avatar.png
-File40=red.png
-File41=sadface.png
-File42=sweetalert2.all.min.js
-File43=third-party.js
-File44=upload.php
-File45=v-blur.min.js
-File46=vjsf.css
-File47=vjsf.js
-File48=vue.min.js
-File49=vue2-leaflet.min.js
+File40=qrcode.min.js
+File41=red.png
+File42=sadface.png
+File43=sweetalert2.all.min.js
+File44=third-party.js
+File45=upload.php
+File46=v-blur.min.js
+File47=vjsf.css
+File48=vjsf.js
+File49=vue.min.js
 File5=axios.min.js
-File50=vue-chartkick.min.js
+File50=vue2-leaflet.min.js
 File51=vue-clipboard.min.js
 File52=vue-count-to.min.js
 File53=vue-form-wizard.js
@@ -61,7 +61,7 @@ File61=vuetify-simple-wizard.min.js
 File62=xlsx.full.min.js
 File7=beautify-css.min.js
 File8=beautify-html.min.js
-File9=Chart.min.css
+File9=chart.js
 FileGroup1=Default Group
 FileGroup10=Default Group
 FileGroup11=Default Group
@@ -150,18 +150,19 @@ Module114=VToolBarTitle
 Module115=VToolTip
 Module116=VTransition
 Module117=VTreeView
-Module118=VueComponent
-Module119=VueElement
+Module118=VueChartkick
+Module119=VueComponent
 Module12=BVAD3ListItem
-Module120=VueFlowy
-Module121=VueGCharts
-Module122=VueGMap
-Module123=VueInfoBox
-Module124=VueSimpleWizard
-Module125=VueSwal
-Module126=VueTable
-Module127=VuetifyApp
-Module128=VueVJSF
+Module120=VueElement
+Module121=VueFlowy
+Module122=VueGCharts
+Module123=VueGMap
+Module124=VueInfoBox
+Module125=VueSimpleWizard
+Module126=VueSwal
+Module127=VueTable
+Module128=VuetifyApp
+Module129=VueVJSF
 Module13=JsPdfAnnotation
 Module14=JsPdfAutoTable
 Module15=JsPdfCircle
@@ -204,7 +205,7 @@ Module48=VCardTitle
 Module49=VCarousel
 Module5=BANanoJSPDF
 Module50=VCarouselItem
-Module51=VChartkick
+Module51=VChartKick
 Module52=VCheckBox
 Module53=VChip
 Module54=VCol
@@ -259,7 +260,7 @@ Module98=VSlider
 Module99=VSnackBar
 NumberOfFiles=62
 NumberOfLibraries=4
-NumberOfModules=128
+NumberOfModules=129
 Version=9
 @EndOfDesignText@
 #Region Project Attributes 
@@ -274,7 +275,7 @@ Version=9
 
 Sub Process_Globals
 	Private BANano As BANano 'ignore
-	Public Version As String = "5.40"
+	Public Version As String = "5.41"
 	Public AppName As String = "BANanoVuetifyAD3"
 End Sub
 
@@ -333,7 +334,7 @@ Sub AppStart (Form1 As Form, Args() As String)
 	'BANano.Header.AddJavascriptFile("vuedraggable.umd.min.js")
 	BANano.Header.AddJavascriptFile("v-blur.min.js")
 	BANano.Header.AddJavascriptFile("vue-google-charts.browser.js")
-	BANano.Header.AddJavascriptFile("html2canvas.js")
+	BANano.Header.AddJavascriptFile("html2canvas.min.js")
 	
 	BANano.Header.AddJavascriptFile("jspdf.umd.min.js")
 	BANano.Header.AddJavascriptFile("jspdf.plugin.autotable.min.js")	
@@ -358,15 +359,19 @@ Sub AppStart (Form1 As Form, Args() As String)
 	BANano.Header.AddJavascriptFile("sweetalert2.all.min.js")
 	BANano.Header.AddJavascriptFile("arcCounter.umd.min.js")
 	'BANano.Header.AddJavascriptFile("tiptap-vuetify.js")
-	BANano.Header.AddJavascriptFile("moment.js")
+	BANano.Header.AddJavascriptFile("moment.min.js")
+	
 	BANano.Header.AddCSSFile("Chart.min.css")
-	BANano.Header.AddJavascriptFile("Chart.min.js")
-	BANano.Header.AddJavascriptFile("vue-chartkick.min.js")
+	'BANano.Header.AddJavascriptFile("vue-chartkick.min.js")
+	BANano.Header.AddJavascriptFile("chart.js")
+	BANano.Header.AddJavascriptFile("chartjs-adapter-date-fns.bundle.min.js")
+	BANano.Header.AddJavascriptFile("chartkick.min.js")
+	
 	'
 	BANano.Header.AddCSSFile("leaflet.min.css")
 	BANano.Header.AddJavascriptFile("leaflet.min.js")
 	BANano.Header.AddJavascriptfile("vue2-leaflet.min.js")
-	
+	'
 	'
 	' start the build
 	#if release

@@ -20,6 +20,7 @@ Version=7
 #Event: Excel (Success As Boolean, Response As String, Error As String, affectedRows As Int, Result As List)
 #Event: Report (Success As Boolean, Response As String, Error As String, affectedRows As Int, Result As List)
 #Event: SelectForCombo (Success As Boolean, Response As String, Error As String, affectedRows As Int, Result As List)
+#Event: Chart (Success As Boolean, Response As String, Error As String, affectedRows As Int, Result As List)
 
 #DesignerProperty: Key: ShowLog, DisplayName: ShowLog, FieldType: Boolean, DefaultValue: False, Description: ShowLog
 #DesignerProperty: Key: DatabaseType, DisplayName: DatabaseType, FieldType: String, DefaultValue: mysql, Description: DatabaseType, List: banano|firebase|firestore|mssql|mysql|sqlite
@@ -132,6 +133,7 @@ Sub Class_Globals
 	Public const ACTION_PDF As String = "Pdf"
 	Public const ACTION_EXCEL As String = "Excel"
 	Public const ACTION_SELECTFORCOMBO As String = "SelectForCombo"
+	Public const ACTION_CHART As String = "Chart"
 	'
 	Public const MODE_CREATE As String = "C"
 	Public const MODE_UPDATE As String = "U"
@@ -651,6 +653,18 @@ Sub PDF
 	Execute(ACTION_PDF)
 End Sub
 
+'select all based on fields and order by for Chart
+Sub CHART
+	If IsBound = False Then
+		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+	End If
+	If bShowLog Then
+		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.Chart"$)
+	End If
+	Tag = ACTION_CHART
+	Execute(ACTION_CHART)
+End Sub
+
 'select all based on fields and order by for Excel
 Sub EXCEL
 	If IsBound = False Then
@@ -805,7 +819,7 @@ private Sub MySQLExecute As Boolean    'ignore
 		End If
 		Log($"Delete: ${pkValue}"$)
 		MySQL.Delete(pkValue)
-	Case ACTION_SELECTALL, ACTION_PDF, ACTION_REPORT, ACTION_EXCEL, ACTION_SELECTFORCOMBO
+	Case ACTION_SELECTALL, ACTION_PDF, ACTION_REPORT, ACTION_EXCEL, ACTION_SELECTFORCOMBO, ACTION_CHART
 		bSelect = True
 		MySQL.SelectAll(schemaSelectFields, schemaOrderBy)
 	Case ACTION_SELECTWHERE
