@@ -326,6 +326,15 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.BindAllEvents
 End Sub
 
+'return html of the element
+Sub getHTML As String
+	If mElement <> Null Then
+		Return mElement.GetHTML
+	Else
+		Return ""
+	End If
+End Sub
+
 'update the label of the button
 Sub UpdateLabel(VC As VueComponent, s As String)
 	VC.SetData(xCaption, S)

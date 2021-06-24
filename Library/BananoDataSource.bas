@@ -23,7 +23,7 @@ Version=7
 #Event: Chart (Success As Boolean, Response As String, Error As String, affectedRows As Int, Result As List)
 
 #DesignerProperty: Key: ShowLog, DisplayName: ShowLog, FieldType: Boolean, DefaultValue: False, Description: ShowLog
-#DesignerProperty: Key: DatabaseType, DisplayName: DatabaseType, FieldType: String, DefaultValue: mysql, Description: DatabaseType, List: banano|firebase|firestore|mssql|mysql|sqlite
+#DesignerProperty: Key: DatabaseType, DisplayName: DatabaseType, FieldType: String, DefaultValue: mysql, Description: DatabaseType, List: mysql
 #DesignerProperty: Key: Action, DisplayName: Action, FieldType: String, DefaultValue: , Description: Action, List: CreateTable|Create|Read|Update|Delete|SelectAll|SelectWhere|Count|GetMax|GetMin|SumOf|Custom
 #DesignerProperty: Key: HostName, DisplayName: HostName, FieldType: String, DefaultValue: localhost, Description: HostName
 #DesignerProperty: Key: DatabaseName, DisplayName: DatabaseName, FieldType: String, DefaultValue: , Description: DatabaseName
@@ -318,7 +318,8 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	sAscDesc = sAscDesc.Replace(",", ";")
 	sOrderBy = sOrderBy.Replace(",", ";")
 	'
-	schemaDefaults = BANano.Split(";", sDefaults)
+	sDefaults = sDefaults.replace("=", ":")
+	schemaDefaults = BANano.Split(";", sDefaults)	
 	schemaDefaults = BANanoShared.ListTrimItems(schemaDefaults)
 	For Each fld As String In schemaDefaults
 		Dim k As String = BANanoShared.MvField(fld, 1, ":")

@@ -63,7 +63,8 @@ Sub Class_Globals
 	Private sTo As String
 	Private bAbsolute As Boolean
 	Private sPosition As String
-	private bIsExtension as boolean
+	Private bIsExtension As Boolean
+	Private sColor As String
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -78,6 +79,7 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey)
 		End If
 	End If
+	sColor = $"${mName}color"$
 End Sub
 
 ' this is the place where you create the view in html and run initialize javascript
@@ -133,7 +135,9 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	'
 	VElement.GetIcon.Dark = bIconDark
 	VElement.Classes = mClasses
-	VElement.Color = VElement.BuildColor(mColor, mColorIntensity)
+	VElement.Bind("color", sColor)
+	Dim dColor As String = VElement.BuildColor(mColor, mColorIntensity)
+	VElement.SetData(sColor, dColor)
 	VElement.Styles = mStyles
 	VElement.Attributes = mAttributes	
 	VElement.TextColor = VElement.BuildColor(mTextColor, mTextColorIntensity)
@@ -178,6 +182,19 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		VElement.XLarge = True
 	End Select
 	VElement.BindAllEvents
+End Sub
+
+'return html of the element
+Sub getHTML As String
+	If mElement <> Null Then
+		Return mElement.GetHTML
+	Else
+		Return ""
+	End If
+End Sub
+
+Sub UpdateColor(VC As VueComponent, s As String)
+	VC.SetData(sColor, s)
 End Sub
 
 Sub UpdateLoading(VC As VueComponent, b As Boolean)

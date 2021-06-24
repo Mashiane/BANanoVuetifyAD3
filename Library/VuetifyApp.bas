@@ -5757,3 +5757,24 @@ Sub SetInterval(Module As Object, MethodName As String, ms As Int) As Int
 	Dim res As Int = BANano.Window.SetInterval(cb, ms)
 	Return res
 End Sub
+
+'update the color
+Sub UpdateColor(elID As String, colName As String)
+	Dim xColor As String = $"${elID}color"$
+	xColor = xColor.ToLowerCase
+	SetData(xColor, colName)
+End Sub
+
+'update the visibility
+Sub UpdateVisibility(elID As String, colName As Boolean)
+	Dim xColor As String = $"${elID}show"$
+	xColor = xColor.ToLowerCase
+	SetData(xColor, colName)
+End Sub
+
+'update the disability
+Sub UpdateDisabled(elID As String, colName As Boolean)
+	Dim xColor As String = $"${elID}disabled"$
+	xColor = xColor.ToLowerCase
+	SetData(xColor, colName)
+End Sub

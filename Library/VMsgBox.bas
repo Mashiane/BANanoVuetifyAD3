@@ -22,7 +22,7 @@ Version=9
 #DesignerProperty: Key: MinWidth, DisplayName: MinWidth, FieldType: String, DefaultValue: , Description: MinWidth
 #DesignerProperty: Key: MaxWidth, DisplayName: MaxWidth, FieldType: String, DefaultValue: , Description: MaxWidth
 #DesignerProperty: Key: Height, DisplayName: Height, FieldType: String, DefaultValue: , Description: Height
-#DesignerProperty: Key: MinHeight, DisplayName: MinHeight, FieldType: String, DefaultValue: 300, Description: MinHeight
+#DesignerProperty: Key: MinHeight, DisplayName: MinHeight, FieldType: String, DefaultValue: , Description: MinHeight
 #DesignerProperty: Key: MaxHeight, DisplayName: MaxHeight, FieldType: String, DefaultValue: , Description: MaxHeight
 #DesignerProperty: Key: ToolBarColor, DisplayName: ToolBarColor, FieldType: String, DefaultValue: green, Description: ToolBarColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: ToolBarColorIntensity, DisplayName: ToolBarColorIntensity, FieldType: String, DefaultValue: normal, Description: ToolBarColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
@@ -359,9 +359,15 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.BindVueElement(ccb)
 End Sub
 
+'get the process
+Sub Process(VC As VueComponent) As String
+	Dim sprocess As String = VC.GetData("confirmkey")
+	Return sprocess
+End Sub
+
 'show confirm dialog
-Sub Confirm(VC As VueComponent, process As String, Title As String, Message As String, ConfirmText As String, CancelText As String)
-	process = process.tolowercase
+Sub Confirm(VC As VueComponent, sProcess As String, Title As String, Message As String, ConfirmText As String, CancelText As String)
+	sProcess = sProcess.tolowercase
 	UpdateTitle(VC, Title)
 	UpdateMessage(VC, Message)
 	UpdateOkLabel(VC, ConfirmText)
@@ -371,20 +377,20 @@ Sub Confirm(VC As VueComponent, process As String, Title As String, Message As S
 	UpdateOkLoading(VC, False)
 	UpdateCancelLoading(VC, False)
 	UpdateScrollable(VC, False)
-	VC.SetData("confirmkey", process)
+	VC.SetData("confirmkey", sProcess)
 	UpdateVisible(VC, True)
 End Sub
 
 'show confirm dialog
-Sub Alert(VC As VueComponent, process As String, Title As String, Message As String, ConfirmText As String)
-	process = process.tolowercase
+Sub Alert(VC As VueComponent, sProcess As String, Title As String, Message As String, ConfirmText As String)
+	sProcess = sProcess.tolowercase
 	UpdateTitle(VC, Title)
 	UpdateMessage(VC, Message)
 	UpdateOkLabel(VC, ConfirmText)
 	UpdateOkVisible(VC, True)
 	UpdateScrollable(VC, False)
 	UpdateCancelVisible(VC, False)
-	VC.SetData("confirmkey", process)
+	VC.SetData("confirmkey", sProcess)
 	UpdateVisible(VC, True)
 End Sub
 
