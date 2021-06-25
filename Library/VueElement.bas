@@ -6309,12 +6309,16 @@ Sub AddListViewTemplate(numLines As Int, props As ListViewItemOptions) As VueEle
 	datasource = datasource.ToLowerCase
 	key = key.ToLowerCase
 	Dim xrightitemavatarclass As String = props.rightitemavatarclass
+	Dim xhref As String = props.href
+	Dim xtarget As String = props.target
+	If xhref = "" Then xhref = "href"
+	If xtarget = "" Then xtarget = "target"
 	
 	'
 	Dim sTemplate As String = $"<v-template id="${templateID}" v-for="(item, index) in ${datasource}">
 <v-subheader id="${headerID}" v-if="item.header">{{ item.header }}</v-subheader>
 <v-divider id="${dividerID}" v-else-if="item.divider" :inset="item.inset"></v-divider>
-<v-list-item id="${listitemID}" v-else="true" :key="item.${key}" :to="item.${xurl}" active-class="${xactiveclass}">
+<v-list-item id="${listitemID}" v-else="true" :key="item.${key}" :to="item.${xurl}" :href="item.${xhref}" :target="item.${xtarget}" active-class="${xactiveclass}">
 <v-list-item-action id="${leftactionID}" v-if="item.${xlefticon} || ${xshowleftcheckboxes} || ${xshowleftswitch}">
 <v-btn id="${leftactionBtnID}" :icon="true" v-if="item.${xlefticon}">
 <v-icon id="${leftactionIconID}" ${props.lefticonattr} :color="item.${xlefticoncolor}" v-html="item.${xlefticon}" class="${xlefticonclass}"></v-icon>
@@ -6683,10 +6687,14 @@ Sub AddListItemGroupTemplate(numLines As Int) As VueElement
 	datasource = datasource.ToLowerCase
 	key = key.ToLowerCase
 	Dim xrightitemavatarclass As String = props.rightitemavatarclass
+	Dim xhref As String = props.href
+	Dim xtarget As String = props.target
+	If xhref = "" Then xhref = "href"
+	If xtarget = "" Then xtarget = "target"
 	
 	Dim sTemplate As String = $"<v-list-item-group id="${templateID}" active-class="${xactiveclass}">
 	<v-template v-for="(item, index) in ${datasource}">
-<v-list-item id="${listitemID}" :key="item.${key}" :to="item.${xurl}">
+<v-list-item id="${listitemID}" :key="item.${key}" :to="item.${xurl}" :href="item.${xhref}" :target="item.${xtarget}">
 <v-list-item-action id="${leftactionID}" v-if="item.${xlefticon} || ${xshowleftcheckboxes} || ${xshowleftswitch}">
 <v-btn id="${leftactionBtnID}" :icon="true" v-if="item.${xlefticon}">
 <v-icon id="${leftactionIconID}" ${props.lefticonattr} :color="item.${xlefticoncolor}" v-html="item.${xlefticon}" class="${xlefticonclass}"></v-icon>
@@ -6892,6 +6900,10 @@ Sub AddListViewGroupTemplate(numLines As Int, props As ListViewItemOptions) As V
 	'
 	Dim xrightchip As String = props.rightchip
 	Dim xrightchipcolor As String = props.rightchipcolor
+	Dim xhref As String = props.href
+	Dim xtarget As String = props.target
+	If xhref = "" Then xhref = "href"
+	If xtarget = "" Then xtarget = "target"
 	'
 	datasource = datasource.ToLowerCase
 	key = key.ToLowerCase
@@ -6909,7 +6921,7 @@ Sub AddListViewGroupTemplate(numLines As Int, props As ListViewItemOptions) As V
 	sTemplate.Append($"</v-list-item-content>"$)
 	sTemplate.Append($"</v-template>"$)
 	'
-sTemplate.Append($"<v-list-item id="${listitemID}" v-for="child in item.items" :key="child.${key}" :to="child.${xurl}" active-class="${xactiveclass}">
+sTemplate.Append($"<v-list-item id="${listitemID}" v-for="child in item.items" :key="child.${key}" :to="child.${xurl}" active-class="${xactiveclass}" :href="child.${xhref}" :target="child.${xtarget}" >
 <v-list-item-action id="${leftactionID}" v-if="child.${xlefticon} || ${xshowleftcheckboxes} || ${xshowleftswitch}">
 <v-btn id="${leftactionBtnID}" :icon="true" v-if="child.${xlefticon}">
 <v-icon id="${leftactionIconID}" ${props.lefticonattr} :color="child.${xlefticoncolor}" v-html="child.${xlefticon}" class="${xlefticonclass}"></v-icon>
@@ -6951,7 +6963,7 @@ sTemplate.Append($"<v-list-item id="${listitemID}" v-for="child in item.items" :
 </v-list-item>
 </v-list-group>"$)
 '
-sTemplate.Append($"<v-list-item v-else id="${listitemID}" :key="item.${key}" :to="item.${xurl}" active-class="${xactiveclass}">
+sTemplate.Append($"<v-list-item v-else id="${listitemID}" :key="item.${key}" :to="item.${xurl}" active-class="${xactiveclass}" :href="item.${xhref}" :target="item.${xtarget}">
 <v-list-item-action id="${leftactionID}" v-if="item.${xlefticon} || ${xshowleftcheckboxes} || ${xshowleftswitch}">
 <v-btn id="${leftactionBtnID}" :icon="true" v-if="item.${xlefticon}">
 <v-icon id="${leftactionIconID}" ${props.lefticonattr} :color="item.${xlefticoncolor}" v-html="item.${xlefticon}" class="${xlefticonclass}"></v-icon>
@@ -8922,6 +8934,12 @@ End Sub
 
 Sub GetButton1 As VueElement
 	Dim elKey As String = $"${mName}_button"$
+	Dim elx As VueElement = GetVueElement(elKey)
+	Return elx
+End Sub
+
+Sub GetIFrame As VueElement
+	Dim elKey As String = $"${mName}iframe"$
 	Dim elx As VueElement = GetVueElement(elKey)
 	Return elx
 End Sub

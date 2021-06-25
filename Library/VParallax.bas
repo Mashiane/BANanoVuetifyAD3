@@ -1,5 +1,5 @@
 ﻿B4J=true
-Group=Default Group\Images
+Group=Default Group
 ModulesStructureVersion=1
 Type=Class
 Version=8.95

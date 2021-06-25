@@ -296,12 +296,13 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.GetCard.Append($"<v-divider id="${mName}divider2" v-show="${sShowActions}" class="mx-2"></v-divider>"$)
 	'
 	VElement.GetCard.Append($"<v-card-actions v-show="${sShowActions}" id="${mName}cardactions"></v-card-actions>"$)
-	VElement.GetCardActions.Append($"<v-spacer></v-spacer>"$)
 	VElement.GetCardActions.Append($"<v-btn id="${mName}_cancel" class="mr-2" dark>{{${xCancelCaption} }}</v-btn>"$)
 	VElement.GetCancel1.Bind("color", xCancelColor)
 	VElement.GetCancel1.Disabled = xCancelDisabled
 	VElement.GetCancel1.Vshow = xCancelVisible
 	VElement.GetCancel1.Loading = xCancelLoading
+	'
+	VElement.GetCardActions.Append($"<v-spacer></v-spacer>"$)
 	'
 	VElement.GetCardActions.Append($"<v-btn id="${mName}_ok" dark>{{ ${xOkCaption} }}</v-btn>"$)
 	VElement.GetOK1.Bind("color", xOkColor)

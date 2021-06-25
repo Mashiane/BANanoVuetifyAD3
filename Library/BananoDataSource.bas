@@ -349,7 +349,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	schemaSelectFields = BANano.Split(";", sSelectFields)
 	schemaSelectFields = BANanoShared.ListTrimItems(schemaSelectFields)
 	'
-	dsKey = $"${sTableName}.${sPrimaryKey}"$
+	dsKey = $"${sRecordSource}.${sPrimaryKey}"$
 	'
 	'loop through each field
 	For Each fld As String In schemaFields
@@ -694,7 +694,7 @@ End Sub
 private Sub Execute(nAction As String)
 	OK = False
 	Result.Initialize 
-	affectedRows = -1
+	affectedRows = 0
 	Error = ""
 	sAction = nAction
 	'

@@ -193,6 +193,7 @@ Sub Class_Globals
 	Public Error As String
 	Public affectedRows As Int
 	Private sAction As String
+	Private db As FBCollection
 End Sub
 
 
@@ -321,7 +322,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	schemaSelectFields = BANano.Split(";", sSelectFields)
 	schemaSelectFields = BANanoShared.ListTrimItems(schemaSelectFields)
 	'
-	dsKey = $"${sTableName}.${sPrimaryKey}"$
+	dsKey = $"${sRecordSource}.${sPrimaryKey}"$
 	'
 	'loop through each field
 	For Each fld As String In schemaFields
@@ -898,13 +899,13 @@ End Sub
 private Sub Execute(nAction As String)
 	OK = False
 	Result.Initialize 
-	affectedRows = -1
+	affectedRows = 0
 	Error = ""
 	sAction = nAction
 	'
-	'Dim bpRun As BANanoPromise
-	'bpRun.CallSub(Me, "MySQLExecute", Null)
-	'BANano.Await(bpRun)
+	Dim bpRun As BANanoPromise
+	bpRun.CallSub(Me, "FireStoreExecute", Null)
+	BANano.Await(bpRun)
 		'
 	'priorize the exact query, if not execute done
 	Dim subKey As String = $"${mName}_${Tag}"$
@@ -919,6 +920,133 @@ private Sub Execute(nAction As String)
 	End If
 End Sub
 
+'*get a collection
+private Sub collection(colName As String) As FBCollection
+	Dim lbc As FBCollection
+	lbc.Initialize(firestore, colName)
+	Return lbc
+End Sub
+
+private Sub FireStoreExecute As Boolean    'ignore
+	'clear the schema
+	db = collection(sTableName)
+	db.PrimaryKey = sPrimaryKey
+	db.AutoIncrement = sAutoIncrement
+	db.SchemaClear
+	'add the schema to the dbclass
+	db.SchemaAddBlob(Blobs)
+	db.SchemaAddDouble(Doubles)
+	db.SchemaAddInt(Integers)
+	db.SchemaAddText(Strings)
+	'
+	Dim bRead As Boolean = False
+	Dim bSelect As Boolean = False
+	Dim bCount As Boolean = False
+	'
+	'
+	Tag = sAction
+	
+	Select Case sAction
+	Case ACTION_CREATE_TABLE
+		'MySQL.SchemaCreateTable
+	Case ACTION_CREATE
+		'remove auto-increment
+		Record = ParentComponent.GetData(sRecordSource)
+		CorrectDataTypes(Record)
+		If sAutoIncrement <> "" Then
+			Record.Remove(sAutoIncrement)
+		End If
+		Log($"Create: ${Record}"$)
+		'insert a record and wait to finish and raise the event
+		BANano.Await(db.AddWait(Record))
+	Case ACTION_READ
+		bRead = True
+		'get the key for the record
+		Dim pkValue As String = ParentComponent.GetData(dsKey)
+		'there is no key, return a blank data-source
+		If pkValue = "" Then
+			Dim nr As Map = CreateMap()
+			'copy the fields
+			For Each k As String In schemaFields
+				Record.Put(k, "")
+			Next
+			CorrectDataTypes(nr)
+			ParentComponent.SetData(sRecordSource, nr) 
+			BANano.ReturnThen(True)
+		End If
+		Log($"Read: ${pkValue}"$)
+		'execute the read
+		BANano.Await(db.ReadWait(pkValue))
+	Case ACTION_UPDATE
+		'get the key for the record
+		Dim pkValue As String = ParentComponent.GetData(dsKey)
+		If pkValue = "" Then
+			BANano.ReturnThen(True)
+		End If
+		'read the record to update
+		Record = ParentComponent.GetData(sRecordSource)
+		CorrectDataTypes(Record)
+		'we need to remove the auto-increment key from the record
+		Record.Remove(sPrimaryKey)
+		Log($"Update: ${Record}"$)
+		'use merge to update affected fields only
+		BANano.Await(db.MergeWait(pkValue, Record))
+	Case ACTION_DELETE
+		'get the key for the record
+		Dim pkValue As String = ParentComponent.GetData(dsKey)
+		If pkValue = "" Then
+			BANano.ReturnThen(True)
+		End If
+		Log($"Delete: ${pkValue}"$)
+		BANano.Await(db.DeleteWait(pkValue))
+	Case ACTION_SELECTALL, ACTION_PDF, ACTION_REPORT, ACTION_EXCEL, ACTION_SELECTFORCOMBO, ACTION_CHART
+		bSelect = True
+		Result = BANano.Await(db.GetWait)
+	Case ACTION_SELECTWHERE
+		bSelect = True
+		'MySQL.SelectWhere(schemaSelectFields, cw, ops, schemaOrderBy) 
+	Case ACTION_COUNT
+		bCount = True
+		bSelect = True
+		'MySQL.GetCount
+	Case ACTION_GETMAX
+		bSelect = True
+	Case ACTION_GETMIN
+		bSelect = True
+	Case ACTION_CUSTOM
+		bSelect = True
+		'MySQL.Execute(sCustomQuery)
+	End Select
+	'we are using mysqlphp.config
+	
+	'get the result
+	Response = db.response
+	Error = db.error
+	affectedRows = db.affectedRows
+	Result = db.result
+	OK = db.OK
+	'
+	'we are reading a record
+	If bRead Then
+		'record is found
+		If Result.Size >= 0 Then
+			Record = Result.Get(0)
+			ParentComponent.SetData(sRecordSource, Record)
+		Else
+			'record is not found
+			Record = CreateMap()
+			'copy the fields
+			For Each k As String In schemaFields
+				Record.Put(k, "")
+			Next
+			CorrectDataTypes(Record)
+			ParentComponent.SetData(sRecordSource, Record)
+		End If
+	End If
+	BANano.ReturnThen(True)
+End Sub
+
+
 'bind to this DS to this component
 Sub BindState(VC As VueComponent)
 	If bShowLog Then
@@ -930,3 +1058,4 @@ Sub BindState(VC As VueComponent)
 	ParentComponent.SetData(sRecordSource, nr)
 	IsBound = True
 End Sub
+ 

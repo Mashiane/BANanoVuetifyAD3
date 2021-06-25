@@ -1,5 +1,5 @@
 ﻿B4J=true
-Group=Default Group\Forms
+Group=Default Group
 ModulesStructureVersion=1
 Type=Class
 Version=8.9
@@ -621,4 +621,39 @@ Sub BindState(VC As VueComponent)
 		Dim cb As BANanoObject = mmethods.Get(k)
 		VC.SetCallBack(k, cb)
 	Next
+End Sub
+
+'get the process
+Sub Process(VC As VueComponent) As String
+	Dim sprocess As String = VC.GetData("confirmkey")
+	Return sprocess
+End Sub
+
+'show confirm dialog
+Sub Confirm(VC As VueComponent, sProcess As String, Title As String, Message As String, ConfirmText As String, CancelText As String)
+	sProcess = sProcess.tolowercase
+	UpdateToolBarTitle(VC, Title)
+	UpdateCardTitle(VC, Title)
+	UpdateOkLabel(VC, ConfirmText)
+	UpdateCancelLabel(VC, CancelText)
+	UpdateOkVisible(VC, True)
+	UpdateCancelVisible(VC, True)
+	UpdateOkLoading(VC, False)
+	UpdateCancelLoading(VC, False)
+	UpdateCardText(VC, Message)
+	VC.SetData("confirmkey", sProcess)
+	UpdateVisible(VC, True)
+End Sub
+
+'show confirm dialog
+Sub Alert(VC As VueComponent, sProcess As String, Title As String, Message As String, ConfirmText As String)
+	sProcess = sProcess.tolowercase
+	UpdateToolBarTitle(VC, Title)
+	UpdateCardTitle(VC, Title)
+	UpdateCardText(VC, Message)
+	UpdateOkLabel(VC, ConfirmText)
+	UpdateOkVisible(VC, True)
+	UpdateCancelVisible(VC, False)
+	VC.SetData("confirmkey", sProcess)
+	UpdateVisible(VC, True)
 End Sub

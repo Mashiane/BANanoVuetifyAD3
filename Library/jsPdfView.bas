@@ -10,8 +10,11 @@ Version=7
 'Custom BANano View class
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: FileName, DisplayName: URL, FieldType: String, DefaultValue: , Description: URL
+#DesignerProperty: Key: AspectRatio, DisplayName: AspectRatio, FieldType: String, DefaultValue: 1.0, Description: AspectRatio
+#DesignerProperty: Key: Elevation, DisplayName: Elevation, FieldType: String, DefaultValue: 2, Description: Elevation
+#DesignerProperty: Key: Height, DisplayName: Height, FieldType: String, DefaultValue: 100%, Description: Height
+#DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: 100%, Description: Width
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
-#DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue: , Description: VShow
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag. 
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use = 
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
@@ -32,6 +35,10 @@ Sub Class_Globals
 	Private sVIf As String
 	Private sVShow As String
 	Private sVModel As String
+	Private sAspectRatio As String
+	Private sElevation As String
+	Private sHeight As String
+	Private sWidth As String
 End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -59,53 +66,44 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bHidden = Props.GetDefault("Hidden", False)
 		sFileName = Props.GetDefault("FileName", "")
 		sVIf = Props.GetDefault("VIf", "")
-		'sVShow = Props.GetDefault("VShow", "")
+		sAspectRatio = Props.GetDefault("AspectRatio", "1.0")
+		sElevation = Props.GetDefault("Elevation", "")
+		sHeight = Props.GetDefault("Height", "500px")
+		sWidth = Props.GetDefault("Width", "100%")
 	End If 
 	' 
 	'build and get the element 
 	If BANano.Exists($"#${mName}"$) Then 
 		mElement = BANano.GetElement($"#${mName}"$) 
 	Else	 
-		mElement = mTarget.Append($"<div id="${mName}"></div>"$).Get("#" & mName) 
+		mElement = mTarget.Append($"<v-responsive id="${mName}"><iframe id="${mName}iframe" scrolling="no" frameborder="0"/></v-responsive>"$).Get("#" & mName) 
 	End If 
 	' 
 	VElement.Initialize(mCallBack, mName, mName) 
-	VElement.TagName = "div"
+	VElement.TagName = "v-responsive"
 	VElement.Classes = mClasses 
 	VElement.Styles = mStyles 
-	VElement.Attributes = mAttributes 
+	VElement.Attributes = mAttributes
+	VElement.AddAttr("aspect-ratio", sAspectRatio)
+	VElement.Elevation = sElevation
+	VElement.AddStyle("height", sHeight) 
 	VElement.AddAttr("v-if", sVIf)
 	VElement.AddAttr("v-show", sVShow)
 	VElement.SetData(sVShow, Not(bHidden))
-	VElement.AddAttr("width", "100%")
-	VElement.AddAttr("height", "100%")
-	VElement.AddStyle("width", "100%")
-	VElement.AddStyle("height", "100%")
-	VElement.AddStyle("max-width", "100%")
-	VElement.AddStyle("max-height", "100%")
-	'
-	'add the iframe
-	Dim sIFrame As String = $"${mName}iframe"$
-	VElement.Append($"<iframe id="${sIFrame}"></iframe>"$)
-	Dim iframe As VueElement
-	iframe.Initialize(mCallBack, sIFrame, sIFrame)
-	iframe.AddAttr("width", "100%")
-	iframe.AddAttr("height", "100%")
-	iframe.AddStyle("width", "100%")
-	iframe.AddStyle("height", "100%")
-	iframe.AddStyle("max-width", "100%")
-	iframe.AddStyle("max-height", "100%")
-	iframe.AddAttr("scrolling", "no")
-	iframe.AddAttr("frameborder", "0")
-	iframe.AddStyle("border", "0")
-	iframe.AddStyle("top", "0px")
-	iframe.AddStyle("left", "0px")
-	iframe.AddStyle("bottom", "0px")
-	iframe.AddStyle("right", "0px")
-	iframe.AddAttr(":allowfullscreen", True)
-	iframe.Bind("src", sVModel)
-	iframe.SetData(sVModel, sFileName )
-	VElement.BindVueElement(iframe)
+	VElement.AddStyle("width", sWidth)
+	VElement.GetIframe.AddAttr(":src", sVModel)
+	VElement.GetIframe.AddStyle("background-color", "transparent")
+  	VElement.GetIFrame.AddStyle("border", "none")
+  	VElement.GetIFrame.AddStyle("height", "1px")
+	VElement.GetIframe.AddStyle("min-height", "100%")
+  	VElement.GetIFrame.AddStyle("width", "1px")
+  	VElement.GetIFrame.AddStyle("min-width", "100%")
+	VElement.GetIFrame.AddStyle("top", "0px")
+	VElement.GetIFrame.AddStyle("left", "0px")
+	VElement.GetIFrame.AddStyle("bottom", "0px")
+	VElement.GetIFrame.AddStyle("right", "0px")
+	VElement.GetIFrame.AddAttr(":allowfullscreen", True)
+	VElement.SetData(sVModel, sFileName )
 	VElement.BindAllEvents
 End Sub
 

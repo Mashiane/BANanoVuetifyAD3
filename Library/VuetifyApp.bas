@@ -417,7 +417,7 @@ Sub Class_Globals
 	rightswitchattr As String, rightchipattr As String, iconattr As String, hasdivider As Boolean, insetdivider As Boolean, _
 	rightavatar As String, rightavatarclass As String, rightavataricon As String, _
 	rightavatariconcolor As String, rightavatariconclass As String, rightavatarattr As String, rightavatariconattr As String, _
-	rightitemavatarclass As String, avatartext As String, rightavatartext As String, avatartextcolor As String, rightavatartextcolor As String, avatartextclass As String, rightavatartextclass As String, subtitle2 As String, subtitle3 As String, subtitle4 As String)
+	rightitemavatarclass As String, avatartext As String, rightavatartext As String, avatartextcolor As String, rightavatartextcolor As String, avatartextclass As String, rightavatartextclass As String, subtitle2 As String, subtitle3 As String, subtitle4 As String, href As String, target As string)
 	'
 	Public RouterViewName As String
 	Public DatabaseName As String
@@ -505,6 +505,9 @@ Sub NewListViewItemOptions() As ListViewItemOptions
 	lvio.rightchip = "rightchip"
 	lvio.rightchipcolor = "rightchipcolor"
 	'
+	lvio.href = "href"
+	lvio.target = "target"
+	
 	lvio.lefticonattr = ""
 	lvio.avatarattr = ""
 	lvio.avatariconattr = ""

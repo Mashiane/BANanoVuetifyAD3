@@ -1,67 +1,63 @@
 ﻿AppType=JavaFX
 Build1=Default,b4j.example
 File1=1.png
-File10=Chart.min.css
-File11=chartjs-adapter-date-fns.bundle.min.js
-File12=chartkick.min.js
-File13=dayjs.min.js
-File14=faker.min.js
-File15=fileSaver.min.js
-File16=flowy-vue.css
-File17=flowy-vue.umd.min.js
-File18=gray.png
-File19=green.png
+File10=chartjs-adapter-date-fns.bundle.min.js
+File11=chartkick.min.js
+File12=dayjs.min.js
+File13=fileSaver.min.js
+File14=flowy-vue.css
+File15=flowy-vue.umd.min.js
+File16=gray.png
+File17=green.png
+File18=happyface.png
+File19=helpers.min.css
 File2=2.png
-File20=happyface.png
-File21=helpers.min.css
-File22=html2canvas.min.js
-File23=info-box.min.css
-File24=jspdf.plugin.autotable.min.js
-File25=jspdf.umd.min.js
-File26=jszip.min.js
-File27=leaflet.min.css
-File28=leaflet.min.js
-File29=lodash.min.js
-File3=arcCounter.umd.min.js
-File30=material-ui.min.css
-File31=microtip.min.css
-File32=moment.min.js
-File33=nedb.min.js
-File34=neutralface.png
-File35=numeral.min.js
-File36=orange.png
-File37=oxml.min.js
-File38=prism.min.css
-File39=prism.min.js
-File4=avatar.png
-File40=qrcode.min.js
-File41=red.png
-File42=sadface.png
-File43=sweetalert2.all.min.js
-File44=third-party.js
-File45=upload.php
-File46=v-blur.min.js
-File47=vjsf.css
-File48=vjsf.js
-File49=vue.min.js
-File5=axios.min.js
-File50=vue2-leaflet.min.js
-File51=vue-clipboard.min.js
-File52=vue-count-to.min.js
-File53=vue-form-wizard.js
-File54=vue-form-wizard.min.css
-File55=vue-google-charts.browser.js
-File56=vue-google-maps.js
-File57=vue-prism-component.min.js
-File58=vue-router.min.js
-File59=vuetify.min.css
-File6=beautify.min.js
-File60=vuetify.min.js
-File61=vuetify-simple-wizard.min.js
-File62=xlsx.full.min.js
-File7=beautify-css.min.js
-File8=beautify-html.min.js
-File9=chart.js
+File20=html2canvas.min.js
+File21=info-box.min.css
+File22=jspdf.plugin.autotable.min.js
+File23=jspdf.umd.min.js
+File24=jszip.min.js
+File25=leaflet.min.css
+File26=leaflet.min.js
+File27=lodash.min.js
+File28=material-ui.min.css
+File29=microtip.min.css
+File3=avatar.png
+File30=moment.min.js
+File31=neutralface.png
+File32=numeral.min.js
+File33=orange.png
+File34=oxml.min.js
+File35=prism.min.css
+File36=prism.min.js
+File37=qrcode.min.js
+File38=red.png
+File39=sadface.png
+File4=axios.min.js
+File40=sweetalert2.all.min.js
+File41=upload.php
+File42=v-blur.min.js
+File43=vjsf.css
+File44=vjsf.js
+File45=vue.min.js
+File46=vue2-leaflet.min.js
+File47=vue-clipboard.min.js
+File48=vue-count-to.min.js
+File49=vue-form-wizard.js
+File5=beautify.min.js
+File50=vue-form-wizard.min.css
+File51=vue-google-charts.browser.js
+File52=vue-google-maps.js
+File53=vue-prism-component.min.js
+File54=vue-router.min.js
+File55=vuetify.min.css
+File56=vuetify.min.js
+File57=vuetify-simple-wizard.min.js
+File58=xlsx.full.min.js
+File6=beautify-css.min.js
+File7=beautify-html.min.js
+File8=chart.js
+File9=Chart.min.css
 FileGroup1=Default Group
 FileGroup10=Default Group
 FileGroup11=Default Group
@@ -116,11 +112,7 @@ FileGroup55=Default Group
 FileGroup56=Default Group
 FileGroup57=Default Group
 FileGroup58=Default Group
-FileGroup59=Default Group
 FileGroup6=Default Group
-FileGroup60=Default Group
-FileGroup61=Default Group
-FileGroup62=Default Group
 FileGroup7=Default Group
 FileGroup8=Default Group
 FileGroup9=Default Group
@@ -154,46 +146,45 @@ Module118=VToolTip
 Module119=VTransition
 Module12=BANanoSQLiteE
 Module120=VTreeView
-Module121=VueChartkick
-Module122=VueComponent
-Module123=VueElement
-Module124=VueFlowy
-Module125=VueGCharts
-Module126=VueGMap
-Module127=VueInfoBox
-Module128=VueSimpleWizard
-Module129=VueSwal
+Module121=VueComponent
+Module122=VueElement
+Module123=VueFlowy
+Module124=VueGCharts
+Module125=VueGMap
+Module126=VueInfoBox
+Module127=VueSimpleWizard
+Module128=VueSwal
+Module129=VueTable
 Module13=BVAD3ListItem
-Module130=VueTable
-Module131=VuetifyApp
-Module132=VueVJSF
+Module130=VuetifyApp
+Module131=VueVJSF
 Module14=FBCollection
 Module15=FBDocument
-Module16=JsPdfAnnotation
-Module17=JsPdfAutoTable
-Module18=JsPdfCircle
-Module19=JsPdfCurveTo
+Module16=FBStorage
+Module17=JsPdfAnnotation
+Module18=JsPdfAutoTable
+Module19=JsPdfCircle
 Module2=BANanoAxios
-Module20=JsPdfDoc
-Module21=JsPdfEllipse
-Module22=JsPdfImage
-Module23=JsPdfLine
-Module24=JsPdfLink
-Module25=JsPdfPage
-Module26=JsPdfRect
-Module27=JsPdfRoundedRect
-Module28=JsPdfStyle
-Module29=JsPdfText
+Module20=JsPdfCurveTo
+Module21=JsPdfDoc
+Module22=JsPdfEllipse
+Module23=JsPdfImage
+Module24=JsPdfLine
+Module25=JsPdfLink
+Module26=JsPdfPage
+Module27=JsPdfRect
+Module28=JsPdfRoundedRect
+Module29=JsPdfStyle
 Module3=BananoDataSource
-Module30=JsPdfTriangle
-Module31=jsPdfView
-Module32=MySQLCRUD
-Module33=VAlert
-Module34=VApp
-Module35=VAppBar
-Module36=VAppBarNavIcon
-Module37=VAppBarTitle
-Module38=VArcCounter
+Module30=JsPdfText
+Module31=JsPdfTriangle
+Module32=jsPdfView
+Module33=MySQLCRUD
+Module34=VAlert
+Module35=VApp
+Module36=VAppBar
+Module37=VAppBarNavIcon
+Module38=VAppBarTitle
 Module39=VAutoComplete
 Module4=BANanoDataSourceFireBase
 Module40=VAvatar
@@ -261,9 +252,9 @@ Module96=VRating
 Module97=VRow
 Module98=VSelect
 Module99=VSheet
-NumberOfFiles=62
+NumberOfFiles=58
 NumberOfLibraries=4
-NumberOfModules=132
+NumberOfModules=131
 Version=9
 @EndOfDesignText@
 #Region Project Attributes 
@@ -278,7 +269,7 @@ Version=9
 
 Sub Process_Globals
 	Private BANano As BANano 'ignore
-	Public Version As String = "5.42"
+	Public Version As String = "5.45"
 	Public AppName As String = "BANanoVuetifyAD3"
 End Sub
 
@@ -348,7 +339,7 @@ Sub AppStart (Form1 As Form, Args() As String)
 	BANano.Header.AddJavascriptFile("vue-form-wizard.js")
 	
 	BANano.Header.AddJavascriptFile("vjsf.js")
-	BANano.Header.AddJavascriptFile("third-party.js")
+	'BANano.Header.AddJavascriptFile("third-party.js")
 	'BANano.Header.AddJavascriptFile("vuetify-form-base.js")
 	'BANano.Header.AddJavascriptFile("v-mask.min.js")
 	'BANano.Header.AddJavaScriptfile("VueTheMask.umd.js")
@@ -360,7 +351,7 @@ Sub AppStart (Form1 As Form, Args() As String)
 	BANano.Header.AddJavascriptFile("vuetify-simple-wizard.min.js")
 	'BANano.Header.AddJavascriptFile("nedb.min.js")
 	BANano.Header.AddJavascriptFile("sweetalert2.all.min.js")
-	BANano.Header.AddJavascriptFile("arcCounter.umd.min.js")
+	'BANano.Header.AddJavascriptFile("arcCounter.umd.min.js")
 	'BANano.Header.AddJavascriptFile("tiptap-vuetify.js")
 	BANano.Header.AddJavascriptFile("moment.min.js")
 	

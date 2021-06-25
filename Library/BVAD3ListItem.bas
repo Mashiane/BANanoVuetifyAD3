@@ -1,5 +1,5 @@
 ﻿B4J=true
-Group=Default Group\ListView
+Group=Default Group
 ModulesStructureVersion=1
 Type=Class
 Version=8.9
@@ -112,6 +112,11 @@ End Sub
 	
 Sub SetTitle(v As String) As BVAD3ListItem	
 	options.put("title", v)
+	Return Me
+End Sub
+
+Sub SetTarget(v As String) As BVAD3ListItem	
+	options.put("target", v)
 	Return Me
 End Sub
 

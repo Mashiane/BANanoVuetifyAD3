@@ -11,12 +11,98 @@ Sub Class_Globals
 	Private DocChangeMethod As String
 	Private GetCallBack As Object
 	Private GetMethod As String
+	Private Schema As Map
+	'
+	Public const DB_STRING As String = "TEXT"
+	Public const DB_INT As String = "INT"
+	Public const DB_FLOAT As String = "FLOAT"
+	Public const DB_DOUBLE As String = "DOUBLE"
+	Public const DB_BLOB As String = "BLOB"
+	Public const DB_BOOL As String = "BOOL"
+	Public const DB_REAL As String = "REAL"
+	Public const DB_DATE As String = "DATE"
+	Public const DB_INTEGER As String = "INTEGER"
+	Public const DB_TEXT As String = "TEXT"
+	Public affectedRows As Long
+	Public OK As Boolean
+	Public result As List
+	Public response As String
+	Public error As String
+	Public PrimaryKey As String
+	Public AutoIncrement As String
 End Sub
 
 Public Sub Initialize(fb As BANanoObject, colName As String) As FBCollection
 	co = fb.RunMethod("collection", Array(colName))
+	Schema.Initialize 
+	affectedRows = 0
+	OK = False
+	result.Initialize 
+	response = ""
+	error = ""
+	PrimaryKey = ""
+	AutoIncrement = ""
 	Return Me
 End Sub
+
+'add a field to the schame
+'<code>
+''add schema to table
+'dbConnect.SchemaAddField("id", dbConntect.DB_INT)
+'</code>
+Sub SchemaAddField(fldName As String, fldType As String)
+	Schema.Put(fldName, fldType)
+End Sub
+
+'prepare for new table definition
+Sub SchemaClear
+	Schema.clear
+End Sub
+
+
+'schema add boolean
+Sub SchemaAddBoolean(bools As List)
+	For Each b As String In bools
+		Schema.Put(b, DB_BOOL)
+	Next
+End Sub
+
+'add int to the schema
+Sub SchemaAddInt(bools As List)
+	For Each b As String In bools
+		Schema.Put(b, DB_INT)
+	Next
+End Sub
+
+'add double fields
+Sub SchemaAddDouble(bools As List)
+	For Each b As String In bools
+		Schema.Put(b, DB_DOUBLE)
+	Next
+End Sub
+
+
+'add float to the schema
+Sub SchemaAddFloat(bools As List) 
+	For Each b As String In bools
+		Schema.Put(b, DB_FLOAT)
+	Next
+End Sub
+
+'add blob to the schema
+Sub SchemaAddBlob(bools As List) 
+	For Each b As String In bools
+		Schema.Put(b, DB_BLOB)
+	Next
+End Sub
+
+'add text to the schema
+Sub SchemaAddText(bools As List)
+	For Each b As String In bools
+		Schema.Put(b, DB_STRING)
+	Next
+End Sub
+
 
 'detect changes when made and fire an event for each document
 Sub onSnapshot(Module As Object, methodName As String)
@@ -55,6 +141,22 @@ Sub AddWait(record As Map) As String
 	bpAdd = Add(record)
     docRef = banano.Await(bpAdd)
 	Dim res As String = getID(docRef)
+	If res <> "" Then 
+		affectedRows = 1
+		response = "Success"
+		error = ""
+		result.Initialize
+		Dim nr As Map = record
+		nr.Put(PrimaryKey, res)
+		result.Add(nr)
+		OK = True
+	Else
+		affectedRows = 0
+		response = "Error"
+		error = "Could not add the record"
+		result.Initialize 	
+		OK = False 
+	End If
 	Return res
 End Sub
 
@@ -66,24 +168,27 @@ Sub GetWait() As List
 	bpGet = Get
     querySnapshot = banano.Await(bpGet)
 	Dim docs As List = querySnapshot.Get("docs")
-	Dim recs As List
-	recs.Initialize
+	result.Initialize
 	For Each userx As BANanoObject In docs
 		Dim uid As String = userx.Getfield("id").Result
 		Dim udata As Map = userx.RunMethod("data", Null).Result
-		udata.Put("id", uid)
-		recs.Add(udata)
+		udata.Put(PrimaryKey, uid)
+		result.Add(udata)
 	Next
-	Return recs
+	affectedRows = result.size
+	response = "Success"
+	error = ""
+	OK = True
+	Return result
 End Sub
 
 'get the id from a response
-private Sub getID(response As Map) As String
-	If response.ContainsKey("id") Then
-		Dim res As String = response.Get("id")
+private Sub getID(xresponse As Map) As String
+	If xresponse.ContainsKey("id") Then
+		Dim res As String = xresponse.Get("id")
 		Return res
-	Else if response.ContainsKey("message") Then
-		Dim res As String = response.Get("message")
+	Else if xresponse.ContainsKey("message") Then
+		Dim res As String = xresponse.Get("message")
 		res = "error." & res
 		Return res
 	End If	
@@ -138,30 +243,88 @@ Sub where(fld As String, oper As String, value As Object) As FBCollection
 	Return Me
 End Sub
 
-'create merge a document
-Sub InsertWait(primaryKey As String, rec As Map) As Boolean
-	Dim d As FBDocument = doc(primaryKey)
+'merge changes wait
+Sub MergeWait(sPrimaryKey As String, rec As Map) As Boolean
+	Dim d As FBDocument = doc(sPrimaryKey)
 	Dim r As Boolean = banano.Await(d.SetMergeWait(rec))
+	If r = False Then
+		affectedRows = 0
+		response = "Error"
+		error = "Could not merge the record"
+		result.Initialize 	
+		OK = False 
+	Else
+		'update the pk
+		affectedRows = 1
+		response = "Success"
+		error = ""
+		result.Initialize
+		OK = True
+	End If
 	Return r
 End Sub
 
-'update wait
-Sub UpdateWait(primaryKey As String, rec As Map) As String
-	Dim d As FBDocument = doc(primaryKey)
+'update wait will overwrite a record
+Sub UpdateWait(sPrimaryKey As String, rec As Map) As String
+	Dim d As FBDocument = doc(sPrimaryKey)
 	Dim r As String = banano.Await(d.UpdateWait(rec))
+	If r <> "" Then
+		affectedRows = 0
+		response = "Error"
+		error = "Could not update the record"
+		result.Initialize 	
+		OK = False 
+	Else
+		'update the pk
+		affectedRows = 1
+		response = "Success"
+		error = ""
+		result.Initialize
+		OK = True
+	End If
 	Return r
 End Sub
 
 'read document
-Sub ReadWait(primaryKey As String) As Map
-	Dim d As FBDocument = doc(primaryKey)
+Sub ReadWait(sPrimaryKey As String) As Map
+	Dim d As FBDocument = doc(sPrimaryKey)
 	Dim r As Map = banano.Await(d.GetWait)
+	If banano.IsNull(r) Then
+		affectedRows = 0
+		response = "Error"
+		error = "Could not read the record"
+		result.Initialize 	
+		OK = False 
+	Else
+		'update the pk
+		r.Put(PrimaryKey, sPrimaryKey)	
+		affectedRows = 1
+		response = "Success"
+		error = ""
+		result.Initialize
+		result.Add(r)
+		OK = True
+	End If
 	Return r
 End Sub
 
 'delete
-Sub DeleteWait(primaryKey As String) As String
-	Dim d As FBDocument = doc(primaryKey)
+Sub DeleteWait(sPrimaryKey As String) As String
+	Dim d As FBDocument = doc(sPrimaryKey)
 	Dim r As String = banano.Await(d.DeleteWait)
+	If r <> "" Then
+		affectedRows = 0
+		response = "Error"
+		error = "Could not delete the record"
+		result.Initialize 	
+		OK = False 
+	Else
+		'update the pk
+		affectedRows = 1
+		response = "Success"
+		error = ""
+		result.Initialize
+		OK = True
+	End If
 	Return r
 End Sub

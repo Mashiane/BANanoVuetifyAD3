@@ -165,7 +165,7 @@ Sub Class_Globals
 	Private bShowExpand As Boolean = False
 	Private bDark As Boolean = False
 	Private bLoading As Boolean = False
-	private sPageLength as string 
+	Private sPageLength As String 
 	'
 	Public Items As List
 	Public AppTemplateName As String = "#apptemplate"
@@ -716,7 +716,6 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		f = lsColumnTextfield.Get(colCnt)
 		f = f.trim
 		If lsColumnFields.IndexOf(f) >= 0 Then
-			Log(f)
 			SetTextField(f, False)
 		Else
 			Log($"DataTable Error: ${mName}.${f} text-field column not found on column fields!"$)
