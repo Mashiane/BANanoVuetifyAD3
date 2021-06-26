@@ -18,6 +18,7 @@ Version=8.9
 #DesignerProperty: Key: ColorIntensity, DisplayName: ColorIntensity, FieldType: String, DefaultValue: , Description: ColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: false, Description: Dark
 #DesignerProperty: Key: Dense, DisplayName: Dense, FieldType: Boolean, DefaultValue: false, Description: Dense
+#DesignerProperty: Key: UsesAuthentication, DisplayName: UsesAuthentication, FieldType: Boolean, DefaultValue: false, Description: UsesAuthentication
 #DesignerProperty: Key: ElevateOnScroll, DisplayName: ElevateOnScroll, FieldType: Boolean, DefaultValue: false, Description: ElevateOnScroll
 #DesignerProperty: Key: Elevation, DisplayName: Elevation, FieldType: String, DefaultValue: , Description: Elevation
 #DesignerProperty: Key: Extended, DisplayName: Extended, FieldType: Boolean, DefaultValue: false, Description: Extended
@@ -51,7 +52,6 @@ Version=8.9
 #DesignerProperty: Key: TextColorIntensity, DisplayName: TextColorIntensity, FieldType: String, DefaultValue: , Description: TextColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: Tile, DisplayName: Tile, FieldType: Boolean, DefaultValue: false, Description: Tile
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
-#DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: , Description: Value
 #DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: , Description: Width
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
@@ -119,6 +119,7 @@ Private sProgressLoaderColor As String
 Private sProgressLoaderColorIntensity As String
 Private sProgressloader As String
 Public ProgressLoader As String
+Private bUsesAuthentication As Boolean
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -186,13 +187,16 @@ sTextColor = Props.Get("TextColor")
 sTextColorIntensity = Props.Get("TextColorIntensity")
 bTile = Props.Get("Tile")
 sVIf = Props.Get("VIf")
-sVShow = Props.Get("VShow")
 sValue = Props.Get("Value")
 sWidth = Props.Get("Width")
 bHidden = Props.GetDefault("Hidden", False)
+bHidden = BANanoShared.parseBool(bHidden)
 bProgressLoader = Props.GetDefault("ProgressLoader", False)
+bProgressLoader = BANanoShared.parseBool(bProgressLoader)
 sProgressLoaderColor = Props.GetDefault("ProgressLoaderColor", "")
 sProgressLoaderColorIntensity = Props.GetDefault("ProgressLoaderColorIntensity", "")
+bUsesAuthentication = Props.GetDefault("UsesAuthentication", False)
+bUsesAuthentication = BANanoShared.parseBool(bUsesAuthentication)
 	End If
 	'
 	'build and get the element
@@ -211,6 +215,32 @@ sProgressLoaderColorIntensity = Props.GetDefault("ProgressLoaderColorIntensity",
       ></v-progress-linear>"$)
 	  VElement.SetData(ProgressLoader, False)
 	End If
+	
+	bAbsolute = BANanoShared.parseBool(bAbsolute)
+bApp = BANanoShared.parseBool(bApp)
+bBottom = BANanoShared.parseBool(bBottom)
+bClippedLeft = BANanoShared.parseBool(bClippedLeft)
+bClippedRight = BANanoShared.parseBool(bClippedRight)
+bCollapse = BANanoShared.parseBool(bCollapse)
+bCollapseOnScroll = BANanoShared.parseBool(bCollapseOnScroll)
+bDark = BANanoShared.parseBool(bDark)
+bDense = BANanoShared.parseBool(bDense)
+bElevateOnScroll = BANanoShared.parseBool(bElevateOnScroll)
+bExtended = BANanoShared.parseBool(bExtended)
+bFadeImgOnScroll = BANanoShared.parseBool(bFadeImgOnScroll)
+bFixed = BANanoShared.parseBool(bFixed)
+bFlat = BANanoShared.parseBool(bFlat)
+bFloating = BANanoShared.parseBool(bFloating)
+bHideOnScroll = BANanoShared.parseBool(bHideOnScroll)
+bInvertedScroll = BANanoShared.parseBool(bInvertedScroll)
+bLight = BANanoShared.parseBool(bLight)
+bOutlined = BANanoShared.parseBool(bOutlined)
+bProminent = BANanoShared.parseBool(bProminent)
+bScrollOffScreen = BANanoShared.parseBool(bScrollOffScreen)
+bShaped = BANanoShared.parseBool(bShaped)
+bShort = BANanoShared.parseBool(bShort)
+bShrinkOnScroll = BANanoShared.parseBool(bShrinkOnScroll)
+bTile = BANanoShared.parseBool(bTile)
 		
 	VElement.Classes = mClasses
 	VElement.Styles = mStyles
@@ -255,9 +285,12 @@ VElement.Src = sSrc
 VElement.TextColor = VElement.BuildColor(sTextColor, sTextColorIntensity)
 VElement.TextColorIntensity = sTextColorIntensity
 VElement.Tile = bTile
-VElement.VIf = sVIf
 VElement.AddAttr(":value", sValue)
 VElement.Width = sWidth
+If bUsesAuthentication Then
+	sVIf = "authenticated"
+End If
+VElement.VIf = sVIf
 VElement.VShow = sVShow
 VElement.SetData(sVShow, Not(bHidden))
 VElement.BindAllEvents

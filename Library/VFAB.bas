@@ -20,6 +20,7 @@ Version=8.9
 #DesignerProperty: Key: ColorIntensity, DisplayName: Color Intensity, FieldType: String, DefaultValue:  normal, Description: , List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: TextColor, DisplayName: Text Color, FieldType: String, DefaultValue:  , Description: , List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: TextColorIntensity, DisplayName: Text Color Intensity, FieldType: String, DefaultValue:  normal, Description: , List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
+#DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: Depressed, DisplayName: Depressed, FieldType: Boolean, DefaultValue: False, Description: Depressed
 #DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: Boolean, DefaultValue: False, Description: Disabled
 #DesignerProperty: Key: HREF, DisplayName: HREF, FieldType: String, DefaultValue: , Description: HREF
@@ -30,7 +31,6 @@ Version=8.9
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
-#DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VIf, DisplayName: V-If, FieldType: String, DefaultValue:  , Description: 
 
 Sub Class_Globals
@@ -45,7 +45,7 @@ Sub Class_Globals
 	Private mStyles As String = ""
 	Private mAttributes As String = ""
 	Public VElement As VueElement
-	Private mVShow As String = ""
+	'Private mVShow As String = ""
 	Private mVIf As String = ""
 	Private mTextColor As String = ""
 	Private mTextColorIntensity As String = ""
@@ -65,6 +65,7 @@ Sub Class_Globals
 	Private sPosition As String
 	Private bIsExtension As Boolean
 	Private sColor As String
+	Private bHidden As Boolean
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -80,6 +81,7 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 		End If
 	End If
 	sColor = $"${mName}color"$
+	'mVShow = $"${mName}show"$
 End Sub
 
 ' this is the place where you create the view in html and run initialize javascript
@@ -93,7 +95,6 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mColorIntensity = Props.Get("ColorIntensity")
 		mTextColor = Props.Get("TextColor")
 		mTextColorIntensity = Props.Get("TextColorIntensity")
-		mVShow = Props.Get("VShow")
 		mVIf = Props.Get("VIf")
 		bDark = Props.Get("Dark")
 		bDepressed = Props.Get("Depressed")
@@ -109,12 +110,20 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bAbsolute = Props.Get("Absolute")
 		sPosition = Props.Get("Position")
 		bIsExtension = Props.GetDefault("IsExtension", False)
+		bHidden = Props.GetDefault("Hidden", False)
 	End If
-	
-	If BANano.IsNull(bLoading) Or BANano.IsUndefined(bLoading) Then
-		bLoading = False 
-	End If
-	
+	'
+	bDark = BANanoShared.parseBool(bDark)
+bDepressed = BANanoShared.parseBool(bDepressed)
+bDisabled = BANanoShared.parseBool(bDisabled)
+bIconDark = BANanoShared.parseBool(bIconDark)
+bLoading = BANanoShared.parseBool(bLoading)
+bOutlined = BANanoShared.parseBool(bOutlined)
+bAbsolute = BANanoShared.parseBool(bAbsolute)
+bIsExtension = BANanoShared.parseBool(bIsExtension)
+bHidden = BANanoShared.parseBool(bHidden)
+bLoading = BANanoShared.parseBool(bLoading)
+
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
 		mElement = BANano.GetElement($"#${mName}"$)
@@ -142,7 +151,8 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.Attributes = mAttributes	
 	VElement.TextColor = VElement.BuildColor(mTextColor, mTextColorIntensity)
 	VElement.VIf = mVIf
-	VElement.VShow = mVShow
+	'VElement.VShow = mVShow
+	'VElement.SetData(mVShow, Not(bHidden))
 	VElement.Dark = bDark
 	VElement.Depressed = bDepressed
 	VElement.Disabled = $"${mName}disabled"$
@@ -237,7 +247,7 @@ End Sub
 
 Sub UpdateVisible(VC As VueComponent, b As Boolean)
 	VC.SetData(mVIf, b)
-	VC.SetData(mVShow, b)
+	'VC.SetData(mVShow, b)
 End Sub
 
 

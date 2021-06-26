@@ -8,6 +8,7 @@ Version=8.9
 
 #Event: Click (e As BANanoEvent)
 
+#DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: Boolean, DefaultValue: False, Description: Disabled
 #DesignerProperty: Key: Loading, DisplayName: Loading, FieldType: Boolean, DefaultValue: False, Description: Loading
 
@@ -46,7 +47,6 @@ Version=8.9
 #DesignerProperty: Key: Tile, DisplayName: Tile, FieldType: Boolean, DefaultValue: false, Description: Tile
 #DesignerProperty: Key: To, DisplayName: To, FieldType: String, DefaultValue: , Description: To
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
-#DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue: , Description: VShow
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
@@ -66,6 +66,7 @@ Version=8.9
 #DesignerProperty: Key: PT, DisplayName: PT, FieldType: String, DefaultValue: , Description: PT
 #DesignerProperty: Key: PX, DisplayName: PX, FieldType: String, DefaultValue: , Description: PX
 #DesignerProperty: Key: PY, DisplayName: PY, FieldType: String, DefaultValue: , Description: PY
+
 Sub Class_Globals
     Private BANano As BANano 'ignore
 	Private mName As String 'ignore
@@ -77,7 +78,7 @@ Sub Class_Globals
 	Private mStyles As String = ""
 	Private mAttributes As String = ""
 	Public VElement As VueElement
-	Private mVShow As String = ""
+	'Private mVShow As String = ""
 	Private mVIf As String = ""
 	Private sActiveClass As String
 Private sColor As String
@@ -133,6 +134,7 @@ Private sPX As String
 Private sPY As String
 Private bdisabled As Boolean
 Private bLoading As Boolean
+Private bHidden As Boolean
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -149,6 +151,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	End If
 	sDisabled = $"${mName}disabled"$
 	sLoading = $"${mName}loading"$
+	'mVShow = $"${mName}show"$
 	End Sub
 	
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
@@ -157,43 +160,71 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mClasses = Props.Get("Classes")
 		mStyles = Props.Get("Styles")
 		mAttributes = Props.Get("Attributes")
-		mVShow = Props.Get("VShow")
 		mVIf = Props.Get("VIf")
 		sActiveClass = Props.Get("ActiveClass")
 sColor = Props.Get("Color")
 sColorintensity = Props.Get("ColorIntensity")
-bDark = Props.Get("Dark")
+bDark = Props.GetDefault("Dark", False)
+bDark = BANanoShared.parsebool(bDark)
+
 sElevation = Props.Get("Elevation")
 bFlat = Props.Get("Flat")
+bFlat = BANanoShared.parsebool(bFlat)
+
 sHeight = Props.Get("Height")
+
 bHover = Props.Get("Hover")
+bHover = BANanoShared.parsebool(bHover)
+
 sHref = Props.Get("Href")
 sImg = Props.Get("Img")
+
+bHidden = Props.GetDefault("Hidden", False)
+bHidden = BANanoShared.parseBool(bHidden)
+
 sLoaderHeight = Props.Get("LoaderHeight")
 bLoading = Props.GetDefault("Loading",False)
+bLoading = BANanoShared.parseBool(bLoading)
+
 bdisabled = Props.GetDefault("Disabled",False)
+bdisabled = BANanoShared.parseBool(bdisabled)
+
 sMaxHeight = Props.Get("MaxHeight")
 sMaxWidth = Props.Get("MaxWidth")
 sMinHeight = Props.Get("MinHeight")
 sMinWidth = Props.Get("MinWidth")
 bOutlined = Props.Get("Outlined")
 bRaised = Props.Get("Raised")
+bRaised = BANanoShared.parsebool(bRaised)
+
 sRounded = Props.Get("Rounded")
 bShaped = Props.Get("Shaped")
+bShaped = BANanoShared.parsebool(bShaped)
+
 sTarget = Props.Get("Target")
 sTextcolor = Props.Get("Textcolor")
 sTextcolorintensity = Props.Get("Textcolorintensity")
 bTile = Props.Get("Tile")
+bTile = BANanoShared.parsebool(bTile)
+
 sTo = Props.Get("To")
 sWidth = Props.Get("Width")
 sImgHeight = Props.Get("ImgHeight")
 sTitle = Props.Get("Title")
 sSubTitle = Props.Get("SubTitle")
 bCardText = Props.Get("CardText")
+bCardText = BANanoShared.parseBool(bCardText)
+
 bDivider = Props.Get("Divider")
+bDivider = BANanoShared.parsebool(bDivider)
+
 bTitleOnImage = Props.Get("TitleOnImage")
 bSubTitleOnImage = Props.Get("SubTitleOnImage")
+bSubTitleOnImage = BANanoShared.parsebool(bSubTitleOnImage)
+
 bActions = Props.Get("Actions")
+bActions = BANanoShared.parsebool(bActions)
+
 sCardTextContent = Props.Get("CardTextContent")
 sVOn = Props.Get("VOn")
 		sVBind = Props.Get("VBind")
@@ -212,6 +243,9 @@ sPT = Props.Get("PT")
 sPX = Props.Get("PX")
 sPY = Props.Get("PY")
 	End If
+	bOutlined = BANanoShared.parseBool(bOutlined)
+bTitleOnImage = BANanoShared.parseBool(bTitleOnImage)
+
 	'
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
@@ -242,21 +276,6 @@ sPY = Props.Get("PY")
 	End If
 	If BANano.IsNull(sSubTitle) Or BANano.IsUndefined(sSubTitle) Then
 		sSubTitle = "" 
-	End If
-	If BANano.IsNull(bCardText) Or BANano.IsUndefined(bCardText) Then
-		bCardText = False
-	End If
-	If BANano.IsNull(bDivider) Or BANano.IsUndefined(bDivider) Then
-		bDivider = False 
-	End If
-	If BANano.IsNull(bTitleOnImage) Or BANano.IsUndefined(bTitleOnImage) Then
-		bTitleOnImage = False
-	End If
-	If BANano.IsNull(bSubTitleOnImage) Or BANano.IsUndefined(bSubTitleOnImage) Then
-		bSubTitleOnImage = False
-	End If
-	If BANano.IsNull(bActions) Or BANano.IsUndefined(bActions) Then
-		bActions = False
 	End If
 	If BANano.IsNull(sCardTextContent) Or BANano.IsUndefined(sCardTextContent) Then
 		sCardTextContent = ""
@@ -298,18 +317,11 @@ sPY = Props.Get("PY")
 		VElement.Append($"<v-card-actions id="${mName}cardactions"></v-card-actions>"$)
 	End If
 	'
-	If BANano.IsNull(bdisabled) Or BANano.IsUndefined(bdisabled) Then
-		bdisabled = False 
-	End If
-	
-	If BANano.IsNull(bLoading) Or BANano.IsUndefined(bLoading) Then
-		bLoading = False 
-	End If
-	
 	VElement.Classes = mClasses
 	VElement.Styles = mStyles
 	VElement.Attributes = mAttributes
-	VElement.VShow = mVShow
+	'VElement.VShow = mVShow
+	'VElement.SetData(mVShow, Not(bHidden))
 	VElement.VIf = mVIf
 	VElement.ActiveClass = sActiveClass
 VElement.Color = VElement.BuildColor(sColor, sColorintensity)
@@ -388,7 +400,7 @@ End Sub
 
 Sub UpdateVisible(VC As VueComponent, b As Boolean) As VCard
 	VC.SetData(mVIf, b)
-	VC.SetData(mVShow, b)
+	'VC.SetData(mVShow, b)
 	Return Me
 End Sub
 
@@ -436,6 +448,7 @@ Sub UpdateDisabled(VC As VueComponent, b As Boolean)
 	bdisabled = b
 	VC.SetData(sDisabled, b)
 End Sub
+
 
 Sub BindState(VC As VueComponent)
 	Dim mbindings As Map = VElement.bindings

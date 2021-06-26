@@ -25,7 +25,6 @@ Version=8.9
 #DesignerProperty: Key: Transition, DisplayName: Transition, FieldType: String, DefaultValue: , Description: Transition, List: none|fab-transition|fade-transition|expand-transition|scale-transition|scroll-x-transition|scroll-x-reverse-transition|scroll-y-transition|scroll-y-reverse-transition|slide-x-transition|slide-x-reverse-transition|slide-y-transition|slide-y-reverse-transition
 #DesignerProperty: Key: VFor, DisplayName: VFor, FieldType: String, DefaultValue: , Description: VFor
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
-#DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue: , Description: VShow
 #DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: , Description: Value
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
@@ -59,7 +58,7 @@ Private sTo As String
 Private sTransition As String
 Private sVFor As String
 Private sVIf As String
-Private sVShow As String
+'Private sVShow As String
 Private sValue As String
 Private bHidden As Boolean
 	End Sub
@@ -76,7 +75,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey)
 		End If
 	End If
-	sVShow = $"${mName}show"$
+	'sVShow = $"${mName}show"$
 	End Sub
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	mTarget = Target
@@ -102,10 +101,19 @@ sTo = Props.Get("To")
 sTransition = Props.Get("Transition")
 sVFor = Props.Get("VFor")
 sVIf = Props.Get("VIf")
-sVShow = Props.Get("VShow")
 bHidden = Props.GetDefault("Hidden", False)
 sValue = Props.Get("Value")
 	End If
+	'
+	bAppend = BANanoShared.parseBool(bAppend)
+bDisabled = BANanoShared.parseBool(bDisabled)
+bEager = BANanoShared.parseBool(bEager)
+bExact = BANanoShared.parseBool(bExact)
+bLink = BANanoShared.parseBool(bLink)
+bReplace = BANanoShared.parseBool(bReplace)
+bRipple = BANanoShared.parseBool(bRipple)
+bHidden = BANanoShared.parseBool(bHidden)
+
 	'
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
@@ -137,8 +145,8 @@ VElement.AddAttr("to", sTo)
 VElement.AddAttr("transition", sTransition)
 VElement.AddAttr("v-for", sVFor)
 VElement.AddAttr("v-if", sVIf)
-VElement.AddAttr("v-show", sVShow)
-VElement.SetData(sVShow, Not(bHidden))
+'VElement.AddAttr("v-show", sVShow)
+'VElement.SetData(sVShow, Not(bHidden))
 VElement.AddAttr("value", sValue)
 VElement.BindAllEvents
 End Sub
@@ -168,7 +176,7 @@ Sub RemoveAttr(p As String) As VCarouselItem
 End Sub
 Sub UpdateVisible(VC As VueComponent, b As Boolean) As VCarouselItem
 	VC.SetData(sVIf, b)
-	VC.SetData(sVShow, b)
+	'VC.SetData(sVShow, b)
 	Return Me
 End Sub
 

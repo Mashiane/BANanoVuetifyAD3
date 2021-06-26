@@ -38,7 +38,6 @@ Version=7
 #DesignerProperty: Key: VBind, DisplayName: VBind, FieldType: String, DefaultValue: , Description: VBind
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
 #DesignerProperty: Key: VOn, DisplayName: VOn, FieldType: String, DefaultValue: , Description: VOn
-#DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue: , Description: VShow
 #DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: , Description: Value
 #DesignerProperty: Key: Vertical, DisplayName: Vertical, FieldType: Boolean, DefaultValue: False, Description: Vertical
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag. 
@@ -79,7 +78,7 @@ Private sVBind As String
 Private sVIf As String
 Private sVModel As String
 Private sVOn As String
-Private sVShow As String
+'Private sVShow As String
 Private sValue As String
 Private bVertical As Boolean
 Private sWidth As String
@@ -98,7 +97,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey) 
 		End If 
 	End If 
-	sVShow = $"${mName}show"$
+	'sVShow = $"${mName}show"$
 	xSteps = 0
 	End Sub
 
@@ -131,13 +130,22 @@ sVBind = Props.GetDefault("VBind", "")
 sVIf = Props.GetDefault("VIf", "")
 sVModel = Props.GetDefault("VModel", "")
 sVOn = Props.GetDefault("VOn", "")
-sVShow = Props.GetDefault("VShow", "")
 sValue = Props.GetDefault("Value", "")
 bVertical = Props.GetDefault("Vertical", False)
 sWidth = Props.GetDefault("Width", "")
  
 	End If 
-	' 
+	'
+	bAltLabels = BANanoShared.parseBool(bAltLabels)
+bDark = BANanoShared.parseBool(bDark)
+bFlat = BANanoShared.parseBool(bFlat)
+bLight = BANanoShared.parseBool(bLight)
+bNonLinear = BANanoShared.parseBool(bNonLinear)
+bOutlined = BANanoShared.parseBool(bOutlined)
+bShaped = BANanoShared.parseBool(bShaped)
+bTile = BANanoShared.parseBool(bTile)
+bVertical = BANanoShared.parseBool(bVertical)
+ 
 	'build and get the element 
 	If BANano.Exists($"#${mName}"$) Then 
 		mElement = BANano.GetElement($"#${mName}"$) 
@@ -179,8 +187,8 @@ VElement.AddAttr("v-bind", sVBind)
 VElement.AddAttr("v-if", sVIf)
 VElement.AddAttr("v-model", sVModel)
 VElement.AddAttr("v-on", sVOn)
-VElement.AddAttr("v-show", sVShow)
-VElement.SetData(sVShow, Not(bHidden))
+'VElement.AddAttr("v-show", sVShow)
+'VElement.SetData(sVShow, Not(bHidden))
 VElement.SetData(sVModel, sValue)
 
 VElement.AddAttr(":vertical", bVertical)
@@ -281,7 +289,7 @@ End Sub
 
 Sub UpdateVisible(VC As VueComponent, b As Boolean) As VStepper 
 	VC.SetData(sVIf, b) 
-	VC.SetData(sVShow, b) 
+	'VC.SetData(sVShow, b) 
 	Return Me 
 End Sub
 

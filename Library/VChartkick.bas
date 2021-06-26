@@ -48,8 +48,6 @@ Version=7
 #DesignerProperty: Key: YTitle, DisplayName: YTitle, FieldType: String, DefaultValue: Y, Description: YTitle
 #DesignerProperty: Key: Zeros, DisplayName: Zeros, FieldType: Boolean, DefaultValue: False, Description: Zeros
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
-#DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue: , Description: VShow
-
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag. 
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use = 
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
@@ -102,7 +100,7 @@ Sub Class_Globals
 	Private datasets As Map
 	Private bHidden As Boolean
 	Private sVIf As String
-	Private sVShow As String
+	'Private sVShow As String
 	Private data As Map
 	Private colors As List
 	Private bSetXMinXMax As Boolean
@@ -154,6 +152,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	ColorMap.put("grey", "#9e9e9e")
 	ColorMap.put("blue-grey", "#607d8b")
 	ColorMap.put("black", "#000000")
+	'sVShow = $"${mName}show"$
 End Sub
 
 Sub DesignerCreateView (Target As BANanoElement, Props As Map) 
@@ -197,14 +196,28 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bZeros = Props.GetDefault("Zeros", False)
 		bHidden = Props.GetDefault("Hidden", False)
 		sVIf = Props.GetDefault("VIf", "")
-		sVShow = Props.GetDefault("VShow", "")
- 		bSetXMinXMax = Props.GetDefault("SetXMinXMax", False)
+		bSetXMinXMax = Props.GetDefault("SetXMinXMax", False)
 		bSetMinMax = Props.GetDefault("SetMinMax", False)
 		bShowLine = Props.GetDefault("ShowLine", True)
 		bSetRound = Props.GetDefault("SetRound", False)
 		bSetPrecision = Props.GetDefault("SetPrecision", False)
 	End If 
-	' 
+	'
+	bBytes = BANanoShared.parseBool(bBytes)
+bCurve = BANanoShared.parseBool(bCurve)
+bDiscrete = BANanoShared.parseBool(bDiscrete)
+bDonut = BANanoShared.parseBool(bDonut)
+bDownload = BANanoShared.parseBool(bDownload)
+bPoints = BANanoShared.parseBool(bPoints)
+bStacked = BANanoShared.parseBool(bStacked)
+bZeros = BANanoShared.parseBool(bZeros)
+bHidden = BANanoShared.parseBool(bHidden)
+bSetXMinXMax = BANanoShared.parseBool(bSetXMinXMax)
+bSetMinMax = BANanoShared.parseBool(bSetMinMax)
+bShowLine = BANanoShared.parseBool(bShowLine)
+bSetRound = BANanoShared.parseBool(bSetRound)
+bSetPrecision = BANanoShared.parseBool(bSetPrecision)
+ 
 	'build and get the element 
 	If BANano.Exists($"#${mName}"$) Then 
 		mElement = BANano.GetElement($"#${mName}"$) 
@@ -220,8 +233,8 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.AddStyle("width", sWidth)
 	VElement.AddStyle("height", sHeight)
 	VElement.AddAttr("v-if", sVIf)
-	VElement.AddAttr("v-show", sVShow)
-	VElement.SetData(sVShow, Not(bHidden))
+	'VElement.AddAttr("v-show", sVShow)
+	'VElement.SetData(sVShow, Not(bHidden))
 	VElement.BindAllEvents
 	'
 	sMin = BANano.parseFloat(sMin)
@@ -377,7 +390,7 @@ End Sub
 'update visibility of the chart
 Sub UpdateVisible(VC As VueComponent, b As Boolean) As VChartKick 
 	VC.SetData(sVIf, b) 
-	VC.SetData(sVShow, b) 
+	'VC.SetData(sVShow, b) 
 	Return Me 
 End Sub
 

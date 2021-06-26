@@ -25,9 +25,7 @@ Version=8.95
 #DesignerProperty: Key: VBind, DisplayName: VBind, FieldType: String, DefaultValue: , Description: VBind
 #DesignerProperty: Key: VFor, DisplayName: VFor, FieldType: String, DefaultValue: , Description: VFor
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
-#DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VOn, DisplayName: VOn, FieldType: String, DefaultValue: , Description: VOn
-#DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue: , Description: VShow
 #DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: , Description: Width
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
@@ -63,10 +61,10 @@ Private sVBind As String
 Private sVFor As String
 Private sVIf As String
 Private sVOn As String
-Private sVShow As String
+'Private sVShow As String
 Private sWidth As String
 Private bHidden As Boolean
-private sElevation as string
+Private sElevation As String
 	End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -81,7 +79,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey)
 		End If
 	End If
-	sVShow = $"${mName}show"$
+	'sVShow = $"${mName}show"$
 	End Sub
 
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
@@ -108,13 +106,16 @@ bTile = Props.Get("Tile")
 sVBind = Props.Get("VBind")
 sVFor = Props.Get("VFor")
 sVIf = Props.Get("VIf")
-sVShow = Props.Get("VShow")
 sVOn = Props.Get("VOn")
 bHidden = Props.GetDefault("Hidden", False)
 sWidth = Props.Get("Width")
 sElevation = Props.GetDefault("Elevation", "")
 	End If
 	'
+	bHorizontal = BANanoShared.parseBool(bHorizontal)
+bTile = BANanoShared.parseBool(bTile)
+bHidden = BANanoShared.parseBool(bHidden)
+
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
 		mElement = BANano.GetElement($"#${mName}"$)
@@ -149,8 +150,8 @@ VElement.AddAttr("v-bind", sVBind)
 VElement.AddAttr("v-for", sVFor)
 VElement.AddAttr("v-if", sVIf)
 VElement.AddAttr("v-on", sVOn)
-VElement.AddAttr("v-show", sVShow)
-VElement.SetData(sVShow, Not(bHidden))
+'VElement.AddAttr("v-show", sVShow)
+'VElement.SetData(sVShow, Not(bHidden))
 VElement.AddAttr("width", sWidth)
 VElement.Elevation = sElevation
 VElement.BindAllEvents
@@ -188,7 +189,7 @@ End Sub
 
 Sub UpdateVisible(VC As VueComponent, b As Boolean) As VListItemAvatar
 	VC.SetData(sVIf, b)
-	VC.SetData(sVShow, b)
+	'VC.SetData(sVShow, b)
 	Return Me
 End Sub
 

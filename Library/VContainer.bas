@@ -23,7 +23,6 @@ Version=8.9
 #DesignerProperty: Key: BorderStyle, DisplayName: Border Style, FieldType: String, DefaultValue:  , Description: , List: none|hidden|dotted|dashed|solid|double|groove|ridge|inset|outset|initial|inherit|remove
 #DesignerProperty: Key: BorderWidth, DisplayName: Border Width, FieldType: String, DefaultValue:  , Description: 
 
-#DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VIf, DisplayName: V-If, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
@@ -63,7 +62,7 @@ Version=8.9
 Sub Class_Globals
 	Private BANano As BANano 'ignore
 	Private mVIf As String = ""
-	Private bFluid As Boolean = False
+	Private bFluid As Boolean
 	Private sColor As String
 	Private sColorintensity As String
 	Private mName As String 'ignore
@@ -75,7 +74,7 @@ Sub Class_Globals
 	Private mStyles As String = ""
 	Private mAttributes As String = ""
 	Public VElement As VueElement
-	Private mVShow As String = ""
+	'Private mVShow As String = ""
 	Private mVIf As String = ""
 	Private sAlign As String
 	Private sJustify As String
@@ -108,8 +107,8 @@ Private stOffSets As String = "xs=?; s=?; m=?; l=?; x=?"
 	Private sOffsetMD As String = ""
 	Private sOffsetLG As String = ""
 	Private sOffsetXL As String = ""
-	Private bBuildGrid As Boolean = False
-	Private bShowGridDesign As Boolean = False
+	Private bBuildGrid As Boolean
+	Private bShowGridDesign As Boolean
 	Private sRows As String = ""
 	Private sColumns As String = ""
 		Private sBorder As String
@@ -119,6 +118,7 @@ Private sBorderStyle As String
 Private sBorderWidth As String
 Private bNoGutters As Boolean
 Private bDebugBorder As Boolean
+'Private sVShow As String
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -133,6 +133,8 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey)
 		End If
 	End If
+	'sFluid = $"${mName}fluid"$
+	'sVShow = $"${mName}show"$
 End Sub
 
 ' this is the place where you create the view in html and run initialize javascript
@@ -189,6 +191,12 @@ bNoGutters = Props.GetDefault("NoGutters",False)
 bDebugBorder = Props.GetDefault("DebugBorder",False)
 	End If
 	'
+	bFillHeight = BANanoShared.parseBool(bFillHeight)
+bFitScreen = BANanoShared.parseBool(bFitScreen)
+bNoGutters = BANanoShared.parseBool(bNoGutters)
+bDebugBorder = BANanoShared.parseBool(bDebugBorder)
+
+	'
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
 		mElement = BANano.GetElement($"#${mName}"$)
@@ -229,9 +237,10 @@ bDebugBorder = Props.GetDefault("DebugBorder",False)
 	'
 	VElement.Initialize(mCallBack, mName, mName)
 	VElement.TagName = "v-container"
-	VElement.fluid = bFluid
+	If bFluid Then 
+		VElement.Bind("fluid", bFluid)
+	End If
 	VElement.Color = VElement.BuildColor(sColor, sColorintensity)
-	VElement.VShow = mVShow
 	VElement.VIf = mVIf
 	VElement.setAlign(sAlign)	
 	VElement.setJustify(sJustify)
@@ -254,6 +263,8 @@ bDebugBorder = Props.GetDefault("DebugBorder",False)
 	VElement.BorderRadius = sBorderRadius
 	VElement.BorderStyle = sBorderStyle
 	VElement.BorderWidth = sBorderWidth
+	'VElement.VShow = sVShow
+	'VElement.SetData(sVShow, True)
 	VElement.SetAttrOnTrue(":no-gutters", bNoGutters, True)
 	If bDebugBorder Then
 		VElement.Border = ""
@@ -296,7 +307,7 @@ Sub RemoveAttr(p As String) As VContainer
 End Sub
 
 Sub UpdateVisible(VC As VueComponent, b As Boolean)
-	VC.SetData(mVShow, b)
+	'VC.SetData(mVShow, b)
 	VC.SetData(mVIf, b)
 End Sub
 

@@ -37,7 +37,6 @@ Version=7
 #DesignerProperty: Key: Key, DisplayName: Key, FieldType: String, DefaultValue: , Description: Key
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
 #DesignerProperty: Key: VOn, DisplayName: VOn, FieldType: String, DefaultValue: , Description: VOn
-#DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue: , Description: VShow
 #DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: , Description: Width
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag. 
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use = 
@@ -76,7 +75,7 @@ Private sVFor As String
 Private sVIf As String
 Private sVModel As String
 Private sVOn As String
-Private sVShow As String
+'Private sVShow As String
 Private sValue As String
 Private sWidth As String
  Private sDisabled As String
@@ -96,6 +95,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 		End If 
 	End If 
 	sDisabled = $"${mName}disabled"$
+	'sVShow = $"${mName}show"$
 	End Sub
 
 Sub DesignerCreateView (Target As BANanoElement, Props As Map) 
@@ -126,11 +126,23 @@ sVFor = Props.GetDefault("VFor", "")
 sVIf = Props.GetDefault("VIf", "")
 sVModel = Props.GetDefault("VModel", "")
 sVOn = Props.GetDefault("VOn", "")
-sVShow = Props.GetDefault("VShow", "")
 sValue = Props.GetDefault("Value", "")
 sWidth = Props.GetDefault("Width", "")
  
 	End If 
+	'
+	bHidden = BANanoShared.parseBool(bHidden)
+bDark = BANanoShared.parseBool(bDark)
+bDisabled = BANanoShared.parseBool(bDisabled)
+bFlat = BANanoShared.parseBool(bFlat)
+bHideCanvas = BANanoShared.parseBool(bHideCanvas)
+bHideInputs = BANanoShared.parseBool(bHideInputs)
+bHideModeSwitch = BANanoShared.parseBool(bHideModeSwitch)
+bHideSliders = BANanoShared.parseBool(bHideSliders)
+bLight = BANanoShared.parseBool(bLight)
+bShowSwatches = BANanoShared.parseBool(bShowSwatches)
+
+	
 	' 
 	'build and get the element 
 	If BANano.Exists($"#${mName}"$) Then 
@@ -172,8 +184,8 @@ VElement.AddAttr("v-model", sVModel)
 VElement.SetData(sVModel, sValue)
 
 VElement.AddAttr("v-on", sVOn)
-VElement.AddAttr("v-show", sVShow)
-VElement.SetData(sVShow, Not(bHidden))
+'VElement.AddAttr("v-show", sVShow)
+'VElement.SetData(sVShow, Not(bHidden))
 VElement.AddAttr("width", sWidth)
 
 
@@ -218,7 +230,7 @@ End Sub
 
 Sub UpdateVisible(VC As VueComponent, b As Boolean) As VColorPicker 
 	VC.SetData(sVIf, b) 
-	VC.SetData(sVShow, b) 
+	'VC.SetData(sVShow, b) 
 	Return Me 
 End Sub
 

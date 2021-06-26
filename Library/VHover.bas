@@ -6,6 +6,8 @@ Version=8.95
 @EndOfDesignText@
 #IgnoreWarnings:12
 
+#DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
+#DesignerProperty: Key: VModel, DisplayName: VModel/Visible, FieldType: String, DefaultValue: hover1, Description: VModel
 #DesignerProperty: Key: HoverSlot, DisplayName: HoverSlot, FieldType: Boolean, DefaultValue: False, Description: HoverSlot
 #DesignerProperty: Key: CloseDelay, DisplayName: CloseDelay, FieldType: String, DefaultValue: , Description: CloseDelay
 #DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: Boolean, DefaultValue: False, Description: Disabled
@@ -14,9 +16,7 @@ Version=8.95
 #DesignerProperty: Key: VBind, DisplayName: VBind, FieldType: String, DefaultValue: , Description: VBind
 #DesignerProperty: Key: VFor, DisplayName: VFor, FieldType: String, DefaultValue: , Description: VFor
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
-#DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VOn, DisplayName: VOn, FieldType: String, DefaultValue: , Description: VOn
-#DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: , Description: VModel
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
@@ -43,7 +43,7 @@ Private sVOn As String
 Private sVModel As String
 Private bHoverSlot As Boolean
 Private bDisabled As Boolean
-Private sVShow As String
+Private bHidden As Boolean
 	End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -59,7 +59,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 		End If
 	End If
 	sDisabled = $"${mName}disabled"$
-	End Sub
+End Sub
 
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	mTarget = Target
@@ -73,13 +73,18 @@ sOpenDelay = Props.Get("OpenDelay")
 sVBind = Props.Get("VBind")
 sVFor = Props.Get("VFor")
 sVIf = Props.Get("VIf")
-sVShow = Props.Get("VShow")
 sVOn = Props.Get("VOn")
 sVModel = Props.Get("VModel")
 bHoverSlot = Props.Get("HoverSlot")
 bDisabled = Props.GetDefault("Disabled",False)
+bHidden = Props.GetDefault("Hidden", False)
 	End If
 	'
+	bHoverSlot = BANanoShared.parseBool(bHoverSlot)
+bDisabled = BANanoShared.parseBool(bDisabled)
+bHidden = BANanoShared.parseBool(bHidden)
+bDisabled = BANanoShared.parseBool(bDisabled)
+
 	Dim sbHover As String = ""
 	If bHoverSlot Then
 		sbHover = $"v-slot="{ hover }""$
@@ -110,8 +115,7 @@ VElement.AddAttr("v-for", sVFor)
 VElement.AddAttr("v-if", sVIf)
 VElement.AddAttr("v-on", sVOn)
 VElement.AddAttr("v-model", sVModel)
-VElement.SetData(sVModel, True)
-VElement.AddAttr("v-show", sVShow)
+VElement.SetData(sVModel, Not(bHidden))
 VElement.BindAllEvents
 End Sub
 

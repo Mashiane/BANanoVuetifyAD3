@@ -126,7 +126,6 @@ Version=8.5
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VElse, DisplayName: VElse, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VElseIf, DisplayName: VElseIf, FieldType: String, DefaultValue:  , Description: 
-#DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: States, DisplayName: States, FieldType: String, DefaultValue: , Description: Initial Binding States. Must be a json String.
 
 Sub Class_Globals
@@ -150,21 +149,21 @@ Sub Class_Globals
 	Private stVElseIf As String = ""
 	Private stVIf As String = ""
 	Private stVShow As String = ""
-	Private bDense As Boolean = False
+	Private bDense As Boolean
 	Private stItemsPerPage As String = "10"
 	Private stElevation As String = ""
 	Private stGroupBy As String = ""
-	Private bShowGroupBy As Boolean = False
-	Private bShowSelect As Boolean = False
-	Private bSingleSelect As Boolean = False
-	Private bMultiSort As Boolean = False
-	Private bMustSort As Boolean = False
-	Private bFixedHeader As Boolean = False
-	Private bHideDefaultHeader As Boolean = False
-	Private bHideDefaultFooter As Boolean = False
-	Private bShowExpand As Boolean = False
-	Private bDark As Boolean = False
-	Private bLoading As Boolean = False
+	Private bShowGroupBy As Boolean
+	Private bShowSelect As Boolean
+	Private bSingleSelect As Boolean
+	Private bMultiSort As Boolean
+	Private bMustSort As Boolean
+	Private bFixedHeader As Boolean
+	Private bHideDefaultHeader As Boolean
+	Private bHideDefaultFooter As Boolean
+	Private bShowExpand As Boolean
+	Private bDark As Boolean
+	Private bLoading As Boolean
 	Private sPageLength As String 
 	'
 	Public Items As List
@@ -346,6 +345,7 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	xPagination = $"${mName}pagination"$
 	xPageCount = $"${mName}pagecount"$
 	xPage = $"${mName}page"$
+	stVShow = $"${mName}show"$
 End Sub
 
 'Create view in the designer
@@ -359,7 +359,6 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		stVElse = Props.Get("VElse")
 		stVElseIf = Props.Get("VElseIf")
 		stVIf = Props.Get("VIf")
-		stVShow = Props.Get("VShow")
 		PrimaryKey = Props.Get("ItemKey")
 		bDense = Props.Get("Dense")
 		stItemsPerPage = Props.Get("ItemsPerPage")
@@ -437,6 +436,38 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sMaxPages = Props.GetDefault("MaxPages", "5")
 		sPageLength = Props.GetDefault("PageLength", 5)
 	End If
+	'
+	bDense = BANanoShared.parseBool(bDense)
+bShowGroupBy = BANanoShared.parseBool(bShowGroupBy)
+bShowSelect = BANanoShared.parseBool(bShowSelect)
+bSingleSelect = BANanoShared.parseBool(bSingleSelect)
+mHasSearch = BANanoShared.parseBool(mHasSearch)
+bMultiSort = BANanoShared.parseBool(bMultiSort)
+bMustSort = BANanoShared.parseBool(bMustSort)
+bFixedHeader = BANanoShared.parseBool(bFixedHeader)
+bHideDefaultHeader = BANanoShared.parseBool(bHideDefaultHeader)
+bHideDefaultFooter = BANanoShared.parseBool(bHideDefaultFooter)
+bShowExpand = BANanoShared.parseBool(bShowExpand)
+bLoading = BANanoShared.parseBool(bLoading)
+bDark = BANanoShared.parseBool(bDark)
+bHasAddnew = BANanoShared.parseBool(bHasAddnew)
+bHasBack = BANanoShared.parseBool(bHasBack)
+bHasCancel = BANanoShared.parseBool(bHasCancel)
+bHasClearSort = BANanoShared.parseBool(bHasClearSort)
+bHasClone = BANanoShared.parseBool(bHasClone)
+bHasDelete = BANanoShared.parseBool(bHasDelete)
+bHasDownload = BANanoShared.parseBool(bHasDownload)
+bHasEdit = BANanoShared.parseBool(bHasEdit)
+bHasExcel = BANanoShared.parseBool(bHasExcel)
+bHasFilter = BANanoShared.parseBool(bHasFilter)
+bHasMenu = BANanoShared.parseBool(bHasMenu)
+bHasPdf = BANanoShared.parseBool(bHasPdf)
+bHasPrint = BANanoShared.parseBool(bHasPrint)
+bHasRefresh = BANanoShared.parseBool(bHasRefresh)
+bHasSave = BANanoShared.parseBool(bHasSave)
+bExternalPagination = BANanoShared.parseBool(bExternalPagination)
+bHideDefaultFooter = BANanoShared.parseBool(bHideDefaultFooter)
+
 	'		
 	Dim sb As StringBuilder
 	sb.Initialize 
@@ -489,7 +520,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	AddAttr("v-else", stVElse)
 	AddAttr("v-else-if", stVElseIf)
 	AddAttr("v-if", stVIf)
-	AddAttr("v-show", stVShow)
+	'AddAttr("v-show", stVShow)
 	AddAttr("item-key", PrimaryKey)
 	AddAttr(":dense", bDense)
 	setElevation(stElevation)

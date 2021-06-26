@@ -57,7 +57,6 @@ Version=7
 #DesignerProperty: Key: VBind, DisplayName: VBind, FieldType: String, DefaultValue: , Description: VBind
 #DesignerProperty: Key: VFor, DisplayName: VFor, FieldType: String, DefaultValue: , Description: VFor
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
-#DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VOn, DisplayName: VOn, FieldType: String, DefaultValue: , Description: VOn
 #DesignerProperty: Key: ValidateOnBlur, DisplayName: ValidateOnBlur, FieldType: Boolean, DefaultValue: False, Description: ValidateOnBlur
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag. 
@@ -209,7 +208,6 @@ sTrueValue = Props.GetDefault("TrueValue", True)
 sVBind = Props.Get("VBind")
 sVFor = Props.Get("VFor")
 sVIf = Props.Get("VIf")
-sVShow = Props.Get("VShow")
 sVModel = Props.Get("VModel")
 sVOn = Props.Get("VOn")
 bValidateOnBlur = Props.Get("ValidateOnBlur")
@@ -230,6 +228,23 @@ sPY = Props.Get("PY")
 sMA = Props.Get("MA")
 	End If 
 	' 
+	bDisabled = BANanoShared.parseBool(bDisabled)
+bHidden = BANanoShared.parseBool(bHidden)
+bReadonly = BANanoShared.parseBool(bReadonly)
+bRequired = BANanoShared.parseBool(bRequired)
+bDark = BANanoShared.parseBool(bDark)
+bDense = BANanoShared.parseBool(bDense)
+bHideDetails = BANanoShared.parseBool(bHideDetails)
+bLight = BANanoShared.parseBool(bLight)
+bMultiple = BANanoShared.parseBool(bMultiple)
+bPersistentHint = BANanoShared.parseBool(bPersistentHint)
+bRipple = BANanoShared.parseBool(bRipple)
+bValidateOnBlur = BANanoShared.parseBool(bValidateOnBlur)
+bChecked = BANanoShared.parseBool(bChecked)
+bDisabled = BANanoShared.parseBool(bDisabled)
+bRequired = BANanoShared.parseBool(bRequired)
+bMultiple = BANanoShared.parseBool(bMultiple)
+
 	'build and get the element 
 	If BANano.Exists($"#${mName}"$) Then 
 		mElement = BANano.GetElement($"#${mName}"$) 
@@ -237,17 +252,6 @@ sMA = Props.Get("MA")
 		mElement = mTarget.Append($"<v-checkbox ref="${mName}" id="${mName}"></v-checkbox>"$).Get("#" & mName) 
 	End If 
 	'
-	If BANano.IsNull(bDisabled) Or BANano.IsUndefined(bDisabled) Then
-		bDisabled = False 
-	End If
-	If BANano.IsNull(bRequired) Or BANano.IsUndefined(bRequired) Then
-		bRequired = False 
-	End If
-	
-If BANano.IsNull(bMultiple) Or BANano.IsUndefined(bMultiple) Then
-	bMultiple = False
-End If
-
 	VElement.Initialize(mCallBack, mName, mName) 
 	VElement.TagName = "v-checkbox" 
 	VElement.Classes = mClasses 

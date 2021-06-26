@@ -4,9 +4,10 @@ ModulesStructureVersion=1
 Type=Class
 Version=9
 @EndOfDesignText@
+#IgnoreWarnings:12
 Sub Class_Globals
 	Private doc As BANanoObject
-	Private BANAno As BANano
+	Private BANAno As BANano  'ignore
 	Private DocChangeCallBack As Object
 	Private DocChangeMethod As String
 End Sub

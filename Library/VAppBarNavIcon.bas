@@ -10,6 +10,7 @@ Version=8.9
 #Event: ClickStop (e As BANanoEvent)
 
 ' Properties that will be show in the ABStract Designer.  They will be passed in the props map in DesignerCreateView (Case Sensitive!)
+#DesignerProperty: Key: Hidden, DisplayName: Classes, FieldType: Boolean, DefaultValue: False, Description
 #DesignerProperty: Key: AutoID, DisplayName: Auto ID/Name, FieldType: Boolean, DefaultValue: False, Description: Overrides the ID/Name with a random string.
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue:  , Description: , List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: ColorIntensity, DisplayName: Color Intensity, FieldType: String, DefaultValue:  normal, Description: , List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
@@ -19,7 +20,6 @@ Version=8.9
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: VIf, DisplayName: V-If, FieldType: String, DefaultValue:  , Description: 
-#DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 Sub Class_Globals
     Private BANano As BANano 'ignore
 	Private mName As String 'ignore
@@ -35,8 +35,10 @@ Sub Class_Globals
 	Private mColorIntensity As String = ""
 	Private mTextColor As String = ""
 	Private mTextColorIntensity As String = ""
-	Private mVShow As String = ""
+	'Private mVShow As String = ""
 	Private mVIf As String = ""
+	'Private svshow As String 
+	Private bHidden As Boolean
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -51,6 +53,7 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey)
 		End If
 	End If
+	'svshow = $"${mName}show"$
 End Sub
 
 ' this is the place where you create the view in html and run initialize javascript
@@ -65,8 +68,9 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mColorIntensity = Props.Get("ColorIntensity")
 		mTextColor = Props.Get("TextColor")
 		mTextColorIntensity = Props.Get("TextColorIntensity")
-		mVShow = Props.Get("VShow")
 		mVIf = Props.Get("VIf")
+		bHidden = Props.GetDefault("Hidden", False)
+		bHidden = BANanoShared.parseBool(bHidden)
 	End If
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
@@ -84,7 +88,8 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.TextColor = mTextColor
 	VElement.TextColorIntensity = mTextColorIntensity
 	VElement.VIf = mVIf
-	VElement.VShow = mVShow
+	'VElement.VShow = mVShow
+	'VElement.SetData(mVShow, Not(bHidden))
 	VElement.BindAllEvents	
 End Sub
 
@@ -120,7 +125,7 @@ End Sub
 
 Sub UpdateVisible(VC As VueComponent, b As Boolean) As VAppBarNavIcon
 	VC.SetData(mVIf, b)
-	VC.SetData(mVShow, b)
+	'VC.SetData(mVShow, b)
 	Return Me
 End Sub
 

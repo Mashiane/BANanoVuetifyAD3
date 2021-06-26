@@ -76,6 +76,9 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sFileName = Props.GetDefault("FileName", "")
 	End If 
 	'
+	bHidden = BANanoShared.parseBool(bHidden)
+bInline = BANanoShared.parseBool(bInline)
+
 	Dim sTemplate As String = $"<v-card v-show="${sVShow}">
 	<v-toolbar dense flat>
 	<v-card-title>{{ ${xTitle} }}</v-card-title><v-spacer></v-spacer>

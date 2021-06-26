@@ -44,7 +44,6 @@ Version=7
 #DesignerProperty: Key: VFor, DisplayName: VFor, FieldType: String, DefaultValue: , Description: VFor
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
 #DesignerProperty: Key: VOn, DisplayName: VOn, FieldType: String, DefaultValue: , Description: VOn
-#DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue: , Description: VShow
 #DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: , Description: Width
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag. 
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use = 
@@ -86,7 +85,7 @@ Private sVFor As String
 Private sVIf As String
 Private sVModel As String
 Private sVOn As String
-Private sVShow As String
+'Private sVShow As String
 Private sValue As String
 Private sWidth As String
  Private bNow As Boolean
@@ -112,6 +111,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	xmin = $"${mName}min"$
 	sReadOnly = $"${mName}readonly"$
 	sDisabled = $"${mName}disabled"$
+	'sVShow = $"${mName}show"$
 End Sub
 
 Sub DesignerCreateView (Target As BANanoElement, Props As Map) 
@@ -145,12 +145,25 @@ sVFor = Props.GetDefault("VFor", "")
 sVIf = Props.GetDefault("VIf", "")
 sVModel = Props.GetDefault("VModel", "")
 sVOn = Props.GetDefault("VOn", "")
-sVShow = Props.GetDefault("VShow", "")
 sValue = Props.GetDefault("Value", "")
 sWidth = Props.GetDefault("Width", "")
- bNow = Props.GetDefault("Now", False)
- 
+ bNow = Props.GetDefault("Now", False) 
 	End If 
+	'
+	bHidden = BANanoShared.parseBool(bHidden)
+bAmpmInTitle = BANanoShared.parseBool(bAmpmInTitle)
+bDark = BANanoShared.parseBool(bDark)
+bDisabled = BANanoShared.parseBool(bDisabled)
+bFlat = BANanoShared.parseBool(bFlat)
+bFullWidth = BANanoShared.parseBool(bFullWidth)
+bLandscape = BANanoShared.parseBool(bLandscape)
+bLight = BANanoShared.parseBool(bLight)
+bNoTitle = BANanoShared.parseBool(bNoTitle)
+bReadonly = BANanoShared.parseBool(bReadonly)
+bScrollable = BANanoShared.parseBool(bScrollable)
+bUseSeconds = BANanoShared.parseBool(bUseSeconds)
+bNow = BANanoShared.parseBool(bNow)
+
 	' 
 	'build and get the element 
 	If BANano.Exists($"#${mName}"$) Then 
@@ -198,8 +211,8 @@ If bNow Then
 End If
 VElement.SetData(sVModel, sValue)
 VElement.AddAttr("v-on", sVOn)
-VElement.AddAttr("v-show", sVShow)
-VElement.SetData(sVShow, Not(bHidden))
+'VElement.AddAttr("v-show", sVShow)
+'VElement.SetData(sVShow, Not(bHidden))
 VElement.AddAttr("width", sWidth)
 VElement.BindAllEvents
 End Sub
@@ -242,7 +255,7 @@ End Sub
 
 Sub UpdateVisible(VC As VueComponent, b As Boolean) As VTimePicker 
 	VC.SetData(sVIf, b) 
-	VC.SetData(sVShow, b) 
+	'VC.SetData(sVShow, b) 
 	Return Me 
 End Sub
 

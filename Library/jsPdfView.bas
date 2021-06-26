@@ -33,7 +33,7 @@ Sub Class_Globals
 	Private bHidden As Boolean
 	Private sFileName As String
 	Private sVIf As String
-	Private sVShow As String
+	'Private sVShow As String
 	Private sVModel As String
 	Private sAspectRatio As String
 	Private sElevation As String
@@ -53,7 +53,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey) 
 		End If 
 	End If 
-	sVShow = $"${mName}show"$
+	'sVShow = $"${mName}show"$
 	sVModel = $"${mName}src"$
 End Sub
 
@@ -64,6 +64,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mStyles = Props.GetDefault("Styles", "") 
 		mAttributes = Props.GetDefault("Attributes","") 
 		bHidden = Props.GetDefault("Hidden", False)
+		bHidden = BANanoShared.parseBool(bHidden)
 		sFileName = Props.GetDefault("FileName", "")
 		sVIf = Props.GetDefault("VIf", "")
 		sAspectRatio = Props.GetDefault("AspectRatio", "1.0")
@@ -88,8 +89,8 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.Elevation = sElevation
 	VElement.AddStyle("height", sHeight) 
 	VElement.AddAttr("v-if", sVIf)
-	VElement.AddAttr("v-show", sVShow)
-	VElement.SetData(sVShow, Not(bHidden))
+	'VElement.AddAttr("v-show", sVShow)
+	'VElement.SetData(sVShow, Not(bHidden))
 	VElement.AddStyle("width", sWidth)
 	VElement.GetIframe.AddAttr(":src", sVModel)
 	VElement.GetIframe.AddStyle("background-color", "transparent")
@@ -130,7 +131,7 @@ End Sub
 
 Sub UpdateVisible(VC As VueComponent, b As Boolean) 
 	VC.SetData(sVIf, b) 
-	VC.SetData(sVShow, b) 
+	'VC.SetData(sVShow, b) 
 End Sub
 
 Sub getID As String 

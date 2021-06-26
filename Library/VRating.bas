@@ -35,7 +35,6 @@ Version=8.9
 #DesignerProperty: Key: OpenDelay, DisplayName: OpenDelay, FieldType: String, DefaultValue: , Description: OpenDelay
 #DesignerProperty: Key: Ripple, DisplayName: Ripple, FieldType: Boolean, DefaultValue: false, Description: Ripple
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
-#DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
@@ -87,7 +86,7 @@ Private bRequired As Boolean
 Private sRequired As String
 Private sDisabled As String
 Private sReadonly As String
-private sValue as string
+Private sValue As String
 	End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -140,13 +139,27 @@ bRipple = Props.Get("Ripple")
 sSize = Props.Get("Size")
 sSize1 = Props.Get("Size1")
 sVIf = Props.Get("VIf")
-sVShow = Props.Get("VShow")
 sVModel = Props.Get("VModel")
 sVOn = Props.Get("VOn")
 		sVBind = Props.Get("VBind")
 		sValue = Props.GetDefault("Value", 0)
 	End If
 	'
+	bDisabled = BANanoShared.parseBool(bDisabled)
+bHidden = BANanoShared.parseBool(bHidden)
+bReadonly = BANanoShared.parseBool(bReadonly)
+bRequired = BANanoShared.parseBool(bRequired)
+bClearable = BANanoShared.parseBool(bClearable)
+bDark = BANanoShared.parseBool(bDark)
+bDense = BANanoShared.parseBool(bDense)
+bHalfIncrements = BANanoShared.parseBool(bHalfIncrements)
+bHover = BANanoShared.parseBool(bHover)
+bLight = BANanoShared.parseBool(bLight)
+bReadonly = BANanoShared.parseBool(bReadonly)
+bRipple = BANanoShared.parseBool(bRipple)
+bDisabled = BANanoShared.parseBool(bDisabled)
+bRequired = BANanoShared.parseBool(bRequired)
+
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
 		mElement = BANano.GetElement($"#${mName}"$)
@@ -154,13 +167,6 @@ sVOn = Props.Get("VOn")
 		mElement = mTarget.Append($"<v-rating ref="${mName}" id="${mName}"></v-rating>"$).Get("#" & mName)
 	End If
 	'
-	If BANano.IsNull(bDisabled) Or BANano.IsUndefined(bDisabled) Then
-		bDisabled = False 
-	End If
-	If BANano.IsNull(bRequired) Or BANano.IsUndefined(bRequired) Then
-		bRequired = False 
-	End If
-	
 	VElement.Initialize(mCallBack, mName, mName)
 	VElement.TagName = "v-rating"
 	VElement.Classes = mClasses

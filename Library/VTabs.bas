@@ -44,7 +44,6 @@ Version=8.95
 #DesignerProperty: Key: VFor, DisplayName: VFor, FieldType: String, DefaultValue: , Description: VFor
 #DesignerProperty: Key: Key, DisplayName: Key, FieldType: String, DefaultValue: , Description: Key
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
-#DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VOn, DisplayName: VOn, FieldType: String, DefaultValue: , Description: VOn
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
@@ -90,7 +89,7 @@ Private sVFor As String
 Private sVIf As String
 Private sVModel As String
 Private sVOn As String
-Private sVShow As String
+'Private sVShow As String
 Private bVertical As Boolean
 Private sSliderColorIntensity As String
 Private bHidden As Boolean
@@ -109,7 +108,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey)
 		End If
 	End If
-	sVShow = $"${mName}show"$
+	'sVShow = $"${mName}show"$
 	xTabs = 0
 	End Sub
 	
@@ -146,7 +145,6 @@ sSliderSize = Props.Get("SliderSize")
 sVBind = Props.Get("VBind")
 sVFor = Props.Get("VFor")
 sVIf = Props.Get("VIf")
-sVShow = Props.Get("VShow")
 sVModel = Props.Get("VModel")
 sVOn = Props.Get("VOn")
 bHidden = Props.GetDefault("Hidden", False)
@@ -154,6 +152,21 @@ bVertical = Props.GetDefault("Vertical",False)
 sSliderColorIntensity= Props.Get("SliderColorIntensity")
 	End If
 	'
+	bAlignWithTitle = BANanoShared.parseBool(bAlignWithTitle)
+bCenterActive = BANanoShared.parseBool(bCenterActive)
+bCentered = BANanoShared.parseBool(bCentered)
+bDark = BANanoShared.parseBool(bDark)
+bFixedTabs = BANanoShared.parseBool(bFixedTabs)
+bGrow = BANanoShared.parseBool(bGrow)
+bHideSlider = BANanoShared.parseBool(bHideSlider)
+bIconsAndText = BANanoShared.parseBool(bIconsAndText)
+bLight = BANanoShared.parseBool(bLight)
+bOptional = BANanoShared.parseBool(bOptional)
+bRight = BANanoShared.parseBool(bRight)
+bShowArrows = BANanoShared.parseBool(bShowArrows)
+bHidden = BANanoShared.parseBool(bHidden)
+bVertical = BANanoShared.parseBool(bVertical)
+
 	
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
@@ -196,8 +209,8 @@ sSliderColorIntensity= Props.Get("SliderColorIntensity")
 	VElement.AddAttr("v-model", sVModel)
 	VElement.SetData(sVModel, Null)
 	VElement.AddAttr("v-on", sVOn)
-	VElement.AddAttr("v-show", sVShow)
-	VElement.SetData(sVShow, Not(bHidden))
+	'VElement.AddAttr("v-show", sVShow)
+	'VElement.SetData(sVShow, Not(bHidden))
 	VElement.AddAttr(":vertical", bVertical)
 	VElement.BindAllEvents
 End Sub
@@ -268,7 +281,7 @@ End Sub
 
 Sub UpdateVisible(VC As VueComponent, b As Boolean) As VTabs
 	VC.SetData(sVIf, b)
-	VC.SetData(sVShow, b)
+	'VC.SetData(sVShow, b)
 	Return Me
 End Sub
 

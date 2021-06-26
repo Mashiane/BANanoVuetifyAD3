@@ -25,7 +25,6 @@ Version=7
 #DesignerProperty: Key: Key, DisplayName: Key, FieldType: String, DefaultValue: , Description: Key
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
 #DesignerProperty: Key: VOn, DisplayName: VOn, FieldType: String, DefaultValue: , Description: VOn
-#DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue: , Description: VShow
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag. 
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use = 
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
@@ -58,7 +57,7 @@ Private sVBind As String
 Private sVFor As String
 Private sVIf As String
 Private sVOn As String
-Private sVShow As String
+'Private sVShow As String
 	End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -73,6 +72,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey) 
 		End If 
 	End If
+	'sVShow = $"${mName}show"$
 End Sub
 
 Sub DesignerCreateView (Target As BANanoElement, Props As Map) 
@@ -98,9 +98,14 @@ sVBind = Props.GetDefault("VBind", "")
 sVFor = Props.GetDefault("VFor", "")
 sVIf = Props.GetDefault("VIf", "")
 sVOn = Props.GetDefault("VOn", "")
-sVShow = Props.GetDefault("VShow", "")
- 
 	End If 
+	'
+	bDark = BANanoShared.parseBool(bDark)
+bFillDot = BANanoShared.parseBool(bFillDot)
+bHidden = BANanoShared.parseBool(bHidden)
+bHideDot = BANanoShared.parseBool(bHideDot)
+bLight = BANanoShared.parseBool(bLight)
+
 	' 
 	'build and get the element 
 	If BANano.Exists($"#${mName}"$) Then 
@@ -138,8 +143,8 @@ VElement.AddAttr("v-bind", sVBind)
 VElement.AddAttr("v-for", sVFor)
 VElement.AddAttr("v-if", sVIf)
 VElement.AddAttr("v-on", sVOn)
-VElement.AddAttr("v-show", sVShow)
-VElement.SetData(sVShow, Not(bHidden))
+'VElement.AddAttr("v-show", sVShow)
+'VElement.SetData(sVShow, Not(bHidden))
 
 VElement.BindAllEvents
 End Sub
@@ -176,7 +181,7 @@ End Sub
 
 Sub UpdateVisible(VC As VueComponent, b As Boolean) As VTimelineItem 
 	VC.SetData(sVIf, b) 
-	VC.SetData(sVShow, b) 
+	'VC.SetData(sVShow, b) 
 	Return Me 
 End Sub
 

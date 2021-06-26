@@ -30,6 +30,7 @@ Version=7
 #DesignerProperty: Key: Absolute, DisplayName: Absolute, FieldType: Boolean, DefaultValue: False, Description: Absolute
 #DesignerProperty: Key: Activator, DisplayName: Activator, FieldType: Boolean, DefaultValue: False, Description: Activator
 #DesignerProperty: Key: AllowOverflow, DisplayName: AllowOverflow, FieldType: Boolean, DefaultValue: False, Description: AllowOverflow
+#DesignerProperty: Key: Dense, DisplayName: Dense, FieldType: Boolean, DefaultValue: True, Description: Dense
 #DesignerProperty: Key: Attach, DisplayName: Attach, FieldType: String, DefaultValue: , Description: Attach
 #DesignerProperty: Key: Auto, DisplayName: Auto, FieldType: Boolean, DefaultValue: False, Description: Auto
 #DesignerProperty: Key: CloseDelay, DisplayName: CloseDelay, FieldType: String, DefaultValue: , Description: CloseDelay
@@ -64,11 +65,10 @@ Version=7
 #DesignerProperty: Key: ReturnValueSync, DisplayName: ReturnValueSync, FieldType: String, DefaultValue: , Description: ReturnValueSync
 #DesignerProperty: Key: Rounded, DisplayName: Rounded, FieldType: Boolean, DefaultValue: False, Description: Rounded, List: none|true|rounded-0|rounded|rounded-sm|rounded-lg|rounded-xl|rounded-t-xl|rounded-r-xl|rounded-b-xl|rounded-l-xl|rounded-tl-xl|rounded-tr-xl|rounded-br-xl|rounded-bl-xl|rounded-pill|rounded-circle
 #DesignerProperty: Key: Tile, DisplayName: Tile, FieldType: String, DefaultValue: , Description: Tile
-#DesignerProperty: Key: Transition, DisplayName: Transition, FieldType: String, DefaultValue: , Description: Transition, List: none|fab-transition|fade-transition|expand-transition|scale-transition|scroll-x-transition|scroll-x-reverse-transition|scroll-y-transition|scroll-y-reverse-transition|slide-x-transition|slide-x-reverse-transition|slide-y-transition|slide-y-reverse-transition
+#DesignerProperty: Key: Transition, DisplayName: Transition, FieldType: String, DefaultValue: fade-transition, Description: Transition, List: none|fab-transition|fade-transition|expand-transition|scale-transition|scroll-x-transition|scroll-x-reverse-transition|scroll-y-transition|scroll-y-reverse-transition|slide-x-transition|slide-x-reverse-transition|slide-y-transition|slide-y-reverse-transition
 #DesignerProperty: Key: VBind, DisplayName: VBind, FieldType: String, DefaultValue: , Description: VBind
 #DesignerProperty: Key: VFor, DisplayName: VFor, FieldType: String, DefaultValue: , Description: VFor
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
-#DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VOn, DisplayName: VOn, FieldType: String, DefaultValue: , Description: VOn
 #DesignerProperty: Key: ZIndex, DisplayName: ZIndex, FieldType: String, DefaultValue: , Description: ZIndex
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag. 
@@ -145,6 +145,7 @@ Private sTextColor As String
 Private sTextColorIntensity As String
 Public MenuItems As VList
 Private bDisabled As Boolean
+Private bDense As Boolean
 	End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -160,7 +161,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 		End If 
 	End If 
 	sDisabled = $"${mName}disabled"$
-	End Sub
+End Sub
 
 Sub DesignerCreateView (Target As BANanoElement, Props As Map) 
 	mTarget = Target 
@@ -225,7 +226,31 @@ sButtonText = Props.Get("ButtonText")
 sIconName = Props.Get("IconName")
 sTextColor = Props.Get("TextColor")
 sTextColorIntensity = Props.Get("TextColorIntensity")
+bDense = Props.GetDefault("Dense", True)
 	End If 
+	'
+	bAbsolute = BANanoShared.parseBool(bAbsolute)
+bActivator = BANanoShared.parseBool(bActivator)
+bAllowOverflow = BANanoShared.parseBool(bAllowOverflow)
+bAuto = BANanoShared.parseBool(bAuto)
+bDark = BANanoShared.parseBool(bDark)
+bDisableKeys = BANanoShared.parseBool(bDisableKeys)
+bDisabled = BANanoShared.parseBool(bDisabled)
+bEager = BANanoShared.parseBool(bEager)
+bFixed = BANanoShared.parseBool(bFixed)
+bInternalActivator = BANanoShared.parseBool(bInternalActivator)
+bLight = BANanoShared.parseBool(bLight)
+bOffsetOverflow = BANanoShared.parseBool(bOffsetOverflow)
+bOffsetX = BANanoShared.parseBool(bOffsetX)
+bOffsetY = BANanoShared.parseBool(bOffsetY)
+bOpenOnClick = BANanoShared.parseBool(bOpenOnClick)
+bOpenOnFocus = BANanoShared.parseBool(bOpenOnFocus)
+bOpenOnHover = BANanoShared.parseBool(bOpenOnHover)
+bRounded = BANanoShared.parseBool(bRounded)
+bButtonDark = BANanoShared.parseBool(bButtonDark)
+bButtonRaised = BANanoShared.parseBool(bButtonRaised)
+bDense = BANanoShared.parseBool(bDense)
+
 	' 
 	'build and get the element 
 	If BANano.Exists($"#${mName}"$) Then 
@@ -467,6 +492,7 @@ End Sub
 
 'set options from definition
 Sub SetOptions(opt As VListOptions)
+	MenuItems.AddAttr(":bind", bDense)
 	Dim tmp As ListViewItemOptions = opt.Options
 	Select Case opt.template
 	Case "none"

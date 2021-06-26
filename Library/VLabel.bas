@@ -54,7 +54,6 @@ Version=8.9
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
 #DesignerProperty: Key: VFor, DisplayName: VFor, FieldType: String, DefaultValue: , Description: VFor
 #DesignerProperty: Key: Key, DisplayName: Key, FieldType: String, DefaultValue: , Description: Key
-#DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue: , Description: VShow
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
@@ -102,7 +101,7 @@ Private sTextColor As String
 Private sTextColorIntensity As String
 Private sTo As String
 Private sVIf As String
-Private sVShow As String
+'Private sVShow As String
 Private bVertical As Boolean
 Private bInset As Boolean
 Private sVOn As String
@@ -131,7 +130,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey)
 		End If
 	End If
-	sVShow = $"${mName}show"$
+	'sVShow = $"${mName}show"$
 	End Sub
 	
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
@@ -170,8 +169,8 @@ sTextColor = Props.Get("TextColor")
 sTextColorIntensity = Props.Get("TextColorIntensity")
 sTo = Props.Get("To")
 sVIf = Props.Get("VIf")
-sVShow = Props.Get("VShow")
 bHidden = Props.GetDefault("Hidden", False)
+bHidden = BANanoShared.parseBool(bHidden)	
 bVertical = Props.Get("Vertical")
 bInset = Props.Get("Inset")
 sVOn = Props.Get("VOn")
@@ -180,6 +179,7 @@ sVOn = Props.Get("VOn")
 		sOwnTag = Props.GetDefault("OwnTag", "")
 		sElevation = Props.GetDefault("Elevation", "")
 		bTile = Props.GetDefault("Tile", False)
+		bTile = BANanoShared.parseBool(bTile)
 		sRounded = Props.GetDefault("Rounded", "")
 		sStepValue = Props.GetDefault("StepValue", "")
 		sTextAlign = Props.GetDefault("TextAlign", "")
@@ -190,6 +190,11 @@ sVOn = Props.Get("VOn")
 		sKey = Props.GetDefault("Key", "")
 	End If
 	'
+	bLoremIpsum = BANanoShared.parseBool(bLoremIpsum)
+bVertical = BANanoShared.parseBool(bVertical)
+bInset = BANanoShared.parseBool(bInset)
+bSetName = BANanoShared.parseBool(bSetName)
+
 	If sOwnTag <> "" Then
 		sSize = sOwnTag
 	End If
@@ -239,7 +244,7 @@ VElement.Target = sTarget
 VElement.TextColor = VElement.BuildColor(sTextColor, sTextColorIntensity)
 VElement.To = sTo
 VElement.VIf = sVIf
-VElement.VShow = sVShow
+'VElement.VShow = sVShow
 VElement.Vertical = bVertical
 VElement.Inset = bInset
 VElement.VText = sVText
@@ -253,7 +258,7 @@ End If
 VElement.AddAttr("step", sStepValue)
 VElement.AddAttr("v-on", sVOn)
 	VElement.AddAttr("v-bind", sVBind)
-	VElement.SetData(sVShow, Not(bHidden))
+	'VElement.SetData(sVShow, Not(bHidden))
 VElement.BindAllEvents
 End Sub
 
@@ -289,7 +294,7 @@ End Sub
 
 Sub UpdateVisible(VC As VueComponent, b As Boolean) As VLabel
 	VC.SetData(sVIf, b)
-	VC.SetData(sVShow, b)
+	'VC.SetData(sVShow, b)
 	Return Me
 End Sub
 

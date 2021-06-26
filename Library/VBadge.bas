@@ -28,7 +28,6 @@ Version=8.9
 #DesignerProperty: Key: Tile, DisplayName: Tile, FieldType: Boolean, DefaultValue: false, Description: Tile
 #DesignerProperty: Key: Transition, DisplayName: Transition, FieldType: String, DefaultValue: , Description: Transition, List: none|fab-transition|fade-transition|expand-transition|scale-transition|scroll-x-transition|scroll-x-reverse-transition|scroll-y-transition|scroll-y-reverse-transition|slide-x-transition|slide-x-reverse-transition|slide-y-transition|slide-y-reverse-transition
 #DesignerProperty: Key: VIf, DisplayName: V-If, FieldType: String, DefaultValue:  , Description: 
-#DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
@@ -59,8 +58,8 @@ Sub Class_Globals
 	Private mAttributes As String = ""
 	Public VElement As VueElement
 	Private mVIf As String = ""
-	Private bLeft As Boolean = False
-	Private bBottom As Boolean = False
+	Private bLeft As Boolean
+	Private bBottom As Boolean
 	Private mVIf As String = ""
 	Private sAvatarImg As String = ""
 	Private sAvatarSize As String = ""
@@ -113,8 +112,19 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sAvatarImg = Props.Get("AvatarImg")
 		sAvatarSize = Props.Get("AvatarSize")
 		bHidden = Props.GetDefault("Hidden", False)
+		bHidden = BANanoShared.parseBool(bHidden)
 		svModel = Props.GetDefault("VModel", "badge1")
 	End If
+	'
+	bAvatar = BANanoShared.parseBool(bAvatar)
+bBordered = BANanoShared.parseBool(bBordered)
+bDark = BANanoShared.parseBool(bDark)
+bDot = BANanoShared.parseBool(bDot)
+bInline = BANanoShared.parseBool(bInline)
+bOverlap = BANanoShared.parseBool(bOverlap)
+bTile = BANanoShared.parseBool(bTile)
+bLeft = BANanoShared.parseBool(bLeft)
+bBottom = BANanoShared.parseBool(bBottom)
 	'
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then

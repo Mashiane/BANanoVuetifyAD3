@@ -72,7 +72,6 @@ Version=8.9
 #DesignerProperty: Key: Scrollable, DisplayName: Scrollable, FieldType: Boolean, DefaultValue: false, Description: Scrollable
 #DesignerProperty: Key: Transition, DisplayName: Transition, FieldType: String, DefaultValue: , Description: Transition, List: none|fab-transition|fade-transition|expand-transition|scale-transition|scroll-x-transition|scroll-x-reverse-transition|scroll-y-transition|scroll-y-reverse-transition|slide-x-transition|slide-x-reverse-transition|slide-y-transition|slide-y-reverse-transition
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
-#DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: 700, Description: Width
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
@@ -194,7 +193,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	xCancelDisabled = $"${mName}cancel_disabled"$
 	'
 	sDisabled = $"${mName}disabled"$
-	sVModel = $"${mName}vmodel"$
+	sVModel = $"${mName}show"$
 End Sub
 	
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
@@ -261,6 +260,38 @@ bToolbarDark = Props.Get("ToolBarDark")
 bHidden = Props.GetDefault("Hidden", True)
 	End If
 	'
+	bHasToolbar = BANanoShared.parseBool(bHasToolbar)
+bOkVisible = BANanoShared.parseBool(bOkVisible)
+bOkLoading = BANanoShared.parseBool(bOkLoading)
+bOkDisabled = BANanoShared.parseBool(bOkDisabled)
+bCancelVisible = BANanoShared.parseBool(bCancelVisible)
+bCancelLoading = BANanoShared.parseBool(bCancelLoading)
+bCancelDisabled = BANanoShared.parseBool(bCancelDisabled)
+bCardTextAppend = BANanoShared.parseBool(bCardTextAppend)
+bDark = BANanoShared.parseBool(bDark)
+bDisabled = BANanoShared.parseBool(bDisabled)
+bEager = BANanoShared.parseBool(bEager)
+bFullscreen = BANanoShared.parseBool(bFullscreen)
+bHasCancel = BANanoShared.parseBool(bHasCancel)
+bHasCardActions = BANanoShared.parseBool(bHasCardActions)
+bHasCardText = BANanoShared.parseBool(bHasCardText)
+bHasCardTitle = BANanoShared.parseBool(bHasCardTitle)
+bHasDivider = BANanoShared.parseBool(bHasDivider)
+bHasOk = BANanoShared.parseBool(bHasOk)
+bHideOverlay = BANanoShared.parseBool(bHideOverlay)
+bInternalActivator = BANanoShared.parseBool(bInternalActivator)
+bLight = BANanoShared.parseBool(bLight)
+bNoClickAnimation = BANanoShared.parseBool(bNoClickAnimation)
+bOpenOnFocus = BANanoShared.parseBool(bOpenOnFocus)
+bOpenOnHover = BANanoShared.parseBool(bOpenOnHover)
+bPersistent = BANanoShared.parseBool(bPersistent)
+bRetainFocus = BANanoShared.parseBool(bRetainFocus)
+bScrollable = BANanoShared.parseBool(bScrollable)
+bFullscreenOnMobile = BANanoShared.parseBool(bFullscreenOnMobile)
+bToolbarDark = BANanoShared.parseBool(bToolbarDark)
+bHidden = BANanoShared.parseBool(bHidden)
+bDisabled = BANanoShared.parseBool(bDisabled)
+
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
 		mElement = BANano.GetElement($"#${mName}"$)

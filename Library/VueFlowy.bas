@@ -29,9 +29,9 @@ Sub Class_Globals
 	Public VC As VueComponent	
 	Private nodes As List
 	Private nodesName As String
-	Private mHasBeforeAdd As Boolean = True
-	Private mHasBeforeMove As Boolean = True
-	Private mHasDragStart As Boolean = True
+	Private mHasBeforeAdd As Boolean
+	Private mHasBeforeMove As Boolean
+	Private mHasDragStart As Boolean 
 	Private sbeforemove As String = ""
 	Private sbeforeadd As String = ""
 	Private mNodeComponent As String = ""
@@ -68,6 +68,11 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mHasDragStart = Props.Get("HasDragStart")
 		mNodeComponent = Props.Get("NodeComponent")
 	End If
+	'
+	mHasBeforeAdd = BANanoShared.parseBool(mHasBeforeAdd)
+mHasBeforeMove = BANanoShared.parseBool(mHasBeforeMove)
+mHasDragStart = BANanoShared.parseBool(mHasDragStart)
+
 		
 	'build and get the element
 	Dim strHTML As String = ToString

@@ -34,8 +34,6 @@ Version=8.9
 #DesignerProperty: Key: Scrollable, DisplayName: Scrollable, FieldType: Boolean, DefaultValue: false, Description: Scrollable
 #DesignerProperty: Key: Transition, DisplayName: Transition, FieldType: String, DefaultValue: , Description: Transition, List: none|fab-transition|fade-transition|expand-transition|scale-transition|scroll-x-transition|scroll-x-reverse-transition|scroll-y-transition|scroll-y-reverse-transition|slide-x-transition|slide-x-reverse-transition|slide-y-transition|slide-y-reverse-transition
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
-#DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
-#DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: , Description: Value
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
@@ -77,8 +75,7 @@ Private sReturnValue As String
 Private bScrollable As Boolean
 Private sTransition As String
 Private sVIf As String
-Private sVShow as String
-Private sValue As String
+Private sVShow As String
 Private sWidth As String
 Private bDisabled As Boolean
 	End Sub
@@ -96,7 +93,8 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 		End If
 	End If
 	sDisabled = $"${mName}disabled"$
-	End Sub
+	sVShow = $"${mName}show"$
+End Sub
 	
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	mTarget = Target
@@ -130,15 +128,28 @@ sReturnValue = Props.Get("ReturnValue")
 bScrollable = Props.Get("Scrollable")
 sTransition = Props.Get("Transition")
 sVIf = Props.Get("VIf")
-sVShow = Props.Get("VShow")
-sValue = Props.Get("Value")
 sWidth = Props.Get("Width")
 bDisabled = Props.GetDefault("Disabled",False)
 	End If
 	'
-	If BANano.IsNull(bDisabled) Or BANano.IsUndefined(bDisabled) Then
-		bDisabled = False 
-	End If
+	bAttach = BANanoShared.parseBool(bAttach)
+bDark = BANanoShared.parseBool(bDark)
+bEager = BANanoShared.parseBool(bEager)
+bFullscreen = BANanoShared.parseBool(bFullscreen)
+bHideOverlay = BANanoShared.parseBool(bHideOverlay)
+bInset = BANanoShared.parseBool(bInset)
+bInternalActivator = BANanoShared.parseBool(bInternalActivator)
+bLight = BANanoShared.parseBool(bLight)
+bNoClickAnimation = BANanoShared.parseBool(bNoClickAnimation)
+bOpenOnFocus = BANanoShared.parseBool(bOpenOnFocus)
+bOpenOnHover = BANanoShared.parseBool(bOpenOnHover)
+bPersistent = BANanoShared.parseBool(bPersistent)
+bRetainFocus = BANanoShared.parseBool(bRetainFocus)
+bScrollable = BANanoShared.parseBool(bScrollable)
+bDisabled = BANanoShared.parseBool(bDisabled)
+bDisabled = BANanoShared.parseBool(bDisabled)
+
+	
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
 		mElement = BANano.GetElement($"#${mName}"$)
@@ -178,10 +189,9 @@ VElement.AddAttr("return-value", sReturnValue)
 VElement.AddAttr(":scrollable", bScrollable)
 VElement.AddAttr("transition", sTransition)
 VElement.AddAttr("v-if", sVIf)
-VElement.AddAttr(":value", sValue)
+VElement.AddAttr(":value", sVShow)
 VElement.AddAttr("width", sWidth)
-VElement.AddAttr("v-show", sVShow)
-VElement.SetData(sValue, False)
+VElement.SetData(sVShow, False)
 VElement.BindAllEvents
 End Sub
 
@@ -217,7 +227,7 @@ End Sub
 
 Sub UpdateVisible(VC As VueComponent, b As Boolean) As VBottomSheet
 	VC.SetData(sVIf, b)
-	VC.SetData(sValue, b)
+	VC.SetData(sVShow, b)
 	Return Me
 End Sub
 

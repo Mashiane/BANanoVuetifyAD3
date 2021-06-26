@@ -27,7 +27,6 @@ Version=8.9
 #DesignerProperty: Key: Prefix, DisplayName: Prefix, FieldType: String, DefaultValue: , Description: Separator
 #DesignerProperty: Key: Suffix, DisplayName: Suffix, FieldType: String, DefaultValue: , Description: Suffix
 #DesignerProperty: Key: OnClick, DisplayName: On Click, FieldType: String, DefaultValue: , Description: Event arguments to be passed to the attribute.
-
 Sub Class_Globals
 	Private mCallBack As Object
 	Private mEvent As String
@@ -44,11 +43,11 @@ Sub Class_Globals
 	Private iconDiv As String
 	Private mIcon As String
 	Private mIconColor As String
-	Private mHoverZoomEffect As Boolean = False
+	Private mHoverZoomEffect As Boolean
 	Private mStartValue As String
 	Private mEndValue As String
 	Private numberID As String
-	Private mHoverExpandEffect As Boolean = False
+	Private mHoverExpandEffect As Boolean
 	Private mColor As String
 	Private mInfoType As String
 	Private mIconBackgroundColor As String
@@ -64,6 +63,7 @@ Sub Class_Globals
 	Private startID As String
 	Private endID As String
 End Sub
+
 
 'initialize to the component you want to load to
 Public Sub Initialize(Module As Object, Name As String, eventName As String)
@@ -115,6 +115,12 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mPrefix = Props.Get("Prefix")
 		mSuffix = Props.Get("Suffix")
 	End If
+	'
+	mHoverZoomEffect = BANanoShared.parseBool(mHoverZoomEffect)
+mHoverExpandEffect = BANanoShared.parseBool(mHoverExpandEffect)
+mAutoPlay = BANanoShared.parseBool(mAutoPlay)
+mUseEasing = BANanoShared.parseBool(mUseEasing)
+
 	
 	'build and get the element
 	Dim strHTML As String = $"<div ref="${mName}" id="${mName}">

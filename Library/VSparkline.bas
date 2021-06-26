@@ -67,7 +67,7 @@ Sub Class_Globals
 	Private sVIf As String
 	Private sVModel As String
 	Private sVOn As String
-	Private sVShow As String
+	'Private sVShow As String
 	Private sValue As String
 	Private sWidth As String
 	Private xValues As List
@@ -91,6 +91,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	sGradient = $"${mName}gradient"$
 	xValues.Initialize 
 	xLabels.Initialize 
+	'svshow = $"${mName}show"$
 End Sub
 
 Sub DesignerCreateView (Target As BANanoElement, Props As Map) 
@@ -119,10 +120,15 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sVIf = Props.GetDefault("VIf", "")
 		sVModel = Props.GetDefault("VModel", "")
 		sVOn = Props.GetDefault("VOn", "")
-		sVShow = Props.GetDefault("VShow", "")
 		sWidth = Props.GetDefault("Width", "")
 	End If 
 	' 
+	bAutoDraw = BANanoShared.parseBool(bAutoDraw)
+bAutoLineWidth = BANanoShared.parseBool(bAutoLineWidth)
+bFill = BANanoShared.parseBool(bFill)
+bHidden = BANanoShared.parseBool(bHidden)
+bShowLabels = BANanoShared.parseBool(bShowLabels)
+
 	'build and get the element 
 	If BANano.Exists($"#${mName}"$) Then 
 		mElement = BANano.GetElement($"#${mName}"$) 
@@ -158,9 +164,9 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.AddAttr("v-bind", sVBind)
 	VElement.AddAttr("v-if", sVIf)
 	VElement.AddAttr("v-model", sVModel)
-	VElement.SetData(sVModel, VElement.NewList)
+	'VElement.SetData(sVModel, VElement.NewList)
 	VElement.AddAttr("v-on", sVOn)
-	VElement.AddAttr("v-show", Not(bHidden))
+	'VElement.AddAttr("v-show", Not(bHidden))
 	VElement.AddAttr("width", sWidth)
 	VElement.BindAllEvents
 End Sub
@@ -197,7 +203,7 @@ End Sub
 
 Sub UpdateVisible(VC As VueComponent, b As Boolean) As VSparkline 
 	VC.SetData(sVIf, b) 
-	VC.SetData(sVShow, b) 
+	'VC.SetData(sVShow, b) 
 	Return Me 
 End Sub
 

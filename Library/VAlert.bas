@@ -35,8 +35,6 @@ Version=8.9
 #DesignerProperty: Key: Tile, DisplayName: Tile, FieldType: Boolean, DefaultValue: false, Description: Tile
 #DesignerProperty: Key: Transition, DisplayName: Transition, FieldType: String, DefaultValue: , Description: Transition, List: none|fab-transition|fade-transition|expand-transition|scale-transition|scroll-x-transition|scroll-x-reverse-transition|scroll-y-transition|scroll-y-reverse-transition|slide-x-transition|slide-x-reverse-transition|slide-y-transition|slide-y-reverse-transition
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
-#DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
-#DesignerProperty: Key: Value, DisplayName: Value/Visible, FieldType: String, DefaultValue: , Description: Value/Visible
 #DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: , Description: Width
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
@@ -52,7 +50,6 @@ Sub Class_Globals
 	Private mStyles As String = ""
 	Private mAttributes As String = ""
 	Public VElement As VueElement
-	Private mVShow As String = ""
 	Private mVIf As String = ""
 	Private sAlertType As String
 Private sBorder As String
@@ -98,6 +95,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey)
 		End If
 	End If
+	sValue = $"${mName}show"$
 	End Sub
 	
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
@@ -106,7 +104,6 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mClasses = Props.Get("Classes")
 		mStyles = Props.Get("Styles")
 		mAttributes = Props.Get("Attributes")
-		mVShow = Props.Get("VShow")
 		mVIf = Props.Get("VIf")
 		sAlertType = Props.Get("AlertType")
 sBorder = Props.Get("Border")
@@ -115,28 +112,37 @@ sCloseIcon = Props.Get("CloseIcon")
 sColor = Props.Get("Color")
 sColorIntensity = Props.Get("ColorIntensity")
 bColoredBorder = Props.Get("ColoredBorder")
+bColoredBorder = BANanoShared.parseBool(bColoredBorder)
 bDark = Props.Get("Dark")
+bDark = BANanoShared.parseBool(bDark)
 bDense = Props.Get("Dense")
+bDense = BANanoShared.parseBool(bDense)
 bDismissible = Props.Get("Dismissible")
+bDismissible = BANanoShared.parseBool(bDismissible)
 sElevation = Props.Get("Elevation")
 sHeight = Props.Get("Height")
 sIcon = Props.Get("Icon")
 bLoremipsum = Props.Get("Loremipsum")
+bLoremipsum = BANanoShared.parseBool(bLoremipsum)
 sMaxHeight = Props.Get("MaxHeight")
 sMaxWidth = Props.Get("MaxWidth")
 sMinHeight = Props.Get("MinHeight")
 sMinWidth = Props.Get("MinWidth")
 sMode = Props.Get("Mode")
 bOutlined = Props.Get("Outlined")
+bOutlined = BANanoShared.parseBool(bOutlined)
 bProminent = Props.Get("Prominent")
+bProminent = BANanoShared.parseBool(bProminent)
 sRounded = Props.Get("Rounded")
 bShaped = Props.Get("Shaped")
+bShaped = BANanoShared.parseBool(bShaped)
 bText = Props.Get("Text")
+bText = BANanoShared.parseBool(bText)
 sTextColor = Props.Get("TextColor")
 sTextColorIntensity = Props.Get("TextColorIntensity")
 bTile = Props.Get("Tile")
+bTile = BANanoShared.parseBool(bTile)
 sTransition = Props.Get("Transition")
-sValue = Props.Get("Value")
 sWidth = Props.Get("Width")
 	End If
 	'
@@ -152,7 +158,6 @@ sWidth = Props.Get("Width")
 	VElement.Classes = mClasses
 	VElement.Styles = mStyles
 	VElement.Attributes = mAttributes
-	VElement.VShow = mVShow
 	VElement.VIf = mVIf
 	VElement.AlertType = sAlertType
 VElement.AddAttr("border", sBorder)
@@ -184,7 +189,7 @@ VElement.Tile = bTile
 VElement.Transition = sTransition
 VElement.AddAttr(":value", sValue)
 VElement.Width = sWidth
-VElement.SetData(sValue, False)
+VElement.SetData(sValue, True)
 VElement.BindAllEvents
 End Sub
 

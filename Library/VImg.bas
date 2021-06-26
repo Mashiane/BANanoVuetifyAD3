@@ -88,6 +88,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey)
 		End If
 	End If
+	mVShow = $"${mName}show"$
 	End Sub
 	
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
@@ -96,7 +97,6 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mClasses = Props.Get("Classes")
 		mStyles = Props.Get("Styles")
 		mAttributes = Props.Get("Attributes")
-		mVShow = Props.Get("VShow")
 		mVIf = Props.Get("VIf")
 		sAlt = Props.Get("Alt")
 sAspectRatio = Props.Get("AspectRatio")
@@ -124,6 +124,11 @@ sAnimeTranslateX = Props.Get("AnimeTranslateX")
 sAnimeTranslateY = Props.Get("AnimeTranslateY")
 	End If
 	'
+	bContain = BANanoShared.parseBool(bContain)
+bDark = BANanoShared.parseBool(bDark)
+bAnimeAlternate = BANanoShared.parseBool(bAnimeAlternate)
+bAnimeLoop = BANanoShared.parseBool(bAnimeLoop)
+
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
 		mElement = BANano.GetElement($"#${mName}"$)
@@ -133,7 +138,8 @@ sAnimeTranslateY = Props.Get("AnimeTranslateY")
 	'
 	VElement.Initialize(mCallBack, mName, mName)
 	VElement.TagName = "v-img"
-	VElement.VShow = mVShow
+	'VElement.VShow = mVShow
+	'VElement.setdata(mVShow, True)
 	VElement.VIf = mVIf
 	VElement.Classes = mClasses
 	VElement.Styles = mStyles

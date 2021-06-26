@@ -247,6 +247,16 @@ sRightSwitch = Props.Get("RightSwitch")
 sRightSwitchColor = Props.Get("RightSwitchColor")
 	End If
 	'
+	bHasDivider = BANanoShared.parseBool(bHasDivider)
+bInsetDivider = BANanoShared.parseBool(bInsetDivider)
+bShowLeftCheckBoxes = BANanoShared.parseBool(bShowLeftCheckBoxes)
+bShowLeftSwitches = BANanoShared.parseBool(bShowLeftSwitches)
+bShowRightCheckBoxes = BANanoShared.parseBool(bShowRightCheckBoxes)
+bShowRightRating = BANanoShared.parseBool(bShowRightRating)
+bShowRightSwitches = BANanoShared.parseBool(bShowRightSwitches)
+bSwitchInset = BANanoShared.parseBool(bSwitchInset)
+
+	'
 	'build and get the element
 	'If BANano.Exists($"#${mName}"$) Then
 	'	mElement = BANano.GetElement($"#${mName}"$)

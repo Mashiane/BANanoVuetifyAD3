@@ -25,7 +25,6 @@ Version=7
 #DesignerProperty: Key: Readonly, DisplayName: Readonly, FieldType: Boolean, DefaultValue: False, Description: Readonly
 #DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: rg1, Description: VModel
 #DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: , Description: Value
-#DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue: , Description: VShow
 #DesignerProperty: Key: Mandatory, DisplayName: Mandatory, FieldType: Boolean, DefaultValue: False, Description: Mandatory
 #DesignerProperty: Key: ItemText, DisplayName: ItemText, FieldType: String, DefaultValue: text, Description: ItemText
 #DesignerProperty: Key: ItemValue, DisplayName: ItemValue, FieldType: String, DefaultValue: value, Description: ItemValue
@@ -168,7 +167,6 @@ sVBind = Props.GetDefault("VBind", "")
 sVIf = Props.GetDefault("VIf", "")
 sVModel = Props.GetDefault("VModel", "")
 sVOn = Props.GetDefault("VOn", "")
-sVShow = Props.GetDefault("VShow", "")
 bValidateOnBlur = Props.GetDefault("ValidateOnBlur", False)
 sItemDisabled = Props.GetDefault("ItemDisabled", "disabled")
 sItemText = Props.GetDefault("ItemText","text")
@@ -177,6 +175,19 @@ sItems = Props.GetDefault("Items", "items")
  sValue = Props.GetDefault("Value", "")
  bRequired = Props.GetDefault("Required", False)
 End If 
+'
+bDense = BANanoShared.parseBool(bDense)
+bDisabled = BANanoShared.parseBool(bDisabled)
+bHidden = BANanoShared.parseBool(bHidden)
+bHideDetails = BANanoShared.parseBool(bHideDetails)
+bLight = BANanoShared.parseBool(bLight)
+bMandatory = BANanoShared.parseBool(bMandatory)
+bMultiple = BANanoShared.parseBool(bMultiple)
+bPersistentHint = BANanoShared.parseBool(bPersistentHint)
+bReadonly = BANanoShared.parseBool(bReadonly)
+bValidateOnBlur = BANanoShared.parseBool(bValidateOnBlur)
+bRequired = BANanoShared.parseBool(bRequired)
+
 	' 
 	'build and get the element 
 	If BANano.Exists($"#${mName}"$) Then 

@@ -33,9 +33,7 @@ Version=8.9
 #DesignerProperty: Key: VBind, DisplayName: VBind, FieldType: String, DefaultValue: , Description: VBind
 #DesignerProperty: Key: VFor, DisplayName: VFor, FieldType: String, DefaultValue: , Description: VFor
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
-#DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VOn, DisplayName: VOn, FieldType: String, DefaultValue: , Description: VOn
-#DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue: , Description: VShow
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
@@ -78,7 +76,7 @@ Private sVShow As String
 Private bHidden As Boolean
 Private sValue As String
 Private sCaption As String
-private bShowCaption as boolean
+Private bShowCaption As Boolean
 	End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -123,14 +121,26 @@ bStriped = Props.Get("Striped")
 sVBind = Props.Get("VBind")
 sVFor = Props.Get("VFor")
 sVIf = Props.Get("VIf")
-sVShow = Props.Get("VShow")
 sVModel = Props.Get("VModel")
 sVOn = Props.Get("VOn")
 bHidden = Props.GetDefault("Hidden", False)
+bHidden = BANanoShared.parseBool(bHidden)
 bShowCaption = Props.GetDefault("ShowCaption", False)
+bShowCaption = BANanoShared.parseBool(bShowCaption)
 sCaption = Props.GetDefault("Caption", "")
 sValue = Props.GetDefault("Value", "")
 	End If
+	'
+	bAbsolute = BANanoShared.parseBool(bAbsolute)
+bActive = BANanoShared.parseBool(bActive)
+bDark = BANanoShared.parseBool(bDark)
+bFixed = BANanoShared.parseBool(bFixed)
+bIndeterminate = BANanoShared.parseBool(bIndeterminate)
+bLight = BANanoShared.parseBool(bLight)
+bQuery = BANanoShared.parseBool(bQuery)
+bReverse = BANanoShared.parseBool(bReverse)
+bStriped = BANanoShared.parseBool(bStriped)
+ 
 	'
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
@@ -222,6 +232,9 @@ Sub Update(VC As VueComponent, num As Int)
 	VC.SetData(sVModel, num)
 End Sub
 
+Sub SetValue(VC As VueComponent, num As Int)
+	VC.SetData(sVModel, num)
+End Sub
 
 Sub getID As String
 	Return mName

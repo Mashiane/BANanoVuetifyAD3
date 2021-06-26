@@ -43,7 +43,6 @@ Version=8.9
 #DesignerProperty: Key: Shaped, DisplayName: Shaped, FieldType: Boolean, DefaultValue: false, Description: Shaped
 #DesignerProperty: Key: Transition, DisplayName: Transition, FieldType: Boolean, DefaultValue: false, Description: Transition
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
-#DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue: , Description: VShow
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
@@ -92,7 +91,7 @@ Private sSelectionType As String
 Private bShaped As Boolean
 Private bTransition As Boolean
 Private sVIf As String
-Private sVShow As String
+'Private sVShow As String
 Private sValue As String
 Private xitems As List
 Private extm As Map
@@ -135,7 +134,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	
 	extm.Put("c", "mdi-language-c")
 	extm.Put("c++", "mdi-language-cpp")
-	sVShow = $"${mName}show"$
+	'sVShow = $"${mName}show"$
 	End Sub
 	
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
@@ -176,10 +175,25 @@ sSelectionType = Props.Get("SelectionType")
 bShaped = Props.Get("Shaped")
 bTransition = Props.Get("Transition")
 sVIf = Props.Get("VIf")
-sVShow = Props.Get("VShow")
 bHidden = Props.GetDefault("Hidden", False)
 sValue = Props.Get("Value")
 	End If
+	'
+	bActivatable = BANanoShared.parseBool(bActivatable)
+bDark = BANanoShared.parseBool(bDark)
+bDense = BANanoShared.parseBool(bDense)
+bHoverable = BANanoShared.parseBool(bHoverable)
+bLight = BANanoShared.parseBool(bLight)
+bMultipleActive = BANanoShared.parseBool(bMultipleActive)
+bOpenAll = BANanoShared.parseBool(bOpenAll)
+bOpenOnClick = BANanoShared.parseBool(bOpenOnClick)
+bReturnObject = BANanoShared.parseBool(bReturnObject)
+bRounded = BANanoShared.parseBool(bRounded)
+bSelectable = BANanoShared.parseBool(bSelectable)
+bShaped = BANanoShared.parseBool(bShaped)
+bTransition = BANanoShared.parseBool(bTransition)
+bHidden = BANanoShared.parseBool(bHidden)
+
 	'
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
@@ -232,8 +246,8 @@ VElement.AddAttr("selection-type", sSelectionType)
 VElement.AddAttr(":shaped", bShaped)
 VElement.AddAttr(":transition", bTransition)
 VElement.AddAttr("v-if", sVIf)
-VElement.AddAttr("v-show", sVShow)
-VElement.SetData(sVShow, Not(bHidden))
+'VElement.AddAttr("v-show", sVShow)
+'VElement.SetData(sVShow, Not(bHidden))
 VElement.SetData(sActive, VElement.NewList)
 VElement.SetData(sOpen, VElement.NewList)
 VElement.SetData(sValue, VElement.NewList)
@@ -280,7 +294,7 @@ End Sub
 
 Sub UpdateVisible(VC As VueComponent, b As Boolean) As VTreeView
 	VC.SetData(sVIf, b)
-	VC.SetData(sVShow, b)
+	'VC.SetData(sVShow, b)
 	Return Me
 End Sub
 

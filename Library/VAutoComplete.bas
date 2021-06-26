@@ -107,7 +107,6 @@ Version=7
 #DesignerProperty: Key: VBind, DisplayName: VBind, FieldType: String, DefaultValue: , Description: VBind
 #DesignerProperty: Key: VFor, DisplayName: VFor, FieldType: String, DefaultValue: , Description: VFor
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
-#DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VOn, DisplayName: VOn, FieldType: String, DefaultValue: , Description: VOn
 #DesignerProperty: Key: ValidateOnBlur, DisplayName: ValidateOnBlur, FieldType: Boolean, DefaultValue: False, Description: ValidateOnBlur
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag. 
@@ -320,13 +319,56 @@ sSuffix = Props.Get("Suffix")
 sVBind = Props.Get("VBind")
 sVFor = Props.Get("VFor")
 sVIf = Props.Get("VIf")
-sVShow = Props.Get("VShow")
 sVModel = Props.Get("VModel")
 sVOn = Props.Get("VOn")
 bValidateOnBlur = Props.Get("ValidateOnBlur")
  
 	End If 
-	' 
+	'
+	bDisabled = BANanoShared.parseBool(bDisabled)
+bHidden = BANanoShared.parseBool(bHidden)
+bLoading = BANanoShared.parseBool(bLoading)
+bReadonly = BANanoShared.parseBool(bReadonly)
+bRequired = BANanoShared.parseBool(bRequired)
+bAllowOverflow = BANanoShared.parseBool(bAllowOverflow)
+bAutoSelectFirst = BANanoShared.parseBool(bAutoSelectFirst)
+bAutofocus = BANanoShared.parseBool(bAutofocus)
+bCacheItems = BANanoShared.parseBool(bCacheItems)
+bChips = BANanoShared.parseBool(bChips)
+bClearable = BANanoShared.parseBool(bClearable)
+bDark = BANanoShared.parseBool(bDark)
+bDeletableChips = BANanoShared.parseBool(bDeletableChips)
+bDense = BANanoShared.parseBool(bDense)
+bDisableLookup = BANanoShared.parseBool(bDisableLookup)
+bEager = BANanoShared.parseBool(bEager)
+bFilled = BANanoShared.parseBool(bFilled)
+bFlat = BANanoShared.parseBool(bFlat)
+bFullWidth = BANanoShared.parseBool(bFullWidth)
+bHideDetails = BANanoShared.parseBool(bHideDetails)
+bHideNoData = BANanoShared.parseBool(bHideNoData)
+bHideSelected = BANanoShared.parseBool(bHideSelected)
+bLight = BANanoShared.parseBool(bLight)
+bMultiple = BANanoShared.parseBool(bMultiple)
+bNoFilter = BANanoShared.parseBool(bNoFilter)
+bOpenOnClear = BANanoShared.parseBool(bOpenOnClear)
+bOutlined = BANanoShared.parseBool(bOutlined)
+bPersistentHint = BANanoShared.parseBool(bPersistentHint)
+bPersistentPlaceholder = BANanoShared.parseBool(bPersistentPlaceholder)
+bReturnObject = BANanoShared.parseBool(bReturnObject)
+bReverse = BANanoShared.parseBool(bReverse)
+bRounded = BANanoShared.parseBool(bRounded)
+bShaped = BANanoShared.parseBool(bShaped)
+bSingleLine = BANanoShared.parseBool(bSingleLine)
+bSmallChips = BANanoShared.parseBool(bSmallChips)
+bSolo = BANanoShared.parseBool(bSolo)
+bSoloInverted = BANanoShared.parseBool(bSoloInverted)
+bValidateOnBlur = BANanoShared.parseBool(bValidateOnBlur)
+bDisabled = BANanoShared.parseBool(bDisabled)
+bRequired = BANanoShared.parseBool(bRequired)
+bLoading = BANanoShared.parseBool(bLoading)
+bMultiple = BANanoShared.parseBool(bMultiple)
+
+	 
 	'build and get the element 
 	If BANano.Exists($"#${mName}"$) Then 
 		mElement = BANano.GetElement($"#${mName}"$) 
@@ -334,21 +376,6 @@ bValidateOnBlur = Props.Get("ValidateOnBlur")
 		mElement = mTarget.Append($"<v-autocomplete ref="${mName}" id="${mName}"></v-autocomplete>"$).Get("#" & mName) 
 	End If 
 	' 
-	If BANano.IsNull(bDisabled) Or BANano.IsUndefined(bDisabled) Then
-		bDisabled = False 
-	End If
-	If BANano.IsNull(bRequired) Or BANano.IsUndefined(bRequired) Then
-		bRequired = False 
-	End If
-	If BANano.IsNull(bLoading) Or BANano.IsUndefined(bLoading) Then
-		bLoading = False 
-	End If
-	'
-	
-If BANano.IsNull(bMultiple) Or BANano.IsUndefined(bMultiple) Then
-	bMultiple = False
-End If
-
 	VElement.Initialize(mCallBack, mName, mName) 
 	VElement.TagName = "v-autocomplete" 
 	VElement.Classes = mClasses 

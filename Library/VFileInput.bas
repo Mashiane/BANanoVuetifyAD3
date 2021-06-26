@@ -93,7 +93,6 @@ Version=7
 #DesignerProperty: Key: VBind, DisplayName: VBind, FieldType: String, DefaultValue: , Description: VBind
 #DesignerProperty: Key: VFor, DisplayName: VFor, FieldType: String, DefaultValue: , Description: VFor
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
-#DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VOn, DisplayName: VOn, FieldType: String, DefaultValue: , Description: VOn
 #DesignerProperty: Key: ValidateOnBlur, DisplayName: ValidateOnBlur, FieldType: Boolean, DefaultValue: False, Description: ValidateOnBlur
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag. 
@@ -209,7 +208,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 Sub DesignerCreateView (Target As BANanoElement, Props As Map) 
 	mTarget = Target 
 	If Props <> Null Then 
-		bDisabled = Props.GetDefault("Disabled",false)
+		bDisabled = Props.GetDefault("Disabled",False)
 bHidden = Props.GetDefault("Hidden", False)
 bLoading = Props.GetDefault("Loading",False)
 bReadonly = Props.Get("Readonly")
@@ -274,7 +273,6 @@ sUpdateThisOnUpload = Props.Get("UpdateThisOnUpload")
 sVBind = Props.Get("VBind")
 sVFor = Props.Get("VFor")
 sVIf = Props.Get("VIf")
-sVShow = Props.Get("VShow")
 sVModel = Props.Get("VModel")
 sVOn = Props.Get("VOn")
 bValidateOnBlur = Props.Get("ValidateOnBlur")
@@ -284,10 +282,42 @@ bValidateOnBlur = Props.Get("ValidateOnBlur")
  sButtonHeight = Props.Get("ButtonHeight")
 	End If 
 	'
-	If BANano.IsNull(bIsGoogle) Or BANano.IsUndefined(bIsGoogle) Then
-		bIsGoogle = False
-	End If
-	 
+	bDisabled = BANanoShared.parseBool(bDisabled)
+bHidden = BANanoShared.parseBool(bHidden)
+bLoading = BANanoShared.parseBool(bLoading)
+bReadonly = BANanoShared.parseBool(bReadonly)
+bRequired = BANanoShared.parseBool(bRequired)
+bAutofocus = BANanoShared.parseBool(bAutofocus)
+bChips = BANanoShared.parseBool(bChips)
+bClearable = BANanoShared.parseBool(bClearable)
+bCounter = BANanoShared.parseBool(bCounter)
+bDark = BANanoShared.parseBool(bDark)
+bDense = BANanoShared.parseBool(bDense)
+bFilled = BANanoShared.parseBool(bFilled)
+bFlat = BANanoShared.parseBool(bFlat)
+bFullWidth = BANanoShared.parseBool(bFullWidth)
+bHideDetails = BANanoShared.parseBool(bHideDetails)
+bHideInput = BANanoShared.parseBool(bHideInput)
+bLight = BANanoShared.parseBool(bLight)
+bMultiple = BANanoShared.parseBool(bMultiple)
+bOutlined = BANanoShared.parseBool(bOutlined)
+bPersistentHint = BANanoShared.parseBool(bPersistentHint)
+bPersistentPlaceholder = BANanoShared.parseBool(bPersistentPlaceholder)
+bReverse = BANanoShared.parseBool(bReverse)
+bRipple = BANanoShared.parseBool(bRipple)
+bRounded = BANanoShared.parseBool(bRounded)
+bShaped = BANanoShared.parseBool(bShaped)
+bSingleLine = BANanoShared.parseBool(bSingleLine)
+bSmallChips = BANanoShared.parseBool(bSmallChips)
+bSolo = BANanoShared.parseBool(bSolo)
+bSoloInverted = BANanoShared.parseBool(bSoloInverted)
+bValidateOnBlur = BANanoShared.parseBool(bValidateOnBlur)
+bIsGoogle = BANanoShared.parseBool(bIsGoogle)
+bIsGoogle = BANanoShared.parseBool(bIsGoogle)
+bDisabled = BANanoShared.parseBool(bDisabled)
+bRequired = BANanoShared.parseBool(bRequired)
+bLoading = BANanoShared.parseBool(bLoading)
+
 	If bIsGoogle = False Then 
 		'build and get the element 
 		If BANano.Exists($"#${mName}"$) Then 
@@ -324,16 +354,6 @@ bValidateOnBlur = Props.Get("ValidateOnBlur")
 		VElement.SetData($"${mName}filehidden"$, False)
 	End If
 	'	
-	If BANano.IsNull(bDisabled) Or BANano.IsUndefined(bDisabled) Then
-		bDisabled = False 
-	End If
-	If BANano.IsNull(bRequired) Or BANano.IsUndefined(bRequired) Then
-		bRequired = False 
-	End If
-	If BANano.IsNull(bLoading) Or BANano.IsUndefined(bLoading) Then
-		bLoading = False 
-	End If
-	
 	VElement.Classes = mClasses 
 	VElement.Styles = mStyles 
 	VElement.Attributes = mAttributes 

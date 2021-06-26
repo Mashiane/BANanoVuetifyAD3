@@ -66,7 +66,6 @@ Version=8.8
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VElse, DisplayName: VElse, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VElseIf, DisplayName: VElseIf, FieldType: String, DefaultValue:  , Description: 
-#DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: States, DisplayName: States, FieldType: String, DefaultValue: , Description: Initial Binding States. Must be a json String.
 
 Sub Class_Globals
@@ -90,7 +89,7 @@ Sub Class_Globals
 	Private stVElse As String = ""
 	Private stVElseIf As String = ""
 	Private stVIf As String = ""
-	Private stVShow As String = ""
+	'Private stVShow As String = ""
 	Private mGoogleMapKey As String = ""
 	'
 	Private mgmap As VueElement
@@ -194,6 +193,7 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	bMarkersDraggable = False
 	bKMLVisible = False
 	bKMLClickable = False
+	'stVShow = $"${mName}show"$
 End Sub
 
 'set the parent component
@@ -232,7 +232,6 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		stVElse = Props.Get("VElse")
 		stVElseIf = Props.Get("VElseIf")
 		stVIf = Props.Get("VIf")
-		stVShow = Props.Get("VShow")
 		mGoogleMapKey = Props.Get("GoogleMapKey")
 		bFullScreenControl = Props.Get("FullScreenControl")
 		bDisableDefaultUI = Props.Get("DisableDefaultUI")
@@ -251,11 +250,25 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mHeight = Props.Get("Height")
 		mWidth = Props.Get("Width")
 	End If
+	'
+	bFullScreenControl = BANanoShared.parseBool(bFullScreenControl)
+bDisableDefaultUI = BANanoShared.parseBool(bDisableDefaultUI)
+bMapTypeControl = BANanoShared.parseBool(bMapTypeControl)
+bRotateControl = BANanoShared.parseBool(bRotateControl)
+bZoomControl = BANanoShared.parseBool(bZoomControl)
+bStreetViewControl = BANanoShared.parseBool(bStreetViewControl)
+bScaleControl = BANanoShared.parseBool(bScaleControl)
+bMarkersVisible = BANanoShared.parseBool(bMarkersVisible)
+bMarkersClickable = BANanoShared.parseBool(bMarkersClickable)
+bMarkersDraggable = BANanoShared.parseBool(bMarkersDraggable)
+bKMLVisible = BANanoShared.parseBool(bKMLVisible)
+bKMLClickable = BANanoShared.parseBool(bKMLClickable)
+
 	
 	AddAttr("v-else", stVElse)
 	AddAttr("v-else-if", stVElseIf)
 	AddAttr("v-if", stVIf)
-	AddAttr("v-show", stVShow)
+	'AddAttr("v-show", stVShow)
 	AddClass(mClasses)
 	setAttributes(mAttributes)
 	setStyles(mStyle)
@@ -327,6 +340,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	SetData(iwOptions, woptions)
 	SetData(kmlName, NewList)
 	SetData(gmapkey, DateTime.Now)
+	'SetData(stVShow, True)
 	'
 	setFullScreenControl(bFullScreenControl)
 	setDisableDefaultUI(bDisableDefaultUI)
@@ -887,12 +901,12 @@ End Sub
 'set v-show
 public Sub setVShow(varVShow As String)
 	AddAttr("v-show", varVShow)
-	stVShow = varVShow
+	'stVShow = varVShow
 End Sub
 
 'get v-show
 public Sub getVShow() As String
-	Return stVShow
+	'Return stVShow
 End Sub
 
 'add a child component
@@ -1451,6 +1465,11 @@ Sub BindState(VS As VueComponent)
 	'apply the events
 	For Each k As String In mmethods.Keys
 		Dim cb As BANanoObject = mmethods.Get(k)
-		Vc.SetCallBack(k, cb)
+		VC.SetCallBack(k, cb)
 	Next
+End Sub
+
+Sub UpdateVisible(V As VueComponent, b As Boolean)
+	V.SetData(stVIf, b)
+	'V.SetData(stVShow, b)
 End Sub

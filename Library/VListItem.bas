@@ -39,7 +39,6 @@ Version=8.95
 #DesignerProperty: Key: TextColorIntensity, DisplayName: TextColorIntensity, FieldType: String, DefaultValue: , Description: TextColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: VBind, DisplayName: VBind, FieldType: String, DefaultValue: , Description: VBind
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
-#DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VOn, DisplayName: VOn, FieldType: String, DefaultValue: , Description: VOn
 #DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: , Description: Value
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
@@ -86,10 +85,10 @@ Private sVBind As String
 Private sVFor As String
 Private sVIf As String
 Private sVOn As String
-Private sVShow As String
+'Private sVShow As String
 Private sValue As String
 Private bDisabled As Boolean
-private bHidden as boolean
+Private bHidden As Boolean
 	End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -105,7 +104,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 		End If
 	End If
 	sDisabled = $"${mName}disabled"$
-	sVShow = $"${mName}show"$
+	'sVShow = $"${mName}show"$
 End Sub
 
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
@@ -141,13 +140,29 @@ bTwoLine = Props.Get("TwoLine")
 sVBind = Props.Get("VBind")
 sVFor = Props.Get("VFor")
 sVIf = Props.Get("VIf")
-sVShow = Props.Get("VShow")
 sVOn = Props.Get("VOn")
 bHidden = Props.GetDefault("Hidden", False)
 sValue = Props.Get("Value")
 bDisabled = Props.GetDefault("Disabled",False)
 	End If
 	'
+	bAppend = BANanoShared.parseBool(bAppend)
+bDark = BANanoShared.parseBool(bDark)
+bDense = BANanoShared.parseBool(bDense)
+bExact = BANanoShared.parseBool(bExact)
+bInactive = BANanoShared.parseBool(bInactive)
+bLight = BANanoShared.parseBool(bLight)
+bLink = BANanoShared.parseBool(bLink)
+bNuxt = BANanoShared.parseBool(bNuxt)
+bReplace = BANanoShared.parseBool(bReplace)
+bRipple = BANanoShared.parseBool(bRipple)
+bSelectable = BANanoShared.parseBool(bSelectable)
+bThreeLine = BANanoShared.parseBool(bThreeLine)
+bTwoLine = BANanoShared.parseBool(bTwoLine)
+bHidden = BANanoShared.parseBool(bHidden)
+bDisabled = BANanoShared.parseBool(bDisabled)
+bDisabled = BANanoShared.parseBool(bDisabled)
+
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
 		mElement = BANano.GetElement($"#${mName}"$)
@@ -192,8 +207,8 @@ VElement.AddAttr("v-bind", sVBind)
 VElement.AddAttr("v-for", sVFor)
 VElement.AddAttr("v-if", sVIf)
 VElement.AddAttr("v-on", sVOn)
-VElement.AddAttr("v-show", sVShow)
-VElement.SetData(sVShow, Not(bHidden))
+'VElement.AddAttr("v-show", sVShow)
+'VElement.SetData(sVShow, Not(bHidden))
 VElement.AddAttr("value", sValue)
 VElement.BindAllEvents
 End Sub
@@ -230,7 +245,7 @@ End Sub
 
 Sub UpdateVisible(VC As VueComponent, b As Boolean) As VListItem
 	VC.SetData(sVIf, b)
-	VC.SetData(sVShow, b)
+	'VC.SetData(sVShow, b)
 	Return Me
 End Sub
 

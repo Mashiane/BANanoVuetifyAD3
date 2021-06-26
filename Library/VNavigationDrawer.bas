@@ -14,6 +14,7 @@ Version=8.9
 #DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: , Description: Width
 #DesignerProperty: Key: Bottom, DisplayName: Bottom, FieldType: Boolean, DefaultValue: false, Description: Bottom
 #DesignerProperty: Key: Clipped, DisplayName: Clipped, FieldType: Boolean, DefaultValue: false, Description: Clipped
+#DesignerProperty: Key: UsesAuthentication, DisplayName: UsesAuthentication, FieldType: Boolean, DefaultValue: false, Description: UsesAuthentication
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue: , Description: Color, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: ColorIntensity, DisplayName: ColorIntensity, FieldType: String, DefaultValue: , Description: ColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: false, Description: Dark
@@ -38,7 +39,6 @@ Version=8.9
 #DesignerProperty: Key: Temporary, DisplayName: Temporary, FieldType: Boolean, DefaultValue: false, Description: Temporary
 #DesignerProperty: Key: Touchless, DisplayName: Touchless, FieldType: Boolean, DefaultValue: false, Description: Touchless
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
-#DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue: , Description: VShow
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
@@ -84,9 +84,10 @@ Private bTouchless As Boolean
 Private sVIf As String
 Private sVModel As String
 Private sWidth As String
-Private sVShow As String
+'Private sVShow As String
 Private bHidden As Boolean
 Private xMiniVariant As String
+Private bUsesAuthentication As Boolean
 End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -101,9 +102,8 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey)
 		End If
 	End If
-	sVShow = $"${mName}show"$
 	xMiniVariant = $"${mName}mini"$
-	sVModel = $"${mName}vmodel"$
+	sVModel = $"${mName}show"$
 End Sub
 	
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
@@ -140,9 +140,9 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bTemporary = Props.Get("Temporary")
 		bTouchless = Props.Get("Touchless")
 		sVIf = Props.Get("VIf")
-		sVShow = Props.Get("VShow")
 		sWidth = Props.Get("Width")
 		bHidden = Props.GetDefault("Hidden", False)
+		bUsesAuthentication = Props.GetDefault("UsesAuthentication", False)
 	End If
 	'
 	'build and get the element
@@ -151,6 +151,28 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	Else	
 		mElement = mTarget.Append($"<v-navigation-drawer ref="${mName}" id="${mName}"></v-navigation-drawer>"$).Get("#" & mName)
 	End If
+	'
+	bAbsolute = BANanoShared.parseBool(bAbsolute)
+bApp = BANanoShared.parseBool(bApp)
+bBottom = BANanoShared.parseBool(bBottom)
+bClipped = BANanoShared.parseBool(bClipped)
+bDark = BANanoShared.parseBool(bDark)
+bDisableResizeWatcher = BANanoShared.parseBool(bDisableResizeWatcher)
+bDisableRouteWatcher = BANanoShared.parseBool(bDisableRouteWatcher)
+bExpandOnHover = BANanoShared.parseBool(bExpandOnHover)
+bFixed = BANanoShared.parseBool(bFixed)
+bFloating = BANanoShared.parseBool(bFloating)
+bHideOverlay = BANanoShared.parseBool(bHideOverlay)
+bLight = BANanoShared.parseBool(bLight)
+bMiniVariant = BANanoShared.parseBool(bMiniVariant)
+bPermanent = BANanoShared.parseBool(bPermanent)
+bRight = BANanoShared.parseBool(bRight)
+bStateles = BANanoShared.parseBool(bStateles)
+bTemporary = BANanoShared.parseBool(bTemporary)
+bTouchless = BANanoShared.parseBool(bTouchless)
+bHidden = BANanoShared.parseBool(bHidden)
+bUsesAuthentication = BANanoShared.parseBool(bUsesAuthentication)
+
 	'
 	VElement.Initialize(mCallBack, mName, mName)
 	VElement.TagName = "v-navigation-drawer"
@@ -183,10 +205,13 @@ VElement.AddAttr("src", sSrc)
 VElement.AddAttr(":stateles", bStateles)
 VElement.AddAttr(":temporary", bTemporary)
 VElement.AddAttr(":touchless", bTouchless)
-VElement.AddAttr("v-if", sVIf)
 VElement.AddAttr("v-model", sVModel)
-VElement.AddAttr("v-show", sVShow)
-VElement.SetData(sVShow, Not(bHidden))
+If bUsesAuthentication Then
+	sVIf = "authenticated"
+End If
+VElement.AddAttr("v-if", sVIf)
+'VElement.AddAttr("v-show", sVShow)
+'VElement.SetData(sVShow, Not(bHidden))
 VElement.AddAttr("width", sWidth)
 VElement.SetData(sVModel, False)
 VElement.BindAllEvents
@@ -224,7 +249,7 @@ End Sub
 
 Sub UpdateVisible(VC As VueComponent, b As Boolean) As VNavigationDrawer
 	VC.SetData(sVIf, b)
-	VC.SetData(sVShow, b)
+	'VC.SetData(sVShow, b)
 	VC.SetData(sVModel, b)
 	Return Me
 End Sub
@@ -260,7 +285,7 @@ Sub getVModel As String
 End Sub
 
 Sub getVShow As String
-	Return sVShow
+	Return sVModel
 End Sub
 
 Sub getID As String

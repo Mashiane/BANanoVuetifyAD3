@@ -14,7 +14,6 @@ Version=8.9
 #DesignerProperty: Key: Align, DisplayName: Vertical Align, FieldType: String, DefaultValue: normal, Description: Align, List: normal|start|center|end|baseline|stretch
 #DesignerProperty: Key: Justify, DisplayName: Horizontal Align, FieldType: String, DefaultValue: normal, Description: Justify, List: normal|start|center|end|space-between|space-around
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
-#DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue: , Description: VShow
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
@@ -29,7 +28,7 @@ Sub Class_Globals
 	Private mStyles As String = ""
 	Private mAttributes As String = ""
 	Public VElement As VueElement
-	Private mVShow As String = ""
+	'Private mVShow As String = ""
 	Private mVIf As String = ""
 	Private sColor As String
 Private sColorintensity As String
@@ -52,6 +51,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey)
 		End If
 	End If
+	'mVShow = $"${mName}show"$
 	End Sub
 	
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
@@ -60,14 +60,13 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mClasses = Props.Get("Classes")
 		mStyles = Props.Get("Styles")
 		mAttributes = Props.Get("Attributes")
-		mVShow = Props.Get("VShow")
 		mVIf = Props.Get("VIf")
 		sColor = Props.Get("Color")
-sColorintensity = Props.Get("ColorIntensity")
-sTextcolor = Props.Get("TextColor")
-sTextcolorintensity = Props.Get("TextColorIntensity")
-sText = Props.Get("Text")
-mAlign = Props.Get("Align")
+		sColorintensity = Props.Get("ColorIntensity")
+		sTextcolor = Props.Get("TextColor")
+		sTextcolorintensity = Props.Get("TextColorIntensity")
+		sText = Props.Get("Text")
+		mAlign = Props.Get("Align")
 		mJustify = Props.Get("Justify")
 	End If
 	'
@@ -84,7 +83,8 @@ mAlign = Props.Get("Align")
 	VElement.Classes = mClasses
 	VElement.Styles = mStyles
 	VElement.Attributes = mAttributes
-	VElement.VShow = mVShow
+	'VElement.VShow = mVShow
+	'VElement.SetData(mVShow, True)
 	VElement.VIf = mVIf
 	VElement.Color = VElement.BuildColor(sColor, sColorintensity)
 	VElement.TextColor = VElement.BuildColor(sTextcolor, sTextcolorintensity)
@@ -125,7 +125,7 @@ End Sub
 
 Sub UpdateVisible(VC As VueComponent, b As Boolean) As VCardTitle
 	VC.SetData(mVIf, b)
-	VC.SetData(mVShow, b)
+	'VC.SetData(mVShow, b)
 	Return Me
 End Sub
 

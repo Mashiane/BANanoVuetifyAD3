@@ -49,7 +49,6 @@ Version=8.95
 #DesignerProperty: Key: VBind, DisplayName: VBind, FieldType: String, DefaultValue: , Description: VBind
 #DesignerProperty: Key: VFor, DisplayName: VFor, FieldType: String, DefaultValue: , Description: VFor
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
-#DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VOn, DisplayName: VOn, FieldType: String, DefaultValue: , Description: VOn
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
@@ -141,7 +140,7 @@ Private sPT As String
 Private sPX As String
 Private sPY As String
 Private sMA As String
-private sValue as object
+Private sValue As Object
 	End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -207,7 +206,6 @@ sTrueValue = Props.GetDefault("TrueValue", True)
 sVBind = Props.Get("VBind")
 sVFor = Props.Get("VFor")
 sVIf = Props.Get("VIf")
-sVShow = Props.Get("VShow")
 sVModel = Props.Get("VModel")
 sVOn = Props.Get("VOn")
 bValidateOnBlur = Props.Get("ValidateOnBlur")
@@ -228,6 +226,28 @@ sPY = Props.Get("PY")
 sMA = Props.Get("MA")
 	End If
 	'
+	bDisabled = BANanoShared.parseBool(bDisabled)
+bHidden = BANanoShared.parseBool(bHidden)
+bLoading = BANanoShared.parseBool(bLoading)
+bReadonly = BANanoShared.parseBool(bReadonly)
+bRequired = BANanoShared.parseBool(bRequired)
+bDark = BANanoShared.parseBool(bDark)
+bDense = BANanoShared.parseBool(bDense)
+bFilled = BANanoShared.parseBool(bFilled)
+bFlat = BANanoShared.parseBool(bFlat)
+bHideDetails = BANanoShared.parseBool(bHideDetails)
+bInset = BANanoShared.parseBool(bInset)
+bLight = BANanoShared.parseBool(bLight)
+bMultiple = BANanoShared.parseBool(bMultiple)
+bPersistentHint = BANanoShared.parseBool(bPersistentHint)
+bRipple = BANanoShared.parseBool(bRipple)
+bValidateOnBlur = BANanoShared.parseBool(bValidateOnBlur)
+bChecked = BANanoShared.parseBool(bChecked)
+bDisabled = BANanoShared.parseBool(bDisabled)
+bRequired = BANanoShared.parseBool(bRequired)
+bLoading = BANanoShared.parseBool(bLoading)
+
+	'
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
 		mElement = BANano.GetElement($"#${mName}"$)
@@ -237,16 +257,6 @@ sMA = Props.Get("MA")
 	'
 	VElement.Initialize(mCallBack, mName, mName)
 	VElement.TagName = "v-switch"
-	'
-	If BANano.IsNull(bDisabled) Or BANano.IsUndefined(bDisabled) Then
-		bDisabled = False 
-	End If
-	If BANano.IsNull(bRequired) Or BANano.IsUndefined(bRequired) Then
-		bRequired = False 
-	End If
-	If BANano.IsNull(bLoading) Or BANano.IsUndefined(bLoading) Then
-		bLoading = False 
-	End If
 	VElement.Classes = mClasses
 	VElement.Styles = mStyles
 	VElement.Attributes = mAttributes

@@ -115,6 +115,13 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sVModel = Props.Get("VModel")
 	End If
 	'
+	bDark = BANanoShared.parseBool(bDark)
+bDisabled = BANanoShared.parseBool(bDisabled)
+bOutlined = BANanoShared.parseBool(bOutlined)
+bAbsolute = BANanoShared.parseBool(bAbsolute)
+bOpenOnHover = BANanoShared.parseBool(bOpenOnHover)
+
+	'
 	'build the data source
 	Dim ds As String = $"${mName}ds"$
 	Dim rs As List

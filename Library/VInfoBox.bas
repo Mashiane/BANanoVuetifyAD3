@@ -87,6 +87,10 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mSuffix = Props.Get("Suffix")
 	End If
 	'
+	mAutoPlay = BANanoShared.parseBool(mAutoPlay)
+mUseEasing = BANanoShared.parseBool(mUseEasing)
+
+	'
 	Dim strHTML As String
 	strHTML = $"<v-card ref="${mName}" id="${mName}" class="ma-3 rounded-lg">
 	<v-list-item id="${mName}listitem">

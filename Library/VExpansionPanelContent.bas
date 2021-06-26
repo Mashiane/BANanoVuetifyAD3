@@ -57,6 +57,8 @@ sColorIntensity = Props.GetDefault("ColorIntensity", "")
 bEager = Props.GetDefault("Eager", False)
  
 	End If 
+	bEager = BANanoShared.parseBool(bEager)
+
 	' 
 	'build and get the element 
 	If BANano.Exists($"#${mName}"$) Then 

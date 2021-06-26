@@ -22,7 +22,6 @@ Version=8.9
 #DesignerProperty: Key: VBind, DisplayName: VBind, FieldType: String, DefaultValue: , Description: VBind
 #DesignerProperty: Key: VFor, DisplayName: VFor, FieldType: String, DefaultValue: , Description: VFor
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
-#DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VOn, DisplayName: VOn, FieldType: String, DefaultValue: , Description: VOn
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
@@ -90,7 +89,6 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sVBind = Props.Get("VBind")
 		sVFor = Props.Get("VFor")
 		sVIf = Props.Get("VIf")
-		sVShow = Props.Get("VShow")
 		sVModel = Props.Get("VModel")
 		sVOn = Props.Get("VOn")
 		bHidden = Props.GetDefault("Hidden", False)
@@ -99,6 +97,10 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sValue = Props.GetDefault("Value", 10)
 	End If
 	'
+	bButton = BANanoShared.parseBool(bButton)
+bIndeterminate = BANanoShared.parseBool(bIndeterminate)
+bHidden = BANanoShared.parseBool(bHidden)
+	
 	If BANano.IsNull(sAvatar) Or BANano.IsUndefined(sAvatar) Then
 		sAvatar = ""
 	End If

@@ -87,7 +87,11 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sStepValue = Props.GetDefault("StepValue", "")
 		bRequired = Props.GetDefault("Required", False)
 	End If 
-	' 
+	'
+	bComplete = BANanoShared.parseBool(bComplete)
+bEditable = BANanoShared.parseBool(bEditable)
+bRequired = BANanoShared.parseBool(bRequired)
+ 
 	'build and get the element 
 	If BANano.Exists($"#${mName}"$) Then 
 		mElement = BANano.GetElement($"#${mName}"$) 

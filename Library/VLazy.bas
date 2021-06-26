@@ -62,7 +62,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey) 
 		End If 
 	End If 
-	soptions = $"${mname}options"$
+	sOptions = $"${mName}options"$
 	End Sub
 
 Sub DesignerCreateView (Target As BANanoElement, Props As Map) 
@@ -85,6 +85,8 @@ sValue = Props.GetDefault("Value", "")
 sWidth = Props.GetDefault("Width", "")
  
 	End If 
+	bHidden = BANanoShared.parseBool(bHidden)
+
 	' 
 	'build and get the element 
 	If BANano.Exists($"#${mName}"$) Then 

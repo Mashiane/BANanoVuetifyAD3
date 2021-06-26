@@ -15,7 +15,6 @@ Version=8.9
 #DesignerProperty: Key: TextColor, DisplayName: TextColor, FieldType: String, DefaultValue: , Description: TextColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: TextColorIntensity, DisplayName: TextColorIntensity, FieldType: String, DefaultValue: , Description: TextColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
-#DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue: , Description: VShow
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
@@ -38,7 +37,7 @@ Sub Class_Globals
 	Private sTextColor As String
 	Private sTextColorIntensity As String
 	Private sVIf As String
-	Private sVShow As String
+	'Private sVShow As String
 	Private xitems As List
 	Private bHidden As Boolean
 End Sub
@@ -56,7 +55,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 		End If
 	End If
 	xitems.Initialize 
-	sVShow = $"${mName}show"$
+	'sVShow = $"${mName}show"$
 	End Sub
 	
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
@@ -74,9 +73,13 @@ sTextColor = Props.Get("TextColor")
 sTextColorIntensity = Props.Get("TextColorIntensity")
 sVIf = Props.Get("VIf")
 bHidden = Props.GetDefault("Hidden", False)
-sVShow = Props.Get("VShow")
+bHidden = BANanoShared.parseBool(bHidden)
 	End If
 	'
+	bDark = BANanoShared.parseBool(bDark)
+bLarge = BANanoShared.parseBool(bLarge)
+bLight = BANanoShared.parseBool(bLight)
+
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
 		mElement = BANano.GetElement($"#${mName}"$)
@@ -97,9 +100,9 @@ VElement.Light = bLight
 VElement.TextColor = VElement.BuildColor(sTextColor, sTextColorIntensity)
 VElement.TextColorIntensity = sTextColorIntensity
 VElement.VIf = sVIf
-VElement.VShow = sVShow
+'VElement.VShow = sVShow
 VElement.SetData(sItems, VElement.NewList)
-VElement.SetData(sVShow, Not(bHidden))
+'VElement.SetData(sVShow, Not(bHidden))
 VElement.BindAllEvents
 End Sub
 
@@ -135,7 +138,7 @@ End Sub
 
 Sub UpdateVisible(VC As VueComponent, b As Boolean) As VBreadCrumbs
 	VC.SetData(sVIf, b)
-	VC.SetData(sVShow, b)
+	'VC.SetData(sVShow, b)
 	Return Me
 End Sub
 

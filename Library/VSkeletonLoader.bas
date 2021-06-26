@@ -7,23 +7,23 @@ Version=8.9
 #IgnoreWarnings:12
 
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
-#DesignerProperty: Key: SkeletonType, DisplayName: Types(s), FieldType: String, DefaultValue: card1, Description: Types(s)
+#DesignerProperty: Key: Loading, DisplayName: Loading, FieldType: Boolean, DefaultValue: False, Description: Loading
+#DesignerProperty: Key: SkeletonType, DisplayName: Types, FieldType: String, DefaultValue: card, Description: Types(s)
+#DesignerProperty: Key: OwnTypes, DisplayName: Choose Type, FieldType: String, DefaultValue: , Description: Types(s), List: actions|article|avatar|button|card|card-avatar|card-heading|chip|date-picker|date-picker-options|date-picker-days|heading|image|list-item|list-item-avatar|list-item-two-line|list-item-avatar-two-line|list-item-three-line|list-item-avatar-three-line|paragraph|sentences|table|table-heading|table-thead|table-tbody|table-row-divider|table-row|table-cell|table-tfoot|text
 #DesignerProperty: Key: Boilerplate, DisplayName: Boilerplate, FieldType: Boolean, DefaultValue: false, Description: Boilerplate
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: false, Description: Dark
+#DesignerProperty: Key: Light, DisplayName: Light, FieldType: Boolean, DefaultValue: false, Description: Light
 #DesignerProperty: Key: Elevation, DisplayName: Elevation, FieldType: String, DefaultValue: , Description: Elevation
 #DesignerProperty: Key: Height, DisplayName: Height, FieldType: String, DefaultValue: , Description: Height
-#DesignerProperty: Key: Light, DisplayName: Light, FieldType: Boolean, DefaultValue: false, Description: Light
-#DesignerProperty: Key: Loading, DisplayName: Loading, FieldType: String, DefaultValue: skeleton1, Description: Loading
-#DesignerProperty: Key: MaxHeight, DisplayName: MaxHeight, FieldType: String, DefaultValue: , Description: MaxHeight
-#DesignerProperty: Key: MaxWidth, DisplayName: MaxWidth, FieldType: String, DefaultValue: 300, Description: MaxWidth
 #DesignerProperty: Key: MinHeight, DisplayName: MinHeight, FieldType: String, DefaultValue: , Description: MinHeight
+#DesignerProperty: Key: MaxHeight, DisplayName: MaxHeight, FieldType: String, DefaultValue: , Description: MaxHeight
+
+#DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: , Description: Width
 #DesignerProperty: Key: MinWidth, DisplayName: MinWidth, FieldType: String, DefaultValue: , Description: MinWidth
+#DesignerProperty: Key: MaxWidth, DisplayName: MaxWidth, FieldType: String, DefaultValue: 300, Description: MaxWidth
 #DesignerProperty: Key: Tile, DisplayName: Tile, FieldType: Boolean, DefaultValue: false, Description: Tile
 #DesignerProperty: Key: Transition, DisplayName: Transition, FieldType: String, DefaultValue: , Description: Transition, List: none|fab-transition|fade-transition|expand-transition|scale-transition|scroll-x-transition|scroll-x-reverse-transition|scroll-y-transition|scroll-y-reverse-transition|slide-x-transition|slide-x-reverse-transition|slide-y-transition|slide-y-reverse-transition
-#DesignerProperty: Key: Types, DisplayName: Types, FieldType: String, DefaultValue: , Description: Types
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
-#DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue: , Description: VShow
-#DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: , Description: Width
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
@@ -51,12 +51,14 @@ Private sMinWidth As String
 Private sSkeletonType As String
 Private bTile As Boolean
 Private sTransition As String
-Private sTypes As String
 Private sVIf As String
 Private sVShow As String
 Private sWidth As String
 Private xitems As List
 Private bHidden As Boolean
+Private bLoading As Boolean
+Private xSkeletonType As String
+Private sOwnTypes As String
 	End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -73,7 +75,9 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	End If
 	xitems.Initialize 
 	sVShow = $"${mName}show"$
-	End Sub
+	sLoading = $"${mName}loading"$
+	xSkeletonType = $"${mName}type"$
+End Sub
 	
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	mTarget = Target
@@ -82,24 +86,31 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mStyles = Props.Get("Styles")
 		mAttributes = Props.Get("Attributes")
 		bBoilerplate = Props.Get("Boilerplate")
-bDark = Props.Get("Dark")
-sElevation = Props.Get("Elevation")
-sHeight = Props.Get("Height")
-bLight = Props.Get("Light")
-sLoading = Props.Get("Loading")
-sMaxHeight = Props.Get("MaxHeight")
-sMaxWidth = Props.Get("MaxWidth")
-sMinHeight = Props.Get("MinHeight")
-sMinWidth = Props.Get("MinWidth")
-sSkeletonType = Props.Get("SkeletonType")
-bTile = Props.Get("Tile")
-sTransition = Props.Get("Transition")
-sTypes = Props.Get("Types")
-sVIf = Props.Get("VIf")
-sVShow = Props.Get("VShow")
-bHidden = Props.GetDefault("Hidden", False)
-sWidth = Props.Get("Width")
+		bDark = Props.Get("Dark")
+		sElevation = Props.Get("Elevation")
+		sHeight = Props.Get("Height")
+		bLight = Props.Get("Light")
+		bLoading = Props.GetDefault("Loading", False)
+		sMaxHeight = Props.Get("MaxHeight")
+		sMaxWidth = Props.Get("MaxWidth")
+		sMinHeight = Props.Get("MinHeight")
+		sMinWidth = Props.Get("MinWidth")
+		sSkeletonType = Props.Get("SkeletonType")
+		bTile = Props.Get("Tile")
+		sTransition = Props.Get("Transition")
+		sVIf = Props.Get("VIf")
+		bHidden = Props.GetDefault("Hidden", False)
+		sWidth = Props.Get("Width")
+		sOwnTypes = Props.GetDefault("OwnTypes", "")
 	End If
+	'
+	bBoilerplate = BANanoShared.parseBool(bBoilerplate)
+bDark = BANanoShared.parseBool(bDark)
+bLight = BANanoShared.parseBool(bLight)
+bLoading = BANanoShared.parseBool(bLoading)
+bTile = BANanoShared.parseBool(bTile)
+bHidden = BANanoShared.parseBool(bHidden)
+
 	'
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
@@ -108,32 +119,35 @@ sWidth = Props.Get("Width")
 		mElement = mTarget.Append($"<v-skeleton-loader ref="${mName}" id="${mName}"></v-skeleton-loader>"$).Get("#" & mName)
 	End If
 	'
+	If sOwnTypes <> "" Then
+		sSkeletonType = sOwnTypes
+	End If
+	
 	VElement.Initialize(mCallBack, mName, mName)
 	VElement.TagName = "v-skeleton-loader"
 	VElement.Classes = mClasses
 	VElement.Styles = mStyles
 	VElement.Attributes = mAttributes
 	VElement.AddAttr(":boilerplate", bBoilerplate)
-VElement.AddAttr(":dark", bDark)
-VElement.AddAttr("elevation", sElevation)
-VElement.AddAttr("height", sHeight)
-VElement.AddAttr(":light", bLight)
-VElement.AddAttr("loading", sLoading)
-VElement.AddAttr("max-height", sMaxHeight)
-VElement.AddAttr("max-width", sMaxWidth)
-VElement.AddAttr("min-height", sMinHeight)
-VElement.AddAttr("min-width", sMinWidth)
-VElement.AddAttr(":type", sSkeletonType)
-VElement.AddAttr(":tile", bTile)
-VElement.AddAttr("transition", sTransition)
-VElement.AddAttr("types", sTypes)
-VElement.AddAttr("v-if", sVIf)
-VElement.AddAttr("v-show", sVShow)
-VElement.SetData(sVShow, Not(bHidden))
-VElement.AddAttr("width", sWidth)
-VElement.SetData(sLoading, False)
-VElement.SetData(sSkeletonType, "card")
-VElement.BindAllEvents
+	VElement.AddAttr(":dark", bDark)
+	VElement.AddAttr("elevation", sElevation)
+	VElement.AddAttr("height", sHeight)
+	VElement.AddAttr(":light", bLight)
+	VElement.AddAttr(":loading", sLoading)
+	VElement.SetData(sLoading, bLoading)
+	VElement.AddAttr("max-height", sMaxHeight)
+	VElement.AddAttr("max-width", sMaxWidth)
+	VElement.AddAttr("min-height", sMinHeight)
+	VElement.AddAttr("min-width", sMinWidth)
+	VElement.AddAttr(":type", xSkeletonType)
+	VElement.AddAttr(":tile", bTile)
+	VElement.AddAttr("transition", sTransition)
+	VElement.AddAttr("v-if", sVIf)
+	VElement.AddAttr("v-show", sVShow)
+	VElement.SetData(sVShow, Not(bHidden))
+	VElement.AddAttr("width", sWidth)
+	VElement.SetData(xSkeletonType, sSkeletonType)
+	VElement.BindAllEvents
 End Sub
 
 Sub Actions As VSkeletonLoader
@@ -198,13 +212,13 @@ End Sub
 
 Sub Clear(VC As VueComponent)
 	xitems.Initialize
-	Dim sItems As String = BANanoShared.Join(",", xitems)
-	VC.SetData(sSkeletonType, sItems)
+	Dim sItems As String = BANanoShared.Join(", ", xitems)
+	VC.SetData(xSkeletonType, sItems) 
 End Sub
 
 Sub Refresh(VC As VueComponent)
-	Dim sItems As String = BANanoShared.Join(",", xitems)
-	VC.SetData(sSkeletonType, sItems)
+	Dim sItems As String = BANanoShared.Join(", ", xitems)
+	VC.SetData(xSkeletonType, sItems)
 End Sub
 
 public Sub AddToParent(targetID As String)
@@ -241,6 +255,27 @@ Sub UpdateVisible(VC As VueComponent, b As Boolean) As VSkeletonLoader
 	VC.SetData(sVIf, b)
 	VC.SetData(sVShow, b)
 	Return Me
+End Sub
+
+Sub UpdateVisibleOnApp(V As VuetifyApp, b As Boolean) As VSkeletonLoader
+	V.SetData(sVIf, b)
+	V.SetData(sVShow, b)
+	Return Me
+End Sub
+
+Sub UpdateLoading(VC As VueComponent, b As Boolean) As VSkeletonLoader
+	VC.SetData(sLoading, b)
+	Return Me
+End Sub
+
+Sub UpdateLoadingOnApp(V As VuetifyApp, b As Boolean) As VSkeletonLoader
+	V.SetData(sLoading, b)
+	Return Me
+End Sub
+
+'get the vmodel to update
+Sub getVModel As String
+	Return sLoading
 End Sub
 
 Sub Image As VSkeletonLoader

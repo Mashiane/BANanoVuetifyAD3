@@ -1108,6 +1108,8 @@ Sub Initialize(Module As Object, myapp As String)
 	SetMethod(Me, "niceyear", Null)
 	SetMethod(Me, "json2list", Null)
 	UseVBlur
+	'turn authentication off
+	setAuthenticated(False)
 End Sub
 
 Sub json2list(content As String) As List
@@ -5775,9 +5777,22 @@ Sub UpdateVisibility(elID As String, colName As Boolean)
 	SetData(xColor, colName)
 End Sub
 
+Sub UpdateVisible(elID As String, colName As Boolean)
+	Dim xColor As String = $"${elID}show"$
+	xColor = xColor.ToLowerCase
+	SetData(xColor, colName)
+End Sub
+
 'update the disability
 Sub UpdateDisabled(elID As String, colName As Boolean)
 	Dim xColor As String = $"${elID}disabled"$
 	xColor = xColor.ToLowerCase
 	SetData(xColor, colName)
+End Sub
+
+'Update Loading
+Sub UpdateLoading(elID As String, vLoading As Boolean)
+	Dim xColor As String = $"${elID}loading"$
+	xColor = xColor.ToLowerCase
+	SetData(xColor, vLoading)
 End Sub

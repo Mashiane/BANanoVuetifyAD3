@@ -12,13 +12,12 @@ Version=7
 #Event: Change (item As Object)
 #Event: UpdatePickerDate (item As Object)
 #Event: UpdateActivePicker (item As Object)
-#Event: Allowed (val As Object)
-#Event: PickerDate (val As Object)
 #Event: DblClickDate (val As Object)
 
 #DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: dp1, Description: VModel
 #DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: , Description: Value
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
+#DesignerProperty: Key: UseAllowedDates, DisplayName: UseAllowedDates, FieldType: Boolean, DefaultValue: False, Description: UseAllowedDates
 #DesignerProperty: Key: FullWidth, DisplayName: FullWidth, FieldType: Boolean, DefaultValue: False, Description: FullWidth
 #DesignerProperty: Key: Today, DisplayName: Today, FieldType: Boolean, DefaultValue: True, Description: Today
 #DesignerProperty: Key: DateType, DisplayName: DateType, FieldType: String, DefaultValue: date, Description: DateType, List: date|month
@@ -58,7 +57,6 @@ Version=7
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
 
 #DesignerProperty: Key: VOn, DisplayName: VOn, FieldType: String, DefaultValue: , Description: VOn
-#DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue: , Description: VShow
 #DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: , Description: Width
 #DesignerProperty: Key: YearIcon, DisplayName: YearIcon, FieldType: String, DefaultValue: , Description: YearIcon
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag. 
@@ -114,7 +112,7 @@ Sub Class_Globals
 	Private sVIf As String
 	Private sVModel As String
 	Private sVOn As String
-	Private sVShow As String
+	'Private sVShow As String
 	Private sValue As String
 	Private sWidth As String
 	Private sYearIcon As String
@@ -124,13 +122,14 @@ Sub Class_Globals
 	Private xMaxValue As String
 	Private xMinValue As String
 	Private xReadOnly As String
-	Private xEvents As List
+	Private xEvents As Map
 	Private bHidden As Boolean
 	Private bToday As Boolean
 	Private sAllowedDates As String
-	Private sPickerDate As String
 	Private bFullWidth As Boolean
 	Private sDateType As String
+	Private bUseAllowedDates As Boolean
+	Private xAllowedDates As List
 End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -151,12 +150,12 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	xMaxValue = $"${mName}maxvalue"$
 	xMinValue = $"${mName}minvalue"$
 	xReadOnly = $"${mName}readonly"$
-	sVShow = $"${mName}vshow"$
+	'sVShow = $"${mName}vshow"$
 	sEvents = $"${mName}events"$
 	xEvents.Initialize 
-	sAllowedDates = $"${mName}_allowed"$
-	sPickerDate = $"${mName}_pickerdate"$
-	End Sub
+	xAllowedDates.Initialize 
+	sAllowedDates = $"${mName}alloweddates"$
+End Sub
 
 Sub DesignerCreateView (Target As BANanoElement, Props As Map) 
 	mTarget = Target 
@@ -172,7 +171,6 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bDark = Props.GetDefault("Dark", False)
 		bDisabled = Props.GetDefault("Disabled", False)
 		sElevation = Props.GetDefault("Elevation", "")
-		sEvents = Props.GetDefault("Events", "")
 		sFirstDayOfWeek = Props.GetDefault("FirstDayOfWeek", "")
 		bFlat = Props.GetDefault("Flat", False)
 		sHeaderColor = Props.GetDefault("HeaderColor", "")
@@ -187,7 +185,6 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sNextMonthAriaLabel = Props.GetDefault("NextMonthAriaLabel", "")
 		sNextYearAriaLabel = Props.GetDefault("NextYearAriaLabel", "")
 		bNoTitle = Props.GetDefault("NoTitle", False)
-		sPickerDate = Props.GetDefault("PickerDate", "")
 		sPrevIcon = Props.GetDefault("PrevIcon", "")
 		sPrevMonthAriaLabel = Props.GetDefault("PrevMonthAriaLabel", "")
 		sPrevYearAriaLabel = Props.GetDefault("PrevYearAriaLabel", "")
@@ -204,14 +201,31 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sVIf = Props.GetDefault("VIf", "")
 		sVModel = Props.GetDefault("VModel", "")
 		sVOn = Props.GetDefault("VOn", "")
-		sVShow = Props.GetDefault("VShow", "")
 		sValue = Props.GetDefault("Value", "")
 		sWidth = Props.GetDefault("Width", "")
 		sYearIcon = Props.GetDefault("YearIcon", "")
 		bFullWidth = Props.GetDefault("FullWidth", False)
 		sDateType = Props.GetDefault("DateType", "date")
+		bUseAllowedDates = Props.GetDefault("UseAllowedDates", False)
  	End If 
 	' 
+	bToday = BANanoShared.parseBool(bToday)
+bHidden = BANanoShared.parseBool(bHidden)
+bDark = BANanoShared.parseBool(bDark)
+bDisabled = BANanoShared.parseBool(bDisabled)
+bFlat = BANanoShared.parseBool(bFlat)
+bLandscape = BANanoShared.parseBool(bLandscape)
+bMultiple = BANanoShared.parseBool(bMultiple)
+bNoTitle = BANanoShared.parseBool(bNoTitle)
+bRange = BANanoShared.parseBool(bRange)
+bReactive = BANanoShared.parseBool(bReactive)
+bReadonly = BANanoShared.parseBool(bReadonly)
+bShowAdjacentMonths = BANanoShared.parseBool(bShowAdjacentMonths)
+bShowCurrent = BANanoShared.parseBool(bShowCurrent)
+bShowWeek = BANanoShared.parseBool(bShowWeek)
+bFullWidth = BANanoShared.parseBool(bFullWidth)
+bUseAllowedDates = BANanoShared.parseBool(bUseAllowedDates)
+
 	'build and get the element 
 	If BANano.Exists($"#${mName}"$) Then 
 		mElement = BANano.GetElement($"#${mName}"$) 
@@ -224,16 +238,24 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.Classes = mClasses 
 	VElement.Styles = mStyles 
 	VElement.Attributes = mAttributes 
-	VElement.AddAttr("active-picker", sActivePicker)
 	VElement.AddAttr("color", VElement.BuildColor(sColor, sColorIntensity))
 	VElement.AddAttr(":dark", bDark)
 	VElement.AddAttr(":disabled", sDisabled)
 	VElement.SetData(sDisabled, bDisabled)
+	VElement.AddAttr("active-picker", sActivePicker)
 
-	VElement.AddAttr("elevation", sElevation)
+	VElement.AddClass(sElevation)
 
 	VElement.AddAttr(":events", sEvents)
-	VElement.SetData(sEvents, VElement.NewList)
+	VElement.AddAttr("event-color", "green")
+
+	VElement.SetData(sEvents, VElement.NewMap)
+	
+	'
+	If bUseAllowedDates Then
+		VElement.AddAttr(":allowed-dates", sAllowedDates)
+		VElement.SetData(sAllowedDates, xAllowedDates)
+	End If
 
 	VElement.AddAttr("first-day-of-week", sFirstDayOfWeek)
 	VElement.AddAttr(":flat", bFlat)
@@ -260,8 +282,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.AddAttr("next-month-aria-label", sNextMonthAriaLabel)
 	VElement.AddAttr("next-year-aria-label", sNextYearAriaLabel)
 	VElement.AddAttr(":no-title", bNoTitle)
-	VElement.AddAttr("picker-date", sPickerDate)
-
+	
 	VElement.AddAttr("prev-icon", sPrevIcon)
 	VElement.AddAttr("prev-month-aria-label", sPrevMonthAriaLabel)
 	VElement.AddAttr("prev-year-aria-label", sPrevYearAriaLabel)
@@ -269,6 +290,8 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	
 	VElement.AddAttr(":reactive", bReactive)
 	VElement.AddAttr(":readonly", xReadOnly)
+	'VElement.AddAttr("event-color", "color")
+	
 	VElement.SetData(xReadOnly, bReadonly)
 
 	VElement.AddAttr("scrollable", sScrollable)
@@ -289,15 +312,11 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	End If
 
 	VElement.AddAttr("v-on", sVOn)
-	VElement.AddAttr("v-show", sVShow)
-	VElement.SetData(sVShow, Not(bHidden))
+	'VElement.AddAttr("v-show", sVShow)
+	'VElement.SetData(sVShow, Not(bHidden))
 
 	VElement.AddAttr("width", sWidth)
 	VElement.AddAttr("year-icon", sYearIcon)
-	'
-	setAllowedDates(sAllowedDates)
-	'watch the picker date
-	setPickerDate(sPickerDate)
 	'
 	VElement.BindAllEvents
 End Sub
@@ -335,7 +354,7 @@ End Sub
 
 Sub UpdateVisible(VC As VueComponent, b As Boolean) As VDatePicker 
 	VC.SetData(sVIf, b) 
-	VC.SetData(sVShow, b) 
+	'VC.SetData(sVShow, b) 
 	Return Me 
 End Sub
 
@@ -344,10 +363,28 @@ Sub UpdateDisabled(VC As VueComponent, vDisabled As Object)
 	VC.SetData(sDisabled, vDisabled)
 End Sub
 
+Sub ClearAllowedDates(VC As VueComponent)
+	xAllowedDates.Initialize 
+	VC.SetData(sAllowedDates, xAllowedDates)
+End Sub
+
+Sub AddAllowedDate(dt As String)
+	xAllowedDates.Add(dt)
+End Sub
+
+Sub RefreshAllowedDates(VC As VueComponent)
+	VC.SetData(sAllowedDates, xAllowedDates)
+End Sub
+
 'clear events
 Sub Clear(VC As VueComponent)
 	xEvents.clear
 	VC.SetData(sEvents, VC.NewList)
+End Sub
+
+'add an event
+Sub AddItem(eDate As String, eColor As String)
+	xEvents.put(eDate, eColor)
 End Sub
 
 'Update Events
@@ -357,12 +394,12 @@ End Sub
 
 'Update Locale
 Sub UpdateLocale(VC As VueComponent, vLocale As Object)
-VC.SetData(xLocale, vLocale)
+	VC.SetData(xLocale, vLocale)
 End Sub
 
 'Update LocaleFirstDayOfYear
 Sub UpdateLocaleFirstDayOfYear(VC As VueComponent, vLocaleFirstDayOfYear As Object)
-VC.SetData(xLocaleFirstDayOfYear, vLocaleFirstDayOfYear)
+	VC.SetData(xLocaleFirstDayOfYear, vLocaleFirstDayOfYear)
 End Sub
 
 'Update MaxValue
@@ -378,26 +415,6 @@ End Sub
 'Update Range
 Sub UpdateRange(VC As VueComponent, vRange As Object)
 VC.SetData(bRange, vRange)
-End Sub
-
-'Update Allowed Date
-private Sub setAllowedDates(MethodName As String)
-	MethodName = MethodName.tolowercase
-	Dim valx As Object
-	If SubExists(mCallBack, MethodName) Then
-		VElement.AddAttr(":allowed-dates", MethodName)
-		VElement.SetMethod(mCallBack, MethodName, Array(valx))
-	End If
-End Sub
-
-private Sub setPickerDate(MethodName As String)
-	MethodName = MethodName.ToLowerCase
-	Dim valx As Object
-	If SubExists(mCallBack, MethodName) Then
-		VElement.AddAttr(":picker-date.sync", MethodName)
-		VElement.SetData(MethodName, Null)
-		VElement.SetWatch(MethodName, True, True, MethodName, Array(valx))
-	End If
 End Sub
 
 'Update Reactive

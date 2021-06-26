@@ -7,7 +7,7 @@ Version=8.9
 #IgnoreWarnings:12
 
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
-#DesignerProperty: Key: Caption, DisplayName: Caption, FieldType: String, DefaultValue: mdi-domain, Description: Caption
+#DesignerProperty: Key: Caption, DisplayName: IconName, FieldType: String, DefaultValue: mdi-domain, Description: Caption
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue: green, Description: Color, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: ColorIntensity, DisplayName: ColorIntensity, FieldType: String, DefaultValue: , Description: ColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: false, Description: Dark
@@ -19,8 +19,6 @@ Version=8.9
 #DesignerProperty: Key: VOn, DisplayName: V-On, FieldType: String, DefaultValue:  , Description: V-On
 #DesignerProperty: Key: VBind, DisplayName: V-Bind, FieldType: String, DefaultValue:  , Description: V-Bind
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
-#DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
-#DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: , Description: VModel
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
@@ -46,7 +44,6 @@ Sub Class_Globals
 	Private sSize As String
 	Private sSize1 As String
 	Private sVIf As String
-	Private sVModel As String
 	Private sVShow As String
 	Private sVOn As String
 	Private sVBind As String
@@ -84,12 +81,16 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sSize = Props.Get("Size")
 		sSize1 = Props.Get("Size1")
 		sVIf = Props.Get("VIf")
-		sVShow = Props.Get("VShow")
-		sVModel = Props.Get("VModel")
 		bHidden = Props.GetDefault("Hidden", False)
 		sVOn = Props.Get("VOn")
 		sVBind = Props.Get("VBind")
 	End If
+	'
+	bDark = BANanoShared.parseBool(bDark)
+bDense = BANanoShared.parseBool(bDense)
+bDisabled = BANanoShared.parseBool(bDisabled)
+bHidden = BANanoShared.parseBool(bHidden)
+
 	'
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
@@ -131,10 +132,8 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	End Select
 	'
 	VElement.AddAttr("v-if", sVIf)
-	VElement.AddAttr("v-model", sVModel)
-	VElement.SetData(sVModel, Null)
-	VElement.AddAttr("v-show", sVShow)
-	VElement.SetData(sVShow, Not(bHidden))
+	'VElement.AddAttr("v-show", sVShow)
+	'VElement.SetData(sVShow, Not(bHidden))
 	VElement.BindAllEvents
 End Sub
 

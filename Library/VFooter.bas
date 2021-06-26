@@ -26,7 +26,6 @@ Version=8.9
 #DesignerProperty: Key: Shaped, DisplayName: Shaped, FieldType: Boolean, DefaultValue: false, Description: Shaped
 #DesignerProperty: Key: Tile, DisplayName: Tile, FieldType: Boolean, DefaultValue: false, Description: Tile
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
-#DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue: , Description: VShow
 #DesignerProperty: Key: Width, DisplayName: Width, FieldType: Boolean, DefaultValue: false, Description: Width
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
@@ -63,7 +62,7 @@ Private bTile As Boolean
 Private sVIf As String
 Private sVShow As String
 Private bWidth As Boolean
-private bHidden as boolean
+Private bHidden As Boolean
 	End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -106,10 +105,23 @@ sRounded = Props.Get("Rounded")
 bShaped = Props.Get("Shaped")
 bTile = Props.Get("Tile")
 sVIf = Props.Get("VIf")
-sVShow = Props.Get("VShow")
 bHidden = Props.GetDefault("Hidden", False)
 bWidth = Props.Get("Width")
 	End If
+	'
+	bAbsolute = BANanoShared.parseBool(bAbsolute)
+bApp = BANanoShared.parseBool(bApp)
+bDark = BANanoShared.parseBool(bDark)
+bFixed = BANanoShared.parseBool(bFixed)
+bInset = BANanoShared.parseBool(bInset)
+bLight = BANanoShared.parseBool(bLight)
+bOutlined = BANanoShared.parseBool(bOutlined)
+bPadless = BANanoShared.parseBool(bPadless)
+bShaped = BANanoShared.parseBool(bShaped)
+bTile = BANanoShared.parseBool(bTile)
+bHidden = BANanoShared.parseBool(bHidden)
+bWidth = BANanoShared.parseBool(bWidth)
+
 	'
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
@@ -141,8 +153,8 @@ VElement.AddClass(sRounded)
 VElement.AddAttr(":shaped", bShaped)
 VElement.AddAttr(":tile", bTile)
 VElement.AddAttr("v-if", sVIf)
-VElement.AddAttr("v-show", sVShow)
-VElement.SetData(sVShow, Not(bHidden))
+'VElement.AddAttr("v-show", sVShow)
+'VElement.SetData(sVShow, Not(bHidden))
 VElement.AddAttr(":width", bWidth)
 VElement.BindAllEvents
 End Sub

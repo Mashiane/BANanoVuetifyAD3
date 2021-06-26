@@ -22,7 +22,8 @@ Version=7
 #Event: SelectForCombo (Success As Boolean, Response As String, Error As String, affectedRows As Int, Result As List)
 #Event: Chart (Success As Boolean, Response As String, Error As String, affectedRows As Int, Result As List)
 #Event: Connected (Success As Boolean)
-
+#Event: OnAuthStateChanged (User As Map)
+#Event: SignUp (Success As Boolean, Result As Map)
 
 #DesignerProperty: Key: ApiKey, DisplayName: ApiKey, FieldType: String, DefaultValue: , Description: ApiKey
 #DesignerProperty: Key: AuthDomain, DisplayName: AuthDomain, FieldType: String, DefaultValue: , Description: AuthDomain
@@ -41,8 +42,8 @@ Version=7
 #DesignerProperty: Key: UsePerformance, DisplayName: UsePerformance, FieldType: Boolean, DefaultValue: False, Description: UsePerformance
 #DesignerProperty: Key: UseStorage, DisplayName: UseStorage, FieldType: Boolean, DefaultValue: False, Description: UseStorage
 #DesignerProperty: Key: UseMessaging, DisplayName: UseMessaging, FieldType: Boolean, DefaultValue: False, Description: UseMessaging
-#DesignerProperty: Key: TimeStampOnSnapShots, DisplayName: TimeStampOnSnapShots, FieldType: Boolean, DefaultValue: False, Description: TimeStampOnSnapShots
-#DesignerProperty: Key: EnablePersistence, DisplayName: EnablePersistence, FieldType: Boolean, DefaultValue: False, Description: EnablePersistence
+#DesignerProperty: Key: TimeStampOnSnapShots, DisplayName: TimeStampOnSnapShots, FieldType: Boolean, DefaultValue: True, Description: TimeStampOnSnapShots
+#DesignerProperty: Key: EnablePersistence, DisplayName: EnablePersistence, FieldType: Boolean, DefaultValue: True, Description: EnablePersistence
 #DesignerProperty: Key: UserName, DisplayName: UserName, FieldType: String, DefaultValue: root, Description: UserName
 #DesignerProperty: Key: Password, DisplayName: Password, FieldType: String, DefaultValue: , Description: Password
 #DesignerProperty: Key: ShowLog, DisplayName: ShowLog, FieldType: Boolean, DefaultValue: False, Description: ShowLog
@@ -127,7 +128,7 @@ Sub Class_Globals
 	Private schemaOrderBy As List
 	Private schemaSelectFields As List
 	Private dsKey As String
-	Private Tag As String
+	Public Tag As String
 	Private sUserName As String
 	Private sPassword As String
 	'
@@ -148,6 +149,7 @@ Sub Class_Globals
 	Public const ACTION_EXCEL As String = "Excel"
 	Public const ACTION_SELECTFORCOMBO As String = "SelectForCombo"
 	Public const ACTION_CHART As String = "Chart"
+	Public const ACTION_SIGN_UP_OWN As String = "SignUpOwn"
 	'
 	Public const MODE_CREATE As String = "C"
 	Public const MODE_UPDATE As String = "U"
@@ -194,6 +196,7 @@ Sub Class_Globals
 	Public affectedRows As Int
 	Private sAction As String
 	Private db As FBCollection
+	Private auth As FBAuth
 End Sub
 
 
@@ -225,6 +228,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	mTarget = Target 
 	If Props <> Null Then 
 		bShowLog = Props.GetDefault("ShowLog", False)
+		bShowLog = BANanoShared.parseBool(bShowLog)
 		sAndOr = Props.GetDefault("AndOr", "")
 		sApiKey = Props.GetDefault("ApiKey", "")
 		sAppId = Props.GetDefault("AppId", "")
@@ -238,6 +242,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sDisplayField = Props.GetDefault("DisplayField", "")
 		sDoubles = Props.GetDefault("Doubles", "")
 		bEnablePersistence = Props.GetDefault("EnablePersistence", False)
+		bEnablePersistence = BANanoShared.parseBool(bEnablePersistence)
 		sFields = Props.GetDefault("Fields", "")
 		sIntegers = Props.GetDefault("Integers", "")
 		sMeasurementId = Props.GetDefault("MeasurementId", "")
@@ -253,12 +258,19 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sStorageBucket = Props.GetDefault("StorageBucket", "")
 		sTableName = Props.GetDefault("TableName", "")
 		bTimeStampOnSnapShots = Props.GetDefault("TimeStampOnSnapShots", False)
+		bTimeStampOnSnapShots = BANanoShared.parseBool(bTimeStampOnSnapShots)
 		bUseAnalytics = Props.GetDefault("UseAnalytics", False)
+		bUseAnalytics = BANanoShared.parseBool(bUseAnalytics)
 		bUseAuth = Props.GetDefault("UseAuth", False)
+		bUseAuth = BANanoShared.parseBool(bUseAuth)
 		bUseDatabase = Props.GetDefault("UseDatabase", False)
+		bUseDatabase = BANanoShared.parseBool(bUseDatabase)
 		bUsePerformance = Props.GetDefault("UsePerformance", False)
+		bUsePerformance = BANanoShared.parseBool(bUsePerformance)
 		bUseStorage = Props.GetDefault("UseStorage", False)
+		bUseStorage = BANanoShared.parseBool(bUseStorage)
 		bUseMessaging = Props.GetDefault("UseMessaging", False)
+		bUseMessaging = BANanoShared.parseBool(bUseMessaging)
 		sVapidKey = Props.GetDefault("VapidKey", "")
 		sWhereFields = Props.GetDefault("WhereFields", "")
 	End If 
@@ -371,7 +383,7 @@ Sub Connect
 	If sMeasurementId <> "" Then firebaseConfig.put("measurementId", sMeasurementId)
 	
 	'if we are still connected, then exit
-	If IsConnected Then Return True
+	If IsConnected Then Return
 	
 	'initialize the app
 	firebaseApp = firebase.RunMethod("initializeApp", firebaseConfig)
@@ -412,8 +424,18 @@ Sub Connect
 	If bUseStorage Then
 		storage = firebase.RunMethod("storage", Null)
 	End If
+	'we are using authorization
+	If bUseAuth Then
+		auth.Initialize(firebaseApp)
+		auth.onAuthStateChanged(Me, "onAuthStateChanged")
+	
+	End If	
 	'check if we are connected
 	Dim bConnect As Boolean = IsConnected
+	'enable persistence
+	If bEnablePersistence Then
+		BANano.Await(enablePersistence)
+	End If
 	'if we have done defined, call it
 	If SubExists(mCallBack, $"${mName}_connected"$) Then
 		BANano.CallSub(mCallBack, $"${mName}_connected"$, Array(bConnect))
@@ -422,8 +444,32 @@ Sub Connect
 	End If
 End Sub
 
+'run internal to return to the user
+private Sub onAuthStateChanged(user As Object)
+	Dim isauthenticated As Boolean
+	Dim usr As Map = CreateMap()
+	If BANano.isnull(user) Or BANano.isundefined(user) Then
+		'user not authenticated
+		isauthenticated = False
+	Else
+		'user authenticated
+		isauthenticated = True
+		'get the user data
+		usr = auth.GetUserData(user)
+	End If
+	'update the authentication status of the user
+	usr.Put("authenticated", isauthenticated)
+	'call the sub
+	If SubExists(mCallBack, $"${mName}_onAuthStateChanged"$) Then
+		BANano.CallSub(mCallBack, $"${mName}_onAuthStateChanged"$, Array(usr))
+	Else
+		BANano.Throw($"${mName}_onAuthStateChanged does not exist!"$)	
+	End If
+End Sub
+
+
 'check if we are connected to firestore
-public Sub IsConnected As Boolean
+private Sub IsConnected As Boolean
 	If IsBound = False Then
 		BANano.Throw($"BANanoDataSourceFireBase.${mName} has not been bound to the component!"$)
 	End If
@@ -440,7 +486,7 @@ public Sub IsConnected As Boolean
 End Sub
 
 'enable persistence
-Sub enablePersistence() As BANanoPromise
+private Sub enablePersistence() As BANanoPromise
 	If IsBound = False Then
 		BANano.Throw($"BANanoDataSourceFireBase.${mName} has not been bound to the component!"$)
 	End If
@@ -1059,3 +1105,37 @@ Sub BindState(VC As VueComponent)
 	IsBound = True
 End Sub
  
+Sub SIGN_UP_OWN(emailAddress As String, password As String)
+	Tag = ACTION_SIGN_UP_OWN
+	If IsBound = False Then
+		BANano.Throw($"BANanoDataSourceFireBase.${mName} has not been bound to the component!"$)
+	End If
+	If bShowLog Then
+		Log($"BANanoDataSourceFireBase.${sTableName}.SIGN_UP_OWN"$)
+	End If
+	'
+	Dim resp As Map
+	Dim err As Map
+	Dim promRegister As BANanoPromise = auth.createUserWithEmailAndPassword(emailAddress, password)
+	promRegister.ThenWait(resp)
+		Dim usr As Map = auth.getSignedInUserDetails(resp)
+		'if we have done defined, call it
+		If SubExists(mCallBack, $"${mName}_signup"$) Then
+			BANano.CallSub(mCallBack, $"${mName}_signup"$, Array(True, usr))
+		Else
+			BANano.Throw($"BANanoDataSourceFireBase.${mName}.SIGNUP callback not defined!"$)
+		End If
+	promRegister.ElseWait(err)
+		If SubExists(mCallBack, $"${mName}_signup"$) Then
+			BANano.CallSub(mCallBack, $"${mName}_signup"$, Array(False, err))
+		Else
+			BANano.Throw($"BANanoDataSourceFireBase.${mName}.SIGNUP callback not defined!"$)
+		End If
+	promRegister.End
+End Sub
+
+'get the error message from the response
+Sub ErrorMessage(res As Map) As String
+	Dim serror As String = res.GetDefault("message", "")
+	Return serror
+End Sub

@@ -70,6 +70,10 @@ bHideActions = Props.GetDefault("HideActions", False)
 bRipple = Props.GetDefault("Ripple", False)
  
 	End If 
+	bDisableIconRotate = BANanoShared.parseBool(bDisableIconRotate)
+bHideActions = BANanoShared.parseBool(bHideActions)
+bRipple = BANanoShared.parseBool(bRipple)
+
 	' 
 	'build and get the element 
 	If BANano.Exists($"#${mName}"$) Then 

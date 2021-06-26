@@ -41,7 +41,6 @@ Version=8.9
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
-#DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VIf, DisplayName: V-If, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: MA, DisplayName: MA, FieldType: String, DefaultValue: , Description: MA
 #DesignerProperty: Key: MB, DisplayName: MB, FieldType: String, DefaultValue: , Description: MB
@@ -76,7 +75,7 @@ Sub Class_Globals
 	Private mTextColorIntensity As String = ""
 	
 	Private mColorIntensity As String = ""
-	Private mVShow As String = ""
+	'Private mVShow As String = ""
 	Private mVIf As String = ""
 	Private mCols As String = ""
 	Private mAlignSelf As String = ""
@@ -128,6 +127,7 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey)
 		End If
 	End If
+	'mVShow = $"${mName}show"$
 End Sub
 
 ' this is the place where you create the view in html and run initialize javascript
@@ -143,7 +143,6 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mAlign = Props.Get("Align")
 		mJustify = Props.Get("Justify")
 		mColorIntensity = Props.Get("ColorIntensity")
-		mVShow = Props.Get("VShow")
 		mVIf = Props.Get("VIf")
 		mCols = Props.Get("Cols")
 		mAlignSelf = Props.Get("AlignSelf")
@@ -182,6 +181,13 @@ sBorderWidth = Props.Get("BorderWidth")
 bNoGutters = Props.GetDefault("NoGutters",False)
 bDebugBorder = Props.GetDefault("DebugBorder",False)
 	End If
+	'
+	bDense = BANanoShared.parseBool(bDense)
+bFillHeight = BANanoShared.parseBool(bFillHeight)
+bNoGutters = BANanoShared.parseBool(bNoGutters)
+bDebugBorder = BANanoShared.parseBool(bDebugBorder)
+
+	
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
 		mElement = BANano.GetElement($"#${mName}"$)
@@ -200,7 +206,8 @@ bDebugBorder = Props.GetDefault("DebugBorder",False)
 	VElement.VIf = mVIf
 	VElement.Cols = mCols
 	VElement.AlignSelf = mAlignSelf
-	VElement.VShow = mVShow
+	'VElement.VShow = mVShow
+	'VElement.SetData(mVShow, False)
 	VElement.MA = sMA
 	VElement.MB = sMB
 	VElement.ML = sML
@@ -276,7 +283,7 @@ End Sub
 
 
 Sub UpdateVisible(VC As VueComponent, b As Boolean)
-	VC.SetData(mVShow, b)
+	'VC.SetData(mVShow, b)
 	VC.SetData(mVIf, b)
 End Sub
 

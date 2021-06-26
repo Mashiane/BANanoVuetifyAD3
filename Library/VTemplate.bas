@@ -64,7 +64,7 @@ Private sSlot As String
 Private sTextColor As String
 Private sTextColorIntensity As String
 Private sVIf As String
-Private sVShow As String
+'Private sVShow As String
 Private sKey As String
 Private sVFor As String
 Private bHidden As Boolean
@@ -82,7 +82,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey)
 		End If
 	End If
-	sVShow = $"${mName}show"$
+	'sVShow = $"${mName}show"$
 	End Sub
 	
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
@@ -111,12 +111,14 @@ sPY = Props.Get("PY")
 sTextColor = Props.Get("TextColor")
 sTextColorIntensity = Props.Get("TextColorIntensity")
 sVIf = Props.Get("VIf")
-sVShow = Props.Get("VShow")
+'sVShow = Props.Get("VShow")
 bHidden = Props.GetDefault("Hidden", False)
 sKey = Props.Get("Key")
 sVFor = Props.Get("VFor")
 	End If
-	
+	'
+	bHidden = BANanoShared.parseBool(bHidden)
+
 	If BANano.IsNull(sSlot) Or BANano.IsUndefined(sSlot) Then sSlot = ""
 	If sSlot = "none" Then sSlot = ""
 	Select Case sSlot
@@ -164,7 +166,8 @@ VElement.PY = sPY
 VElement.TextColor = VElement.BuildColor(sTextColor, sTextColorIntensity)
 VElement.TextColorIntensity = sTextColorIntensity
 VElement.VIf = sVIf
-VElement.VShow = sVShow
+'VElement.VShow = sVShow
+'VElement.SetData(sVShow, Null)
 VElement.VFor = sVFor
 VElement.Bind("key", sKey)
 VElement.BindAllEvents
@@ -202,7 +205,7 @@ End Sub
 
 Sub UpdateVisible(VC As VueComponent, b As Boolean) As VTemplate
 	VC.SetData(sVIf, b)
-	VC.SetData(sVShow, b)
+	'VC.SetData(sVShow, b)
 	Return Me
 End Sub
 

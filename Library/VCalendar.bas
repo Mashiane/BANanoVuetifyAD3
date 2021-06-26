@@ -8,6 +8,10 @@ Version=7
 'Created with BANano Custom View Creator 1.00 by TheMash
 'https://github.com/Mashiane/BANano-Custom-View-Creator
 'Custom BANano View class
+#Event: Add (e As BANanoEvent)
+#Event: Today (e As BANanoEvent)
+#Event: Previous (e As BANanoEvent)
+#Event: Next (e As BANanoEvent)
 #Event: Change (item As Map)
 #Event: ClickDate (item As Map)
 #Event: ClickDay (item As Map)
@@ -26,13 +30,13 @@ Version=7
 #Event: ContextMenuTimeCategory (item As Map)
 #Event: Moved (item As Map)
 
-
+#DesignerProperty: Key: Loading, DisplayName: Loading, FieldType: Boolean, DefaultValue: False, Description: Loading
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: calendar1, Description: VModel
+#DesignerProperty: Key: Height, DisplayName: Height, FieldType: String, DefaultValue: 600, Description: Height
 #DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: , Description: Value
 #DesignerProperty: Key: CalendarType, DisplayName: CalendarType, FieldType: String, DefaultValue: month, Description: Type, List: 4day|category|custom-daily|custom-weekly|day|month|week
 #DesignerProperty: Key: EventOverlapMode, DisplayName: EventOverlapMode, FieldType: String, DefaultValue: stack, Description: EventOverlapMode, List: column|stack
-
 #DesignerProperty: Key: CategoryDays, DisplayName: CategoryDays, FieldType: String, DefaultValue: , Description: CategoryDays
 #DesignerProperty: Key: CategoryForValid, DisplayName: CategoryForValid, FieldType: String, DefaultValue: , Description: CategoryForValid
 #DesignerProperty: Key: CategoryHideDynamic, DisplayName: CategoryHideDynamic, FieldType: Boolean, DefaultValue: False, Description: CategoryHideDynamic
@@ -70,7 +74,6 @@ Version=7
 #DesignerProperty: Key: LocaleFirstDayOfYear, DisplayName: LocaleFirstDayOfYear, FieldType: String, DefaultValue: , Description: LocaleFirstDayOfYear
 #DesignerProperty: Key: MaxDays, DisplayName: MaxDays, FieldType: String, DefaultValue: , Description: MaxDays
 #DesignerProperty: Key: MinWeeks, DisplayName: MinWeeks, FieldType: String, DefaultValue: , Description: MinWeeks
-#DesignerProperty: Key: Now, DisplayName: Now, FieldType: String, DefaultValue: , Description: Now
 #DesignerProperty: Key: ShortIntervals, DisplayName: ShortIntervals, FieldType: Boolean, DefaultValue: False, Description: ShortIntervals
 #DesignerProperty: Key: ShortMonths, DisplayName: ShortMonths, FieldType: Boolean, DefaultValue: False, Description: ShortMonths
 #DesignerProperty: Key: ShortWeekdays, DisplayName: ShortWeekdays, FieldType: Boolean, DefaultValue: False, Description: ShortWeekdays
@@ -80,7 +83,6 @@ Version=7
 #DesignerProperty: Key: VBind, DisplayName: VBind, FieldType: String, DefaultValue: , Description: VBind
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
 #DesignerProperty: Key: VOn, DisplayName: VOn, FieldType: String, DefaultValue: , Description: VOn
-#DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue: , Description: VShow
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag. 
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use = 
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
@@ -107,8 +109,6 @@ Private sColorIntensity As String
 Private bDark As Boolean
 Private sEndValue As String
 Private sEventCategory As String
-Private sEventColor As String
-Private sEventColorIntensity As String
 Private sEventEnd As String
 Private sEventHeight As String
 Private sEventMarginBottom As String
@@ -148,12 +148,16 @@ Private sVBind As String
 Private sVIf As String
 Private sVModel As String
 Private sVOn As String
-Private sVShow As String
+'Private sVShow As String
 Private sValue As String
 Private sWeekdays As String
 Private xType As String 
 Private mEvents As List
 Private mCategories As List
+Private sHeight As String
+Private sloading As String
+Private bLoading As Boolean
+Private sEventColor As String
 	End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -173,7 +177,10 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	sEvents = $"${mName}events"$
 	sWeekdays = $"${mName}weekdays"$
 	mEvents.Initialize 
-	mCategories.Initialize 
+	mCategories.Initialize
+	'sVShow = $"${mName}show"$ 
+	sloading = $"${mName}loading"$
+	sNow = $"${mName}now"$
 End Sub
 
 Sub DesignerCreateView (Target As BANanoElement, Props As Map) 
@@ -185,24 +192,33 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 sCategoryDays = Props.GetDefault("CategoryDays", "")
 sCategoryForValid = Props.GetDefault("CategoryForValid", "")
 bCategoryHideDynamic = Props.GetDefault("CategoryHideDynamic", False)
+bCategoryHideDynamic = BANanoShared.parseBool(bCategoryHideDynamic)
+
 bCategoryShowAll = Props.GetDefault("CategoryShowAll", False)
+bCategoryShowAll = BANanoShared.parseBool(bCategoryShowAll)
+
 sCategoryText = Props.GetDefault("CategoryText", "")
 sColor = Props.GetDefault("Color", "")
 sColorIntensity = Props.GetDefault("ColorIntensity", "")
 bDark = Props.GetDefault("Dark", False)
+bDark = BANanoShared.parseBool(bDark)
+
 sEndValue = Props.GetDefault("EndValue", "")
 sEventCategory = Props.GetDefault("EventCategory", "category")
 sEventColor = Props.GetDefault("EventColor", "")
-sEventColorIntensity = Props.GetDefault("EventColorIntensity", "")
 sEventEnd = Props.GetDefault("EventEnd", "end")
 sEventHeight = Props.GetDefault("EventHeight", "")
 sEventMarginBottom = Props.GetDefault("EventMarginBottom", "")
 bEventMore = Props.GetDefault("EventMore", False)
+bEventMore = BANanoShared.parseBool(bEventMore)
+
 sEventMoreText = Props.GetDefault("EventMoreText", "")
 sEventName = Props.GetDefault("EventName", "name")
 sEventOverlapMode = Props.GetDefault("EventOverlapMode", "")
 sEventOverlapThreshold = Props.GetDefault("EventOverlapThreshold", "")
 bEventRipple = Props.GetDefault("EventRipple", False)
+bEventRipple = BANanoShared.parseBool(bEventRipple)
+
 sEventStart = Props.GetDefault("EventStart", "start")
 sEventTextColor = Props.GetDefault("EventTextColor", "")
 sEventTextColorIntensity = Props.GetDefault("EventTextColorIntensity", "")
@@ -210,39 +226,86 @@ sEventTimed = Props.GetDefault("EventTimed", "")
 sFirstInterval = Props.GetDefault("FirstInterval", "")
 sFirstTime = Props.GetDefault("FirstTime", "")
 bHidden = Props.GetDefault("Hidden", False)
+bHidden = BANanoShared.parseBool(bHidden)
+
 bHideHeader = Props.GetDefault("HideHeader", False)
+bHideHeader = BANanoShared.parseBool(bHideHeader)
+
 sIntervalCount = Props.GetDefault("IntervalCount", "")
 sIntervalHeight = Props.GetDefault("IntervalHeight", "")
 sIntervalMinutes = Props.GetDefault("IntervalMinutes", "")
 sIntervalWidth = Props.GetDefault("IntervalWidth", "")
 bLight = Props.GetDefault("Light", False)
+bLight = BANanoShared.parseBool(bLight)
+
 sLocale = Props.GetDefault("Locale", "")
 sLocaleFirstDayOfYear = Props.GetDefault("LocaleFirstDayOfYear", "")
 sMaxDays = Props.GetDefault("MaxDays", "")
 sMinWeeks = Props.GetDefault("MinWeeks", "")
-sNow = Props.GetDefault("Now", "")
 bShortIntervals = Props.GetDefault("ShortIntervals", False)
+bShortIntervals = BANanoShared.parseBool(bShortIntervals)
+
 bShortMonths = Props.GetDefault("ShortMonths", False)
+bShortMonths = BANanoShared.parseBool(bShortMonths)
+
 bShortWeekdays = Props.GetDefault("ShortWeekdays", False)
+bShortWeekdays = BANanoShared.parseBool(bShortWeekdays)
+
 bShowMonthOnFirst = Props.GetDefault("ShowMonthOnFirst", False)
+bShowMonthOnFirst = BANanoShared.parseBool(bShowMonthOnFirst)
+
 bShowWeek = Props.GetDefault("ShowWeek", False)
+bShowWeek = BANanoShared.parseBool(bShowWeek)
+
 sStart = Props.GetDefault("Start", "")
 sType = Props.GetDefault("CalendarType", "month")
 sVBind = Props.GetDefault("VBind", "")
 sVIf = Props.GetDefault("VIf", "")
 sVModel = Props.GetDefault("VModel", "")
 sVOn = Props.GetDefault("VOn", "")
-sVShow = Props.GetDefault("VShow", "")
 sValue = Props.GetDefault("Value", "")
-bHidden = Props.GetDefault("Hidden", False)
- 
+sHeight = Props.GetDefault("Height", "600")
+bLoading = Props.GetDefault("Loading", False)
+bLoading = BANanoShared.parseBool(bLoading)
+
 	End If 
 	' 
 	'build and get the element 
 	If BANano.Exists($"#${mName}"$) Then 
 		mElement = BANano.GetElement($"#${mName}"$) 
-	Else	 
-		mElement = mTarget.Append($"<v-calendar ref="${mName}" id="${mName}"></v-calendar>"$).Get("#" & mName) 
+	Else
+		Dim stemplate As String = $"<v-card id="${mName}card">
+	<v-card-title id="${mName}cardtitle">
+	<v-btn id="${mName}today" outlined class="mr-4" color="grey darken-2">Today</v-btn>
+	<v-btn id="${mName}previous" fab text small color="grey darken-2"><v-icon small>mdi-chevron-left</v-icon></v-btn>
+    <v-btn id="${mName}next" fab text small class="mr-4" color="grey darken-2"><v-icon small>mdi-chevron-right</v-icon></v-btn>
+	<v-toolbar-title id="${mName}toolbartitle" v-if="~refs.${mName}">{{ ~refs.${mName}.title }}</v-toolbar-title>
+    <v-spacer></v-spacer>
+	<v-menu id="${mName}menu" bottom right>
+    	<template v-slot:activator="{ on, attrs }">
+    		<v-btn outlined color="grey darken-2" v-bind="attrs" v-on="on"><span>{{ typetolabel[${mName}type] }}</span><v-icon right>mdi-menu-down</v-icon></v-btn>
+    	</template>
+    	<v-list>
+      		<v-list-item @click="${mName}type = 'day'">
+  	    		<v-list-item-title>Day</v-list-item-title>
+      		</v-list-item>
+      		<v-list-item @click="${mName}type = 'week'">
+        		<v-list-item-title>Week</v-list-item-title>
+      		</v-list-item>
+      		<v-list-item @click="${mName}type = 'month'">
+        		<v-list-item-title>Month</v-list-item-title>
+      		</v-list-item>
+    	</v-list>
+  	</v-menu>
+	<v-btn id="${mName}add" fab text small class="mx-2" color="grey darken-2"><v-icon small>mdi-plus</v-icon></v-btn>
+	</v-card-title>
+	<v-card-text id="${mName}cardtext">
+	</v-card-text>
+	<v-divider></v-divider>
+	<v-calendar id="${mName}" ref="${mName}" full-width offset-x></v-calendar>
+	</v-card>"$	
+	stemplate = stemplate.Replace("~","$") 
+		mElement = mTarget.Append(stemplate).Get("#" & mName) 
 	End If 
 	' 
 	VElement.Initialize(mCallBack, mName, mName) 
@@ -262,7 +325,7 @@ VElement.AddAttr("color", VElement.BuildColor(sColor, sColorIntensity))
 VElement.AddAttr(":dark", bDark)
 VElement.AddAttr("end-value", sEndValue)
 VElement.AddAttr("event-category", sEventCategory)
-VElement.AddAttr("event-color", VElement.BuildColor(sEventColor, sEventColorIntensity))
+VElement.AddAttr("event-color", sEventColor)
 VElement.AddAttr("event-end", sEventEnd)
 VElement.AddAttr("event-height", sEventHeight)
 VElement.AddAttr("event-margin-bottom", sEventMarginBottom)
@@ -290,7 +353,9 @@ VElement.AddAttr("locale", sLocale)
 VElement.AddAttr("locale-first-day-of-year", sLocaleFirstDayOfYear)
 VElement.AddAttr("max-days", sMaxDays)
 VElement.AddAttr("min-weeks", sMinWeeks)
-VElement.AddAttr("now", sNow)
+VElement.AddAttr(":now", sNow)
+Dim mNow As String = BANanoShared.DateNow
+VElement.SetData(sNow, mNow)
 VElement.AddAttr(":short-intervals", bShortIntervals)
 VElement.AddAttr(":short-months", bShortMonths)
 VElement.AddAttr(":short-weekdays", bShortWeekdays)
@@ -303,10 +368,13 @@ VElement.SetData(xType, sType)
 VElement.AddAttr("v-bind", sVBind)
 VElement.AddAttr("v-if", sVIf)
 VElement.AddAttr("v-model", sVModel)
+If sValue = "" Then
+	sValue = mNow
+End If
 VElement.SetData(sVModel, sValue)
 VElement.AddAttr("v-on", sVOn)
-VElement.AddAttr("v-show", sVShow)
-VElement.setdata(sVShow, Not(bHidden))
+'VElement.AddAttr("v-show", sVShow)
+'VElement.setdata(sVShow, Not(bHidden))
 VElement.AddAttr(":weekdays", sWeekdays)
 Dim wd As List
 wd.Initialize 
@@ -318,7 +386,40 @@ wd.Add(4)
 wd.Add(5)
 wd.Add(6)
 VElement.SetData(sWeekdays, wd)
+VElement.GetCard.Bind("loading", sloading)
+VElement.GetCard.AddAttr("height",sHeight)
+VElement.SetData(sloading, bLoading)
+'
+VElement.SetMethod(Me, "GetEventColor", Null)
+'
+Dim typetolabel As Map = CreateMap()
+typetolabel.Put("month", "Month")
+typetolabel.Put("week", "Week")
+typetolabel.Put("day", "Day")
+VElement.SetData("typetolabel", typetolabel)
+
+Dim btntoday As VueElement = VElement.GetVueElement($"${mName}today"$)
+btntoday.SetOnEventOwn(mCallBack, $"${mName}_today"$, "click", Null)
+btntoday.BindAllEvents
+'
+Dim btnprev As VueElement = VElement.GetVueElement($"${mName}previous"$)
+btnprev.SetOnEventOwn(mCallBack, $"${mName}_previous"$, "click", Null)
+btnprev.BindAllEvents
+'
+Dim btnnext As VueElement = VElement.GetVueElement($"${mName}next"$)
+btnnext.SetOnEventOwn(mCallBack, $"${mName}_next"$, "click", Null)
+btnnext.BindAllEvents
+'
+Dim btnAdd As VueElement = VElement.GetVueElement($"${mName}add"$)
+btnAdd.SetOnEventOwn(mCallBack, $"${mName}_add"$, "click", Null)
+btnAdd.BindAllEvents
+
+VElement.BindVueElement(btntoday)
+VElement.BindVueElement(btnprev)
+VElement.BindVueElement(btnnext)
+VElement.BindVueElement(btnAdd)
 VElement.BindAllEvents
+
 End Sub
 
 public Sub AddToParent(targetID As String) 
@@ -359,7 +460,12 @@ End Sub
 
 Sub UpdateVisible(VC As VueComponent, b As Boolean) As VCalendar 
 	VC.SetData(sVIf, b) 
-	VC.SetData(sVShow, b) 
+	'VC.SetData(sVShow, b) 
+	Return Me 
+End Sub
+
+Sub UpdateLoading(VC As VueComponent, b As Boolean) As VCalendar 
+	VC.SetData(sloading, b) 
 	Return Me 
 End Sub
 
@@ -371,14 +477,27 @@ Sub getHere As String
 	Return $"#${mName}"$ 
 End Sub
 
-'set the date of the calendar
-Sub SetDate(VC As VueComponent, vVModel As Object) 
-	VC.SetData(sVModel, vVModel) 
+'show selected date
+Sub OpenDate(VC As VueComponent, item As Map)
+	Dim tDate As String
+	If item.ContainsKey("date") Then
+		tDate = item.Get("date")
+	Else
+		tDate = item   'ignore
+	End If	
+	VC.SetData(sVModel, tDate)
+	VC.SetData(xType, "day")
 End Sub
 
 'set the date of the calendar
-Sub SetToday(VC As VueComponent) 
-	VC.SetData(sVModel, "") 
+Sub SetDate(VC As VueComponent, vVModel As Object) 
+	VC.SetData(sVModel, vVModel)
+End Sub
+
+'set the date of the calendar
+Sub SetToday(VC As VueComponent)
+	Dim mNow As String = BANanoShared.DateNow 
+	VC.SetData(sVModel, mNow)
 End Sub
 
 Sub GetDate(VC As VueComponent) As Object 
@@ -406,16 +525,18 @@ Sub UpdateWeekDays(VC As VueComponent, vWeekDays As List)
 	VC.SetData(sWeekdays, vWeekDays)
 End Sub
 
+'clear events
 Sub Clear(VC As VueComponent)
 	VC.SetData(sEvents, VC.NewList)
 End Sub
 
-
+'refresh
 Sub Refresh(VC As VueComponent)
 	VC.SetData(sEvents, mEvents)
 End Sub
 
-Sub AddItem(eID As String, eCategory As String, eName As String, eStart As String, eEnd As String, eColor As String, eAllDay As Boolean)
+'add an event
+Sub AddItem(eID As String, eCategory As String, eName As String, eStart As String, eEnd As String, eColor As String, eAllDay As Boolean, eLocation As String, eNote As String)
 	Dim ne As Map = CreateMap()
 	ne.Put("id", eID)
 	ne.Put("name", eName)
@@ -424,19 +545,24 @@ Sub AddItem(eID As String, eCategory As String, eName As String, eStart As Strin
 	ne.Put("color", eColor)
 	ne.Put("timed", eAllDay)
 	ne.Put("category", eCategory)
+	ne.Put("note", eNote)
+	ne.Put("location", eLocation)
 	mEvents.Add(ne)
 End Sub
 
+'check change
 Sub checkChange(VC As VueComponent)
 	Dim refs As BANanoObject = VC.refs
 	refs.GetField(mName).runmethod("checkChange", Null)
 End Sub
 
+'set the previous dat
 Sub prevDate(VC As VueComponent)
 	Dim refs As BANanoObject = VC.refs
 	refs.GetField(mName).runmethod("prev", Null)
 End Sub
 
+'set the next day
 Sub nextDate(VC As VueComponent)
 	Dim refs As BANanoObject = VC.refs
 	refs.GetField(mName).runmethod("next", Null)
@@ -460,4 +586,16 @@ Sub BindState(VC As VueComponent)
 		Dim cb As BANanoObject = mmethods.Get(k)
 		VC.SetCallBack(k, cb)
 	Next
+End Sub
+
+Sub ShowWeekView(VC As VueComponent)
+	VC.SetData($"${mName}type"$, "week")
+End Sub
+
+Sub ShowDayView(VC As VueComponent)
+	VC.SetData($"${mName}type"$, "day")
+End Sub
+
+Sub ShowMonthMonth(VC As VueComponent)
+	VC.SetData($"${mName}type"$, "month")
 End Sub

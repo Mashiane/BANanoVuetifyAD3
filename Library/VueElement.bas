@@ -236,7 +236,7 @@ Sub Class_Globals
 	Private stValue As String = ""
 	Private stVIf As String = ""
 	Private stVModel As String = ""
-	Private bSetColorByAttribute As Boolean = True
+	Private bSetColorByAttribute As Boolean
 	Private stVShow As String = ""
 	Private stVText As String = ""
 	Private stBackgroundColor As String = ""
@@ -262,54 +262,54 @@ Sub Class_Globals
 	Private stTextDecoration As String = ""
 	Private stLabel As String = ""
 	Private stWidth As String = ""
-	Private bLoremIpsum As Boolean = False
-	Private bDark As Boolean = False
+	Private bLoremIpsum As Boolean
+	Private bDark As Boolean
 	Private stInputType As String = ""
 	Private stHref As String = ""
 	Private stVSlotActivator As String = ""
 	Private stVSlotDefault As String = ""
-	Private bHiddenMDAndUp As Boolean = False
+	Private bHiddenMDAndUp As Boolean 
 	Private stTo As String = ""
-	Private bHiddenSMAndDown As Boolean = False
-	Private bJustifyCenter As Boolean = False
-	Private bFitScreen As Boolean = False
-	Private bFullScreen As Boolean = False
-	Private bAlignCenter As Boolean = False
-	Private bFillHeight As Boolean = False
+	Private bHiddenSMAndDown As Boolean 
+	Private bJustifyCenter As Boolean 
+	Private bFitScreen As Boolean 
+	Private bFullScreen As Boolean 
+	Private bAlignCenter As Boolean 
+	Private bFillHeight As Boolean 
 	Private stJustify As String = ""
 	Private stAlign As String = ""
 	Private stRules As String = ""
 	Private stCoverImage As String = ""
 	Private stAppendIcon As String = ""
 	Private stAppendOuterIcon As String = ""
-	Private boAutofocus As Boolean = False
-	Private boClearable As Boolean = False
-	Private bNoGutter As Boolean = False
+	Private boAutofocus As Boolean 
+	Private boClearable As Boolean 
+	Private bNoGutter As Boolean 
 	Private stCounter As String = ""
-	Private boDense As Boolean = False
+	Private boDense As Boolean 
 	Private stDisabled As String = ""
-	Private boFilled As Boolean = False
-	Private boFlat As Boolean = False
-	Private boHideDetails As Boolean = False
+	Private boFilled As Boolean 
+	Private boFlat As Boolean 
+	Private boHideDetails As Boolean 
 	Private stHint As String = ""
-	Private boOutlined As Boolean = False
-	Private boPersistentHint As Boolean = False
+	Private boOutlined As Boolean 
+	Private boPersistentHint As Boolean 
 	Private stPlaceholder As String = ""
 	Private stPrependIcon As String = ""
 	Private stPrependInnerIcon As String = ""
 	Private stReadonly As String = ""
 	Private stRequired As String = ""
-	Private boRounded As Boolean = False
-	Private boShaped As Boolean = False
-	Private boSingleLine As Boolean = False
-	Private boSolo As Boolean = False
+	Private boRounded As Boolean 
+	Private boShaped As Boolean 
+	Private boSingleLine As Boolean 
+	Private boSolo As Boolean 
 	Private stOffSets As String = "xs=?; s=?; m=?; l=?; x=?"
 	Private stSizes As String = "xs=?; s=?; m=?; l=?; x=?"
 	Private stPaddingAXYTBLR As String = "a=?; x=?; y=?; t=?; b=?; l=?; r=?"
 	Private stMarginAXYTBLR As String = "a=?; x=?; y=?; t=?; b=?; l=?; r=?"
-	Private bFluid As Boolean = False
-	Public bBuildGrid As Boolean = False
-	Private bShowGridDesign As Boolean = False
+	Private bFluid As Boolean 
+	Public bBuildGrid As Boolean 
+	Private bShowGridDesign As Boolean 
 	Public stRows As String = ""
 	Public stColumns As String = ""
 	Private stStyleHeight As String = ""
@@ -322,20 +322,20 @@ Sub Class_Globals
 	Private stItemText As String = ""
 	Private stItemValue As String
 	Private stItems As String
-	Private bReturnObject As Boolean = False
-	Private bBold As Boolean = False
-	Private bItalic As Boolean = False
-	Private bCircle As Boolean = False
-	Private bCenter As Boolean = False
+	Private bReturnObject As Boolean 
+	Private bBold As Boolean 
+	Private bItalic As Boolean 
+	Private bCircle As Boolean 
+	Private bCenter As Boolean 
 	Private stFloat As String = ""
 	Private stElevation As String = ""
-	Private bApp As Boolean = False
-	Private bClipped As Boolean = False
-	Private bClippedLeft As Boolean = False
-	Private bClippedRight As Boolean = False
+	Private bApp As Boolean 
+	Private bClipped As Boolean 
+	Private bClippedLeft As Boolean 
+	Private bClippedRight As Boolean 
 	Private extm As Map
 	Public OpenItems As List
-	Private mSetName As Boolean = False
+	Private mSetName As Boolean 
 	Private xClasses As Map
 	Private xAttributes As Map
 	Private xStyles As Map
@@ -1222,6 +1222,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bApp = Props.Get("App")
 		bLoremIpsum = Props.Get("LoremIpsum")
 		bDark = Props.Get("Dark")
+		bDark = BANanoShared.parseBool(bDark)
 		mClasses = Props.Get("Classes")
 		stActiveClass = Props.Get("ActiveClass")
 		mAttributes = Props.Get("Attributes")
@@ -1284,8 +1285,10 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		stVSlotActivator = Props.get("VSlotActivator")
 		stVSlotDefault = Props.Get("VSlotDefault")
 		bHiddenMDAndUp = Props.Get("HiddenMDAndUp")
+		bHiddenMDAndUp = BANanoShared.parseBool(bHiddenMDAndUp)
 		stTo = Props.get("To")
 		bHiddenSMAndDown = Props.Get("HiddenSMAndDown")
+		bHiddenSMAndDown = BANanoShared.parseBool(bHiddenSMAndDown)
 		bJustifyCenter = Props.Get("JustifyCenter")
 		bFitScreen = Props.Get("FitScreen")
 		bFullScreen = Props.Get("FullScreen")
@@ -1351,6 +1354,41 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mSetName = Props.Get("AssignName")
 	End If
 	'
+	bApp = BANanoShared.parseBool(bApp)
+bLoremIpsum = BANanoShared.parseBool(bLoremIpsum)
+bJustifyCenter = BANanoShared.parseBool(bJustifyCenter)
+bFitScreen = BANanoShared.parseBool(bFitScreen)
+bFullScreen = BANanoShared.parseBool(bFullScreen)
+bAlignCenter = BANanoShared.parseBool(bAlignCenter)
+bFillHeight = BANanoShared.parseBool(bFillHeight)
+boAutofocus = BANanoShared.parseBool(boAutofocus)
+boClearable = BANanoShared.parseBool(boClearable)
+boDense = BANanoShared.parseBool(boDense)
+boFilled = BANanoShared.parseBool(boFilled)
+boFlat = BANanoShared.parseBool(boFlat)
+boHideDetails = BANanoShared.parseBool(boHideDetails)
+boOutlined = BANanoShared.parseBool(boOutlined)
+boPersistentHint = BANanoShared.parseBool(boPersistentHint)
+boRounded = BANanoShared.parseBool(boRounded)
+boShaped = BANanoShared.parseBool(boShaped)
+boSingleLine = BANanoShared.parseBool(boSingleLine)
+boSolo = BANanoShared.parseBool(boSolo)
+bFluid = BANanoShared.parseBool(bFluid)
+bBuildGrid = BANanoShared.parseBool(bBuildGrid)
+bShowGridDesign = BANanoShared.parseBool(bShowGridDesign)
+bReturnObject = BANanoShared.parseBool(bReturnObject)
+bBold = BANanoShared.parseBool(bBold)
+bItalic = BANanoShared.parseBool(bItalic)
+bCircle = BANanoShared.parseBool(bCircle)
+bCenter = BANanoShared.parseBool(bCenter)
+bNoGutter = BANanoShared.parseBool(bNoGutter)
+bClipped = BANanoShared.parseBool(bClipped)
+bClippedLeft = BANanoShared.parseBool(bClippedLeft)
+bClippedRight = BANanoShared.parseBool(bClippedRight)
+mSetName = BANanoShared.parseBool(mSetName)
+bBuildGrid = BANanoShared.parseBool(bBuildGrid)
+bSetColorByAttribute = BANanoShared.parseBool(bSetColorByAttribute)
+	'
 	If BANano.Exists($"#${mName}"$) Then
 		mElement = BANano.GetElement($"#${mName}"$)
 	Else	
@@ -1411,7 +1449,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	AddStyle("border-radius", stBorderRadius)
 	If stBorderStyle <> "remove" Then
 		AddStyle("border-style", stBorderStyle)
-	end if
+	End If
 	AddStyle("border-width", stBorderWidth)
 	
 	AddAttrOnConditionTrue("color", stColor, bSetColorByAttribute)
@@ -2311,7 +2349,8 @@ Public Sub AddAttr(varProp As String, varValue As String)
 	Select Case varProp
 	Case "v-model", "v-show", "v-if"
 		varValue = CStr(varValue)
-		varValue = varValue.tolowercase	
+		varValue = varValue.tolowercase
+		varValue = varValue.trim	
 	End Select
 	'we are adding a boolean
 	If BANano.IsBoolean(varValue) Then
@@ -2355,7 +2394,17 @@ Public Sub AddAttr(varProp As String, varValue As String)
 				If varValue.Contains(".") = False Or varValue.Contains("(") = False Or varValue.Contains("||") = False Or varProp <> "key" Then
 					bindings.Put(varValue, Null)
 				End If
+			Else
+				Select Case varProp
+				Case "v-model", "v-show", "v-if"
+					If varValue <> "" Then
+						If varValue.Contains(".") = False Or varValue.Contains("(") = False Or varValue.Contains("||") = False Or varProp <> "key" Then
+							bindings.Put(varValue, Null)
+						End If
+					End If	
+				End Select
 			End If
+			
 					
 			If mElement <> Null Then 
 				mElement.SetAttr(varProp, varValue)
@@ -2365,13 +2414,6 @@ Public Sub AddAttr(varProp As String, varValue As String)
 		'
 		If bindings.ContainsKey("true") Then bindings.Remove("true")
 		If bindings.ContainsKey("false") Then bindings.Remove("false")
-		
-'		Select Case varProp
-'		Case "v-model", "v-show", "v-if", "v-else-if", "required", "disabled", "readonly"
-'			If varValue <> "" Then
-'				bindings.Put(varValue, Null)
-'			End If
-'		End Select
 	End If
 	Return
 End Sub
@@ -11020,14 +11062,14 @@ End Sub
 Sub setTextNoWrap(b As Boolean)  'ignore
 	AddClass("text-no-wrap")
 End Sub
-
-Sub AddVueGCharts(elID As String) As VueGCharts
-	elID = elID.tolowercase
-	Dim gc As VueGCharts
-	gc.Initialize(mCallBack, elID, elID)
-	gc.AddToParent(mName)
-	Return gc
-End Sub
+'
+'Sub AddVueGCharts(elID As String) As VueGCharts
+'	elID = elID.tolowercase
+'	Dim gc As VueGCharts
+'	gc.Initialize(mCallBack, elID, elID)
+'	gc.AddToParent(mName)
+'	Return gc
+'End Sub
 
 Sub setTextCapitalize(b As Boolean)   'ignore
 	AddClass("text-capitalize")

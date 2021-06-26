@@ -29,6 +29,19 @@ Sub Process_Globals
 	Type sequencePair(value As Int, numTimes As Int)
 End Sub
 
+Sub parseBool(v As Object) As Boolean
+	If BANano.IsNull(v) Or BANano.IsUndefined(v) Then
+		v = False
+	End If
+	If GetType(v) = "string" Or GetType(v) = "object" Then
+		Dim s As String = v & ""
+		s = s.tolowercase
+		If s = "false" Then Return False
+		If S = "true" Then Return True
+	End If
+	Return v
+End Sub
+
 Sub ListTrimItems(cols As List) As List
 	Dim colTot As Int = cols.Size - 1
 	Dim colCnt As Int
@@ -812,6 +825,35 @@ End Sub
 'return lorem ipsum
 Sub LoremIpsum(count As String) As String
 	Return Rand_LoremIpsum(count)
+End Sub
+
+Sub Random_Color As String
+	Dim colors As List
+	colors.Initialize 
+	colors.Add("red")
+	colors.Add("pink")
+	colors.Add("purple")
+	colors.Add("deep-purple")
+	colors.Add("indigo")
+	colors.Add("blue")
+	colors.Add("light-blue")
+	colors.Add("cyan")
+	colors.Add("teal")
+	colors.Add("green")
+	colors.Add("light-green")
+	colors.Add("lime")
+	colors.Add("yellow")
+	colors.Add("amber")
+	colors.Add("orange")
+	colors.Add("deep-orange")
+	colors.Add("brown")
+	colors.Add("grey")
+	colors.Add("blue-grey")
+	colors.Add("black")
+	'explode the colors
+	colors = ExplodeList(colors, 2)
+	Dim col As String = RandListValue1(colors)
+	Return col
 End Sub
 
 'return sentences of lorem ipsum
@@ -2395,6 +2437,11 @@ End Sub
 'Returns a random list value from a LIST 
 Sub RandListValue(ListX As List) As Object
 	ShuffleList(ListX)
+	Return ListX.Get(Rnd(0, ListX.Size -1))
+End Sub
+
+'Returns a random list value from a LIST 
+Sub RandListValue1(ListX As List) As Object
 	Return ListX.Get(Rnd(0, ListX.Size -1))
 End Sub
 

@@ -30,7 +30,6 @@ Version=8.9
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
-#DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue: , Description: VShow
 #DesignerProperty: Key: VOn, DisplayName: V-On, FieldType: String, DefaultValue:  , Description: V-On
 #DesignerProperty: Key: VBind, DisplayName: V-Bind, FieldType: String, DefaultValue:  , Description: V-Bind
 #DesignerProperty: Key: MA, DisplayName: MA, FieldType: String, DefaultValue: , Description: MA
@@ -59,7 +58,7 @@ Sub Class_Globals
 	Private mStyles As String = ""
 	Private mAttributes As String = ""
 	Public VElement As VueElement
-	Private mVShow As String = ""
+	'Private mVShow As String = ""
 	Private mVIf As String = ""
 	Private sColor As String
 Private sHeight As String
@@ -76,7 +75,7 @@ Private mTextColor As String = ""
 	Private mTextColorIntensity As String = ""
 	Private mColorIntensity As String = ""
 	Private mText As String = ""
-	Private bHeadLine As Boolean = False
+	Private bHeadLine As Boolean
 	Private mIcon As String = ""
 	Private mImage As String = ""
 	Private bIconDark As String = ""
@@ -111,6 +110,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey)
 		End If
 	End If
+	'mVShow = $"${mName}show"$
 	End Sub
 	
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
@@ -119,7 +119,6 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mClasses = Props.Get("Classes")
 		mStyles = Props.Get("Styles")
 		mAttributes = Props.Get("Attributes")
-		mVShow = Props.Get("VShow")
 		mVIf = Props.Get("VIf")
 		sColor = Props.Get("Color")
 		mColorIntensity = Props.Get("ColorIntensity")
@@ -158,6 +157,8 @@ sPT = Props.Get("PT")
 sPX = Props.Get("PX")
 sPY = Props.Get("PY")
 	End If
+	bTile = BANanoShared.parseBool(bTile)
+	bHeadLine = BANanoShared.parseBool(bHeadLine)
 	'
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
@@ -197,7 +198,8 @@ sPY = Props.Get("PY")
 	VElement.Styles = mStyles
 	VElement.Attributes = mAttributes
 	VElement.Color = VElement.BuildColor(sColor, mColorIntensity)
-	VElement.VShow = mVShow
+	'VElement.VShow = mVShow
+	'VElement.SetData(mVShow, True)
 	VElement.VIf = mVIf
 	'
 '	If hasText Then
@@ -271,7 +273,7 @@ End Sub
 
 Sub UpdateVisible(VC As VueComponent, b As Boolean)
 	VC.SetData(mVIf, b)
-	VC.SetData(mVShow, b)
+	'VC.SetData(mVShow, b)
 End Sub
 
 

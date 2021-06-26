@@ -4,9 +4,10 @@ ModulesStructureVersion=1
 Type=Class
 Version=9
 @EndOfDesignText@
+#IgnoreWarnings:12
 Sub Class_Globals
 	Private ref As BANanoObject
-	Private BANano As BANano
+	Private BANano As BANano  'ignore
 End Sub
 
 'get storage path

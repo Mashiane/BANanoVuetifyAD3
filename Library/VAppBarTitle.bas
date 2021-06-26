@@ -17,7 +17,6 @@ Version=8.9
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
-#DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VIf, DisplayName: V-If, FieldType: String, DefaultValue:  , Description: 
 Sub Class_Globals
     Private BANano As BANano 'ignore
@@ -31,7 +30,7 @@ Sub Class_Globals
 	Private mStyles As String = ""
 	Private mAttributes As String = ""
 	Public VElement As VueElement
-	Private mVShow As String = ""
+	'Private mVShow As String = ""
 	Private mVIf As String = ""
 	Private mTextColor As String = ""
 	Private mTextColorIntensity As String = ""
@@ -53,6 +52,7 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 		End If
 	End If
 	xCaption = $"${mName}caption"$
+	'mVShow = $"${mName}show"$
 End Sub
 
 ' this is the place where you create the view in html and run initialize javascript
@@ -67,7 +67,6 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mColorIntensity = Props.Get("ColorIntensity")
 		mTextColor = Props.Get("TextColor")
 		mTextColorIntensity = Props.Get("TextColorIntensity")
-		mVShow = Props.Get("VShow")
 		mVIf = Props.Get("VIf")
 		mText = Props.Get("Text")
 	End If
@@ -89,7 +88,9 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.VIf = mVIf
 	VElement.Caption = VElement.InMoustache1(mText, xCaption)
 	VElement.SetData(xCaption, mText)
-	VElement.VShow = mVShow
+	'VElement.VShow = mVShow
+	'VElement.SetData(mVShow, True)
+	VElement.BindAllEvents
 End Sub
 
 Sub UpdateTitle(VC As VueComponent, sText As String)
@@ -130,7 +131,7 @@ End Sub
 
 Sub UpdateVisible(VC As VueComponent, b As Boolean) As VAppBarTitle
 	VC.SetData(mVIf, b)
-	VC.SetData(mVShow, b)
+	'VC.SetData(mVShow, b)
 	Return Me
 End Sub
 

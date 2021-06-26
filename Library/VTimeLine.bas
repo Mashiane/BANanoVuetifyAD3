@@ -28,7 +28,6 @@ Version=8.9
 #DesignerProperty: Key: ItemSize, DisplayName: Item Size, FieldType: String, DefaultValue: small, Description: Item Size, List: large|small
 '
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
-#DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
@@ -50,7 +49,7 @@ Private bDense As Boolean
 Private bLight As Boolean
 Private bReverse As Boolean
 Private sVIf As String
-Private sVShow As String
+'Private sVShow As String
 Private bHidden As Boolean
 '
 	Private sItemColor As String
@@ -80,7 +79,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey)
 		End If
 	End If
-	sVShow = $"${mName}show"$
+	'sVShow = $"${mName}show"$
 	sitems = $"${mName}items"$
 	xitems.Initialize 
 	End Sub
@@ -97,7 +96,6 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bLight = Props.Get("Light")
 		bReverse = Props.Get("Reverse")
 		sVIf = Props.Get("VIf")
-		sVShow = Props.Get("VShow")
 		bHidden = Props.GetDefault("Hidden", False)
 		sItemColor = Props.GetDefault("ItemColor", "")
 		bItemDark = Props.GetDefault("ItemDark", False)
@@ -111,6 +109,19 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sItemSize = Props.GetDefault("ItemSize", "")
 		bHasItems = Props.GetDefault("HasItems", False)
 	End If
+	'
+	bAlignTop = BANanoShared.parseBool(bAlignTop)
+bDark = BANanoShared.parseBool(bDark)
+bDense = BANanoShared.parseBool(bDense)
+bLight = BANanoShared.parseBool(bLight)
+bReverse = BANanoShared.parseBool(bReverse)
+bHidden = BANanoShared.parseBool(bHidden)
+bItemDark = BANanoShared.parseBool(bItemDark)
+bItemFillDot = BANanoShared.parseBool(bItemFillDot)
+bItemHideDot = BANanoShared.parseBool(bItemHideDot)
+bItemLight = BANanoShared.parseBool(bItemLight)
+bHasItems = BANanoShared.parseBool(bHasItems)
+
 	'
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
@@ -166,8 +177,8 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.AddAttr(":light", bLight)
 	VElement.AddAttr(":reverse", bReverse)
 	VElement.AddAttr("v-if", sVIf)
-	VElement.AddAttr("v-show", sVShow)
-	VElement.SetData(sVShow, Not(bHidden))
+	'VElement.AddAttr("v-show", sVShow)
+	'VElement.SetData(sVShow, Not(bHidden))
 	VElement.BindAllEvents
 End Sub
 
@@ -221,7 +232,7 @@ End Sub
 
 Sub UpdateVisible(VC As VueComponent, b As Boolean) As VTimeLine
 	VC.SetData(sVIf, b)
-	VC.SetData(sVShow, b)
+	'VC.SetData(sVShow, b)
 	Return Me
 End Sub
 

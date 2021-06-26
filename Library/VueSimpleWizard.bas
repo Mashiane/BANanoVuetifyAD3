@@ -52,6 +52,8 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	If Props <> Null Then
 		mscrollToTopOnStepChange = Props.Get("scrollToTopOnStepChange")
 	End If
+	'
+	mscrollToTopOnStepChange = BANanoShared.parseBool(mscrollToTopOnStepChange)
 	
 	'build and get the element
 	Dim strHTML As String = ToString

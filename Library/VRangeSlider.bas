@@ -70,7 +70,6 @@ Version=7
 #DesignerProperty: Key: VBind, DisplayName: VBind, FieldType: String, DefaultValue: , Description: VBind
 #DesignerProperty: Key: VFor, DisplayName: VFor, FieldType: String, DefaultValue: , Description: VFor
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
-#DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VOn, DisplayName: VOn, FieldType: String, DefaultValue: , Description: VOn
 #DesignerProperty: Key: ValidateOnBlur, DisplayName: ValidateOnBlur, FieldType: Boolean, DefaultValue: False, Description: ValidateOnBlur
 #DesignerProperty: Key: Vertical, DisplayName: Vertical, FieldType: Boolean, DefaultValue: False, Description: Vertical
@@ -145,7 +144,7 @@ Private bLoading As Boolean
 Private bReadonly As Boolean
 Private bRequired As Boolean
 Private sRequired As String
-private sValue as string
+Private sValue As String
 	End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -221,14 +220,30 @@ sTrackFillColorIntensity = Props.Get("TrackFillColorIntensity")
 sVBind = Props.Get("VBind")
 sVFor = Props.Get("VFor")
 sVIf = Props.Get("VIf")
-sVShow = Props.Get("VShow")
 sVModel = Props.Get("VModel")
 sVOn = Props.Get("VOn")
 bValidateOnBlur = Props.Get("ValidateOnBlur")
 bVertical = Props.Get("Vertical")
  sValue = Props.GetDefault("Value","10;20")
 	End If 
-	' 
+	'
+	bDisabled = BANanoShared.parseBool(bDisabled)
+bHidden = BANanoShared.parseBool(bHidden)
+bLoading = BANanoShared.parseBool(bLoading)
+bReadonly = BANanoShared.parseBool(bReadonly)
+bRequired = BANanoShared.parseBool(bRequired)
+bDark = BANanoShared.parseBool(bDark)
+bDense = BANanoShared.parseBool(bDense)
+bHideDetails = BANanoShared.parseBool(bHideDetails)
+bInverseLabel = BANanoShared.parseBool(bInverseLabel)
+bLight = BANanoShared.parseBool(bLight)
+bPersistentHint = BANanoShared.parseBool(bPersistentHint)
+bValidateOnBlur = BANanoShared.parseBool(bValidateOnBlur)
+bVertical = BANanoShared.parseBool(bVertical)
+bDisabled = BANanoShared.parseBool(bDisabled)
+bRequired = BANanoShared.parseBool(bRequired)
+bLoading = BANanoShared.parseBool(bLoading)
+	
 	'build and get the element 
 	If BANano.Exists($"#${mName}"$) Then 
 		mElement = BANano.GetElement($"#${mName}"$) 
@@ -236,16 +251,6 @@ bVertical = Props.Get("Vertical")
 		mElement = mTarget.Append($"<v-range-slider ref="${mName}" id="${mName}"></v-range-slider>"$).Get("#" & mName) 
 	End If 
 	' 
-	If BANano.IsNull(bDisabled) Or BANano.IsUndefined(bDisabled) Then
-		bDisabled = False 
-	End If
-	If BANano.IsNull(bRequired) Or BANano.IsUndefined(bRequired) Then
-		bRequired = False 
-	End If
-	If BANano.IsNull(bLoading) Or BANano.IsUndefined(bLoading) Then
-		bLoading = False 
-	End If
-	
 	VElement.Initialize(mCallBack, mName, mName) 
 	VElement.TagName = "v-range-slider" 
 	VElement.Classes = mClasses 

@@ -68,6 +68,12 @@ sMode = Props.Get("Mode")
 sOrigin = Props.Get("Origin")
 sSize = Props.Get("Size")
 	End If
+	'
+	bAppear = BANanoShared.parseBool(bAppear)
+bGroup = BANanoShared.parseBool(bGroup)
+bHideOnLeave = BANanoShared.parseBool(bHideOnLeave)
+bLeaveAbsolute = BANanoShared.parseBool(bLeaveAbsolute)
+
 	
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then

@@ -43,7 +43,6 @@ Version=8.9
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
-#DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VIf, DisplayName: V-If, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VFor, DisplayName: V-For, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Key, DisplayName: Key, FieldType: String, DefaultValue:  , Description: 
@@ -71,17 +70,17 @@ Sub Class_Globals
 	Private mCallBack As Object 'ignore
 	Private mTarget As BANanoElement 'ignore
 	Private mElement As BANanoElement 'ignore
-	Private mClasses As String = ""
-	Private mColor As String = ""
-	Private mStyles As String = ""
-	Private mAttributes As String = ""
+	Private mClasses As String
+	Private mColor As String
+	Private mStyles As String
+	Private mAttributes As String
 	Public VElement As VueElement
-	Private mVShow As String = ""
-	Private mVIf As String = ""
-	Private mTextColor As String = ""
-	Private mTextColorIntensity As String = ""
-	Private mColorIntensity As String = ""
-	Private mText As String = ""
+	Private mVShow As String
+	Private mVIf As String
+	Private mTextColor As String
+	Private mTextColorIntensity As String
+	Private mColorIntensity As String
+	Private mText As String
 	Private bBlock As Boolean
 	Private bDark As Boolean
 	Private bDepressed As Boolean
@@ -158,14 +157,15 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mColorIntensity = Props.Get("ColorIntensity")
 		mTextColor = Props.Get("TextColor")
 		mTextColorIntensity = Props.Get("TextColorIntensity")
-		mVShow = Props.Get("VShow")
 		mVIf = Props.Get("VIf")
 		bHidden = Props.GetDefault("Hidden", False)
+		bHidden = BANanoShared.parseBool(bHidden)
 		mText = Props.Get("Text")
 		bBlock = Props.Get("Block")
 		bDark = Props.Get("Dark")
 		bDepressed = Props.Get("Depressed")
 		bDisabled = Props.GetDefault("Disabled",False)
+		bDisabled = BANanoShared.parseBool(bDisabled)
 		bFAB = Props.Get("FAB")
 		sHREF = Props.Get("HREF")
 		bIcon = Props.Get("Icon")
@@ -173,6 +173,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bIconDark = Props.Get("IconDark")
 		sIconName = Props.Get("IconName")
 		bLoading = Props.GetDefault("Loading", False)
+		bLoading = BANanoShared.parseBool(bLoading)
 		bOutlined = Props.Get("Outlined")
 		bRaised = Props.Get("Raised")
 		bRounded = Props.Get("Rounded")
@@ -202,22 +203,25 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sPX = Props.GetDefault("PX","")
 		sPY = Props.GetDefault("PY","")
 	End If
-	
+	'
+	bBlock = BANanoShared.parseBool(bBlock)
+bDark = BANanoShared.parseBool(bDark)
+bDepressed = BANanoShared.parseBool(bDepressed)
+bFAB = BANanoShared.parseBool(bFAB)
+bIcon = BANanoShared.parseBool(bIcon)
+bIconDark = BANanoShared.parseBool(bIconDark)
+bOutlined = BANanoShared.parseBool(bOutlined)
+bRaised = BANanoShared.parseBool(bRaised)
+bRounded = BANanoShared.parseBool(bRounded)
+bShaped = BANanoShared.parseBool(bShaped)
+bTile = BANanoShared.parseBool(bTile)
+bAbsolute = BANanoShared.parseBool(bAbsolute)
+
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
 		mElement = BANano.GetElement($"#${mName}"$)
 	Else	
 		mElement = mTarget.Append($"<v-btn ref="${mName}" id="${mName}"></v-btn>"$).Get("#" & mName)
-	End If
-	
-	If BANano.IsNull(bLoading) Or BANano.IsUndefined(bLoading) Then
-		bLoading = False 
-	End If
-	If BANano.IsNull(bDisabled) Or BANano.IsUndefined(bDisabled) Then
-		bDisabled = False 
-	End If
-	If BANano.IsNull(bHidden) Or BANano.IsUndefined(bHidden) Then
-		bHidden = False 
 	End If
 		
 	VElement.Initialize(mCallBack, mName, mName)
@@ -250,6 +254,8 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 			VElement.GetIcon.Right = True
 		End Select
 	End If
+	
+	'If bFAB Then bIcon = False
 	
 	VElement.Classes = mClasses
 	mColor = VElement.BuildColor(mColor, mColorIntensity)

@@ -51,7 +51,7 @@ Private bSubGroup As Boolean
 Private sTextColor As String
 Private sTextColorIntensity As String
 Private sVModel As String
-private bDisabled as boolean
+Private bDisabled As Boolean
 	End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -90,6 +90,13 @@ sTextColorIntensity = Props.Get("TextColorIntensity")
 sVModel = Props.Get("VModel")
 bDisabled = Props.GetDefault("Disabled",False)
 	End If
+	bEager = BANanoShared.parseBool(bEager)
+bNoAction = BANanoShared.parseBool(bNoAction)
+bRipple = BANanoShared.parseBool(bRipple)
+bSubGroup = BANanoShared.parseBool(bSubGroup)
+bDisabled = BANanoShared.parseBool(bDisabled)
+bDisabled = BANanoShared.parseBool(bDisabled)
+
 	'
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
@@ -97,11 +104,7 @@ bDisabled = Props.GetDefault("Disabled",False)
 	Else	
 		mElement = mTarget.Append($"<v-list-group ref="${mName}" id="${mName}"></v-list-group>"$).Get("#" & mName)
 	End If
-	'
-	If BANano.IsNull(bDisabled) Or BANano.IsUndefined(bDisabled) Then
-		bDisabled = False 
-	End If
-	
+		
 	VElement.Initialize(mCallBack, mName, mName)
 	VElement.TagName = "v-list-group"
 	VElement.Classes = mClasses

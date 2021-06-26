@@ -132,7 +132,6 @@ Private bCancelVisible As Boolean
 Private bCancelLoading As Boolean
 Private bCancelDisabled As Boolean
 Private sDisabled As String
-Private sVShow As String
 Private bHidden As Boolean
 Private sToolbarCaption As String
 Private sRounded As String
@@ -174,7 +173,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	xCancelLoading = $"${mName}cancel_loading"$
 	xCancelDisabled = $"${mName}cancel_disabled"$
 	sDisabled = $"${mName}disabled"$
-	sVModel = $"${mName}vmodel"$
+	sVModel = $"${mName}show"$
 	sShowActions = $"${mName}actionsshow"$
 	sScrollable = $"${mName}scrollable"$
 End Sub
@@ -219,7 +218,6 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bScrollable = Props.Get("Scrollable")
 		sTransition = Props.Get("Transition")
 		sVIf = Props.Get("VIf")
-		sVShow = Props.Get("VShow")
 		sWidth = Props.Get("Width")
 		bFullscreenOnMobile = Props.Get("FullscreenOnMobile")
 		sToolBarColor = Props.Get("ToolBarColor")
@@ -235,6 +233,27 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sHeight = Props.GetDefault("Height", False)
 	End If
 	'
+	bOkVisible = BANanoShared.parseBool(bOkVisible)
+bOkLoading = BANanoShared.parseBool(bOkLoading)
+bOkDisabled = BANanoShared.parseBool(bOkDisabled)
+bCancelVisible = BANanoShared.parseBool(bCancelVisible)
+bCancelLoading = BANanoShared.parseBool(bCancelLoading)
+bCancelDisabled = BANanoShared.parseBool(bCancelDisabled)
+bDark = BANanoShared.parseBool(bDark)
+bDisabled = BANanoShared.parseBool(bDisabled)
+bEager = BANanoShared.parseBool(bEager)
+bFullscreen = BANanoShared.parseBool(bFullscreen)
+bHideOverlay = BANanoShared.parseBool(bHideOverlay)
+bNoClickAnimation = BANanoShared.parseBool(bNoClickAnimation)
+bPersistent = BANanoShared.parseBool(bPersistent)
+bRetainFocus = BANanoShared.parseBool(bRetainFocus)
+bScrollable = BANanoShared.parseBool(bScrollable)
+bFullscreenOnMobile = BANanoShared.parseBool(bFullscreenOnMobile)
+bToolbarDark = BANanoShared.parseBool(bToolbarDark)
+bHidden = BANanoShared.parseBool(bHidden)
+bCustomActions = BANanoShared.parseBool(bCustomActions)
+bDisabled = BANanoShared.parseBool(bDisabled)
+
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
 		mElement = BANano.GetElement($"#${mName}"$)

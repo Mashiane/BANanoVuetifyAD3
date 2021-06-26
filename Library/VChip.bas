@@ -11,6 +11,7 @@ Version=8.9
 #Event: ClickClose (e As BANanoEvent)
 
 ' Properties that will be show in the ABStract Designer.  They will be passed in the props map in DesignerCreateView (Case Sensitive!)
+#DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: AutoID, DisplayName: Auto ID/Name, FieldType: Boolean, DefaultValue: False, Description: Overrides the ID/Name with a random string.
 #DesignerProperty: Key: Text, DisplayName: Caption, FieldType: String, DefaultValue: Chip , Description: Text
 #DesignerProperty: Key: Avatar, DisplayName: Avatar, FieldType: String, DefaultValue: , Description: Avatar
@@ -21,9 +22,7 @@ Version=8.9
 #DesignerProperty: Key: Close, DisplayName: Close, FieldType: Boolean, DefaultValue: False, Description: Close
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: False, Description: Dark
 #DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: Boolean, DefaultValue: False, Description: Disabled
-#DesignerProperty: Key: Active, DisplayName: Active/Visible, FieldType: String, DefaultValue:  , Description: Active/Visible
 #DesignerProperty: Key: VIf, DisplayName: V-If, FieldType: String, DefaultValue:  , Description: 
-#DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue:  , Description:
 #DesignerProperty: Key: HREF, DisplayName: HREF, FieldType: String, DefaultValue: , Description: HREF
 #DesignerProperty: Key: Label, DisplayName: Label, FieldType: Boolean, DefaultValue: False, Description: Label
@@ -78,6 +77,7 @@ Sub Class_Globals
 	Private bPointer As Boolean
 	Private sVBind As String
 	Private sVOn As String
+	Private bHidden As Boolean
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -92,6 +92,7 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey)
 		End If
 	End If
+	sActive = $"${mName}show"$
 End Sub
 
 ' this is the place where you create the view in html and run initialize javascript
@@ -108,10 +109,10 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mVIf = Props.Get("VIf")
 		mText = Props.Get("Text")
 		bLabel = Props.Get("Label")
-		sActive = Props.Get("Active")
 		sValue = Props.Get("Value")
 		bDark = Props.Get("Dark")
 		bDisabled = Props.GetDefault("Disabled",False)
+		bDisabled = BANanoShared.parseBool(bDisabled)
 		sHREF = Props.Get("HREF")
 		sIconAlignment = Props.Get("IconAlignment")
 		bIconDark = Props.Get("IconDark")
@@ -126,7 +127,19 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bPointer = Props.Get("Pointer")
 		sVOn = Props.Get("VOn")
 		sVBind = Props.Get("VBind")
+		bHidden = Props.GetDefault("Hidden", False)
+		bHidden = BANanoShared.parseBool(bHidden)
 	End If
+	'
+	bLabel = BANanoShared.parseBool(bLabel)
+bDark = BANanoShared.parseBool(bDark)
+bIconDark = BANanoShared.parseBool(bIconDark)
+bOutlined = BANanoShared.parseBool(bOutlined)
+bClose = BANanoShared.parseBool(bClose)
+bPill = BANanoShared.parseBool(bPill)
+bPointer = BANanoShared.parseBool(bPointer)
+
+	
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
 		mElement = BANano.GetElement($"#${mName}"$)
@@ -141,7 +154,6 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.Styles = mStyles
 	VElement.Attributes = mAttributes	
 	VElement.VIf = mVIf
-	VElement.Active = sActive
 	VElement.Close = bClose
 	VElement.ChipLabel = bLabel
 	VElement.Dark = bDark
@@ -153,8 +165,9 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.To = sTo
 	VElement.Pill = bPill
 	VElement.Value = sValue
-	VElement.SetData(mVIf, True)
-	VElement.SetData(sActive, True)
+	VElement.bind("active", sActive)
+	VElement.SetData(sActive, Not(bHidden))
+	VElement.SetData(mVIf, False)
 	If bPointer Then
 		VElement.CursorPointer
 	End If
@@ -217,7 +230,6 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.AddAttr("v-bind", sVBind)
 	VElement.BindAllEvents
 End Sub
-
 
 Sub UpdateDisabled(VC As VueComponent, b As Boolean)
 	VC.SetData($"${mName}disabled"$, b)

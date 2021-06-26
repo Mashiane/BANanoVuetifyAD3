@@ -74,7 +74,7 @@ Private sVFor As String
 Private sVIf As String
 Private sVModel As String
 Private sVOn As String
-Private sVShow As String
+'Private sVShow As String
 Private sWrapperAriaLabel As String
 Private bHidden As Boolean
 Private sDisabled As String
@@ -92,7 +92,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey)
 		End If
 	End If
-	sVShow = $"${mName}show"$
+	'sVShow = $"${mName}show"$
 	sDisabled = $"${mName}disabled"$
 End Sub
 
@@ -128,6 +128,13 @@ bHidden = Props.GetDefault("Hidden", False)
 sWrapperAriaLabel = Props.Get("WrapperAriaLabel")
 	End If
 	'
+	bCircle = BANanoShared.parseBool(bCircle)
+bDark = BANanoShared.parseBool(bDark)
+bDisabled = BANanoShared.parseBool(bDisabled)
+bLight = BANanoShared.parseBool(bLight)
+bHidden = BANanoShared.parseBool(bHidden)
+
+	'
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
 		mElement = BANano.GetElement($"#${mName}"$)
@@ -161,8 +168,8 @@ VElement.AddAttr("v-for", sVFor)
 VElement.AddAttr("v-if", sVIf)
 VElement.AddAttr("v-model", sVModel)
 VElement.AddAttr("v-on", sVOn)
-VElement.AddAttr("v-show", sVShow)
-VElement.SetData(sVShow, Not(bHidden))
+'VElement.AddAttr("v-show", sVShow)
+'VElement.SetData(sVShow, Not(bHidden))
 VElement.AddAttr("wrapper-aria-label", sWrapperAriaLabel)
 VElement.SetData(sVModel, 1)
 VElement.BindAllEvents
@@ -200,7 +207,7 @@ End Sub
 
 Sub UpdateVisible(VC As VueComponent, b As Boolean) As VPagination
 	VC.SetData(sVIf, b)
-	VC.SetData(sVShow, b)
+	'VC.SetData(sVShow, b)
 	Return Me
 End Sub
 

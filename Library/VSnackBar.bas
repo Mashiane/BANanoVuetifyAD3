@@ -8,6 +8,7 @@ Version=8.9
 
 #DesignerProperty: Key: Absolute, DisplayName: Absolute, FieldType: Boolean, DefaultValue: false, Description: Absolute
 #DesignerProperty: Key: App, DisplayName: App, FieldType: Boolean, DefaultValue: True, Description: App
+#DesignerProperty: Key: AppSnackBar, DisplayName: AppSnackBar, FieldType: Boolean, DefaultValue: False, Description: AppSnackBar
 #DesignerProperty: Key: Caption, DisplayName: Caption, FieldType: String, DefaultValue: SnackBar , Description: Caption
 #DesignerProperty: Key: Centered, DisplayName: Centered, FieldType: Boolean, DefaultValue: false, Description: Centered
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue: blue , Description: Color, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
@@ -30,11 +31,9 @@ Version=8.9
 #DesignerProperty: Key: TextColor, DisplayName: TextColor, FieldType: String, DefaultValue: , Description: TextColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: TextColorIntensity, DisplayName: TextColorIntensity, FieldType: String, DefaultValue: , Description: TextColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: Tile, DisplayName: Tile, FieldType: Boolean, DefaultValue: false, Description: Tile
-#DesignerProperty: Key: Timeout, DisplayName: Timeout, FieldType: String, DefaultValue: , Description: Timeout
+#DesignerProperty: Key: Timeout, DisplayName: Timeout, FieldType: String, DefaultValue: 5000, Description: Timeout
 #DesignerProperty: Key: Transition, DisplayName: Transition, FieldType: String, DefaultValue: expand-transition, Description: Transition, List: none|fab-transition|fade-transition|expand-transition|scale-transition|scroll-x-transition|scroll-x-reverse-transition|scroll-y-transition|scroll-y-reverse-transition|slide-x-transition|slide-x-reverse-transition|slide-y-transition|slide-y-reverse-transition
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
-#DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
-#DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: snackshow , Description: VModel
 #DesignerProperty: Key: Vertical, DisplayName: Vertical, FieldType: Boolean, DefaultValue: false, Description: Vertical
 #DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: , Description: Width
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
@@ -84,8 +83,17 @@ Private bVertical As Boolean
 Private sWidth As String
 Private xCaption As String
 Private xColor As String
-Private sVShow as String
-	End Sub
+Private xtimeout As String
+Private bAppSnackBar As Boolean
+Private xright As String
+Private xtop As String
+Private xbottom As String
+Private xcentered As String
+Private xoutlined As String
+Private xleft As String
+Private xshaped As String
+Private forapp As String
+End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	mName = Name.tolowercase
@@ -99,9 +107,19 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey)
 		End If
 	End If
-	xCaption = $"${mName}caption"$
+	forapp = mName
+	xCaption = $"${mName}message"$
 	xColor = $"${mName}color"$
-	End Sub
+	sVModel = $"${mName}show"$
+	xtimeout = $"${mName}timeout"$
+	xright = $"${mName}right"$
+	xtop = $"${mName}top"$
+	xbottom = $"${mName}bottom"$
+	xcentered = $"${mName}centered"$
+	xoutlined = $"${mName}outlined"$
+	xleft = $"${mName}left"$
+	xshaped = $"${mName}shaped"$
+End Sub
 	
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	mTarget = Target
@@ -110,37 +128,49 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mStyles = Props.Get("Styles")
 		mAttributes = Props.Get("Attributes")
 		bAbsolute = Props.Get("Absolute")
-bApp = Props.Get("App")
-sCaption = Props.Get("Caption")
-bCentered = Props.Get("Centered")
-sColor = Props.Get("Color")
-sColorIntensity = Props.Get("ColorIntensity")
-sContentClass = Props.Get("ContentClass")
-bDark = Props.Get("Dark")
-sElevation = Props.Get("Elevation")
-sHeight = Props.Get("Height")
-bLight = Props.Get("Light")
-sMaxHeight = Props.Get("MaxHeight")
-sMaxWidth = Props.Get("MaxWidth")
-sMinHeight = Props.Get("MinHeight")
-sMinWidth = Props.Get("MinWidth")
-bMultiLine = Props.Get("MultiLine")
-bOutlined = Props.Get("Outlined")
-sPosition = Props.Get("Position")
-sRounded = Props.Get("Rounded")
-bShaped = Props.Get("Shaped")
-bText = Props.Get("Text")
-sTextColor = Props.Get("TextColor")
-sTextColorIntensity = Props.Get("TextColorIntensity")
-bTile = Props.Get("Tile")
-sTimeout = Props.Get("Timeout")
-sTransition = Props.Get("Transition")
-sVIf = Props.Get("VIf")
-sVShow = Props.Get("VShow")
-sVModel = Props.Get("VModel")
-bVertical = Props.Get("Vertical")
-sWidth = Props.Get("Width")
+		bApp = Props.Get("App")
+		sCaption = Props.Get("Caption")
+		bCentered = Props.Get("Centered")
+		sColor = Props.Get("Color")
+		sColorIntensity = Props.Get("ColorIntensity")
+		sContentClass = Props.Get("ContentClass")
+		bDark = Props.Get("Dark")
+		sElevation = Props.Get("Elevation")
+		sHeight = Props.Get("Height")
+		bLight = Props.Get("Light")
+		sMaxHeight = Props.Get("MaxHeight")
+		sMaxWidth = Props.Get("MaxWidth")
+		sMinHeight = Props.Get("MinHeight")
+		sMinWidth = Props.Get("MinWidth")
+		bMultiLine = Props.Get("MultiLine")
+		bOutlined = Props.Get("Outlined")
+		sPosition = Props.Get("Position")
+		sRounded = Props.Get("Rounded")
+		bShaped = Props.Get("Shaped")
+		bText = Props.Get("Text")
+		sTextColor = Props.Get("TextColor")
+		sTextColorIntensity = Props.Get("TextColorIntensity")
+		bTile = Props.Get("Tile")
+		sTimeout = Props.GetDefault("Timeout", 5000)
+		sTransition = Props.Get("Transition")
+		sVIf = Props.Get("VIf")
+		bVertical = Props.Get("Vertical")
+		sWidth = Props.Get("Width")
+		bAppSnackBar = Props.GetDefault("AppSnackBar", False)
 	End If
+	'
+	bAbsolute = BANanoShared.parseBool(bAbsolute)
+	bApp = BANanoShared.parseBool(bApp)
+	bCentered = BANanoShared.parseBool(bCentered)
+	bDark = BANanoShared.parseBool(bDark)
+	bLight = BANanoShared.parseBool(bLight)
+	bMultiLine = BANanoShared.parseBool(bMultiLine)
+	bOutlined = BANanoShared.parseBool(bOutlined)
+	bShaped = BANanoShared.parseBool(bShaped)
+	bText = BANanoShared.parseBool(bText)
+	bTile = BANanoShared.parseBool(bTile)
+	bVertical = BANanoShared.parseBool(bVertical)
+	bAppSnackBar = BANanoShared.parseBool(bAppSnackBar)
 	'
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
@@ -149,6 +179,21 @@ sWidth = Props.Get("Width")
 		mElement = mTarget.Append($"<v-snackbar ref="${mName}" id="${mName}"></v-snackbar>"$).Get("#" & mName)
 	End If
 	'
+	If bAppSnackBar Then
+		forapp = "appsnack"
+		xCaption = $"${forapp}message"$
+		xColor = $"${forapp}color"$
+		sVModel = $"${forapp}show"$
+		xtimeout = $"${forapp}timeout"$
+		xright = $"${forapp}right"$
+		xtop = $"${forapp}top"$
+		xbottom = $"${forapp}bottom"$
+		xcentered = $"${forapp}centered"$
+		xoutlined = $"${forapp}outlined"$
+		xleft = $"${forapp}left"$
+		xshaped = $"${forapp}shaped"$
+	End If
+	
 	VElement.Initialize(mCallBack, mName, mName)
 	VElement.TagName = "v-snackbar"
 	VElement.Classes = mClasses
@@ -158,7 +203,8 @@ sWidth = Props.Get("Width")
 	VElement.Attributes = mAttributes
 	VElement.AddAttr(":absolute", bAbsolute)
 	VElement.AddAttr(":app", bApp)
-	VElement.AddAttr(":centered", bCentered)	
+	VElement.AddAttr(":centered", xcentered)	
+	VElement.SetData(xcentered, bCentered)
 	sColor = VElement.BuildColor(sColor, sColorIntensity)
 	VElement.Bind("color", xColor)
 	VElement.SetData(xColor, sColor)
@@ -172,36 +218,56 @@ sWidth = Props.Get("Width")
 	VElement.AddAttr("min-height", sMinHeight)
 	VElement.AddAttr("min-width", sMinWidth)
 	VElement.AddAttr(":multi-line", bMultiLine)
-	VElement.AddAttr(":outlined", bOutlined)
-Select Case sPosition
-Case "none"	
-Case "bottom-left"
-VElement.AddAttr(":bottom", True)
-VElement.AddAttr(":left", True)
-Case "bottom-right"
-VElement.AddAttr(":bottom", True)
-VElement.AddAttr(":right", True)
-Case "top-left"
-VElement.AddAttr(":top", True)
-VElement.AddAttr(":left", True)
-Case "top-right"
-VElement.AddAttr(":top", True)
-VElement.AddAttr(":right", True)
-End Select
+	VElement.AddAttr(":outlined", xoutlined)
+	VElement.AddAttr(":bottom", xbottom)
+	VElement.AddAttr(":left", xleft)
+	VElement.AddAttr(":right", xright)
+	VElement.AddAttr(":top", xtop)
+	
+	Select Case sPosition
+	Case "none"	
+	Case "bottom-left"
+		VElement.SetData(xbottom, True)
+		VElement.SetData(xleft, True)
+		VElement.SetData(xtop, False)
+		VElement.SetData(xright, False)
+		VElement.SetData(xcentered, False)
+	Case "bottom-right"
+		VElement.SetData(xbottom, True)
+		VElement.SetData(xright, True)
+		VElement.SetData(xleft, False)
+		VElement.SetData(xtop, False)
+		VElement.SetData(xcentered, False)
+	Case "top-left"
+		VElement.SetData(xtop, True)
+		VElement.SetData(xleft, True)
+		VElement.SetData(xright, False)
+		VElement.SetData(xbottom, False)
+		VElement.SetData(xcentered, False)
+	Case "top-right"
+		VElement.SetData(xtop, True)
+		VElement.SetData(xright, True)
+		VElement.SetData(xleft, False)
+		VElement.SetData(xbottom, False)
+	End Select
 
-VElement.AddClass("rounded")
-VElement.AddAttr(":shaped", bShaped)
-VElement.AddAttr(":text", bText)
-VElement.TextColor = VElement.BuildColor(sTextColor, sTextColorIntensity)
-VElement.AddAttr(":tile", bTile)
-VElement.AddAttr("timeout", sTimeout)
-VElement.AddAttr("transition", sTransition)
-VElement.AddAttr("v-if", sVIf)
-VElement.AddAttr("v-model", sVModel)
-VElement.AddAttr(":vertical", bVertical)
-VElement.AddAttr("width", sWidth)
-VElement.AddAttr(sVModel, False)
-VElement.BindAllEvents
+	VElement.AddClass(sRounded)
+	VElement.AddAttr(":shaped", xshaped)
+	VElement.AddAttr(":text", bText)
+	VElement.TextColor = VElement.BuildColor(sTextColor, sTextColorIntensity)
+	VElement.AddAttr(":tile", bTile)
+	VElement.AddAttr(":timeout", xtimeout)
+	VElement.AddAttr("transition", sTransition)
+	VElement.AddAttr("v-if", sVIf)
+	VElement.AddAttr("v-model", sVModel)
+	VElement.AddAttr(":vertical", bVertical)
+	VElement.AddAttr("width", sWidth)
+	VElement.SetData(sVModel, False)
+	
+	VElement.SetData(xoutlined, bOutlined)
+	VElement.SetData(xshaped, bShaped)
+	VElement.SetData(xtimeout, sTimeout)
+	VElement.BindAllEvents
 End Sub
 
 'update the label of the button
@@ -250,11 +316,14 @@ Sub UpdateVisible(VC As VueComponent, b As Boolean) As VSnackBar
 	Return Me
 End Sub
 
+Sub UpdateTimeOut(VC As VueComponent, s As String) As VSnackBar
+	VC.SetData(xtimeout, s)
+	Return Me
+End Sub
 
 Sub getID As String
 	Return mName
 End Sub
-
 
 Sub getHere As String
 	Return $"#${mName}"$
@@ -278,4 +347,54 @@ Sub BindState(VC As VueComponent)
 		Dim cb As BANanoObject = mmethods.Get(k)
 		VC.SetCallBack(k, cb)
 	Next
+End Sub
+
+
+Sub ShowError(VC As VueComponent, Message As String)
+	If BANano.IsNull(Message) Then Return
+	VC.SetData(xCaption, Message)
+	VC.SetData(xColor, "error")
+	VC.SetData(sVModel, True)
+End Sub
+
+Sub ShowSuccess(VC As VueComponent,  Message As String)
+	If BANano.IsNull(Message) Then Return
+	VC.SetData(xCaption, Message)
+	VC.SetData(xColor, "success")
+	VC.SetData(sVModel, True)
+End Sub
+
+Sub ShowPrimary(VC As VueComponent,  Message As String)
+	If BANano.IsNull(Message) Then Return
+	VC.SetData(xCaption, Message)
+	VC.SetData(xColor, "primary")
+	VC.SetData(sVModel, True)
+End Sub
+
+Sub ShowSecondary(VC As VueComponent,  Message As String)
+	If BANano.IsNull(Message) Then Return
+	VC.SetData(xCaption, Message)
+	VC.SetData(xColor, "secondary")
+	VC.SetData(sVModel, True)
+End Sub
+
+Sub ShowInfo(VC As VueComponent,  Message As String)
+	If BANano.IsNull(Message) Then Return
+	VC.SetData(xCaption, Message)
+	VC.SetData(xColor, "info")
+	VC.SetData(sVModel, True)
+End Sub
+
+Sub ShowWarning(VC As VueComponent,  Message As String)
+	If BANano.IsNull(Message) Then Return
+	VC.SetData(xCaption, Message)
+	VC.SetData(xColor, "warning")
+	VC.SetData(sVModel, True)
+End Sub
+
+Sub Show(VC As VueComponent,  Message As String)
+	If BANano.IsNull(Message) Then Return
+	VC.SetData(xCaption, Message)
+	VC.SetData(xColor, "")
+	VC.SetData(sVModel, True)
 End Sub

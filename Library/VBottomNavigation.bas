@@ -21,7 +21,6 @@ Version=8.9
 #DesignerProperty: Key: Height, DisplayName: Height, FieldType: String, DefaultValue: 56 , Description: Height
 #DesignerProperty: Key: HideOnScroll, DisplayName: HideOnScroll, FieldType: Boolean, DefaultValue: false, Description: HideOnScroll
 #DesignerProperty: Key: Horizontal, DisplayName: Horizontal, FieldType: Boolean, DefaultValue: false, Description: Horizontal
-#DesignerProperty: Key: InputValue, DisplayName: InputValue, FieldType: Boolean, DefaultValue: True, Description: InputValue
 #DesignerProperty: Key: Light, DisplayName: Light, FieldType: Boolean, DefaultValue: false, Description: Light
 #DesignerProperty: Key: Mandatory, DisplayName: Mandatory, FieldType: Boolean, DefaultValue: false, Description: Mandatory
 #DesignerProperty: Key: MaxHeight, DisplayName: MaxHeight, FieldType: String, DefaultValue: , Description: MaxHeight
@@ -32,7 +31,6 @@ Version=8.9
 #DesignerProperty: Key: ScrollThreshold, DisplayName: ScrollThreshold, FieldType: String, DefaultValue: , Description: ScrollThreshold
 #DesignerProperty: Key: Shift, DisplayName: Shift, FieldType: Boolean, DefaultValue: false, Description: Shift
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
-#DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue: , Description: VShow
 #DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: , Description: Value
 #DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: , Description: Width
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
@@ -62,7 +60,6 @@ Sub Class_Globals
 	Private sHeight As String
 	Private bHideOnScroll As Boolean
 	Private bHorizontal As Boolean
-	Private bInputValue As Boolean
 	Private bLight As Boolean
 	Private bMandatory As Boolean
 	Private sMaxHeight As String
@@ -79,6 +76,7 @@ Sub Class_Globals
 	Private xitems As List
 	Private itemsName As String
 	Private bHidden As Boolean
+	Private svmodel As String
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -96,6 +94,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	xitems.Initialize 
 	itemsName = $"${mName}items"$
 	sVShow = $"${mName}show"$
+	svmodel = $"${mName}vmodel"$
 End Sub
 	
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
@@ -116,7 +115,6 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sHeight = Props.Get("Height")
 		bHideOnScroll = Props.Get("HideOnScroll")
 		bHorizontal = Props.Get("Horizontal")
-		bInputValue = Props.Get("InputValue")
 		bLight = Props.Get("Light")
 		bMandatory = Props.Get("Mandatory")
 		sMaxHeight = Props.Get("MaxHeight")
@@ -127,12 +125,22 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sScrollThreshold = Props.Get("ScrollThreshold")
 		bShift = Props.Get("Shift")
 		sVIf = Props.Get("VIf")
-		sVShow = Props.Get("VShow")
 		bHidden = Props.GetDefault("Hidden", False)
+		bHidden = BANanoShared.parseBool(bHidden)
 		sValue = Props.Get("Value")
 		sWidth = Props.Get("Width")
 	End If
 	'
+	bApp = BANanoShared.parseBool(bApp)
+bDark = BANanoShared.parseBool(bDark)
+bFixed = BANanoShared.parseBool(bFixed)
+bGrow = BANanoShared.parseBool(bGrow)
+bHideOnScroll = BANanoShared.parseBool(bHideOnScroll)
+bHorizontal = BANanoShared.parseBool(bHorizontal)
+bLight = BANanoShared.parseBool(bLight)
+bMandatory = BANanoShared.parseBool(bMandatory)
+bShift = BANanoShared.parseBool(bShift)
+
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
 		mElement = BANano.GetElement($"#${mName}"$)
@@ -172,7 +180,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.AddAttr("height", sHeight)
 	VElement.AddAttr(":hide-on-scroll", bHideOnScroll)
 	VElement.AddAttr(":horizontal", bHorizontal)
-	VElement.AddAttr(":input-value", bInputValue)
+	VElement.AddAttr(":input-value.sync", sVShow)
 	VElement.AddAttr(":light", bLight)
 	VElement.AddAttr(":mandatory", bMandatory)
 	VElement.AddAttr("max-height", sMaxHeight)
@@ -183,12 +191,11 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.AddAttr("scroll-threshold", sScrollThreshold)
 	VElement.AddAttr(":shift", bShift)
 	VElement.AddAttr("v-if", sVIf)
-	VElement.AddAttr("v-show", sVShow)
 	VElement.SetData(sVShow, Not(bHidden))
-	VElement.AddAttr("value", sValue)
+	VElement.AddAttr(":value", svmodel)
+	VElement.SetData(svmodel, sValue)
 	VElement.AddAttr("width", sWidth)
 	VElement.SetData(itemsName, VElement.NewList)
-	VElement.SetData(sValue, "")
 	VElement.BindAllEvents
 End Sub
 
@@ -271,6 +278,10 @@ Sub Refresh(VC As VueComponent)
 	VC.SetData(itemsName, xitems)
 End Sub
 
+'set active button
+Sub SetValue(VC As VueComponent, xvalue As String)
+	VC.SetData(svmodel, xvalue)
+End Sub
 
 Sub getID As String
 	Return mName

@@ -39,7 +39,6 @@ Version=8.9
 #DesignerProperty: Key: Touchless, DisplayName: Touchless, FieldType: Boolean, DefaultValue: false, Description: Touchless
 '
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
-#DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue: , Description: VShow
 #DesignerProperty: Key: Vertical, DisplayName: Vertical, FieldType: Boolean, DefaultValue: false, Description: Vertical
 #DesignerProperty: Key: VerticalDelimiters, DisplayName: VerticalDelimiters, FieldType: String, DefaultValue: , Description: VerticalDelimiters
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
@@ -81,7 +80,7 @@ Private bShowArrows As Boolean
 Private bShowArrowsOnHover As Boolean
 Private bTouchless As Boolean
 Private sVIf As String
-Private sVShow As String
+'Private sVShow As String
 Private bVertical As Boolean
 Private sVerticalDelimiters As String
 Private sImagesLink As String
@@ -106,7 +105,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 		End If
 	End If
 	xItems.Initialize 
-	sVShow = $"${mName}show"$
+	'sVShow = $"${mName}show"$
 End Sub
 	
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
@@ -138,7 +137,6 @@ bShowArrows = Props.Get("ShowArrows")
 bShowArrowsOnHover = Props.Get("ShowArrowsOnHover")
 bTouchless = Props.Get("Touchless")
 sVIf = Props.Get("VIf")
-sVShow = Props.Get("VShow")
 bHidden = Props.GetDefault("Hidden", False)
 bVertical = Props.Get("Vertical")
 sVerticalDelimiters = Props.Get("VerticalDelimiters")
@@ -149,6 +147,23 @@ sImagesRipple = Props.Get("ImagesRipple")
 sImagesTarget = Props.Get("ImagesTarget")
 sImagesTransition = Props.Get("ImagesTransition")
 	End If
+	'
+	bContinuos = BANanoShared.parseBool(bContinuos)
+bCycle = BANanoShared.parseBool(bCycle)
+bDark = BANanoShared.parseBool(bDark)
+bHideDelimiterBackground = BANanoShared.parseBool(bHideDelimiterBackground)
+bHideDelimiters = BANanoShared.parseBool(bHideDelimiters)
+bLight = BANanoShared.parseBool(bLight)
+bMandatory = BANanoShared.parseBool(bMandatory)
+bMultiple = BANanoShared.parseBool(bMultiple)
+bProgress = BANanoShared.parseBool(bProgress)
+bReverse = BANanoShared.parseBool(bReverse)
+bShowArrows = BANanoShared.parseBool(bShowArrows)
+bShowArrowsOnHover = BANanoShared.parseBool(bShowArrowsOnHover)
+bTouchless = BANanoShared.parseBool(bTouchless)
+bHidden = BANanoShared.parseBool(bHidden)
+bVertical = BANanoShared.parseBool(bVertical)
+
 	'
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
@@ -208,10 +223,10 @@ VElement.ShowArrows = bShowArrows
 VElement.AddAttr(":show-arrows-on-hover", bShowArrowsOnHover)
 VElement.AddAttr(":touchless", bTouchless)
 VElement.VIf = sVIf
-VElement.VShow = sVShow
+'VElement.VShow = sVShow
+'VElement.SetData(sVShow, Not(bHidden))
 VElement.Vertical = bVertical
 VElement.AddAttr("vertical-delimiters", sVerticalDelimiters)
-VElement.SetData(sVShow, Not(bHidden))
 VElement.BindAllEvents
 End Sub
 
@@ -260,7 +275,7 @@ Sub RemoveAttr(p As String) As VCarousel
 End Sub
 Sub UpdateVisible(VC As VueComponent, b As Boolean) As VCarousel
 	VC.SetData(sVIf, b)
-	VC.SetData(sVShow, b)
+	'VC.SetData(sVShow, b)
 	Return Me
 End Sub
 

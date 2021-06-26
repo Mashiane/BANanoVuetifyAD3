@@ -24,7 +24,6 @@ Version=7
 #DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: Boolean, DefaultValue: False, Description: Disabled
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: Required, DisplayName: Required, FieldType: Boolean, DefaultValue: False, Description: Required
-#DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue: , Description: VShow
 
 #DesignerProperty: Key: ActiveClass, DisplayName: ActiveClass, FieldType: String, DefaultValue: , Description: ActiveClass
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue: , Description: Color, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
@@ -79,7 +78,7 @@ Private sValue As String
  Private bHidden As Boolean
  Private bChecked As Boolean
  Private bRequired As Boolean
- private sRequired as string
+ Private sRequired As String
 	End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -123,13 +122,21 @@ sVFor = Props.GetDefault("VFor", "")
 sVIf = Props.GetDefault("VIf", "")
 sVModel = Props.GetDefault("VModel", "radio1")
 sVOn = Props.GetDefault("VOn", "")
-sVShow = Props.GetDefault("VShow", "")
 sValue = Props.GetDefault("Value", "")
 bHidden = Props.GetDefault("Hidden", False)
  bChecked = Props.GetDefault("Checked", False)
  bRequired = Props.GetDefault("Required", False)
 	End If 
 	' 
+	bDark = BANanoShared.parseBool(bDark)
+bDisabled = BANanoShared.parseBool(bDisabled)
+bLight = BANanoShared.parseBool(bLight)
+bReadOnly = BANanoShared.parseBool(bReadOnly)
+bRipple = BANanoShared.parseBool(bRipple)
+bHidden = BANanoShared.parseBool(bHidden)
+bChecked = BANanoShared.parseBool(bChecked)
+bRequired = BANanoShared.parseBool(bRequired)
+
 	'build and get the element 
 	If BANano.Exists($"#${mName}"$) Then 
 		mElement = BANano.GetElement($"#${mName}"$) 

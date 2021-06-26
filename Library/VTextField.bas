@@ -80,7 +80,6 @@ Version=8.95
 #DesignerProperty: Key: VBind, DisplayName: VBind, FieldType: String, DefaultValue: , Description: VBind
 #DesignerProperty: Key: VFor, DisplayName: VFor, FieldType: String, DefaultValue: , Description: VFor
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
-#DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VOn, DisplayName: VOn, FieldType: String, DefaultValue: , Description: VOn
 #DesignerProperty: Key: ValidateOnBlur, DisplayName: ValidateOnBlur, FieldType: Boolean, DefaultValue: false, Description: ValidateOnBlur
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
@@ -256,7 +255,6 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sVBind = Props.Get("VBind")
 		sVFor = Props.Get("VFor")
 		sVIf = Props.Get("VIf")
-		sVShow = Props.Get("VShow")
 		sVModel = Props.Get("VModel")
 		sVOn = Props.Get("VOn")
 		bValidateOnBlur = Props.Get("ValidateOnBlur")
@@ -266,6 +264,43 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bTimePicker = Props.getdefault("TimePicker", False)
 		sAutoComplete = Props.GetDefault("AutoComplete", "none")
 	End If
+	'
+	bDisabled = BANanoShared.parseBool(bDisabled)
+bHidden = BANanoShared.parseBool(bHidden)
+bLoading = BANanoShared.parseBool(bLoading)
+bReadonly = BANanoShared.parseBool(bReadonly)
+bRequired = BANanoShared.parseBool(bRequired)
+bAutoGrow = BANanoShared.parseBool(bAutoGrow)
+bAutofocus = BANanoShared.parseBool(bAutofocus)
+bClearable = BANanoShared.parseBool(bClearable)
+bDark = BANanoShared.parseBool(bDark)
+bDense = BANanoShared.parseBool(bDense)
+bFilled = BANanoShared.parseBool(bFilled)
+bFlat = BANanoShared.parseBool(bFlat)
+bFullWidth = BANanoShared.parseBool(bFullWidth)
+bHideDetails = BANanoShared.parseBool(bHideDetails)
+bLight = BANanoShared.parseBool(bLight)
+bNoResize = BANanoShared.parseBool(bNoResize)
+bOutlined = BANanoShared.parseBool(bOutlined)
+bPersistentHint = BANanoShared.parseBool(bPersistentHint)
+bPersistentPlaceholder = BANanoShared.parseBool(bPersistentPlaceholder)
+bReverse = BANanoShared.parseBool(bReverse)
+bRounded = BANanoShared.parseBool(bRounded)
+bShaped = BANanoShared.parseBool(bShaped)
+bSingleLine = BANanoShared.parseBool(bSingleLine)
+bSolo = BANanoShared.parseBool(bSolo)
+bSoloInverted = BANanoShared.parseBool(bSoloInverted)
+bTextArea = BANanoShared.parseBool(bTextArea)
+bValidateOnBlur = BANanoShared.parseBool(bValidateOnBlur)
+bShowEyes = BANanoShared.parseBool(bShowEyes)
+bDatePicker = BANanoShared.parseBool(bDatePicker)
+bTimePicker = BANanoShared.parseBool(bTimePicker)
+bTextArea = BANanoShared.parseBool(bTextArea)
+bShowEyes = BANanoShared.parseBool(bShowEyes)
+bDisabled = BANanoShared.parseBool(bDisabled)
+bRequired = BANanoShared.parseBool(bRequired)
+bLoading = BANanoShared.parseBool(bLoading)
+
 	'
 	Dim stagName As String = "v-text-field"
 	If BANano.IsNull(bTextArea) Or BANano.IsUndefined(bTextArea) Then
@@ -347,20 +382,6 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	'
 	VElement.Initialize(mCallBack, mName, mName)
 	VElement.TagName = stagName
-	'
-	If BANano.IsNull(bShowEyes) Or BANano.IsUndefined(bShowEyes) Then
-		bShowEyes = False
-	End If
-	'
-	If BANano.IsNull(bDisabled) Or BANano.IsUndefined(bDisabled) Then
-		bDisabled = False 
-	End If
-	If BANano.IsNull(bRequired) Or BANano.IsUndefined(bRequired) Then
-		bRequired = False 
-	End If
-	If BANano.IsNull(bLoading) Or BANano.IsUndefined(bLoading) Then
-		bLoading = False 
-	End If
 	VElement.Classes = mClasses
 	VElement.Styles = mStyles
 	VElement.Attributes = mAttributes

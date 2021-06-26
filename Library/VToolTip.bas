@@ -92,7 +92,7 @@ Private sVIf As String
 Private sVModel As String
 Private sZIndex As String
 Private sCaption As String
-Private sVShow as String
+'Private sVShow As String
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -107,6 +107,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey)
 		End If
 	End If
+	sVModel = $"${mName}show"$
 End Sub
 
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
@@ -147,11 +148,22 @@ sTextColor = Props.Get("TextColor")
 sTextColorIntensity = Props.Get("TextColorIntensity")
 sTransition = Props.Get("Transition")
 sVIf = Props.Get("VIf")
-sVShow = Props.Get("VShow")
 sVModel = Props.Get("VModel")
 sZIndex = Props.Get("ZIndex")
 sCaption = Props.Get("Caption")
 	End If
+	'
+	bAbsolute = BANanoShared.parseBool(bAbsolute)
+bAllowOverflow = BANanoShared.parseBool(bAllowOverflow)
+bDisabled = BANanoShared.parseBool(bDisabled)
+bEager = BANanoShared.parseBool(bEager)
+bFixed = BANanoShared.parseBool(bFixed)
+bInternalActivator = BANanoShared.parseBool(bInternalActivator)
+bOffsetOverflow = BANanoShared.parseBool(bOffsetOverflow)
+bOpenOnClick = BANanoShared.parseBool(bOpenOnClick)
+bOpenOnFocus = BANanoShared.parseBool(bOpenOnFocus)
+bOpenOnHover = BANanoShared.parseBool(bOpenOnHover)
+
 	'
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then

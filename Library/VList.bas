@@ -41,7 +41,6 @@ Version=8.95
 #DesignerProperty: Key: VBind, DisplayName: VBind, FieldType: String, DefaultValue: , Description: VBind
 #DesignerProperty: Key: VFor, DisplayName: VFor, FieldType: String, DefaultValue: , Description: VFor
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
-#DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VOn, DisplayName: VOn, FieldType: String, DefaultValue: , Description: VOn
 #DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: , Description: Width
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
@@ -88,7 +87,7 @@ Private sVBind As String
 Private sVFor As String
 Private sVIf As String
 Private sVOn As String
-Private sVShow As String
+'Private sVShow As String
 Private sWidth As String
 Private Options As ListViewItemOptions
 Public Records As List
@@ -116,7 +115,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	DataSource = ""
 	numLines = 0
 	sDisabled = $"${mName}disabled"$
-	sVShow = $"${mName}show"$
+	'sVShow = $"${mName}show"$
 	NewListViewItemOptions
 End Sub
 	
@@ -154,24 +153,37 @@ bTwoLine = Props.Get("TwoLine")
 sVBind = Props.Get("VBind")
 sVFor = Props.Get("VFor")
 sVIf = Props.Get("VIf")
-sVShow = Props.Get("VShow")
 sVOn = Props.Get("VOn")
 bHidden = Props.GetDefault("Hidden", False)
 sWidth = Props.Get("Width")
 bPlaceAtBottom = Props.GetDefault("PlaceAtBottom", False)
 	End If
 	'
+	bDark = BANanoShared.parseBool(bDark)
+bDense = BANanoShared.parseBool(bDense)
+bDisabled = BANanoShared.parseBool(bDisabled)
+bExpand = BANanoShared.parseBool(bExpand)
+bFlat = BANanoShared.parseBool(bFlat)
+bLight = BANanoShared.parseBool(bLight)
+bNav = BANanoShared.parseBool(bNav)
+bOutlined = BANanoShared.parseBool(bOutlined)
+bRounded = BANanoShared.parseBool(bRounded)
+bShaped = BANanoShared.parseBool(bShaped)
+bSubheader = BANanoShared.parseBool(bSubheader)
+bThreeLine = BANanoShared.parseBool(bThreeLine)
+bTile = BANanoShared.parseBool(bTile)
+bTwoLine = BANanoShared.parseBool(bTwoLine)
+bHidden = BANanoShared.parseBool(bHidden)
+bPlaceAtBottom = BANanoShared.parseBool(bPlaceAtBottom)
+bDisabled = BANanoShared.parseBool(bDisabled)
+
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
 		mElement = BANano.GetElement($"#${mName}"$)
 	Else	
 		mElement = mTarget.Append($"<v-list ref="${mName}" id="${mName}"></v-list>"$).Get("#" & mName)
 	End If
-	'
-	If BANano.IsNull(bDisabled) Or BANano.IsUndefined(bDisabled) Then
-		bDisabled = False 
-	End If
-	
+		
 	VElement.Initialize(mCallBack, mName, mName)
 	VElement.TagName = "v-list"
 	VElement.Classes = mClasses
@@ -205,8 +217,8 @@ VElement.AddAttr("v-bind", sVBind)
 VElement.AddAttr("v-for", sVFor)
 VElement.AddAttr("v-if", sVIf)
 VElement.AddAttr("v-on", sVOn)
-VElement.AddAttr("v-show", sVShow)
-VElement.SetData(sVShow, Not(bHidden))
+'VElement.AddAttr("v-show", sVShow)
+'VElement.SetData(sVShow, Not(bHidden))
 VElement.AddAttr("width", sWidth)
 numLines = 0
 If bThreeLine Then numLines = 3
@@ -267,7 +279,7 @@ End Sub
 
 Sub UpdateVisible(VC As VueComponent, b As Boolean) As VList
 	VC.SetData(sVIf, b)
-	VC.SetData(sVShow, b)
+	'VC.SetData(sVShow, b)
 	Return Me
 End Sub
 

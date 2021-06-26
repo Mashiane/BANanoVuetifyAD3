@@ -35,7 +35,6 @@ Version=8.9
 #DesignerProperty: Key: TextColorIntensity, DisplayName: TextColorIntensity, FieldType: String, DefaultValue: , Description: TextColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: Tile, DisplayName: Tile, FieldType: Boolean, DefaultValue: false, Description: Tile
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
-#DesignerProperty: Key: VShow, DisplayName: VShow, FieldType: String, DefaultValue: , Description: VShow
 #DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: , Description: Width
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
@@ -82,7 +81,7 @@ Private sVIf As String
 Private sVShow As String
 Private sWidth As String
 Private xColor As String
-private bHidden as boolean
+Private bHidden As Boolean
 	End Sub
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	mName = Name.tolowercase
@@ -134,10 +133,26 @@ sTextColor = Props.Get("TextColor")
 sTextColorIntensity = Props.Get("TextColorIntensity")
 bTile = Props.Get("Tile")
 sVIf = Props.Get("VIf")
-sVShow = Props.Get("VShow")
 bHidden = Props.GetDefault("Hidden", False)
 sWidth = Props.Get("Width")
 	End If
+	'
+	bAbsolute = BANanoShared.parseBool(bAbsolute)
+bBottom = BANanoShared.parseBool(bBottom)
+bCollapse = BANanoShared.parseBool(bCollapse)
+bDark = BANanoShared.parseBool(bDark)
+bDense = BANanoShared.parseBool(bDense)
+bExtended = BANanoShared.parseBool(bExtended)
+bFlat = BANanoShared.parseBool(bFlat)
+bFloating = BANanoShared.parseBool(bFloating)
+bLight = BANanoShared.parseBool(bLight)
+bOutlined = BANanoShared.parseBool(bOutlined)
+bProminent = BANanoShared.parseBool(bProminent)
+bShaped = BANanoShared.parseBool(bShaped)
+bShort = BANanoShared.parseBool(bShort)
+bTile = BANanoShared.parseBool(bTile)
+bHidden = BANanoShared.parseBool(bHidden)
+
 	'
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
@@ -145,6 +160,7 @@ sWidth = Props.Get("Width")
 	Else	
 		mElement = mTarget.Append($"<v-toolbar ref="${mName}" id="${mName}"></v-toolbar>"$).Get("#" & mName)
 	End If
+	
 	'
 	VElement.Initialize(mCallBack, mName, mName)
 	VElement.TagName = "v-toolbar"
@@ -180,6 +196,7 @@ VElement.TextColorIntensity = sTextColorIntensity
 VElement.Tile = bTile
 VElement.VIf = sVIf
 VElement.VShow = sVShow
+VElement.SetData(sVShow, True)
 VElement.Width = sWidth
 VElement.BindAllEvents
 End Sub

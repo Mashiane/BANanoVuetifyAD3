@@ -65,6 +65,9 @@ bDisabled = Props.GetDefault("Disabled", False)
 bReadonly = Props.GetDefault("Readonly", False)
  
 	End If 
+	bDisabled = BANanoShared.parseBool(bDisabled)
+bReadonly = BANanoShared.parseBool(bReadonly)
+
 	' 
 	'build and get the element 
 	If BANano.Exists($"#${mName}"$) Then 

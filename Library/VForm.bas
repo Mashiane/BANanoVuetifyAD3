@@ -17,9 +17,7 @@ Version=7
 #DesignerProperty: Key: Readonly, DisplayName: Readonly, FieldType: Boolean, DefaultValue: False, Description: Readonly
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: VBind, DisplayName: VBind, FieldType: String, DefaultValue: , Description: VBind
-#DesignerProperty: Key: VFor, DisplayName: VFor, FieldType: String, DefaultValue: , Description: VFor
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
-#DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VOn, DisplayName: VOn, FieldType: String, DefaultValue: , Description: VOn
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag. 
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use = 
@@ -44,7 +42,7 @@ Sub Class_Globals
 	Private sVIf As String
 	Private sVModel As String
 	Private sVOn As String
-	Private sVShow As String
+	'Private sVShow As String
  	Private bDisabled As Boolean
 	Private bReadonly As Boolean
 End Sub
@@ -64,6 +62,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	sDisabled = $"${mName}disabled"$
 	sReadonly = $"${mName}readonly"$
 	sVModel = $"${mName}vmodel"$
+	'sVShow = $"${mName}show"$
 End Sub
 
 Sub DesignerCreateView (Target As BANanoElement, Props As Map) 
@@ -78,7 +77,6 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sVBind = Props.Get("VBind")
 		sVFor = Props.Get("VFor")
 		sVIf = Props.Get("VIf")
-		sVShow = Props.Get("VShow")
 		sVOn = Props.Get("VOn") 
 	End If 
 	' 
@@ -111,7 +109,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.AddAttr("v-on", sVOn)	
 	VElement.AddAttr("v-model", sVModel)
 	VElement.AddAttr("v-if", sVIf)
-	VElement.AddAttr("v-show", sVShow)
+	'VElement.AddAttr("v-show", sVShow)
 	VElement.SetData(sVModel, False)
 	VElement.BindAllEvents
 End Sub
