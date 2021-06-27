@@ -195,8 +195,8 @@ Sub Class_Globals
 	Public Error As String
 	Public affectedRows As Int
 	Private sAction As String
-	Private db As FBCollection
-	Private auth As FBAuth
+	Private db As BVAD3FBCollection
+	Private auth As BVAD3FBAuth
 End Sub
 
 
@@ -967,8 +967,8 @@ private Sub Execute(nAction As String)
 End Sub
 
 '*get a collection
-private Sub collection(colName As String) As FBCollection
-	Dim lbc As FBCollection
+private Sub collection(colName As String) As BVAD3FBCollection
+	Dim lbc As BVAD3FBCollection
 	lbc.Initialize(firestore, colName)
 	Return lbc
 End Sub
