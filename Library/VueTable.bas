@@ -43,6 +43,7 @@ Version=8.5
 
 #DesignerProperty: Key: Title, DisplayName: Title, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: AutoID, DisplayName: Auto ID/Name, FieldType: Boolean, DefaultValue: False, Description: Overrides the ID/Name with a random string.
+#DesignerProperty: Key: Manual, DisplayName: Manual, FieldType: Boolean, DefaultValue: False, Description: Table created manually.
 #DesignerProperty: Key: ItemKey, DisplayName: ItemKey, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: ItemsPerPage, DisplayName: ItemsPerPage, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Dense, DisplayName: Dense, FieldType: Boolean, DefaultValue:  False, Description: 
@@ -93,6 +94,8 @@ Version=8.5
 #DesignerProperty: Key: ColumIcons, DisplayName: ColumIcons (;), FieldType: String, DefaultValue: , Description: ColumIcons
 #DesignerProperty: Key: ColumnAutoComplete, DisplayName: ColumnAutoComplete (;), FieldType: String, DefaultValue: , Description: ColumnAutoComplete
 #DesignerProperty: Key: ColumnAvatar, DisplayName: ColumnAvatar (;), FieldType: String, DefaultValue: , Description: ColumnAvatar
+#DesignerProperty: Key: ColumnAvatarText, DisplayName: ColumnAvatarText (;), FieldType: String, DefaultValue: , Description: ColumnAvatarText
+#DesignerProperty: Key: ColumnAvatarIcon, DisplayName: ColumnAvatarIcon (;), FieldType: String, DefaultValue: , Description: ColumnAvatarIcon
 #DesignerProperty: Key: ColumnButton, DisplayName: ColumnButton (;), FieldType: String, DefaultValue: , Description: ColumnButton
 #DesignerProperty: Key: ColumnCheckbox, DisplayName: ColumnCheckbox (;), FieldType: String, DefaultValue: , Description: ColumnCheckbox
 #DesignerProperty: Key: ColumnChip, DisplayName: ColumnChip (;), FieldType: String, DefaultValue: , Description: ColumnChip
@@ -165,6 +168,7 @@ Sub Class_Globals
 	Private bDark As Boolean
 	Private bLoading As Boolean
 	Private sPageLength As String 
+	private bManual as boolean
 	'
 	Public Items As List
 	Public AppTemplateName As String = "#apptemplate"
@@ -192,6 +196,8 @@ Sub Class_Globals
 	Public COLUMN_ACTION As String = "action"
 	Public COLUMN_SWITCH As String = "switch"
 	Public COLUMN_AVATARIMG As String = "avatarimg"
+	Public COLUMN_AVATARTXT As String = "avatartxt"
+	Public COLUMN_AVATARICON As String = "avataricon"
 	Public COLUMN_RATING As String = "rating"
 	Public COLUMN_LINK As String = "link"
 	Public COLUMN_LINK1 As String = "link1"
@@ -303,6 +309,8 @@ Private showpagination As String
 Private xPage As String
 Private xPageCount As String
 Private xPagination As String
+Private sColumnAvatarText As String
+private sColumnAvatarIcon as string
 End Sub
 
 'initialize the custom view
@@ -377,6 +385,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bShowExpand = Props.Get("ShowExpand")
 		bLoading = Props.GetDefault("Loading",False)
 		bDark = Props.Get("Dark")
+		bManual = Props.GetDefault("Manual", True)
 		'
 		sCancelColor = Props.GetDefault("CancelColor", "brown")
 		sCloneColor = Props.GetDefault("CloneColor", "amber")
@@ -435,8 +444,11 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sPaginationPosition = Props.getdefault("PaginationPosition", "top")
 		sMaxPages = Props.GetDefault("MaxPages", "5")
 		sPageLength = Props.GetDefault("PageLength", 5)
+		sColumnAvatarText = Props.getdefault("ColumnAvatarText", "")
+		sColumnAvatarIcon = Props.GetDefault("ColumnAvatarIcon", "")
 	End If
 	'
+	bManual = BANanoShared.parseBool(bManual)
 	bDense = BANanoShared.parseBool(bDense)
 bShowGroupBy = BANanoShared.parseBool(bShowGroupBy)
 bShowSelect = BANanoShared.parseBool(bShowSelect)
@@ -577,6 +589,7 @@ bHideDefaultFooter = BANanoShared.parseBool(bHideDefaultFooter)
 	setStates(mStates)
 	setTitle(mTitle)
 	'
+	If bManual = False Then
 	If mHasSearch = True Then
 		AddSpacer
 		AddSearch
@@ -655,6 +668,8 @@ bHideDefaultFooter = BANanoShared.parseBool(bHideDefaultFooter)
 	Dim lsColumnTitles As List = BANanoShared.StrParse(";", sColumnTitles)
 	Dim lsColumnWidths As List = BANanoShared.StrParse(";", sColumnWidths)
 	Dim lsColumnFilterable As List = BANanoShared.StrParse(";", sColumnFilterable)
+	Dim lsColumnAvatarTxt As List = BANanoShared.StrParse(";", sColumnAvatarText)
+	Dim lsColumnAvatarIcon As List = BANano.Split(";", sColumnAvatarIcon)
 	'
 	Dim colTot As Int = lsColumnFields.Size - 1
 	Dim colCnt As Int
@@ -829,6 +844,28 @@ bHideDefaultFooter = BANanoShared.parseBool(bHideDefaultFooter)
 			Log($"DataTable Error: ${mName}.${f} avatar column not found on column fields!"$)
 		End If
 	Next
+	'avatar text
+	colTot = lsColumnAvatarTxt.size - 1
+	For colCnt = 0 To colTot
+		f = lsColumnAvatarTxt.Get(colCnt)
+		f = f.trim
+		If lsColumnFields.IndexOf(f) >= 0 Then
+			SetColumnType(f, COLUMN_AVATARTXT)
+		Else
+			Log($"DataTable Error: ${mName}.${f} avatar text column not found on column fields!"$)
+		End If
+	Next
+	'avatar icons
+	colTot = lsColumnAvatarIcon.Size - 1
+	For colCnt = 0 To colTot
+		f = lsColumnAvatarIcon.Get(colCnt)
+		f = f.trim
+		If lsColumnFields.IndexOf(f) >= 0 Then
+			SetColumnType(f, COLUMN_AVATARICON)
+		Else
+			Log($"DataTable Error: ${mName}.${f} avatar icon column not found on column fields!"$)
+		End If
+	Next
 	'button
 	colTot = lsColumnButton.Size - 1
 	For colCnt = 0 To colTot
@@ -971,7 +1008,7 @@ bHideDefaultFooter = BANanoShared.parseBool(bHideDefaultFooter)
 	If bHasMenu Then
 		SetIconDimensions("menu", "", sMenuColor)
 	End If
-		
+	End If	
 End Sub
 
 
@@ -1955,6 +1992,26 @@ Sub AddAvatarImg(colField As String, colTitle As String)
 	colField = colField.tolowercase
 	Dim dt As DataTableColumn = NewDataTableColumn(colField, colTitle)
 	dt.ColType = COLUMN_AVATARIMG
+	dt.filterable = False
+	dt.sortable = False
+	columnsM.Put(colField, dt)
+End Sub
+
+'add an avatar text
+Sub AddAvatarTxt(colField As String, colTitle As String)
+	colField = colField.tolowercase
+	Dim dt As DataTableColumn = NewDataTableColumn(colField, colTitle)
+	dt.ColType = COLUMN_AVATARTXT
+	dt.filterable = False
+	dt.sortable = True
+	columnsM.Put(colField, dt)
+End Sub
+
+'add an avatar icon
+Sub AddAvatarIcon(colField As String, colTitle As String)
+	colField = colField.tolowercase
+	Dim dt As DataTableColumn = NewDataTableColumn(colField, colTitle)
+	dt.ColType = COLUMN_AVATARICON
 	dt.filterable = False
 	dt.sortable = False
 	columnsM.Put(colField, dt)
@@ -3411,6 +3468,92 @@ sb.Append(temp)
 				tmp.AddAttr($"v-slot:item.${value}"$, "{ item }")
 				tmp.Append(rat.ToString)
 				sb.Append(tmp.ToString)
+				'
+			Case COLUMN_AVATARTXT
+				Dim akey As String = $"${mName}_${value}"$
+				Dim avt As VueElement
+				avt.Initialize(mCallBack, akey, akey)
+				avt.TagName = "v-avatar"
+				avt.Size = "36"
+				'
+				If nf.color.StartsWith("item.") Then
+					avt.AddAttr(":color", nf.color)
+				Else
+					If nf.color <> "" Then 
+						avt.Color = nf.color
+					End If
+				End If
+
+				Dim avtimg As VueElement
+				avtimg.Initialize(mCallBack, "", "")
+				avtimg.TagName = "span"
+				avtimg.AddClass("white--text")
+				avtimg.AddClass("headline")
+				If nf.PreDisplay = "" Then
+					avtimg.AddAttr("v-text", $"item.${value}"$)
+				Else
+					avtimg.AddAttr("v-text", $"${nf.predisplay}(item.${value})"$)
+				End If
+					
+				If nf.ConditionalClass <> "" Then
+					avt.Bind("class", $"${nf.ConditionalClass}(item)"$)
+				End If
+				If nf.ConditionalColor <> "" Then
+					avt.Bind("color", $"${nf.ConditionalColor}(item)"$)
+				End If
+'								
+				avt.Append(avtimg.ToString)
+				'
+				'define template
+				Dim tmp As VueElement
+				tmp.Initialize(mCallBack, aslot , aslot)
+				tmp.TagName = "v-template"
+				tmp.AddAttr($"v-slot:item.${value}"$, "{ item }")
+				tmp.Append(avt.ToString)
+				sb.Append(tmp.ToString)
+				'
+			Case COLUMN_AVATARICON		
+				Dim akey As String = $"${mName}_${value}"$
+				Dim avt As VueElement
+				avt.Initialize(mCallBack, akey, akey)
+				avt.TagName = "v-avatar"
+				'
+				If nf.color.StartsWith("item.") Then
+					avt.AddAttr(":color", nf.color)
+				Else
+					If nf.color <> "" Then 
+						avt.Color = nf.color
+					End If
+				End If
+
+				Dim avtimg As VueElement
+				avtimg.Initialize(mCallBack, "", "")
+				avtimg.TagName = "v-icon"
+				avtimg.Dark = True
+				
+				If nf.PreDisplay = "" Then
+					avtimg.AddAttr("v-text", $"item.${value}"$)
+				Else
+					avtimg.AddAttr("v-text", $"${nf.predisplay}(item.${value})"$)
+				End If
+					
+				If nf.ConditionalClass <> "" Then
+					avt.Bind("class", $"${nf.ConditionalClass}(item)"$)
+				End If
+				If nf.ConditionalColor <> "" Then
+					avt.Bind("color", $"${nf.ConditionalColor}(item)"$)
+				End If
+'								
+				avt.Append(avtimg.ToString)
+				'
+				'define template
+				Dim tmp As VueElement
+				tmp.Initialize(mCallBack, aslot , aslot)
+				tmp.TagName = "v-template"
+				tmp.AddAttr($"v-slot:item.${value}"$, "{ item }")
+				tmp.Append(avt.ToString)
+				sb.Append(tmp.ToString)
+				
 			Case COLUMN_AVATARIMG
 				Dim akey As String = $"${mName}_${value}"$
 				Dim avt As VueElement
