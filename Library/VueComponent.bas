@@ -226,6 +226,31 @@ Public Sub Initialize (CallBack As Object, Name As String) As VueComponent
 End Sub
 
 
+Sub ImportLeafLet
+	'get the leaflet map from the windows object
+	Dim Vue2Leaflet As BANanoObject = BANano.Window.GetField("Vue2Leaflet")
+	Dim LMap As BANanoObject = Vue2Leaflet.GetField("LMap")
+	Dim LTileLayer As BANanoObject = Vue2Leaflet.GetField("LTileLayer")
+	Dim LMarker As BANanoObject = Vue2Leaflet.GetField("LMarker")
+	Dim LPopup As BANanoObject = Vue2Leaflet.GetField("LPopup")
+	Dim LTooltip As BANanoObject = Vue2Leaflet.GetField("LTooltip")
+	Dim LPolyline As BANanoObject = Vue2Leaflet.GetField("LPolyline")
+	Dim LCircle As BANanoObject = Vue2Leaflet.GetField("LCircle")
+	Dim LPolygon As BANanoObject = Vue2Leaflet.GetField("LPolygon")
+	Dim LRectangle As BANanoObject = Vue2Leaflet.GetField("LRectangle")
+	'
+	components.Put("l-map", LMap)
+	components.Put("l-tile-layer", LTileLayer)
+	components.Put("l-marker", LMarker)
+	components.Put("l-tooltip", LTooltip)
+	components.Put("l-popup", LPopup)
+	components.Put("l-polyline", LPolyline)
+	components.Put("l-circle", LCircle)
+	components.Put("l-polygon", LPolygon)
+	components.Put("l-rectangle", LRectangle)
+End Sub
+
+
 Sub UseArcCounter
 	If components.ContainsKey("arc-counter") = False Then
 		Dim arcCounter As BANanoObject = BANano.Window.GetField("arcCounter")

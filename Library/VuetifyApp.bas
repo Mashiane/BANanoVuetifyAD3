@@ -5264,6 +5264,14 @@ Sub UseGoogleCharts
 	End If
 End Sub
 '
+
+Sub UseLeafLet
+	If components.ContainsKey("l-map") = False Then
+		Dim LMap As BANanoObject = BANano.Window.GetField("Vue2Leaflet").GetField("LMap")
+		components.Put("l-map", LMap)
+	End If
+End Sub
+
 'Sub UseTipTap
 '	If ModuleExist("tiptapVuetify") = False Then
 '		Dim tt As BANanoObject = BANano.Window.GetField("tiptapVuetify")
@@ -5511,7 +5519,7 @@ Sub SetNextTick(Module As Object, methodName As String)
 	methodName = methodName.ToLowerCase
 	Dim e As BANanoEvent
 	Dim cb As BANanoObject = BANano.CallBack(Module, methodName, Array(e))
-	Vue.RunMethod("nextTick", cb)
+	Vue.RunMethod("$nextTick", cb)
 End Sub
 
 'return the theme color

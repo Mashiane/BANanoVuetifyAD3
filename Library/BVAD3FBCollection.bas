@@ -184,7 +184,7 @@ Sub GetWait() As List
 End Sub
 
 'get the id from a response
-private Sub getID(xresponse As Map) As String
+private Sub getID(xresponse As Map) As String  'ignore
 	If xresponse.ContainsKey("id") Then
 		Dim res As String = xresponse.Get("id")
 		Return res
