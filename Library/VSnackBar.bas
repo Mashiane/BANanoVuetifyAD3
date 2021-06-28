@@ -204,7 +204,6 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.AddAttr(":absolute", bAbsolute)
 	VElement.AddAttr(":app", bApp)
 	VElement.AddAttr(":centered", xcentered)	
-	VElement.SetData(xcentered, bCentered)
 	sColor = VElement.BuildColor(sColor, sColorIntensity)
 	VElement.Bind("color", xColor)
 	VElement.SetData(xColor, sColor)
@@ -223,7 +222,24 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.AddAttr(":left", xleft)
 	VElement.AddAttr(":right", xright)
 	VElement.AddAttr(":top", xtop)
+	VElement.AddClass(sRounded)
+	VElement.AddAttr(":shaped", xshaped)
+	VElement.AddAttr(":text", bText)
+	VElement.TextColor = VElement.BuildColor(sTextColor, sTextColorIntensity)
+	VElement.AddAttr(":tile", bTile)
+	VElement.AddAttr(":timeout", xtimeout)
+	VElement.AddAttr("transition", sTransition)
+	VElement.AddAttr("v-if", sVIf)
+	VElement.AddAttr("v-model", sVModel)
+	VElement.AddAttr(":vertical", bVertical)
+	VElement.AddAttr("width", sWidth)
+	VElement.SetData(sVModel, False)
 	
+	VElement.SetData(xoutlined, bOutlined)
+	VElement.SetData(xshaped, bShaped)
+	VElement.SetData(xtimeout, sTimeout)
+	VElement.SetData(xleft, Null)
+
 	Select Case sPosition
 	Case "none"	
 	Case "bottom-left"
@@ -249,24 +265,8 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		VElement.SetData(xright, True)
 		VElement.SetData(xleft, False)
 		VElement.SetData(xbottom, False)
+		VElement.SetData(xcentered, False)
 	End Select
-
-	VElement.AddClass(sRounded)
-	VElement.AddAttr(":shaped", xshaped)
-	VElement.AddAttr(":text", bText)
-	VElement.TextColor = VElement.BuildColor(sTextColor, sTextColorIntensity)
-	VElement.AddAttr(":tile", bTile)
-	VElement.AddAttr(":timeout", xtimeout)
-	VElement.AddAttr("transition", sTransition)
-	VElement.AddAttr("v-if", sVIf)
-	VElement.AddAttr("v-model", sVModel)
-	VElement.AddAttr(":vertical", bVertical)
-	VElement.AddAttr("width", sWidth)
-	VElement.SetData(sVModel, False)
-	
-	VElement.SetData(xoutlined, bOutlined)
-	VElement.SetData(xshaped, bShaped)
-	VElement.SetData(xtimeout, sTimeout)
 	VElement.BindAllEvents
 End Sub
 

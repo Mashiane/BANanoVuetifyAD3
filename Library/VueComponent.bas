@@ -238,6 +238,8 @@ Sub ImportLeafLet
 	Dim LCircle As BANanoObject = Vue2Leaflet.GetField("LCircle")
 	Dim LPolygon As BANanoObject = Vue2Leaflet.GetField("LPolygon")
 	Dim LRectangle As BANanoObject = Vue2Leaflet.GetField("LRectangle")
+	Dim LGeoJson As BANanoObject = Vue2Leaflet.GetField("LGeoJson")
+	Dim LIcon As BANanoObject = Vue2Leaflet.GetField("LIcon")
 	'
 	components.Put("l-map", LMap)
 	components.Put("l-tile-layer", LTileLayer)
@@ -248,6 +250,8 @@ Sub ImportLeafLet
 	components.Put("l-circle", LCircle)
 	components.Put("l-polygon", LPolygon)
 	components.Put("l-rectangle", LRectangle)
+	components.Put("l-geo-json", LGeoJson)
+	components.Put("l-icon", LIcon)
 End Sub
 
 

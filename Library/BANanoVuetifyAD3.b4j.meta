@@ -403,6 +403,6 @@ ModuleClosedNodes96=
 ModuleClosedNodes97=
 ModuleClosedNodes98=
 ModuleClosedNodes99=
-NavigationStack=VLeaflet,AddRectangle,1122,6,VLeaflet,Class_Globals,131,0,VLeaflet,Initialize,201,0,VLeaflet,DesignerCreateView,511,0,VLeaflet,Refresh,800,0,VLeaflet,AddClass,816,0,VLeaflet,AddToParent,804,0,VLeaflet,BuildPolygons,641,0,Main,AppStart,105,0,VLeaflet,BuildRectangles,608,5
+NavigationStack=VSnackBar,DesignerCreateView,259,6,VSnackBar,AddToParent,278,0,VSnackBar,ShowPrimary,363,0,VSnackBar,ShowWarning,383,0,VSnackBar,Show,393,0,VDialog,DesignerCreateView,301,1,VDialog,Class_Globals,148,0,VDialog,Initialize,179,0,VueTable,Class_Globals,164,0,VueTable,DesignerCreateView,593,1
 SelectedBuild=0
 VisibleModules=

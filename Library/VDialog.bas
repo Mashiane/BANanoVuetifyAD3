@@ -260,7 +260,7 @@ sToolBarColor = Props.Get("ToolBarColor")
 sToolBarColorIntensity = Props.Get("ToolBarColorIntensity")
 bToolbarDark = Props.Get("ToolBarDark")
 bHidden = Props.GetDefault("Hidden", True)
-bDefault = Props.GetDefault("Default", True)
+bDefault = Props.GetDefault("Default", False)
 	End If
 	'
 	bDefault = BANanoShared.parseBool(bDefault)

@@ -16,6 +16,7 @@ Version=7
 #Event: Resize
 #Event: Tooltip_Click (item As Map)
 #Event: PopUp_Click (item As Map)
+#Event: ToolBar_Click (id As String)
 
 #DesignerProperty: Key: Title, DisplayName: Title, FieldType: String, DefaultValue: LeafLet, Description: Title
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
@@ -24,6 +25,10 @@ Version=7
 #DesignerProperty: Key: LayerToken, DisplayName: LayerToken, FieldType: String, DefaultValue: , Description: LayerToken
 #DesignerProperty: Key: UseMakiMarkers, DisplayName: UseMakiMarkers, FieldType: Boolean, DefaultValue: True, Description: UseMakiMarkers
 #DesignerProperty: Key: PermanentTooltips, DisplayName: PermanentTooltips, FieldType: Boolean, DefaultValue: False, Description: PermanentTooltips
+'
+#DesignerProperty: Key: ItemKeys, DisplayName: Item Keys (;), FieldType: String, DefaultValue:  add; edit; delete, Description: Item Icons
+#DesignerProperty: Key: ItemIcons, DisplayName: Item Icons (;), FieldType: String, DefaultValue:  mdi-plus; mdi-pencil; mdi-delete, Description: Item Icons
+#DesignerProperty: Key: ItemColors, DisplayName: Item Colors (;), FieldType: String, DefaultValue:  green; amber; red, Description: Item Colors
 
 '#DesignerProperty: Key: Bounds, DisplayName: Bounds, FieldType: String, DefaultValue: , Description: Bounds
 #DesignerProperty: Key: CenterLat, DisplayName: CenterLat, FieldType: String, DefaultValue: 0, Description: CenterLat
@@ -138,7 +143,12 @@ Sub Class_Globals
 	Private xrectangles As String
 	Private xrectangle As String
 	Private rectangles As Map
+	Private xgeojson As String
+	Private xgeojsons As String
+	Private geojsons As Map
 	'
+	Type GeoJsonType(id As String, name As String, visible As Boolean, geojson As String, title As String, url As String)
+	
 	Type VMarkerType(MarkerId As String, MarkerTitle As String, MarkerImgURL As String, MarkerWindowOpened As Boolean, MarkerLatitude As String, _
 	MarkerLongitude As String, MarkerColor As String,  MarkerInforWindow As String, _
 	MarkerDraggable As Boolean, MarkerriseOnHover As Boolean, MarkerIconSize As String, MarkerIcon As String, MarkerHasIcon As Boolean, MarkerPopUp As String)
@@ -168,6 +178,11 @@ Sub Class_Globals
 	Private xpolyLine As String
 	Private xpolyLines As String
 	Private bPermanentTooltips As Boolean
+	'
+	Private sItemKeys As String
+	Private sItemIcons As String
+	Private sItemColors As String
+	Private sButtons As String
 End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -206,7 +221,11 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	xcircles = $"${mName}circles"$
 	xrectangle = $"${mName}rectangle"$
 	xrectangles = $"${mName}rectangles"$
+	xgeojson = $"${mName}geojson"$
+	xgeojsons = $"${mName}geojsons"$
+	sButtons = $"${mName}buttons"$
 	'
+	geojsons.Initialize 
 	markers.Initialize 
 	circles.Initialize 
 	polygons.Initialize 
@@ -409,27 +428,90 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bUseMakiMarkers = BANanoShared.parsebool(bUseMakiMarkers)
 		bPermanentTooltips = Props.GetDefault("PermanentTooltips", False)
 		bPermanentTooltips = BANanoShared.parseBool(bPermanentTooltips)
+		sItemKeys = Props.Get("ItemKeys")
+		sItemIcons = Props.Get("ItemIcons")
+		sItemColors = Props.Get("ItemColors")
  	End If 
 	' 
+	Dim rs As List
+	rs.Initialize 
+	'
+	sItemKeys = sItemKeys.Replace(",", ";")
+	sItemIcons = sItemIcons.Replace(",", ";")
+	sItemColors = sItemColors.Replace(",", ";")
+	
+	Dim xkeys As List = BANanoShared.StrParse(";", sItemKeys)
+	Dim xicons As List = BANanoShared.StrParse(";", sItemIcons)
+	Dim xcolors As List = BANanoShared.StrParse(";", sItemColors)
+	'
+	xkeys = BANanoShared.ListTrimItems(xkeys)
+	xicons = BANanoShared.ListTrimItems(xicons)
+	xcolors = BANanoShared.ListTrimItems(xcolors)
+	'
+	Dim tItems As Int = xkeys.Size - 1
+	For itemCnt = 0 To tItems
+		Dim iKey As String = xkeys.Get(itemCnt)
+		Dim iIco As String = xicons.Get(itemCnt)
+		Dim iCol As String = xcolors.Get(itemCnt)
+		'
+		Dim nm As Map = CreateMap()
+		nm.Put("id", iKey)
+		nm.Put("icon", iIco)
+		nm.Put("color", iCol)
+		rs.Add(nm)
+	Next	
+	
 	'build and get the element 
 	If BANano.Exists($"#${mName}"$) Then 
 		mElement = BANano.GetElement($"#${mName}"$) 
 	Else	 
-		mElement = mTarget.Append($"<v-card id="${mName}card" v-lazy><v-card-title id="${mName}cardtitle" v-text="${xTitle}"></v-card-title><v-card-text><l-map ref="${mName}" id="${mName}"></l-map></v-card-text></v-card>"$).Get("#" & mName) 
+		mElement = mTarget.Append($"<v-card id="${mName}card" v-lazy><v-card-title id="${mName}cardtitle">{{ ${xTitle} }}</v-card-title><v-card-text><l-map ref="${mName}" id="${mName}"></l-map></v-card-text></v-card>"$).Get("#" & mName) 
 	End If 
 	' 
 	VElement.Initialize(mCallBack, mName, mName) 
 	VElement.TagName = "l-map"
-	VElement.SetOnEventOwn(mCallBack, $"${mName}_ready"$, "ready", Null)
+	
+	'add a spacer then add buttons
+	VElement.GetCardTitle.Append($"<v-spacer></v-spacer>"$)
+	VElement.GetCardTitle.Append($"<v-btn id="${mName}button" class="mx-2" v-for="item in ${sButtons}" :key="item.id" fab dark small :color="item.color">
+        <v-icon v-html=item.icon></v-icon>
+      </v-btn>"$)
+	If SubExists(mCallBack, $"${mName}_toolbar_click"$) Then  
+		VElement.GetButton.SetOnEventOwn(mCallBack, $"${mName}_toolbar_click"$, "click", "item.id")
+		Dim args As List
+		VElement.SetMethod(mCallBack, $"${mName}_toolbar_click"$, args)
+		Dim btnt As VueElement = VElement.GetButton
+		VElement.BindVueElement(btnt)
+	End If
+	'
+	VElement.SetData(sButtons, rs)
+	
+	If SubExists(mCallBack, $"${mName}_ready"$) Then
+		VElement.SetOnEventOwn(mCallBack, $"${mName}_ready"$, "ready", Null)
+	Else
+		BANano.Throw($"VLeaflet.${mName} - generate members for Ready!"$)
+	End If	
+	
 	'detect changes on size
 	If SubExists(mCallBack, xresize) Then
 		VElement.AddAttr("v-resize", xresize)
 		VElement.SetMethod(mCallBack, xresize, Null)
+	Else
+		BANano.Throw($"VLeaflet.${mName} - generate members for Resize!"$)
 	End If
 		'
-	VElement.SetOnEventOwn(mCallBack, $"${mName}_updatezoom"$, "update:zoom", "") 
-	VElement.SetOnEventOwn(mCallBack, $"${mName}_updatecenter"$, "update:center", "")
-	VElement.SetOnEventOWn(mCallBack, $"${mName}_updatebounds"$, "update:bounds", "") 
+	If SubExists(mCallBack, $"${mName}_updatezoom"$) Then	
+		VElement.SetOnEventOwn(mCallBack, $"${mName}_updatezoom"$, "update:zoom", "") 
+	End If
+	'
+	If SubExists(mCallBack, $"${mName}_updatecenter"$) Then
+		VElement.SetOnEventOwn(mCallBack, $"${mName}_updatecenter"$, "update:center", "")
+	End If
+	'
+	If SubExists(mCallBack, $"${mName}_updatebounds"$) Then
+		VElement.SetOnEventOWn(mCallBack, $"${mName}_updatebounds"$, "update:bounds", "") 
+	End If
+	'
 	'add the tile later
 	VElement.Append($"<l-tile-layer :url="${xurl}"></l-tile-layer>"$)
 	'add the markers
@@ -438,8 +520,16 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	<l-tooltip v-if="item.tooltip" :options="{ permanent: ${bPermanentTooltips}, interactive: true }"><div @click="${mName}_tooltip_click(item)">{{ item.tooltip }}</div></l-tooltip>
 	</l-marker>"$)
 	Dim itm As Object
-	VElement.SetMethod(mCallBack, $"${mName}_tooltip_click"$, Array(itm))
-	VElement.SetMethod(mCallBack, $"${mName}_popup_click"$, Array(itm))
+	If SubExists(mCallBack, $"${mName}_tooltip_click"$) Then
+		VElement.SetMethod(mCallBack, $"${mName}_tooltip_click"$, Array(itm))
+	Else
+		BANano.Throw($"VLeaflet.${mName} - generate members for ToolTip_Click!"$)
+	End If
+	If SubExists(mCallBack, $"${mName}_popup_click"$) Then
+		VElement.SetMethod(mCallBack, $"${mName}_popup_click"$, Array(itm))
+	Else
+		BANano.Throw($"VLeaflet.${mName} - generate members for PopUp_Click!"$)
+	End If
 	'empty the markers
 	VElement.SetData(xmarkers, markers)
 	'get the marker and update its attributes
@@ -515,10 +605,19 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	vrectangle.Bind("name", "item.name")
 	vrectangle.Bind("color", "item.color")
 	vrectangle.Bind("bounds", "item.bounds")
-	vrectangle.Bind("l-style", "item.style")
+	vrectangle.Bind("weight", "item.weight")
 	vrectangle.Bind("fill-opacity", "item.fillopacity")
 	vrectangle.Bind("opacity", "item.opacity")
 	vrectangle.RemoveAttr("id")
+	'add geojson
+	VElement.Append($"<l-geo-json id="${xgeojson}" v-for="item in ${xgeojsons}" :key="item.id"></l-geo-json>"$)
+	VElement.SetData(xgeojsons, geojsons)
+	Dim vgeojson As VueElement = VElement.GetVueElement(xgeojson)
+	vgeojson.Bind("id", "item.id")
+	vgeojson.Bind("name", "item.name")
+	vgeojson.Bind("visible", "item.visible")
+	vgeojson.Bind("geojson", "item.geojson")
+	vgeojson.RemoveAttr("id")
 		
 	VElement.Classes = mClasses 
 	VElement.Styles = mStyles 
@@ -593,6 +692,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	sCenterLng = BANano.parseFloat(sCenterLng)
 	Dim cobj As BANanoObject = latLng(sCenterLat, sCenterLng)
 	VElement.SetData(xcenter, cobj)
+	'
 	VElement.BindAllEvents
 End Sub
 
@@ -689,6 +789,31 @@ private Sub BuildPolyLines(VC As VueComponent)
 		polylineList.Add(nm)
 	Next
 	VC.SetData(xpolyLines, polylineList)
+End Sub
+
+
+'build the geo-json
+private Sub BuildGeoJSON(VC As VueComponent)
+	Dim geoList As List
+	geoList.Initialize 
+	'
+	Dim rsCnt As Int
+	Dim rsTot As Int = geojsons.Size - 1
+	For rsCnt = 0 To rsTot
+		Dim mt As GeoJsonType = geojsons.GetValueAt(rsCnt)
+		Dim nm As Map = CreateMap()
+		BANanoShared.PutRecursive(nm, "name", mt.name)
+		BANanoShared.PutRecursive(nm, "visible", mt.visible)
+		BANanoShared.PutRecursive(nm, "id", mt.id)
+		If mt.title <> "" Then
+			BANanoShared.PutRecursive(nm, "tooltip", mt.title)
+		End If
+		'get the file contents
+		Dim geojson As String = BANano.Await(BANano.GetFileAsJSON(mt.url, Null))
+		BANanoShared.PutRecursive(nm, "geojson", geojson)
+		geoList.Add(nm)
+	Next
+	VC.SetData(xgeojsons, geoList)
 End Sub
 
 'build the circles
@@ -806,6 +931,8 @@ Sub Refresh(VC As VueComponent)
 	BuildPolyLines(VC)	
 	'build the rectangles
 	BuildRectangles(VC)
+	'build grojson
+	BuildGeoJSON(VC)
 End Sub
 
 public Sub AddToParent(targetID As String) 
@@ -974,6 +1101,19 @@ Sub AddMarker(markerID As String, markerTitle As String, markerLat As Double, ma
 	mt.MarkerLongitude = markerLng
 	mt.MarkerDraggable = True
 	markers.Put(markerID,mt)
+End Sub
+
+'add a geo json
+Sub AddGeoJSON(id As String, title As String, urlpath As String)
+	id = id.ToLowerCase
+	Dim mt As GeoJsonType
+	mt.geojson = urlpath
+	mt.id = id
+	mt.name = title
+	mt.title = title
+	mt.visible = True
+	mt.url = urlpath
+	geojsons.Put(id, mt)
 End Sub
 
 'add a marker with icon

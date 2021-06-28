@@ -385,7 +385,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bShowExpand = Props.Get("ShowExpand")
 		bLoading = Props.GetDefault("Loading",False)
 		bDark = Props.Get("Dark")
-		bManual = Props.GetDefault("Manual", True)
+		bManual = Props.GetDefault("Manual", False)
 		'
 		sCancelColor = Props.GetDefault("CancelColor", "brown")
 		sCloneColor = Props.GetDefault("CloneColor", "amber")
