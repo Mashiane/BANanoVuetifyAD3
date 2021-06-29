@@ -1490,9 +1490,6 @@ bSetColorByAttribute = BANanoShared.parseBool(bSetColorByAttribute)
 	setCoverImage(stCoverImage)
 	setFitScreen(bFitScreen)
 	'
-	If BANano.IsNull(bBuildGrid) Or BANano.IsUndefined(bBuildGrid) Then 
-		bBuildGrid = False
-	End If
 	If bBuildGrid = False Then
 		setOffsets(stOffSets)
 		setSizes(stSizes)

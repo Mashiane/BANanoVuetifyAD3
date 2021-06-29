@@ -161,11 +161,7 @@ bDisabled = BANanoShared.parseBool(bDisabled)
 		VElement.Append($"<v-icon id="${mName}icon">${sIcon}</v-icon>"$)
 		VElement.GetIcon.Color = VElement.BuildColor(sIconColor, sIconColorIntensity)
 	End If
-	
-	If BANano.IsNull(bDisabled) Or BANano.IsUndefined(bDisabled) Then
-		bDisabled = False 
-	End If
-		
+			
 	VElement.Classes = mClasses
 	VElement.Styles = mStyles
 	VElement.Attributes = mAttributes

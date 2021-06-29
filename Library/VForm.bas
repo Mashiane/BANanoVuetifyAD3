@@ -87,10 +87,6 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mElement = mTarget.Append($"<v-form ref="${mName}" id="${mName}"></v-form>"$).Get("#" & mName) 
 	End If 
 	' 
-	If BANano.IsNull(bDisabled) Or BANano.IsUndefined(bDisabled) Then
-		bDisabled = False 
-	End If
-	
 	VElement.Initialize(mCallBack, mName, mName) 
 	VElement.TagName = "v-form" 
 	VElement.Classes = mClasses 

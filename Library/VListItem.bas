@@ -169,11 +169,7 @@ bDisabled = BANanoShared.parseBool(bDisabled)
 	Else	
 		mElement = mTarget.Append($"<v-list-item ref="${mName}" id="${mName}"></v-list-item>"$).Get("#" & mName)
 	End If
-	'
-	If BANano.IsNull(bDisabled) Or BANano.IsUndefined(bDisabled) Then
-		bDisabled = False 
-	End If
-	
+		
 	VElement.Initialize(mCallBack, mName, mName)
 	VElement.TagName = "v-list-item"
 	VElement.Classes = mClasses

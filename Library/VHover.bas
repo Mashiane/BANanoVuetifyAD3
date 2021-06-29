@@ -95,10 +95,7 @@ bDisabled = BANanoShared.parseBool(bDisabled)
 	Else	
 		mElement = mTarget.Append($"<v-hover ref="${mName}" ${sbHover} id="${mName}"></v-hover>"$).Get("#" & mName)
 	End If
-	'
-	If BANano.IsNull(bDisabled) Or BANano.IsUndefined(bDisabled) Then
-		bDisabled = False 
-	End If
+	
 	
 	VElement.Initialize(mCallBack, mName, mName)
 	VElement.TagName = "v-hover"

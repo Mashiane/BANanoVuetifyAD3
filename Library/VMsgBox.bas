@@ -329,10 +329,6 @@ bDisabled = BANanoShared.parseBool(bDisabled)
 	VElement.GetOK1.Vshow = xOkVisible
 	VElement.GetOK1.Loading = xOkLoading
 	'
-	If BANano.IsNull(bDisabled) Or BANano.IsUndefined(bDisabled) Then
-		bDisabled = False 
-	End If
-	
 	VElement.Classes = mClasses
 	VElement.Styles = mStyles
 	VElement.Attributes = mAttributes

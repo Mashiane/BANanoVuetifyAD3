@@ -5,9 +5,90 @@ Type=Class
 Version=7
 @EndOfDesignText@
 #IgnoreWarnings:12
-'Created with BANano Custom View Creator 1.00 by TheMash
-'https://github.com/Mashiane/BANano-Custom-View-Creator
-'Custom BANano View class
+
+#if javascript
+var blueIcon = new L.Icon({
+	iconUrl: './assets/marker-icon-2x-blue.png',
+	shadowUrl: './assets/marker-shadow.png',
+	iconSize: [25, 41],
+	iconAnchor: [12, 41],
+	popupAnchor: [1, -34],
+	shadowSize: [41, 41]
+});
+
+var goldIcon = new L.Icon({
+	iconUrl: './assets/marker-icon-2x-gold.png',
+	shadowUrl: './assets/marker-shadow.png',
+	iconSize: [25, 41],
+	iconAnchor: [12, 41],
+	popupAnchor: [1, -34],
+	shadowSize: [41, 41]
+});
+
+var redIcon = new L.Icon({
+	iconUrl: './assets/marker-icon-2x-red.png',
+	shadowUrl: './assets/marker-shadow.png',
+	iconSize: [25, 41],
+	iconAnchor: [12, 41],
+	popupAnchor: [1, -34],
+	shadowSize: [41, 41]
+});
+
+var greenIcon = new L.Icon({
+	iconUrl: './assets/marker-icon-2x-green.png',
+	shadowUrl: './assets/marker-shadow.png',
+	iconSize: [25, 41],
+	iconAnchor: [12, 41],
+	popupAnchor: [1, -34],
+	shadowSize: [41, 41]
+});
+
+var orangeIcon = new L.Icon({
+	iconUrl: './assets/marker-icon-2x-orange.png',
+	shadowUrl: './assets/marker-shadow.png',
+	iconSize: [25, 41],
+	iconAnchor: [12, 41],
+	popupAnchor: [1, -34],
+	shadowSize: [41, 41]
+});
+
+var yellowIcon = new L.Icon({
+	iconUrl: './assets/marker-icon-2x-yellow.png',
+	shadowUrl: './assets/marker-shadow.png',
+	iconSize: [25, 41],
+	iconAnchor: [12, 41],
+	popupAnchor: [1, -34],
+	shadowSize: [41, 41]
+});
+
+var violetIcon = new L.Icon({
+	iconUrl: './assets/marker-icon-2x-violet.png',
+	shadowUrl: './assets/marker-shadow.png',
+	iconSize: [25, 41],
+	iconAnchor: [12, 41],
+	popupAnchor: [1, -34],
+	shadowSize: [41, 41]
+});
+
+var greyIcon = new L.Icon({
+	iconUrl: './assets/marker-icon-2x-grey.png',
+	shadowUrl: './assets/marker-shadow.png',
+	iconSize: [25, 41],
+	iconAnchor: [12, 41],
+	popupAnchor: [1, -34],
+	shadowSize: [41, 41]
+});
+
+var blackIcon = new L.Icon({
+	iconUrl: './assets/marker-icon-2x-black.png',
+	shadowUrl: './assets/marker-shadow.png',
+	iconSize: [25, 41],
+	iconAnchor: [12, 41],
+	popupAnchor: [1, -34],
+	shadowSize: [41, 41]
+});
+#End If
+
 
 #Event: Ready
 #Event: UpdateCenter (latLng as Object)
@@ -102,7 +183,6 @@ Sub Class_Globals
 	Private iMaxZoom As Int
 	Private iMinZoom As Int
 	Private bNoBlockingAnimations As Boolean
-	Private sOptions As String
 	Private sPadding As String
 	Private sPaddingBottomRight As String
 	Private sPaddingTopLeft As String
@@ -149,9 +229,9 @@ Sub Class_Globals
 	'
 	Type GeoJsonType(id As String, name As String, visible As Boolean, geojson As String, title As String, url As String)
 	
-	Type VMarkerType(MarkerId As String, MarkerTitle As String, MarkerImgURL As String, MarkerWindowOpened As Boolean, MarkerLatitude As String, _
+	Type VMarkerType(MarkerId As String, MarkerTitle As String, MarkerWindowOpened As Boolean, MarkerLatitude As String, _
 	MarkerLongitude As String, MarkerColor As String,  MarkerInforWindow As String, _
-	MarkerDraggable As Boolean, MarkerriseOnHover As Boolean, MarkerIconSize As String, MarkerIcon As String, MarkerHasIcon As Boolean, MarkerPopUp As String)
+	MarkerDraggable As Boolean, MarkerriseOnHover As Boolean, MarkerIconSize As List, MarkerIconAnchor As List, MarkerIcon As String, MarkerHasIcon As Boolean, MarkerHasIconColor As Boolean, MarkerIconColor As String, MarkerPopUp As String)
 	'
 	Type MapTypeObj(MapBoxStreets As String, MapBoxOutdoors As String, MapBoxDark As String, MapBoxLight As String, MapBoxSatellite As String, _
 	MapBoxSatelliteStreets As String, MapBoxStreetsBasic As String, MapBoxComic As String, MapboxEmerald As String, MapboxHighContrast As String, _
@@ -183,6 +263,26 @@ Sub Class_Globals
 	Private sItemIcons As String
 	Private sItemColors As String
 	Private sButtons As String
+	'
+	Public const COLOR_BLUE As String = "blue"
+	Public const COLOR_GOLD As String = "gold"
+	Public const COLOR_RED As String = "red"
+	Public const COLOR_GREEN As String = "green"
+	Public const COLOR_ORANGE As String = "orange"
+	Public const COLOR_YELLOW As String = "yellow"
+	Public const COLOR_VIOLET As String = "violet"
+	Public const COLOR_GREY As String = "grey"
+	Public const COLOR_BLACK As String = "black"
+	'
+	Private blueIcon As BANanoObject
+	Private goldIcon As BANanoObject
+	Private redIcon As BANanoObject
+	Private greenIcon As BANanoObject
+	Private orangeIcon As BANanoObject
+	Private yellowIcon As BANanoObject
+	Private violetIcon As BANanoObject
+	Private greyIcon As BANanoObject
+	Private blackIcon As BANanoObject
 End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -409,7 +509,6 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		iMinZoom = Props.GetDefault("MinZoom", 5)
 		bNoBlockingAnimations = Props.GetDefault("NoBlockingAnimations", False)
 		bNoBlockingAnimations = BANanoShared.parseBool(bNoBlockingAnimations)
-		'sOptions = Props.GetDefault("Options", "")
 		sPadding = Props.GetDefault("Padding", "")
 		sPaddingBottomRight = Props.GetDefault("PaddingBottomRight", "")
 		sPaddingTopLeft = Props.GetDefault("PaddingTopLeft", "")
@@ -517,7 +616,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	'add the markers
 	VElement.Append($"<l-marker id="${xmarker}" v-for="item in ${xmarkers}" :key="item.id">
 	<l-popup v-if="item.popup"><div @click="${mName}_popup_click(item)">{{ item.popup }}</div></l-popup>
-	<l-tooltip v-if="item.tooltip" :options="{ permanent: ${bPermanentTooltips}, interactive: true }"><div @click="${mName}_tooltip_click(item)">{{ item.tooltip }}</div></l-tooltip>
+	<l-tooltip v-if="item.tooltip" :options="{ permanent: ${bPermanentTooltips}, interactive: true}"><div @click="${mName}_tooltip_click(item)">{{ item.tooltip }}</div></l-tooltip>
 	</l-marker>"$)
 	Dim itm As Object
 	If SubExists(mCallBack, $"${mName}_tooltip_click"$) Then
@@ -542,11 +641,12 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	vmarker.Bind("visible", "item.visible")
 	vmarker.Bind("item", "item")
 	vmarker.RemoveAttr("id")
+	vmarker.Bind("options", "item.options")
 	'
 	'add polygons
 	VElement.Append($"<l-polygon id="${xpolygon}" v-for="item in ${xpolygons}" :key="item.id">
 	<l-popup v-if="item.popup"><div @click="${mName}_popup_click(item)">{{ item.popup }}</div></l-popup>
-	<l-tooltip v-if="item.tooltip" :options="{ permanent: ${bPermanentTooltips}, interactive: true }"><div @click="${mName}_tooltip_click(item)">{{ item.tooltip }}</div></l-tooltip>
+	<l-tooltip v-if="item.tooltip" :options="{ permanent: ${bPermanentTooltips}, interactive: true}"><div @click="${mName}_tooltip_click(item)">{{ item.tooltip }}</div></l-tooltip>
 	</l-polygon>"$)
 	VElement.SetData(xpolygons, polygons)
 	Dim vpolygon As VueElement = VElement.GetVueElement(xpolygon)
@@ -559,11 +659,12 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	vpolygon.Bind("opacity", "item.opacity")
 	vpolygon.Bind("weight", "item.weight")
 	vpolygon.RemoveAttr("id")
+	vpolygon.Bind("options", "item.options")
 	'
 	'add polylines
 	VElement.Append($"<l-polyline id="${xpolyLine}" v-for="item in ${xpolyLines}" :key="item.id">
 	<l-popup v-if="item.popup"><div @click="${mName}_popup_click(item)">{{ item.popup }}</div></l-popup>
-	<l-tooltip v-if="item.tooltip" :options="{ permanent: ${bPermanentTooltips}, interactive: true }"><div @click="${mName}_tooltip_click(item)">{{ item.tooltip }}</div></l-tooltip>	
+	<l-tooltip v-if="item.tooltip" :options="{ permanent: ${bPermanentTooltips}, interactive: true}"><div @click="${mName}_tooltip_click(item)">{{ item.tooltip }}</div></l-tooltip>	
 	</l-polyline>"$)
 	VElement.SetData(xpolyLines, polylines)
 	Dim vpolyline As VueElement = VElement.GetVueElement(xpolyLine)
@@ -576,11 +677,12 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	vpolyline.Bind("opacity", "item.opacity")
 	vpolyline.Bind("weight", "item.weight")
 	vpolyline.RemoveAttr("id")
+	vpolyline.Bind("options", "item.options")
 	'
 	'add circles
 	VElement.Append($"<l-circle id="${xcircle}" v-for="item in ${xcircles}" :key="item.id">
 	<l-popup v-if="item.popup"><div @click="${mName}_popup_click(item)">{{ item.popup }}</div></l-popup>
-	<l-tooltip v-if="item.tooltip" :options="{ permanent: ${bPermanentTooltips}, interactive: true }"><div @click="${mName}_tooltip_click(item)">{{ item.tooltip }}</div></l-tooltip>
+	<l-tooltip v-if="item.tooltip" :options="{ permanent: ${bPermanentTooltips}, interactive: true}"><div @click="${mName}_tooltip_click(item)">{{ item.tooltip }}</div></l-tooltip>
 	</l-circle>"$)
 	VElement.SetData(xcircles, circles)
 	Dim vcircle As VueElement = VElement.GetVueElement(xcircle)
@@ -593,21 +695,24 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	vcircle.Bind("opacity", "item.opacity")
 	vcircle.Bind("weight", "item.weight")
 	vcircle.Bind("radius", "item.radius")
+	vcircle.Bind("options", "item.options")
 	vcircle.RemoveAttr("id")
 	'add rectangle
 	VElement.Append($"<l-rectangle id="${xrectangle}" v-for="item in ${xrectangles}" :key="item.id">
 	<l-popup v-if="item.popup"><div @click="${mName}_popup_click(item)">{{ item.popup }}</div></l-popup>
-	<l-tooltip v-if="item.tooltip" :options="{ permanent: ${bPermanentTooltips}, interactive: true }"><div @click="${mName}_tooltip_click(item)">{{ item.tooltip }}</div></l-tooltip>
+	<l-tooltip v-if="item.tooltip" :options="{ permanent: ${bPermanentTooltips}, interactive: true}"><div @click="${mName}_tooltip_click(item)">{{ item.tooltip }}</div></l-tooltip>
 	</l-rectangle>"$)
 	VElement.SetData(xrectangles, rectangles)
 	Dim vrectangle As VueElement = VElement.GetVueElement(xrectangle)
 	vrectangle.Bind("id", "item.id")
 	vrectangle.Bind("name", "item.name")
-	vrectangle.Bind("color", "item.color")
+	'vrectangle.Bind("color", "item.color")
 	vrectangle.Bind("bounds", "item.bounds")
-	vrectangle.Bind("weight", "item.weight")
-	vrectangle.Bind("fill-opacity", "item.fillopacity")
-	vrectangle.Bind("opacity", "item.opacity")
+	vrectangle.Bind("l-style", "item.style")
+	'vrectangle.Bind("weight", "item.weight")
+	'vrectangle.Bind("fill-opacity", "item.fillopacity")
+	'vrectangle.Bind("opacity", "item.opacity")
+	'vrectangle.Bind("options", "item.options")
 	vrectangle.RemoveAttr("id")
 	'add geojson
 	VElement.Append($"<l-geo-json id="${xgeojson}" v-for="item in ${xgeojsons}" :key="item.id"></l-geo-json>"$)
@@ -617,6 +722,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	vgeojson.Bind("name", "item.name")
 	vgeojson.Bind("visible", "item.visible")
 	vgeojson.Bind("geojson", "item.geojson")
+	vgeojson.Bind("options", "item.options")
 	vgeojson.RemoveAttr("id")
 		
 	VElement.Classes = mClasses 
@@ -656,12 +762,13 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.AddAttr("max-zoom", iMaxZoom)
 	VElement.AddAttr("min-zoom", iMinZoom)
 	VElement.AddAttr(":no-blocking-animations", bNoBlockingAnimations)
-	VElement.AddAttr(":options", sOptions)
+	VElement.AddAttr(":options", xoptions)
 	
 	
 	sZoomSnap = BANano.parseFloat(sZoomSnap)
 	BANanoShared.PutRecursive(mapOptions, "zoomSnap", sZoomSnap)
-	VElement.SetData(sOptions, mapOptions)
+	BANanoShared.PutRecursive(mapOptions, "trackResize", True)
+	VElement.SetData(xoptions, mapOptions)
 	
 	'VElement.AddAttr(":padding", sPadding)
 	'VElement.SetData(sPadding, )
@@ -711,17 +818,24 @@ private Sub BuildRectangles(VC As VueComponent)
 		BANanoShared.PutRecursive(nm, "visible", True)
 		BANanoShared.PutRecursive(nm, "id", mt.ID)
 		BANanoShared.PutRecursive(nm, "bounds", mt.points)
-		BANanoShared.PutRecursive(nm, "color", mt.Color)
-		BANanoShared.PutRecursive(nm, "fillcolor", mt.FillColor)
-		BANanoShared.PutRecursive(nm, "fillopacity", mt.FillOpacity)
-		BANanoShared.PutRecursive(nm, "opacity", mt.Opacity)
-		BANanoShared.PutRecursive(nm, "weight", mt.Weight)
+		''style: { color: 'red', weight: 3 }
+		BANanoShared.PutRecursive(nm, "style.color", mt.Color)
+		BANanoShared.PutRecursive(nm, "style.weight", mt.weight)
+		
+		'BANanoShared.PutRecursive(nm, "color", mt.Color)
+		'BANanoShared.PutRecursive(nm, "fillcolor", mt.FillColor)
+		'BANanoShared.PutRecursive(nm, "fillopacity", mt.FillOpacity)
+		'BANanoShared.PutRecursive(nm, "opacity", mt.Opacity)
+		'BANanoShared.PutRecursive(nm, "weight", mt.Weight)
 		If mt.title <> "" Then
 			BANanoShared.PutRecursive(nm, "tooltip", mt.Title)
 		End If
 		If mt.PopUp <> "" Then
 			BANanoShared.PutRecursive(nm, "popup", mt.PopUp)
 		End If
+		'BANanoShared.PutRecursive(nm, "options.color", mt.Color)
+		'BANanoShared.PutRecursive(nm, "options.weight", mt.weight)
+		
 		rectList.Add(nm)
 	Next
 	VC.SetData(xrectangles, rectList)
@@ -866,8 +980,38 @@ private Sub BuildMarkers(VC As VueComponent)
 		'
 		BANanoShared.PutRecursive(nm, "draggable", mt.MarkerDraggable)
 		If mt.MarkerHasIcon Then
-			BANanoShared.PutRecursive(nm, "icon", mt.MarkerImgURL )
+			Dim img As Map = CreateMap()
+			BANanoShared.PutRecursive(img, "iconUrl", mt.MarkerIcon)
+			BANanoShared.PutRecursive(img, "iconSize", mt.MarkerIconSize)
+			BANanoShared.PutRecursive(img, "iconAnchor", mt.MarkerIconAnchor)
+			'
+			Dim oicon As BANanoObject = icon(img)
+			BANanoShared.PutRecursive(nm, "icon", oicon)
 		End If
+		'
+		If mt.MarkerHasIconColor Then
+			Select Case mt.MarkerIconColor
+			Case "blue"
+				 BANanoShared.PutRecursive(nm, "icon",blueIcon)
+			Case "gold"
+				 BANanoShared.PutRecursive(nm, "icon",goldIcon)
+			Case "red"
+				 BANanoShared.PutRecursive(nm, "icon",redIcon)
+			Case "green"
+				 BANanoShared.PutRecursive(nm, "icon",greenIcon)
+			Case "orange"
+				BANanoShared.PutRecursive(nm, "icon",orangeIcon)
+			Case "yellow"
+				 BANanoShared.PutRecursive(nm, "icon",yellowIcon)
+			Case "violet"
+				 BANanoShared.PutRecursive(nm, "icon",violetIcon)
+			Case "grey"
+				 BANanoShared.PutRecursive(nm, "icon",greyIcon)
+			Case "black"
+				 BANanoShared.PutRecursive(nm, "icon",blackIcon)
+			End Select
+		End If
+		
 		BANanoShared.PutRecursive(nm, "name", mt.MarkerId)
 		BANanoShared.PutRecursive(nm, "visible", True)
 		BANanoShared.PutRecursive(nm, "id", mt.markerid)
@@ -878,6 +1022,9 @@ private Sub BuildMarkers(VC As VueComponent)
 			BANanoShared.PutRecursive(nm, "popup", mt.MarkerPopUp)
 		End If	
 		BANanoShared.PutRecursive(nm, "latlng", point)
+		BANanoShared.PutRecursive(nm, "options.clickable", True)
+		BANanoShared.PutRecursive(nm, "options.riseOnHover", True)
+		
 		markerList.Add(nm)
 	Next
 	VC.SetData(xmarkers, markerList)
@@ -985,15 +1132,34 @@ Sub mapObject(VC As VueComponent)
 	map = VC.refs.GetField(mName).GetField("mapObject")
 End Sub
 
+'native  stopLocate
+Sub stopLocate(VC As VueComponent)
+	mapObject(VC)
+	map.RunMethod("stopLocate", Null)
+End Sub
+
+'native locate
+Sub locate(VC As VueComponent, bWatch As Boolean, bSetView As Boolean, maxZoom As Int, timeOut As Int, maximumAge As Int, enableHighAccuracy As Boolean)
+	
+	
+End Sub
+
 'native method - resize the map
 Sub Resize(VC As VueComponent)
-	map = VC.refs.GetField(mName).GetField("mapObject")
+	mapObject(VC)
 	'map.RunMethod("_onResize", Null)
 	map.RunMethod("invalidateSize", Null)
 End Sub
 
+'native method - LIcon
+private Sub icon(options As Map) As BANanoObject
+	L.Initialize("L")
+	Dim objicon As BANanoObject = L.RunMethod("icon", options)
+	Return objicon
+End Sub
+
 'native method - latLng
-Sub latLng(lat As Double, lng As Double) As BANanoObject
+private Sub latLng(lat As Double, lng As Double) As BANanoObject
 	L.Initialize("L")
 	lat = BANano.parseFloat(lat)
 	lng = BANano.parseFloat(lng)
@@ -1074,7 +1240,6 @@ private Sub MarkerInit() As VMarkerType
 	mt.Initialize 
 	mt.MarkerColor = ""
 	mt.MarkerId = ""
-	mt.MarkerImgURL = ""
 	mt.MarkerInforWindow = ""
 	mt.MarkerLatitude = 0
 	mt.MarkerLongitude = 0
@@ -1082,7 +1247,8 @@ private Sub MarkerInit() As VMarkerType
 	mt.MarkerWindowOpened = False
 	mt.MarkerDraggable = False
 	mt.MarkerriseOnHover = False
-	mt.MarkerIconSize = ""
+	mt.MarkerIconSize.Initialize
+	mt.MarkerIconAnchor.Initialize  
 	mt.MarkerIcon = ""
 	mt.MarkerHasIcon = False
 	mt.MarkerPopUp = ""
@@ -1117,7 +1283,7 @@ Sub AddGeoJSON(id As String, title As String, urlpath As String)
 End Sub
 
 'add a marker with icon
-Sub AddMarker1(markerID As String, markerTitle As String, markerLat As Double, markerLng As Double, markerIcon As String, markerColor As String, markerSize As String)
+Sub AddMarkerIcon(markerID As String, markerTitle As String, markerLat As Double, markerLng As Double, markerIcon As String, SizeX As String, SizeY As String, anchorX As String, anchorY As String)
 	markerID = markerID.tolowercase
 	Dim mt As VMarkerType
 	mt = MarkerInit
@@ -1128,8 +1294,27 @@ Sub AddMarker1(markerID As String, markerTitle As String, markerLat As Double, m
 	mt.MarkerLongitude = markerLng
 	mt.MarkerHasIcon = True
 	mt.MarkerIcon = markerIcon
-	mt.MarkerColor = markerColor
-	mt.MarkerIconSize = markerSize
+	mt.MarkerIconSize.Initialize 
+	mt.MarkerIconSize.Add(SizeX)
+	mt.markericonsize.add(SizeY)
+	mt.MarkerIconAnchor.Initialize 
+	mt.MarkerIconAnchor.Add(anchorX)
+	mt.MarkerIconAnchor.Add(anchorY)
+	markers.Put(markerID,mt)	
+End Sub
+
+'add a marker with color
+Sub AddMarkerIconColor(markerID As String, markerTitle As String, markerLat As Double, markerLng As Double, markerColor As String)
+	markerID = markerID.tolowercase
+	Dim mt As VMarkerType
+	mt = MarkerInit
+	mt.MarkerId = markerID
+	mt.MarkerTitle = markerTitle
+	mt.MarkerPopUp = markerTitle
+	mt.MarkerLatitude = markerLat
+	mt.MarkerLongitude = markerLng
+	mt.MarkerHasIconColor = True
+	mt.MarkerIconColor = markerColor
 	markers.Put(markerID,mt)	
 End Sub
 
@@ -1177,11 +1362,6 @@ Sub MarkerChangeTitle(markerID As String, markerTitle As String)
 		mt.MarkerTitle = markerTitle
 		markers.Put(markerID,mt)
 	End If
-End Sub
-
-'add a marker with a color ONLY
-Sub AddMarker2(markerID As String,markerTitle As String, markerLat As Double, markerLng As Double, markerColor As String)
-	AddMarker1(markerID,markerTitle,markerLat,markerLng,"",markerColor,"")
 End Sub
 
 'add a simple popup
@@ -1262,8 +1442,8 @@ Sub AddRectangle(rectID As String, rectTitle As String, rectLat1 As Double, rect
 	'
 	Dim point2 As List
 	point2.Initialize 
-	point2.Add(rectLat1)
-	point2.Add(rectLng1)
+	point2.Add(rectLat2)
+	point2.Add(rectLng2)
 	mc.points.Add(point2)
 	'
 	rectangles.Put(rectID,mc)
@@ -1368,18 +1548,6 @@ Sub AddPolyLineLatLng(polyLineID As String, markerLat As Double, markerLng As Do
 	End If
 End Sub
 
-'add items to be poped up
-Sub OpenPopUp(markerID As String)
-	markerID = markerID.ToLowerCase
-	OpenPopUpMap.Put(markerID,markerID)
-End Sub
-
-'add items to be removed from pop ups
-Sub ClosePopUp(markerID As String)
-	markerID = markerID.ToLowerCase
-	OpenPopUpMap.Remove(markerID)
-End Sub
-
 'reset map, clear everything
 Sub Reset
 	RemoveMarkers
@@ -1387,6 +1555,17 @@ Sub Reset
 	RemovePolyLines
 	RemovePopUps
 	RemoveRectangles
+	RemoveCircles
+	'
+	blueIcon.Initialize("blueIcon")
+	goldIcon.Initialize("goldIcon")
+	redIcon.Initialize("redIcon")
+	greenIcon.Initialize("greenIcon")
+	orangeIcon.Initialize("orangeIcon")
+	yellowIcon.Initialize("yellowIcon")
+	violetIcon.Initialize("violetIcon")
+	greyIcon.Initialize("greyIcon")
+	blackIcon.Initialize("blackIcon")
 End Sub
 
 'remove rectangles

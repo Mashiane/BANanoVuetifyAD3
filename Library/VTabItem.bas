@@ -98,10 +98,6 @@ bDisabled = BANanoShared.parseBool(bDisabled)
 		mElement = mTarget.Append($"<v-tab-item ref="${mName}" id="${mName}"></v-tab-item>"$).Get("#" & mName)
 	End If
 	'
-	If BANano.IsNull(bDisabled) Or BANano.IsUndefined(bDisabled) Then
-		bDisabled = False 
-	End If
-	
 	VElement.Initialize(mCallBack, mName, mName)
 	VElement.TagName = "v-tab-item"
 	VElement.Classes = mClasses

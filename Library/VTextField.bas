@@ -303,10 +303,7 @@ bLoading = BANanoShared.parseBool(bLoading)
 
 	'
 	Dim stagName As String = "v-text-field"
-	If BANano.IsNull(bTextArea) Or BANano.IsUndefined(bTextArea) Then
-		bTextArea = False
-	End If
-	
+		
 	If bTextArea Then
 		stagName = "v-textarea"
 	End If
