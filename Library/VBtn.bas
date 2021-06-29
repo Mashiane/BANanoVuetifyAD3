@@ -21,6 +21,9 @@ Version=8.9
 #DesignerProperty: Key: IconName, DisplayName: Icon Name, FieldType: String, DefaultValue: , Description: Icon Name
 #DesignerProperty: Key: IconAlignment, DisplayName: Icon Alignment, FieldType: String, DefaultValue: normal, Description: Icon Alignment, List: normal|left|right
 #DesignerProperty: Key: IconDark, DisplayName: Icon Dark, FieldType: Boolean, DefaultValue: False, Description: Icon Dark
+#DesignerProperty: Key: IconSize, DisplayName: Icon Size, FieldType: String, DefaultValue: , Description: Icon Size
+#DesignerProperty: Key: IconColor, DisplayName: Icon Color, FieldType: String, DefaultValue: , Description: Icon Color
+
 #DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: Boolean, DefaultValue: False, Description: Disabled
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: Loading, DisplayName: Loading, FieldType: Boolean, DefaultValue: False, Description: Loading
@@ -33,19 +36,19 @@ Version=8.9
 #DesignerProperty: Key: Position, DisplayName: Position, FieldType: String, DefaultValue: , Description: Position, List: normal|top-left|top-right|bottom-left|bottom-right
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: False, Description: Dark
 #DesignerProperty: Key: Depressed, DisplayName: Depressed, FieldType: Boolean, DefaultValue: False, Description: Depressed
+#DesignerProperty: Key: VFor, DisplayName: V-For, FieldType: String, DefaultValue:  , Description: 
+#DesignerProperty: Key: Key, DisplayName: Key, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: HREF, DisplayName: HREF, FieldType: String, DefaultValue: , Description: HREF
+#DesignerProperty: Key: To, DisplayName: To, FieldType: String, DefaultValue: , Description: To
+#DesignerProperty: Key: Target, DisplayName: Target, FieldType: String, DefaultValue: , Description: Target, List: _blank|_self|_parent|_top|none
 #DesignerProperty: Key: Outlined, DisplayName: Outlined, FieldType: Boolean, DefaultValue: False, Description: Outlined
 #DesignerProperty: Key: Rounded, DisplayName: Rounded, FieldType: Boolean, DefaultValue: False, Description: Rounded, 
 #DesignerProperty: Key: Shaped, DisplayName: Shaped, FieldType: Boolean, DefaultValue: False, Description: Shaped
 #DesignerProperty: Key: Tile, DisplayName: Tile, FieldType: Boolean, DefaultValue: False, Description: Tile
-#DesignerProperty: Key: To, DisplayName: To, FieldType: String, DefaultValue: , Description: To
-#DesignerProperty: Key: Target, DisplayName: Target, FieldType: String, DefaultValue: , Description: Target
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: VIf, DisplayName: V-If, FieldType: String, DefaultValue:  , Description: 
-#DesignerProperty: Key: VFor, DisplayName: V-For, FieldType: String, DefaultValue:  , Description: 
-#DesignerProperty: Key: Key, DisplayName: Key, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: VOn, DisplayName: V-On, FieldType: String, DefaultValue:  , Description: V-On
 #DesignerProperty: Key: VBind, DisplayName: V-Bind, FieldType: String, DefaultValue:  , Description: V-Bind
 #DesignerProperty: Key: MA, DisplayName: MA, FieldType: String, DefaultValue: , Description: MA
@@ -125,6 +128,8 @@ Private sPR As String
 Private sPT As String
 Private sPX As String
 Private sPY As String
+Private sIconSize As String
+private sIconColor as string
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -202,6 +207,8 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sPT = Props.GetDefault("PT","")
 		sPX = Props.GetDefault("PX","")
 		sPY = Props.GetDefault("PY","")
+		sIconSize = Props.GetDefault("IconSize", "")
+		sIconColor = Props.GetDefault("IconColor", "")
 	End If
 	'
 	bBlock = BANanoShared.parseBool(bBlock)
@@ -240,11 +247,15 @@ bAbsolute = BANanoShared.parseBool(bAbsolute)
 		Case "normal"
 			VElement.Append($"<v-icon id="${siconID}">${sIconName}</v-icon>"$)
 			VElement.GetIcon.Dark = bIconDark
+			VElement.GetIcon.Size = sIconSize
+			VElement.GetIcon.Color = sIconColor
 		Case "left"
 			VElement.Caption = ""
 			VElement.Append($"<v-icon id="${siconID}">${sIconName}</v-icon>"$)
 			VElement.GetIcon.Dark = bIconDark
 			VElement.GetIcon.Left = True
+			VElement.GetIcon.Size = sIconSize
+			VElement.GetIcon.Color = sIconColor
 			VElement.Append($"<span id="${mName}text">${VElement.InMoustache1(mText, xCaption)}</span>"$)
 		Case "right"
 			VElement.Caption = ""
@@ -252,6 +263,8 @@ bAbsolute = BANanoShared.parseBool(bAbsolute)
 			VElement.Append($"<v-icon id="${siconID}">${sIconName}</v-icon>"$)
 			VElement.GetIcon.Dark = bIconDark
 			VElement.GetIcon.Right = True
+			VElement.GetIcon.Size = sIconSize
+			VElement.GetIcon.Color = sIconColor
 		End Select
 	End If
 	

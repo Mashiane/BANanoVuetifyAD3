@@ -292,6 +292,17 @@ Sub getID As String
 	Return mName
 End Sub
 
+'check if the drawer is open
+Sub IsOpen(VC As VueComponent) As Boolean
+	Dim res As Boolean = VC.GetData(sVModel)
+	Return res
+End Sub
+
+'check if the drawer is open
+Sub IsOpenOnApp(V As VuetifyApp) As Boolean
+	Dim res As Boolean = V.GetData(sVModel)
+	Return res
+End Sub
 
 Sub getHere As String
 	Return $"#${mName}"$

@@ -11,6 +11,7 @@ Version=8.9
 
 ' Properties that will be show in the ABStract Designer.  They will be passed in the props map in DesignerCreateView (Case Sensitive!)
 #DesignerProperty: Key: Hidden, DisplayName: Classes, FieldType: Boolean, DefaultValue: False, Description
+#DesignerProperty: Key: IconName, DisplayName: IconName, FieldType: String, DefaultValue: , Description: IconName
 #DesignerProperty: Key: AutoID, DisplayName: Auto ID/Name, FieldType: Boolean, DefaultValue: False, Description: Overrides the ID/Name with a random string.
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue:  , Description: , List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: ColorIntensity, DisplayName: Color Intensity, FieldType: String, DefaultValue:  normal, Description: , List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
@@ -39,6 +40,7 @@ Sub Class_Globals
 	Private mVIf As String = ""
 	'Private svshow As String 
 	Private bHidden As Boolean
+	Private sIconName As String
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -71,6 +73,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mVIf = Props.Get("VIf")
 		bHidden = Props.GetDefault("Hidden", False)
 		bHidden = BANanoShared.parseBool(bHidden)
+		sIconName = Props.GetDefault("IconName", "")
 	End If
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
@@ -80,6 +83,11 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	End If
 	VElement.Initialize(mCallBack, mName, mName)
 	VElement.TagName = "v-app-bar-nav-icon"
+	'if we have an icon, add it
+	If sIconName <> "" Then
+		VElement.Append($"<v-icon id="${mName}icon">${sIconName}</v-icon>"$)		
+	End If
+	
 	VElement.Classes = mClasses
 	VElement.Color = mColor
 	VElement.Styles = mStyles

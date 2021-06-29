@@ -23,8 +23,11 @@ Version=7
 #DesignerProperty: Key: Flat, DisplayName: Flat, FieldType: Boolean, DefaultValue: False, Description: Flat
 #DesignerProperty: Key: Height, DisplayName: Height, FieldType: String, DefaultValue: , Description: Height
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
+#DesignerProperty: Key: TextAlign, DisplayName: Text Align, FieldType: String, DefaultValue:  , Description: , List: left|center|right|justify|none
 #DesignerProperty: Key: Hover, DisplayName: Hover, FieldType: Boolean, DefaultValue: False, Description: Hover
 #DesignerProperty: Key: Href, DisplayName: Href, FieldType: String, DefaultValue: , Description: Href
+#DesignerProperty: Key: To, DisplayName: To, FieldType: String, DefaultValue: , Description: To
+#DesignerProperty: Key: Target, DisplayName: Target, FieldType: String, DefaultValue: , Description: Target, List: _blank|_self|_parent|_top|none
 #DesignerProperty: Key: Img, DisplayName: Img, FieldType: String, DefaultValue: , Description: Img
 #DesignerProperty: Key: Light, DisplayName: Light, FieldType: Boolean, DefaultValue: False, Description: Light
 #DesignerProperty: Key: Link, DisplayName: Link, FieldType: Boolean, DefaultValue: False, Description: Link
@@ -44,7 +47,6 @@ Version=7
 #DesignerProperty: Key: Tag, DisplayName: Tag, FieldType: String, DefaultValue: , Description: Tag
 #DesignerProperty: Key: Target, DisplayName: Target, FieldType: String, DefaultValue: , Description: Target, List: _blank|_self|_parent|_top|none
 #DesignerProperty: Key: Tile, DisplayName: Tile, FieldType: Boolean, DefaultValue: False, Description: Tile
-#DesignerProperty: Key: To, DisplayName: To, FieldType: String, DefaultValue: , Description: To
 #DesignerProperty: Key: VBind, DisplayName: VBind, FieldType: String, DefaultValue: , Description: VBind
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
 #DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: , Description: Width
@@ -106,6 +108,7 @@ Private sDisabled As String
 Private xHover As String
 Private xElevation As String 
 Private xLoading As String
+Private sTextAlign As String
 	End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -134,6 +137,8 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mStyles = Props.GetDefault("Styles", "") 
 		mAttributes = Props.GetDefault("Attributes","") 
 		sActiveClass = Props.GetDefault("ActiveClass", "")
+		sTextAlign = Props.GetDefault("TextAlign", "")
+		sTarget = Props.GetDefault("Target", "")
 bAppend = Props.GetDefault("Append", False)
 bAppend = BANanoShared.parseBool(bAppend)
 sColor = Props.GetDefault("Color", "")
@@ -182,7 +187,6 @@ sRounded = Props.GetDefault("Rounded", "")
 bShaped = Props.GetDefault("Shaped", False)
 bShaped = BANanoShared.parseBool(bShaped)
 sTag = Props.GetDefault("Tag", "")
-sTarget = Props.GetDefault("Target", "")
 bTile = Props.GetDefault("Tile", False)
 bTile = BANanoShared.parseBool(bTile)
 sTo = Props.GetDefault("To", "")
@@ -247,6 +251,7 @@ VElement.AddAttr("v-if", sVIf)
 VElement.AddAttr("v-show", sVShow)
 VElement.SetData(sVShow, Not(bHidden))
 VElement.AddAttr("width", sWidth)
+VElement.AddStyle("text-align", sTextAlign)
 VElement.BindAllEvents
 End Sub
 

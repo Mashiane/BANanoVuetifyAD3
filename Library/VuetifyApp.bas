@@ -417,11 +417,12 @@ Sub Class_Globals
 	rightswitchattr As String, rightchipattr As String, iconattr As String, hasdivider As Boolean, insetdivider As Boolean, _
 	rightavatar As String, rightavatarclass As String, rightavataricon As String, _
 	rightavatariconcolor As String, rightavatariconclass As String, rightavatarattr As String, rightavatariconattr As String, _
-	rightitemavatarclass As String, avatartext As String, rightavatartext As String, avatartextcolor As String, rightavatartextcolor As String, avatartextclass As String, rightavatartextclass As String, subtitle2 As String, subtitle3 As String, subtitle4 As String, href As String, target As string)
+	rightitemavatarclass As String, avatartext As String, rightavatartext As String, avatartextcolor As String, rightavatartextcolor As String, avatartextclass As String, rightavatartextclass As String, subtitle2 As String, subtitle3 As String, subtitle4 As String, href As String, target As String)
 	'
 	Public RouterViewName As String
 	Public DatabaseName As String
 	Public ProgressLoaderName As String
+	private sFullScreen as string
 End Sub
 
 Sub FindProgressLoaderOn(appBar As VAppBar)
@@ -1089,6 +1090,7 @@ Sub Initialize(Module As Object, myapp As String)
 	InitColors
 	
 	'
+	sFullScreen = $"${myapp}fullscreen"$
 	SetData("placeholdershow", False)
 	SetData("appendholdershow", False)
 	SetData("apptemplateshow", False)
@@ -1107,9 +1109,17 @@ Sub Initialize(Module As Object, myapp As String)
 	SetMethod(Me, "nicemonth", Null)
 	SetMethod(Me, "niceyear", Null)
 	SetMethod(Me, "json2list", Null)
+	'set the full screen to false
+	SetData(sFullScreen, False)
 	UseVBlur
 	'turn authentication off
 	setAuthenticated(False)
+End Sub
+
+'check if full screen
+Sub IsFullScreen As Boolean
+	Dim res As Boolean = GetData(sFullScreen)
+	Return res
 End Sub
 
 Sub json2list(content As String) As List

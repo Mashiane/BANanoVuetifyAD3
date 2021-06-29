@@ -406,6 +406,6 @@ ModuleClosedNodes96=
 ModuleClosedNodes97=
 ModuleClosedNodes98=
 ModuleClosedNodes99=
-NavigationStack=VForm,BindState,204,0,VForm,SetData,207,6,VForm,GetData,197,6,VForm,Validate,188,0,VMsgBox,Initialize,165,0,VMsgBox,Class_Globals,145,6,VMsgBox,DesignerCreateView,375,6,VMsgBox,Process,392,0,Main,Process_Globals,15,0,Main,AppStart,26,0
+NavigationStack=VueTable,DesignerCreateView,487,0,VCard0,Remove,258,0,VCard0,Class_Globals,104,6,VueElement,setTextAlignLast,7330,0,VueElement,setTextAlign,3141,0,VCard0,Trigger,262,0,VCard0,DesignerCreateView,245,6,VueElement,SetAttr,2201,0,VueElement,AddStyle,2197,0,VBtn,DesignerCreateView,237,6
 SelectedBuild=0
 VisibleModules=

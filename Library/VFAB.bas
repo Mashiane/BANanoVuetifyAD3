@@ -9,6 +9,7 @@ Version=8.9
 #Event: Click (e As BANanoEvent)
 ' Properties that will be show in the ABStract Designer.  They will be passed in the props map in DesignerCreateView (Case Sensitive!)
 #DesignerProperty: Key: AutoID, DisplayName: Auto ID/Name, FieldType: Boolean, DefaultValue: False, Description: Overrides the ID/Name with a random string.
+#DesignerProperty: Key: Settings, DisplayName: Settings, FieldType: Boolean, DefaultValue: False, Description: Settings.
 #DesignerProperty: Key: IconName, DisplayName: Icon Name, FieldType: String, DefaultValue: , Description: Icon Name
 #DesignerProperty: Key: IconDark, DisplayName: Icon Dark, FieldType: Boolean, DefaultValue: False, Description: Icon Dark
 #DesignerProperty: Key: Size, DisplayName: Size, FieldType: String, DefaultValue: large, Description: Size, List: x-small|small|normal|large|x-large
@@ -16,6 +17,7 @@ Version=8.9
 #DesignerProperty: Key: IsExtension, DisplayName: IsExtension, FieldType: Boolean, DefaultValue: False, Description: IsExtension
 #DesignerProperty: Key: Fixed, DisplayName: Fixed, FieldType: Boolean, DefaultValue: False, Description: Fixed
 #DesignerProperty: Key: Absolute, DisplayName: Absolute, FieldType: Boolean, DefaultValue: False, Description: Absolute
+#DesignerProperty: Key: Flat, DisplayName: Flat, FieldType: Boolean, DefaultValue: False, Description: Flat
 #DesignerProperty: Key: Position, DisplayName: Position, FieldType: String, DefaultValue: , Description: Position, List: normal|top-left|top-right|bottom-left|bottom-right
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue:  , Description: , List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: ColorIntensity, DisplayName: Color Intensity, FieldType: String, DefaultValue:  normal, Description: , List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
@@ -28,7 +30,7 @@ Version=8.9
 #DesignerProperty: Key: Loading, DisplayName: Loading, FieldType: Boolean, DefaultValue: False, Description: Loading
 #DesignerProperty: Key: Outlined, DisplayName: Outlined, FieldType: Boolean, DefaultValue: False, Description: Outlined
 #DesignerProperty: Key: To, DisplayName: To, FieldType: String, DefaultValue: , Description: To
-#DesignerProperty: Key: Target, DisplayName: Target, FieldType: String, DefaultValue: , Description: Target
+#DesignerProperty: Key: Target, DisplayName: Target, FieldType: String, DefaultValue: , Description: Target, List: _blank|_self|_parent|_top|none
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
@@ -67,7 +69,9 @@ Sub Class_Globals
 	Private bIsExtension As Boolean
 	Private sColor As String
 	Private bHidden As Boolean
-	private bFixed as boolean
+	Private bFixed As Boolean
+	Private bSettings As Boolean
+	Private bFlat As Boolean
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -114,8 +118,12 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bIsExtension = Props.GetDefault("IsExtension", False)
 		bHidden = Props.GetDefault("Hidden", False)
 		bFixed = Props.GetDefault("Fixed", False)
+		bSettings = Props.GetDefault("Settings", False)
+		bFlat = Props.GetDefault("Flat", False)
 	End If
 	'
+	bFlat = BANanoShared.parseBool(bFlat)
+	bSettings = BANanoShared.parseBool(bSettings)
 	bFixed = BANanoShared.parseBool(bFixed)
 	bDark = BANanoShared.parseBool(bDark)
 bDepressed = BANanoShared.parseBool(bDepressed)
@@ -143,6 +151,22 @@ bLoading = BANanoShared.parseBool(bLoading)
 	VElement.Initialize(mCallBack, mName, mName)
 	VElement.TagName = "v-btn"
 	'
+	If bSettings Then
+		sIconName = "mdi-cog-outline"
+		sSize = "small"
+		bFlat = True
+		bFixed = True
+		bAbsolute = True
+		If sPosition = "" Then
+			sPosition = "top-right"
+		End If
+		'
+		VElement.AddStyle("margin-top", "4px")
+		VElement.AddStyle("top", "50%")
+		VElement.AddStyle("right", "0")
+		VElement.AddStyle("border-radius", "0")
+	End If
+	
 	Dim siconID As String = $"${mName}icon"$
 	VElement.Append($"<v-icon id="${siconID}">${sIconName}</v-icon>"$)
 	'
@@ -159,6 +183,7 @@ bLoading = BANanoShared.parseBool(bLoading)
 	'VElement.SetData(mVShow, Not(bHidden))
 	VElement.Fixed = bFixed
 	VElement.Dark = bDark
+	VElement.Flat = bFlat
 	VElement.Depressed = bDepressed
 	VElement.Disabled = $"${mName}disabled"$
 	VElement.SetData($"${mName}disabled"$, bDisabled)

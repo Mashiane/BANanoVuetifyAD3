@@ -205,7 +205,6 @@ Sub getHere As String
 	Return $"#${mName}"$
 End Sub
 
-
 Sub BindState(VC As VueComponent)
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
