@@ -14,6 +14,12 @@ Version=8.9
 #DesignerProperty: Key: VText, DisplayName: VText, FieldType: String, DefaultValue: , Description: VText
 #DesignerProperty: Key: Size, DisplayName: Tag, FieldType: String, DefaultValue: div, Description: Size, List: a|div|h1|h2|h3|h4|h5|h6|label|p|span|v-spacer|v-responsive|v-divider|nav|v-subheader|v-main|slot|v-tabs-slider|router-view|router-link|v-list-item-action|v-list-item-title|v-list-item-subtitle|v-list-item-icon|v-list-item-content|v-list-item-action-text|strong|blockquote|i|img|a|ul|li|ol|v-stepper-content|v-stepper-header|v-stepper-items|small
 #DesignerProperty: Key: OwnTag, DisplayName: OwnTag, FieldType: String, DefaultValue: , Description: OwnTag
+#DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: , Description: Width
+#DesignerProperty: Key: StyleWidth, DisplayName: StyleWidth, FieldType: String, DefaultValue: , Description: Width
+#DesignerProperty: Key: Height, DisplayName: Height, FieldType: String, DefaultValue: , Description: Height
+#DesignerProperty: Key: StyleHeight, DisplayName: StyleHeight, FieldType: String, DefaultValue: , Description: Height
+#DesignerProperty: Key: Src, DisplayName: Src, FieldType: String, DefaultValue: , Description: Src
+#DesignerProperty: Key: Alt, DisplayName: Alt, FieldType: String, DefaultValue: , Description: Alt
 #DesignerProperty: Key: Elevation, DisplayName: Elevation, FieldType: String, DefaultValue: , Description: Elevation
 #DesignerProperty: Key: StepValue, DisplayName: StepValue, FieldType: String, DefaultValue: , Description: StepValue
 #DesignerProperty: Key: Tile, DisplayName: Tile, FieldType: Boolean, DefaultValue: false, Description: Tile
@@ -116,7 +122,13 @@ Private sVHtml As String
 Private sVText As String
 Private sVFor As String
 Private sKey As String
-	End Sub
+Private sWidth As String
+Private sStyleWidth As String
+Private sHeight As String
+Private sStyleHeight As String
+Private sSrc As String
+Private sAlt As String
+End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	mName = Name.tolowercase
@@ -131,7 +143,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 		End If
 	End If
 	'sVShow = $"${mName}show"$
-	End Sub
+End Sub
 	
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	mTarget = Target
@@ -149,6 +161,12 @@ sColor = Props.Get("Color")
 sColorIntensity = Props.Get("ColorIntensity")
 sHref = Props.Get("Href")
 bLoremIpsum = Props.Get("LoremIpsum")
+sWidth = Props.getdefault("Width", "")
+sStyleWidth = Props.GetDefault("StyleWidth", "")
+sStyleHeight = Props.getdefault("StyleHeight", "")
+sHeight = Props.GetDefault("Height", "")
+sSrc = Props.GetDefault("Src", "")
+sAlt = Props.GetDefault("Alt", "")
 sMA = Props.Get("MA")
 sMB = Props.Get("MB")
 sML = Props.Get("ML")
@@ -223,6 +241,12 @@ VElement.Caption = sCaption
 VElement.Color = VElement.BuildColor(sColor, sColorIntensity)
 VElement.Href = sHref
 VElement.LoremIpsum = bLoremIpsum
+VElement.Width = sWidth
+VElement.AddStyle("width", sStyleWidth)
+VElement.AddStyle("height", sStyleHeight)
+VElement.Height = sHeight
+VElement.Src = sSrc
+VElement.Alt = sAlt
 VElement.MA = sMA
 VElement.MB = sMB
 VElement.ML = sML

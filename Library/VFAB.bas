@@ -14,6 +14,7 @@ Version=8.9
 #DesignerProperty: Key: Size, DisplayName: Size, FieldType: String, DefaultValue: large, Description: Size, List: x-small|small|normal|large|x-large
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: true, Description: Dark
 #DesignerProperty: Key: IsExtension, DisplayName: IsExtension, FieldType: Boolean, DefaultValue: False, Description: IsExtension
+#DesignerProperty: Key: Fixed, DisplayName: Fixed, FieldType: Boolean, DefaultValue: False, Description: Fixed
 #DesignerProperty: Key: Absolute, DisplayName: Absolute, FieldType: Boolean, DefaultValue: False, Description: Absolute
 #DesignerProperty: Key: Position, DisplayName: Position, FieldType: String, DefaultValue: , Description: Position, List: normal|top-left|top-right|bottom-left|bottom-right
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue:  , Description: , List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
@@ -66,6 +67,7 @@ Sub Class_Globals
 	Private bIsExtension As Boolean
 	Private sColor As String
 	Private bHidden As Boolean
+	private bFixed as boolean
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -111,8 +113,10 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sPosition = Props.Get("Position")
 		bIsExtension = Props.GetDefault("IsExtension", False)
 		bHidden = Props.GetDefault("Hidden", False)
+		bFixed = Props.GetDefault("Fixed", False)
 	End If
 	'
+	bFixed = BANanoShared.parseBool(bFixed)
 	bDark = BANanoShared.parseBool(bDark)
 bDepressed = BANanoShared.parseBool(bDepressed)
 bDisabled = BANanoShared.parseBool(bDisabled)
@@ -153,6 +157,7 @@ bLoading = BANanoShared.parseBool(bLoading)
 	VElement.VIf = mVIf
 	'VElement.VShow = mVShow
 	'VElement.SetData(mVShow, Not(bHidden))
+	VElement.Fixed = bFixed
 	VElement.Dark = bDark
 	VElement.Depressed = bDepressed
 	VElement.Disabled = $"${mName}disabled"$
