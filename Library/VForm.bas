@@ -12,6 +12,7 @@ Version=7
 #Event: Input (B As Boolean)
 #Event: Submit (e As BANanoEvent)
 
+#DesignerProperty: Key: RecordSource, DisplayName: RecordSource, FieldType: String, DefaultValue: , Description: RecordSource
 #DesignerProperty: Key: LazyValidation, DisplayName: LazyValidation, FieldType: Boolean, DefaultValue: True, Description: LazyValidation
 #DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: Boolean, DefaultValue: False, Description: Disabled
 #DesignerProperty: Key: Readonly, DisplayName: Readonly, FieldType: Boolean, DefaultValue: False, Description: Readonly
@@ -45,6 +46,7 @@ Sub Class_Globals
 	'Private sVShow As String
  	Private bDisabled As Boolean
 	Private bReadonly As Boolean
+	Private sRecordSource As String
 End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -78,6 +80,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sVFor = Props.Get("VFor")
 		sVIf = Props.Get("VIf")
 		sVOn = Props.Get("VOn") 
+		sRecordSource = Props.GetDefault("RecordSource", "")
 	End If 
 	' 
 	'build and get the element 
@@ -140,7 +143,6 @@ Sub RemoveAttr(p As String) As VForm
 	Return Me 
 End Sub
 
-
 'Update Disabled
 Sub UpdateDisabled(VC As VueComponent, vDisabled As Object)
 VC.SetData(sDisabled, vDisabled)
@@ -189,6 +191,26 @@ Sub Validate(VC As VueComponent) As Boolean
 	Dim refs As BANanoObject = VC.refs
 	Dim res As Boolean = refs.GetField(mName).runmethod("validate", Null).Result
 	Return res
+End Sub
+
+'get the data of the form
+Sub GetData(VC As VueComponent) As Map
+	Dim m As Map = CreateMap()
+	If sRecordSource = "" Then
+		BANano.Throw($"VForm.${mName} - the RecordSource has not been specified!"$)
+		Return m
+	End If
+	m = VC.GetData(sRecordSource)
+	Return m
+End Sub
+
+'set the data of the form
+Sub SetData(VC As VueComponent, rec As Map)
+	If sRecordSource = "" Then
+		BANano.Throw($"VForm.${mName} - the RecordSource has not been specified!"$)
+		Return
+	End If
+	VC.SetData(sRecordSource, rec)
 End Sub
 
 Sub BindState(VC As VueComponent)

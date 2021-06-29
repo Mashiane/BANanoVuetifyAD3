@@ -70,16 +70,17 @@ File7=beautify-html.min.js
 File70=vue2-leaflet-movingmarker.umd.min.js
 File71=vue-clipboard.min.js
 File72=vue-count-to.min.js
-File73=vue-form-wizard.js
-File74=vue-form-wizard.min.css
-File75=vue-google-maps.js
-File76=vue-prism-component.min.js
-File77=vue-router.min.js
-File78=vuetify.min.css
-File79=vuetify.min.js
+File73=vuedraggable.umd.min.js
+File74=vue-form-wizard.js
+File75=vue-form-wizard.min.css
+File76=vue-google-maps.js
+File77=vue-prism-component.min.js
+File78=vue-router.min.js
+File79=vuetify.min.css
 File8=chart.js
-File80=vuetify-simple-wizard.min.js
-File81=xlsx.full.min.js
+File80=vuetify.min.js
+File81=vuetify-simple-wizard.min.js
+File82=xlsx.full.min.js
 File9=Chart.min.css
 FileGroup1=Default Group
 FileGroup10=Default Group
@@ -161,6 +162,7 @@ FileGroup79=Default Group
 FileGroup8=Default Group
 FileGroup80=Default Group
 FileGroup81=Default Group
+FileGroup82=Default Group
 FileGroup9=Default Group
 Group=Default Group
 Library1=banano
@@ -302,7 +304,7 @@ Module96=VProgressCircular
 Module97=VProgressLinear
 Module98=VRadio
 Module99=VRadioGroup
-NumberOfFiles=81
+NumberOfFiles=82
 NumberOfLibraries=4
 NumberOfModules=135
 Version=9
@@ -359,6 +361,8 @@ Sub AppStart (Form1 As Form, Args() As String)
 	'
 	BANano.Header.AddJavascriptFile("vue-count-to.min.js")
 	'
+	BANano.Header.AddJavascriptFile("vuedraggable.umd.min.js")
+	'
 	BANano.Header.AddJavascriptFile("flowy-vue.umd.min.js")
 	'
 	BANano.Header.AddCSSFile("prism.min.css")		
@@ -406,7 +410,6 @@ Sub AppStart (Form1 As Form, Args() As String)
 	BANano.Header.AddJavascriptFile("moment.min.js")
 	
 	BANano.Header.AddCSSFile("Chart.min.css")
-	'BANano.Header.AddJavascriptFile("vue-chartkick.min.js")
 	BANano.Header.AddJavascriptFile("chart.js")
 	BANano.Header.AddJavascriptFile("chartjs-adapter-date-fns.bundle.min.js")
 	BANano.Header.AddJavascriptFile("chartkick.min.js")

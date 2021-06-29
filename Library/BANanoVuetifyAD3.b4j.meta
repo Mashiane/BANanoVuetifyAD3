@@ -406,6 +406,6 @@ ModuleClosedNodes96=
 ModuleClosedNodes97=
 ModuleClosedNodes98=
 ModuleClosedNodes99=
-NavigationStack=VDialog0,BindState,267,0,VFAB,Class_Globals,64,4,VFAB,DesignerCreateView,181,6,VFAB,Remove,221,0,VFAB,BindState,278,0,VLabel,Initialize,128,0,VLabel,Class_Globals,121,6,VLabel,AddToParent,276,0,VLabel,Remove,284,0,VLabel,DesignerCreateView,243,6
+NavigationStack=VForm,BindState,204,0,VForm,SetData,207,6,VForm,GetData,197,6,VForm,Validate,188,0,VMsgBox,Initialize,165,0,VMsgBox,Class_Globals,145,6,VMsgBox,DesignerCreateView,375,6,VMsgBox,Process,392,0,Main,Process_Globals,15,0,Main,AppStart,26,0
 SelectedBuild=0
 VisibleModules=

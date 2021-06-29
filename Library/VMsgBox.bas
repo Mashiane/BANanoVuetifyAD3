@@ -12,10 +12,30 @@ Version=9
 
 #DesignerProperty: Key: DialogType, DisplayName: DialogType, FieldType: String, DefaultValue: message, Description: DialogType, List: message|input
 #DesignerProperty: Key: ToolbarCaption, DisplayName: Title, FieldType: String, DefaultValue: Title, Description: Title
+#DesignerProperty: Key: ToolBarColor, DisplayName: ToolBarColor, FieldType: String, DefaultValue: green, Description: ToolBarColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
+#DesignerProperty: Key: ToolBarColorIntensity, DisplayName: ToolBarColorIntensity, FieldType: String, DefaultValue: normal, Description: ToolBarColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
+#DesignerProperty: Key: ToolbarDark, DisplayName: ToolbarDark, FieldType: Boolean, DefaultValue: False, Description: ToolbarDark
 #DesignerProperty: Key: CardTextCaption, DisplayName: Message, FieldType: String, DefaultValue: Message, Description: Message
 #DesignerProperty: Key: CustomActions, DisplayName: CustomActions, FieldType: Boolean, DefaultValue: False, Description: CustomActions
+'
 #DesignerProperty: Key: OkCaption, DisplayName: OkCaption, FieldType: String, DefaultValue: Ok, Description: OkCaption
+#DesignerProperty: Key: OkVisible, DisplayName: OkVisible, FieldType: Boolean, DefaultValue: True, Description: OKVisible
+#DesignerProperty: Key: OkLoading, DisplayName: OkLoading, FieldType: Boolean, DefaultValue: False, Description: OkLoading
+#DesignerProperty: Key: OkDisabled, DisplayName: OkDisabled, FieldType: Boolean, DefaultValue: False, Description: OkDisabled
+#DesignerProperty: Key: OkColor, DisplayName: OkColor, FieldType: String, DefaultValue: green, Description: OkColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
+#DesignerProperty: Key: OkColorIntensity, DisplayName: OkColorIntensity, FieldType: String, DefaultValue: , Description: OkColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
+#DesignerProperty: Key: OkOutlined, DisplayName: OkOutlined, FieldType: Boolean, DefaultValue: True, Description: OkOutlined
+#DesignerProperty: Key: OkRounded, DisplayName: OkRounded, FieldType: Boolean, DefaultValue: True, Description: OkRounded
+
+'
 #DesignerProperty: Key: CancelCaption, DisplayName: CancelCaption, FieldType: String, DefaultValue: Cancel, Description: CancelCaption
+#DesignerProperty: Key: CancelVisible, DisplayName: CancelVisible, FieldType: Boolean, DefaultValue: True, Description: CancelVisible
+#DesignerProperty: Key: CancelLoading, DisplayName: CancelLoading, FieldType: Boolean, DefaultValue: False, Description: CancelLoading
+#DesignerProperty: Key: CancelDisabled, DisplayName: CancelDisabled, FieldType: Boolean, DefaultValue: False, Description: CancelDisabled
+#DesignerProperty: Key: CancelColor, DisplayName: CancelColor, FieldType: String, DefaultValue: red, Description: CancelColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
+#DesignerProperty: Key: CancelColorIntensity, DisplayName: CancelColorIntensity, FieldType: String, DefaultValue: , Description: CancelColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
+#DesignerProperty: Key: CancelOutlined, DisplayName: CancelOutlined, FieldType: Boolean, DefaultValue: True, Description: CancelOutlined
+#DesignerProperty: Key: CancelRounded, DisplayName: CancelRounded, FieldType: Boolean, DefaultValue: True, Description: CancelRounded
 
 #DesignerProperty: Key: Rounded, DisplayName: Rounded, FieldType: String, DefaultValue: none, Description: Rounded, List: none|rounded-0|rounded|rounded-sm|rounded-lg|rounded-xl|rounded-t-xl|rounded-r-xl|rounded-b-xl|rounded-l-xl|rounded-tl-xl|rounded-tr-xl|rounded-br-xl|rounded-bl-xl|rounded-pill|rounded-circle
 #DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: 700, Description: Width
@@ -24,24 +44,9 @@ Version=9
 #DesignerProperty: Key: Height, DisplayName: Height, FieldType: String, DefaultValue: , Description: Height
 #DesignerProperty: Key: MinHeight, DisplayName: MinHeight, FieldType: String, DefaultValue: , Description: MinHeight
 #DesignerProperty: Key: MaxHeight, DisplayName: MaxHeight, FieldType: String, DefaultValue: , Description: MaxHeight
-#DesignerProperty: Key: ToolBarColor, DisplayName: ToolBarColor, FieldType: String, DefaultValue: green, Description: ToolBarColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
-#DesignerProperty: Key: ToolBarColorIntensity, DisplayName: ToolBarColorIntensity, FieldType: String, DefaultValue: normal, Description: ToolBarColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
-#DesignerProperty: Key: ToolbarDark, DisplayName: ToolbarDark, FieldType: Boolean, DefaultValue: False, Description: ToolbarDark
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: True, Description: Hidden
 #DesignerProperty: Key: VShow, DisplayName: V-Show, FieldType: String, DefaultValue:  , Description: 
 '
-#DesignerProperty: Key: OkVisible, DisplayName: OkVisible, FieldType: Boolean, DefaultValue: True, Description: OKVisible
-#DesignerProperty: Key: OkLoading, DisplayName: OkLoading, FieldType: Boolean, DefaultValue: False, Description: OkLoading
-#DesignerProperty: Key: OkDisabled, DisplayName: OkDisabled, FieldType: Boolean, DefaultValue: False, Description: OkDisabled
-#DesignerProperty: Key: OkColor, DisplayName: OkColor, FieldType: String, DefaultValue: green, Description: OkColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
-#DesignerProperty: Key: OkColorIntensity, DisplayName: OkColorIntensity, FieldType: String, DefaultValue: , Description: OkColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
-
-#DesignerProperty: Key: CancelVisible, DisplayName: CancelVisible, FieldType: Boolean, DefaultValue: True, Description: CancelVisible
-#DesignerProperty: Key: CancelLoading, DisplayName: CancelLoading, FieldType: Boolean, DefaultValue: False, Description: CancelLoading
-#DesignerProperty: Key: CancelDisabled, DisplayName: CancelDisabled, FieldType: Boolean, DefaultValue: False, Description: CancelDisabled
-#DesignerProperty: Key: CancelColor, DisplayName: CancelColor, FieldType: String, DefaultValue: red, Description: CancelColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
-#DesignerProperty: Key: CancelColorIntensity, DisplayName: CancelColorIntensity, FieldType: String, DefaultValue: , Description: CancelColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
-
 #DesignerProperty: Key: CloseDelay, DisplayName: CloseDelay, FieldType: String, DefaultValue: , Description: CloseDelay
 #DesignerProperty: Key: ContentClass, DisplayName: ContentClass, FieldType: String, DefaultValue: , Description: ContentClass
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: false, Description: Dark
@@ -144,6 +149,10 @@ Private sMinWidth As String
 Private sMaxHeight As String
 Private sMaxWidth As String
 Private sHeight As String
+Private bOkOutlined As Boolean
+Private bCancelOutlined As Boolean
+Private bOkRounded As Boolean
+Private bCancelRounded As Boolean
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -187,6 +196,10 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mStyles = Props.Get("Styles")
 		mAttributes = Props.Get("Attributes")
 		bOkVisible = Props.Get("OkVisible")
+		bOkOutlined = Props.GetDefault("OkOutlined", False)
+		bCancelOutlined = Props.getdefault("CancelOutlined", False)
+		bCancelRounded = Props.GetDefault("CancelRounded", False)
+		bOkRounded = Props.GetDefault("OkRounded", False)
 		bOkLoading = Props.Get("OkLoading")
 		bOkDisabled = Props.Get("OkDisabled")
 		bCancelVisible = Props.Get("CancelVisible")
@@ -233,34 +246,37 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sHeight = Props.GetDefault("Height", False)
 	End If
 	'
+	bOkRounded = BANanoShared.parseBool(bOkRounded)
+	bOkOutlined = BANanoShared.parseBool(bOkOutlined)
+	bCancelRounded = BANanoShared.parseBool(bCancelRounded)
+	bCancelOutlined = BANanoShared.parseBool(bCancelOutlined)
 	bOkVisible = BANanoShared.parseBool(bOkVisible)
-bOkLoading = BANanoShared.parseBool(bOkLoading)
-bOkDisabled = BANanoShared.parseBool(bOkDisabled)
-bCancelVisible = BANanoShared.parseBool(bCancelVisible)
-bCancelLoading = BANanoShared.parseBool(bCancelLoading)
-bCancelDisabled = BANanoShared.parseBool(bCancelDisabled)
-bDark = BANanoShared.parseBool(bDark)
-bDisabled = BANanoShared.parseBool(bDisabled)
-bEager = BANanoShared.parseBool(bEager)
-bFullscreen = BANanoShared.parseBool(bFullscreen)
-bHideOverlay = BANanoShared.parseBool(bHideOverlay)
-bNoClickAnimation = BANanoShared.parseBool(bNoClickAnimation)
-bPersistent = BANanoShared.parseBool(bPersistent)
-bRetainFocus = BANanoShared.parseBool(bRetainFocus)
-bScrollable = BANanoShared.parseBool(bScrollable)
-bFullscreenOnMobile = BANanoShared.parseBool(bFullscreenOnMobile)
-bToolbarDark = BANanoShared.parseBool(bToolbarDark)
-bHidden = BANanoShared.parseBool(bHidden)
-bCustomActions = BANanoShared.parseBool(bCustomActions)
-bDisabled = BANanoShared.parseBool(bDisabled)
-
+	bOkLoading = BANanoShared.parseBool(bOkLoading)
+	bOkDisabled = BANanoShared.parseBool(bOkDisabled)
+	bCancelVisible = BANanoShared.parseBool(bCancelVisible)
+	bCancelLoading = BANanoShared.parseBool(bCancelLoading)
+	bCancelDisabled = BANanoShared.parseBool(bCancelDisabled)
+	bDark = BANanoShared.parseBool(bDark)
+	bDisabled = BANanoShared.parseBool(bDisabled)
+	bEager = BANanoShared.parseBool(bEager)
+	bFullscreen = BANanoShared.parseBool(bFullscreen)
+	bHideOverlay = BANanoShared.parseBool(bHideOverlay)
+	bNoClickAnimation = BANanoShared.parseBool(bNoClickAnimation)
+	bPersistent = BANanoShared.parseBool(bPersistent)
+	bRetainFocus = BANanoShared.parseBool(bRetainFocus)
+	bScrollable = BANanoShared.parseBool(bScrollable)
+	bFullscreenOnMobile = BANanoShared.parseBool(bFullscreenOnMobile)
+	bToolbarDark = BANanoShared.parseBool(bToolbarDark)
+	bHidden = BANanoShared.parseBool(bHidden)
+	bCustomActions = BANanoShared.parseBool(bCustomActions)
+	bDisabled = BANanoShared.parseBool(bDisabled)
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
 		mElement = BANano.GetElement($"#${mName}"$)
 	Else	
 		mElement = mTarget.Append($"<v-dialog ref="${mName}" id="${mName}"></v-dialog>"$).Get("#" & mName)
 	End If
-	'
+	
 	VElement.Initialize(mCallBack, mName, mName)
 	VElement.TagName = "v-dialog"
 	VElement.SetData(xToolbarCaption, sToolbarCaption)
@@ -320,6 +336,8 @@ bDisabled = BANanoShared.parseBool(bDisabled)
 	VElement.GetCancel1.Disabled = xCancelDisabled
 	VElement.GetCancel1.Vshow = xCancelVisible
 	VElement.GetCancel1.Loading = xCancelLoading
+	VElement.GetCancel1.Rounded = bCancelRounded
+	VElement.GetCancel1.Outlined = bCancelOutlined
 	'
 	VElement.GetCardActions.Append($"<v-spacer></v-spacer>"$)
 	'
@@ -328,6 +346,8 @@ bDisabled = BANanoShared.parseBool(bDisabled)
 	VElement.GetOK1.Disabled = xOkDisabled
 	VElement.GetOK1.Vshow = xOkVisible
 	VElement.GetOK1.Loading = xOkLoading
+	VElement.GetOK1.Rounded = bOkRounded
+	VElement.GetOK1.Outlined = bOkOutlined
 	'
 	VElement.Classes = mClasses
 	VElement.Styles = mStyles
