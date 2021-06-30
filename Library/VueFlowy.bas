@@ -39,6 +39,9 @@ End Sub
 
 'initialize to the component you want to load to
 Public Sub Initialize(CallBack As Object, Name As String , EventName As String)
+	BANano.DependsOnAsset("flowy-vue.umd.min.js")
+	BANano.DependsOnAsset("flowy-vue.css")
+	'
 	mCallBack = CallBack
 	methods.Initialize 
 	bindings.Initialize

@@ -47,6 +47,16 @@ Sub Class_Globals
 End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
+	BANano.DependsOnAsset("vue-clipboard.min.js")
+	BANano.DependsOnAsset("prism.min.css")		
+	BANano.DependsOnAsset("prism.min.js")
+	BANano.DependsOnAsset("vue-prism-component.min.js")
+	BANano.DependsOnAsset("beautify.min.js")
+	BANano.DependsOnAsset("beautify-css.min.js")
+	BANano.DependsOnAsset("beautify-html.min.js")
+	BANano.DependsOnAsset("vue-clipboard.min.js")
+	BANano.DependsOnAsset("lodash.min.js")
+	
 	mName = Name.tolowercase 
 	mEventName = EventName.ToLowerCase 
 	mCallBack = CallBack	 

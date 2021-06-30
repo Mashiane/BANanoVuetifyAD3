@@ -6,12 +6,22 @@ Version=8.9
 @EndOfDesignText@
 #IgnoreWarnings:12
 
-#DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: badge1, Description: VModel
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
-#DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: 10, Description: Value
-#DesignerProperty: Key: Avatar, DisplayName: ShowAvatar, FieldType: Boolean, DefaultValue: false, Description: Avatar
+#DesignerProperty: Key: Value, DisplayName: BadgeText, FieldType: String, DefaultValue: 10, Description: Value
+#DesignerProperty: Key: Icon, DisplayName: BadgeIcon, FieldType: String, DefaultValue: , Description: Icon
+
+'
+#DesignerProperty: Key: UseIcon, DisplayName: UseIcon, FieldType: Boolean, DefaultValue: True, Description: UseIcon
+#DesignerProperty: Key: IconName, DisplayName: IconName, FieldType: String, DefaultValue: , Description: IconName
+#DesignerProperty: Key: IconColor, DisplayName: IconColor, FieldType: String, DefaultValue: , Description: IconColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
+#DesignerProperty: Key: IconColorIntensity, DisplayName: IconColorIntensity, FieldType: String, DefaultValue: , Description: ColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
+#DesignerProperty: Key: IconSize, DisplayName: IconSize, FieldType: String, DefaultValue: , Description: IconSize, List: none|large|small|x-large|x-small
+
+#DesignerProperty: Key: Avatar, DisplayName: UseAvatar, FieldType: Boolean, DefaultValue: False, Description: Avatar
 #DesignerProperty: Key: AvatarImg, DisplayName: AvatarImg, FieldType: String, DefaultValue: , Description: AvatarImg
+#DesignerProperty: Key: AvatarIcon, DisplayName: AvatarIcon, FieldType: String, DefaultValue: , Description: AvatarIcon
 #DesignerProperty: Key: AvatarSize, DisplayName: AvatarSize, FieldType: String, DefaultValue: 48, Description: AvatarSize
+'
 #DesignerProperty: Key: Bordered, DisplayName: Bordered, FieldType: Boolean, DefaultValue: false, Description: Bordered
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue:  blue, Description: , List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: ColorIntensity, DisplayName: Color Intensity, FieldType: String, DefaultValue:  normal, Description: , List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
@@ -19,7 +29,6 @@ Version=8.9
 #DesignerProperty: Key: Bottom, DisplayName: Bottom, FieldType: Boolean, DefaultValue: False, Description: Bottom
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: false, Description: Dark
 #DesignerProperty: Key: Dot, DisplayName: Dot, FieldType: Boolean, DefaultValue: false, Description: Dot
-#DesignerProperty: Key: Icon, DisplayName: Icon, FieldType: String, DefaultValue: , Description: Icon
 #DesignerProperty: Key: Inline, DisplayName: Inline, FieldType: Boolean, DefaultValue: false, Description: Inline
 #DesignerProperty: Key: Mode, DisplayName: Mode, FieldType: String, DefaultValue: , Description: Mode
 #DesignerProperty: Key: OffsetX, DisplayName: OffsetX, FieldType: String, DefaultValue: , Description: OffsetX
@@ -67,6 +76,13 @@ Sub Class_Globals
 	Private svModel As String = ""
 	Private sValue As String
 	Private xHidden As String 
+	Private sAvatarIcon As String
+	Private bUseIcon As Boolean
+	Private sIconName As String
+	Private sIconColor As String
+	Private sIconSize As String
+	Private sIconColorIntensity As String
+	Private sIconSize As String
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -82,12 +98,17 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 		End If
 	End If
 	xHidden = $"${mName}hidden"$
+	svModel = $"${mName}vmodel"$
 End Sub
 
 ' this is the place where you create the view in html and run initialize javascript
 Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	mTarget = Target
 	If Props <> Null Then
+		sIconName = Props.GetDefault("IconName", "")
+		sIconColor = Props.GetDefault("IconColor", "")
+		sIconSize = Props.GetDefault("IconSize", "")
+		sIconColorIntensity = Props.GetDefault("IconColorIntensity", "")
 		mClasses = Props.Get("Classes")
 		mStyles = Props.Get("Styles")
 		mAttributes = Props.Get("Attributes")
@@ -113,18 +134,21 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sAvatarSize = Props.Get("AvatarSize")
 		bHidden = Props.GetDefault("Hidden", False)
 		bHidden = BANanoShared.parseBool(bHidden)
-		svModel = Props.GetDefault("VModel", "badge1")
+		sAvatarIcon = Props.GetDefault("AvatarIcon", "")
+		bUseIcon = Props.GetDefault("UseIcon", False)
+		bUseIcon = BANanoShared.parseBool(bUseIcon)
+		sIconSize = Props.GetDefault("IconSize", "")
 	End If
 	'
 	bAvatar = BANanoShared.parseBool(bAvatar)
-bBordered = BANanoShared.parseBool(bBordered)
-bDark = BANanoShared.parseBool(bDark)
-bDot = BANanoShared.parseBool(bDot)
-bInline = BANanoShared.parseBool(bInline)
-bOverlap = BANanoShared.parseBool(bOverlap)
-bTile = BANanoShared.parseBool(bTile)
-bLeft = BANanoShared.parseBool(bLeft)
-bBottom = BANanoShared.parseBool(bBottom)
+	bBordered = BANanoShared.parseBool(bBordered)
+	bDark = BANanoShared.parseBool(bDark)
+	bDot = BANanoShared.parseBool(bDot)
+	bInline = BANanoShared.parseBool(bInline)
+	bOverlap = BANanoShared.parseBool(bOverlap)
+	bTile = BANanoShared.parseBool(bTile)
+	bLeft = BANanoShared.parseBool(bLeft)
+	bBottom = BANanoShared.parseBool(bBottom)
 	'
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
@@ -134,15 +158,61 @@ bBottom = BANanoShared.parseBool(bBottom)
 	End If
 	'
 	VElement.Initialize(mCallBack, mName, mName)
+	'add the badge slot
+	VElement.Append($"<v-template id="${mName}tmp" v-slot:badge></v-template>"$)
 	'
+	Dim tmp As VueElement = VElement.GetVueElement($"#${mName}tmp"$)
+	'add the badge icon
+	If sIcon <> "" Then
+		tmp.Append($"<v-icon id="${mName}icon">${sIcon}</v-icon>"$)
+		VElement.GetIcon.Dark = True
+		VElement.GetIcon.Small = True
+	Else
+		'add the badge value
+		If sValue <> "" Then
+			tmp.Append($"<span id="${mName}span">{{ ${svModel} }}</span>"$)
+		End If
+	End If
+		
+	VElement.SetData(svModel, sValue)
+	'
+	'we are using an icon
+	If bUseIcon Then
+		If sIconName = "" Then
+			BANano.Throw($"VBadge.${mName} icon has not been specified!"$)
+		End If
+		VElement.Append($"<v-icon id="${mName}icon1">${sIconName}</v-icon>"$)
+		VElement.GetIcon1.Color = VElement.BuildColor(sIconColor, sIconColorIntensity)
+		Select Case sIconSize
+		Case "none"	
+		Case "large"
+			VElement.GetIcon1.AddAttr(":large", True)
+		Case "small"
+			VElement.GetIcon1.AddAttr(":small", True)
+		Case "x-large"
+			VElement.GetIcon1.AddAttr(":x-large", True)
+		Case "x-small"
+			VElement.GetIcon1.AddAttr(":x-small", True)
+		End Select
+	End If
+	
 	If BANano.IsNull(sAvatarImg) Or BANano.IsUndefined(sAvatarImg) Then
 		sAvatarImg = ""
 	End If
-	If sAvatarImg <> "" Then
-		VElement.Append($"<v-avatar id="${mName}avatar"><img id="${mName}image" alt=""></img></v-avatar>"$)
-		VElement.GetAvatar.Size = sAvatarSize
-		VElement.GetImage.Src = sAvatarImg
-	End If
+	
+'	If sAvatarImg <> "" Then
+'		'add slot
+'		VElement.Append($"<v-avatar id="${mName}avatar"><img id="${mName}image" alt=""></img></v-avatar>"$)
+'		VElement.GetAvatar.Size = sAvatarSize
+'		VElement.GetImage.Src = sAvatarImg
+'	End If
+'	If sAvatarIcon <> "" Then
+'		'add slot
+'		VElement.Append($"<v-avatar id="${mName}avatar"><v-icon id="${mName}icon"></v-icon></v-avatar>"$)
+'		VElement.GetAvatar.Size = sAvatarSize
+'		VElement.GetImage.Src = sAvatarImg
+'	End If
+	
 	
 	VElement.TagName = "v-badge"
 	VElement.setAvatar(bAvatar)
@@ -158,8 +228,8 @@ bBottom = BANanoShared.parseBool(bBottom)
 	VElement.Overlap = bOverlap
 	VElement.Tile = bTile
 	VElement.Transition = sTransition
-	VElement.Bind("content", svModel)
-	VElement.SetData(svModel, sValue)
+	'VElement.Bind("content", svModel)
+	'VElement.SetData(svModel, sValue)
 	VElement.VIf = mVIf
 	VElement.Classes = mClasses
 	VElement.Styles = mStyles

@@ -314,6 +314,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.Append($"<v-card id="${mName}card"></v-card>"$)
 	'
 	VElement.GetCard.Append($"<v-card-title id="${mName}cardtitle"></v-card-title>"$)
+	VElement.GetCardTitle.AddClass("headline")
 	VElement.GetCardTitle.VHtml = xToolbarCaption
 	VElement.GetCardTitle.Bind("color", xToolBarColor)
 	VElement.GetCardTitle.Bind("dark", xToolBarDark)		

@@ -114,6 +114,12 @@ Sub Class_Globals
 End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
+	BANano.DependsOnAsset("leaflet.css")
+	BANano.DependsOnAsset("Chart.min.css")
+	BANano.DependsOnAsset("chart.js")
+	BANano.DependsOnAsset("chartjs-adapter-date-fns.bundle.min.js")
+	BANano.DependsOnAsset("chartkick.min.js")
+	'
 	mName = Name.tolowercase 
 	mEventName = EventName.ToLowerCase 
 	mCallBack = CallBack	 

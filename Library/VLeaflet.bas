@@ -285,7 +285,12 @@ Sub Class_Globals
 	Private blackIcon As BANanoObject
 End Sub
 
-Sub Initialize (CallBack As Object, Name As String, EventName As String) 
+Sub Initialize (CallBack As Object, Name As String, EventName As String)
+	BANano.DependsOnAsset("leaflet.css")
+	BANano.DependsOnAsset("leaflet.js")
+	BANano.DependsOnAsset("vue2-leaflet.min.js")
+	BANano.DependsOnAsset("vue2-leaflet-movingmarker.umd.min.js")
+	'
 	mName = Name.tolowercase 
 	mEventName = EventName.ToLowerCase 
 	mCallBack = CallBack	 
@@ -1128,13 +1133,13 @@ Sub getHere As String
 End Sub
 
 'native method get the map object after ready
-Sub mapObject(VC As VueComponent)
+private Sub GetMapObject(VC As VueComponent)
 	map = VC.refs.GetField(mName).GetField("mapObject")
 End Sub
 
 'native  stopLocate
 Sub stopLocate(VC As VueComponent)
-	mapObject(VC)
+	GetMapObject(VC)
 	map.RunMethod("stopLocate", Null)
 End Sub
 
@@ -1146,7 +1151,7 @@ End Sub
 
 'native method - resize the map
 Sub Resize(VC As VueComponent)
-	mapObject(VC)
+	GetMapObject(VC)
 	'map.RunMethod("_onResize", Null)
 	map.RunMethod("invalidateSize", Null)
 End Sub

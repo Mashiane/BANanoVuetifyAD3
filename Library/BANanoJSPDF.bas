@@ -171,6 +171,10 @@ End Sub
 
 'Initializes the object. You can add parameters to this method if needed.
 Public Sub Initialize(eventHandler As Object, fileName As String) As BANanoJSPDF
+	BANano.DependsOnAsset("jspdf.umd.min.js")
+	BANano.DependsOnAsset("jspdf.plugin.autotable.min.js")
+	BANano.DependsOnAsset("html2canvas.min.js")
+	
 	mCallBack = eventHandler
 	fname = fileName	
 	encryption.Initialize 

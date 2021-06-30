@@ -7,7 +7,7 @@ Version=8.9
 #IgnoreWarnings:12
 
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
-#DesignerProperty: Key: Slot, DisplayName: Slot, FieldType: String, DefaultValue: , Description: Slot, List: none|v-slot:append|v-slot:prepend|v-slot:activator-on-attrs|v-slot:activator-on|v-slot:progress|v-slot:extension|v-slot:default-hover|v-slot:placeholder|v-slot-active-toggle|v-slot-thumb-label-props|v-slot:label|v-slot:default-value|v-slot:opposite
+#DesignerProperty: Key: Slot, DisplayName: Slot, FieldType: String, DefaultValue: , Description: Slot, List: none|v-slot:append|v-slot:prepend|v-slot:activator-on-attrs|v-slot:activator-on|v-slot:progress|v-slot:extension|v-slot:default-hover|v-slot:placeholder|v-slot-active-toggle|v-slot-thumb-label-props|v-slot:label|v-slot:default-value|v-slot:opposite|v-slot:badge
 #DesignerProperty: Key: VFor, DisplayName: VFor, FieldType: String, DefaultValue: , Description: VFor
 #DesignerProperty: Key: Key, DisplayName: Key, FieldType: String, DefaultValue: , Description: Key
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue: , Description: Color, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none

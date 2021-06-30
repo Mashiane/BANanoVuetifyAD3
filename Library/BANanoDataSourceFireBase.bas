@@ -206,6 +206,7 @@ End Sub
 
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
+	'BANano.DependsOnAsset("BANanoSkeleton.colorpicker.min.js")
 	mName = Name.tolowercase 
 	mEventName = EventName.ToLowerCase 
 	mCallBack = CallBack	 

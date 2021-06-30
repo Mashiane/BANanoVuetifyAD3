@@ -225,6 +225,74 @@ Public Sub Initialize (CallBack As Object, Name As String) As VueComponent
 	Return Me
 End Sub
 
+Sub UseVueDraggable
+	If components.ContainsKey("vuedraggable") = False Then
+		Dim vuedraggable As BANanoObject
+		vuedraggable.Initialize("vuedraggable")
+		components.put("draggable", vuedraggable)
+	End If
+End Sub
+
+'Sub ImportKanBan(Vue As BANanoObject)
+'	
+'	Dim kanbanx As VueComponent
+'	kanbanx.Initialize(mCallBack, "kanban")
+'	kanbanx.AddProperty1("headertext", kanbanx.jsString, "Header", False)
+'	kanbanx.AddProperty1("headercolor", kanbanx.jsString, "pink", False)
+'	'
+'	Dim m As Map
+'	m.Initialize 
+'	Dim l As List
+'	l.Initialize 
+'	'
+'	kanbanx.AddProperty1("options", kanbanx.jsObject, m, False)
+'	kanbanx.AddProperty1("list", kanbanx.jsArray, l, False)
+'	kanbanx.AddProperty1("toolbardense", kanbanx.jsBoolean, False, False)
+'	'add the html of the component
+'	
+'	Dim scontent As String = $"<v-col cols="6" sm="3" md="2">
+'    <v-card>
+'      <v-app-bar dark :color="headercolor" :dense="toolbardense">
+'        <v-toolbar-side-icon />
+'        <v-toolbar-title>{{ headertext }}</v-toolbar-title>
+'        <v-spacer />
+'        <v-btn icon>
+'          <v-icon>mdi-dots-vertical</v-icon>
+'        </v-btn>
+'      </v-app-bar>
+'
+'      <draggable :list="list" :class="options.class" :group="options.group">
+'        <template v-for="(item, index) in list">
+'          <div :key="item.id">
+'            <v-list-item avatar ripple>
+'              <v-list-item-content>
+'                <v-list-item-title>
+'                  {{ item.title }} {{ index }}
+'                </v-list-item-title>
+'                <v-list-item-subtitle class="text--primary">
+'                  {{ item.headline }}
+'                </v-list-item-subtitle>
+'                <v-list-item-subtitle>
+'                  {{ item.subtitle }}
+'                </v-list-item-subtitle>
+'              </v-list-item-content>
+'
+'              <v-list-item-action>
+'                <v-list-item-action-text>
+'                  {{ item.action }}
+'                </v-list-item-action-text>
+'              </v-list-item-action>
+'            </v-list-item>
+'            <v-divider v-if="index + 1 < list.length" :key="index" />
+'          </div>
+'        </template>
+'      </draggable>
+'    </v-card>
+'  </v-col>"$
+'	kanbanx.AddHTML(scontent)
+'	Import(Vue, kanbanx)
+'End Sub
+
 
 Sub ImportLeafLet
 	'get the leaflet map from the windows object
@@ -252,14 +320,6 @@ Sub ImportLeafLet
 	components.Put("l-rectangle", LRectangle)
 	components.Put("l-geo-json", LGeoJson)
 	components.Put("l-icon", LIcon)
-End Sub
-
-
-Sub UseArcCounter
-	If components.ContainsKey("arc-counter") = False Then
-		Dim arcCounter As BANanoObject = BANano.Window.GetField("arcCounter")
-		components.Put("arc-counter", arcCounter)
-	End If
 End Sub
 
 Sub json2list(content As String) As List

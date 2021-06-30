@@ -210,8 +210,8 @@ Sub UpdateEnd(VC As VueComponent, vEndNumber As Int)
 End Sub
 
 'Update Icon
-Sub UpdateIcon(VC As VueComponent, vIcon As String)
-	VC.SetData($"${mName}icon"$, vIcon)
+Sub UpdateIcon(VC As VueComponent, vIconx As String)
+	VC.SetData($"${mName}icon"$, vIconx)
 End Sub
 
 'Update StartNumber

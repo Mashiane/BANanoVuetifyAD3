@@ -51,6 +51,7 @@ End Sub
 
 'initialize to the component you want to load to
 Public Sub Initialize(Module As Object, Name As String, eventName As String)
+	BANano.DependsOnAsset("vue-count-to.min.js") 
 	mCallBack = Module
 	mName = Name.tolowercase
 	mEvent = eventName.tolowercase

@@ -1062,6 +1062,18 @@ End Sub
 
 'initialize the app with where to render and where to .GetHTML
 Sub Initialize(Module As Object, myapp As String) 
+	BANano.DependsOnAsset("sweetalert2.all.min.js")
+	BANano.DependsOnAsset("v-blur.min.js")
+	BANano.DependsOnAsset("material-ui.min.css")
+	BANano.DependsOnAsset("vuetify.min.css")
+	BANano.DependsOnAsset("vue.min.js")
+	BANano.DependsOnAsset("vuetify.min.js")
+	BANano.DependsOnAsset("vue-router.min.js")
+	BANano.DependsOnAsset("dayjs.min.js")
+	BANano.DependsOnAsset("numeral.min.js")
+	BANano.DependsOnAsset("roboto.min.css")
+	BANano.DependsOnAsset("materialdesignicons.min.css")
+	
 	Dim pdf As BANanoObject = BANano.Window.GetField("jspdf").GetField("jsPDF")
 	BANano.Window.SetField("jsPDF", pdf)
 
@@ -1114,6 +1126,13 @@ Sub Initialize(Module As Object, myapp As String)
 	UseVBlur
 	'turn authentication off
 	setAuthenticated(False)
+End Sub
+
+Sub UseVueDraggable
+	If components.ContainsKey("vuedraggable") = False Then
+		Dim vuedraggable As BANanoObject = BANano.Window.GetField("vuedraggable")
+		components.put("draggable", vuedraggable)
+	End If
 End Sub
 
 'check if full screen
@@ -5364,15 +5383,6 @@ Sub UseVBlur
 		Dim VBlur As BANanoObject = BANano.Window.GetField("v-blur")
 		Use(VBlur)
 		AddModule("vblur")
-	End If
-End Sub
-
-Sub UseVueDraggable
-	If ModuleExist("vuedraggable") = False Then
-		Dim vuedraggable As BANanoObject
-		vuedraggable.Initialize("vuedraggable")
-		Use(vuedraggable)
-		AddModule("vuedraggable")
 	End If
 End Sub
 

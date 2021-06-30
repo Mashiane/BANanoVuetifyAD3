@@ -17,9 +17,13 @@ Sub Class_Globals
 	Public optionsname As String
 	Private mVA As VuetifyApp
 	Public ID As String
+	Private BANano As BANano
 End Sub
 
 Public Sub Initialize(VA As VuetifyApp, parentID As String, elID As String)
+	BANano.DependsOnAsset("vjsf.js")
+	BANano.DependsOnAsset("vjsf.css")
+	
 	mCallBack = VA.EventHandler
 	mVA = VA
 	'

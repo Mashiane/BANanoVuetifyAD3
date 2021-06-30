@@ -8565,6 +8565,11 @@ Sub GetIcon As VueElement
 	Return GetVueElement($"${mName}icon"$)
 End Sub
 
+'get embedded icon
+Sub GetIcon1 As VueElement
+	Return GetVueElement($"${mName}icon1"$)
+End Sub
+
 'get embedded template
 Sub GetTemplate As VueElement
 	Return GetVueElement($"${mName}template"$)

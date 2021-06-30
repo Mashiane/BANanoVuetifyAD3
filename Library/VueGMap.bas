@@ -144,6 +144,8 @@ Sub Class_Globals
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
+	BANano.DependsOnAsset("vue-google-maps.js")
+	
 	mName = Name.tolowercase
 	mEventName = EventName.ToLowerCase
 	mCallBack = CallBack
