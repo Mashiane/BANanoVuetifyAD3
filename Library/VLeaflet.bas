@@ -95,12 +95,21 @@ var blackIcon = new L.Icon({
 #Event: UpdateZoom (latLng As Object)
 #Event: UpdateBounds (bounds as Object)
 #Event: Resize
-#Event: Tooltip_Click (item As Map)
-#Event: PopUp_Click (item As Map)
+'#Event: Tooltip_Click (item As Map)
+'#Event: PopUp_Click (item As Map)
 #Event: ToolBar_Click (id As String)
+#Event: MarkerClick (marker As Map)
+#Event: PolygonClick (marker As Map)
+#Event: PolylineClick (marker As Map)
+#Event: CircleClick (marker As Map)
+#Event: RectangleClick (marker As Map)
 
 #DesignerProperty: Key: Title, DisplayName: Title, FieldType: String, DefaultValue: LeafLet, Description: Title
+#DesignerProperty: Key: MapType, DisplayName: MapType, FieldType: String, DefaultValue: OpenStreetMap, Description: MapType, List: OpenStreetMap|GoogleRoadMap|GoogleSatellite|GoogleHybrid|GoogleTerrain
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
+#DesignerProperty: Key: InsideVCard, DisplayName: InsideVCard, FieldType: Boolean, DefaultValue: True, Description: InsideVCard
+#DesignerProperty: Key: Elevation, DisplayName: Elevation, FieldType: String, DefaultValue: , Description: Elevation
+#DesignerProperty: Key: ZIndex, DisplayName: ZIndex, FieldType: String, DefaultValue: 0, Description: ZIndex
 #DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: 100%, Description: Width
 #DesignerProperty: Key: Height, DisplayName: Height, FieldType: String, DefaultValue: 500px, Description: Height
 #DesignerProperty: Key: LayerToken, DisplayName: LayerToken, FieldType: String, DefaultValue: , Description: LayerToken
@@ -119,7 +128,6 @@ var blackIcon = new L.Icon({
 #DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: Boolean, DefaultValue: False , Description: Disabled
 #DesignerProperty: Key: DoubleClickZoom, DisplayName: DoubleClickZoom, FieldType: Boolean, DefaultValue: False, Description: DoubleClickZoom
 #DesignerProperty: Key: EaseLinearity, DisplayName: EaseLinearity, FieldType: Int, DefaultValue: 0, Description: EaseLinearity
-#DesignerProperty: Key: Elevation, DisplayName: Elevation, FieldType: String, DefaultValue: , Description: Elevation
 #DesignerProperty: Key: FadeAnimation, DisplayName: FadeAnimation, FieldType: Boolean, DefaultValue: False, Description: FadeAnimation
 
 #DesignerProperty: Key: Inertia, DisplayName: Inertia, FieldType: Boolean, DefaultValue: False, Description: Inertia
@@ -128,8 +136,8 @@ var blackIcon = new L.Icon({
 #DesignerProperty: Key: MarkerZoomAnimation, DisplayName: MarkerZoomAnimation, FieldType: Boolean, DefaultValue: False, Description: MarkerZoomAnimation
 '#DesignerProperty: Key: MaxBounds, DisplayName: MaxBounds, FieldType: String, DefaultValue: , Description: MaxBounds
 #DesignerProperty: Key: MaxBoundsViscosity, DisplayName: MaxBoundsViscosity, FieldType: Int, DefaultValue: 0, Description: MaxBoundsViscosity
-#DesignerProperty: Key: MaxZoom, DisplayName: MaxZoom, FieldType: Int, DefaultValue: 18, Description: MaxZoom
-#DesignerProperty: Key: MinZoom, DisplayName: MinZoom, FieldType: Int, DefaultValue: 0, Description: MinZoom
+#DesignerProperty: Key: MaxZoom, DisplayName: MaxZoom, FieldType: Int, DefaultValue: 20, Description: MaxZoom
+#DesignerProperty: Key: MinZoom, DisplayName: MinZoom, FieldType: Int, DefaultValue: 3, Description: MinZoom
 #DesignerProperty: Key: NoBlockingAnimations, DisplayName: NoBlockingAnimations, FieldType: Boolean, DefaultValue: False, Description: NoBlockingAnimations
 '#DesignerProperty: Key: Options, DisplayName: Options, FieldType: String, DefaultValue: , Description: Options
 '#DesignerProperty: Key: Padding, DisplayName: Padding, FieldType: String, DefaultValue: , Description: Padding
@@ -198,6 +206,8 @@ Sub Class_Globals
 	Private sZoomSnap As String
 	Private bUseMakiMarkers As Boolean
 	Private OpenPopUpMap As Map 
+	Private bInsideVCard As Boolean
+	Private zZIndex As String
  	'
 	Dim xTitle As String
 	Dim xoptions As String
@@ -226,6 +236,7 @@ Sub Class_Globals
 	Private xgeojson As String
 	Private xgeojsons As String
 	Private geojsons As Map
+	Private sMapType As String
 	'
 	Type GeoJsonType(id As String, name As String, visible As Boolean, geojson As String, title As String, url As String)
 	
@@ -233,19 +244,12 @@ Sub Class_Globals
 	MarkerLongitude As String, MarkerColor As String,  MarkerInforWindow As String, _
 	MarkerDraggable As Boolean, MarkerriseOnHover As Boolean, MarkerIconSize As List, MarkerIconAnchor As List, MarkerIcon As String, MarkerHasIcon As Boolean, MarkerHasIconColor As Boolean, MarkerIconColor As String, MarkerPopUp As String)
 	'
-	Type MapTypeObj(MapBoxStreets As String, MapBoxOutdoors As String, MapBoxDark As String, MapBoxLight As String, MapBoxSatellite As String, _
-	MapBoxSatelliteStreets As String, MapBoxStreetsBasic As String, MapBoxComic As String, MapboxEmerald As String, MapboxHighContrast As String, _
-	MapBoxNavigationGuidanceDay As String, MapBoxRunBikeHike As String, MapboxPencil As String, MapboxPirates As String, _
-	MapBoxWheatPaste As String)
-	'
-	Public EnumMapBoxType As MapTypeObj
 	Private markers As Map
 	Private circles As Map
 	Private polylines As Map
 	Private popups As Map
 	
 	Type VCircle(CircleId As String,CircleTitle As String, CircleWeight As Int, CircleLatitude As Double,CircleLongitude As Double,CircleColor As String,CircleFillColor As String, CircleFillOpacity As Double, CircleRadius As Int, CirclePopUp As String)
-	Public GeoLocate As Boolean
 	
 	Type VPolyLine(ID As String, Title As String, Color As String, Weight As Int, Opacity As Double, FillColor As String, FillOpacity As Double, fitBounds As Boolean, points As List, PopUp As String)
 	
@@ -283,6 +287,17 @@ Sub Class_Globals
 	Private violetIcon As BANanoObject
 	Private greyIcon As BANanoObject
 	Private blackIcon As BANanoObject
+	Private sZIndex As String
+'	Private mtt As String
+'	Private mpp As String
+'	Private pltt As String
+'	Private plpp As String
+'	Private ctt As String
+'	Private cpp As String
+'	Private pgtt As String
+'	Private pgpp As String
+'	Private rtt As String
+'	Private rpp As String
 End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -474,6 +489,17 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	EnumMakiIcons.wetland = "wetland"
 	EnumMakiIcons.wheelchair = "wheelchair"
 	EnumMakiIcons.zoo = "zoo"
+	'
+'	mtt = $"${mName}mtt"$
+'	mpp = $"${mName}mpp"$
+'	pltt =$"${mName}pltt"$
+'	plpp = $"${mName}plpp"$
+'	ctt = $"${mName}ctt"$
+'	cpp = $"${mName}cpp"$
+'	pgtt = $"${mName}pgtt"$
+'	pgpp = $"${mName}pgpp"$
+'	rtt = $"${mName}rtt"$
+'	rpp = $"${mName}rpp"$
 End Sub
 
 Sub DesignerCreateView (Target As BANanoElement, Props As Map) 
@@ -535,8 +561,25 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sItemKeys = Props.Get("ItemKeys")
 		sItemIcons = Props.Get("ItemIcons")
 		sItemColors = Props.Get("ItemColors")
+		bInsideVCard = Props.GetDefault("InsideVCard", True)
+		bInsideVCard = BANanoShared.parseBool(bInsideVCard)
+		sZIndex = Props.GetDefault("ZIndex", 0)
+		sMapType = Props.GetDefault("MapType", "OpenStreetMap")
  	End If 
-	' 
+	'
+	Select Case sMapType
+	Case "GoogleRoadMap"
+		sLayerUrl = "http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}"
+	Case "GoogleSatellite"
+		sLayerUrl = "http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
+	Case "GoogleHybrid"
+		sLayerUrl = "http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}"
+	Case "GoogleTerrain"
+		sLayerUrl = "http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}"
+	Case Else
+		sLayerUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+	End Select	
+	 
 	Dim rs As List
 	rs.Initialize 
 	'
@@ -568,27 +611,35 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	'build and get the element 
 	If BANano.Exists($"#${mName}"$) Then 
 		mElement = BANano.GetElement($"#${mName}"$) 
-	Else	 
-		mElement = mTarget.Append($"<v-card id="${mName}card" v-lazy><v-card-title id="${mName}cardtitle">{{ ${xTitle} }}</v-card-title><v-card-text><l-map ref="${mName}" id="${mName}"></l-map></v-card-text></v-card>"$).Get("#" & mName) 
+	Else
+		If bInsideVCard Then	 
+			mElement = mTarget.Append($"<v-card id="${mName}card" v-lazy><v-card-title id="${mName}cardtitle">{{ ${xTitle} }}</v-card-title>
+			<v-card-text id="${mName}cardtext"><l-map ref="${mName}" id="${mName}"></l-map></v-card-text></v-card>"$).Get("#" & mName) 
+		Else
+			mElement = mTarget.Append($"<l-map ref="${mName}" id="${mName}"></l-map>"$).Get("#" & mName)
+		End If	
 	End If 
 	' 
 	VElement.Initialize(mCallBack, mName, mName) 
 	VElement.TagName = "l-map"
 	
-	'add a spacer then add buttons
-	VElement.GetCardTitle.Append($"<v-spacer></v-spacer>"$)
-	VElement.GetCardTitle.Append($"<v-btn id="${mName}button" class="mx-2" v-for="item in ${sButtons}" :key="item.id" fab dark small :color="item.color">
-        <v-icon v-html=item.icon></v-icon>
-      </v-btn>"$)
-	If SubExists(mCallBack, $"${mName}_toolbar_click"$) Then  
-		VElement.GetButton.SetOnEventOwn(mCallBack, $"${mName}_toolbar_click"$, "click", "item.id")
-		Dim args As List
-		VElement.SetMethod(mCallBack, $"${mName}_toolbar_click"$, args)
-		Dim btnt As VueElement = VElement.GetButton
-		VElement.BindVueElement(btnt)
+	'the map sits inside a v-card
+	If bInsideVCard Then
+		VElement.GetCard.AddAttr("elevation", sElevation)
+		'add a spacer then add buttons
+		VElement.GetCardTitle.Append($"<v-spacer></v-spacer>"$)
+		VElement.GetCardTitle.Append($"<v-btn id="${mName}button" class="mx-2" v-for="item in ${sButtons}" :key="item.id" fab dark small :color="item.color">
+        	<v-icon v-html=item.icon></v-icon>
+      	</v-btn>"$)
+		If SubExists(mCallBack, $"${mName}_toolbar_click"$) Then  
+			VElement.GetButton.SetOnEventOwn(mCallBack, $"${mName}_toolbar_click"$, "click", "item.id")
+			Dim args As List
+			VElement.SetMethod(mCallBack, $"${mName}_toolbar_click"$, args)
+			Dim btnt As VueElement = VElement.GetButton
+			VElement.BindVueElement(btnt)
+		End If
+		VElement.SetData(sButtons, rs)
 	End If
-	'
-	VElement.SetData(sButtons, rs)
 	
 	If SubExists(mCallBack, $"${mName}_ready"$) Then
 		VElement.SetOnEventOwn(mCallBack, $"${mName}_ready"$, "ready", Null)
@@ -620,39 +671,37 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.Append($"<l-tile-layer :url="${xurl}"></l-tile-layer>"$)
 	'add the markers
 	VElement.Append($"<l-marker id="${xmarker}" v-for="item in ${xmarkers}" :key="item.id">
-	<l-popup v-if="item.popup"><div @click="${mName}_popup_click(item)">{{ item.popup }}</div></l-popup>
-	<l-tooltip v-if="item.tooltip" :options="{ permanent: ${bPermanentTooltips}, interactive: true}"><div @click="${mName}_tooltip_click(item)">{{ item.tooltip }}</div></l-tooltip>
+	<l-popup v-if="item.popup"><div>{{ item.popup }}</div></l-popup>
+	<l-tooltip v-if="item.tooltip" :options="{ permanent: ${bPermanentTooltips}, interactive: true}"><div>{{ item.tooltip }}</div></l-tooltip>
 	</l-marker>"$)
-	Dim itm As Object
-	If SubExists(mCallBack, $"${mName}_tooltip_click"$) Then
-		VElement.SetMethod(mCallBack, $"${mName}_tooltip_click"$, Array(itm))
-	Else
-		BANano.Throw($"VLeaflet.${mName} - generate members for ToolTip_Click!"$)
-	End If
-	If SubExists(mCallBack, $"${mName}_popup_click"$) Then
-		VElement.SetMethod(mCallBack, $"${mName}_popup_click"$, Array(itm))
-	Else
-		BANano.Throw($"VLeaflet.${mName} - generate members for PopUp_Click!"$)
-	End If
+	'
+	'VElement.GetVueElement(mpp).SetOnEventOwn(mCallBack, $"${mName}_popup_click"$, "click", "item")
+	'VElement.GetVueElement(mtt).SetOnEventOwn(mCallBack, $"${mName}_tooltip_click"$, "click", "item")
+	
 	'empty the markers
 	VElement.SetData(xmarkers, markers)
+	VElement.setdata("item", CreateMap())
 	'get the marker and update its attributes
 	Dim vmarker As VueElement = VElement.GetVueElement(xmarker)
 	vmarker.Bind("draggable", "item.draggable")
 	vmarker.Bind("icon", "item.icon")
 	vmarker.Bind("id", "item.id")
-	vmarker.Bind("lat-lng", "item.latlng")
+	vmarker.Bind("lat-lng.sync", "item.latlng")
 	vmarker.Bind("name", "item.name")
 	vmarker.Bind("visible", "item.visible")
-	vmarker.Bind("item", "item")
-	vmarker.RemoveAttr("id")
+	vmarker.Bind("key", "item")
 	vmarker.Bind("options", "item.options")
+	vmarker.SetOnEventOwn(mCallBack, $"${mName}_MarkerClick"$, "click", "item")
+	VElement.BindVueElement(vmarker)
 	'
 	'add polygons
 	VElement.Append($"<l-polygon id="${xpolygon}" v-for="item in ${xpolygons}" :key="item.id">
-	<l-popup v-if="item.popup"><div @click="${mName}_popup_click(item)">{{ item.popup }}</div></l-popup>
-	<l-tooltip v-if="item.tooltip" :options="{ permanent: ${bPermanentTooltips}, interactive: true}"><div @click="${mName}_tooltip_click(item)">{{ item.tooltip }}</div></l-tooltip>
+	<l-popup v-if="item.popup"><div>{{ item.popup }}</div></l-popup>
+	<l-tooltip v-if="item.tooltip" :options="{ permanent: ${bPermanentTooltips}, interactive: true}"><div>{{ item.tooltip }}</div></l-tooltip>
 	</l-polygon>"$)
+	'VElement.GetVueElement(pgpp).SetOnEventOwn(mCallBack, $"${mName}_popup_click"$, "click", "item")
+	'VElement.GetVueElement(pgtt).SetOnEventOwn(mCallBack, $"${mName}_tooltip_click"$, "click", "item")
+	
 	VElement.SetData(xpolygons, polygons)
 	Dim vpolygon As VueElement = VElement.GetVueElement(xpolygon)
 	vpolygon.Bind("id", "item.id")
@@ -663,14 +712,18 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	vpolygon.Bind("fill-opacity", "item.fillopacity")
 	vpolygon.Bind("opacity", "item.opacity")
 	vpolygon.Bind("weight", "item.weight")
-	vpolygon.RemoveAttr("id")
 	vpolygon.Bind("options", "item.options")
+	vpolygon.SetOnEventOwn(mCallBack, $"${mName}_PolygonClick"$, "click", "item")
+	VElement.BindVueElement(vpolygon)
 	'
 	'add polylines
 	VElement.Append($"<l-polyline id="${xpolyLine}" v-for="item in ${xpolyLines}" :key="item.id">
-	<l-popup v-if="item.popup"><div @click="${mName}_popup_click(item)">{{ item.popup }}</div></l-popup>
-	<l-tooltip v-if="item.tooltip" :options="{ permanent: ${bPermanentTooltips}, interactive: true}"><div @click="${mName}_tooltip_click(item)">{{ item.tooltip }}</div></l-tooltip>	
+	<l-popup v-if="item.popup"><div>{{ item.popup }}</div></l-popup>
+	<l-tooltip v-if="item.tooltip" :options="{ permanent: ${bPermanentTooltips}, interactive: true}"><div>{{ item.tooltip }}</div></l-tooltip>	
 	</l-polyline>"$)
+	'VElement.GetVueElement(plpp).SetOnEventOwn(mCallBack, $"${mName}_popup_click"$, "click", "item")
+	'VElement.GetVueElement(pltt).SetOnEventOwn(mCallBack, $"${mName}_tooltip_click"$, "click", "item")
+	
 	VElement.SetData(xpolyLines, polylines)
 	Dim vpolyline As VueElement = VElement.GetVueElement(xpolyLine)
 	vpolyline.Bind("id", "item.id")
@@ -681,14 +734,19 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	vpolyline.Bind("fill-opacity", "item.fillopacity")
 	vpolyline.Bind("opacity", "item.opacity")
 	vpolyline.Bind("weight", "item.weight")
-	vpolyline.RemoveAttr("id")
 	vpolyline.Bind("options", "item.options")
+	vpolyline.SetOnEventOwn(mCallBack, $"${mName}_PolylineClick"$, "click", "item")
+	VElement.BindVueElement(vpolyline)
+	
 	'
 	'add circles
 	VElement.Append($"<l-circle id="${xcircle}" v-for="item in ${xcircles}" :key="item.id">
-	<l-popup v-if="item.popup"><div @click="${mName}_popup_click(item)">{{ item.popup }}</div></l-popup>
-	<l-tooltip v-if="item.tooltip" :options="{ permanent: ${bPermanentTooltips}, interactive: true}"><div @click="${mName}_tooltip_click(item)">{{ item.tooltip }}</div></l-tooltip>
+	<l-popup v-if="item.popup"><div>{{ item.popup }}</div></l-popup>
+	<l-tooltip v-if="item.tooltip" :options="{ permanent: ${bPermanentTooltips}, interactive: true}"><div>{{ item.tooltip }}</div></l-tooltip>
 	</l-circle>"$)
+	'VElement.GetVueElement(cpp).SetOnEventOwn(mCallBack, $"${mName}_popup_click"$, "click", "item")
+	'VElement.GetVueElement(ctt).SetOnEventOwn(mCallBack, $"${mName}_tooltip_click"$, "click", "item")
+	
 	VElement.SetData(xcircles, circles)
 	Dim vcircle As VueElement = VElement.GetVueElement(xcircle)
 	vcircle.Bind("id", "item.id")
@@ -701,12 +759,18 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	vcircle.Bind("weight", "item.weight")
 	vcircle.Bind("radius", "item.radius")
 	vcircle.Bind("options", "item.options")
-	vcircle.RemoveAttr("id")
+	vcircle.SetOnEventOwn(mCallBack, $"${mName}_CircleClick"$, "click", "item")
+	VElement.BindVueElement(vcircle)
+	
 	'add rectangle
 	VElement.Append($"<l-rectangle id="${xrectangle}" v-for="item in ${xrectangles}" :key="item.id">
-	<l-popup v-if="item.popup"><div @click="${mName}_popup_click(item)">{{ item.popup }}</div></l-popup>
-	<l-tooltip v-if="item.tooltip" :options="{ permanent: ${bPermanentTooltips}, interactive: true}"><div @click="${mName}_tooltip_click(item)">{{ item.tooltip }}</div></l-tooltip>
+	<l-popup v-if="item.popup"><div>{{ item.popup }}</div></l-popup>
+	<l-tooltip v-if="item.tooltip" :options="{ permanent: ${bPermanentTooltips}, interactive: true}"><div>{{ item.tooltip }}</div></l-tooltip>
 	</l-rectangle>"$)
+	'
+	'VElement.GetVueElement(rpp).SetOnEventOwn(mCallBack, $"${mName}_popup_click"$, "click", "item")
+	'VElement.GetVueElement(rtt).SetOnEventOwn(mCallBack, $"${mName}_tooltip_click"$, "click", "item")
+	
 	VElement.SetData(xrectangles, rectangles)
 	Dim vrectangle As VueElement = VElement.GetVueElement(xrectangle)
 	vrectangle.Bind("id", "item.id")
@@ -718,7 +782,9 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	'vrectangle.Bind("fill-opacity", "item.fillopacity")
 	'vrectangle.Bind("opacity", "item.opacity")
 	'vrectangle.Bind("options", "item.options")
-	vrectangle.RemoveAttr("id")
+	vrectangle.SetOnEventOwn(mCallBack, $"${mName}_RectangleClick"$, "click", "item")
+	VElement.BindVueElement(vrectangle)
+	
 	'add geojson
 	VElement.Append($"<l-geo-json id="${xgeojson}" v-for="item in ${xgeojsons}" :key="item.id"></l-geo-json>"$)
 	VElement.SetData(xgeojsons, geojsons)
@@ -728,7 +794,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	vgeojson.Bind("visible", "item.visible")
 	vgeojson.Bind("geojson", "item.geojson")
 	vgeojson.Bind("options", "item.options")
-	vgeojson.RemoveAttr("id")
+		
 		
 	VElement.Classes = mClasses 
 	VElement.Styles = mStyles 
@@ -738,6 +804,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 
 	VElement.AddAttr(":center", xcenter)
 	VElement.AddAttr(":close-popup-on-click", bClosePopupOnClick)
+	VElement.AddStyle("z-index", sZIndex)
 	'VElement.AddAttr(":crs", sCrs)
 	'VElement.SetData(sCrs, )
 
@@ -746,7 +813,6 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 
 	VElement.AddAttr(":double-click-zoom", bDoubleClickZoom)
 	VElement.AddAttr("ease-linearity", iEaseLinearity)
-	VElement.GetCard.AddAttr("elevation", sElevation)
 	VElement.AddAttr(":fade-animation", bFadeAnimation)
 	VElement.AddStyle("height", sHeight)
 	
@@ -805,6 +871,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	Dim cobj As BANanoObject = latLng(sCenterLat, sCenterLng)
 	VElement.SetData(xcenter, cobj)
 	'
+	VElement.RemoveBinding("item")
 	VElement.BindAllEvents
 End Sub
 
@@ -1043,6 +1110,8 @@ End Sub
 
 'native method move the view to this point
 Sub SetView(VC As VueComponent, Lat As Double, Lng As Double, Zoom As Int)
+	Zoom = BANano.parseInt(Zoom)
+	iZoom = Zoom
 	VC.SetData(xzoom, Zoom)
 	Dim obj As BANanoObject = latLng(Lat, Lng)
 	map.RunMethod("setView", Array(obj, Zoom))
@@ -1134,13 +1203,21 @@ End Sub
 
 'native method get the map object after ready
 private Sub GetMapObject(VC As VueComponent)
-	map = VC.refs.GetField(mName).GetField("mapObject")
+	Try
+		map = VC.refs.GetField(mName).GetField("mapObject")
+	Catch
+		Log(LastException)
+	End Try	
 End Sub
 
 'native  stopLocate
 Sub stopLocate(VC As VueComponent)
-	GetMapObject(VC)
-	map.RunMethod("stopLocate", Null)
+	Try
+		GetMapObject(VC)
+		map.RunMethod("stopLocate", Null)
+	Catch
+		Log(LastException)
+	End Try	
 End Sub
 
 'native locate
@@ -1151,9 +1228,13 @@ End Sub
 
 'native method - resize the map
 Sub Resize(VC As VueComponent)
-	GetMapObject(VC)
-	'map.RunMethod("_onResize", Null)
-	map.RunMethod("invalidateSize", Null)
+	Try
+		GetMapObject(VC)
+		'map.RunMethod("_onResize", Null)
+		map.RunMethod("invalidateSize", Null)
+	Catch
+		Log(LastException)
+	End Try	
 End Sub
 
 'native method - LIcon
@@ -1182,11 +1263,13 @@ End Sub
 'update the zoom
 Sub UpdateZoom(VC As VueComponent, dZoom As Double) As VLeaflet
 	VC.SetData(xzoom, dZoom)
+	iZoom = dZoom
+	SetZoom(iZoom)
 	Return Me
 End Sub
 
 'native method setZoom
-Sub SetZoom(Zoom As Int)
+private Sub SetZoom(Zoom As Int)
 	map.RunMethod("setZoom", Zoom)
 End Sub
 
@@ -1205,6 +1288,7 @@ End Sub
 Sub BindState(VS As VueComponent)
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
+	
 	'apply the binding for the control
 	For Each k As String In mbindings.Keys
 		Dim v As Object = mbindings.Get(k)
@@ -1651,3 +1735,13 @@ Sub RemovePopUp(markerID As String)
 	End If
 End Sub
 
+'set center pos
+Sub SetCenterOnLastPos(VC As VueComponent)
+	'get the last point and center on it
+	Dim ps As Int = markers.Size - 1
+	If ps = -1 Then Return
+	iZoom = VC.GetData(xzoom)
+	Dim mt As VMarkerType = markers.GetValueAt(ps)
+	UpdateCenter(VC, mt.MarkerLatitude, mt.MarkerLongitude)
+	SetView(VC, mt.MarkerLatitude, mt.MarkerLongitude, iZoom)
+End Sub

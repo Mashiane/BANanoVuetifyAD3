@@ -4637,6 +4637,54 @@ Sub AddRows(iRows As Int) As VueElement
 	Return Me
 End Sub
 
+'add a toolip at the bottom
+Sub AddTippyBottom(content As String)
+	AddAttr("content", content)
+	Dim tippy As Map = CreateMap()
+	tippy.Put("placement", "bottom")
+	tippy.Put("arrow", True)
+	tippy.Put("arrowType", "round")
+	tippy.Put("theme", "google")
+	Dim stippy As String = BANano.ToJson(tippy)
+	AddAttr("v-tippy", stippy)
+End Sub
+
+'add a toolip on the right
+Sub AddTippyRight(content As String)
+	AddAttr("content", content)
+	Dim tippy As Map = CreateMap()
+	tippy.Put("placement", "right")
+	tippy.Put("arrow", True)
+	tippy.Put("arrowType", "round")
+	tippy.Put("theme", "google")
+	Dim stippy As String = BANano.ToJson(tippy)
+	AddAttr("v-tippy", stippy)
+End Sub
+
+'add a tooltip on the top
+Sub AddTippyTop(content As String)
+	AddAttr("content", content)
+	Dim tippy As Map = CreateMap()
+	tippy.Put("placement", "top")
+	tippy.Put("arrow", True)
+	tippy.Put("arrowType", "round")
+	tippy.Put("theme", "google")
+	Dim stippy As String = BANano.ToJson(tippy)
+	AddAttr("v-tippy", stippy)
+End Sub
+
+'add a tooltip on the left
+Sub AddTippyLeft(content As String)
+	AddAttr("content", content)
+	Dim tippy As Map = CreateMap()
+	tippy.Put("placement", "left")
+	tippy.Put("arrow", True)
+	tippy.Put("arrowType", "round")
+	tippy.Put("theme", "google")
+	Dim stippy As String = BANano.ToJson(tippy)
+	AddAttr("v-tippy", stippy)
+End Sub
+
 Sub AddColumns(iColumns As Int, xs As Int, sm As Int, md As Int, lg As Int, xl As Int) As VueElement
 	AddColumnsOS(iColumns, 0, 0, 0, 0, 0, xs, sm, md, lg, xl)
 	Return Me

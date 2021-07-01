@@ -73,27 +73,29 @@ File72=Roboto700.ttf
 File73=Roboto900.ttf
 File74=sadface.png
 File75=sweetalert2.all.min.js
-File76=upload.php
-File77=v-blur.min.js
-File78=vjsf.css
-File79=vjsf.js
+File76=tippygoogle.css
+File77=upload.php
+File78=v-blur.min.js
+File79=vjsf.css
 File8=chart.js
-File80=vue.min.js
-File81=vue2-leaflet.min.js
-File82=vue2-leaflet-movingmarker.umd.min.js
-File83=vue-clipboard.min.js
-File84=vue-count-to.min.js
-File85=vuedraggable.umd.min.js
-File86=vue-form-wizard.js
-File87=vue-form-wizard.min.css
-File88=vue-google-maps.js
-File89=vue-prism-component.min.js
+File80=vjsf.js
+File81=vue.min.js
+File82=vue2-leaflet.min.js
+File83=vue2-leaflet-movingmarker.umd.min.js
+File84=vue-clipboard.min.js
+File85=vue-count-to.min.js
+File86=vuedraggable.umd.min.js
+File87=vue-form-wizard.js
+File88=vue-form-wizard.min.css
+File89=vue-google-maps.js
 File9=Chart.min.css
-File90=vue-router.min.js
-File91=vuetify.min.css
-File92=vuetify.min.js
-File93=vuetify-simple-wizard.min.js
-File94=xlsx.full.min.js
+File90=vue-prism-component.min.js
+File91=vue-router.min.js
+File92=vuetify.min.css
+File93=vuetify.min.js
+File94=vuetify-simple-wizard.min.js
+File95=vue-tippy.min.js
+File96=xlsx.full.min.js
 FileGroup1=Default Group
 FileGroup10=Default Group
 FileGroup11=Default Group
@@ -188,6 +190,8 @@ FileGroup91=Default Group
 FileGroup92=Default Group
 FileGroup93=Default Group
 FileGroup94=Default Group
+FileGroup95=Default Group
+FileGroup96=Default Group
 Group=Default Group
 Library1=banano
 Library2=bananoanimejs
@@ -328,7 +332,7 @@ Module96=VProgressCircular
 Module97=VProgressLinear
 Module98=VRadio
 Module99=VRadioGroup
-NumberOfFiles=94
+NumberOfFiles=96
 NumberOfLibraries=4
 NumberOfModules=135
 Version=9
@@ -345,7 +349,7 @@ Version=9
 
 Sub Process_Globals
 	Private BANano As BANano 'ignore
-	Public Version As String = "5.49"
+	Public Version As String = "5.50"
 	Public AppName As String = "BANanoVuetifyAD3"
 End Sub
 
@@ -476,6 +480,10 @@ Sub AppStart (Form1 As Form, Args() As String)
 	BANano.header.AddJavaScriptfile("https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js")
 	BANano.header.AddJavaScriptfile("https://www.gstatic.com/firebasejs/8.6.8/firebase-functions.js")
 	'
+	'TIPPY
+	BANano.Header.AddJavascriptFile("vue-tippy.min.js")
+	BANano.Header.AddCSSFile("tippygoogle.css")
+	
 	' start the build
 	#if release
 		BANano.BuildAsB4Xlib(Version)

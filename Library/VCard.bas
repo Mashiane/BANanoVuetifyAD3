@@ -12,16 +12,22 @@ Version=8.9
 #DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: Boolean, DefaultValue: False, Description: Disabled
 #DesignerProperty: Key: Loading, DisplayName: Loading, FieldType: Boolean, DefaultValue: False, Description: Loading
 
-#DesignerProperty: Key: Img, DisplayName: Image, FieldType: String, DefaultValue: , Description: Image
+#DesignerProperty: Key: Img, DisplayName: Image, FieldType: String, DefaultValue: , Description: The image on the card
 #DesignerProperty: Key: ImgHeight, DisplayName: Image Height, FieldType: String, DefaultValue: , Description: Image Height
-#DesignerProperty: Key: Title, DisplayName: Title, FieldType: String, DefaultValue: , Description: Title
-#DesignerProperty: Key: TitleOnImage, DisplayName: Title On Image, FieldType: Boolean, DefaultValue: False, Description: Title On Image
-#DesignerProperty: Key: SubTitle, DisplayName: Sub Title, FieldType: String, DefaultValue: , Description: Sub Title
-#DesignerProperty: Key: SubTitleOnImage, DisplayName: Sub Title On Image, FieldType: Boolean, DefaultValue: False, Description: Sub Title On Image
-#DesignerProperty: Key: CardText, DisplayName: Card Text, FieldType: Boolean, DefaultValue: True , Description: Card Text
-#DesignerProperty: Key: CardTextContent, DisplayName: Card Text Content, FieldType: String, DefaultValue: , Description: Card Text Content
-#DesignerProperty: Key: Divider, DisplayName: Divider, FieldType: Boolean, DefaultValue: True, Description: Divider
-#DesignerProperty: Key: Actions, DisplayName: Actions, FieldType: Boolean, DefaultValue: True, Description: Actions
+#DesignerProperty: Key: Title, DisplayName: Title, FieldType: String, DefaultValue: , Description: The title of the card
+#DesignerProperty: Key: TitleOnImage, DisplayName: Title On Image, FieldType: Boolean, DefaultValue: False, Description: The title should be inside the image
+#DesignerProperty: Key: SubTitle, DisplayName: Sub Title, FieldType: String, DefaultValue: , Description: The subtitle of the card
+#DesignerProperty: Key: SubTitleOnImage, DisplayName: Sub Title On Image, FieldType: Boolean, DefaultValue: False, Description: The subtitle should be inside the image
+#DesignerProperty: Key: CardText, DisplayName: HasCardText, FieldType: Boolean, DefaultValue: True , Description: The card has a card text area
+#DesignerProperty: Key: CardTextContent, DisplayName: Card Text Content, FieldType: String, DefaultValue: , Description: The content to appear in the card text area
+#DesignerProperty: Key: Divider, DisplayName: HasCardTextDivider, FieldType: Boolean, DefaultValue: True, Description: Add a divider after card text
+#DesignerProperty: Key: Actions, DisplayName: HasActions, FieldType: Boolean, DefaultValue: True, Description: Actions
+'
+#DesignerProperty: Key: ItemKeys, DisplayName: Action Keys (;), FieldType: String, DefaultValue:  add; edit; delete, Description: Item Icons
+#DesignerProperty: Key: ItemIcons, DisplayName: Action Icons (;), FieldType: String, DefaultValue:  mdi-plus; mdi-pencil; mdi-delete, Description: Item Icons
+#DesignerProperty: Key: ItemColors, DisplayName: Action Colors (;), FieldType: String, DefaultValue:  green; amber; red, Description: Item Colors
+#DesignerProperty: Key: ItemTextx, DisplayName: Action Texts (;), FieldType: String, DefaultValue:  Add; Edit; Delete, Description: Item Texts
+
 #DesignerProperty: Key: ActiveClass, DisplayName: ActiveClass, FieldType: String, DefaultValue: , Description: ActiveClass
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue: , Description: Color, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: ColorIntensity, DisplayName: Colorintensity, FieldType: String, DefaultValue: , Description: Colorintensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
@@ -135,6 +141,10 @@ Private sPY As String
 Private bdisabled As Boolean
 Private bLoading As Boolean
 Private bHidden As Boolean
+Private sItemKeys As String
+Private sItemColors As String
+Private sItemIcons As String
+private sItemTexts as string
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -242,7 +252,13 @@ sPR = Props.Get("PR")
 sPT = Props.Get("PT")
 sPX = Props.Get("PX")
 sPY = Props.Get("PY")
+'
+sItemKeys = Props.GetDefault("ItemKeys","")
+		sItemIcons = Props.GetDefault("ItemIcons","")
+		sItemColors = Props.GetDefault("ItemColors","")
+		sItemTexts = Props.GetDefault("ItemTexts","")
 	End If
+	'
 	bOutlined = BANanoShared.parseBool(bOutlined)
 bTitleOnImage = BANanoShared.parseBool(bTitleOnImage)
 
@@ -409,7 +425,7 @@ Sub UpdateLoading(VC As VueComponent, b As Boolean) As VCard
 	Return Me
 End Sub
 
-Sub UploadElevation(VC As VueComponent, b As Boolean) As VCard
+Sub UpdateElevation(VC As VueComponent, b As Boolean) As VCard
 	VC.SetData(sElevation, b)
 	Return Me
 End Sub

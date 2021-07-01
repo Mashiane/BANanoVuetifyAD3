@@ -422,7 +422,8 @@ Sub Class_Globals
 	Public RouterViewName As String
 	Public DatabaseName As String
 	Public ProgressLoaderName As String
-	private sFullScreen as string
+	Private sFullScreen As String
+	Public FooterName As String
 End Sub
 
 Sub FindProgressLoaderOn(appBar As VAppBar)
@@ -1073,6 +1074,8 @@ Sub Initialize(Module As Object, myapp As String)
 	BANano.DependsOnAsset("numeral.min.js")
 	BANano.DependsOnAsset("roboto.min.css")
 	BANano.DependsOnAsset("materialdesignicons.min.css")
+	BANano.DependsOnAsset("vue-tippy.min.js")
+	BANano.DependsOnAsset("tippygoogle.css")
 	
 	Dim pdf As BANanoObject = BANano.Window.GetField("jspdf").GetField("jsPDF")
 	BANano.Window.SetField("jsPDF", pdf)
@@ -1083,7 +1086,6 @@ Sub Initialize(Module As Object, myapp As String)
 	Body.Append($"<div ref="app" id="app"><div id="placeholder" v-show="placeholdershow"></div><div id="appendholder" v-show="appendholdershow"></div><div id="apptemplate" v-show="apptemplateshow"></div></div>"$)
 	'
 	Vue.Initialize("Vue")
-	'
 	'***use a global prototype
 	state.Initialize
 	Modules.Initialize
@@ -1124,6 +1126,8 @@ Sub Initialize(Module As Object, myapp As String)
 	'set the full screen to false
 	SetData(sFullScreen, False)
 	UseVBlur
+	UseVueTippy
+	
 	'turn authentication off
 	setAuthenticated(False)
 End Sub
@@ -1132,6 +1136,17 @@ Sub UseVueDraggable
 	If components.ContainsKey("vuedraggable") = False Then
 		Dim vuedraggable As BANanoObject = BANano.Window.GetField("vuedraggable")
 		components.put("draggable", vuedraggable)
+	End If
+End Sub
+
+Sub UseVueTippy
+	If components.ContainsKey("tippy") = False Then
+		Dim VueTippy As BANanoObject
+		Dim TippyComponent As BANanoObject
+		VueTippy.Initialize("VueTippy")
+		TippyComponent = VueTippy.GetField("TippyComponent")
+		Use(VueTippy)
+		components.Put("tippy", TippyComponent)
 	End If
 End Sub
 
@@ -5823,4 +5838,23 @@ Sub UpdateLoading(elID As String, vLoading As Boolean)
 	Dim xColor As String = $"${elID}loading"$
 	xColor = xColor.ToLowerCase
 	SetData(xColor, vLoading)
+End Sub
+
+'use the map
+Sub UseGoogleMap(mGoogleMapKey As String)
+	'ensure that the module is loaded
+	If ModuleExist("googlemap") = False Then
+		Dim VueGoogleMaps As BANanoObject
+		VueGoogleMaps.Initialize("VueGoogleMaps")
+		
+		Dim load As Map = CreateMap()
+		load.Put("key", mGoogleMapKey)
+		load.Put("libraries", "places")
+		'
+		Dim VueGoogleMapsOptions As Map = CreateMap()
+		VueGoogleMapsOptions.Put("load", load)
+		VueGoogleMapsOptions.Put("installComponents", True)
+		Use1(VueGoogleMaps, VueGoogleMapsOptions)
+		AddModule("googlemap")
+	End If
 End Sub
