@@ -754,8 +754,8 @@ Sub BindVueTable(el As VueTable)
 End Sub
 
 Sub BindVueGMap(el As VueGMap)
-	Dim mbindings As Map = el.bindings
-	Dim mmethods As Map = el.methods
+	Dim mbindings As Map = el.VElement.bindings
+	Dim mmethods As Map = el.VElement.methods
 	'apply the binding for the control
 	For Each k As String In mbindings.Keys
 		Dim v As Object = mbindings.Get(k)

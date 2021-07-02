@@ -9,7 +9,9 @@ Version=8.8
 
 'Uncomment the events you want to show to the user and implement the HandleEvents in DesignerCreateView 
 #Event: MarkerClick (marker As Map)
-#Event: Tooltip_Click (item As Map)
+#Event: ToolBar_Click (id As String)
+#Event: Resize
+#Event: Ready (Success As Boolean)
 '#Event: Blur (event As BANanoEvent)
 '#Event: Resize (event As BANanoEvent)
 '#Event: Scroll (event As BANanoEvent)
@@ -44,27 +46,35 @@ Version=8.8
 
 ' Properties that will be show in the ABStract Designer.  They will be passed in the props map in DesignerCreateView (Case Sensitive!)
 #DesignerProperty: Key: AutoID, DisplayName: Auto ID/Name, FieldType: Boolean, DefaultValue: False, Description: Overrides the ID/Name with a random string.
-#DesignerProperty: Key: Title, DisplayName: Title, FieldType: String, DefaultValue: , Description: Title
+#DesignerProperty: Key: Title, DisplayName: Title, FieldType: String, DefaultValue: GMap, Description: Title
 #DesignerProperty: Key: GoogleMapKey, DisplayName: GoogleMapKey, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: InsideVCard, DisplayName: InsideVCard, FieldType: Boolean, DefaultValue: True, Description: InsideVCard
 #DesignerProperty: Key: Elevation, DisplayName: Elevation, FieldType: String, DefaultValue: , Description: Elevation
 #DesignerProperty: Key: ZIndex, DisplayName: ZIndex, FieldType: String, DefaultValue: 0, Description: ZIndex
-#DesignerProperty: Key: FullScreenControl, DisplayName: FullScreenControl, FieldType: Boolean, DefaultValue:  , Description:
-#DesignerProperty: Key: DisableDefaultUI, DisplayName: DisableDefaultUI, FieldType: Boolean, DefaultValue:  , Description:
-#DesignerProperty: Key: MapTypeControl, DisplayName: MapTypeControl, FieldType: Boolean, DefaultValue: , Description:
+#DesignerProperty: Key: FullScreenControl, DisplayName: FullScreenControl, FieldType: Boolean, DefaultValue: True , Description:
+#DesignerProperty: Key: DisableDefaultUI, DisplayName: DisableDefaultUI, FieldType: Boolean, DefaultValue:  True, Description:
+#DesignerProperty: Key: MapTypeControl, DisplayName: MapTypeControl, FieldType: Boolean, DefaultValue: False, Description:
 #DesignerProperty: Key: MapType, DisplayName: MapType, FieldType: String, DefaultValue: roadmap, Description:, List: roadmap|satellite|hybrid|terrain
-#DesignerProperty: Key: RotateControl, DisplayName: RotateControl, FieldType: Boolean, DefaultValue:  , Description:
-#DesignerProperty: Key: ZoomControl, DisplayName: ZoomControl, FieldType: Boolean, DefaultValue:  , Description:
+#DesignerProperty: Key: RotateControl, DisplayName: RotateControl, FieldType: Boolean, DefaultValue:  False, Description:
+#DesignerProperty: Key: ZoomControl, DisplayName: ZoomControl, FieldType: Boolean, DefaultValue:  False, Description:
 #DesignerProperty: Key: Zoom, DisplayName: Zoom, FieldType: Int, DefaultValue: 18, Description:
-#DesignerProperty: Key: StreetViewControl, DisplayName: StreetViewControl, FieldType: Boolean, DefaultValue: , Description:
-#DesignerProperty: Key: ScaleControl, DisplayName: ScaleControl, FieldType: Boolean, DefaultValue: , Description:
-#DesignerProperty: Key: MarkersVisible, DisplayName: MarkersVisible, FieldType: Boolean, DefaultValue:  , Description:
-#DesignerProperty: Key: MarkersClickable, DisplayName: MarkersClickable, FieldType: Boolean, DefaultValue:  , Description:
-#DesignerProperty: Key: MarkersDraggable, DisplayName: MarkersDraggable, FieldType: Boolean, DefaultValue:  , Description:
-#DesignerProperty: Key: KMLVisible, DisplayName: KMLVisible, FieldType: Boolean, DefaultValue:  , Description:
-#DesignerProperty: Key: KMLClickable, DisplayName: KMLClickable, FieldType: Boolean, DefaultValue:  , Description:
-#DesignerProperty: Key: Height, DisplayName: Height, FieldType: String, DefaultValue:  , Description:
-#DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue:  , Description:
+'#DesignerProperty: Key: Bounds, DisplayName: Bounds, FieldType: String, DefaultValue: , Description: Bounds
+#DesignerProperty: Key: CenterLat, DisplayName: CenterLat, FieldType: String, DefaultValue: 0, Description: CenterLat
+#DesignerProperty: Key: CenterLng, DisplayName: CenterLng, FieldType: String, DefaultValue: 0, Description: CenterLng
+#DesignerProperty: Key: StreetViewControl, DisplayName: StreetViewControl, FieldType: Boolean, DefaultValue: False, Description:
+#DesignerProperty: Key: ScaleControl, DisplayName: ScaleControl, FieldType: Boolean, DefaultValue: False, Description:
+#DesignerProperty: Key: MarkersVisible, DisplayName: MarkersVisible, FieldType: Boolean, DefaultValue: True , Description:
+#DesignerProperty: Key: MarkersClickable, DisplayName: MarkersClickable, FieldType: Boolean, DefaultValue: True , Description:
+#DesignerProperty: Key: MarkersDraggable, DisplayName: MarkersDraggable, FieldType: Boolean, DefaultValue:  True, Description:
+#DesignerProperty: Key: KMLVisible, DisplayName: KMLVisible, FieldType: Boolean, DefaultValue: False , Description:
+#DesignerProperty: Key: KMLClickable, DisplayName: KMLClickable, FieldType: Boolean, DefaultValue:  False, Description:
+#DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue:  100%, Description:
+#DesignerProperty: Key: Height, DisplayName: Height, FieldType: String, DefaultValue: 500px , Description:
+'
+#DesignerProperty: Key: ItemKeys, DisplayName: Item Keys (;), FieldType: String, DefaultValue:  add; edit; delete, Description: Item Icons
+#DesignerProperty: Key: ItemIcons, DisplayName: Item Icons (;), FieldType: String, DefaultValue:  mdi-plus; mdi-pencil; mdi-delete, Description: Item Icons
+#DesignerProperty: Key: ItemColors, DisplayName: Item Colors (;), FieldType: String, DefaultValue:  green; amber; red, Description: Item Colors
+
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String.
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Style, DisplayName: Style, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String.
@@ -80,17 +90,14 @@ Sub Class_Globals
 	Private mCallBack As Object 'ignore
 	Private mTarget As BANanoElement 'ignore
 	Private mElement As BANanoElement 'ignore
+	Private sCenterLat As String
+	Private sCenterLng As String
 	
 	Private mClasses As String = ""
 	Private mStyle As String = ""
 	Private mAttributes As String = ""
 	Private mStyle As String = ""
-	Private classList As Map
-	Private styleList As Map
-	Private attributeList As Map
 	Private mStates As String
-	Public bindings As Map
-	Public methods As Map
 	Private stVElse As String = ""
 	Private stVElseIf As String = ""
 	Private stVIf As String = ""
@@ -98,14 +105,14 @@ Sub Class_Globals
 	Private mGoogleMapKey As String = ""
 	'
 	Private mkmllayer As VueElement
-	Private mmarkers As VueElement
+	Private mmarker As VueElement
 	Private minfowindow As VueElement
 	
 	Private skmllayer As String
-	Private smarkers As String
+	Private smarker As String
 	Private sinfowindow As String
 	'
-	Private points As List
+	Public points As List
 	Private markerName As String
 	Private iwOptions As String
 	Private iwPosition As String
@@ -147,11 +154,18 @@ Sub Class_Globals
 	Private gmapkey As String
 	Private sTitle As String
 	Private xTitle As String
-	Private VElement As VueElement
+	Public VElement As VueElement
 	Private sButtons As String
 	Private bInsideVCard As Boolean
 	Private sZIndex As String
-	private sElevation as string
+	Private sElevation As String
+	'
+	Private sItemKeys As String
+	Private sItemIcons As String
+	Private sItemColors As String
+	Private sButtons As String
+	Private xresize As String
+	Private map As BANanoObject
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -160,15 +174,10 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	mName = Name.tolowercase
 	mEventName = EventName.ToLowerCase
 	mCallBack = CallBack
-	classList.Initialize
-	styleList.Initialize
-	attributeList.Initialize
-	bindings.Initialize
-	methods.Initialize
-	'
+		
 	gmapkey = $"${mName}key"$
 	skmllayer = $"${mName}kmllayer"$
-	smarkers = $"${mName}markers"$
+	smarker = $"${mName}marker"$
 	sinfowindow = $"${mName}infowindow"$
 	options.Initialize 
 	'
@@ -189,6 +198,7 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	sKMLClickable = $"${mName}kmlclickable"$
 	xTitle = $"${mName}title"$
 	sButtons = $"${mName}buttons"$
+	xresize = $"${mName}_resize"$
 	
 	options.Initialize
 	points.Initialize
@@ -249,27 +259,32 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		stVElseIf = Props.Get("VElseIf")
 		stVIf = Props.Get("VIf")
 		mGoogleMapKey = Props.Get("GoogleMapKey")
-		bFullScreenControl = Props.Get("FullScreenControl")
-		bDisableDefaultUI = Props.Get("DisableDefaultUI")
-		bMapTypeControl = Props.Get("MapTypeControl")
+		bFullScreenControl = Props.GetDefault("FullScreenControl", True)
+		bDisableDefaultUI = Props.GetDefault("DisableDefaultUI", False)
+		bMapTypeControl = Props.GetDefault("MapTypeControl", False)
 		mMapType = Props.Get("MapType")
-		bRotateControl = Props.Get("RotateControl")
-		bZoomControl = Props.Get("ZoomControl")
-		mZoom = Props.Get("Zoom")
+		bRotateControl = Props.GetDefault("RotateControl", True)
+		bZoomControl = Props.GetDefault("ZoomControl", True)
+		mZoom = Props.GetDefault("Zoom", 10)
 		bStreetViewControl = Props.Get("StreetViewControl")
 		bScaleControl = Props.Get("ScaleControl")
-		bMarkersVisible = Props.Get("MarkersVisible")
-		bMarkersClickable = Props.Get("MarkersClickable")
-		bMarkersDraggable = Props.Get("MarkersDraggable")
-		bKMLVisible = Props.Get("KMLVisible")
-		bKMLClickable = Props.Get("KMLClickable")
-		mHeight = Props.Get("Height")
-		mWidth = Props.Get("Width")
-		sTitle = Props.GetDefault("Title", "")
+		bMarkersVisible = Props.GetDefault("MarkersVisible", True)
+		bMarkersClickable = Props.GetDefault("MarkersClickable",True)
+		bMarkersDraggable = Props.GetDefault("MarkersDraggable",True)
+		bKMLVisible = Props.GetDefault("KMLVisible",False)
+		bKMLClickable = Props.GetDefault("KMLClickable",False)
+		mHeight = Props.GetDefault("Height","800px")
+		mWidth = Props.GetDefault("Width","100%")
+		sTitle = Props.GetDefault("Title", "GMap")
 		bInsideVCard = Props.GetDefault("InsideVCard", True)
 		bInsideVCard = BANanoShared.parseBool(bInsideVCard)
 		sZIndex = Props.GetDefault("ZIndex", 0)
 		sElevation = Props.GetDefault("Elevation", "")
+		sItemKeys = Props.Get("ItemKeys")
+		sItemIcons = Props.Get("ItemIcons")
+		sItemColors = Props.Get("ItemColors")
+		sCenterLat = Props.GetDefault("CenterLat", 0)
+		sCenterLng = Props.getdefault("sCenterLng", 0)
 	End If
 	'
 	bFullScreenControl = BANanoShared.parseBool(bFullScreenControl)
@@ -284,7 +299,36 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	bMarkersDraggable = BANanoShared.parseBool(bMarkersDraggable)
 	bKMLVisible = BANanoShared.parseBool(bKMLVisible)
 	bKMLClickable = BANanoShared.parseBool(bKMLClickable)
-
+	'
+	If bInsideVCard Then 
+		Dim rs As List
+		rs.Initialize 
+		'
+		sItemKeys = sItemKeys.Replace(",", ";")
+		sItemIcons = sItemIcons.Replace(",", ";")
+		sItemColors = sItemColors.Replace(",", ";")
+		
+		Dim xkeys As List = BANanoShared.StrParse(";", sItemKeys)
+		Dim xicons As List = BANanoShared.StrParse(";", sItemIcons)
+		Dim xcolors As List = BANanoShared.StrParse(";", sItemColors)
+		'
+		xkeys = BANanoShared.ListTrimItems(xkeys)
+		xicons = BANanoShared.ListTrimItems(xicons)
+		xcolors = BANanoShared.ListTrimItems(xcolors)
+		'
+		Dim tItems As Int = xkeys.Size - 1
+		For itemCnt = 0 To tItems
+			Dim iKey As String = xkeys.Get(itemCnt)
+			Dim iIco As String = xicons.Get(itemCnt)
+			Dim iCol As String = xcolors.Get(itemCnt)
+			'
+			Dim nm As Map = CreateMap()
+			nm.Put("id", iKey)
+			nm.Put("icon", iIco)
+			nm.Put("color", iCol)
+			rs.Add(nm)
+		Next	
+	End If
 
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then 
@@ -295,12 +339,12 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 			<v-card-text id="${mName}cardtext"></v-card-text></v-card>"$)
 			
 			mElement = BANano.GetElement($"#${mName}cardtext"$).Append($"<gmap-map :key="${gmapkey}" ref="${mName}" id="${mName}">
-			<gmap-marker id="${smarkers}"></gmap-marker>
+			<gmap-marker id="${smarker}"></gmap-marker>
 			<google-kml-layer id="${skmllayer}"></google-kml-layer>
 			<gmap-info-window id="${sinfowindow}"></gmap-info-window></gmap-map>"$).Get($"#${mName}"$)
 		Else
 			mElement = mTarget.Append($"<gmap-map :key="${gmapkey}" ref="${mName}" id="${mName}">
-			<gmap-marker id="${smarkers}"></gmap-marker>
+			<gmap-marker id="${smarker}"></gmap-marker>
 			<google-kml-layer id="${skmllayer}"></google-kml-layer>
 			<gmap-info-window id="${sinfowindow}"></gmap-info-window></gmap-map>"$).Get($"#${mName}"$)
 		End If	
@@ -308,6 +352,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	'
 	VElement.Initialize(mCallBack, mName, mName) 
 	VElement.TagName = "gmap-map"
+
 	'
 	If bInsideVCard Then 
 		'add a spacer then add buttons
@@ -323,17 +368,24 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 			Dim btnt As VueElement = VElement.GetButton
 			VElement.BindVueElement(btnt)
 		End If
+		VElement.SetData(sButtons, rs)
+		VElement.SetData(xTitle, sTitle)
 	End If
 	'
-	'get the layers etc
-	mkmllayer.Initialize(mCallBack,skmllayer,skmllayer)
-	mmarkers.Initialize(mCallBack,smarkers,smarkers)
-	minfowindow.Initialize(mCallBack,sinfowindow,sinfowindow)
+	'detect changes on size
+	If SubExists(mCallBack, xresize) Then
+		VElement.AddAttr("v-resize", xresize)
+		VElement.SetMethod(mCallBack, xresize, Null)
+	Else
+		BANano.Throw($"VueGMap.${mName} - generate members for Resize!"$)
+	End If
+	'
+	If SubExists(mCallBack, $"${mName}_ready"$) Then
+		VElement.SetOnEventOwn(mCallBack, $"${mName}_ready"$, "ready", Null)
+	Else
+		BANano.Throw($"VueGMap.${mName} - generate members for Ready!"$)
+	End If	
 	
-	Dim rs As List
-	rs.Initialize 
-	VElement.SetData(sButtons, rs)
-	VElement.SetData(xTitle, sTitle)
 	VElement.AddAttr("v-else", stVElse)
 	VElement.AddAttr("v-else-if", stVElseIf)
 	VElement.AddAttr("v-if", stVIf)
@@ -350,25 +402,27 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	setHeight(mHeight)
 	setWidth(mWidth)
 	'
-	mmarkers.SetAttr(":position","m.position")
-	mmarkers.vif = smarkersVisible
-	mmarkers.SetAttr(":clickable", sMarkersClickable)
-	mmarkers.SetAttr(":draggable", sMarkersDraggable)
-	mmarkers.SetAttr(":icon", "m.icon")
-	mmarkers.SetAttr(":title", "m.label")
-	mmarkers.SetAttr(":animation", "m.animation")
-	mmarkers.VFor = $"(m,i) in ${markerName}"$
-	mmarkers.BindKey("m.id")
-	mmarkers.SetAttr("v-on:click", "toggleinfowindow(m, i)")
+	mmarker.Initialize(mCallBack,smarker,smarker)
+	mmarker.SetAttr(":position","m.position")
+	mmarker.vif = smarkersVisible
+	mmarker.SetAttr(":clickable", sMarkersClickable)
+	mmarker.SetAttr(":draggable", sMarkersDraggable)
+	mmarker.SetAttr(":icon", "m.icon")
+	mmarker.SetAttr(":title", "m.label")
+	mmarker.SetAttr(":animation", "m.animation")
+	mmarker.VFor = $"(m,i) in ${markerName}"$
+	mmarker.BindKey("m.id")
+	mmarker.SetAttr("v-on:click", "toggleinfowindow(m, i)")
 	'
 	Dim m, i As Object
 	Dim cb As BANanoObject = BANano.CallBack(Me, "toggleInfoWindow", Array(m, i))
-	SetCallBack("toggleInfoWindow", cb)
+	VElement.SetCallBack("toggleInfoWindow", cb)
 	'
 	Dim e As BANanoEvent
 	Dim cb As BANanoObject = BANano.CallBack(Me, "closeInfoWindow", Array(e))
-	SetCallBack("closeInfoWindow", cb)
+	VElement.SetCallBack("closeInfoWindow", cb)
 	'
+	minfowindow.Initialize(mCallBack,sinfowindow,sinfowindow)
 	minfowindow.SetAttr(":options", iwOptions)
 	minfowindow.SetAttr(":position", iwPosition)
 	minfowindow.SetAttr(":opened", iwOpen)
@@ -381,14 +435,18 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	woptions.Put("content", "")
 	woptions.put("pixelOffset", pixelOffset)
 	'
+	'get the layers etc
+	mkmllayer.Initialize(mCallBack,skmllayer,skmllayer)
 	mkmllayer.vif = skmlvisible
 	mkmllayer.SetAttr(":clickable", sKMLClickable)
 	mkmllayer.VFor = $"lyr in ${kmlName}"$
 	mkmllayer.SetAttr(":url", "lyr.url")
-	'
+	
+	mmarker.RemoveBinding("m")
+	mkmllayer.RemoveBinding("lyr")
 	VElement.BindVueElement(minfowindow)
 	VElement.BindVueElement(mkmllayer)
-	VElement.BindVueElement(mmarkers)
+	VElement.BindVueElement(mmarker)
 	'
 	VElement.SetData(soptions, CreateMap())
 	VElement.SetData(iwPosition, Null)
@@ -414,7 +472,11 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	setMarkersClickable(bMarkersClickable)
 	setMarkersDraggable(bMarkersDraggable)
 	setKMLClickable(bKMLClickable)
-	
+	'kill error
+	ClearMarkers
+	SetCenter(sCenterLat, sCenterLng)
+	AddMarker("1", sCenterLat, sCenterLng, "Origin", "")
+	Refresh
 End Sub
 
 'set the google map key
@@ -471,12 +533,6 @@ End Sub
 'add html of component to app and this binds events and states
 Sub BindVueElement(el As VueElement)
 	VElement.BindVueElement(el)
-End Sub
-
-'set a call back
-Sub SetCallBack(methodName As String, cb As BANanoObject)
-	methodName = methodName.ToLowerCase
-	methods.Put(methodName, cb)
 End Sub
 
 'set center pos
@@ -553,6 +609,11 @@ private Sub toggleInfoWindow(m As Map, i As Object)
 	End If
 End Sub
 
+'reset the map
+Sub Reset
+	ClearMarkers
+End Sub
+
 'clear all markers
 Sub ClearMarkers   'ignoreDeadcode
 	points.Initialize
@@ -573,38 +634,42 @@ End Sub
 
 Sub AddMarker(mID As String, lat As Double, lng As Double, label As String, info As String)
 	mID = mID.tolowercase
-	Dim point As Map = CreateMap()
 	Dim marker As Map = CreateMap()
 	'
 	lat = BANano.parseFloat(lat)
 	lng = BANano.parseFloat(lng)
 	
-	point.Put("lat", lat)
-	point.put("lng", lng)
-	'
-	marker.put("position", point)
-	marker.put("id", mID)
-	If info <> Null Then marker.Put("infoText", info)
-	If label <> Null Then marker.put("label", label)
+	BANanoShared.PutRecursive(marker, "id", mID)
+	BANanoShared.PutRecursive(marker, "position.lat", lat)
+	BANanoShared.PutRecursive(marker, "position.lng", lng)
+	If BANano.IsNull(info) <> False Then
+		BANanoShared.PutRecursive(marker, "infoText", info)
+	End If
+	If BANano.IsNull(label) <> False Then
+		BANanoShared.PutRecursive(marker, "label", label)
+	End If
 	points.add(marker)
 End Sub
 
 Sub AddMarker1(mID As String, lat As Double, lng As Double, label As String, info As String, icon As String)
 	mID = mID.tolowercase
-	Dim point As Map = CreateMap()
 	Dim marker As Map = CreateMap()
 	'
 	lat = BANano.parseFloat(lat)
 	lng = BANano.parseFloat(lng)
-	
-	point.Put("lat", lat)
-	point.put("lng", lng)
 	'
-	marker.put("position", point)
-	marker.put("id", mID)
-	If icon <> Null Then marker.Put("icon", icon)
-	If info <> Null Then marker.Put("infoText", info)
-	If label <> Null Then marker.put("label", label)
+	BANanoShared.PutRecursive(marker, "id", mID)
+	BANanoShared.PutRecursive(marker, "position.lat", lat)
+	BANanoShared.PutRecursive(marker, "position.lng", lng)
+	If BANano.IsNull(info) <> False Then
+		BANanoShared.PutRecursive(marker, "infoText", info)
+	End If
+	If BANano.IsNull(label) <> False Then
+		BANanoShared.PutRecursive(marker, "label", label)
+	End If
+	If BANano.IsNull(icon) <> False Then
+		BANanoShared.PutRecursive(marker, "icon", icon)
+	End If
 	marker.Put("animation", "bounce")
 	points.add(marker)
 End Sub
@@ -819,27 +884,43 @@ Sub VisibleOnlyOnXL
 	VElement.AddClass("d-none d-xl-flex")
 End Sub
 
+'bind the states for the component
 Sub BindState(VS As VueComponent)
 	VC = VS
-	Dim mbindings As Map = bindings
-	Dim mmethods As Map = methods
+	Dim mbindings As Map = VElement.bindings
+	Dim mmethods As Map = VElement.methods
+	
 	'apply the binding for the control
 	For Each k As String In mbindings.Keys
 		Dim v As Object = mbindings.Get(k)
 		Select Case k
 		Case "key"
 		Case Else
-			VC.SetData(k, v)
+			VS.SetData(k, v)
 		End Select
 	Next
 	'apply the events
 	For Each k As String In mmethods.Keys
 		Dim cb As BANanoObject = mmethods.Get(k)
-		VC.SetCallBack(k, cb)
+		VS.SetCallBack(k, cb)
 	Next
 End Sub
 
 Sub UpdateVisible(V As VueComponent, b As Boolean)
 	V.SetData(stVIf, b)
 	'V.SetData(stVShow, b)
+End Sub
+
+'check the readiness of he map
+Sub IsReady(V As VueComponent)
+	Dim smp As String = "$mapPromise"
+	Dim mpres As Map
+	Dim mperr As Map
+	Dim mp As BANanoPromise
+	mp = V.refs.GetField(mName).GetField(smp)
+	mp.ThenWait(mpres)
+	BANano.CallSub(mCallBack, $"${mName}_ready"$, Array(True))
+	mp.ElseWait(mperr)
+	BANano.CallSub(mCallBack, $"${mName}_ready"$, Array(False))
+	mp.End
 End Sub

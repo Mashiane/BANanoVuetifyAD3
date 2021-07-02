@@ -335,7 +335,7 @@ Module99=VRadioGroup
 NumberOfFiles=96
 NumberOfLibraries=4
 NumberOfModules=135
-Version=9
+Version=9.07
 @EndOfDesignText@
 #Region Project Attributes 
 	#MainFormWidth: 600

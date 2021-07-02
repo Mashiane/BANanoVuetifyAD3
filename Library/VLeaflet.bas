@@ -579,34 +579,36 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	Case Else
 		sLayerUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
 	End Select	
-	 
-	Dim rs As List
-	rs.Initialize 
-	'
-	sItemKeys = sItemKeys.Replace(",", ";")
-	sItemIcons = sItemIcons.Replace(",", ";")
-	sItemColors = sItemColors.Replace(",", ";")
 	
-	Dim xkeys As List = BANanoShared.StrParse(";", sItemKeys)
-	Dim xicons As List = BANanoShared.StrParse(";", sItemIcons)
-	Dim xcolors As List = BANanoShared.StrParse(";", sItemColors)
-	'
-	xkeys = BANanoShared.ListTrimItems(xkeys)
-	xicons = BANanoShared.ListTrimItems(xicons)
-	xcolors = BANanoShared.ListTrimItems(xcolors)
-	'
-	Dim tItems As Int = xkeys.Size - 1
-	For itemCnt = 0 To tItems
-		Dim iKey As String = xkeys.Get(itemCnt)
-		Dim iIco As String = xicons.Get(itemCnt)
-		Dim iCol As String = xcolors.Get(itemCnt)
+	If bInsideVCard Then 
+		Dim rs As List
+		rs.Initialize 
 		'
-		Dim nm As Map = CreateMap()
-		nm.Put("id", iKey)
-		nm.Put("icon", iIco)
-		nm.Put("color", iCol)
-		rs.Add(nm)
-	Next	
+		sItemKeys = sItemKeys.Replace(",", ";")
+		sItemIcons = sItemIcons.Replace(",", ";")
+		sItemColors = sItemColors.Replace(",", ";")
+		
+		Dim xkeys As List = BANanoShared.StrParse(";", sItemKeys)
+		Dim xicons As List = BANanoShared.StrParse(";", sItemIcons)
+		Dim xcolors As List = BANanoShared.StrParse(";", sItemColors)
+		'
+		xkeys = BANanoShared.ListTrimItems(xkeys)
+		xicons = BANanoShared.ListTrimItems(xicons)
+		xcolors = BANanoShared.ListTrimItems(xcolors)
+		'
+		Dim tItems As Int = xkeys.Size - 1
+		For itemCnt = 0 To tItems
+			Dim iKey As String = xkeys.Get(itemCnt)
+			Dim iIco As String = xicons.Get(itemCnt)
+			Dim iCol As String = xcolors.Get(itemCnt)
+			'
+			Dim nm As Map = CreateMap()
+			nm.Put("id", iKey)
+			nm.Put("icon", iIco)
+			nm.Put("color", iCol)
+			rs.Add(nm)
+		Next	
+	End If
 	
 	'build and get the element 
 	If BANano.Exists($"#${mName}"$) Then 
