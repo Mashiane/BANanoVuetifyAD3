@@ -121,7 +121,8 @@ VElement.AddAttr(":no-action", bNoAction)
 VElement.AddAttr("prepend-icon", sPrependIcon)
 VElement.AddAttr(":ripple", bRipple)
 VElement.AddAttr(":sub-group", bSubGroup)
-VElement.TextColor = VElement.BuildColor(sTextColor, sTextColorIntensity)
+VElement.TextColor = sTextColor
+VElement.TextColorIntensity = sTextColorIntensity
 VElement.AddAttr("v-model", sVModel)
 VElement.SetData(sVModel, Null)
 VElement.BindAllEvents

@@ -145,7 +145,8 @@ VElement.AddAttr("min-width", sMinWidth)
 VElement.AddAttr("outlined", bOutlined)
 VElement.AddClass(sRounded)
 VElement.AddAttr("shaped", bShaped)
-VElement.TextColor = VElement.BuildColor(sTextColor, sTextColorIntensity)
+VElement.TextColor = sTextColor
+VElement.TextColorIntensity = sTextColorIntensity
 VElement.AddAttr("tile", bTile)
 VElement.AddAttr("v-for", sVFor)
 VElement.AddAttr("v-if", sVIf)

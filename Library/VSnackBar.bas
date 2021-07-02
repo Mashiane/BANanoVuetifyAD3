@@ -225,7 +225,8 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.AddClass(sRounded)
 	VElement.AddAttr(":shaped", xshaped)
 	VElement.AddAttr(":text", bText)
-	VElement.TextColor = VElement.BuildColor(sTextColor, sTextColorIntensity)
+	VElement.TextColor = sTextColor
+	VElement.TextColorIntensity =  sTextColorIntensity
 	VElement.AddAttr(":tile", bTile)
 	VElement.AddAttr(":timeout", xtimeout)
 	VElement.AddAttr("transition", sTransition)

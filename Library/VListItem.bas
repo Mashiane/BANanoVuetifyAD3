@@ -195,7 +195,8 @@ VElement.AddAttr(":replace", bReplace)
 VElement.AddAttr(":ripple", bRipple)
 VElement.AddAttr(":selectable", bSelectable)
 VElement.AddAttr("target", sTarget)
-VElement.TextColor = VElement.BuildColor(sTextColor, sTextColorIntensity)
+VElement.TextColor = sTextColor
+VElement.TextColorIntensity = sTextColorIntensity
 VElement.AddAttr(":three-line", bThreeLine)
 VElement.AddAttr("to", sTo)
 VElement.AddAttr(":two-line", bTwoLine)

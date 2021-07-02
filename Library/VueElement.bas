@@ -4638,7 +4638,7 @@ Sub AddRows(iRows As Int) As VueElement
 End Sub
 
 'add a toolip at the bottom
-Sub AddTippyBottom(content As String)
+Sub MicroTipBottom(content As String)
 	AddAttr("content", content)
 	Dim tippy As Map = CreateMap()
 	tippy.Put("placement", "bottom")
@@ -4650,7 +4650,7 @@ Sub AddTippyBottom(content As String)
 End Sub
 
 'add a toolip on the right
-Sub AddTippyRight(content As String)
+Sub MicroTipRight(content As String)
 	AddAttr("content", content)
 	Dim tippy As Map = CreateMap()
 	tippy.Put("placement", "right")
@@ -4662,7 +4662,7 @@ Sub AddTippyRight(content As String)
 End Sub
 
 'add a tooltip on the top
-Sub AddTippyTop(content As String)
+Sub MicroTipTop(content As String)
 	AddAttr("content", content)
 	Dim tippy As Map = CreateMap()
 	tippy.Put("placement", "top")
@@ -4674,7 +4674,7 @@ Sub AddTippyTop(content As String)
 End Sub
 
 'add a tooltip on the left
-Sub AddTippyLeft(content As String)
+Sub MicroTipLeft(content As String)
 	AddAttr("content", content)
 	Dim tippy As Map = CreateMap()
 	tippy.Put("placement", "left")
@@ -11724,82 +11724,6 @@ End Sub
 Sub getTarget As String
 	Dim s As String = $"#${mName}"$
 	Return s
-End Sub
-
-Sub MicroTipTop(tt As String) As VueElement
-	SetAttr("aria-label", tt)
-	SetAttr("data-microtip-position", "top")
-	SetAttr("role", "tooltip")
-	Return Me
-End Sub
-
-Sub MicroTipLeft(tt As String)  As VueElement
-	SetAttr("aria-label", tt)
-	SetAttr("data-microtip-position", "left")
-	SetAttr("role", "tooltip")
-	Return Me
-End Sub
-
-Sub MicroTipRight(tt As String)  As VueElement
-	SetAttr("aria-label", tt)
-	SetAttr("data-microtip-position", "right")
-	SetAttr("role", "tooltip")
-	Return Me
-End Sub
-
-Sub MicroTipBottom(tt As String)  As VueElement
-	SetAttr("aria-label", tt)
-	SetAttr("data-microtip-position", "bottom")
-	SetAttr("role", "tooltip")
-	Return Me
-End Sub
-
-Sub MicroTipTopLeft(tt As String)  As VueElement
-	SetAttr("aria-label", tt)
-	SetAttr("data-microtip-position", "top-left")
-	SetAttr("role", "tooltip")
-	Return Me
-End Sub
-
-Sub MicroTipTopRight(tt As String)  As VueElement
-	SetAttr("aria-label", tt)
-	SetAttr("data-microtip-position", "top-right")
-	SetAttr("role", "tooltip")
-	Return Me
-End Sub
-
-Sub MicroTipBottomRight(tt As String)  As VueElement
-	SetAttr("aria-label", tt)
-	SetAttr("data-microtip-position", "bottom-right")
-	SetAttr("role", "tooltip")
-	Return Me
-End Sub
-
-Sub MicroTipBottomLeft(tt As String)  As VueElement
-	SetAttr("aria-label", tt)
-	SetAttr("data-microtip-position", "bottom-left")
-	SetAttr("role", "tooltip")
-	Return Me
-End Sub
-
-Sub MicroTipSmall  As VueElement
-	SetAttr("data-microtip-size", "small")
-	Return Me
-End Sub
-
-Sub MicroTipMedium  As VueElement
-	SetAttr("data-microtip-size", "medium")
-	Return Me
-End Sub
-
-Sub MicroTipLarge  As VueElement
-	SetAttr("data-microtip-size", "large")
-	Return Me
-End Sub
-
-Sub MicroTipFit  As VueElement
-	SetAttr("data-microtip-size", "fit")
-	Return Me
 End Sub
 
 Sub TargetBlank  As VueElement

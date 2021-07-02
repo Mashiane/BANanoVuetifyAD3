@@ -161,7 +161,8 @@ VElement.AddAttr("next-icon", sNextIcon)
 VElement.AddAttr("page-aria-label", sPageAriaLabel)
 VElement.AddAttr("prev-icon", sPrevIcon)
 VElement.AddAttr("previous-aria-label", sPreviousAriaLabel)
-VElement.TextColor = VElement.BuildColor(sTextColor, sTextColorIntensity)
+VElement.TextColor = sTextColor
+VElement.TextColorIntensity =  sTextColorIntensity
 VElement.AddAttr("total-visible", sTotalVisible)
 VElement.AddAttr("v-bind", sVBind)
 VElement.AddAttr("v-for", sVFor)

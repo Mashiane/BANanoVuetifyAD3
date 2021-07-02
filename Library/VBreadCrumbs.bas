@@ -97,7 +97,7 @@ VElement.AddAttr("divider", sDivider)
 VElement.Bind("items", sItems)
 VElement.Large = bLarge
 VElement.Light = bLight
-VElement.TextColor = VElement.BuildColor(sTextColor, sTextColorIntensity)
+VElement.TextColor = sTextColor
 VElement.TextColorIntensity = sTextColorIntensity
 VElement.VIf = sVIf
 'VElement.VShow = sVShow

@@ -191,7 +191,7 @@ VElement.AddClass(sRounded)
 VElement.Shaped = bShaped
 VElement.AddAttr(":short", bShort)
 VElement.Src = sSrc
-VElement.TextColor = VElement.BuildColor(sTextColor, sTextColorIntensity)
+VElement.TextColor = sTextColor
 VElement.TextColorIntensity = sTextColorIntensity
 VElement.Tile = bTile
 VElement.VIf = sVIf

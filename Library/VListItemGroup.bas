@@ -126,7 +126,8 @@ VElement.AddAttr(":light", bLight)
 VElement.AddAttr(":mandatory", bMandatory)
 VElement.AddAttr("max", sMax)
 VElement.AddAttr(":multiple", bMultiple)
-VElement.TextColor = VElement.BuildColor(sTextColor, sTextColorIntensity)
+VElement.TextColor = sTextColor
+VElement.TextColorIntensity = sTextColorIntensity
 VElement.AddAttr("v-bind", sVBind)
 VElement.AddAttr("v-for", sVFor)
 VElement.AddAttr("v-if", sVIf)

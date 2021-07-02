@@ -361,7 +361,8 @@ VElement.AddAttr(":raised", bRaised)
 VElement.AddClass(sRounded)
 VElement.Shaped = bShaped
 VElement.Target = sTarget
-VElement.TextColor = VElement.BuildColor(sTextcolor, sTextcolorintensity)
+VElement.TextColor = sTextcolor
+VElement.TextColorIntensity = sTextcolorintensity
 VElement.Tile = bTile
 VElement.To = sTo
 VElement.Width = sWidth

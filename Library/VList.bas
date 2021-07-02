@@ -209,7 +209,8 @@ VElement.AddAttr(":outlined", bOutlined)
 VElement.AddAttr(":rounded", bRounded)
 VElement.AddAttr(":shaped", bShaped)
 VElement.AddAttr(":subheader", bSubheader)
-VElement.TextColor = VElement.BuildColor(sTextColor, sTextColorIntensity)
+VElement.TextColor = sTextColor
+VElement.TextColorIntensity = sTextColorIntensity
 VElement.AddAttr(":three-line", bThreeLine)
 VElement.AddAttr(":tile", bTile)
 VElement.AddAttr(":two-line", bTwoLine)

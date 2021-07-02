@@ -114,7 +114,8 @@ VElement.AddAttr(":dark", bDark)
 VElement.AddAttr("key", sKey)
 VElement.AddAttr(":light", bLight)
 VElement.AddAttr("opacity", sOpacity)
-VElement.TextColor = VElement.BuildColor(sTextColor, sTextColorIntensity)
+VElement.TextColor = sTextColor
+VElement.TextColorIntensity = sTextColorIntensity
 VElement.AddAttr("v-bind", sVBind)
 VElement.AddAttr("v-for", sVFor)
 VElement.AddAttr("v-if", sVIf)

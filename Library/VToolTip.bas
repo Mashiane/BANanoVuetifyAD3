@@ -215,7 +215,8 @@ VElement.AddAttr(":top", True)
 End Select
 VElement.AddAttr("position-x", sPositionX)
 VElement.AddAttr("position-y", sPositionY)
-VElement.TextColor = VElement.BuildColor(sTextColor, sTextColorIntensity)
+VElement.TextColor = sTextColor
+VElement.TextColorIntensity = sTextColorIntensity
 VElement.AddAttr("transition", sTransition)
 VElement.AddAttr("v-if", sVIf)
 VElement.AddAttr("v-model", sVModel)

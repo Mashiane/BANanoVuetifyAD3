@@ -178,7 +178,8 @@ bOpenOnHover = BANanoShared.parseBool(bOpenOnHover)
 	'
 	VElement.GetMain.Dark = bDark
 	VElement.GetMain.Color = VElement.BuildColor(mColor, mColorIntensity)
-	VElement.GetMain.TextColor = VElement.BuildColor(mTextColor, mTextColorIntensity)
+	VElement.GetMain.TextColor = mTextColor
+	VElement.GetMain.TextColorIntensity = mTextColorIntensity
 	VElement.GetMain.Outlined = bOutlined
 	'
 	VElement.Classes = mClasses

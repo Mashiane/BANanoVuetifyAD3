@@ -87,7 +87,8 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	'VElement.SetData(mVShow, True)
 	VElement.VIf = mVIf
 	VElement.Color = VElement.BuildColor(sColor, sColorintensity)
-	VElement.TextColor = VElement.BuildColor(sTextcolor, sTextcolorintensity)
+	VElement.TextColor = sTextcolor
+	VElement.TextCOlorIntensity = sTextcolorintensity
 	VElement.setAlign(mAlign)	
 	VElement.setJustify(mJustify)
 VElement.BindAllEvents

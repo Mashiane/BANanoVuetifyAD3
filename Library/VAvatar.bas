@@ -175,7 +175,8 @@ sPY = Props.Get("PY")
 	End If
 	If mText <> "" Then
 		VElement.Append($"<span id="${mName}text">${mText}</span>"$)
-		VElement.GetText.TextColor = VElement.BuildColor(mTextColor, mTextColorIntensity)
+		VElement.GetText.TextColor = mTextColor
+		VElement.GetText.TextColorIntensity=  mTextColorIntensity
 		If bHeadLine = True Then
 			VElement.GetText.AddClass("headline")
 		End If

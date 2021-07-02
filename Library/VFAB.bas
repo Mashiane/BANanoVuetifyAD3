@@ -177,7 +177,8 @@ bLoading = BANanoShared.parseBool(bLoading)
 	VElement.SetData(sColor, dColor)
 	VElement.Styles = mStyles
 	VElement.Attributes = mAttributes	
-	VElement.TextColor = VElement.BuildColor(mTextColor, mTextColorIntensity)
+	VElement.TextColor = mTextColor
+	VElement.TextColorIntensity = mTextColorIntensity
 	VElement.VIf = mVIf
 	'VElement.VShow = mVShow
 	'VElement.SetData(mVShow, Not(bHidden))

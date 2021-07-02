@@ -13,6 +13,7 @@ Version=8.9
 #DesignerProperty: Key: VHtml, DisplayName: VHtml, FieldType: String, DefaultValue: , Description: VHtml
 #DesignerProperty: Key: VText, DisplayName: VText, FieldType: String, DefaultValue: , Description: VText
 #DesignerProperty: Key: Size, DisplayName: Tag, FieldType: String, DefaultValue: div, Description: Size, List: a|div|h1|h2|h3|h4|h5|h6|label|p|span|v-spacer|v-responsive|v-divider|nav|v-subheader|v-main|slot|v-tabs-slider|router-view|router-link|v-list-item-action|v-list-item-title|v-list-item-subtitle|v-list-item-icon|v-list-item-content|v-list-item-action-text|strong|blockquote|i|img|a|ul|li|ol|v-stepper-content|v-stepper-header|v-stepper-items|small
+#DesignerProperty: Key: KeepAlive, DisplayName: KeepAlive, FieldType: Boolean, DefaultValue: False, Description: KeepAlive
 #DesignerProperty: Key: OwnTag, DisplayName: OwnTag, FieldType: String, DefaultValue: , Description: OwnTag
 #DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: , Description: Width
 #DesignerProperty: Key: StyleWidth, DisplayName: StyleWidth, FieldType: String, DefaultValue: , Description: Width
@@ -128,6 +129,7 @@ Private sHeight As String
 Private sStyleHeight As String
 Private sSrc As String
 Private sAlt As String
+private bKeepAlive as boolean
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -206,6 +208,8 @@ sVOn = Props.Get("VOn")
 		sVText = Props.GetDefault("VText", "")
 		sVFor = Props.GetDefault("VFor", "")
 		sKey = Props.GetDefault("Key", "")
+		bKeepAlive = Props.GetDefault("KeepAlive", False)
+		bKeepAlive = BANanoShared.parseBool(bKeepAlive)
 	End If
 	'
 	bLoremIpsum = BANanoShared.parseBool(bLoremIpsum)
@@ -220,8 +224,12 @@ bSetName = BANanoShared.parseBool(bSetName)
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
 		mElement = BANano.GetElement($"#${mName}"$)
-	Else	
-		mElement = mTarget.Append($"<${sSize} ref="${mName}" id="${mName}"></${sSize}>"$).Get("#" & mName)
+	Else
+		If bKeepAlive Then
+			mElement = mTarget.Append($"<keep-alive><${sSize} :key='$route.fullPath' ref="${mName}" id="${mName}"></${sSize}></keep-alive>"$).Get("#" & mName)
+		Else		
+			mElement = mTarget.Append($"<${sSize} ref="${mName}" id="${mName}"></${sSize}>"$).Get("#" & mName)
+		End If
 	End If
 	'
 	VElement.Initialize(mCallBack, mName, mName)
@@ -265,7 +273,8 @@ VElement.AddClass(sRounded)
 VElement.AddAttr(":tile", bTile)
 VElement.Elevation = sElevation
 VElement.Target = sTarget
-VElement.TextColor = VElement.BuildColor(sTextColor, sTextColorIntensity)
+VElement.TextColor = sTextColor
+VElement.TextColorIntensity = sTextColorIntensity
 VElement.To = sTo
 VElement.VIf = sVIf
 'VElement.VShow = sVShow

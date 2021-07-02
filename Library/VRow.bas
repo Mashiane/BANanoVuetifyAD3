@@ -157,7 +157,8 @@ bDebugBorder = BANanoShared.parseBool(bDebugBorder)
 	VElement.Initialize(mCallBack, mName, mName)
 	VElement.TagName = "v-row"
 	VElement.Classes = mClasses
-	VElement.TextColor = VElement.BuildColor(mTextColor, mTextColorIntensity)
+	VElement.TextColor = mTextColor
+	VElement.TextColorIntensity = mTextColorIntensity
 	VElement.Color = VElement.BuildColor(mColor, mColorIntensity)
 	VElement.Styles = mStyles
 	VElement.Attributes = mAttributes

@@ -144,7 +144,8 @@ VElement.AddAttr(":right", True)
 End Select
 VElement.AddClass(sRounded)
 VElement.AddAttr("size", sSize)
-VElement.TextColor = VElement.BuildColor(sTextColor, sTextColorIntensity)
+VElement.TextColor = sTextColor
+VElement.TextColorIntensity = sTextColorIntensity
 VElement.AddAttr(":tile", bTile)
 VElement.AddAttr("v-bind", sVBind)
 VElement.AddAttr("v-for", sVFor)

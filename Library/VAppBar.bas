@@ -38,6 +38,7 @@ Version=8.9
 #DesignerProperty: Key: Outlined, DisplayName: Outlined, FieldType: Boolean, DefaultValue: false, Description: Outlined
 #DesignerProperty: Key: Prominent, DisplayName: Prominent, FieldType: Boolean, DefaultValue: false, Description: Prominent
 #DesignerProperty: Key: ProgressLoader, DisplayName: ProgressLoader, FieldType: Boolean, DefaultValue: false, Description: ProgressLoader
+#DesignerProperty: Key: ProgressLoading, DisplayName: ProgressLoading, FieldType: Boolean, DefaultValue: false, Description: ProgressLoading
 #DesignerProperty: Key: ProgressLoaderColor, DisplayName: ProgressLoaderColor, FieldType: String, DefaultValue: amber, Description: ProgressLoaderColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: ProgressLoaderColorIntensity, DisplayName: ProgressLoaderColorIntensity, FieldType: String, DefaultValue: darken-4, Description: ProgressLoaderColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: Rounded, DisplayName: Rounded, FieldType: String, DefaultValue: none, Description: Rounded, List: none|rounded-0|rounded|rounded-sm|rounded-lg|rounded-xl|rounded-t-xl|rounded-r-xl|rounded-b-xl|rounded-l-xl|rounded-tl-xl|rounded-tr-xl|rounded-br-xl|rounded-bl-xl|rounded-pill|rounded-circle
@@ -120,6 +121,7 @@ Private sProgressLoaderColorIntensity As String
 Private sProgressloader As String
 Public ProgressLoader As String
 Private bUsesAuthentication As Boolean
+Private bProgressLoading As Boolean
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -197,6 +199,8 @@ sProgressLoaderColor = Props.GetDefault("ProgressLoaderColor", "")
 sProgressLoaderColorIntensity = Props.GetDefault("ProgressLoaderColorIntensity", "")
 bUsesAuthentication = Props.GetDefault("UsesAuthentication", False)
 bUsesAuthentication = BANanoShared.parseBool(bUsesAuthentication)
+bProgressLoading = Props.getdefault("ProgressLoading", False)
+bProgressLoading = BANanoShared.parseBool(bProgressLoading)
 	End If
 	'
 	'build and get the element
@@ -213,7 +217,7 @@ bUsesAuthentication = BANanoShared.parseBool(bUsesAuthentication)
 		Dim pColor As String = VElement.BuildColor(sProgressLoaderColor, sProgressLoaderColorIntensity)
 		VElement.Append($"<v-progress-linear id="${sProgressloader}" :active="${ProgressLoader}" :indeterminate="${ProgressLoader}" absolute bottom color="${pColor}"
       ></v-progress-linear>"$)
-	  VElement.SetData(ProgressLoader, False)
+	  VElement.SetData(ProgressLoader, bProgressLoading)
 	End If
 	
 	bAbsolute = BANanoShared.parseBool(bAbsolute)
@@ -282,7 +286,7 @@ VElement.Shaped = bShaped
 VElement.AddAttr(":short", bShort)
 VElement.ShrinkOnScroll = bShrinkOnScroll
 VElement.Src = sSrc
-VElement.TextColor = VElement.BuildColor(sTextColor, sTextColorIntensity)
+VElement.TextColor = sTextColor
 VElement.TextColorIntensity = sTextColorIntensity
 VElement.Tile = bTile
 VElement.AddAttr(":value", sValue)
