@@ -6,9 +6,14 @@ Version=8.9
 @EndOfDesignText@
 #IgnoreWarnings:12
 
+#Event: Click(e As BANanoEvent)
+
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: Height, DisplayName: Height, FieldType: String, DefaultValue: 200px, Description: Height
 #DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: 200px, Description: Width
+#DesignerProperty: Key: FillHeight, DisplayName: FillHeight, FieldType: Boolean, DefaultValue: false, Description: FillHeight
+#DesignerProperty: Key: BackgroundImage, DisplayName: BackgroundImage, FieldType: String, DefaultValue:  , Description: BackgroundImage
+#DesignerProperty: Key: FitScreen, DisplayName: Fit Screen VH, FieldType: Boolean, DefaultValue: False, Description: FitScreen VH
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue: blue, Description: Color, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: ColorIntensity, DisplayName: ColorIntensity, FieldType: String, DefaultValue: , Description: ColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: false, Description: Dark
@@ -65,6 +70,9 @@ Private sWidth As String
 Private sVOn As String
 Private sVBind As String
 Private bHidden As Boolean
+Private bFillHeight As Boolean
+	Private sBackgroundImage As String
+	Private bFitScreen As Boolean
 	End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -111,8 +119,13 @@ bHidden = Props.GetDefault("Hidden", False)
 sWidth = Props.Get("Width")
 sVOn = Props.Get("VOn")
 sVBind = Props.Get("VBind")
+bFillHeight = Props.Get("FillHeight")
+		sBackgroundImage = Props.Get("BackgroundImage")
+		bFitScreen = Props.Get("FitScreen")
 	End If
 	'
+	bFillHeight = BANanoShared.parseBool(bFillHeight)
+	bFitScreen = BANanoShared.parseBool(bFitScreen)
 	bDark = BANanoShared.parseBool(bDark)
 bLight = BANanoShared.parseBool(bLight)
 bOutlined = BANanoShared.parseBool(bOutlined)
@@ -153,6 +166,9 @@ VElement.AddAttr("v-if", sVIf)
 'VElement.AddAttr("v-show", sVShow)
 'VElement.SetData(sVShow, Not(bHidden))
 VElement.AddAttr("width", sWidth)
+VElement.AddAttr(":fill-height", bFillHeight)
+VElement.CoverImage = sBackgroundImage
+VElement.FitScreen = bFitScreen
 VElement.AddAttr("v-on", sVOn)
 	VElement.AddAttr("v-bind", sVBind)
 VElement.BindAllEvents
@@ -215,4 +231,9 @@ Sub BindState(VC As VueComponent)
 		Dim cb As BANanoObject = mmethods.Get(k)
 		VC.SetCallBack(k, cb)
 	Next
+End Sub
+
+
+Sub OnClick(args As String)
+	VElement.SetOnEventOwn(mCallBack, $"${mName}_click"$, "click", args)
 End Sub

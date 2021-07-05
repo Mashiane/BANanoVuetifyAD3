@@ -9,7 +9,11 @@ Version=8.9
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: false, Description: Dark
 #DesignerProperty: Key: Divider, DisplayName: Divider, FieldType: String, DefaultValue: /, Description: Divider
-#DesignerProperty: Key: Items, DisplayName: Items, FieldType: String, DefaultValue: , Description: Items
+
+#DesignerProperty: Key: ItemKeys, DisplayName: Action Keys (;), FieldType: String, DefaultValue:  , Description: Action Icons
+#DesignerProperty: Key: ItemTitles, DisplayName: Action Titles (;), FieldType: String, DefaultValue:  , Description: Action Titles
+#DesignerProperty: Key: ItemTo, DisplayName: Action To (;), FieldType: String, DefaultValue:  , Description: Action To
+
 #DesignerProperty: Key: Large, DisplayName: Large, FieldType: Boolean, DefaultValue: false, Description: Large
 #DesignerProperty: Key: Light, DisplayName: Light, FieldType: Boolean, DefaultValue: false, Description: Light
 #DesignerProperty: Key: TextColor, DisplayName: TextColor, FieldType: String, DefaultValue: , Description: TextColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
@@ -40,6 +44,10 @@ Sub Class_Globals
 	'Private sVShow As String
 	Private xitems As List
 	Private bHidden As Boolean
+	'
+	Private sItemKeys As String
+	Private sItemTitles As String
+	Private sItemTo As String
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -55,8 +63,9 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 		End If
 	End If
 	xitems.Initialize 
+	sItems = $"${mName}items"$
 	'sVShow = $"${mName}show"$
-	End Sub
+End Sub
 	
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	mTarget = Target
@@ -65,20 +74,22 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mStyles = Props.Get("Styles")
 		mAttributes = Props.Get("Attributes")
 		bDark = Props.Get("Dark")
-sDivider = Props.Get("Divider")
-sItems = Props.Get("Items")
-bLarge = Props.Get("Large")
-bLight = Props.Get("Light")
-sTextColor = Props.Get("TextColor")
-sTextColorIntensity = Props.Get("TextColorIntensity")
-sVIf = Props.Get("VIf")
-bHidden = Props.GetDefault("Hidden", False)
-bHidden = BANanoShared.parseBool(bHidden)
+		sDivider = Props.Get("Divider")
+		bLarge = Props.Get("Large")
+		bLight = Props.Get("Light")
+		sTextColor = Props.Get("TextColor")
+		sTextColorIntensity = Props.Get("TextColorIntensity")
+		sVIf = Props.Get("VIf")
+		bHidden = Props.GetDefault("Hidden", False)
+		bHidden = BANanoShared.parseBool(bHidden)
+		sItemKeys = Props.GetDefault("ItemKeys","")
+		sItemTitles = Props.GetDefault("ItemTitles","")
+		sItemTo = Props.getdefault("ItemTo", "")
 	End If
 	'
 	bDark = BANanoShared.parseBool(bDark)
-bLarge = BANanoShared.parseBool(bLarge)
-bLight = BANanoShared.parseBool(bLight)
+	bLarge = BANanoShared.parseBool(bLarge)
+	bLight = BANanoShared.parseBool(bLight)
 
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
@@ -86,6 +97,32 @@ bLight = BANanoShared.parseBool(bLight)
 	Else	
 		mElement = mTarget.Append($"<v-breadcrumbs ref="${mName}" id="${mName}"></v-breadcrumbs>"$).Get("#" & mName)
 	End If
+	'create the items
+	'add the additional actions
+	Dim rs As List
+	rs.Initialize 
+	'
+	sItemKeys = sItemKeys.Replace(",", ";")
+	sItemTitles = sItemTitles.Replace(",", ";")
+	sItemTo = sItemTo.Replace(",", ";")
+		
+	Dim xkeys As List = BANanoShared.StrParse(";", sItemKeys)
+	Dim xto As List = BANanoShared.StrParse(";", sItemTo)
+	Dim xtitles As List = BANanoShared.StrParse(";", sItemTitles)
+		'
+	xkeys = BANanoShared.ListTrimItems(xkeys)
+	xto = BANanoShared.ListTrimItems(xto)
+	xtitles = BANanoShared.ListTrimItems(xtitles)
+	'
+	xitems.Initialize 
+	Dim tItems As Int = xkeys.Size - 1
+	For itemCnt = 0 To tItems
+		Dim iKey As String = xkeys.Get(itemCnt)
+		Dim iTo As String = xto.Get(itemCnt)
+		Dim iTit As String = xtitles.Get(itemCnt)
+		'
+		AddItem(iKey, iTit, iTo, "", False, False, False)
+	Next	
 	'
 	VElement.Initialize(mCallBack, mName, mName)
 	VElement.TagName = "v-breadcrumbs"
@@ -93,17 +130,17 @@ bLight = BANanoShared.parseBool(bLight)
 	VElement.Styles = mStyles
 	VElement.Attributes = mAttributes
 	VElement.Dark = bDark
-VElement.AddAttr("divider", sDivider)
-VElement.Bind("items", sItems)
-VElement.Large = bLarge
-VElement.Light = bLight
-VElement.TextColor = sTextColor
-VElement.TextColorIntensity = sTextColorIntensity
-VElement.VIf = sVIf
-'VElement.VShow = sVShow
-VElement.SetData(sItems, VElement.NewList)
-'VElement.SetData(sVShow, Not(bHidden))
-VElement.BindAllEvents
+	VElement.AddAttr("divider", sDivider)
+	VElement.Bind("items", sItems)
+	VElement.Large = bLarge
+	VElement.Light = bLight
+	VElement.TextColor = sTextColor
+	VElement.TextColorIntensity = sTextColorIntensity
+	VElement.VIf = sVIf
+	'VElement.VShow = sVShow
+	VElement.SetData(sItems, xitems)
+	'VElement.SetData(sVShow, Not(bHidden))
+	VElement.BindAllEvents
 End Sub
 
 public Sub AddToParent(targetID As String)

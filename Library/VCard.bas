@@ -23,10 +23,10 @@ Version=8.9
 #DesignerProperty: Key: Divider, DisplayName: HasCardTextDivider, FieldType: Boolean, DefaultValue: True, Description: Add a divider after card text
 #DesignerProperty: Key: Actions, DisplayName: HasActions, FieldType: Boolean, DefaultValue: True, Description: Actions
 '
-#DesignerProperty: Key: ItemKeys, DisplayName: Action Keys (;), FieldType: String, DefaultValue:  add; edit; delete, Description: Item Icons
-#DesignerProperty: Key: ItemIcons, DisplayName: Action Icons (;), FieldType: String, DefaultValue:  mdi-plus; mdi-pencil; mdi-delete, Description: Item Icons
-#DesignerProperty: Key: ItemColors, DisplayName: Action Colors (;), FieldType: String, DefaultValue:  green; amber; red, Description: Item Colors
-#DesignerProperty: Key: ItemTextx, DisplayName: Action Texts (;), FieldType: String, DefaultValue:  Add; Edit; Delete, Description: Item Texts
+#DesignerProperty: Key: ItemKeys, DisplayName: Action Keys (;), FieldType: String, DefaultValue:  , Description: Item Icons
+#DesignerProperty: Key: ItemIcons, DisplayName: Action Icons (;), FieldType: String, DefaultValue:  , Description: Item Icons
+#DesignerProperty: Key: ItemColors, DisplayName: Action Colors (;), FieldType: String, DefaultValue:  , Description: Item Colors
+#DesignerProperty: Key: ItemTextx, DisplayName: Action Texts (;), FieldType: String, DefaultValue:  , Description: Item Texts
 
 #DesignerProperty: Key: ActiveClass, DisplayName: ActiveClass, FieldType: String, DefaultValue: , Description: ActiveClass
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue: , Description: Color, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
@@ -492,4 +492,8 @@ Sub Container As VCardText
 	Dim elx As VCardText
 	elx.Initialize(mCallBack, scard, scard)
 	Return elx
+End Sub
+
+Sub OnClick(args As String)
+	VElement.SetOnEventOwn(mCallBack, $"${mName}_click"$, "click", args)
 End Sub

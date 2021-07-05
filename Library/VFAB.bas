@@ -238,11 +238,23 @@ Sub UpdateColor(VC As VueComponent, s As String)
 	VC.SetData(sColor, s)
 End Sub
 
+Sub UpdateColorOnApp(VC As VuetifyApp, s As String)
+	VC.SetData(sColor, s)
+End Sub
+
 Sub UpdateLoading(VC As VueComponent, b As Boolean)
 	VC.SetData($"${mName}loading"$, b)
 End Sub
 
+Sub UpdateLoadingOnApp(VC As VuetifyApp, b As Boolean)
+	VC.SetData($"${mName}loading"$, b)
+End Sub
+
 Sub UpdateDisabled(VC As VueComponent, b As Boolean)
+	VC.SetData($"${mName}disabled"$, b)
+End Sub
+
+Sub UpdateDisabledOnApp(VC As VuetifyApp, b As Boolean)
 	VC.SetData($"${mName}disabled"$, b)
 End Sub
 
@@ -281,6 +293,10 @@ Sub UpdateVisible(VC As VueComponent, b As Boolean)
 	'VC.SetData(mVShow, b)
 End Sub
 
+Sub UpdateVisibleOnApp(VC As VuetifyApp, b As Boolean)
+	VC.SetData(mVIf, b)
+	'VC.SetData(mVShow, b)
+End Sub
 
 Sub getID As String
 	Return mName
@@ -308,4 +324,9 @@ Sub BindState(VC As VueComponent)
 		Dim cb As BANanoObject = mmethods.Get(k)
 		VC.SetCallBack(k, cb)
 	Next
+End Sub
+
+
+Sub OnClick(args As String)
+	VElement.SetOnEventOwn(mCallBack, $"${mName}_click"$, "click", args)
 End Sub

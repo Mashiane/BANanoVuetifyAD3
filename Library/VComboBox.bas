@@ -29,10 +29,13 @@ Version=7
 #DesignerProperty: Key: Label, DisplayName: Label, FieldType: String, DefaultValue: combobox, Description: Label
 #DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: combobox, Description: VModel
 #DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: , Description: Value
-#DesignerProperty: Key: Items, DisplayName: Items, FieldType: String, DefaultValue: items1, Description: Items
 #DesignerProperty: Key: ItemValue, DisplayName: Item Value, FieldType: String, DefaultValue: value, Description: ItemValue
 #DesignerProperty: Key: ItemText, DisplayName: Item Text, FieldType: String, DefaultValue: text, Description: ItemText
 #DesignerProperty: Key: ItemDisabled, DisplayName: Item Disabled, FieldType: String, DefaultValue: disabled , Description: ItemDisabled
+'
+#DesignerProperty: Key: ItemKeys, DisplayName: Item Values (;), FieldType: String, DefaultValue:  , Description: Item Values
+#DesignerProperty: Key: ItemTitles, DisplayName: Item Texts (;), FieldType: String, DefaultValue:  , Description: Item Texts
+'
 #DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: Boolean, DefaultValue: False, Description: Disabled
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: Loading, DisplayName: Loading, FieldType: Boolean, DefaultValue: False, Description: Loading
@@ -213,7 +216,10 @@ Private bReadonly As Boolean
 Private bRequired As Boolean
 Private sRequired As String
 Private sValue As String
-	End Sub
+'
+Private sItemKeys As String
+Private sItemTitles As String
+End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
 	mName = Name.tolowercase 
@@ -234,6 +240,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	sReadonly = $"${mName}readonly"$
 	sVShow = $"${mName}show"$
 	sLoading = $"${mName}loading"$
+	sItems = $"${mName}items"$
 	End Sub
 
 Sub DesignerCreateView (Target As BANanoElement, Props As Map) 
@@ -325,6 +332,8 @@ sVModel = Props.Get("VModel")
 sVOn = Props.Get("VOn")
 bValidateOnBlur = Props.Get("ValidateOnBlur")
  sValue = Props.GetDefault("Value", "")
+ sItemKeys = Props.GetDefault("ItemKeys", "")
+sItemTitles = Props.GetDefault("ItemTitles", "")
  	End If 
 	'
 	bDisabled = BANanoShared.parseBool(bDisabled)
@@ -376,6 +385,26 @@ bLoading = BANanoShared.parseBool(bLoading)
 	Else	 
 		mElement = mTarget.Append($"<v-combobox ref="${mName}" id="${mName}"></v-combobox>"$).Get("#" & mName) 
 	End If 
+	'
+	Dim rs As List
+	rs.Initialize 
+	'
+	sItemKeys = sItemKeys.Replace(",", ";")
+	sItemTitles = sItemTitles.Replace(",", ";")
+		
+	Dim xkeys As List = BANanoShared.StrParse(";", sItemKeys)
+	Dim xtitles As List = BANanoShared.StrParse(";", sItemTitles)
+		'
+	xkeys = BANanoShared.ListTrimItems(xkeys)
+	xtitles = BANanoShared.ListTrimItems(xtitles)
+	'
+	xitems.Initialize 
+	Dim tItems As Int = xkeys.Size - 1
+	For itemCnt = 0 To tItems
+		Dim iKey As String = xkeys.Get(itemCnt)
+		Dim iTit As String = xtitles.Get(itemCnt)
+		AddItem(iKey, iTit)
+	Next
 		
 	VElement.Initialize(mCallBack, mName, mName) 
 	VElement.TagName = "v-combobox" 
@@ -429,7 +458,7 @@ VElement.AddAttr("item-disabled", sItemDisabled)
 VElement.AddAttr("item-text", sItemText)
 VElement.AddAttr("item-value", sItemValue)
 VElement.AddAttr(":items", sItems)
-VElement.SetData(sItems, VElement.NewList)
+VElement.SetData(sItems, xitems)
 
 VElement.AddAttr("key", sKey)
 VElement.AddAttr("label", sLabel)
@@ -492,8 +521,6 @@ VElement.AddAttr("v-show", sVShow)
 VElement.SetData(sVShow, Not(bHidden))
 
 VElement.AddAttr(":validate-on-blur", bValidateOnBlur)
-
-
 VElement.BindAllEvents
 End Sub
 
@@ -776,4 +803,9 @@ Sub BindState(VC As VueComponent)
 		Dim cb As BANanoObject = mmethods.Get(k)
 		VC.SetCallBack(k, cb)
 	Next
+End Sub
+
+
+Sub OnChange(args As String)
+	VElement.SetOnEventOwn(mCallBack, $"${mName}_change"$, "change", args)
 End Sub

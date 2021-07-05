@@ -129,7 +129,7 @@ Private sPT As String
 Private sPX As String
 Private sPY As String
 Private sIconSize As String
-private sIconColor as string
+Private sIconColor As String
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -360,8 +360,16 @@ Sub UpdateLabel(VC As VueComponent, s As String)
 	VC.SetData(xCaption, S)
 End Sub
 
+Sub UpdateLabelOnApp(VC As VuetifyApp, s As String)
+	VC.SetData(xCaption, S)
+End Sub
+
 'update the color of the button
 Sub UpdateColor(VC As VueComponent, s As String)
+	VC.SetData(xColor, S)
+End Sub
+
+Sub UpdateColorOnApp(VC As VuetifyApp, s As String)
 	VC.SetData(xColor, S)
 End Sub
 
@@ -370,8 +378,16 @@ Sub UpdateLoading(VC As VueComponent, b As Boolean)
 	VC.SetData(xLoading, b)
 End Sub
 
+Sub UpdateLoadingOnApp(VC As VuetifyApp, b As Boolean)
+	VC.SetData(xLoading, b)
+End Sub
+
 'update the disabled state of the button
 Sub UpdateDisabled(VC As VueComponent, b As Boolean)
+	VC.SetData(xDisabled, b)
+End Sub
+
+Sub UpdateDisabledOnApp(VC As VuetifyApp, b As Boolean)
 	VC.SetData(xDisabled, b)
 End Sub
 
@@ -417,6 +433,11 @@ Sub UpdateVisible(VC As VueComponent, b As Boolean)
 	VC.SetData(mVShow, b)
 End Sub
 
+Sub UpdateVisibleOnApp(VC As VuetifyApp, b As Boolean)
+	VC.SetData(mVIf, b)
+	VC.SetData(mVShow, b)
+End Sub
+
 'get the id of the button
 Sub getID As String
 	Return mName
@@ -444,4 +465,9 @@ Sub BindState(VC As VueComponent)
 		Dim cb As BANanoObject = mmethods.Get(k)
 		VC.SetCallBack(k, cb)
 	Next
+End Sub
+
+
+Sub OnClick(args As String)
+	VElement.SetOnEventOwn(mCallBack, $"${mName}_click"$, "click", args)
 End Sub

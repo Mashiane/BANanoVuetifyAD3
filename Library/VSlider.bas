@@ -491,3 +491,8 @@ Sub BindState(VC As VueComponent)
 		VC.SetCallBack(k, cb)
 	Next
 End Sub
+
+
+Sub OnChange(args As String)
+	VElement.SetOnEventOwn(mCallBack, $"${mName}_change"$, "change", args)
+End Sub

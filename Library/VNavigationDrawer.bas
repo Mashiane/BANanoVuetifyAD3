@@ -15,6 +15,7 @@ Version=8.9
 #DesignerProperty: Key: Bottom, DisplayName: Bottom, FieldType: Boolean, DefaultValue: false, Description: Bottom
 #DesignerProperty: Key: Clipped, DisplayName: Clipped, FieldType: Boolean, DefaultValue: false, Description: Clipped
 #DesignerProperty: Key: UsesAuthentication, DisplayName: UsesAuthentication, FieldType: Boolean, DefaultValue: false, Description: UsesAuthentication
+#DesignerProperty: Key: Rounded, DisplayName: Rounded, FieldType: String, DefaultValue: , Description: Rounded, List: none|true|rounded-0|rounded|rounded-sm|rounded-lg|rounded-xl|rounded-t-xl|rounded-r-xl|rounded-b-xl|rounded-l-xl|rounded-tl-xl|rounded-tr-xl|rounded-br-xl|rounded-bl-xl|rounded-pill|rounded-circle
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue: , Description: Color, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: ColorIntensity, DisplayName: ColorIntensity, FieldType: String, DefaultValue: , Description: ColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: false, Description: Dark
@@ -88,6 +89,7 @@ Private sWidth As String
 Private bHidden As Boolean
 Private xMiniVariant As String
 Private bUsesAuthentication As Boolean
+private sRounded as string
 End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -143,6 +145,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sWidth = Props.Get("Width")
 		bHidden = Props.GetDefault("Hidden", False)
 		bUsesAuthentication = Props.GetDefault("UsesAuthentication", False)
+		sRounded = Props.GetDefault("Rounded", "")
 	End If
 	'
 	'build and get the element
@@ -180,41 +183,42 @@ bUsesAuthentication = BANanoShared.parseBool(bUsesAuthentication)
 	VElement.Styles = mStyles
 	VElement.Attributes = mAttributes
 	VElement.AddAttr(":absolute", bAbsolute)
-VElement.AddAttr(":app", bApp)
-VElement.AddAttr(":bottom", bBottom)
-VElement.AddAttr(":clipped", bClipped)
-VElement.Color = VElement.BuildColor(sColor, sColorIntensity)
-VElement.AddAttr(":dark", bDark)
-VElement.AddAttr(":disable-resize-watcher", bDisableResizeWatcher)
-VElement.AddAttr(":disable-route-watcher", bDisableRouteWatcher)
-VElement.AddAttr(":expand-on-hover", bExpandOnHover)
-VElement.AddAttr(":fixed", bFixed)
-VElement.AddAttr(":floating", bFloating)
-VElement.AddAttr("height", sHeight)
-VElement.AddAttr(":hide-overlay", bHideOverlay)
-VElement.AddAttr(":light", bLight)
-VElement.AddAttr(":mini-variant.sync", xMiniVariant)
-VElement.SetData(xMiniVariant, bMiniVariant)
-VElement.AddAttr("mini-variant-width", sMiniVariantWidth)
-VElement.AddAttr("mobile-breakpoint", sMobileBreakpoint)
-VElement.OverlayColor = VElement.BuildColor(sOverlayColor, sOverlayColorIntensity)
-VElement.AddAttr("overlay-opacity", sOverlayOpacity)
-VElement.AddAttr(":permanent", bPermanent)
-VElement.AddAttr(":right", bRight)
-VElement.AddAttr("src", sSrc)
-VElement.AddAttr(":stateles", bStateles)
-VElement.AddAttr(":temporary", bTemporary)
-VElement.AddAttr(":touchless", bTouchless)
-VElement.AddAttr("v-model", sVModel)
-If bUsesAuthentication Then
-	sVIf = "authenticated"
-End If
-VElement.AddAttr("v-if", sVIf)
-'VElement.AddAttr("v-show", sVShow)
-'VElement.SetData(sVShow, Not(bHidden))
-VElement.AddAttr("width", sWidth)
-VElement.SetData(sVModel, False)
-VElement.BindAllEvents
+	VElement.AddClass(sRounded)
+	VElement.AddAttr(":app", bApp)
+	VElement.AddAttr(":bottom", bBottom)
+	VElement.AddAttr(":clipped", bClipped)
+	VElement.Color = VElement.BuildColor(sColor, sColorIntensity)
+	VElement.AddAttr(":dark", bDark)
+	VElement.AddAttr(":disable-resize-watcher", bDisableResizeWatcher)
+	VElement.AddAttr(":disable-route-watcher", bDisableRouteWatcher)
+	VElement.AddAttr(":expand-on-hover", bExpandOnHover)
+	VElement.AddAttr(":fixed", bFixed)
+	VElement.AddAttr(":floating", bFloating)
+	VElement.AddAttr("height", sHeight)
+	VElement.AddAttr(":hide-overlay", bHideOverlay)
+	VElement.AddAttr(":light", bLight)
+	VElement.AddAttr(":mini-variant.sync", xMiniVariant)
+	VElement.SetData(xMiniVariant, bMiniVariant)
+	VElement.AddAttr("mini-variant-width", sMiniVariantWidth)
+	VElement.AddAttr("mobile-breakpoint", sMobileBreakpoint)
+	VElement.OverlayColor = VElement.BuildColor(sOverlayColor, sOverlayColorIntensity)
+	VElement.AddAttr("overlay-opacity", sOverlayOpacity)
+	VElement.AddAttr(":permanent", bPermanent)
+	VElement.AddAttr(":right", bRight)
+	VElement.AddAttr("src", sSrc)
+	VElement.AddAttr(":stateles", bStateles)
+	VElement.AddAttr(":temporary", bTemporary)
+	VElement.AddAttr(":touchless", bTouchless)
+	VElement.AddAttr("v-model", sVModel)
+	If bUsesAuthentication Then
+		sVIf = "authenticated"
+	End If
+	VElement.AddAttr("v-if", sVIf)
+	'VElement.AddAttr("v-show", sVShow)
+	'VElement.SetData(sVShow, Not(bHidden))
+	VElement.AddAttr("width", sWidth)
+	VElement.SetData(sVModel, False)
+	VElement.BindAllEvents
 End Sub
 
 public Sub AddToParent(targetID As String)
@@ -248,6 +252,13 @@ Sub RemoveAttr(p As String) As VNavigationDrawer
 End Sub
 
 Sub UpdateVisible(VC As VueComponent, b As Boolean) As VNavigationDrawer
+	VC.SetData(sVIf, b)
+	'VC.SetData(sVShow, b)
+	VC.SetData(sVModel, b)
+	Return Me
+End Sub
+
+Sub UpdateVisibleOnApp(VC As VuetifyApp, b As Boolean) As VNavigationDrawer
 	VC.SetData(sVIf, b)
 	'VC.SetData(sVShow, b)
 	VC.SetData(sVModel, b)

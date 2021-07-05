@@ -426,22 +426,27 @@ Sub Class_Globals
 	Public FooterName As String
 End Sub
 
+'link the progress loader to the app
 Sub FindProgressLoaderOn(appBar As VAppBar)
 	ProgressLoaderName = appBar.ProgressLoader
 End Sub
 
+'show the progress loader
 Sub PagePause
 	SetData(ProgressLoaderName, True)
 End Sub
 
+'hide the appbar progress loader
 Sub PageResume
 	SetData(ProgressLoaderName, False)
 End Sub
 
+'show the progress loader
 Sub ShowProgressLoader
 	SetData(ProgressLoaderName, True)
 End Sub
 
+'hide the progress loader
 Sub HideProgressLoader
 	SetData(ProgressLoaderName, False)
 End Sub
@@ -1076,6 +1081,7 @@ Sub Initialize(Module As Object, myapp As String)
 	BANano.DependsOnAsset("materialdesignicons.min.css")
 	BANano.DependsOnAsset("vue-tippy.min.js")
 	BANano.DependsOnAsset("tippygoogle.css")
+	BANano.DependsOnAsset("collect.min.js")
 	
 	Dim pdf As BANanoObject = BANano.Window.GetField("jspdf").GetField("jsPDF")
 	BANano.Window.SetField("jsPDF", pdf)
@@ -2214,6 +2220,17 @@ Sub FormValidate1(formName As String) As Boolean
 	Return FormValidate(formName)
 End Sub
 
+Sub RunMethodOnActive(compName As String)
+	Try
+		'get the router view
+		Dim rKey As String = "$refs"
+		refs = Vue.GetField(rKey)
+		RouterView = refs.GetField(RouterViewName)
+		RouterView.RunMethod(compName, Null)
+	Catch
+		Log(LastException)
+	End Try	
+End Sub
 
 'get the active component refs
 Sub GetRefs As BANanoObject
@@ -5458,15 +5475,6 @@ Sub UseVJSF
 		components.Put("v-jsf", boVJsf)
 	End If	
 End Sub
-
-Sub UseFlowy
-	If components.ContainsKey("flowy") = False Then
-		Dim FlowyVue As BANanoObject = BANano.Window.GetField("flowy-vue")
-		'Dim Flowy As BANanoObject = FlowyVue.GetField("Flowy")
-		'Dim boFlowy As BANanoObject = FlowyVue.GetField("default")
-		components.Put("flowy", FlowyVue)
-	End If	
-End Sub	
 
 Sub UsePrism
 	If components.ContainsKey("prism") = False Then

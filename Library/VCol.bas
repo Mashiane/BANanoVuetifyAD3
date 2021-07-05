@@ -317,3 +317,8 @@ Sub BindState(VC As VueComponent)
 		VC.SetCallBack(k, cb)
 	Next
 End Sub
+
+
+Sub OnClick(args As String)
+	VElement.SetOnEventOwn(mCallBack, $"${mName}_click"$, "click", args)
+End Sub

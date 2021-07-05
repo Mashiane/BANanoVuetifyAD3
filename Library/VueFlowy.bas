@@ -6,20 +6,30 @@ Version=8.9
 @EndOfDesignText@
 #IgnoreWarnings:12
 
+'https://github.com/remcoplasmeyer/flowy-vue
+
 #Event: add (item As Map)
 #Event: remove (item As Map)
-#Event: dragStart (item As Map)
 #Event: beforeMove (item As Map)
 #Event: beforeAdd (item As Map)
 
 #DesignerProperty: Key: AutoID, DisplayName: Auto ID/Name, FieldType: Boolean, DefaultValue: False, Description: Overrides the ID/Name with a random string.
-#DesignerProperty: Key: HasBeforeAdd, DisplayName: Before Add, FieldType: Boolean, DefaultValue: True, Description: Before Add.
-#DesignerProperty: Key: HasBeforeMove, DisplayName: Before Move, FieldType: Boolean, DefaultValue: True, Description: Before Move.
 #DesignerProperty: Key: NodeComponent, DisplayName: NodeComponent, FieldType: String, DefaultValue: , Description: NodeComponent.
+#DesignerProperty: Key: Height, DisplayName: Height, FieldType: String, DefaultValue: 85vh, Description: Height
+#DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: 100%, Description: Width
+#DesignerProperty: Key: FillHeight, DisplayName: FillHeight, FieldType: Boolean, DefaultValue: false, Description: FillHeight
+#DesignerProperty: Key: FitScreen, DisplayName: Fit Screen VH, FieldType: Boolean, DefaultValue: False, Description: FitScreen VH
+#DesignerProperty: Key: Elevation, DisplayName: Elevation, FieldType: String, DefaultValue: , Description: Elevation
+#DesignerProperty: Key: MaxHeight, DisplayName: MaxHeight, FieldType: String, DefaultValue: , Description: MaxHeight
+#DesignerProperty: Key: MaxWidth, DisplayName: MaxWidth, FieldType: String, DefaultValue: , Description: MaxWidth
+#DesignerProperty: Key: MinHeight, DisplayName: MinHeight, FieldType: String, DefaultValue: , Description: MinHeight
+#DesignerProperty: Key: MinWidth, DisplayName: MinWidth, FieldType: String, DefaultValue: , Description: MinWidth
+#DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
+#DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
+#DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
+#DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
 
 Sub Class_Globals
-	Public bindings As Map
-	Public methods As Map
 	Private mCallBack As Object
 	Private mName As String
 	Private mEventName As String
@@ -35,6 +45,21 @@ Sub Class_Globals
 	Private sbeforemove As String = ""
 	Private sbeforeadd As String = ""
 	Private mNodeComponent As String = ""
+	Public VElement As VueElement
+	Private mClasses As String
+	Private mStyles As String
+	Private mAttributes As String
+	Private sElevation As String
+	Private sHeight As String
+	Private sMaxHeight As String
+	Private sMaxWidth As String
+	Private sMinHeight As String
+	Private sMinWidth As String
+	Private sVIf As String
+	Private sWidth As String
+	Private bFillHeight As Boolean
+	Private bFitScreen As Boolean
+	Private sKey As String
 End Sub
 
 'initialize to the component you want to load to
@@ -43,8 +68,6 @@ Public Sub Initialize(CallBack As Object, Name As String , EventName As String)
 	BANano.DependsOnAsset("flowy-vue.css")
 	'
 	mCallBack = CallBack
-	methods.Initialize 
-	bindings.Initialize
 	mName = Name.Replace("#","")
 	mName = mName.tolowercase
 	mEventName = EventName.Replace("#","") 
@@ -52,96 +75,111 @@ Public Sub Initialize(CallBack As Object, Name As String , EventName As String)
 	
 	sbeforemove = $"${mName}_beforemove"$
 	sbeforeadd = $"${mName}_beforeadd"$
-	'
-	Dim fKey As String = $"#${mName}"$
-	If BANano.Exists(fKey) Then 
-		mElement = BANano.GetElement(fKey)
-	End If
 	nodesName = $"${mName}nodes"$
+	sKey = $"${mName}key"$
 	nodes.Initialize 
-	SetData(nodesName, nodes)
 End Sub
 
 ' this is the place where you create the view in html and run initialize javascript
 Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	mTarget = Target
 	If Props <> Null Then
+		mClasses = Props.Get("Classes")
+		mStyles = Props.Get("Styles")
+		mAttributes = Props.Get("Attributes")
+		sElevation = Props.Get("Elevation")
+		sHeight = Props.Get("Height")
+		sMaxHeight = Props.Get("MaxHeight")
+		sMaxWidth = Props.Get("MaxWidth")
+		sMinHeight = Props.Get("MinHeight")
+		sMinWidth = Props.Get("MinWidth")
+		sVIf = Props.Get("VIf")
+		sWidth = Props.Get("Width")
+		bFillHeight = Props.Get("FillHeight")
+		bFitScreen = Props.Get("FitScreen")
 		mHasBeforeAdd = Props.Get("HasBeforeAdd")
 		mHasBeforeMove = Props.Get("HasBeforeMove")
 		mHasDragStart = Props.Get("HasDragStart")
 		mNodeComponent = Props.Get("NodeComponent")
 	End If
 	'
+	bFillHeight = BANanoShared.parseBool(bFillHeight)
+	bFitScreen = BANanoShared.parseBool(bFitScreen)
 	mHasBeforeAdd = BANanoShared.parseBool(mHasBeforeAdd)
-mHasBeforeMove = BANanoShared.parseBool(mHasBeforeMove)
-mHasDragStart = BANanoShared.parseBool(mHasDragStart)
-
-		
+	mHasBeforeMove = BANanoShared.parseBool(mHasBeforeMove)
+	mHasDragStart = BANanoShared.parseBool(mHasDragStart)
+	
 	'build and get the element
-	Dim strHTML As String = ToString
-	mElement = mTarget.Append(strHTML).Get("#" & mName)
-	mElement.SetAttr(":nodes", nodesName)
-	SetOnEvent("add", "")
-	SetOnEvent("remove", "")
-	SetOnEvent("drag-start", "")
+	If BANano.Exists($"#${mName}"$) Then
+		mElement = BANano.GetElement($"#${mName}"$)
+	Else	
+		mElement = mTarget.Append($"<flowy :key="${sKey}" ref="${mName}" id="${mName}"></flowy>"$).Get("#" & mName)
+	End If
+	'
+	VElement.Initialize(mCallBack, mName, mName)
+	VElement.TagName = "flowy"
+	VElement.SetData(sKey, DateTime.Now)
+	VElement.Classes = mClasses
+	VElement.Styles = mStyles
+	VElement.Elevation = sElevation
+	VElement.Attributes = mAttributes
+	VElement.AddAttr("height", sHeight)
+	VElement.AddAttr("max-height", sMaxHeight)
+	VElement.AddAttr("max-width", sMaxWidth)
+	VElement.AddAttr("min-height", sMinHeight)
+	VElement.AddAttr("min-width", sMinWidth)
+	VElement.AddAttr("v-if", sVIf)
+	VElement.AddAttr("width", sWidth)
+	VElement.AddAttr(":fill-height", bFillHeight)
+	VElement.FitScreen = bFitScreen
+	VElement.Bind("nodes", nodesName)
 	setBeforeMove(mHasBeforeMove)
 	setBeforeAdd(mHasBeforeAdd)
+	'SetOnEvent("add", "")
+	'SetOnEvent("remove", "")
+	'SetOnEvent("drag-start", "")
+	VElement.SetData(nodesName, VElement.NewList)
+	VElement.BindAllEvents
 End Sub
+
 
 'add a class
 public Sub AddClass(varClass As String) 
-	If BANano.IsUndefined(varClass) Or BANano.IsNull(varClass) Then Return
-	If BANano.IsNumber(varClass) Then varClass = BANanoShared.CStr(varClass)
-	varClass = varClass.trim
-	If varClass = "" Then Return
-	If mElement <> Null Then 
-		mElement.AddClass(varClass)
-	End If
+	VElement.AddClass(varClass)
 End Sub
-
 
 Sub setNodeComponent(s As String)
 	mNodeComponent = s
 End Sub
 
 Sub SetOnEvent(event As String, args As String)
-	event = event.ToLowerCase
-	'
-	Dim attrName As String = event
-	attrName = attrName.tolowercase
-	attrName = attrName.Replace(":","")
-	attrName = attrName.Replace(".","")
-	attrName = attrName.Replace("-","")
-	'
-	Dim methodName As String = $"${mName}_${attrName}"$
-	'
-	If SubExists(mCallBack, methodName) = False Then Return
-	If BANano.IsUndefined(args) Or BANano.IsNull(args) Then args = ""
-	Dim scode As String
-	If args = "" Then
-		scode = methodName
-	Else	
-		scode = $"${methodName}(${args})"$
-	End If
-	mElement.SetAttr($"v-on:${event}"$, scode)
-	'arguments for the event
-	Dim item As Map 'ignore
-	Dim cb As BANanoObject = BANano.CallBack(mCallBack, methodName, Array(item))
-	methods.Put(methodName, cb)
+	VElement.SetOnEvent(mCallBack, event, args)
 End Sub
 
 Sub setBeforeMove(b As Boolean)
 	mHasBeforeMove = b
 	If BANano.IsNull(b) Or BANano.IsUndefined(b) Then Return
 	If b = False Then Return
-	mElement.SetAttr(":beforeMove", sbeforemove)
+	VElement.AddAttr(":before-move", sbeforemove)
+	If SubExists(mCallBack, sbeforemove) = True Then
+		Dim obj As Map = CreateMap()
+		VElement.SetMethod(mCallBack, sbeforemove, Array(obj))
+	Else
+		BANano.Throw($"VueFlowy.${mName} - generate members for beforeMove method!"$)
+	End If	
 End Sub
 
 Sub setBeforeAdd(b As Boolean)
 	mHasBeforeAdd = b
 	If BANano.IsNull(b) Or BANano.IsUndefined(b) Then Return
 	If b = False Then Return
-	mElement.SetAttr(":beforeAdd", sbeforeadd)
+	VElement.AddAttr(":before-add", sbeforeadd)
+	If SubExists(mCallBack, sbeforemove) = True Then
+		Dim obj As Map = CreateMap()
+		VElement.SetMethod(mCallBack, sbeforeadd, Array(obj))
+	Else
+		BANano.Throw($"VueFlowy.${mName} - generate members for beforeAdd method!"$)
+	End If		
 End Sub
 
 Sub ClearNodes
@@ -149,30 +187,9 @@ Sub ClearNodes
 	SetData(nodesName, nodes)
 End Sub
 
-private Sub CleanID(v As String) As String
-	v = v.Replace("#","")
-	v = $"#${v}"$
-	v = v.tolowercase
-	Return v
-End Sub
-
-'return the generated html
-Sub ToString As String
-	'build the 'class' attribute
-	Dim sb As StringBuilder
-	sb.Initialize
-	sb.Append($"<flowy ref="${mName}" id="${mName}"></flowy>"$)
-	Return sb.tostring
-End Sub
-
 'update the state
 Sub SetData(prop As String, value As Object)
-	If BANano.IsNull(prop) Or BANano.IsUndefined(prop) Then
-		prop = ""
-	End If
-	If prop = "" Then Return
-	prop = prop.tolowercase
-	bindings.put(prop, value)
+	VElement.SetData(prop, value)
 End Sub
 
 'returns the BANanoElement
@@ -213,19 +230,9 @@ public Sub Remove()
 	BANano.SetMeToNull
 End Sub
 
-
-
 'set the parent component
 Sub setParentComponent(PVC As VueComponent)
 	VC = PVC
-	'
-	Dim obj As Map
-	If BANano.IsNull(mHasBeforeMove) = False Or BANano.IsUndefined(mHasBeforeMove) = False Then
-		VC.SetComputed(sbeforemove, mCallBack, sbeforemove, Array(obj))
-	End If
-	If BANano.IsNull(mHasBeforeAdd) = False Or BANano.IsUndefined(mHasBeforeAdd) = False Then
-		VC.SetComputed(sbeforeadd, mCallBack, sbeforeadd, Array(obj))
-	End If
 End Sub
 
 'use -1 for the parent node
@@ -252,6 +259,7 @@ End Sub
 'set the parent component first
 Sub Refresh
 	VC.SetData(nodesName, nodes)
+	VC.SetData(sKey, DateTime.Now)
 End Sub
 
 Sub HiddenXSOnly
@@ -365,16 +373,8 @@ End Sub
 
 Sub BindState(VS As VueComponent)
 	VC = VS
-	Dim obj As Map
-	If BANano.IsNull(mHasBeforeMove) = False Or BANano.IsUndefined(mHasBeforeMove) = False Then
-		VC.SetComputed(sbeforemove, mCallBack, sbeforemove, Array(obj))
-	End If
-	If BANano.IsNull(mHasBeforeAdd) = False Or BANano.IsUndefined(mHasBeforeAdd) = False Then
-		VC.SetComputed(sbeforeadd, mCallBack, sbeforeadd, Array(obj))
-	End If
-	
-	Dim mbindings As Map = bindings
-	Dim mmethods As Map = methods
+	Dim mbindings As Map = VElement.bindings
+	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control
 	For Each k As String In mbindings.Keys
 		Dim v As Object = mbindings.Get(k)

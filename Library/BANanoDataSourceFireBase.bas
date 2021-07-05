@@ -8,6 +8,7 @@ Version=7
 'Created with BANano Custom View Creator 1.00 by TheMash
 'https://github.com/Mashiane/BANano-Custom-View-Creator
 'Custom BANano View class
+#Event: Exists (Success As Boolean, Response As String, Error As String, affectedRows As Int, Result As List)
 #Event: Done (Action As String, Success As Boolean, Response As String, Error As String, affectedRows As Int, Result As List)
 #Event: Create (Success As Boolean, Response As String, Error As String, affectedRows As Int, Result As List)
 #Event: Update (Success As Boolean, Response As String, Error As String, affectedRows As Int, Result As List)
@@ -150,6 +151,7 @@ Sub Class_Globals
 	Public const ACTION_SELECTFORCOMBO As String = "SelectForCombo"
 	Public const ACTION_CHART As String = "Chart"
 	Public const ACTION_SIGN_UP_OWN As String = "SignUpOwn"
+	Public const ACTION_EXISTS As String = "Exists"
 	'
 	Public const MODE_CREATE As String = "C"
 	Public const MODE_UPDATE As String = "U"
@@ -172,6 +174,7 @@ Sub Class_Globals
 	Public const FB_LT As String = "<"
 	Public const FB_LE As String = "<="
 	Public const FB_IN As String = "in"
+	Public const FB_NIN As String = "not-in"
 	Public const FB_CONTAINS_ANY As String = "array-contains-any"
 	Public const FB_CONTAINS As String = "array-contains"
 	Public const FB_NE As String = "ne"
@@ -197,6 +200,7 @@ Sub Class_Globals
 	Private sAction As String
 	Private db As BVAD3FBCollection
 	Private auth As BVAD3FBAuth
+	Private fireSQL As BANanoObject
 End Sub
 
 
@@ -206,7 +210,7 @@ End Sub
 
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
-	'BANano.DependsOnAsset("BANanoSkeleton.colorpicker.min.js")
+	BANano.DependsOnAsset("firesql.umd.js")
 	mName = Name.tolowercase 
 	mEventName = EventName.ToLowerCase 
 	mCallBack = CallBack	 
@@ -1046,12 +1050,49 @@ private Sub FireStoreExecute As Boolean    'ignore
 		End If
 		Log($"Delete: ${pkValue}"$)
 		BANano.Await(db.DeleteWait(pkValue))
-	Case ACTION_SELECTALL, ACTION_PDF, ACTION_REPORT, ACTION_EXCEL, ACTION_SELECTFORCOMBO, ACTION_CHART
+	Case ACTION_SELECTALL, ACTION_PDF, ACTION_REPORT, ACTION_EXCEL, ACTION_CHART
 		bSelect = True
-		Result = BANano.Await(db.GetWait)
+		If schemaOrderBy.Size = 0 Then
+			Result = BANano.Await(db.GetWait)
+		Else
+			Result = BANano.Await(db.GetWaitSort(schemaOrderBy))
+		End If		
+	Case ACTION_SELECTFORCOMBO, ACTION_EXISTS
+		'fireSQL
+		bSelect = True
+		Dim xSort As String = BANano.Join(schemaOrderBy, ",")
+		Dim xqry As String = $"SELECT __name__ AS ${sPrimaryKey}, ${sDisplayField} FROM ${sTableName}"$
+		If cw.Size > 0 Then
+			Dim strWhere As String = BuildWhere
+			xqry = xqry & " WHERE " & strWhere & " "
+		End If
+		If xSort <> "" Then
+			xqry = $"${xqry} ORDER BY ${xSort}"$
+		End If
+		xqry = xqry.trim
+		'
+		'include the id as a field 
+		fireSQL.Initialize2("FireSQL", firestore)
+		Result = BANano.Await(db.query(fireSQL, xqry))
+		'
 	Case ACTION_SELECTWHERE
 		bSelect = True
-		'MySQL.SelectWhere(schemaSelectFields, cw, ops, schemaOrderBy) 
+		Dim xfields As String = BANano.join(schemaSelectFields, ",")
+		Dim xSort As String = BANano.Join(schemaOrderBy, ",")
+		Dim xqry As String = $"SELECT __name__ AS ${sPrimaryKey}, ${xfields} FROM ${sTableName}"$
+		If cw.Size > 0 Then
+			Dim strWhere As String = BuildWhere
+			xqry = xqry & " WHERE " & strWhere & " "
+		End If
+		If xSort <> "" Then
+			xqry = $"${xqry} ORDER BY ${xSort}"$
+		End If
+		xqry = xqry.trim
+		Log(xqry)
+		'include the id as a field 
+		fireSQL.Initialize2("FireSQL", firestore)
+		Result = BANano.Await(db.query(fireSQL, xqry))	
+		'
 	Case ACTION_COUNT
 		bCount = True
 		bSelect = True
@@ -1091,6 +1132,27 @@ private Sub FireStoreExecute As Boolean    'ignore
 		End If
 	End If
 	BANano.ReturnThen(True)
+End Sub
+
+
+private Sub BuildWhere() As String
+	Dim sb As StringBuilder
+	sb.Initialize
+	Dim i As Int
+	Dim iWhere As Int = cw.Size - 1
+	For i = 0 To iWhere
+		If i > 0 Then
+			sb.Append(" AND ")
+		End If
+		Dim col As String = cw.GetKeyAt(i)
+		Dim val As String = cw.GetValueAt(i)
+		Dim oper As String = ops.Get(i)
+		'
+		sb.Append(col)
+		sb.Append($" ${oper} "$)
+		sb.Append(val)
+	Next
+	Return sb.tostring
 End Sub
 
 

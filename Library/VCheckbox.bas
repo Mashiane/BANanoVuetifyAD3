@@ -499,7 +499,7 @@ End Sub
 Sub AddRule(methodName As String)
 	VElement.AddRule(methodName)
 		VElement.SetData(sRequired, True)
-	bRequired = true
+	bRequired = True
 End Sub
 
 Sub BindState(VC As VueComponent)
@@ -519,4 +519,9 @@ Sub BindState(VC As VueComponent)
 		Dim cb As BANanoObject = mmethods.Get(k)
 		VC.SetCallBack(k, cb)
 	Next
+End Sub
+
+
+Sub OnChange(args As String)
+	VElement.SetOnEventOwn(mCallBack, $"${mName}_change"$, "change", args)
 End Sub

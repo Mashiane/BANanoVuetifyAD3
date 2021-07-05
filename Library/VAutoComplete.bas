@@ -31,10 +31,13 @@ Version=7
 #DesignerProperty: Key: Label, DisplayName: Label, FieldType: String, DefaultValue: autocomplete1, Description: Label
 #DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: autocomplete1, Description: VModel
 #DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: , Description: Value
-#DesignerProperty: Key: Items, DisplayName: Items, FieldType: String, DefaultValue: items1, Description: Items
 #DesignerProperty: Key: ItemValue, DisplayName: Item Value, FieldType: String, DefaultValue: value, Description: ItemValue
 #DesignerProperty: Key: ItemText, DisplayName: Item Text, FieldType: String, DefaultValue: text, Description: ItemText
 #DesignerProperty: Key: ItemDisabled, DisplayName: Item Disabled, FieldType: String, DefaultValue: disabled, Description: ItemDisabled
+'
+#DesignerProperty: Key: ItemKeys, DisplayName: Item Values (;), FieldType: String, DefaultValue:  , Description: Item Values
+#DesignerProperty: Key: ItemTitles, DisplayName: Item Texts (;), FieldType: String, DefaultValue:  , Description: Item Texts
+'
 #DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: Boolean, DefaultValue: False, Description: Disabled
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: Loading, DisplayName: Loading, FieldType: Boolean, DefaultValue: False, Description: Loading
@@ -114,6 +117,8 @@ Version=7
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
 
 Sub Class_Globals 
+	Private sItemKeys As String
+	Private sItemTitles As String
     Private BANano As BANano 'ignore 
 	Private mName As String 'ignore 
 	Private mEventName As String 'ignore 
@@ -233,6 +238,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	sReadonly = $"${mName}readonly"$
 	sVShow = $"${mName}show"$
 	sLoading = $"${mName}loading"$
+	sItems = $"${mName}items"$
 	End Sub
 
 Sub DesignerCreateView (Target As BANanoElement, Props As Map) 
@@ -322,7 +328,8 @@ sVIf = Props.Get("VIf")
 sVModel = Props.Get("VModel")
 sVOn = Props.Get("VOn")
 bValidateOnBlur = Props.Get("ValidateOnBlur")
- 
+ sItemKeys = Props.GetDefault("ItemKeys", "")
+sItemTitles = Props.GetDefault("ItemTitles", "")
 	End If 
 	'
 	bDisabled = BANanoShared.parseBool(bDisabled)
@@ -376,6 +383,26 @@ bMultiple = BANanoShared.parseBool(bMultiple)
 		mElement = mTarget.Append($"<v-autocomplete ref="${mName}" id="${mName}"></v-autocomplete>"$).Get("#" & mName) 
 	End If 
 	' 
+	Dim rs As List
+	rs.Initialize 
+	'
+	sItemKeys = sItemKeys.Replace(",", ";")
+	sItemTitles = sItemTitles.Replace(",", ";")
+		
+	Dim xkeys As List = BANanoShared.StrParse(";", sItemKeys)
+	Dim xtitles As List = BANanoShared.StrParse(";", sItemTitles)
+		'
+	xkeys = BANanoShared.ListTrimItems(xkeys)
+	xtitles = BANanoShared.ListTrimItems(xtitles)
+	'
+	xitems.Initialize 
+	Dim tItems As Int = xkeys.Size - 1
+	For itemCnt = 0 To tItems
+		Dim iKey As String = xkeys.Get(itemCnt)
+		Dim iTit As String = xtitles.Get(itemCnt)
+		AddItem(iKey, iTit)
+	Next
+	
 	VElement.Initialize(mCallBack, mName, mName) 
 	VElement.TagName = "v-autocomplete" 
 	VElement.Classes = mClasses 
@@ -423,7 +450,6 @@ VElement.AddAttr("item-disabled", sItemDisabled)
 VElement.AddAttr("item-text", sItemText)
 VElement.AddAttr("item-value", sItemValue)
 VElement.AddAttr(":items", sItems)
-VElement.SetData(sItems, VElement.NewList)
 
 VElement.AddAttr("key", sKey)
 VElement.AddAttr("label", sLabel)
@@ -496,7 +522,7 @@ VElement.SetData(sVShow, Not(bHidden))
 
 VElement.AddAttr(":validate-on-blur", bValidateOnBlur)
 
-
+VElement.SetData(sItems, xitems)
 VElement.BindAllEvents
 End Sub
 
@@ -771,4 +797,9 @@ Sub BindState(VC As VueComponent)
 		Dim cb As BANanoObject = mmethods.Get(k)
 		VC.SetCallBack(k, cb)
 	Next
+End Sub
+
+
+Sub OnChange(args As String)
+	VElement.SetOnEventOwn(mCallBack, $"${mName}_change"$, "change", args)
 End Sub

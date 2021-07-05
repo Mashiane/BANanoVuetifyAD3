@@ -116,9 +116,9 @@ var blackIcon = new L.Icon({
 #DesignerProperty: Key: UseMakiMarkers, DisplayName: UseMakiMarkers, FieldType: Boolean, DefaultValue: True, Description: UseMakiMarkers
 #DesignerProperty: Key: PermanentTooltips, DisplayName: PermanentTooltips, FieldType: Boolean, DefaultValue: False, Description: PermanentTooltips
 '
-#DesignerProperty: Key: ItemKeys, DisplayName: Item Keys (;), FieldType: String, DefaultValue:  add; edit; delete, Description: Item Icons
-#DesignerProperty: Key: ItemIcons, DisplayName: Item Icons (;), FieldType: String, DefaultValue:  mdi-plus; mdi-pencil; mdi-delete, Description: Item Icons
-#DesignerProperty: Key: ItemColors, DisplayName: Item Colors (;), FieldType: String, DefaultValue:  green; amber; red, Description: Item Colors
+#DesignerProperty: Key: ItemKeys, DisplayName: Item Keys (;), FieldType: String, DefaultValue:  add; edit; delete; refresh, Description: Item Icons
+#DesignerProperty: Key: ItemIcons, DisplayName: Item Icons (;), FieldType: String, DefaultValue:  mdi-plus; mdi-pencil; mdi-delete; mdi-refresh, Description: Item Icons
+#DesignerProperty: Key: ItemColors, DisplayName: Item Colors (;), FieldType: String, DefaultValue:  green; amber; red; indigo, Description: Item Colors
 
 '#DesignerProperty: Key: Bounds, DisplayName: Bounds, FieldType: String, DefaultValue: , Description: Bounds
 #DesignerProperty: Key: CenterLat, DisplayName: CenterLat, FieldType: String, DefaultValue: 0, Description: CenterLat

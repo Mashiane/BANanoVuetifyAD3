@@ -290,3 +290,8 @@ Sub BindState(VC As VueComponent)
 		VC.SetCallBack(k, cb)
 	Next
 End Sub
+
+
+Sub OnInput(args As String)
+	VElement.SetOnEventOwn(mCallBack, $"${mName}_input"$, "input", args)
+End Sub

@@ -115,6 +115,11 @@ Version=8.5
 #DesignerProperty: Key: ColumnTextarea, DisplayName: ColumnTextarea (;), FieldType: String, DefaultValue: , Description: ColumnTextarea
 #DesignerProperty: Key: ColumnTextfield, DisplayName: ColumnTextfield (;), FieldType: String, DefaultValue: , Description: ColumnTextfield
 #DesignerProperty: Key: ColumnTime, DisplayName: ColumnTime (;), FieldType: String, DefaultValue: , Description: ColumnTime
+'
+#DesignerProperty: Key: ItemKeys, DisplayName: Action Keys (;), FieldType: String, DefaultValue:  , Description: Action Icons
+#DesignerProperty: Key: ItemTitles, DisplayName: Action Titles (;), FieldType: String, DefaultValue:  , Description: Action Titles
+#DesignerProperty: Key: ItemIcons, DisplayName: Action Icons (;), FieldType: String, DefaultValue:  , Description: Action Icons
+#DesignerProperty: Key: ItemColors, DisplayName: Action Colors (;), FieldType: String, DefaultValue:  green; amber; red, Description: Action Colors
 
 #DesignerProperty: Key: FixedHeader, DisplayName: Fixed Header, FieldType: Boolean, DefaultValue:  False, Description: 
 #DesignerProperty: Key: HideDefaultHeader, DisplayName: Hide Default Header, FieldType: Boolean, DefaultValue:  False, Description: 
@@ -168,7 +173,7 @@ Sub Class_Globals
 	Private bDark As Boolean
 	Private bLoading As Boolean
 	Private sPageLength As String 
-	private bManual as boolean
+	Private bManual As Boolean
 	'
 	Public Items As List
 	Public AppTemplateName As String = "#apptemplate"
@@ -212,6 +217,11 @@ Sub Class_Globals
 	Public COLUMN_TEXTAREA As String = "textarea"
 	Public COLUMN_SELECT As String = "select"
 	Private sMaxPages As String = ""
+	'
+	Private sItemKeys As String
+	Private sItemIcons As String
+	Private sItemColors As String
+	Private sItemTitles As String
 			
 	'alignment
 	Public ALIGN_CENTER As String = "center"
@@ -310,7 +320,7 @@ Private xPage As String
 Private xPageCount As String
 Private xPagination As String
 Private sColumnAvatarText As String
-private sColumnAvatarIcon as string
+Private sColumnAvatarIcon As String
 End Sub
 
 'initialize the custom view
@@ -446,6 +456,12 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sPageLength = Props.GetDefault("PageLength", 5)
 		sColumnAvatarText = Props.getdefault("ColumnAvatarText", "")
 		sColumnAvatarIcon = Props.GetDefault("ColumnAvatarIcon", "")
+		'
+		'additional actions
+		sItemKeys = Props.GetDefault("ItemKeys","")
+		sItemIcons = Props.GetDefault("ItemIcons","")
+		sItemColors = Props.GetDefault("ItemColors","")
+		sItemTitles = Props.getdefault("ItemTitles", "")
 	End If
 	'
 	bManual = BANanoShared.parseBool(bManual)
@@ -976,6 +992,36 @@ bHideDefaultFooter = BANanoShared.parseBool(bHideDefaultFooter)
 	If bHasMenu Then
 		AddMenuV
 	End If
+	'
+	'add the additional actions
+	Dim rs As List
+	rs.Initialize 
+	'
+	sItemKeys = sItemKeys.Replace(",", ";")
+	sItemIcons = sItemIcons.Replace(",", ";")
+	sItemColors = sItemColors.Replace(",", ";")
+	sItemTitles = sItemTitles.Replace(",", ";")
+		
+	Dim xkeys As List = BANanoShared.StrParse(";", sItemKeys)
+	Dim xicons As List = BANanoShared.StrParse(";", sItemIcons)
+	Dim xcolors As List = BANanoShared.StrParse(";", sItemColors)
+	Dim xtitles As List = BANanoShared.StrParse(";", sItemTitles)
+		'
+	xkeys = BANanoShared.ListTrimItems(xkeys)
+	xicons = BANanoShared.ListTrimItems(xicons)
+	xcolors = BANanoShared.ListTrimItems(xcolors)
+	xtitles = BANanoShared.ListTrimItems(xtitles)
+	'
+	Dim tItems As Int = xkeys.Size - 1
+	For itemCnt = 0 To tItems
+		Dim iKey As String = xkeys.Get(itemCnt)
+		Dim iIco As String = xicons.Get(itemCnt)
+		Dim iCol As String = xcolors.Get(itemCnt)
+		Dim iTit As String = xtitles.Get(itemCnt)
+		'
+		AddAction1(iKey, iTit, iIco, "", iCol)
+	Next	
+	
 	'
 	If bHasEdit Then
 		SetIconDimensions("edit", "", sEditColor)

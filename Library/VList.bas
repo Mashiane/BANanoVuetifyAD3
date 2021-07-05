@@ -7,8 +7,8 @@ Version=8.95
 #IgnoreWarnings:12
 
 #Event: Click (item As Map)
-#Event: RightClick (e As BANanoEvent)
-#Event: LeftClick (e As BANanoEvent)
+#Event: RightClick (item As Map)
+#Event: LeftClick (item As Map)
 
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: PlaceAtBottom, DisplayName: PlaceAtBottom, FieldType: Boolean, DefaultValue: False, Description: PlaceAtBottom

@@ -6,6 +6,14 @@ Version=8.9
 @EndOfDesignText@
 #IgnoreWarnings:12
 
+#Event: Action_Click (id As String)
+
+#DesignerProperty: Key: ItemType, DisplayName: ItemType, FieldType: String, DefaultValue:  none, Description: Item Type, List: button|fab|icon-right|icon-left|none
+#DesignerProperty: Key: ItemKeys, DisplayName: Item Keys (;), FieldType: String, DefaultValue:  add; edit; delete, Description: Item Icons
+#DesignerProperty: Key: ItemIcons, DisplayName: Item Icons (;), FieldType: String, DefaultValue:  mdi-plus; mdi-pencil; mdi-delete, Description: Item Icons
+#DesignerProperty: Key: ItemColors, DisplayName: Item Colors (;), FieldType: String, DefaultValue:  green; amber; red, Description: Item Colors
+#DesignerProperty: Key: ItemTexts, DisplayName: Item Texts (;), FieldType: String, DefaultValue:  Add; Edit; Delete, Description: Item Texts
+
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue: , Description: Color, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: ColorIntensity, DisplayName: Colorintensity, FieldType: String, DefaultValue: , Description: Colorintensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: TextColor, DisplayName: Textcolor, FieldType: String, DefaultValue: , Description: Textcolor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
@@ -28,10 +36,17 @@ Sub Class_Globals
 	'Private mVShow As String = ""
 	Private mVIf As String = ""
 	Private sColor As String
-Private sColorintensity As String
-Private sTextcolor As String
-Private sTextcolorintensity As String
-	End Sub
+	Private sColorintensity As String
+	Private sTextcolor As String
+	Private sTextcolorintensity As String
+	Private sItemKeys As String
+	Private sItemIcons As String
+	Private sItemColors As String
+	Private sItemType As String
+	Private sButtons As String
+	Private sItemTexts As String
+	Private bHasButtons As Boolean
+End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	mName = Name.tolowercase
@@ -46,7 +61,9 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 		End If
 	End If
 	'mVShow = $"${mName}show"$
-	End Sub
+	sButtons = $"${mName}buttons"$
+	bHasButtons = False
+End Sub
 	
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	mTarget = Target
@@ -56,9 +73,14 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mAttributes = Props.Get("Attributes")
 		mVIf = Props.Get("VIf")
 		sColor = Props.Get("Color")
-sColorintensity = Props.Get("ColorIntensity")
-sTextcolor = Props.Get("TextColor")
-sTextcolorintensity = Props.Get("TextColorIntensity")
+		sColorintensity = Props.Get("ColorIntensity")
+		sTextcolor = Props.Get("TextColor")
+		sTextcolorintensity = Props.Get("TextColorIntensity")
+		sItemKeys = Props.GetDefault("ItemKeys","")
+		sItemIcons = Props.GetDefault("ItemIcons","")
+		sItemColors = Props.GetDefault("ItemColors","")
+		sItemType = Props.GetDefault("ItemType", "none")
+		sItemTexts = Props.GetDefault("ItemTexts", "")
 	End If
 	'
 	'build and get the element
@@ -70,6 +92,60 @@ sTextcolorintensity = Props.Get("TextColorIntensity")
 	'
 	VElement.Initialize(mCallBack, mName, mName)
 	VElement.TagName = "v-card-actions"
+	'
+	Dim rs As List
+	rs.Initialize 
+		'
+	sItemKeys = sItemKeys.Replace(",", ";")
+	sItemIcons = sItemIcons.Replace(",", ";")
+	sItemColors = sItemColors.Replace(",", ";")
+	sItemTexts = sItemTexts.Replace(",", ";")
+	
+	Dim xkeys As List = BANanoShared.StrParse(";", sItemKeys)
+	Dim xicons As List = BANanoShared.StrParse(";", sItemIcons)
+	Dim xcolors As List = BANanoShared.StrParse(";", sItemColors)
+	Dim xtexts As List = BANanoShared.StrParse(";", sItemTexts)
+		'
+	xkeys = BANanoShared.ListTrimItems(xkeys)
+	xicons = BANanoShared.ListTrimItems(xicons)
+	xcolors = BANanoShared.ListTrimItems(xcolors)
+		'
+	Dim tItems As Int = xkeys.Size - 1
+	If tItems >= 0 Then
+		bHasButtons = True
+	End If
+	For itemCnt = 0 To tItems
+		Dim iKey As String = xkeys.Get(itemCnt)
+		Dim iIco As String = xicons.Get(itemCnt)
+		Dim iCol As String = xcolors.Get(itemCnt)
+		Dim iTxt As String = xtexts.Get(itemCnt)
+		'
+		Dim nm As Map = CreateMap()
+		nm.Put("id", iKey)
+		nm.Put("icon", iIco)
+		nm.Put("color", iCol)
+		nm.Put("text", iTxt)
+		rs.Add(nm)
+	Next	
+	'
+	If sItemType = "none" Then 
+		bHasButtons = False
+	End If
+	 
+	If bHasButtons Then
+		VElement.Append($"<v-btn id="${mName}button" class="mx-2" v-for="item in ${sButtons}" :key="item.id" fab dark small :color="item.color">
+        	<v-icon v-html=item.icon></v-icon>
+      	</v-btn>"$)
+		If SubExists(mCallBack, $"${mName}_action_click"$) Then  
+			VElement.GetButton.SetOnEventOwn(mCallBack, $"${mName}_action_click"$, "click", "item.id")
+			Dim args As List
+			VElement.SetMethod(mCallBack, $"${mName}_action_click"$, args)
+			Dim btnt As VueElement = VElement.GetButton
+			VElement.BindVueElement(btnt)
+		End If
+		VElement.SetData(sButtons, rs)
+	End If
+		
 	VElement.Classes = mClasses
 	VElement.Styles = mStyles
 	VElement.Attributes = mAttributes
@@ -77,9 +153,9 @@ sTextcolorintensity = Props.Get("TextColorIntensity")
 	'VElement.SetData(mVShow, True)
 	VElement.VIf = mVIf
 	VElement.Color = VElement.BuildColor(sColor, sColorintensity)
-VElement.TextColor = sTextcolor
-VElement.TextColorIntensity = sTextcolorintensity
-VElement.BindAllEvents
+	VElement.TextColor = sTextcolor
+	VElement.TextColorIntensity = sTextcolorintensity
+	VElement.BindAllEvents
 End Sub
 
 public Sub AddToParent(targetID As String)

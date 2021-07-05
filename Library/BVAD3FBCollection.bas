@@ -46,6 +46,19 @@ Public Sub Initialize(fb As BANanoObject, colName As String) As BVAD3FBCollectio
 	Return Me
 End Sub
 
+'use fireSQL to execute SQL query
+Sub query(fireSQL As BANanoObject, qry As String) As List
+	result.Initialize
+	Dim promGet As BANanoPromise = fireSQL.RunMethod("query", qry)
+	result = banano.Await(promGet)
+	affectedRows = result.size
+	response = "Success"
+	error = ""
+	OK = True
+	Return result
+End Sub
+
+
 'add a field to the schame
 '<code>
 ''add schema to table
@@ -103,7 +116,6 @@ Sub SchemaAddText(bools As List)
 		Schema.Put(b, DB_STRING)
 	Next
 End Sub
-
 
 'detect changes when made and fire an event for each document
 Sub onSnapshot(Module As Object, methodName As String)
@@ -182,6 +194,34 @@ Sub GetWait() As List
 	OK = True
 	Return result
 End Sub
+
+'get documents and wait and fire the sub when done
+Sub GetWaitSort(sortFields As List) As List
+	Dim querySnapshot As Map
+	Dim bpGet As BANanoPromise
+	'
+	For Each k As String In sortFields
+		k = k.Trim
+		If k = "" Then Continue
+		orderBy(k, "asc")
+	Next
+	bpGet = Get
+    querySnapshot = banano.Await(bpGet)
+	Dim docs As List = querySnapshot.Get("docs")
+	result.Initialize
+	For Each userx As BANanoObject In docs
+		Dim uid As String = userx.Getfield("id").Result
+		Dim udata As Map = userx.RunMethod("data", Null).Result
+		udata.Put(PrimaryKey, uid)
+		result.Add(udata)
+	Next
+	affectedRows = result.size
+	response = "Success"
+	error = ""
+	OK = True
+	Return result
+End Sub
+
 
 'get the id from a response
 private Sub getID(xresponse As Map) As String  'ignore

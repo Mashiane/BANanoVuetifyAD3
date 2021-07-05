@@ -223,3 +223,8 @@ End Sub
 Sub UpdateTitle(VC As VueComponent, vTitle As String)
 	VC.SetData($"${mName}title"$, vTitle)
 End Sub
+
+
+Sub OnClick(args As String)
+	VElement.SetOnEventOwn(mCallBack, $"${mName}_click"$, "click", args)
+End Sub

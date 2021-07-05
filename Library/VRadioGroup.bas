@@ -26,11 +26,13 @@ Version=7
 #DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: rg1, Description: VModel
 #DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: , Description: Value
 #DesignerProperty: Key: Mandatory, DisplayName: Mandatory, FieldType: Boolean, DefaultValue: False, Description: Mandatory
-#DesignerProperty: Key: ItemText, DisplayName: ItemText, FieldType: String, DefaultValue: text, Description: ItemText
 #DesignerProperty: Key: ItemValue, DisplayName: ItemValue, FieldType: String, DefaultValue: value, Description: ItemValue
+#DesignerProperty: Key: ItemText, DisplayName: ItemText, FieldType: String, DefaultValue: text, Description: ItemText
 #DesignerProperty: Key: ItemDisabled, DisplayName: ItemDisabled, FieldType: String, DefaultValue: disabled, Description: ItemDisabled
-#DesignerProperty: Key: Items, DisplayName: Items, FieldType: String, DefaultValue: items1, Description: Items
-
+'
+#DesignerProperty: Key: ItemKeys, DisplayName: Item Values (;), FieldType: String, DefaultValue:  , Description: Item Values
+#DesignerProperty: Key: ItemTitles, DisplayName: Item Texts (;), FieldType: String, DefaultValue:  , Description: Item Texts
+'
 #DesignerProperty: Key: ActiveClass, DisplayName: ActiveClass, FieldType: String, DefaultValue: , Description: ActiveClass
 #DesignerProperty: Key: Alignment, DisplayName: Alignment, FieldType: String, DefaultValue: row, Description: Alignment, List: column|none|row
 #DesignerProperty: Key: AppendIcon, DisplayName: AppendIcon, FieldType: String, DefaultValue: , Description: AppendIcon
@@ -60,6 +62,9 @@ Version=7
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
 
 Sub Class_Globals 
+	Private sItemKeys As String
+	Private sItemTitles As String
+	
     Private BANano As BANano 'ignore 
 	Private mName As String 'ignore 
 	Private mEventName As String 'ignore 
@@ -129,6 +134,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	sReadOnly = $"${mName}readonly"$
 	sVShow = $"${mName}show"$
 	sRequired = $"${mName}required"$
+	sItems = $"${mName}items"$
 	xitems.Initialize 
 End Sub
 
@@ -171,9 +177,10 @@ bValidateOnBlur = Props.GetDefault("ValidateOnBlur", False)
 sItemDisabled = Props.GetDefault("ItemDisabled", "disabled")
 sItemText = Props.GetDefault("ItemText","text")
 sItemValue = Props.GetDefault("ItemValue","value")
-sItems = Props.GetDefault("Items", "items")
- sValue = Props.GetDefault("Value", "")
- bRequired = Props.GetDefault("Required", False)
+sValue = Props.GetDefault("Value", "")
+bRequired = Props.GetDefault("Required", False)
+sItemKeys = Props.GetDefault("ItemKeys", "")
+sItemTitles = Props.GetDefault("ItemTitles", "")
 End If 
 '
 bDense = BANanoShared.parseBool(bDense)
@@ -187,7 +194,27 @@ bPersistentHint = BANanoShared.parseBool(bPersistentHint)
 bReadonly = BANanoShared.parseBool(bReadonly)
 bValidateOnBlur = BANanoShared.parseBool(bValidateOnBlur)
 bRequired = BANanoShared.parseBool(bRequired)
-
+'
+'add the additional actions
+	Dim rs As List
+	rs.Initialize 
+	'
+	sItemKeys = sItemKeys.Replace(",", ";")
+	sItemTitles = sItemTitles.Replace(",", ";")
+		
+	Dim xkeys As List = BANanoShared.StrParse(";", sItemKeys)
+	Dim xtitles As List = BANanoShared.StrParse(";", sItemTitles)
+		'
+	xkeys = BANanoShared.ListTrimItems(xkeys)
+	xtitles = BANanoShared.ListTrimItems(xtitles)
+	'
+	xitems.Initialize 
+	Dim tItems As Int = xkeys.Size - 1
+	For itemCnt = 0 To tItems
+		Dim iKey As String = xkeys.Get(itemCnt)
+		Dim iTit As String = xtitles.Get(itemCnt)
+		AddItem(iKey, iTit)
+	Next
 	' 
 	'build and get the element 
 	If BANano.Exists($"#${mName}"$) Then 
@@ -259,6 +286,7 @@ VElement.SetData(sVShow, Not(bHidden))
 VElement.AddAttr(":validate-on-blur", bValidateOnBlur)
 VElement.AddAttr(":required", sRequired)
 VElement.SetData(sRequired, bRequired)
+VElement.SetData(sItems, xitems)
 VElement.BindAllEvents
 End Sub
 
@@ -509,4 +537,9 @@ Sub BindState(VC As VueComponent)
 		Dim cb As BANanoObject = mmethods.Get(k)
 		VC.SetCallBack(k, cb)
 	Next
+End Sub
+
+
+Sub OnChange(args As String)
+	VElement.SetOnEventOwn(mCallBack, $"${mName}_change"$, "change", args)
 End Sub

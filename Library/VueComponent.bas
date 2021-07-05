@@ -95,6 +95,14 @@ Sub GetTabItem(elID As String) As VueElement
 	Return ti
 End Sub
 
+'Sub UseFlowy
+'	If components.ContainsKey("flowy") = False Then
+'		Dim FlowyVue As BANanoObject = BANano.Window.GetField("flowy-vue")
+'		Dim boFlowy As BANanoObject = FlowyVue.GetField("default")
+'		components.Put("flowy", boFlowy)
+'	End If	
+'End Sub	
+
 'get a tab icon
 Sub GetTabIcon(elID As String) As VueElement
 	Dim tabID As String = $"${elID}icon"$
@@ -650,8 +658,8 @@ End Sub
 
 'bind VueFlowy
 Sub BindVueFlowy(el As VueFlowy)
-	Dim mbindings As Map = el.bindings
-	Dim mmethods As Map = el.methods
+	Dim mbindings As Map = el.VElement.bindings
+	Dim mmethods As Map = el.velement.methods
 	'apply the binding for the control
 	For Each k As String In mbindings.Keys
 		Dim v As Object = mbindings.Get(k)
