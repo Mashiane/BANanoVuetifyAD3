@@ -500,6 +500,16 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 '	pgpp = $"${mName}pgpp"$
 '	rtt = $"${mName}rtt"$
 '	rpp = $"${mName}rpp"$
+	'
+	blueIcon.Initialize("blueIcon")
+	goldIcon.Initialize("goldIcon")
+	redIcon.Initialize("redIcon")
+	greenIcon.Initialize("greenIcon")
+	orangeIcon.Initialize("orangeIcon")
+	yellowIcon.Initialize("yellowIcon")
+	violetIcon.Initialize("violetIcon")
+	greyIcon.Initialize("greyIcon")
+	blackIcon.Initialize("blackIcon")
 End Sub
 
 Sub DesignerCreateView (Target As BANanoElement, Props As Map) 
@@ -1579,6 +1589,7 @@ End Sub
 Sub AddPolyLineLatLngMap(polygonID As String, points As Map)
 	polygonID = polygonID.tolowercase
 	If polylines.ContainsKey(polygonID) Then
+		Dim po As VPolyLine = polylines.Get(polygonID)
 		For Each k As String In points.Keys
 			Dim v As String = points.Get(k)
 			'Dim point As BANanoObject = latLng(k, v) 
@@ -1586,10 +1597,9 @@ Sub AddPolyLineLatLngMap(polygonID As String, points As Map)
 			point.Initialize 
 			point.Add(k)
 			point.Add(v)
-			Dim po As VPolyLine = polylines.Get(polygonID)
 			po.points.Add(point)
-			polylines.Put(polygonID,po)
 		Next
+		polylines.Put(polygonID,po)
 	End If
 End Sub
 
@@ -1597,6 +1607,7 @@ End Sub
 Sub AddPolygonLatLngMap(polygonID As String, points As Map)
 	polygonID = polygonID.tolowercase
 	If polygons.ContainsKey(polygonID) Then
+		Dim po As VPolyLine = polygons.Get(polygonID)
 		For Each k As String In points.Keys
 			Dim v As String = points.Get(k)
 			'Dim point As BANanoObject = latLng(k, v) 
@@ -1604,10 +1615,9 @@ Sub AddPolygonLatLngMap(polygonID As String, points As Map)
 			point.Initialize 
 			point.Add(k)
 			point.Add(v)
-			Dim po As VPolyLine = polygons.Get(polygonID)
 			po.points.Add(point)
-			polygons.Put(polygonID,po)
 		Next
+		polygons.Put(polygonID,po)
 	End If
 End Sub
 
@@ -1647,16 +1657,6 @@ Sub Reset
 	RemovePopUps
 	RemoveRectangles
 	RemoveCircles
-	'
-	blueIcon.Initialize("blueIcon")
-	goldIcon.Initialize("goldIcon")
-	redIcon.Initialize("redIcon")
-	greenIcon.Initialize("greenIcon")
-	orangeIcon.Initialize("orangeIcon")
-	yellowIcon.Initialize("yellowIcon")
-	violetIcon.Initialize("violetIcon")
-	greyIcon.Initialize("greyIcon")
-	blackIcon.Initialize("blackIcon")
 End Sub
 
 'remove rectangles

@@ -157,7 +157,6 @@ sItemChildren = Props.Get("ItemChildren")
 sItemDisabled = Props.Get("ItemDisabled")
 sItemKey = Props.Get("ItemKey")
 sItemText = Props.Get("ItemText")
-sItems = Props.Get("Items")
 bLight = Props.Get("Light")
 sLoadingIcon = Props.Get("LoadingIcon")
 bMultipleActive = Props.Get("MultipleActive")
@@ -251,7 +250,7 @@ VElement.AddAttr("v-if", sVIf)
 VElement.SetData(sActive, VElement.NewList)
 VElement.SetData(sOpen, VElement.NewList)
 VElement.SetData(sValue, VElement.NewList)
-VElement.SetData(sValue, VElement.NewList)
+VElement.SetData(sitems, VElement.NewList)
 VElement.BindAllEvents
 End Sub
 

@@ -1138,12 +1138,12 @@ Sub Initialize(Module As Object, myapp As String)
 	setAuthenticated(False)
 End Sub
 
-Sub UseVueDraggable
-	If components.ContainsKey("vuedraggable") = False Then
-		Dim vuedraggable As BANanoObject = BANano.Window.GetField("vuedraggable")
-		components.put("draggable", vuedraggable)
-	End If
-End Sub
+'Sub UseVueDraggable
+'	If components.ContainsKey("vuedraggable") = False Then
+'		Dim vuedraggable As BANanoObject = BANano.Window.GetField("vuedraggable")
+'		components.put("draggable", vuedraggable)
+'	End If
+'End Sub
 
 Sub UseVueTippy
 	If components.ContainsKey("tippy") = False Then
@@ -5572,15 +5572,15 @@ Sub GetThemeColor(color As String, intensity As String) As String
 	Return s
 End Sub
 
-Sub UseVuetifySimpleWizard
-	'ensure that the module is loaded
-	If ModuleExist("vuetifySimpleWizard") = False Then
-		Dim vsw As BANanoObject
-		vsw.Initialize("vuetifySimpleWizard")
-		Use(vsw)
-		AddModule("vuetifySimpleWizard")
-	End If
-End Sub
+'Sub UseVuetifySimpleWizard
+'	'ensure that the module is loaded
+'	If ModuleExist("vuetifySimpleWizard") = False Then
+'		Dim vsw As BANanoObject
+'		vsw.Initialize("vuetifySimpleWizard")
+'		Use(vsw)
+'		AddModule("vuetifySimpleWizard")
+'	End If
+'End Sub
 
 Sub ColorList As List
 	Dim colors As List

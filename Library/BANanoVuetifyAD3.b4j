@@ -2,15 +2,14 @@
 Build1=Default,b4j.example
 File1=1.png
 File10=beautify-html.min.js
-File100=vue-google-maps.js
+File100=vue-form-wizard.min.css
 File101=vue-prism-component.min.js
 File102=vue-router.min.js
 File103=vue-session.js
 File104=vuetify.min.css
 File105=vuetify.min.js
-File106=vuetify-simple-wizard.min.js
-File107=vue-tippy.min.js
-File108=xlsx.full.min.js
+File106=vue-tippy.min.js
+File107=xlsx.full.min.js
 File11=bvad31.png
 File12=chart.js
 File13=Chart.min.css
@@ -27,10 +26,10 @@ File22=fileSaver.min.js
 File23=firesql.umd.js
 File24=flowy-vue.css
 File25=flowy-vue.umd.min.js
-File26=gray.png
-File27=green.png
-File28=happyface.png
-File29=helpers.min.css
+File26=gmap-vue.min.js
+File27=gray.png
+File28=green.png
+File29=happyface.png
 File3=android-chrome-192x192.png
 File30=html2canvas.min.js
 File31=info-box.min.css
@@ -44,70 +43,70 @@ File38=leaflet.js
 File39=lodash.min.js
 File4=android-chrome-512x512.png
 File40=male.png
-File41=marker-icon.png
-File42=marker-icon-2x.png
-File43=marker-icon-2x-black.png
-File44=marker-icon-2x-blue.png
-File45=marker-icon-2x-gold.png
-File46=marker-icon-2x-green.png
-File47=marker-icon-2x-grey.png
-File48=marker-icon-2x-orange.png
-File49=marker-icon-2x-red.png
+File41=markerclustererplus.min.js
+File42=marker-icon.png
+File43=marker-icon-2x.png
+File44=marker-icon-2x-black.png
+File45=marker-icon-2x-blue.png
+File46=marker-icon-2x-gold.png
+File47=marker-icon-2x-green.png
+File48=marker-icon-2x-grey.png
+File49=marker-icon-2x-orange.png
 File5=apple-touch-icon.png
-File50=marker-icon-2x-violet.png
-File51=marker-icon-2x-yellow.png
-File52=marker-icon-black.png
-File53=marker-icon-blue.png
-File54=marker-icon-gold.png
-File55=marker-icon-green.png
-File56=marker-icon-grey.png
-File57=marker-icon-orange.png
-File58=marker-icon-red.png
-File59=marker-icon-violet.png
+File50=marker-icon-2x-red.png
+File51=marker-icon-2x-violet.png
+File52=marker-icon-2x-yellow.png
+File53=marker-icon-black.png
+File54=marker-icon-blue.png
+File55=marker-icon-gold.png
+File56=marker-icon-green.png
+File57=marker-icon-grey.png
+File58=marker-icon-orange.png
+File59=marker-icon-red.png
 File6=avatar.png
-File60=marker-icon-yellow.png
-File61=marker-shadow.png
-File62=materialdesignicons.min.css
-File63=materialdesignicons-webfont.eot
-File64=materialdesignicons-webfont.ttf
-File65=materialdesignicons-webfont.woff
-File66=materialdesignicons-webfont.woff2
-File67=material-ui.min.css
-File68=moment.min.js
-File69=neutralface.png
+File60=marker-icon-violet.png
+File61=marker-icon-yellow.png
+File62=marker-shadow.png
+File63=materialdesignicons.min.css
+File64=materialdesignicons-webfont.eot
+File65=materialdesignicons-webfont.ttf
+File66=materialdesignicons-webfont.woff
+File67=materialdesignicons-webfont.woff2
+File68=material-ui.min.css
+File69=moment.min.js
 File7=axios.min.js
-File70=numeral.min.js
-File71=orange.png
-File72=oxml.min.js
-File73=prism.min.css
-File74=prism.min.js
-File75=qrcode.min.js
-File76=red.png
-File77=roboto.min.css
-File78=Roboto100.ttf
-File79=Roboto300.ttf
+File70=neutralface.png
+File71=numeral.min.js
+File72=orange.png
+File73=oxml.min.js
+File74=prism.min.css
+File75=prism.min.js
+File76=qrcode.min.js
+File77=red.png
+File78=roboto.min.css
+File79=Roboto100.ttf
 File8=beautify.min.js
-File80=Roboto400.ttf
-File81=Roboto500.ttf
-File82=Roboto700.ttf
-File83=Roboto900.ttf
-File84=sadface.png
-File85=sponge.png
-File86=sponget.png
-File87=sweetalert2.all.min.js
-File88=tippygoogle.css
-File89=upload.php
+File80=Roboto300.ttf
+File81=Roboto400.ttf
+File82=Roboto500.ttf
+File83=Roboto700.ttf
+File84=Roboto900.ttf
+File85=sadface.png
+File86=sponge.png
+File87=sponget.png
+File88=sweetalert2.all.min.js
+File89=tippygoogle.css
 File9=beautify-css.min.js
-File90=v-blur.min.js
-File91=vjsf.css
-File92=vjsf.js
-File93=vue.min.js
-File94=vue2-leaflet.min.js
-File95=vue2-leaflet-movingmarker.umd.min.js
-File96=vue-clipboard.min.js
-File97=vue-count-to.min.js
-File98=vue-form-wizard.js
-File99=vue-form-wizard.min.css
+File90=upload.php
+File91=v-blur.min.js
+File92=vjsf.css
+File93=vjsf.js
+File94=vue.min.js
+File95=vue2-leaflet.min.js
+File96=vue2-leaflet-movingmarker.umd.min.js
+File97=vue-clipboard.min.js
+File98=vue-count-to.min.js
+File99=vue-form-wizard.js
 FileGroup1=Default Group
 FileGroup10=Default Group
 FileGroup100=Default Group
@@ -118,7 +117,6 @@ FileGroup104=Default Group
 FileGroup105=Default Group
 FileGroup106=Default Group
 FileGroup107=Default Group
-FileGroup108=Default Group
 FileGroup11=Default Group
 FileGroup12=Default Group
 FileGroup13=Default Group
@@ -259,11 +257,10 @@ Module13=BANanoSQLiteE
 Module130=VueFlowy
 Module131=VueGMap
 Module132=VueInfoBox
-Module133=VueSimpleWizard
-Module134=VueSwal
-Module135=VueTable
-Module136=VuetifyApp
-Module137=VueVJSF
+Module133=VueSwal
+Module134=VueTable
+Module135=VuetifyApp
+Module136=VueVJSF
 Module14=BVAD3FBAuth
 Module15=BVAD3FBCollection
 Module16=BVAD3FBDocument
@@ -358,9 +355,9 @@ Module96=VParallax
 Module97=VPrism
 Module98=VProgressCircular
 Module99=VProgressLinear
-NumberOfFiles=108
+NumberOfFiles=107
 NumberOfLibraries=4
-NumberOfModules=137
+NumberOfModules=136
 Version=9.08
 @EndOfDesignText@
 #Region Project Attributes 
@@ -375,7 +372,7 @@ Version=9.08
 
 Sub Process_Globals
 	Private BANano As BANano 'ignore
-	Public Version As String = "5.51"
+	Public Version As String = "5.52"
 	Public AppName As String = "BANanoVuetifyAD3"
 End Sub
 
@@ -400,7 +397,7 @@ Sub AppStart (Form1 As Form, Args() As String)
 	BANano.Header.AddCSSFile("roboto.min.css")
 	BANano.Header.AddCSSFile("info-box.min.css")
 	BANano.Header.AddCSSFile("flowy-vue.css")
-	BANano.Header.AddCSSFile("helpers.min.css")
+	'BANano.Header.AddCSSFile("helpers.min.css")
 	BANano.Header.AddCSSFile("vue-form-wizard.min.css")
 	BANano.Header.AddCSSFile("vjsf.css")
 	'BANano.Header.AddCSSFile("xspreadsheet.css")
@@ -437,7 +434,10 @@ Sub AppStart (Form1 As Form, Args() As String)
 	'BANano.Header.AddJavascriptFile("vue-social-chat.min.js")
 	
 	'GOOGLE MAPS
-	BANano.Header.AddJavascriptFile("vue-google-maps.js")
+	'BANano.Header.AddJavascriptFile("vue-google-maps.js")
+	BANano.Header.AddJavascriptFile("markerclustererplus.min.js")
+	BANano.Header.AddJavascriptFile("gmap-vue.min.js")
+	
 	'BANano.Header.AddJavascriptFile("Sortable.min.js")
 	
 	'BVAD3
@@ -475,7 +475,7 @@ Sub AppStart (Form1 As Form, Args() As String)
 	BANano.Header.AddJavascriptFile("xlsx.full.min.js")
 	
 	'BANano.Header.AddJavascriptFile("xspreadsheet.js")
-	BANano.Header.AddJavascriptFile("vuetify-simple-wizard.min.js")
+	'BANano.Header.AddJavascriptFile("vuetify-simple-wizard.min.js")
 	'BANano.Header.AddJavascriptFile("nedb.min.js")
 	
 	

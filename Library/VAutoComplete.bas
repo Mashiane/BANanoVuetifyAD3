@@ -38,6 +38,7 @@ Version=7
 #DesignerProperty: Key: ItemKeys, DisplayName: Item Values (;), FieldType: String, DefaultValue:  , Description: Item Values
 #DesignerProperty: Key: ItemTitles, DisplayName: Item Texts (;), FieldType: String, DefaultValue:  , Description: Item Texts
 '
+#DesignerProperty: Key: ColorList, DisplayName: ColorList, FieldType: Boolean, DefaultValue: False, Description: ColorList
 #DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: Boolean, DefaultValue: False, Description: Disabled
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: Loading, DisplayName: Loading, FieldType: Boolean, DefaultValue: False, Description: Loading
@@ -217,6 +218,7 @@ Private bReadonly As Boolean
 Private bRequired As Boolean
 Private sRequired As String
 Private sValue As String
+Private bColorList As Boolean
 	End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -239,7 +241,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	sVShow = $"${mName}show"$
 	sLoading = $"${mName}loading"$
 	sItems = $"${mName}items"$
-	End Sub
+End Sub
 
 Sub DesignerCreateView (Target As BANanoElement, Props As Map) 
 	mTarget = Target 
@@ -289,7 +291,6 @@ sItemColorIntensity = Props.Get("ItemColorIntensity")
 sItemDisabled = Props.Get("ItemDisabled")
 sItemText = Props.Get("ItemText")
 sItemValue = Props.Get("ItemValue")
-sItems = Props.Get("Items")
 sKey = Props.Get("Key")
 sLabel = Props.Get("Label")
 bLight = Props.Get("Light")
@@ -330,6 +331,8 @@ sVOn = Props.Get("VOn")
 bValidateOnBlur = Props.Get("ValidateOnBlur")
  sItemKeys = Props.GetDefault("ItemKeys", "")
 sItemTitles = Props.GetDefault("ItemTitles", "")
+bColorList = Props.GetDefault("ColorList", False)
+bColorList = BANanoShared.parseBool(bColorList)
 	End If 
 	'
 	bDisabled = BANanoShared.parseBool(bDisabled)
@@ -383,8 +386,11 @@ bMultiple = BANanoShared.parseBool(bMultiple)
 		mElement = mTarget.Append($"<v-autocomplete ref="${mName}" id="${mName}"></v-autocomplete>"$).Get("#" & mName) 
 	End If 
 	' 
-	Dim rs As List
-	rs.Initialize 
+	'build the color list
+	If bColorList Then
+		sItemKeys = $"red,pink,purple,indigo,deep-purple,blue,light-blue,cyan,teal,green,light-green,lime,yellow,amber,orange,deep-orange,brown,grey,blue-grey,black,white"$	
+		sItemTitles = $"Red,Pink,Purple,Indigo,Deep Purple,Blue,Light Blue,Cyan,Teal,Green,Light Green,Lime,Yellow,Amber,Orange,Deep Orange,Brown,Grey,Blue Grey,Black,White"$
+	End If	
 	'
 	sItemKeys = sItemKeys.Replace(",", ";")
 	sItemTitles = sItemTitles.Replace(",", ";")
@@ -404,7 +410,27 @@ bMultiple = BANanoShared.parseBool(bMultiple)
 	Next
 	
 	VElement.Initialize(mCallBack, mName, mName) 
-	VElement.TagName = "v-autocomplete" 
+	VElement.TagName = "v-autocomplete"
+	'this is a color list
+	If bColorList Then
+		Dim strColor As String = $"<v-template v-slot:selection="data">
+                    <v-list-item-avatar style='border:1px solid black !important;'>
+                    	<v-avatar :color="data.item.${sItemValue}" class="text-center" size=40>
+                    </v-list-item-avatar>
+                    {{ data.item.${sItemText} }}
+                  </v-template>
+                  <v-template v-slot:item="data">
+                    <v-list-item-avatar style='border:1px solid black !important;'>
+                    	<v-avatar :color="data.item.${sItemValue}" class="text-center" size=40>
+                    </v-list-item-avatar>
+                    <v-list-item-content>
+                      <v-list-item-title v-html="data.item.${sItemText}"></v-list-item-title>
+                    </v-list-item-content>
+                  </v-template>"$
+				  VElement.Append(strColor)
+	End If	
+	
+	 
 	VElement.Classes = mClasses 
 	VElement.Styles = mStyles 
 	VElement.Attributes = mAttributes 

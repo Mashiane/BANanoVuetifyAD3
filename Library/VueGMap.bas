@@ -6,6 +6,7 @@ Version=8.8
 @EndOfDesignText@
 #IgnoreWarnings:12
 'Custom BANano View class
+'https://diegoazh.github.io/gmap-vue/#about-gmapvue
 
 'Uncomment the events you want to show to the user and implement the HandleEvents in DesignerCreateView 
 #Event: MarkerClick (marker As Map)
@@ -165,11 +166,32 @@ Sub Class_Globals
 	Private sItemColors As String
 	Private sButtons As String
 	Private xresize As String
-	Private map As BANanoObject
+	Private xpolylines As String
+	Private polylines As Map
+	Private xpolygons As String
+	Private polygons As Map
+	Private xcircles As String
+	Private circles As Map
+	Private xrectangles As String
+	Private rectangles As Map
+	Private kmlLayers As Map
+	'
+	Public const COLOR_BLUE As String = "./assets/marker-icon-2x-blue.png"
+	Public const COLOR_GOLD As String = "./assets/marker-icon-2x-gold.png"
+	Public const COLOR_RED As String = "./assets/marker-icon-2x-red.png"
+	Public const COLOR_GREEN As String = "./assets/marker-icon-2x-green.png"
+	Public const COLOR_ORANGE As String = "./assets/marker-icon-2x-orange.png"
+	Public const COLOR_YELLOW As String = "./assets/marker-icon-2x-yellow.png"
+	Public const COLOR_VIOLET As String = "./assets/marker-icon-2x-violet.png"
+	Public const COLOR_GREY As String = "./assets/marker-icon-2x-grey.png"
+	Public const COLOR_BLACK As String = "./assets/marker-icon-2x-black.png"
+	Public MapObject As BANanoObject
+	Public google As BANanoObject
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
-	BANano.DependsOnAsset("vue-google-maps.js")
+	BANano.DependsOnAsset("gmap-vue.min.js")
+	BANano.DependsOnAsset("markerclustererplus.min.js")
 	
 	mName = Name.tolowercase
 	mEventName = EventName.ToLowerCase
@@ -199,9 +221,16 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	xTitle = $"${mName}title"$
 	sButtons = $"${mName}buttons"$
 	xresize = $"${mName}_resize"$
+	xpolylines = $"${mName}polylines"$
+	xpolygons = $"${mName}polygons"$
+	xcircles = $"${mName}circles"$
+	xrectangles = $"${mName}rectangles"$
 	
 	options.Initialize
 	points.Initialize
+	circles.Initialize 
+	rectangles.Initialize
+	kmlLayers.Initialize  
 	'
 	mGoogleMapKey = ""
 	bFullScreenControl = True
@@ -218,6 +247,8 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	bMarkersDraggable = False
 	bKMLVisible = False
 	bKMLClickable = False
+	polylines.Initialize 
+	polygons.Initialize 
 	'stVShow = $"${mName}show"$
 End Sub
 
@@ -226,21 +257,21 @@ Sub setParentComponent(PVC As VueComponent)
 	VC = PVC
 End Sub
 
-'use the map
+'GmapVue
 Sub Use(vuetify As VuetifyApp)
 	'ensure that the module is loaded
 	If vuetify.ModuleExist("googlemap") = False Then
 		Dim VueGoogleMaps As BANanoObject
-		VueGoogleMaps.Initialize("VueGoogleMaps")
-		
-		Dim load As Map = CreateMap()
-		load.Put("key", mGoogleMapKey)
-		load.Put("libraries", "places")
+		VueGoogleMaps.Initialize("GmapVue")
+		Dim opt As Map = CreateMap()
+		BANanoShared.PutRecursive(opt, "load.key", mGoogleMapKey)
+		BANanoShared.PutRecursive(opt, "load.libraries", "places")
+		BANanoShared.PutRecursive(opt, "installComponents", True)
+		vuetify.Use1(VueGoogleMaps, opt)
 		'
-		Dim VueGoogleMapsOptions As Map = CreateMap()
-		VueGoogleMapsOptions.Put("load", load)
-		VueGoogleMapsOptions.Put("installComponents", True)
-		vuetify.Use1(VueGoogleMaps, VueGoogleMapsOptions)
+		Dim Cluster As BANanoObject = VueGoogleMaps.GetField("Cluster")
+		google = VueGoogleMaps.GetField("gmapApi")
+		vuetify.ImportComponentBO("gmap-cluster", Cluster)
 		vuetify.AddModule("googlemap")
 	End If
 End Sub
@@ -337,22 +368,26 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		If bInsideVCard Then 
 			mTarget.Append($"<v-card id="${mName}card" v-lazy><v-card-title id="${mName}cardtitle">{{ ${xTitle} }}</v-card-title>
 			<v-card-text id="${mName}cardtext"></v-card-text></v-card>"$)
-			
-			mElement = BANano.GetElement($"#${mName}cardtext"$).Append($"<gmap-map :key="${gmapkey}" ref="${mName}" id="${mName}">
-			<gmap-marker id="${smarker}"></gmap-marker>
-			<google-kml-layer id="${skmllayer}"></google-kml-layer>
-			<gmap-info-window id="${sinfowindow}"></gmap-info-window></gmap-map>"$).Get($"#${mName}"$)
-		Else
-			mElement = mTarget.Append($"<gmap-map :key="${gmapkey}" ref="${mName}" id="${mName}">
-			<gmap-marker id="${smarker}"></gmap-marker>
-			<google-kml-layer id="${skmllayer}"></google-kml-layer>
-			<gmap-info-window id="${sinfowindow}"></gmap-info-window></gmap-map>"$).Get($"#${mName}"$)
 		End If	
 	End If
 	'
+	Dim mapStr As String = $"<gmap-map :key="${gmapkey}" ref="${mName}" id="${mName}">
+			<gmap-cluster><gmap-marker id="${smarker}"></gmap-marker></gmap-cluster>
+			<gmap-polyline v-for="item in ${xpolylines}" v-if="item.visible" :path="item.path"  :options="item.options" :ref="item.id"></gmap-polyline>
+			<gmap-polygon v-for="item in ${xpolygons}" v-if="item.visible" :paths="item.paths" :options="item.options" :ref="item.id"></gmap-polygon>
+			<gmap-circle v-for="item in ${xcircles}" v-if="item.visible" :bounds="item.bounds" :center="item.center" :radius="item.radius" :options="item.options" :ref="item.id"></gmap-circle>
+			<gmap-rectangle v-for="item in ${xrectangles}" v-if="item.visible" :bounds="item.bounds" :options="item.options" :ref="item.id"></gmap-rectangle>
+    		<google-kml-layer v-if="lyr.visible" id="${skmllayer}" :ref="lyr.id"></google-kml-layer>
+			<gmap-info-window id="${sinfowindow}"></gmap-info-window></gmap-map>"$
+	'
+	If bInsideVCard Then
+		mElement = BANano.GetElement($"#${mName}cardtext"$).Append(mapStr).Get($"#${mName}"$)
+	Else
+		mElement = mTarget.Append(mapStr).Get($"#${mName}"$)
+	End If	
+	'
 	VElement.Initialize(mCallBack, mName, mName) 
 	VElement.TagName = "gmap-map"
-
 	'
 	If bInsideVCard Then 
 		'add a spacer then add buttons
@@ -386,6 +421,11 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		BANano.Throw($"VueGMap.${mName} - generate members for Ready!"$)
 	End If	
 	
+	VElement.SetData(xpolylines, VElement.newlist)
+	VElement.SetData(xpolygons, VElement.NewList)
+	VElement.SetData(xcircles, VElement.NewList)
+	VElement.SetData(xrectangles, VElement.NewList)
+	'
 	VElement.AddAttr("v-else", stVElse)
 	VElement.AddAttr("v-else-if", stVElseIf)
 	VElement.AddAttr("v-if", stVIf)
@@ -437,13 +477,14 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	'
 	'get the layers etc
 	mkmllayer.Initialize(mCallBack,skmllayer,skmllayer)
-	mkmllayer.vif = skmlvisible
 	mkmllayer.SetAttr(":clickable", sKMLClickable)
 	mkmllayer.VFor = $"lyr in ${kmlName}"$
 	mkmllayer.SetAttr(":url", "lyr.url")
 	
 	mmarker.RemoveBinding("m")
 	mkmllayer.RemoveBinding("lyr")
+	mkmllayer.RemoveAttr("id")
+	'
 	VElement.BindVueElement(minfowindow)
 	VElement.BindVueElement(mkmllayer)
 	VElement.BindVueElement(mmarker)
@@ -551,12 +592,13 @@ Sub ShowInfoWindow(b As Boolean)			'ignoredeadcode
 End Sub
 
 'add kml url
-Sub AddKMLURL(url As String)
-	Dim kml As List = VC.GetData(kmlName)
+Sub AddKMLURL(id As String, url As String)
 	Dim nl As Map = CreateMap()
 	nl.put("url", url)
-	kml.add(nl)
-	VC.SetData(kmlName, kml)
+	nl.Put("visible", True)
+	nl.Put("id", id)
+	nl.Put("clickable", sKMLClickable)
+	kmlLayers.Put(id, nl)
 End Sub
 
 'update markers visibility
@@ -612,11 +654,38 @@ End Sub
 'reset the map
 Sub Reset
 	ClearMarkers
+	ClearPolylines
+	ClearCircles
+	ClearRectangles
+	ClearKML
 End Sub
 
 'clear all markers
 Sub ClearMarkers   'ignoreDeadcode
 	points.Initialize
+	VC.SetData(markerName, points)
+End Sub
+
+Sub ClearPolylines
+	polylines.Initialize
+	VC.SetData(xpolylines, polylines) 
+End Sub
+
+
+Sub ClearCircles
+	circles.Initialize
+	VC.SetData(xcircles, circles) 
+End Sub
+
+Sub ClearRectangles
+	rectangles.Initialize
+	VC.SetData(xrectangles, rectangles) 
+End Sub
+
+
+Sub ClearKML
+	kmlLayers.Initialize
+	VC.SetData(kmlName, kmlLayers) 
 End Sub
 
 'refresh markers and re-render the map
@@ -624,12 +693,85 @@ Sub Refresh
 	VC.SetData(gmapkey, DateTime.Now)
 	VC.SetData(soptions, options)
 	VC.SetData(markerName, points)
+	BuildPolyLines
+	BuildPolyGons
+	BuildCircles
+	BuildRectangles
+	BuildKML
 End Sub
 
-'refresh markers
-Sub Refresh1
-	VC.SetData(soptions, options)
-	VC.SetData(markerName, points)
+
+'build the polylines
+private Sub BuildPolyLines
+	Dim polylineList As List
+	polylineList.Initialize 
+	'
+	Dim rsCnt As Int
+	Dim rsTot As Int = polylines.Size - 1
+	For rsCnt = 0 To rsTot
+		Dim mt As Map = polylines.GetValueAt(rsCnt)
+		polylineList.Add(mt)
+	Next
+	VC.SetData(xpolylines, polylineList)
+End Sub
+
+
+'build the kml
+private Sub BuildKML
+	Dim polylineList As List
+	polylineList.Initialize 
+	'
+	Dim rsCnt As Int
+	Dim rsTot As Int = kmlLayers.Size - 1
+	For rsCnt = 0 To rsTot
+		Dim mt As Map = kmlLayers.GetValueAt(rsCnt)
+		polylineList.Add(mt)
+	Next
+	VC.SetData(kmlName, polylineList)
+End Sub
+
+
+'build the circles
+private Sub BuildCircles
+	Dim polylineList As List
+	polylineList.Initialize 
+	'
+	Dim rsCnt As Int
+	Dim rsTot As Int = circles.Size - 1
+	For rsCnt = 0 To rsTot
+		Dim mt As Map = circles.GetValueAt(rsCnt)
+		polylineList.Add(mt)
+	Next
+	VC.SetData(xcircles, polylineList)
+End Sub
+
+
+'build the rectangles
+private Sub BuildRectangles
+	Dim polylineList As List
+	polylineList.Initialize 
+	'
+	Dim rsCnt As Int
+	Dim rsTot As Int = rectangles.Size - 1
+	For rsCnt = 0 To rsTot
+		Dim mt As Map = rectangles.GetValueAt(rsCnt)
+		polylineList.Add(mt)
+	Next
+	VC.SetData(xrectangles, polylineList)
+End Sub
+
+'build the polygons
+private Sub BuildPolyGons
+	Dim polylineList As List
+	polylineList.Initialize 
+	'
+	Dim rsCnt As Int
+	Dim rsTot As Int = polygons.Size - 1
+	For rsCnt = 0 To rsTot
+		Dim mt As Map = polygons.GetValueAt(rsCnt)
+		polylineList.Add(mt)
+	Next
+	VC.SetData(xpolygons, polylineList)
 End Sub
 
 Sub AddMarker(mID As String, lat As Double, lng As Double, label As String, info As String)
@@ -642,36 +784,167 @@ Sub AddMarker(mID As String, lat As Double, lng As Double, label As String, info
 	BANanoShared.PutRecursive(marker, "id", mID)
 	BANanoShared.PutRecursive(marker, "position.lat", lat)
 	BANanoShared.PutRecursive(marker, "position.lng", lng)
-	If BANano.IsNull(info) <> False Then
-		BANanoShared.PutRecursive(marker, "infoText", info)
-	End If
-	If BANano.IsNull(label) <> False Then
-		BANanoShared.PutRecursive(marker, "label", label)
-	End If
+	BANanoShared.PutRecursive(marker, "infoText", info)
+	BANanoShared.PutRecursive(marker, "label", label)
+	marker.Put("animation", "bounce")
 	points.add(marker)
 End Sub
 
-Sub AddMarker1(mID As String, lat As Double, lng As Double, label As String, info As String, icon As String)
-	mID = mID.tolowercase
+Sub AddMarkerIcon(markerID As String, info As String, lat As Double, lng As Double, icon As String, SizeX As String, SizeY As String, AnchorX As Int, AnchorY As Int)
+	markerID = markerID.tolowercase
 	Dim marker As Map = CreateMap()
 	'
 	lat = BANano.parseFloat(lat)
 	lng = BANano.parseFloat(lng)
 	'
-	BANanoShared.PutRecursive(marker, "id", mID)
+	SizeX = BANano.parseInt(SizeX)
+	SizeY = BANano.parseInt(SizeY)
+	'
+	AnchorX = BANano.parseInt(AnchorX)
+	AnchorY = BANano.parseInt(AnchorY)
+	
+	
+	Dim size As BANanoObject
+	size.Initialize2("google.maps.Size", Array(SizeX, SizeY))
+	'
+	Dim point As BANanoObject
+	point.Initialize2("google.maps.Point", Array(AnchorX, AnchorY))
+	'
+	Dim origin As BANanoObject
+	origin.Initialize2("google.maps.Point", Array(0, 0))
+	
+	Dim img As Map = CreateMap()
+	img.Put("url", icon)
+	img.Put("scaledSize", size)
+	img.Put("anchor", point)
+	img.Put("origin", origin)
+	
+	BANanoShared.PutRecursive(marker, "id", markerID)
 	BANanoShared.PutRecursive(marker, "position.lat", lat)
 	BANanoShared.PutRecursive(marker, "position.lng", lng)
-	If BANano.IsNull(info) <> False Then
-		BANanoShared.PutRecursive(marker, "infoText", info)
-	End If
-	If BANano.IsNull(label) <> False Then
-		BANanoShared.PutRecursive(marker, "label", label)
-	End If
-	If BANano.IsNull(icon) <> False Then
-		BANanoShared.PutRecursive(marker, "icon", icon)
-	End If
+	BANanoShared.PutRecursive(marker, "infoText", info)
 	marker.Put("animation", "bounce")
+	marker.Put("icon", img)
 	points.add(marker)
+End Sub
+
+'add a marker with color
+Sub AddMarkerIconColor(markerID As String, markerTitle As String, markerLat As Double, markerLng As Double, markerColor As String)
+	AddMarkerIcon(markerID, markerTitle, markerLat, markerLng, markerColor, 25, 41, 12, 41)
+End Sub
+
+'add a polyline
+Sub AddPolyLine(polyLineID As String, polyLineTitle As String,polyLineColor As String)
+	polyLineID = polyLineID.tolowercase
+	Dim path As List
+	path.Initialize
+	' 
+	Dim pe As Map
+	pe.Initialize
+	pe.Put("id", polyLineID)
+	pe.put("title", polyLineTitle)
+	pe.Put("visible", True)
+	'pe.Weight = 3
+	'pe.Opacity = 1.0
+	'pe.FillColor = "#3388ff"
+	'pe.FillOpacity = 0.2
+	'pe.fitBounds = False
+	'pe.PopUp = ""
+	pe.Put("path", path)
+	'
+	BANanoShared.PutRecursive(pe, "options.geodesic", True)
+	BANanoShared.PutRecursive(pe, "options.strokeColor", polyLineColor)
+	BANanoShared.PutRecursive(pe, "options.fillColor", "#3388ff")
+	polylines.Put(polyLineID, pe)
+End Sub
+
+
+
+'
+'add a polygon
+Sub AddPolygon(polyLineID As String, polyLineTitle As String,polyLineColor As String)
+	polyLineID = polyLineID.tolowercase
+	Dim path As List
+	path.Initialize
+	' 
+	Dim pe As Map
+	pe.Initialize
+	pe.Put("id", polyLineID)
+	pe.put("title", polyLineTitle)
+	pe.Put("visible", True)
+	'pe.Weight = 3
+	'pe.Opacity = 1.0
+	'pe.FillColor = "#3388ff"
+	'pe.FillOpacity = 0.2
+	'pe.fitBounds = False
+	'pe.PopUp = ""
+	pe.Put("paths", path)
+	BANanoShared.PutRecursive(pe, "options.geodesic", True)
+	BANanoShared.PutRecursive(pe, "options.strokeColor", polyLineColor)
+	BANanoShared.PutRecursive(pe, "options.fillColor", "#3388ff")
+	
+	polygons.Put(polyLineID, pe)
+End Sub
+
+
+'add polyline points from a map
+Sub AddPolyLineLatLngMap(polygonID As String, paths As Map)
+	polygonID = polygonID.tolowercase
+	If polylines.ContainsKey(polygonID) Then
+		Dim po As Map = polylines.Get(polygonID)
+		Dim path As List = po.Get("path")
+		For Each k As String In paths.Keys
+			Dim v As String = paths.Get(k)
+			k = BANano.parseFloat(k)
+			v = BANano.parseFloat(v)
+			Dim latlng As Map = CreateMap()
+			latlng.Put("lat", k)
+			latlng.Put("lng", v)
+			path.add(latlng)
+		Next
+		po.Put("path", path)
+		polylines.Put(polygonID, po)
+	End If
+End Sub
+
+'add polygon points from a map
+Sub AddPolyGonLatLngMap(polygonID As String, paths As Map)
+	polygonID = polygonID.tolowercase
+	If polygons.ContainsKey(polygonID) Then
+		Dim po As Map = polygons.Get(polygonID)
+		Dim path As List = po.Get("paths")
+		For Each k As String In paths.Keys
+			Dim v As String = paths.Get(k)
+			k = BANano.parseFloat(k)
+			v = BANano.parseFloat(v)
+			Dim latlng As Map = CreateMap()
+			latlng.Put("lat", k)
+			latlng.Put("lng", v)
+			path.add(latlng)
+		Next
+		po.Put("paths", path)
+		polygons.Put(polygonID, po)
+	End If
+End Sub
+
+'add a simple polygon marker
+Sub AddPolyGonLatLng(polyLineID As String, markerLat As Double, markerLng As Double)
+	markerLat = BANano.parseFloat(markerLat)
+	markerLng = BANano.parseFloat(markerLng)
+	Dim latlng As Map = CreateMap()
+	latlng.Put("lat", markerLat)
+	latlng.Put("lng", markerLng)
+	AddPolyGonLatLngMap(polyLineID, latlng)
+End Sub
+
+'add a simple polyline marker
+Sub AddPolyLineLatLng(polyLineID As String, markerLat As Double, markerLng As Double)
+	markerLat = BANano.parseFloat(markerLat)
+	markerLng = BANano.parseFloat(markerLng)
+	Dim latlng As Map = CreateMap()
+	latlng.Put("lat", markerLat)
+	latlng.Put("lng", markerLng)
+	AddPolyLineLatLngMap(polyLineID, latlng)
 End Sub
 
 private Sub setZoomControl(b As Boolean)
@@ -914,13 +1187,66 @@ End Sub
 'check the readiness of he map
 Sub IsReady(V As VueComponent)
 	Dim smp As String = "$mapPromise"
-	Dim mpres As Map
+	Dim mresp As Map
 	Dim mperr As Map
 	Dim mp As BANanoPromise
 	mp = V.refs.GetField(mName).GetField(smp)
-	mp.ThenWait(mpres)
+	mp.ThenWait(mresp)
+	MapObject = mresp
 	BANano.CallSub(mCallBack, $"${mName}_ready"$, Array(True))
 	mp.ElseWait(mperr)
 	BANano.CallSub(mCallBack, $"${mName}_ready"$, Array(False))
 	mp.End
+End Sub
+
+''panTo
+'Sub panTo(V As VueComponent, lat As Double, lng As Double)
+'	'
+'	Dim latlng As Map = CreateMap()
+'	latlng.Put("lat", lat)
+'	latlng.Put("lng", lng)
+'	'
+'	'get the map object
+'	MapObject = V.refs.GetField(mName)
+'	MapObject.RunMethod("panTo", latlng)
+'End Sub
+
+'add a circle
+Sub AddCircle(CircleId As String, CircleTitle As String, CircleLatitude As Double,CircleLongitude As Double,CircleColor As String, CircleRadius As Int)
+	CircleId = CircleId.tolowercase
+	Dim mc As Map = CreateMap()
+	BANanoShared.PutRecursive(mc, "center.lat", CircleLatitude)
+	BANanoShared.PutRecursive(mc, "center.lng", CircleLongitude)
+	BANanoShared.PutRecursive(mc, "options.strokeColor", CircleColor)
+	BANanoShared.PutRecursive(mc, "options.fillColor", "#3388ff")
+	'
+	Dim bounds As Map = CreateMap()
+	mc.Put("radius", CircleRadius)
+	mc.Put("bounds", bounds)
+	mc.Put("title", CircleTitle)
+	mc.Put("id", CircleId)
+	mc.Put("visible", True)
+	circles.Put(CircleId, mc)
+End Sub
+
+'add a rectangle
+Sub AddRectangle(rectID As String, rectTitle As String, rectLat1 As Double, rectLng1 As Double, rectLat2 As Double, rectLng2 As Double, rectColor As String, rectWeight As Int)
+	rectID = rectID.tolowercase
+	Dim mc As Map = CreateMap()
+	mc.Put("title", rectTitle)
+	mc.Put("id", rectID)
+	mc.Put("visible", True)
+	BANanoShared.PutRecursive(mc, "options.strokeColor", rectColor)
+	BANanoShared.PutRecursive(mc, "options.fillColor", "#3388ff")
+	BANanoShared.PutRecursive(mc, "options.weight", rectWeight)
+	
+	'bottom right
+	BANanoShared.PutRecursive(mc, "bounds.south", rectLat2)
+	BANanoShared.PutRecursive(mc, "bounds.east", rectLng2)
+	
+	'top left
+	BANanoShared.PutRecursive(mc, "bounds.north", rectLat1)
+	BANanoShared.PutRecursive(mc, "bounds.west", rectLng1)
+	
+	rectangles.Put(rectID,mc)
 End Sub

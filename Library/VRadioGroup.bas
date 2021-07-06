@@ -196,8 +196,6 @@ bValidateOnBlur = BANanoShared.parseBool(bValidateOnBlur)
 bRequired = BANanoShared.parseBool(bRequired)
 '
 'add the additional actions
-	Dim rs As List
-	rs.Initialize 
 	'
 	sItemKeys = sItemKeys.Replace(",", ";")
 	sItemTitles = sItemTitles.Replace(",", ";")
