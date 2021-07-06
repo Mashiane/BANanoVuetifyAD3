@@ -12,7 +12,7 @@ Version=8.8
 #Event: MarkerClick (marker As Map)
 #Event: ToolBar_Click (id As String)
 #Event: Resize
-#Event: Ready (Success As Boolean)
+#Event: Ready
 '#Event: Blur (event As BANanoEvent)
 '#Event: Resize (event As BANanoEvent)
 '#Event: Scroll (event As BANanoEvent)
@@ -58,7 +58,7 @@ Version=8.8
 #DesignerProperty: Key: MapType, DisplayName: MapType, FieldType: String, DefaultValue: roadmap, Description:, List: roadmap|satellite|hybrid|terrain
 #DesignerProperty: Key: RotateControl, DisplayName: RotateControl, FieldType: Boolean, DefaultValue:  False, Description:
 #DesignerProperty: Key: ZoomControl, DisplayName: ZoomControl, FieldType: Boolean, DefaultValue:  False, Description:
-#DesignerProperty: Key: Zoom, DisplayName: Zoom, FieldType: Int, DefaultValue: 18, Description:
+#DesignerProperty: Key: Zoom, DisplayName: Zoom, FieldType: Int, DefaultValue: 9, Description:
 '#DesignerProperty: Key: Bounds, DisplayName: Bounds, FieldType: String, DefaultValue: , Description: Bounds
 #DesignerProperty: Key: CenterLat, DisplayName: CenterLat, FieldType: String, DefaultValue: 0, Description: CenterLat
 #DesignerProperty: Key: CenterLng, DisplayName: CenterLng, FieldType: String, DefaultValue: 0, Description: CenterLng
@@ -231,22 +231,6 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	circles.Initialize 
 	rectangles.Initialize
 	kmlLayers.Initialize  
-	'
-	mGoogleMapKey = ""
-	bFullScreenControl = True
-	bDisableDefaultUI = True
-	bMapTypeControl = True
-	mMapType = "roadmap"
-	bRotateControl = True
-	bZoomControl = True
-	mZoom = 18
-	bStreetViewControl = False
-	bScaleControl = True
-	bMarkersVisible = True
-	bMarkersClickable = True
-	bMarkersDraggable = False
-	bKMLVisible = False
-	bKMLClickable = False
 	polylines.Initialize 
 	polygons.Initialize 
 	'stVShow = $"${mName}show"$
@@ -296,9 +280,9 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mMapType = Props.Get("MapType")
 		bRotateControl = Props.GetDefault("RotateControl", True)
 		bZoomControl = Props.GetDefault("ZoomControl", True)
-		mZoom = Props.GetDefault("Zoom", 10)
-		bStreetViewControl = Props.Get("StreetViewControl")
-		bScaleControl = Props.Get("ScaleControl")
+		mZoom = Props.GetDefault("Zoom", 9)
+		bStreetViewControl = Props.GetDefault("StreetViewControl",True)
+		bScaleControl = Props.GetDefault("ScaleControl",True)
 		bMarkersVisible = Props.GetDefault("MarkersVisible", True)
 		bMarkersClickable = Props.GetDefault("MarkersClickable",True)
 		bMarkersDraggable = Props.GetDefault("MarkersDraggable",True)
@@ -311,9 +295,9 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bInsideVCard = BANanoShared.parseBool(bInsideVCard)
 		sZIndex = Props.GetDefault("ZIndex", 0)
 		sElevation = Props.GetDefault("Elevation", "")
-		sItemKeys = Props.Get("ItemKeys")
-		sItemIcons = Props.Get("ItemIcons")
-		sItemColors = Props.Get("ItemColors")
+		sItemKeys = Props.GetDefault("ItemKeys","")
+		sItemIcons = Props.GetDefault("ItemIcons","")
+		sItemColors = Props.GetDefault("ItemColors","")
 		sCenterLat = Props.GetDefault("CenterLat", 0)
 		sCenterLng = Props.getdefault("sCenterLng", 0)
 	End If
@@ -366,7 +350,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mElement = BANano.GetElement($"#${mName}"$) 
 	Else	
 		If bInsideVCard Then 
-			mTarget.Append($"<v-card id="${mName}card" v-lazy><v-card-title id="${mName}cardtitle">{{ ${xTitle} }}</v-card-title>
+			mTarget.Append($"<v-card id="${mName}card"><v-card-title id="${mName}cardtitle">{{ ${xTitle} }}</v-card-title>
 			<v-card-text id="${mName}cardtext"></v-card-text></v-card>"$)
 		End If	
 	End If
@@ -690,7 +674,6 @@ End Sub
 
 'refresh markers and re-render the map
 Sub Refresh
-	VC.SetData(gmapkey, DateTime.Now)
 	VC.SetData(soptions, options)
 	VC.SetData(markerName, points)
 	BuildPolyLines
@@ -698,6 +681,7 @@ Sub Refresh
 	BuildCircles
 	BuildRectangles
 	BuildKML
+	VC.SetData(gmapkey, DateTime.Now)
 End Sub
 
 
@@ -1006,6 +990,11 @@ Sub SetCenter(lat As Double, lng As Double)
 	VC.SetData(scenter, point)
 End Sub
 
+Sub SetView(Lat As Double, Lng As Double, Zoom As Int)
+	SetCenter(Lat, Lng)
+	setZoom(Zoom)
+End Sub
+
 Sub SetCenterLatLon(latlon As Map)
 	VC.SetData(scenter, latlon)
 End Sub
@@ -1184,8 +1173,19 @@ Sub UpdateVisible(V As VueComponent, b As Boolean)
 	'V.SetData(stVShow, b)
 End Sub
 
+Sub IsReady(V As BANanoObject)
+	Dim mresp As Map
+	Dim mperr As Map
+	Dim mp As BANanoPromise = V.RunMethod("$gmapApiPromiseLazy", Null)
+	mp.ThenWait(mresp)
+	google = mresp
+	BANano.CallSub(mCallBack, $"${mName}_ready"$, Null)
+	mp.ElseWait(mperr)
+	mp.End
+End Sub
+
 'check the readiness of he map
-Sub IsReady(V As VueComponent)
+Sub GetMapObject(V As VueComponent)
 	Dim smp As String = "$mapPromise"
 	Dim mresp As Map
 	Dim mperr As Map
@@ -1193,23 +1193,19 @@ Sub IsReady(V As VueComponent)
 	mp = V.refs.GetField(mName).GetField(smp)
 	mp.ThenWait(mresp)
 	MapObject = mresp
-	BANano.CallSub(mCallBack, $"${mName}_ready"$, Array(True))
 	mp.ElseWait(mperr)
-	BANano.CallSub(mCallBack, $"${mName}_ready"$, Array(False))
 	mp.End
 End Sub
 
-''panTo
-'Sub panTo(V As VueComponent, lat As Double, lng As Double)
-'	'
-'	Dim latlng As Map = CreateMap()
-'	latlng.Put("lat", lat)
-'	latlng.Put("lng", lng)
-'	'
-'	'get the map object
-'	MapObject = V.refs.GetField(mName)
-'	MapObject.RunMethod("panTo", latlng)
-'End Sub
+'panTo
+Sub panTo(V As VueComponent, lat As Double, lng As Double)
+	Dim latlng As Map = CreateMap()
+	latlng.Put("lat", lat)
+	latlng.Put("lng", lng)
+	'get the map object
+	GetMapObject(V)
+	MapObject.RunMethod("panTo", latlng)
+End Sub
 
 'add a circle
 Sub AddCircle(CircleId As String, CircleTitle As String, CircleLatitude As Double,CircleLongitude As Double,CircleColor As String, CircleRadius As Int)

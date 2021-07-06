@@ -218,7 +218,7 @@ Sub Class_Globals
 	Dim xattribution As String
 	Dim xurl As String
 	Dim xzoom As String
-	Public map As BANanoObject
+	Public mapObject As BANanoObject
 	Private L As BANanoObject
 	Private mapOptions As Map
 	Private xmarker As String
@@ -288,6 +288,7 @@ Sub Class_Globals
 	Private greyIcon As BANanoObject
 	Private blackIcon As BANanoObject
 	Private sZIndex As String
+	Private sKey As String
 '	Private mtt As String
 '	Private mpp As String
 '	Private pltt As String
@@ -344,6 +345,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	xgeojson = $"${mName}geojson"$
 	xgeojsons = $"${mName}geojsons"$
 	sButtons = $"${mName}buttons"$
+	sKey = $"${mName}key"$
 	'
 	geojsons.Initialize 
 	markers.Initialize 
@@ -625,10 +627,10 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mElement = BANano.GetElement($"#${mName}"$) 
 	Else
 		If bInsideVCard Then	 
-			mElement = mTarget.Append($"<v-card id="${mName}card" v-lazy><v-card-title id="${mName}cardtitle">{{ ${xTitle} }}</v-card-title>
+			mElement = mTarget.Append($"<v-card id="${mName}card"><v-card-title id="${mName}cardtitle">{{ ${xTitle} }}</v-card-title>
 			<v-card-text id="${mName}cardtext"><l-map ref="${mName}" id="${mName}"></l-map></v-card-text></v-card>"$).Get("#" & mName) 
 		Else
-			mElement = mTarget.Append($"<l-map ref="${mName}" id="${mName}"></l-map>"$).Get("#" & mName)
+			mElement = mTarget.Append($"<l-map :key="${sKey}" ref="${mName}" id="${mName}"></l-map>"$).Get("#" & mName)
 		End If	
 	End If 
 	' 
@@ -817,6 +819,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.AddAttr(":center", xcenter)
 	VElement.AddAttr(":close-popup-on-click", bClosePopupOnClick)
 	VElement.AddStyle("z-index", sZIndex)
+	VElement.SetData(sKey, DateTime.Now)
 	'VElement.AddAttr(":crs", sCrs)
 	'VElement.SetData(sCrs, )
 
@@ -1115,9 +1118,14 @@ private Sub BuildMarkers(VC As VueComponent)
 End Sub
 
 'native method - pan to a particular point
-Sub PanTo(Lat As Double, Lng As Double)
-	Dim obj As BANanoObject = latLng(Lat, Lng)
-	map.RunMethod("panTo", obj)
+Sub PanTo(VC As VueComponent, Lat As Double, Lng As Double)
+	Try
+		Dim obj As BANanoObject = latLng(Lat, Lng)
+		GetMapObject(VC)
+		mapObject.RunMethod("panTo", obj)
+	Catch
+		Log(LastException)
+	End Try		
 End Sub
 
 'native method move the view to this point
@@ -1125,8 +1133,13 @@ Sub SetView(VC As VueComponent, Lat As Double, Lng As Double, Zoom As Int)
 	Zoom = BANano.parseInt(Zoom)
 	iZoom = Zoom
 	VC.SetData(xzoom, Zoom)
-	Dim obj As BANanoObject = latLng(Lat, Lng)
-	map.RunMethod("setView", Array(obj, Zoom))
+	Try
+		Dim obj As BANanoObject = latLng(Lat, Lng)
+		GetMapObject(VC)
+		mapObject.RunMethod("setView", Array(obj, Zoom))
+	Catch
+		Log(LastException)
+	End Try		
 End Sub
 
 'clear the markers
@@ -1166,6 +1179,7 @@ Sub Refresh(VC As VueComponent)
 	BuildRectangles(VC)
 	'build grojson
 	BuildGeoJSON(VC)
+	VC.SetData(sKey, DateTime.Now)
 End Sub
 
 public Sub AddToParent(targetID As String) 
@@ -1216,7 +1230,7 @@ End Sub
 'native method get the map object after ready
 private Sub GetMapObject(VC As VueComponent)
 	Try
-		map = VC.refs.GetField(mName).GetField("mapObject")
+		mapObject = VC.refs.GetField(mName).GetField("mapObject")
 	Catch
 		Log(LastException)
 	End Try	
@@ -1226,7 +1240,7 @@ End Sub
 Sub stopLocate(VC As VueComponent)
 	Try
 		GetMapObject(VC)
-		map.RunMethod("stopLocate", Null)
+		mapObject.RunMethod("stopLocate", Null)
 	Catch
 		Log(LastException)
 	End Try	
@@ -1243,7 +1257,7 @@ Sub Resize(VC As VueComponent)
 	Try
 		GetMapObject(VC)
 		'map.RunMethod("_onResize", Null)
-		map.RunMethod("invalidateSize", Null)
+		mapObject.RunMethod("invalidateSize", Null)
 	Catch
 		Log(LastException)
 	End Try	
@@ -1276,13 +1290,18 @@ End Sub
 Sub UpdateZoom(VC As VueComponent, dZoom As Double) As VLeaflet
 	VC.SetData(xzoom, dZoom)
 	iZoom = dZoom
-	SetZoom(iZoom)
+	SetZoom(VC, iZoom)
 	Return Me
 End Sub
 
 'native method setZoom
-private Sub SetZoom(Zoom As Int)
-	map.RunMethod("setZoom", Zoom)
+private Sub SetZoom(VC As VueComponent, Zoom As Int)
+	Try
+		GetMapObject(VC)
+		mapObject.RunMethod("setZoom", Zoom)
+	Catch
+		Log(LastException)
+	End Try	
 End Sub
 
 '
@@ -1739,11 +1758,15 @@ End Sub
 
 'set center pos
 Sub SetCenterOnLastPos(VC As VueComponent)
-	'get the last point and center on it
-	Dim ps As Int = markers.Size - 1
-	If ps = -1 Then Return
-	iZoom = VC.GetData(xzoom)
-	Dim mt As VMarkerType = markers.GetValueAt(ps)
-	UpdateCenter(VC, mt.MarkerLatitude, mt.MarkerLongitude)
-	SetView(VC, mt.MarkerLatitude, mt.MarkerLongitude, iZoom)
+	Try
+		'get the last point and center on it
+		Dim ps As Int = markers.Size - 1
+		If ps = -1 Then Return
+		iZoom = VC.GetData(xzoom)
+		Dim mt As VMarkerType = markers.GetValueAt(ps)
+		UpdateCenter(VC, mt.MarkerLatitude, mt.MarkerLongitude)
+		SetView(VC, mt.MarkerLatitude, mt.MarkerLongitude, iZoom)
+	Catch
+		Log(LastException)
+	End Try		
 End Sub
