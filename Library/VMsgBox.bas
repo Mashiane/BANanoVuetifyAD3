@@ -24,8 +24,8 @@ Version=9
 #DesignerProperty: Key: OkDisabled, DisplayName: OkDisabled, FieldType: Boolean, DefaultValue: False, Description: OkDisabled
 #DesignerProperty: Key: OkColor, DisplayName: OkColor, FieldType: String, DefaultValue: green, Description: OkColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: OkColorIntensity, DisplayName: OkColorIntensity, FieldType: String, DefaultValue: , Description: OkColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
-#DesignerProperty: Key: OkOutlined, DisplayName: OkOutlined, FieldType: Boolean, DefaultValue: True, Description: OkOutlined
-#DesignerProperty: Key: OkRounded, DisplayName: OkRounded, FieldType: Boolean, DefaultValue: True, Description: OkRounded
+#DesignerProperty: Key: OkOutlined, DisplayName: OkOutlined, FieldType: Boolean, DefaultValue: False, Description: OkOutlined
+#DesignerProperty: Key: OkRounded, DisplayName: OkRounded, FieldType: Boolean, DefaultValue: False, Description: OkRounded
 
 '
 #DesignerProperty: Key: CancelCaption, DisplayName: CancelCaption, FieldType: String, DefaultValue: Cancel, Description: CancelCaption
@@ -34,8 +34,8 @@ Version=9
 #DesignerProperty: Key: CancelDisabled, DisplayName: CancelDisabled, FieldType: Boolean, DefaultValue: False, Description: CancelDisabled
 #DesignerProperty: Key: CancelColor, DisplayName: CancelColor, FieldType: String, DefaultValue: red, Description: CancelColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: CancelColorIntensity, DisplayName: CancelColorIntensity, FieldType: String, DefaultValue: , Description: CancelColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
-#DesignerProperty: Key: CancelOutlined, DisplayName: CancelOutlined, FieldType: Boolean, DefaultValue: True, Description: CancelOutlined
-#DesignerProperty: Key: CancelRounded, DisplayName: CancelRounded, FieldType: Boolean, DefaultValue: True, Description: CancelRounded
+#DesignerProperty: Key: CancelOutlined, DisplayName: CancelOutlined, FieldType: Boolean, DefaultValue: False, Description: CancelOutlined
+#DesignerProperty: Key: CancelRounded, DisplayName: CancelRounded, FieldType: Boolean, DefaultValue: False, Description: CancelRounded
 
 #DesignerProperty: Key: Rounded, DisplayName: Rounded, FieldType: String, DefaultValue: none, Description: Rounded, List: none|rounded-0|rounded|rounded-sm|rounded-lg|rounded-xl|rounded-t-xl|rounded-r-xl|rounded-b-xl|rounded-l-xl|rounded-tl-xl|rounded-tr-xl|rounded-br-xl|rounded-bl-xl|rounded-pill|rounded-circle
 #DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: 700, Description: Width
@@ -195,29 +195,29 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mClasses = Props.Get("Classes")
 		mStyles = Props.Get("Styles")
 		mAttributes = Props.Get("Attributes")
-		bOkVisible = Props.Get("OkVisible")
+		bOkVisible = Props.GetDefault("OkVisible",True)
 		bOkOutlined = Props.GetDefault("OkOutlined", False)
 		bCancelOutlined = Props.getdefault("CancelOutlined", False)
 		bCancelRounded = Props.GetDefault("CancelRounded", False)
 		bOkRounded = Props.GetDefault("OkRounded", False)
-		bOkLoading = Props.Get("OkLoading")
-		bOkDisabled = Props.Get("OkDisabled")
-		bCancelVisible = Props.Get("CancelVisible")
-		bCancelLoading = Props.Get("CancelLoading")
-		bCancelDisabled = Props.Get("CancelDisabled")
+		bOkLoading = Props.GetDefault("OkLoading",False)
+		bOkDisabled = Props.GetDefault("OkDisabled",False)
+		bCancelVisible = Props.GetDefault("CancelVisible",True)
+		bCancelLoading = Props.GetDefault("CancelLoading",False)
+		bCancelDisabled = Props.GetDefault("CancelDisabled",False)
 		sCancelCaption = Props.Get("CancelCaption")
 		sCancelColor = Props.Get("CancelColor")
 		sCancelColorIntensity = Props.Get("CancelColorIntensity")
 		sCardTextCaption = Props.Get("CardTextCaption")
 		sCloseDelay = Props.Get("CloseDelay")
 		sContentClass = Props.Get("ContentClass")
-		bDark = Props.Get("Dark")
+		bDark = Props.GetDefault("Dark",False)
 		bDisabled = Props.GetDefault("Disabled",False)
-		bEager = Props.Get("Eager")
-		bFullscreen = Props.Get("Fullscreen")
-		bHideOverlay = Props.Get("HideOverlay")
+		bEager = Props.GetDefault("Eager",False)
+		bFullscreen = Props.GetDefault("Fullscreen",False)
+		bHideOverlay = Props.GetDefault("HideOverlay",False)
 		sMaxWidth = Props.Get("MaxWidth")
-		bNoClickAnimation = Props.Get("NoClickAnimation")
+		bNoClickAnimation = Props.GetDefault("NoClickAnimation",False)
 		sOkCaption = Props.Get("OkCaption")
 		sOkColor = Props.Get("OkColor")
 		sOkColorIntensity = Props.Get("OkColorIntensity")
@@ -226,24 +226,24 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sOverlayColor = Props.Get("OverlayColor")
 		sOverlayColorIntensity = Props.Get("OverlayColorIntensity")
 		sOverlayOpacity = Props.Get("OverlayOpacity")
-		bPersistent = Props.Get("Persistent")
-		bRetainFocus = Props.Get("RetainFocus")
-		bScrollable = Props.Get("Scrollable")
+		bPersistent = Props.GetDefault("Persistent",False)
+		bRetainFocus = Props.GetDefault("RetainFocus",False)
+		bScrollable = Props.GetDefault("Scrollable",False)
 		sTransition = Props.Get("Transition")
 		sVIf = Props.Get("VIf")
 		sWidth = Props.Get("Width")
-		bFullscreenOnMobile = Props.Get("FullscreenOnMobile")
+		bFullscreenOnMobile = Props.GetDefault("FullscreenOnMobile",True)
 		sToolBarColor = Props.Get("ToolBarColor")
 		sToolBarColorIntensity = Props.Get("ToolBarColorIntensity")
-		bToolbarDark = Props.Get("ToolBarDark")
+		bToolbarDark = Props.GetDefault("ToolBarDark",False)
 		bHidden = Props.GetDefault("Hidden", True)
 		sDialogType = Props.GetDefault("DialogType", "message")
 		bCustomActions = Props.GetDefault("CustomActions", False)
-		sMinHeight = Props.GetDefault("MinHeight", False)
-		sMinWidth = Props.GetDefault("MinWidth", False)
-		sMaxHeight = Props.GetDefault("MaxHeight", False)
-		sMaxWidth = Props.GetDefault("MaxWidth", False)
-		sHeight = Props.GetDefault("Height", False)
+		sMinHeight = Props.GetDefault("MinHeight", "")
+		sMinWidth = Props.GetDefault("MinWidth", "")
+		sMaxHeight = Props.GetDefault("MaxHeight", "")
+		sMaxWidth = Props.GetDefault("MaxWidth", "")
+		sHeight = Props.GetDefault("Height", "")
 	End If
 	'
 	bOkRounded = BANanoShared.parseBool(bOkRounded)
@@ -402,6 +402,12 @@ Sub Process(VC As VueComponent) As String
 	Return sprocess
 End Sub
 
+'get the process
+Sub ProcessOnApp(V As VuetifyApp) As String
+	Dim sprocess As String = V.GetData("confirmkey")
+	Return sprocess
+End Sub
+
 'show confirm dialog
 Sub Confirm(VC As VueComponent, sProcess As String, Title As String, Message As String, ConfirmText As String, CancelText As String)
 	sProcess = sProcess.tolowercase
@@ -418,6 +424,21 @@ Sub Confirm(VC As VueComponent, sProcess As String, Title As String, Message As 
 	UpdateVisible(VC, True)
 End Sub
 
+Sub ConfirmOnApp(V As VuetifyApp, sProcess As String, Title As String, Message As String, ConfirmText As String, CancelText As String)
+	sProcess = sProcess.tolowercase
+	UpdateTitleOnApp(V, Title)
+	UpdateMessageOnApp(V, Message)
+	UpdateOkLabelOnApp(V, ConfirmText)
+	UpdateCancelLabelOnApp(V, CancelText)
+	UpdateOkVisibleOnApp(V, True)
+	UpdateCancelVisibleOnApp(V, True)
+	UpdateOkLoadingOnApp(V, False)
+	UpdateCancelLoadingOnApp(V, False)
+	UpdateScrollableOnApp(V, False)
+	V.SetData("confirmkey", sProcess)
+	UpdateVisibleOnApp(V, True)
+End Sub
+
 'show confirm dialog
 Sub Alert(VC As VueComponent, sProcess As String, Title As String, Message As String, ConfirmText As String)
 	sProcess = sProcess.tolowercase
@@ -431,13 +452,34 @@ Sub Alert(VC As VueComponent, sProcess As String, Title As String, Message As St
 	UpdateVisible(VC, True)
 End Sub
 
+Sub AlertOnApp(V As VuetifyApp, sProcess As String, Title As String, Message As String, ConfirmText As String)
+	sProcess = sProcess.tolowercase
+	UpdateTitleOnApp(V, Title)
+	UpdateMessageOnApp(V, Message)
+	UpdateOkLabelOnApp(V, ConfirmText)
+	UpdateOkVisibleOnApp(V, True)
+	UpdateScrollableOnApp(V, False)
+	UpdateCancelVisibleOnApp(V, False)
+	V.SetData("confirmkey", sProcess)
+	UpdateVisibleOnApp(V, True)
+End Sub
+
 'update the card text
 Sub UpdateScrollable(VC As VueComponent, b As Boolean)
 	VC.SetData(sScrollable, b)
 End Sub
 
+Sub UpdateScrollableOnApp(VC As VuetifyApp, b As Boolean)
+	VC.SetData(sScrollable, b)
+End Sub
+
 'update the card text
 Sub UpdateMessage(VC As VueComponent, vCardTextx As String)
+	sCardTextCaption = vCardTextx
+	VC.SetData(xCardTextCaption, vCardTextx)
+End Sub
+
+Sub UpdateMessageOnApp(VC As VuetifyApp, vCardTextx As String)
 	sCardTextCaption = vCardTextx
 	VC.SetData(xCardTextCaption, vCardTextx)
 End Sub
@@ -448,8 +490,18 @@ Sub UpdateTitleDark(VC As VueComponent, vDark As Boolean)
 	VC.SetData(xToolBarDark, vDark)
 End Sub
 
+Sub UpdateTitleDarkOnApp(VC As VuetifyApp, vDark As Boolean)
+	bToolbarDark = vDark
+	VC.SetData(xToolBarDark, vDark)
+End Sub
+
 'update the toolbar color
 Sub UpdateTitleColor(VC As VueComponent, vColor As String, vIntensity As String)
+	sToolBarColor = VElement.BuildColor(vColor, vIntensity)
+	VC.SetData(xToolBarColor, sToolBarColor)
+End Sub
+
+Sub UpdateTitleColorOnApp(VC As VuetifyApp, vColor As String, vIntensity As String)
 	sToolBarColor = VElement.BuildColor(vColor, vIntensity)
 	VC.SetData(xToolBarColor, sToolBarColor)
 End Sub
@@ -460,14 +512,29 @@ Sub UpdateOkColor(VC As VueComponent, vColor As String, vIntensity As String)
 	VC.SetData(xOkColor, sOkColor)
 End Sub
 
+Sub UpdateOkColorOnApp(VC As VuetifyApp, vColor As String, vIntensity As String)
+	sOkColor = VElement.BuildColor(vColor, vIntensity)
+	VC.SetData(xOkColor, sOkColor)
+End Sub
+
 'update the cancel color
 Sub UpdateCancelColor(VC As VueComponent, vColor As String, vIntensity As String)
 	sCancelColor = VElement.BuildColor(vColor, vIntensity)
 	VC.SetData(xCancelColor, sCancelColor)
 End Sub
 
+Sub UpdateCancelColorOnApp(VC As VuetifyApp, vColor As String, vIntensity As String)
+	sCancelColor = VElement.BuildColor(vColor, vIntensity)
+	VC.SetData(xCancelColor, sCancelColor)
+End Sub
+
 'update the toolbar title
 Sub UpdateTitle(VC As VueComponent, vToolbarCaption As String)
+	sToolbarCaption = vToolbarCaption
+	VC.SetData(xToolbarCaption, vToolbarCaption)
+End Sub
+
+Sub UpdateTitleOnApp(VC As VuetifyApp, vToolbarCaption As String)
 	sToolbarCaption = vToolbarCaption
 	VC.SetData(xToolbarCaption, vToolbarCaption)
 End Sub
@@ -500,6 +567,11 @@ End Sub
 
 'turn visibility on and off on app
 Sub VisibleOnApp(vappx As VuetifyApp, b As Boolean)
+	vappx.SetData(sVModel, b)
+	vappx.SetData(sVIf, b)
+End Sub
+
+Sub UpdateVisibleOnApp(vappx As VuetifyApp, b As Boolean)
 	vappx.SetData(sVModel, b)
 	vappx.SetData(sVIf, b)
 End Sub
@@ -589,8 +661,18 @@ private Sub UpdateOkLabel(VC As VueComponent, s As String)
 	VC.SetData(xOkCaption, sOkCaption)
 End Sub
 
+private Sub UpdateOkLabelOnApp(VC As VuetifyApp, s As String)
+	sOkCaption = s
+	VC.SetData(xOkCaption, sOkCaption)
+End Sub
+
 'update the label of the cancel button
 private Sub UpdateCancelLabel(VC As VueComponent, s As String)
+	sCancelCaption = s
+	VC.SetData(xCancelCaption, sCancelCaption)
+End Sub
+
+private Sub UpdateCancelLabelOnApp(VC As VuetifyApp, s As String)
 	sCancelCaption = s
 	VC.SetData(xCancelCaption, sCancelCaption)
 End Sub
@@ -600,15 +682,30 @@ private Sub UpdateOkVisible(VC As VueComponent, b As Boolean)
 	bOkVisible = b
 	VC.SetData(xOkVisible, bOkVisible)
 End Sub
+
+private Sub UpdateOkVisibleOnApp(VC As VuetifyApp, b As Boolean)
+	bOkVisible = b
+	VC.SetData(xOkVisible, bOkVisible)
+End Sub
 	
 'update the loading of the ok button
 Sub UpdateOkLoading(VC As VueComponent, b As Boolean)
+	bOkLoading = b
+	VC.SetData(xOkLoading, bOkLoading)
+End Sub
+
+Sub UpdateOkLoadingOnApp(VC As VuetifyApp, b As Boolean)
 	bOkLoading = b
 	VC.SetData(xOkLoading, bOkLoading)
 End Sub	
 
 'update the disanled of the ok button
 Sub UpdateOkDisabled(VC As VueComponent, b As Boolean)
+	bOkDisabled = b
+	VC.SetData(xOkDisabled, bOkDisabled)
+End Sub
+
+Sub UpdateOkDisabledOnApp(VC As VuetifyApp, b As Boolean)
 	bOkDisabled = b
 	VC.SetData(xOkDisabled, bOkDisabled)
 End Sub		
@@ -618,15 +715,30 @@ private Sub UpdateCancelVisible(VC As VueComponent, b As Boolean)
 	bCancelVisible = b
 	VC.SetData(xCancelVisible, bCancelVisible)
 End Sub
+
+private Sub UpdateCancelVisibleOnApp(VC As VuetifyApp, b As Boolean)
+	bCancelVisible = b
+	VC.SetData(xCancelVisible, bCancelVisible)
+End Sub
 	
 'update the loading of the cancel button
 Sub UpdateCancelLoading(VC As VueComponent, b As Boolean)
+	bCancelLoading = b
+	VC.SetData(xCancelLoading, bCancelLoading)
+End Sub
+
+Sub UpdateCancelLoadingOnApp(VC As VuetifyApp, b As Boolean)
 	bCancelLoading = b
 	VC.SetData(xCancelLoading, bCancelLoading)
 End Sub	
 
 'update the disanled of the cancel button
 Sub UpdateCancelDisabled(VC As VueComponent, b As Boolean)
+	bCancelDisabled = b
+	VC.SetData(xCancelDisabled, bCancelDisabled)
+End Sub
+
+Sub UpdateCancelDisabledOnApp(VC As VuetifyApp, b As Boolean)
 	bCancelDisabled = b
 	VC.SetData(xCancelDisabled, bCancelDisabled)
 End Sub

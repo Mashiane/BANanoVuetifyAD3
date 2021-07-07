@@ -592,6 +592,10 @@ Sub ListViewSetAppend(itemID As String) As VueElement
 	Return Me
 End Sub
 
+'set authenticated
+Sub UseAuthentication
+	setVIf("authenticated")
+End Sub
 
 'update an icon in the list
 Sub ListViewSetIcon(itemID As String, sIcon As String) As VueElement

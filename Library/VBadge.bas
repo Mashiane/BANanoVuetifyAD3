@@ -8,16 +8,16 @@ Version=8.9
 
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: Value, DisplayName: BadgeText, FieldType: String, DefaultValue: 10, Description: Value
-#DesignerProperty: Key: Icon, DisplayName: BadgeIcon, FieldType: String, DefaultValue: , Description: Icon
+#DesignerProperty: Key: Icon, DisplayName: BadgeIcon, FieldType: String, DefaultValue: , Description: The badge shows this icon 
 
 '
-#DesignerProperty: Key: UseIcon, DisplayName: UseIcon, FieldType: Boolean, DefaultValue: True, Description: UseIcon
+#DesignerProperty: Key: UseIcon, DisplayName: UseIcon, FieldType: Boolean, DefaultValue: True, Description: The badge shows on an icon
 #DesignerProperty: Key: IconName, DisplayName: IconName, FieldType: String, DefaultValue: , Description: IconName
 #DesignerProperty: Key: IconColor, DisplayName: IconColor, FieldType: String, DefaultValue: , Description: IconColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: IconColorIntensity, DisplayName: IconColorIntensity, FieldType: String, DefaultValue: , Description: ColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: IconSize, DisplayName: IconSize, FieldType: String, DefaultValue: , Description: IconSize, List: none|large|small|x-large|x-small
 
-#DesignerProperty: Key: Avatar, DisplayName: UseAvatar, FieldType: Boolean, DefaultValue: False, Description: Avatar
+#DesignerProperty: Key: Avatar, DisplayName: UseAvatar, FieldType: Boolean, DefaultValue: False, Description: The badge shows on an avatar
 #DesignerProperty: Key: AvatarImg, DisplayName: AvatarImg, FieldType: String, DefaultValue: , Description: AvatarImg
 #DesignerProperty: Key: AvatarIcon, DisplayName: AvatarIcon, FieldType: String, DefaultValue: , Description: AvatarIcon
 #DesignerProperty: Key: AvatarSize, DisplayName: AvatarSize, FieldType: String, DefaultValue: 48, Description: AvatarSize
@@ -83,6 +83,8 @@ Sub Class_Globals
 	Private sIconSize As String
 	Private sIconColorIntensity As String
 	Private sIconSize As String
+	Private xiconcolor As String
+	Private xbadgecolor As String
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -99,6 +101,8 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	End If
 	xHidden = $"${mName}hidden"$
 	svModel = $"${mName}vmodel"$
+	xiconcolor = $"${mName}iconcolor"$
+	xbadgecolor = $"${mName}badgecolor"$
 End Sub
 
 ' this is the place where you create the view in html and run initialize javascript
@@ -182,7 +186,9 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 			BANano.Throw($"VBadge.${mName} icon has not been specified!"$)
 		End If
 		VElement.Append($"<v-icon id="${mName}icon1">${sIconName}</v-icon>"$)
-		VElement.GetIcon1.Color = VElement.BuildColor(sIconColor, sIconColorIntensity)
+		VElement.GetIcon1.Bind("color", xiconcolor)
+		sIconColor = VElement.BuildColor(sIconColor, sIconColorIntensity)
+		VElement.SetData(xiconcolor, sIconColor)
 		Select Case sIconSize
 		Case "none"	
 		Case "large"
@@ -217,7 +223,9 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.TagName = "v-badge"
 	VElement.setAvatar(bAvatar)
 	VElement.Bordered = bBordered
-	VElement.Color = VElement.BuildColor(sColor, sColorintensity)
+	VElement.Bind("color", xbadgecolor)
+	sColor = VElement.BuildColor(sColor, sColorintensity)
+	VElement.SetData(xbadgecolor, sColor)
 	VElement.Dark = bDark
 	VElement.Dot = bDot
 	VElement.SetAttr("icon", sIcon)
@@ -242,6 +250,25 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.BindAllEvents
 End Sub	
 
+Sub UpdateIconColor(VC As VueComponent, color As String, intensity As String)
+	sIconColor = VElement.BuildColor(color, intensity)
+	VC.SetData(xiconcolor, sIconColor)
+End Sub
+
+Sub UpdateIconColorOnApp(VC As VuetifyApp, color As String, intensity As String)
+	sIconColor = VElement.BuildColor(color, intensity)
+	VC.SetData(xiconcolor, sIconColor)
+End Sub
+
+Sub UpdateColor(VC As VueComponent, color As String, intensity As String)
+	sIconColor = VElement.BuildColor(color, intensity)
+	VC.SetData(xbadgecolor, sIconColor)
+End Sub
+
+Sub UpdateColorOnApp(VC As VuetifyApp, color As String, intensity As String)
+	sIconColor = VElement.BuildColor(color, intensity)
+	VC.SetData(xbadgecolor, sIconColor)
+End Sub
 
 public Sub AddToParent(targetID As String)
 	mTarget = BANano.GetElement("#" & targetID.ToLowerCase)
@@ -258,7 +285,16 @@ Sub UpdateVisible(VC As VueComponent, b As Boolean)
 	VC.SetData(mVIf, b)
 End Sub
 
+Sub UpdateVisibleOnApp(VC As VuetifyApp, b As Boolean)
+	VC.SetData(xHidden, b)
+	VC.SetData(mVIf, b)
+End Sub
+
 Sub UpdateValue(VC As VueComponent, sv As String)
+	VC.SetData(svModel, sv)
+End Sub
+
+Sub UpdateValueOnApp(VC As VuetifyApp, sv As String)
 	VC.SetData(svModel, sv)
 End Sub
 
@@ -266,8 +302,16 @@ Sub Increment(VC As VueComponent)
 	VC.Increment(svModel)
 End Sub
 
+Sub IncrementOnApp(VC As VuetifyApp)
+	VC.Increment(svModel, 1)
+End Sub
+
 Sub Decrement(VC As VueComponent)
 	VC.Decrement(svModel)
+End Sub
+
+Sub DecrementOnApp(VC As VuetifyApp)
+	VC.Decrement(svModel, 1)
 End Sub
 
 Sub getID As String

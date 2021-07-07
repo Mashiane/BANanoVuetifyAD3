@@ -5866,3 +5866,27 @@ Sub UseGoogleMap(mGoogleMapKey As String)
 		AddModule("googlemap")
 	End If
 End Sub
+
+'trim values in a map
+Sub TrimMapItems(m As Map) As Map
+	Dim nm As Map = CreateMap()
+	For Each k As String In m.Keys
+		Dim v As String = m.GetDefault(k,"")
+		v = BANanoShared.CStr(v)
+		v = v.Trim
+		nm.Put(k, v)
+	Next
+	Return nm
+End Sub
+
+'trim list string items
+Sub TrimListItems(m As List) As List
+	Dim nm As List
+	nm.Initialize 
+	For Each k As String In m
+		k = BANanoShared.CStr(k)
+		k = k.Trim
+		nm.Add(k)
+	Next
+	Return nm
+End Sub

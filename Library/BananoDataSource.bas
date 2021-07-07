@@ -5,9 +5,6 @@ Type=Class
 Version=7
 @EndOfDesignText@
 #IgnoreWarnings:12
-'Created with BANano Custom View Creator 1.00 by TheMash
-'https://github.com/Mashiane/BANano-Custom-View-Creator
-'Custom BANano View class
 #Event: Done (Action As String, Success As Boolean, Response As String, Error As String, affectedRows As Int, Result As List)
 #Event: Create (Success As Boolean, Response As String, Error As String, affectedRows As Int, Result As List)
 #Event: Update (Success As Boolean, Response As String, Error As String, affectedRows As Int, Result As List)
@@ -21,34 +18,34 @@ Version=7
 #Event: Report (Success As Boolean, Response As String, Error As String, affectedRows As Int, Result As List)
 #Event: SelectForCombo (Success As Boolean, Response As String, Error As String, affectedRows As Int, Result As List)
 #Event: Chart (Success As Boolean, Response As String, Error As String, affectedRows As Int, Result As List)
+#Event: Exists (Success As Boolean, Response As String, Error As String, affectedRows As Int, Result As List)
 
 #DesignerProperty: Key: ShowLog, DisplayName: ShowLog, FieldType: Boolean, DefaultValue: False, Description: ShowLog
-#DesignerProperty: Key: DatabaseType, DisplayName: DatabaseType, FieldType: String, DefaultValue: mysql, Description: DatabaseType, List: mysql
-#DesignerProperty: Key: Action, DisplayName: Action, FieldType: String, DefaultValue: , Description: Action, List: CreateTable|Create|Read|Update|Delete|SelectAll|SelectWhere|Count|GetMax|GetMin|SumOf|Custom
-#DesignerProperty: Key: HostName, DisplayName: HostName, FieldType: String, DefaultValue: localhost, Description: HostName
-#DesignerProperty: Key: DatabaseName, DisplayName: DatabaseName, FieldType: String, DefaultValue: , Description: DatabaseName
+#DesignerProperty: Key: DatabaseType, DisplayName: DatabaseType*, FieldType: String, DefaultValue: mysql, Description: DatabaseType, List: mysql
+#DesignerProperty: Key: HostName, DisplayName: HostName*, FieldType: String, DefaultValue: localhost, Description: HostName
+#DesignerProperty: Key: DatabaseName, DisplayName: DatabaseName*, FieldType: String, DefaultValue: , Description: DatabaseName
 #DesignerProperty: Key: UserName, DisplayName: UserName, FieldType: String, DefaultValue: root, Description: UserName
 #DesignerProperty: Key: Password, DisplayName: Password, FieldType: String, DefaultValue: , Description: Password
 #DesignerProperty: Key: UseJetty, DisplayName: UseJetty, FieldType: Boolean, DefaultValue: False, Description: UseJetty
 #DesignerProperty: Key: Dynamic, DisplayName: Dynamic, FieldType: Boolean, DefaultValue: False, Description: Dynamic
-#DesignerProperty: Key: TableName, DisplayName: TableName, FieldType: String, DefaultValue: , Description: TableName
-#DesignerProperty: Key: RecordSource, DisplayName: RecordSource, FieldType: String, DefaultValue: , Description: RecordSource
-#DesignerProperty: Key: PrimaryKey, DisplayName: PrimaryKey, FieldType: String, DefaultValue: , Description: PrimaryKey
+#DesignerProperty: Key: TableName, DisplayName: TableName*, FieldType: String, DefaultValue: , Description: TableName
+#DesignerProperty: Key: RecordSource, DisplayName: RecordSource*, FieldType: String, DefaultValue: , Description: RecordSource
+#DesignerProperty: Key: PrimaryKey, DisplayName: PrimaryKey*, FieldType: String, DefaultValue: , Description: PrimaryKey
 #DesignerProperty: Key: AutoIncrement, DisplayName: AutoIncrement, FieldType: String, DefaultValue: , Description: AutoIncrement
-#DesignerProperty: Key: Singular, DisplayName: Singular, FieldType: String, DefaultValue: , Description: Singular
-#DesignerProperty: Key: Plural, DisplayName: Plural, FieldType: String, DefaultValue: , Description: Plural
-#DesignerProperty: Key: DisplayField, DisplayName: DisplayField, FieldType: String, DefaultValue: , Description: DisplayField
-#DesignerProperty: Key: Fields, DisplayName: Fields (;), FieldType: String, DefaultValue: , Description: Fields
+#DesignerProperty: Key: Singular, DisplayName: Singular*, FieldType: String, DefaultValue: , Description: Singular
+#DesignerProperty: Key: Plural, DisplayName: Plural*, FieldType: String, DefaultValue: , Description: Plural
+#DesignerProperty: Key: DisplayField, DisplayName: DisplayField*, FieldType: String, DefaultValue: , Description: DisplayField
+#DesignerProperty: Key: Fields, DisplayName: Fields (;)*, FieldType: String, DefaultValue: , Description: Fields
 #DesignerProperty: Key: Defaults , DisplayName: Defaults JSON;, FieldType: String, DefaultValue: , Description: Defaults
 #DesignerProperty: Key: Integers, DisplayName: Integers (;), FieldType: String, DefaultValue: , Description: Integers
 #DesignerProperty: Key: Doubles, DisplayName: Doubles (;), FieldType: String, DefaultValue: , Description: Doubles
 #DesignerProperty: Key: Blobs, DisplayName: Blobs (;), FieldType: String, DefaultValue: , Description: Blobs
-#DesignerProperty: Key: SelectFields, DisplayName: SelectFields (;) , FieldType: String, DefaultValue: , Description: SelectFields
-#DesignerProperty: Key: WhereFields, DisplayName: WhereFields, FieldType: String, DefaultValue: , Description: WhereFields
-#DesignerProperty: Key: Operators, DisplayName: Operators (;) , FieldType: String, DefaultValue: , Description: Operators
-#DesignerProperty: Key: AndOr, DisplayName: AndOr (;), FieldType: String, DefaultValue: , Description: AndOr
-#DesignerProperty: Key: AscDesc, DisplayName: AscDesc (;), FieldType: String, DefaultValue: , Description: AscDesc
-#DesignerProperty: Key: OrderBy, DisplayName: OrderBy (;), FieldType: String, DefaultValue: , Description: OrderBy
+#DesignerProperty: Key: SelectFields, DisplayName: SelectFields (;)* , FieldType: String, DefaultValue: , Description: SelectFields
+'#DesignerProperty: Key: WhereFields, DisplayName: WhereFields, FieldType: String, DefaultValue: , Description: WhereFields
+'#DesignerProperty: Key: Operators, DisplayName: Operators (;) , FieldType: String, DefaultValue: , Description: Operators
+'#DesignerProperty: Key: AndOr, DisplayName: AndOr (;), FieldType: String, DefaultValue: , Description: AndOr
+'#DesignerProperty: Key: AscDesc, DisplayName: AscDesc (;), FieldType: String, DefaultValue: , Description: AscDesc
+#DesignerProperty: Key: OrderBy, DisplayName: OrderBy (;)*, FieldType: String, DefaultValue: , Description: OrderBy
 #DesignerProperty: Key: CustomQuery, DisplayName: CustomQuery, FieldType: String, DefaultValue: , Description: CustomQuery
 
 
@@ -134,6 +131,7 @@ Sub Class_Globals
 	Public const ACTION_EXCEL As String = "Excel"
 	Public const ACTION_SELECTFORCOMBO As String = "SelectForCombo"
 	Public const ACTION_CHART As String = "Chart"
+	Public const ACTION_EXISTS As String = "Exists"
 	'
 	Public const MODE_CREATE As String = "C"
 	Public const MODE_UPDATE As String = "U"
@@ -158,6 +156,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	IsBound = False
 End Sub
 
+'convert a banano element to a relationship
 Sub BEToRelationships(be As BANanoElement)
 	'clear existing relationships
 	Relationships.Initialize 
@@ -205,6 +204,32 @@ Sub BEToRelationships(be As BANanoElement)
 	Next	
 End Sub
 
+'set the user name
+Sub setUserName(p As String)
+	If IsBound = False Then
+		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+	End If
+	sUserName = p
+End Sub
+
+'set connection to be dynamic
+Sub setDynamic(b As Boolean)
+	If IsBound = False Then
+		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+	End If
+	b = BANanoShared.parsebool(b)
+	bDynamic = b
+End Sub
+
+'set the primary key
+Sub setPrimaryKey(p As String)
+	If IsBound = False Then
+		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+	End If
+	sPrimaryKey = p
+	dsKey = $"${sRecordSource}.${sPrimaryKey}"$
+End Sub
+
 'return the primary key field bame
 Sub getPrimaryKey As String
 	If IsBound = False Then
@@ -213,12 +238,28 @@ Sub getPrimaryKey As String
 	Return sPrimaryKey
 End Sub
 
+'set singular
+Sub setSingular(p As String)
+	If IsBound = False Then
+		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+	End If
+	sSingular = p
+End Sub
+
 'return the singular name of these records, this is used for deletes
 Sub getSingular As String
 	If IsBound = False Then
 		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
 	End If
 	Return sSingular
+End Sub
+
+'set plural
+Sub setPlural(p As String)
+	If IsBound = False Then
+		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+	End If
+	sPlural = p
 End Sub
 
 'return the plural name of these records
@@ -237,6 +278,14 @@ Sub getDisplayField As String
 	Return sDisplayField
 End Sub
 
+'set display field
+Sub setDisplayField(p As String)
+	If IsBound = False Then
+		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+	End If
+	sDisplayField = p
+End Sub
+
 'return the display value, this is used for deletes
 Sub getDisplayValue As String
 	If IsBound = False Then
@@ -249,6 +298,56 @@ Sub getDisplayValue As String
 	sPrimaryKeyValue = Record.GetDefault(sPrimaryKey, "")
 	Return sDisplayValue
 End Sub
+
+'set CustomQuery
+Sub setCustomQuery(p As String)
+	If IsBound = False Then
+		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+	End If
+	sCustomQuery = p
+End Sub
+
+'set password
+Sub setPassword(p As String)
+	If IsBound = False Then
+		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+	End If
+	sPassword = p
+End Sub
+
+'set hostname
+Sub setHostName(p As String)
+	If IsBound = False Then
+		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+	End If
+	sHostName = p
+End Sub
+
+'set database name
+Sub setDatabaseName(p As String)
+	If IsBound = False Then
+		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+	End If
+	sDatabaseName = p
+End Sub
+
+'set table name
+Sub setTableName(p As String)
+	If IsBound = False Then
+		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+	End If
+	sTableName = p
+End Sub
+
+'set record source
+Sub setRecordSource(p As String)
+	If IsBound = False Then
+		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+	End If
+	sRecordSource = p
+	dsKey = $"${sRecordSource}.${sPrimaryKey}"$
+End Sub
+
 
 Sub DesignerCreateView (Target As BANanoElement, Props As Map) 
 	mTarget = Target 
@@ -376,6 +475,67 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	Next
 	Tag = ""
 	IsBound = False
+End Sub
+
+'reset the datasource to be able to use with another table
+Sub SchemaReset As BananoDataSource
+	Tag = ""
+	Strings.Initialize 
+	Doubles.Initialize 
+	Blobs.Initialize 
+	Integers.Initialize 
+	schemaDefaultsM.Initialize
+	schemaFields.Initialize 
+	schemaOrderBy.Initialize 
+	schemaSelectFields.Initialize 
+	dsKey = ""
+	Return Me
+End Sub
+
+Sub AddDefault(fld As String, value As Object) As BananoDataSource
+	If IsBound = False Then
+		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+	End If
+	If bShowLog Then
+		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.AddDefault"$)
+	End If
+	schemaDefaultsM.Put(fld, value)
+	Return Me
+End Sub
+
+'set schema fields
+Sub SchemaSetFields(flds As List)
+	schemaFields = flds
+End Sub
+
+'set integers
+Sub SchemaSetIntegers(flds As List)
+	Integers = flds
+End Sub
+
+'set strings
+Sub SchemaSetStrings(flds As List)
+	Strings = flds
+End Sub
+
+'set doubles
+Sub SchemaSetDoubles(flds As List)
+	Doubles = flds
+End Sub
+
+'set blobs
+Sub SchemaSetBlobs(flds As List)
+	Blobs = flds
+End Sub
+
+'set order by
+Sub SchemaSetOrderBy(flds As List)
+	schemaOrderBy = flds
+End Sub
+
+'set select fields
+Sub SchemaSetSelectFields(flds As List)
+	schemaSelectFields = flds
 End Sub
 
 'bind to this DS to this component
@@ -645,6 +805,18 @@ Sub SELECTWHERE
 	Execute(ACTION_SELECTWHERE)
 End Sub
 
+'select all based on fields and order by
+Sub EXISTS
+	If IsBound = False Then
+		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+	End If
+	If bShowLog Then
+		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.SELECTWHERE"$)
+	End If
+	Tag = ACTION_EXISTS
+	Execute(ACTION_EXISTS)
+End Sub
+
 'select all based on fields and order by for PDF
 Sub PDF
 	If IsBound = False Then
@@ -774,6 +946,10 @@ private Sub MySQLExecute As Boolean    'ignore
 	Select Case sAction
 	Case ACTION_CREATE_TABLE
 		MySQL.SchemaCreateTable
+		If bShowLog Then
+			Log(MySQL.query)
+			Log(MySQL.args)
+		End If
 	Case ACTION_CREATE
 		'remove auto-increment
 		Record = ParentComponent.GetData(sRecordSource)
@@ -784,6 +960,10 @@ private Sub MySQLExecute As Boolean    'ignore
 		Log($"Create: ${Record}"$)
 		'insert a record
 		MySQL.Insert1(Record)
+		If bShowLog Then
+			Log(MySQL.query)
+			Log(MySQL.args)
+		End If
 	Case ACTION_READ
 		bRead = True
 		'get the key for the record
@@ -802,6 +982,10 @@ private Sub MySQLExecute As Boolean    'ignore
 		Log($"Read: ${pkValue}"$)
 		'execute the read
 		MySQL.Read(pkValue)
+		If bShowLog Then
+			Log(MySQL.query)
+			Log(MySQL.args)
+		End If
 	Case ACTION_UPDATE
 		'get the key for the record
 		Dim pkValue As String = ParentComponent.GetData(dsKey)
@@ -815,6 +999,10 @@ private Sub MySQLExecute As Boolean    'ignore
 		Record.Remove(sPrimaryKey)
 		Log($"Update: ${Record}"$)
 		MySQL.Update1(Record, pkValue)
+		If bShowLog Then
+			Log(MySQL.query)
+			Log(MySQL.args)
+		End If
 	Case ACTION_DELETE
 		'get the key for the record
 		Dim pkValue As String = ParentComponent.GetData(dsKey)
@@ -823,16 +1011,32 @@ private Sub MySQLExecute As Boolean    'ignore
 		End If
 		Log($"Delete: ${pkValue}"$)
 		MySQL.Delete(pkValue)
+		If bShowLog Then
+			Log(MySQL.query)
+			Log(MySQL.args)
+		End If
 	Case ACTION_SELECTALL, ACTION_PDF, ACTION_REPORT, ACTION_EXCEL, ACTION_SELECTFORCOMBO, ACTION_CHART
 		bSelect = True
 		MySQL.SelectAll(schemaSelectFields, schemaOrderBy)
-	Case ACTION_SELECTWHERE
+		If bShowLog Then
+			Log(MySQL.query)
+			Log(MySQL.args)
+		End If
+	Case ACTION_SELECTWHERE, ACTION_EXISTS
 		bSelect = True
 		MySQL.SelectWhere(schemaSelectFields, cw, ops, schemaOrderBy) 
+		If bShowLog Then
+			Log(MySQL.query)
+			Log(MySQL.args)
+		End If
 	Case ACTION_COUNT
 		bCount = True
 		bSelect = True
 		MySQL.GetCount
+		If bShowLog Then
+			Log(MySQL.query)
+			Log(MySQL.args)
+		End If
 	Case ACTION_GETMAX
 		bSelect = True
 	Case ACTION_GETMIN
@@ -840,6 +1044,10 @@ private Sub MySQLExecute As Boolean    'ignore
 	Case ACTION_CUSTOM
 		bSelect = True
 		MySQL.Execute(sCustomQuery)
+		If bShowLog Then
+			Log(MySQL.query)
+			Log(MySQL.args)
+		End If
 	End Select
 	'we are using mysqlphp.config
 	If bDynamic = False Then 
@@ -880,10 +1088,18 @@ private Sub MySQLExecute As Boolean    'ignore
 				Next
 				CorrectDataTypes(Record)
 				ParentComponent.SetData(sRecordSource, Record)
+				affectedRows = -1
 			End If
 		End If
 	End If
 	BANano.ReturnThen(True)
+End Sub
+
+'get the first record
+Sub GetFirstRecord As Map
+	Dim fr As Map = Result.Get(0)
+	CorrectDataTypes(Record)
+	Return fr
 End Sub
 
 'key for deletes and reads
