@@ -7,7 +7,7 @@ Version=8.9
 'Static code module
 Sub Process_Globals	
 	Public vuetify As VuetifyApp
-	Public vfab As VueComponent
+	Public vfabx As VueComponent
 	Public path As String
 	Public name As String = "vfab"
 	Private banano As BANano
@@ -18,10 +18,10 @@ Sub Initialize
 	'establish a reference to the app
 	vuetify = pgIndex.vuetify
 	'initialize the component
-	vfab.Initialize(Me, name)
-	path = vfab.path
+	vfabx.Initialize(Me, name)
+	path = vfabx.path
 	'
-	fcont = vfab.Page.AddContainer("fcont", True)
+	fcont = vfabx.Page.AddContainer("fcont", True)
 	
 	'
 	Dim fcard As VueElement = fcont.AddCard("fcard", "", Null)
@@ -29,7 +29,7 @@ Sub Initialize
 	fcard.Height = 500
 	fcard.ML = 14
 	fcard.MT = 14
-	vfab.BindVueElement(fcard)
+	vfabx.BindVueElement(fcard)
 	'
 	Dim tleft As VueElement = fcard.AddFab1("tleft", "mdi-plus", "orange")
 	tleft.TopLeft
@@ -49,19 +49,19 @@ Sub Initialize
 	
 	'
 	Dim sd As VueElement = fcont.AddSpeedDial("sd1", "mdi-account-circle", "mdi-close", "sdvalue", "blue")
-	vfab.BindVueElement(sd)
+	vfabx.BindVueElement(sd)
 	sd.BottomRight
 	sd.OpenOnHover = True
 	sd.Absolute = True
 	Dim sdedit As VueElement = sd.AddSpeedDialItem("sdedit", "mdi-pencil", "green")
 	Dim sdadd As VueElement = sd.AddSpeedDialItem("sdadd", "mdi-plus", "indigo")
 	Dim sddelete As VueElement = sd.AddSpeedDialItem("sddelete", "mdi-delete", "red")
-	vfab.BindVueElement(sdedit)
-	vfab.BindVueElement(sdadd)
-	vfab.BindVueElement(sddelete)
+	vfabx.BindVueElement(sdedit)
+	vfabx.BindVueElement(sdadd)
+	vfabx.BindVueElement(sddelete)
 			  
 	'add the component as a router
-	vuetify.AddRoute(vfab) 
+	vuetify.AddRoute(vfabx) 
 End Sub
 
 Sub sdedit_click(e As BANanoEvent)

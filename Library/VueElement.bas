@@ -10364,6 +10364,7 @@ Sub AddBottomNavigation(elID As String, vmodel As String, color As String, grow 
 	If shift Then
 		elx.Shift = shift
 	End If
+	elx.BindAllEvents
 	Return elx
 End Sub
 

@@ -21,12 +21,11 @@ Version=7
 #Event: Exists (Success As Boolean, Response As String, Error As String, affectedRows As Int, Result As List)
 
 #DesignerProperty: Key: ShowLog, DisplayName: ShowLog, FieldType: Boolean, DefaultValue: False, Description: ShowLog
-#DesignerProperty: Key: DatabaseType, DisplayName: DatabaseType*, FieldType: String, DefaultValue: mysql, Description: DatabaseType, List: mysql
+#DesignerProperty: Key: DatabaseType, DisplayName: DatabaseType*, FieldType: String, DefaultValue: mysql, Description: DatabaseType, List: mysql|jrdc
 #DesignerProperty: Key: HostName, DisplayName: HostName*, FieldType: String, DefaultValue: localhost, Description: HostName
 #DesignerProperty: Key: DatabaseName, DisplayName: DatabaseName*, FieldType: String, DefaultValue: , Description: DatabaseName
 #DesignerProperty: Key: UserName, DisplayName: UserName, FieldType: String, DefaultValue: root, Description: UserName
 #DesignerProperty: Key: Password, DisplayName: Password, FieldType: String, DefaultValue: , Description: Password
-#DesignerProperty: Key: UseJetty, DisplayName: UseJetty, FieldType: Boolean, DefaultValue: False, Description: UseJetty
 #DesignerProperty: Key: Dynamic, DisplayName: Dynamic, FieldType: Boolean, DefaultValue: False, Description: Dynamic
 #DesignerProperty: Key: TableName, DisplayName: TableName*, FieldType: String, DefaultValue: , Description: TableName
 #DesignerProperty: Key: RecordSource, DisplayName: RecordSource*, FieldType: String, DefaultValue: , Description: RecordSource
@@ -87,7 +86,6 @@ Sub Class_Globals
 	Private sRecordSource As String
 	Private sSelectFields As String
 	Private sTableName As String
-	Private bUseJetty As Boolean
 	Private sUserName As String
 	Private sWhereFields As String
 	Private sDefaults As String
@@ -145,6 +143,8 @@ Sub Class_Globals
 	'
 	Type BDSRelationship(name As String, DisplayFormat As String, SourceTable As String, SourceKey As String, ForeignTable As String, ForeignKey As String, ForeignFields As String)
 	Private IsBound As Boolean
+	Private sjrdcCommand As String
+	Private mPayload As Map
 End Sub
 
 'initialize the BANanoDS
@@ -154,6 +154,20 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	mCallBack = CallBack	
 	Mode = "" 
 	IsBound = False
+	mPayload.Initialize 
+End Sub
+
+'set the jrdc command
+Sub setJRDCCommand(p As String)
+	If IsBound = False Then
+		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+	End If
+	sjrdcCommand = p
+End Sub
+
+'get the jrdc command
+Sub getJRDCCommand As String
+	Return sjrdcCommand
 End Sub
 
 'convert a banano element to a relationship
@@ -373,8 +387,6 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sRecordSource = Props.GetDefault("RecordSource", "")
 		sSelectFields = Props.GetDefault("SelectFields", "")
 		sTableName = Props.GetDefault("TableName", "")
-		bUseJetty = Props.GetDefault("UseJetty", False)
-		bUseJetty = BANanoShared.parseBool(bUseJetty)
 		sUserName = Props.GetDefault("UserName", "")
 		sWhereFields = Props.GetDefault("WhereFields", "")
 		sDefaults = Props.GetDefault("Defaults", "")
@@ -489,6 +501,7 @@ Sub SchemaReset As BananoDataSource
 	schemaOrderBy.Initialize 
 	schemaSelectFields.Initialize 
 	dsKey = ""
+	mPayload.Initialize 
 	Return Me
 End Sub
 
@@ -894,10 +907,16 @@ private Sub Execute(nAction As String)
 		If SubExists(mCallBack, $"${mName}_done"$) Then
 			BANano.CallSub(mCallBack, $"${mName}_done"$, Array(Tag, OK, Response, Error, affectedRows, Result))
 		End If
-		
-		
 	Case "sqlite"
+	Case "jrdc"
+		JRDCExecute
+		'we are using jrdc
 	End Select
+End Sub
+
+'get the payload
+Sub GetJRDCPayload As Map
+	Return mPayload
 End Sub
 
 'clear where clause
@@ -940,7 +959,7 @@ private Sub MySQLExecute As Boolean    'ignore
 	MySQL.SchemaAddInt(Integers)
 	MySQL.SchemaAddText(Strings)
 	Dim bRead As Boolean = False
-	Dim bSelect As Boolean = False
+	Dim bSelect As Boolean = False  'ignore
 	Dim bCount As Boolean = False
 	Tag = sAction
 	Select Case sAction
@@ -1054,7 +1073,7 @@ private Sub MySQLExecute As Boolean    'ignore
 		MySQL.JSON = BANano.CallInlinePHPWait(MySQL.MethodName, MySQL.Build) 
 	Else
 		'we are using dynamic
-		MySQL.JSON = BANano.CallInlinePHPWait(MySQL.MethodNameDynamic, MySQL.BuildDynamic(Not(bUseJetty)))
+		MySQL.JSON = BANano.CallInlinePHPWait(MySQL.MethodNameDynamic, MySQL.BuildDynamic(True))
 	End If	
 	'get the result
 	MySQL.FromJSON 
@@ -1144,4 +1163,80 @@ End Sub
 'the target for this document
 Sub getHere As String
 	Return $"#${mName}"$
+End Sub
+
+private Sub JRDCExecute
+	Dim MySQL As BANanoMySQLE
+	MySQL.Initialize(sDatabaseName, sTableName, sPrimaryKey, sAutoIncrement) 
+	If bDynamic Then
+		MySQL.SetConnection(sHostName, sUserName, sPassword)
+	End If
+	'clear the schema
+	MySQL.SchemaClear
+	'add the schema to the dbclass
+	MySQL.SchemaAddBlob(Blobs)
+	MySQL.SchemaAddDouble(Doubles)
+	MySQL.SchemaAddInt(Integers)
+	MySQL.SchemaAddText(Strings)
+	Tag = sAction
+	Select Case sAction
+	Case ACTION_CREATE_TABLE
+		MySQL.SchemaCreateTable
+		mPayload = MySQL.Build
+	Case ACTION_CREATE
+		'remove auto-increment
+		Record = ParentComponent.GetData(sRecordSource)
+		CorrectDataTypes(Record)
+		If sAutoIncrement <> "" Then
+			Record.Remove(sAutoIncrement)
+		End If
+		Log($"Create: ${Record}"$)
+		'insert a record
+		MySQL.Insert1(Record)
+		mPayload = MySQL.Build
+	Case ACTION_READ
+		'get the key for the record
+		Dim pkValue As String = ParentComponent.GetData(dsKey)
+		Log($"Read: ${pkValue}"$)
+		'execute the read
+		MySQL.Read(pkValue)
+		mPayload = MySQL.Build
+	Case ACTION_UPDATE
+		'get the key for the record
+		Dim pkValue As String = ParentComponent.GetData(dsKey)
+		'read the record to update
+		Record = ParentComponent.GetData(sRecordSource)
+		CorrectDataTypes(Record)
+		'we need to remove the auto-increment key from the record
+		Record.Remove(sPrimaryKey)
+		Log($"Update: ${Record}"$)
+		MySQL.Update1(Record, pkValue)
+		mPayload = MySQL.Build
+	Case ACTION_DELETE
+		'get the key for the record
+		Dim pkValue As String = ParentComponent.GetData(dsKey)
+		Log($"Delete: ${pkValue}"$)
+		MySQL.Delete(pkValue)
+	Case ACTION_SELECTALL, ACTION_PDF, ACTION_REPORT, ACTION_EXCEL, ACTION_SELECTFORCOMBO, ACTION_CHART
+		MySQL.SelectAll(schemaSelectFields, schemaOrderBy)
+		mPayload = MySQL.Build
+	Case ACTION_SELECTWHERE, ACTION_EXISTS
+		MySQL.SelectWhere(schemaSelectFields, cw, ops, schemaOrderBy) 
+		mPayload = MySQL.Build
+	Case ACTION_COUNT
+		MySQL.GetCount
+		mPayload = MySQL.Build
+	Case ACTION_GETMAX
+		mPayload = MySQL.Build
+	Case ACTION_GETMIN
+		mPayload = MySQL.Build
+	Case ACTION_CUSTOM
+		MySQL.Execute(sCustomQuery)
+		mPayload = MySQL.Build
+	End Select
+	If bShowLog Then
+		Log(MySQL.query)
+		Log(MySQL.args)
+	End If
+	mPayload.Put("jrdccommand", sjrdcCommand)		
 End Sub

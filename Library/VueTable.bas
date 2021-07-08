@@ -685,7 +685,7 @@ bHideDefaultFooter = BANanoShared.parseBool(bHideDefaultFooter)
 	Dim lsColumnWidths As List = BANanoShared.StrParse(";", sColumnWidths)
 	Dim lsColumnFilterable As List = BANanoShared.StrParse(";", sColumnFilterable)
 	Dim lsColumnAvatarTxt As List = BANanoShared.StrParse(";", sColumnAvatarText)
-	Dim lsColumnAvatarIcon As List = BANano.Split(";", sColumnAvatarIcon)
+	Dim lsColumnAvatarIcon As List = BANanoShared.StrParse(";", sColumnAvatarIcon)
 	'
 	Dim colTot As Int = lsColumnFields.Size - 1
 	Dim colCnt As Int

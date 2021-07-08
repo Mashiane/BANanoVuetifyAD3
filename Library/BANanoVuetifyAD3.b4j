@@ -2,14 +2,15 @@
 Build1=Default,b4j.example
 File1=1.png
 File10=beautify-html.min.js
-File100=vue-form-wizard.min.css
-File101=vue-prism-component.min.js
-File102=vue-router.min.js
-File103=vue-session.js
-File104=vuetify.min.css
-File105=vuetify.min.js
-File106=vue-tippy.min.js
-File107=xlsx.full.min.js
+File100=vue-form-wizard.js
+File101=vue-form-wizard.min.css
+File102=vue-prism-component.min.js
+File103=vue-router.min.js
+File104=vue-session.js
+File105=vuetify.min.css
+File106=vuetify.min.js
+File107=vue-tippy.min.js
+File108=xlsx.full.min.js
 File11=bvad31.png
 File12=chart.js
 File13=Chart.min.css
@@ -73,40 +74,40 @@ File65=materialdesignicons-webfont.ttf
 File66=materialdesignicons-webfont.woff
 File67=materialdesignicons-webfont.woff2
 File68=material-ui.min.css
-File69=moment.min.js
+File69=md5.min.js
 File7=axios.min.js
-File70=neutralface.png
-File71=numeral.min.js
-File72=orange.png
-File73=oxml.min.js
-File74=prism.min.css
-File75=prism.min.js
-File76=qrcode.min.js
-File77=red.png
-File78=roboto.min.css
-File79=Roboto100.ttf
+File70=moment.min.js
+File71=neutralface.png
+File72=numeral.min.js
+File73=orange.png
+File74=oxml.min.js
+File75=prism.min.css
+File76=prism.min.js
+File77=qrcode.min.js
+File78=red.png
+File79=roboto.min.css
 File8=beautify.min.js
-File80=Roboto300.ttf
-File81=Roboto400.ttf
-File82=Roboto500.ttf
-File83=Roboto700.ttf
-File84=Roboto900.ttf
-File85=sadface.png
-File86=sponge.png
-File87=sponget.png
-File88=sweetalert2.all.min.js
-File89=tippygoogle.css
+File80=Roboto100.ttf
+File81=Roboto300.ttf
+File82=Roboto400.ttf
+File83=Roboto500.ttf
+File84=Roboto700.ttf
+File85=Roboto900.ttf
+File86=sadface.png
+File87=sponge.png
+File88=sponget.png
+File89=sweetalert2.all.min.js
 File9=beautify-css.min.js
-File90=upload.php
-File91=v-blur.min.js
-File92=vjsf.css
-File93=vjsf.js
-File94=vue.min.js
-File95=vue2-leaflet.min.js
-File96=vue2-leaflet-movingmarker.umd.min.js
-File97=vue-clipboard.min.js
-File98=vue-count-to.min.js
-File99=vue-form-wizard.js
+File90=tippygoogle.css
+File91=upload.php
+File92=v-blur.min.js
+File93=vjsf.css
+File94=vjsf.js
+File95=vue.min.js
+File96=vue2-leaflet.min.js
+File97=vue2-leaflet-movingmarker.umd.min.js
+File98=vue-clipboard.min.js
+File99=vue-count-to.min.js
 FileGroup1=Default Group
 FileGroup10=Default Group
 FileGroup100=Default Group
@@ -117,6 +118,7 @@ FileGroup104=Default Group
 FileGroup105=Default Group
 FileGroup106=Default Group
 FileGroup107=Default Group
+FileGroup108=Default Group
 FileGroup11=Default Group
 FileGroup12=Default Group
 FileGroup13=Default Group
@@ -355,7 +357,7 @@ Module96=VParallax
 Module97=VPrism
 Module98=VProgressCircular
 Module99=VProgressLinear
-NumberOfFiles=107
+NumberOfFiles=108
 NumberOfLibraries=4
 NumberOfModules=136
 Version=9.08
@@ -372,7 +374,7 @@ Version=9.08
 
 Sub Process_Globals
 	Private BANano As BANano 'ignore
-	Public Version As String = "5.55"
+	Public Version As String = "5.57"
 	Public AppName As String = "BANanoVuetifyAD3"
 End Sub
 
@@ -512,6 +514,8 @@ Sub AppStart (Form1 As Form, Args() As String)
 	BANano.Header.AddJavascriptFile("vue-session.js")
 	BANano.Header.AddJavascriptFile("collect.min.js")
 	BANano.Header.AddJavascriptFile("firesql.umd.js")
+	'
+	BANano.Header.AddJavascriptFile("md5.min.js")
 	
 	' start the build
 	#if release

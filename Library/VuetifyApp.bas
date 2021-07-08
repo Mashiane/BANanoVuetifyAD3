@@ -5890,3 +5890,9 @@ Sub TrimListItems(m As List) As List
 	Next
 	Return nm
 End Sub
+
+'get md5hash
+Sub Md5Hash(value As String, key As String, raw As Boolean) As String
+    Dim res As Object = BANano.RunJavascriptMethod("md5", Array(value, key, raw))
+    Return res
+End Sub

@@ -8,7 +8,7 @@ Version=8.5
 Sub Process_Globals
 	Public vuetify As VuetifyApp
 	Public BANano As BANano
-	Private vappbar As VueElement
+	Private vappbarx As VueElement
 	Private menubutton As VueElement
 	Private menuicon As VueElement
 	Private menulist As VueElement
@@ -16,10 +16,10 @@ Sub Process_Globals
 	Private menulistitemtitle As VueElement
 	Private menutemplate As VueElement
 	Private menutext As VueElement
-	Private vmenu As VueElement
+	Private vmenux As VueElement
 	Private vappdrawer As VueElement
-	Private vappbarnavicon As VueElement
-	Private vapp As VueElement
+	Private vappbarnaviconx As VueElement
+	Private vappx As VueElement
 	Private appsnackbar As VueElement
 End Sub
 
@@ -65,12 +65,12 @@ Sub Init
 	vuetify.SnackBarTimeOut(500)
 		
 	'add the menu to the v-app-bar
-	vappbar.AppendPlaceHolder
+	vappbarx.AppendPlaceHolder
 	
 	'bind the drawer
 	vuetify.BindVueElement(vappdrawer)
 	'bind the hamburger
-	vuetify.BindVueElement(vappbarnavicon)
+	vuetify.BindVueElement(vappbarnaviconx)
 	'
 	'add the drawer profile
 	BANano.LoadLayoutAppend(vappdrawer.Here, "vdrawerprofile")
@@ -112,7 +112,6 @@ Sub Init
 	drwlist.AddItemParentChild("components", ViewBottomSheet.name, "", "", "Bottom Sheet", ViewBottomSheet.path)
 	drwlist.AddItemParentChild("components", ViewFAB.name, "", "", "Floating Action Button", ViewFAB.path)
 	drwlist.AddItemParentChild("components", ViewToolTip.name, "", "", "ToolTips", ViewToolTip.path)
-	drwlist.AddItemParentChild("components", pgVuetifyFormWizard.name, "", "", "Vuetify Form Wizard", pgVuetifyFormWizard.path)
 	drwlist.AddItemParentChild("components", ViewFlowy.name, "", "", "Flowy", ViewFlowy.path)
 	drwlist.AddItemParentChild("components", ViewStaff.name, "", "", "Employees", ViewStaff.path)
 	'
@@ -171,20 +170,19 @@ Sub Init
 	'
 	'** IMPORTANT
 	vuetify.RouterViewName = "vrouterview"
-	vappbar.ClippedLeft = True
+	vappbarx.ClippedLeft = True
 	vappdrawer.Clipped = True
 	
 	vuetify.UseVueFormWizard
 	
 	'add switch to toggle theme
-	Dim swtTheme As  VueElement = vappbar.AddSwitch("changetheme", "mytheme", "Theme", Null, Null, "", True, Null)
+	Dim swtTheme As  VueElement = vappbarx.AddSwitch("changetheme", "mytheme", "Theme", Null, Null, "", True, Null)
 	swtTheme.MT = 6
 	swtTheme.ML = 4
 	vuetify.BindVueElement(swtTheme)
 	vuetify.SetData("mytheme", False)
 	
 	'
-	vuetify.UseVuetifySimpleWizard
 	'
 	'vuetify.UseFlowy
 	'vuetify.UseVueSocialChat
@@ -210,7 +208,6 @@ Sub AddRouters
 	VueJustAnimate.Initialize 
 	ViewStaff.Initialize 
 	ViewFlowy.Initialize 
-	pgVuetifyFormWizard.Initialize 
 	ViewTips.Initialize 
 	ViewToolTip.Initialize 
 	ViewFAB.Initialize  

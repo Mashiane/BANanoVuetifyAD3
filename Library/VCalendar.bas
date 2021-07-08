@@ -390,7 +390,7 @@ VElement.GetCard.Bind("loading", sloading)
 VElement.GetCard.AddAttr("height",sHeight)
 VElement.SetData(sloading, bLoading)
 '
-VElement.SetMethod(Me, "GetEventColor", Null)
+'VElement.SetMethod(Me, "GetEventColor", Null)
 '
 Dim typetolabel As Map = CreateMap()
 typetolabel.Put("month", "Month")

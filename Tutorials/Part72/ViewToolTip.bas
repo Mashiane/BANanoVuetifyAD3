@@ -41,19 +41,15 @@ Sub Initialize
 	pgtiptap.BindVueElement(btntop)
 	'
 	Dim btnx As VueElement = ttcont.Cell(3, 1).AddButton1("btnx", "Bottom Left", Null)
-	btnx.MicroTipBottomLeft("Click me quick!")
 	pgtiptap.BindVueElement(btnx)
 	'
 	Dim btnmicro As VueElement = ttcont.Cell(3, 2).AddButton1("btnmicro", "Bottom Right", Null)
-	btnmicro.MicroTipBottomRight("This is a micro tooltip!")
 	pgtiptap.BindVueElement(btnmicro)
 	'
 	Dim btnmicrotl As VueElement = ttcont.Cell(4, 1).AddButton1("btnmicrotl", "Top Left", Null)
-	btnmicrotl.MicroTipTopLeft("Click me")
 	pgtiptap.BindVueElement(btnmicrotl)
 	'
 	Dim btnmicrotl As VueElement = ttcont.Cell(4, 2).AddButton1("btnmicrotr", "Top Right", Null)
-	btnmicrotl.MicroTipTopRight("Click me")
 	pgtiptap.BindVueElement(btnmicrotl)
 	
 	'add the component as a router

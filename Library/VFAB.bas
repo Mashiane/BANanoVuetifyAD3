@@ -184,7 +184,7 @@ bLoading = BANanoShared.parseBool(bLoading)
 	'VElement.SetData(mVShow, Not(bHidden))
 	VElement.Fixed = bFixed
 	VElement.Dark = bDark
-	VElement.Flat = bFlat
+	VElement.Bind(":text", bFlat)
 	VElement.Depressed = bDepressed
 	VElement.Disabled = $"${mName}disabled"$
 	VElement.SetData($"${mName}disabled"$, bDisabled)
