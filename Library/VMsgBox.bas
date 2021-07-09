@@ -171,16 +171,16 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	xToolBarColor = $"${mName}toolbarcolor"$
 	xToolBarDark = $"${mName}toolbardark"$
 	xCardTextCaption = $"${mName}cardtextcaption"$
-	xCancelColor = $"${mName}cancel_color"$
-	xOkColor = $"${mName}ok_color"$
-	xOkCaption = $"${mName}ok_caption"$
-	xCancelCaption = $"${mName}cancel_caption"$
-	xOkVisible = $"${mName}_okvshow"$
-	xOkLoading = $"${mName}ok_loading"$
-	xOkDisabled  = $"${mName}ok_disabled"$
-	xCancelVisible = $"${mName}_cancelvshow"$
-	xCancelLoading = $"${mName}cancel_loading"$
-	xCancelDisabled = $"${mName}cancel_disabled"$
+	xCancelColor = $"${mName}cancelcolor"$
+	xOkColor = $"${mName}okcolor"$
+	xOkCaption = $"${mName}okcaption"$
+	xCancelCaption = $"${mName}cancelcaption"$
+	xOkVisible = $"${mName}okshow"$
+	xOkLoading = $"${mName}okloading"$
+	xOkDisabled  = $"${mName}okdisabled"$
+	xCancelVisible = $"${mName}cancelshow"$
+	xCancelLoading = $"${mName}cancelloading"$
+	xCancelDisabled = $"${mName}canceldisabled"$
 	sDisabled = $"${mName}disabled"$
 	sVModel = $"${mName}show"$
 	sShowActions = $"${mName}actionsshow"$
@@ -332,7 +332,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.GetCard.Append($"<v-divider id="${mName}divider2" v-show="${sShowActions}" class="mx-2"></v-divider>"$)
 	'
 	VElement.GetCard.Append($"<v-card-actions v-show="${sShowActions}" id="${mName}cardactions"></v-card-actions>"$)
-	VElement.GetCardActions.Append($"<v-btn id="${mName}_cancel" class="mr-2" dark>{{${xCancelCaption} }}</v-btn>"$)
+	VElement.GetCardActions.Append($"<v-btn id="${mName}_cancel" class="mr-2 white--text">{{${xCancelCaption} }}</v-btn>"$)
 	VElement.GetCancel1.Bind("color", xCancelColor)
 	VElement.GetCancel1.Disabled = xCancelDisabled
 	VElement.GetCancel1.Vshow = xCancelVisible
@@ -342,7 +342,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	'
 	VElement.GetCardActions.Append($"<v-spacer></v-spacer>"$)
 	'
-	VElement.GetCardActions.Append($"<v-btn id="${mName}_ok" dark>{{ ${xOkCaption} }}</v-btn>"$)
+	VElement.GetCardActions.Append($"<v-btn id="${mName}_ok" class="white--text">{{ ${xOkCaption} }}</v-btn>"$)
 	VElement.GetOK1.Bind("color", xOkColor)
 	VElement.GetOK1.Disabled = xOkDisabled
 	VElement.GetOK1.Vshow = xOkVisible

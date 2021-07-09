@@ -803,7 +803,7 @@ Sub DELETE1(rec As Map)
 		BANano.Throw($"BANanoDataSourceFireBase.${mName} has not been bound to the component!"$)
 	End If
 	If bShowLog Then
-		Log($"BANanoDataSourceFireBase..${sTableName}.DELETE1"$)
+		Log($"BANanoDataSourceFireBase.${sTableName}.DELETE1"$)
 	End If
 	DELETE_MODE
 	SetRecord(rec)
@@ -1088,7 +1088,6 @@ private Sub FireStoreExecute As Boolean    'ignore
 			xqry = $"${xqry} ORDER BY ${xSort}"$
 		End If
 		xqry = xqry.trim
-		Log(xqry)
 		'include the id as a field 
 		fireSQL.Initialize2("FireSQL", firestore)
 		Result = BANano.Await(db.query(fireSQL, xqry))	

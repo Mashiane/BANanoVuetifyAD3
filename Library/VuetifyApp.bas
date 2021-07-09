@@ -29,7 +29,7 @@ Sub Class_Globals
 	Public AppName As String
 	Public Root As BANanoObject
 	Public Route As BANanoObject
-	Private refs As BANanoObject
+	Public refs As BANanoObject
 	Public RouterView As BANanoObject
 	Public GoogleMapKey As String
 	Public Body As BANanoElement
@@ -1595,6 +1595,7 @@ Sub AddRoute(comp As VueComponent)
 	eachroute.Put("path", comp.path)
 	eachroute.Put("name", comp.mname)
 	eachroute.Put("component", compx)
+	eachroute.Put("ref", comp.mname)
 	Dim props As Map = comp.mprops
 	If props.Size > 0 Then
 		eachroute.Put("props", props)
@@ -2221,6 +2222,7 @@ Sub FormValidate1(formName As String) As Boolean
 End Sub
 
 Sub RunMethodOnActive(compName As String)
+	compName = compName.tolowercase
 	Try
 		'get the router view
 		Dim rKey As String = "$refs"
@@ -5895,4 +5897,31 @@ End Sub
 Sub Md5Hash(value As String, key As String, raw As Boolean) As String
     Dim res As Object = BANano.RunJavascriptMethod("md5", Array(value, key, raw))
     Return res
+End Sub
+
+'update autocomplete, combo, select items
+Sub UpdateItems(elIDName As String, items As List)
+	Dim sKey As String = $"${elIDName}items"$
+	SetData(sKey, items)
+End Sub
+
+Sub UpdateBadge(elIDName As String, items As Int)
+	Dim sKey As String = $"${elIDName}value"$
+	SetData(sKey, items)
+End Sub
+
+
+Sub IncrementBadge(elIDName As String)
+	Dim sKey As String = $"${elIDName}value"$
+	Increment(sKey, 1)
+End Sub
+
+Sub DecrementBadge(elIDName As String)
+	Dim sKey As String = $"${elIDName}value"$
+	Decrement(sKey, 1)
+End Sub
+
+Sub UpdateBadgeColor(bID As String, color As String)
+	Dim skey As String = $"${bID}badgecolor"$
+	SetData(skey, color)
 End Sub

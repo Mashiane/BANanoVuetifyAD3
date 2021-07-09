@@ -848,7 +848,6 @@ private Sub FireStoreExecute As Boolean    'ignore
 			xqry = $"${xqry} ORDER BY ${xSort}"$
 		End If
 		xqry = xqry.trim
-		Log(xqry)
 		'include the id as a field 
 		fireSQL.Initialize2("FireSQL", firestore)
 		Result = BANano.Await(db.query(fireSQL, xqry))	
@@ -866,7 +865,6 @@ private Sub FireStoreExecute As Boolean    'ignore
 			xqry = $"${xqry} ORDER BY ${xSort}"$
 		End If
 		xqry = xqry.trim
-		Log(xqry)
 		'include the id as a field 
 		fireSQL.Initialize2("FireSQL", firestore)
 		Result = BANano.Await(db.query(fireSQL, xqry))	

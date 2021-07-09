@@ -4565,3 +4565,86 @@ Sub BindState(VS As VueComponent)
 		VC.SetCallBack(k, cb)
 	Next
 End Sub
+
+'build a table from the table description
+Sub BuildFromTableDescription(TD As TableDescription, ShowPrimaryKey As Boolean, ShowBlobs As Boolean, PdfBlobs As Boolean, ExcelBlobs As Boolean)
+	'reset the table
+	Reset
+	'update the table title
+	UpdateTitle(TD.tableName)
+	'attribute cannot be changed at runtime
+	setItemKey(TD.PrimaryKey)
+	'get the fields
+	Dim fields As List = TD.Fields
+	Dim sorts As List = VC.NewList
+	Dim pdfs As List = VC.newlist
+	Dim pk As String = TD.PrimaryKey
+	'
+	Dim fldTot As Int = fields.Size - 1
+	Dim fldCnt As Int
+	
+	'loop through each column and create the structure
+	For fldCnt = 0 To fldTot
+		Dim colm As Map = fields.get(fldCnt)
+		Dim sfieldtype As String = colm.Get("fieldtype")
+		Dim sfieldname As String = colm.Get("fieldname")
+		'
+		colm.Put("title", sfieldname)
+		colm.Put("ontable", "Yes")
+		colm.Put("onpdf", "Yes")
+		colm.Put("onxls", "Yes")
+			
+		'check against blob
+		If sfieldtype.EqualsIgnoreCase("blob") Then
+			If ShowBlobs Then
+				colm.Put("ontable", "Yes")
+			Else
+				colm.Put("ontable", "No")
+				'do not process further
+			End If
+			'can pdf
+			If PdfBlobs Then
+				colm.Put("onpdf", "Yes")
+			Else
+				colm.Put("onpdf", "No")	
+			End If
+			'can excel
+			If ExcelBlobs Then
+				colm.Put("onxls", "Yes")
+			Else
+				colm.Put("onxls", "No")				
+			End If
+			fields.set(fldCnt, colm)
+		End If
+		
+		Dim sontable As String = colm.Get("ontable")
+		Dim ssortdb As String = colm.GetDefault("sortdb","No")
+		Dim sonpdf As String = colm.GetDefault("onpdf", "No")
+		
+		'columns to select
+		If ssortdb = "Yes" Then
+			sorts.Add(sfieldname.tolowercase)
+		End If
+		If sonpdf = "Yes" Then
+			pdfs.Add(colm)
+		End If
+
+		'this field will be in the table
+		If sontable = "Yes" Then
+			If sfieldname.EqualsIgnoreCase(pk) Then 
+				If ShowPrimaryKey = False Then
+					Continue
+				End If
+			End If
+			'add the column to the collection
+			AddColumn(sfieldname.tolowercase, sfieldname)
+		End If
+	Next
+	'add actions
+	AddEdit
+	AddDelete
+	'update headers to new ones
+	UpdateHeaders
+	'save the fields
+	VC.SetData("fields", fields)
+End Sub

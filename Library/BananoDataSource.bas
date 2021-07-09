@@ -19,9 +19,11 @@ Version=7
 #Event: SelectForCombo (Success As Boolean, Response As String, Error As String, affectedRows As Int, Result As List)
 #Event: Chart (Success As Boolean, Response As String, Error As String, affectedRows As Int, Result As List)
 #Event: Exists (Success As Boolean, Response As String, Error As String, affectedRows As Int, Result As List)
+#Event: TableNames (Success As Boolean, Response As String, Error As String, affectedRows As Int, Result As List)
+#Event: DescribeTable (Success As Boolean, Response As String, Error As String, affectedRows As Int, Result As List)
 
 #DesignerProperty: Key: ShowLog, DisplayName: ShowLog, FieldType: Boolean, DefaultValue: False, Description: ShowLog
-#DesignerProperty: Key: DatabaseType, DisplayName: DatabaseType*, FieldType: String, DefaultValue: mysql, Description: DatabaseType, List: mysql|jrdc
+#DesignerProperty: Key: DatabaseType, DisplayName: DatabaseType*, FieldType: String, DefaultValue: mysql, Description: DatabaseType, List: mysql|jrdc|sqlite
 #DesignerProperty: Key: HostName, DisplayName: HostName*, FieldType: String, DefaultValue: localhost, Description: HostName
 #DesignerProperty: Key: DatabaseName, DisplayName: DatabaseName*, FieldType: String, DefaultValue: , Description: DatabaseName
 #DesignerProperty: Key: UserName, DisplayName: UserName, FieldType: String, DefaultValue: root, Description: UserName
@@ -58,8 +60,6 @@ Sub Class_Globals
 	Private mElement As BANanoElement 'ignore 
 	Public VElement As VueElement 
 	Private sAction As String
-	Private sAndOr As String
-	Private sAscDesc As String
 	Private sAutoIncrement As String
 	Private sBlobs As String
 	Private sCustomQuery As String
@@ -68,7 +68,6 @@ Sub Class_Globals
 	Private sDoubles As String
 	Private bDynamic As Boolean
 	Private sFields As String
-	Private bGetNextId As Boolean
 	Private sHostName As String
 	Private sIntegers As String
 	'
@@ -79,7 +78,6 @@ Sub Class_Globals
 	Public Result As List
 	Public Record As Map
 	'
-	Private sOperators As String
 	Private sOrderBy As String
 	Private sPassword As String
 	Private sPrimaryKey As String
@@ -87,7 +85,6 @@ Sub Class_Globals
 	Private sSelectFields As String
 	Private sTableName As String
 	Private sUserName As String
-	Private sWhereFields As String
 	Private sDefaults As String
 	
 	Private schemaIntegers As List
@@ -130,6 +127,8 @@ Sub Class_Globals
 	Public const ACTION_SELECTFORCOMBO As String = "SelectForCombo"
 	Public const ACTION_CHART As String = "Chart"
 	Public const ACTION_EXISTS As String = "Exists"
+	Public const ACTION_TABLENAMES As String = "TableNames"
+	Public const ACTION_DESCRIBETABLE As String = "DescribeTable"
 	'
 	Public const MODE_CREATE As String = "C"
 	Public const MODE_UPDATE As String = "U"
@@ -145,6 +144,9 @@ Sub Class_Globals
 	Private IsBound As Boolean
 	Private sjrdcCommand As String
 	Private mPayload As Map
+	Type TableDescription(tableName As String, PrimaryKey As String, AutoIncrement As String, Fields As List, _
+	Strings As List, Booleans As List, Doubles As List, Blobs As List, Integers As List, TinyInts As List, Sorts As List, FieldNames As List)
+	Public TD As TableDescription
 End Sub
 
 'initialize the BANanoDS
@@ -367,9 +369,8 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	mTarget = Target 
 	If Props <> Null Then 
 		sAction = Props.GetDefault("Action", "")
-		sAndOr = Props.GetDefault("AndOr", "")
-		sAscDesc = Props.GetDefault("AscDesc", "")
 		sAutoIncrement = Props.GetDefault("AutoIncrement", "")
+		sAutoIncrement = sAutoIncrement.tolowercase
 		sBlobs = Props.GetDefault("Blobs", "")
 		sCustomQuery = Props.GetDefault("CustomQuery", "")
 		sDatabaseName = Props.GetDefault("DatabaseName", "")
@@ -380,19 +381,19 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sFields = Props.GetDefault("Fields", "")
 		sHostName = Props.GetDefault("HostName", "")
 		sIntegers = Props.GetDefault("Integers", "")
-		sOperators = Props.GetDefault("Operators", "")
 		sOrderBy = Props.GetDefault("OrderBy", "")
 		sPassword = Props.GetDefault("Password", "")
 		sPrimaryKey = Props.GetDefault("PrimaryKey", "")
+		sPrimaryKey = sPrimaryKey.tolowercase
 		sRecordSource = Props.GetDefault("RecordSource", "")
 		sSelectFields = Props.GetDefault("SelectFields", "")
 		sTableName = Props.GetDefault("TableName", "")
 		sUserName = Props.GetDefault("UserName", "")
-		sWhereFields = Props.GetDefault("WhereFields", "")
 		sDefaults = Props.GetDefault("Defaults", "")
 		sSingular = Props.GetDefault("Singular", "")
 		sPlural = Props.GetDefault("Plural", "")
 		sDisplayField = Props.GetDefault("DisplayField", "")
+		sDisplayField = sDisplayField.tolowercase
 		bShowLog = Props.GetDefault("ShowLog", False)
 		bShowLog = BANanoShared.parseBool(bShowLog)
 	End If
@@ -423,14 +424,17 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	'
 	'ensure consistency
 	sFields = sFields.Replace(",", ";")
+	sFields = sFields.tolowercase
 	sBlobs = sBlobs.Replace(",", ";")
+	sBlobs = sBlobs.tolowercase
 	sIntegers = sIntegers.Replace(",", ";")
+	sIntegers = sIntegers.tolowercase
 	sDoubles = sDoubles.Replace(",", ";") 
+	sDoubles = sDoubles.tolowercase
 	sSelectFields = sSelectFields.Replace(",", ";")
-	sOperators = sOperators.Replace(",", ";")
-	sAndOr = sAndOr.Replace(",", ";")
-	sAscDesc = sAscDesc.Replace(",", ";")
+	sSelectFields = sSelectFields.tolowercase
 	sOrderBy = sOrderBy.Replace(",", ";")
+	sOrderBy = sOrderBy.tolowercase
 	'
 	sDefaults = sDefaults.replace("=", ":")
 	schemaDefaults = BANano.Split(";", sDefaults)	
@@ -439,6 +443,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		Dim k As String = BANanoShared.MvField(fld, 1, ":")
 		Dim v As String = BANanoShared.MvField(fld, 2, ":")
 		k = k.Trim
+		k = k.tolowercase
 		v = v.Trim
 		If k <> "" Then
 			schemaDefaultsM.Put(k, v)
@@ -770,6 +775,29 @@ Sub CUSTOM(ActionName As String)
 	Execute(ACTION_CUSTOM)
 End Sub
 
+'get the table names
+Sub TABLE_NAMES
+	If IsBound = False Then
+		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+	End If
+	If bShowLog Then
+		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.TABLE_NAMES"$)
+	End If
+	Tag = ACTION_TABLENAMES
+	Execute(ACTION_TABLENAMES)
+End Sub
+
+Sub DESCRIBE_TABLE
+	If IsBound = False Then
+		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+	End If
+	If bShowLog Then
+		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.TABLE_NAMES"$)
+	End If
+	Tag = ACTION_DESCRIBETABLE
+	Execute(ACTION_DESCRIBETABLE)
+End Sub
+
 'count total number of records
 Sub COUNT
 	If IsBound = False Then
@@ -889,7 +917,6 @@ private Sub Execute(nAction As String)
 	Select Case sDatabaseType
 	Case "banano"
 	Case "firebase"
-	Case "firestore"
 	Case "mssql"
 	Case "mysql"
 		Dim bpRun As BANanoPromise
@@ -908,6 +935,21 @@ private Sub Execute(nAction As String)
 			BANano.CallSub(mCallBack, $"${mName}_done"$, Array(Tag, OK, Response, Error, affectedRows, Result))
 		End If
 	Case "sqlite"
+		Dim bpRun As BANanoPromise
+		bpRun.CallSub(Me, "SQLiteExecute", Null)
+		BANano.Await(bpRun)
+		'
+		'priorize the exact query, if not execute done
+		Dim subKey As String = $"${mName}_${Tag}"$
+		If SubExists(mCallBack, subKey) Then
+			BANano.CallSub(mCallBack, subKey, Array(OK, Response, Error, affectedRows, Result))
+			Return
+		End If
+		'
+		'if we have done defined, call it
+		If SubExists(mCallBack, $"${mName}_done"$) Then
+			BANano.CallSub(mCallBack, $"${mName}_done"$, Array(Tag, OK, Response, Error, affectedRows, Result))
+		End If
 	Case "jrdc"
 		JRDCExecute
 		'we are using jrdc
@@ -1048,6 +1090,20 @@ private Sub MySQLExecute As Boolean    'ignore
 			Log(MySQL.query)
 			Log(MySQL.args)
 		End If
+	Case ACTION_TABLENAMES
+		bSelect = True
+		MySQL.GetTableNames
+		If bShowLog Then
+			Log(MySQL.query)
+			Log(MySQL.args)
+		End If
+	Case ACTION_DESCRIBETABLE
+		bSelect = True
+		MySQL.DescribeTable
+		If bShowLog Then
+			Log(MySQL.query)
+			Log(MySQL.args)
+		End If
 	Case ACTION_COUNT
 		bCount = True
 		bSelect = True
@@ -1076,7 +1132,128 @@ private Sub MySQLExecute As Boolean    'ignore
 		MySQL.JSON = BANano.CallInlinePHPWait(MySQL.MethodNameDynamic, MySQL.BuildDynamic(True))
 	End If	
 	'get the result
-	MySQL.FromJSON 
+	MySQL.FromJSON
+	Select Case sAction
+	Case ACTION_TABLENAMES
+		'convert to a list
+		Dim tblNames As List
+		tblNames.Initialize 
+		For Each rec As Map In MySQL.result
+			Dim stable_name As String = rec.GetDefault("table_name", "")
+			stable_name = stable_name.Trim
+			If stable_name <> "" Then
+				tblNames.Add(stable_name)
+			End If 
+		Next
+		MySQL.result = tblNames
+		MySQL.affectedRows = tblNames.Size
+	Case ACTION_DESCRIBETABLE
+		'just prepare the information we need
+		TD.Initialize 
+		TD.tableName = sTableName
+		TD.PrimaryKey = ""
+		TD.AutoIncrement = ""
+		TD.Booleans.Initialize 
+		TD.Strings.Initialize 
+		TD.Doubles.Initialize  
+		TD.Blobs.Initialize 
+		TD.Integers.Initialize 
+		TD.TinyInts.Initialize 
+		TD.Fields.Initialize 
+		TD.Sorts.Initialize 
+		TD.FieldNames.Initialize 
+		
+		'will have the auto & primary keys
+		Dim fldnames As List
+		fldnames.Initialize 
+		Dim sauto As String = ""
+		Dim spri As String = ""
+		'loop through each field
+		For Each fldm As Map In MySQL.result
+			'create a new field
+			Dim newfld As Map = CreateMap()
+			Dim sDefault As String = fldm.getdefault("Default","")
+			Dim sExtra As String = fldm.getdefault("Extra", "")
+			Dim sField As String = fldm.getdefault("Field", "")
+			Dim sKey As String = fldm.getdefault("Key", "")
+			Dim sNull As String = fldm.getdefault("Null", "")
+			Dim sType As String = fldm.getdefault("Type", "")	
+			If sNull = "NO" Then sNull = "No"
+			If sNull = "YES" Then sNull = "Yes"
+		'	
+			'update field names
+			TD.FieldNames.Add(sField.tolowercase)
+			'
+			sDefault = BANanoShared.CStr(sDefault)
+			sField = BANanoShared.CStr(sField)
+			sKey = BANanoShared.CStr(sKey)
+			sNull = BANanoShared.CStr(sNull)
+			sType = BANanoShared.CStr(sType)
+			sExtra = BANanoShared.CStr(sExtra)
+			'we have found the auto increment
+			If sExtra.EqualsIgnoreCase("auto_increment") Then 
+				sauto = sField
+				TD.AutoIncrement = sauto
+			End If
+			'we have found the primary key
+			If sKey.EqualsIgnoreCase("pri") Then 
+				spri = sField
+				TD.PrimaryKey = spri
+			End If
+		
+			'get the fld len
+			Dim fldLen As String = BANanoShared.val(sType)
+			'get the fld type
+			Dim fldType As String = BANanoShared.alpha(sType)
+		
+			newfld.Put("defaultvalue", sDefault)
+			newfld.Put("fieldname", sField)
+			newfld.Put("fieldtype", fldType)
+			newfld.Put("fieldlen", fldLen)
+			newfld.Put("acceptnull", sNull)
+			'
+			newfld.Put("title", sField)
+			newfld.Put("ontable", "Yes")
+			newfld.Put("onpdf", "Yes")
+			newfld.Put("onxls", "Yes")
+						
+			If spri.EqualsIgnoreCase(sField) Then
+				newfld.Put("pri", "Yes")
+				newfld.Put("sortdb", "Yes")
+				'sorts
+				TD.Sorts.Add(sField.tolowercase)
+			Else
+				newfld.Put("pri", "No")	
+			End If
+			'
+			If sauto.EqualsIgnoreCase(sField) Then
+				newfld.Put("ai", "Yes")
+			Else
+				newfld.Put("ai", "No")	
+			End If
+			newfld.Put("fieldkey", $"${sTableName}.${sField}"$)
+			'add to collection
+			fldnames.Add(newfld)
+			
+			'define the field types
+			Select Case fldType
+			Case "blob"
+				TD.Blobs.Add(sField.tolowercase)
+			Case "varchar", "date", "longtext"
+				TD.Strings.Add(sField.ToLowerCase)
+			Case "bigint", "int"
+				TD.Integers.Add(sField.tolowercase)
+			Case "tinyint"
+				TD.Integers.Add(sField.tolowercase)
+				TD.TinyInts.Add(sField.ToLowerCase)
+			Case Else
+				TD.Strings.Add(sField.ToLowerCase)
+			End Select
+		Next
+		TD.Fields = fldnames
+		MySQL.result = fldnames
+		MySQL.affectedRows = fldnames.Size
+	End Select
 	Response = MySQL.response
 	Error = MySQL.error
 	affectedRows = MySQL.affectedRows
@@ -1113,6 +1290,290 @@ private Sub MySQLExecute As Boolean    'ignore
 	End If
 	BANano.ReturnThen(True)
 End Sub
+'
+private Sub SQLiteExecute As Boolean    'ignore
+	Dim SQLite As BANanoSQLiteE
+	SQLite.Initialize(sDatabaseName, sTableName, sPrimaryKey, sAutoIncrement) 
+	'clear the schema
+	SQLite.SchemaClear
+	'add the schema to the dbclass
+	SQLite.SchemaAddBlob(Blobs)
+	SQLite.SchemaAddDouble(Doubles)
+	SQLite.SchemaAddInt(Integers)
+	SQLite.SchemaAddText(Strings)
+	Dim bRead As Boolean = False
+	Dim bSelect As Boolean = False  'ignore
+	Dim bCount As Boolean = False
+	Tag = sAction
+	Select Case sAction
+	Case ACTION_CREATE_TABLE
+		SQLite.SchemaCreateTable
+		If bShowLog Then
+			Log(SQLite.query)
+			Log(SQLite.args)
+		End If
+	Case ACTION_CREATE
+		'remove auto-increment
+		Record = ParentComponent.GetData(sRecordSource)
+		CorrectDataTypes(Record)
+		If sAutoIncrement <> "" Then
+			Record.Remove(sAutoIncrement)
+		End If
+		Log($"Create: ${Record}"$)
+		'insert a record
+		SQLite.Insert1(Record)
+		If bShowLog Then
+			Log(SQLite.query)
+			Log(SQLite.args)
+		End If
+	Case ACTION_READ
+		bRead = True
+		'get the key for the record
+		Dim pkValue As String = ParentComponent.GetData(dsKey)
+		'there is no key, return a blank data-source
+		If pkValue = "" Then
+			Dim nr As Map = CreateMap()
+			'copy the fields
+			For Each k As String In schemaFields
+				Record.Put(k, "")
+			Next
+			CorrectDataTypes(nr)
+			ParentComponent.SetData(sRecordSource, nr) 
+			BANano.ReturnThen(True)
+		End If
+		Log($"Read: ${pkValue}"$)
+		'execute the read
+		SQLite.Read(pkValue)
+		If bShowLog Then
+			Log(SQLite.query)
+			Log(SQLite.args)
+		End If
+	Case ACTION_UPDATE
+		'get the key for the record
+		Dim pkValue As String = ParentComponent.GetData(dsKey)
+		If pkValue = "" Then
+			BANano.ReturnThen(True)
+		End If
+		'read the record to update
+		Record = ParentComponent.GetData(sRecordSource)
+		CorrectDataTypes(Record)
+		'we need to remove the auto-increment key from the record
+		Record.Remove(sPrimaryKey)
+		Log($"Update: ${Record}"$)
+		SQLite.Update1(Record, pkValue)
+		If bShowLog Then
+			Log(SQLite.query)
+			Log(SQLite.args)
+		End If
+	Case ACTION_DELETE
+		'get the key for the record
+		Dim pkValue As String = ParentComponent.GetData(dsKey)
+		If pkValue = "" Then
+			BANano.ReturnThen(True)
+		End If
+		Log($"Delete: ${pkValue}"$)
+		SQLite.Delete(pkValue)
+		If bShowLog Then
+			Log(SQLite.query)
+			Log(SQLite.args)
+		End If
+	Case ACTION_SELECTALL, ACTION_PDF, ACTION_REPORT, ACTION_EXCEL, ACTION_SELECTFORCOMBO, ACTION_CHART
+		bSelect = True
+		SQLite.SelectAll(schemaSelectFields, schemaOrderBy)
+		If bShowLog Then
+			Log(SQLite.query)
+			Log(SQLite.args)
+		End If
+	Case ACTION_SELECTWHERE, ACTION_EXISTS
+		bSelect = True
+		SQLite.SelectWhere(schemaSelectFields, cw, ops, schemaOrderBy) 
+		If bShowLog Then
+			Log(SQLite.query)
+			Log(SQLite.args)
+		End If
+	Case ACTION_TABLENAMES
+		bSelect = True
+		SQLite.GetTableNames
+		If bShowLog Then
+			Log(SQLite.query)
+			Log(SQLite.args)
+		End If
+	Case ACTION_DESCRIBETABLE
+		bSelect = True
+		SQLite.DescribeTable
+		If bShowLog Then
+			Log(SQLite.query)
+			Log(SQLite.args)
+		End If
+	Case ACTION_COUNT
+		bCount = True
+		bSelect = True
+		SQLite.GetCount
+		If bShowLog Then
+			Log(SQLite.query)
+			Log(SQLite.args)
+		End If
+	Case ACTION_GETMAX
+		bSelect = True
+	Case ACTION_GETMIN
+		bSelect = True
+	Case ACTION_CUSTOM
+		bSelect = True
+		SQLite.Execute(sCustomQuery)
+		If bShowLog Then
+			Log(SQLite.query)
+			Log(SQLite.args)
+		End If
+	End Select
+	'we are using mysqlphp.config
+	SQLite.JSON = BANano.CallInlinePHPWait(SQLite.MethodName, SQLite.Build) 
+	'get the result
+	SQLite.FromJSON
+	Select Case sAction
+	Case ACTION_TABLENAMES
+		'convert to a list
+		Dim tblNames As List
+		tblNames.Initialize 
+		For Each rec As Map In SQLite.result
+			Dim stable_name As String = rec.GetDefault("name", "")
+			stable_name = stable_name.Trim
+			If stable_name <> "" Then
+				tblNames.Add(stable_name)
+			End If 
+		Next
+		SQLite.result = tblNames
+		SQLite.affectedRows = tblNames.Size
+	Case ACTION_DESCRIBETABLE
+		'just prepare the information we need
+		TD.Initialize 
+		TD.tableName = sTableName
+		TD.PrimaryKey = ""
+		TD.AutoIncrement = ""
+		TD.Booleans.Initialize 
+		TD.Strings.Initialize 
+		TD.Doubles.Initialize  
+		TD.Blobs.Initialize 
+		TD.Integers.Initialize 
+		TD.TinyInts.Initialize 
+		TD.Fields.Initialize 
+		TD.Sorts.Initialize 
+		TD.FieldNames.Initialize 
+		
+		'will have the auto & primary keys
+		Dim fldnames As List
+		fldnames.Initialize 
+		Dim sauto As String = ""
+		Dim spri As String = ""
+		'loop through each field
+		For Each fldm As Map In SQLite.result
+			'create a new field
+			Dim newfld As Map = CreateMap()
+			Dim sDefault As String = fldm.getdefault("dflt_value","")
+			Dim sField As String = fldm.getdefault("name", "")
+			Dim sNull As String = fldm.getdefault("notnull", "0")
+			Dim spk As String = fldm.GetDefault("pk", "0")
+			Dim sType As String = fldm.getdefault("type", "")
+			If sNull = "0" Then sNull = "No"
+			If sNull = "1" Then sNull = "Yes"
+			'
+			sDefault = BANanoShared.CStr(sDefault)
+			sDefault = sDefault.Replace("'", "")
+			sField = BANanoShared.CStr(sField)
+			sNull = BANanoShared.CStr(sNull)
+			sType = BANanoShared.CStr(sType)
+			'
+			'we have found the primary key
+			If spk = "1" Then spri = sField
+				
+			'get the fld len
+			Dim fldlen As String = BANanoShared.MvField(sType, 1, ",")
+			fldlen = BANanoShared.val(fldlen)
+			'get the fld type
+			Dim fldType As String = BANanoShared.alpha(sType)
+			
+			newfld.Put("defaultvalue", sDefault)
+			newfld.Put("fieldname", sField)
+			newfld.Put("fieldtype", fldType)
+			newfld.Put("fieldlen", fldlen)
+			newfld.Put("acceptnull", sNull)
+			newfld.Put("title", sField)
+			newfld.Put("ontable", "Yes")
+			newfld.Put("onpdf", "Yes")
+			newfld.Put("onxls", "Yes")
+			newfld.Put("ai", "No")
+				
+			If spri.EqualsIgnoreCase(sField) Then
+				newfld.Put("pri", "Yes")
+				newfld.Put("dbsort", "Yes")
+				TD.PrimaryKey = sField
+				TD.Sorts.Add(sField.ToLowerCase)
+			Else
+				newfld.Put("pri", "No")
+			End If
+			'
+			'update field names
+			TD.FieldNames.Add(sField.tolowercase)
+			newfld.Put("fieldkey", $"${sTableName}.${sField}"$)
+			'add to collection
+			fldnames.Add(newfld)
+			
+			'define the field types
+			Select Case fldType
+			Case "blob"
+				TD.Blobs.Add(sField.tolowercase)
+			Case "varchar", "date", "longtext"
+				TD.Strings.Add(sField.ToLowerCase)
+			Case "bigint", "int"
+				TD.Integers.Add(sField.tolowercase)
+			Case "tinyint"
+				TD.Integers.Add(sField.tolowercase)
+				TD.TinyInts.Add(sField.ToLowerCase)
+			Case Else
+				TD.Strings.Add(sField.ToLowerCase)
+			End Select
+		Next
+		TD.Fields = fldnames
+		SQLite.result = fldnames
+		SQLite.affectedRows = fldnames.Size
+	End Select
+	Response = SQLite.response
+	Error = SQLite.error
+	affectedRows = SQLite.affectedRows
+	Result = SQLite.result
+	OK = SQLite.OK
+	'we are counting records
+	If bCount Then
+		If Result.Size >= 0 Then
+			Record = Result.Get(0)
+			Dim srecord As String = Record.GetDefault("records", 0)
+			affectedRows = BANano.parseInt(srecord)
+		Else
+			affectedRows = 0
+		End If
+	Else
+		If bRead Then
+			'record is found
+			If Result.Size >= 0 Then
+				Record = Result.Get(0)
+				CorrectDataTypes(Record)
+				ParentComponent.SetData(sRecordSource, Record)
+			Else
+				'record is not found
+				Record = CreateMap()
+				'copy the fields
+				For Each k As String In schemaFields
+					Record.Put(k, "")
+				Next
+				CorrectDataTypes(Record)
+				ParentComponent.SetData(sRecordSource, Record)
+				affectedRows = -1
+			End If
+		End If
+	End If
+	BANano.ReturnThen(True)
+End Sub
+
+
 
 'get the first record
 Sub GetFirstRecord As Map

@@ -34,6 +34,7 @@ Version=8.9
 #DesignerProperty: Key: OverlayColorIntensity, DisplayName: OverlayColorIntensity, FieldType: String, DefaultValue: , Description: OverlayColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: OverlayOpacity, DisplayName: OverlayOpacity, FieldType: String, DefaultValue: , Description: OverlayOpacity
 #DesignerProperty: Key: Permanent, DisplayName: Permanent, FieldType: Boolean, DefaultValue: false, Description: Permanent
+#DesignerProperty: Key: PermanentOnMdUp, DisplayName: PermanentOnMdUp, FieldType: Boolean, DefaultValue: false, Description: Permanent On Medium and Up
 #DesignerProperty: Key: Right, DisplayName: Right, FieldType: Boolean, DefaultValue: false, Description: Right
 #DesignerProperty: Key: Src, DisplayName: Src, FieldType: String, DefaultValue: , Description: Src
 #DesignerProperty: Key: Stateles, DisplayName: Stateles, FieldType: Boolean, DefaultValue: false, Description: Stateles
@@ -89,7 +90,8 @@ Private sWidth As String
 Private bHidden As Boolean
 Private xMiniVariant As String
 Private bUsesAuthentication As Boolean
-private sRounded as string
+Private sRounded As String
+private bPermanentOnMdUp as boolean
 End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -146,6 +148,8 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bHidden = Props.GetDefault("Hidden", False)
 		bUsesAuthentication = Props.GetDefault("UsesAuthentication", False)
 		sRounded = Props.GetDefault("Rounded", "")
+		bPermanentOnMdUp = Props.GetDefault("PermanentOnMdUp", False)
+		bPermanentOnMdUp = BANanoShared.parseBool(bPermanentOnMdUp)
 	End If
 	'
 	'build and get the element
@@ -210,6 +214,9 @@ bUsesAuthentication = BANanoShared.parseBool(bUsesAuthentication)
 	VElement.AddAttr(":temporary", bTemporary)
 	VElement.AddAttr(":touchless", bTouchless)
 	VElement.AddAttr("v-model", sVModel)
+	If bPermanentOnMdUp Then
+		VElement.Bind("permanent", "$vuetify.breakpoint.mdAndUp")
+	End If
 	If bUsesAuthentication Then
 		sVIf = "authenticated"
 	End If

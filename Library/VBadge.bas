@@ -99,8 +99,8 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey)
 		End If
 	End If
-	xHidden = $"${mName}hidden"$
-	svModel = $"${mName}vmodel"$
+	xHidden = $"${mName}show"$
+	svModel = $"${mName}value"$
 	xiconcolor = $"${mName}iconcolor"$
 	xbadgecolor = $"${mName}badgecolor"$
 End Sub
@@ -245,7 +245,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.Left = bLeft
 	VElement.Bottom = bBottom
 	'hidden / visible
-	VElement.Bind(":value", xHidden)
+	VElement.VShow = xHidden
 	VElement.SetData(xHidden, Not(bHidden))
 	VElement.BindAllEvents
 End Sub	
