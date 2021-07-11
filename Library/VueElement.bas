@@ -2381,6 +2381,7 @@ Public Sub AddAttr(varProp As String, varValue As String)
 		'we are adding a string
 		If varValue.StartsWith(":") Then
 			Dim rname As String = BANanoShared.MidS(varValue, 2)
+			rname = rname.tolowercase
 			If rname.Contains(".") = False Or rname.Contains("(") = False Or varValue.Contains("||") = False Or varProp <> "key" Then
 				bindings.Put(rname, Null)
 			End If
@@ -2392,6 +2393,7 @@ Public Sub AddAttr(varProp As String, varValue As String)
 		Else
 			'we have a binding on the property
 			If varProp.StartsWith(":") Then
+				varValue = varValue.tolowercase
 				If varValue.Contains(".") = False Or varValue.Contains("(") = False Or varValue.Contains("||") = False Or varProp <> "key" Then
 					bindings.Put(varValue, Null)
 				End If

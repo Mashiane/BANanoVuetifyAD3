@@ -54,6 +54,7 @@ Version=8.95
 #DesignerProperty: Key: Filled, DisplayName: Filled, FieldType: Boolean, DefaultValue: false, Description: Filled
 #DesignerProperty: Key: Flat, DisplayName: Flat, FieldType: Boolean, DefaultValue: false, Description: Flat
 #DesignerProperty: Key: FullWidth, DisplayName: FullWidth, FieldType: Boolean, DefaultValue: false, Description: FullWidth
+#DesignerProperty: Key: Shrink, DisplayName: Shrink, FieldType: Boolean, DefaultValue: False, Description: Shrink
 #DesignerProperty: Key: Height, DisplayName: Height, FieldType: String, DefaultValue: , Description: Height
 #DesignerProperty: Key: HideDetails, DisplayName: HideDetails, FieldType: Boolean, DefaultValue: false, Description: HideDetails
 #DesignerProperty: Key: Hint, DisplayName: Hint, FieldType: String, DefaultValue: , Description: Hint
@@ -169,6 +170,7 @@ Sub Class_Globals
 	Private bDatePicker As Boolean
 	Private bTimePicker As Boolean
 	Private sAutoComplete As String
+	Private bShrink As Boolean
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -263,6 +265,8 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bDatePicker = Props.getDefault("DatePicker", False)
 		bTimePicker = Props.getdefault("TimePicker", False)
 		sAutoComplete = Props.GetDefault("AutoComplete", "none")
+		bShrink = Props.GetDefault("Shrink", False)
+ bShrink = BANanoShared.parseBool(bShrink)
 	End If
 	'
 	bDisabled = BANanoShared.parseBool(bDisabled)

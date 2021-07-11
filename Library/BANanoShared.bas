@@ -4336,6 +4336,9 @@ Sub GetRecursive(data As Map, path As String) As Object
 		End If
 	Next
 	Dim res As Object = prevObj.GetField(litem)
+	If BANano.IsUndefined(res) Then
+		res = Null
+	End If
 	Return res
 End Sub
 

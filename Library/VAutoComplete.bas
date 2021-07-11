@@ -71,6 +71,7 @@ Version=7
 #DesignerProperty: Key: Filled, DisplayName: Filled, FieldType: Boolean, DefaultValue: False, Description: Filled
 #DesignerProperty: Key: Flat, DisplayName: Flat, FieldType: Boolean, DefaultValue: False, Description: Flat
 #DesignerProperty: Key: FullWidth, DisplayName: FullWidth, FieldType: Boolean, DefaultValue: False, Description: FullWidth
+#DesignerProperty: Key: Shrink, DisplayName: Shrink, FieldType: Boolean, DefaultValue: False, Description: Shrink
 #DesignerProperty: Key: Height, DisplayName: Height, FieldType: String, DefaultValue: , Description: Height
 #DesignerProperty: Key: HideDetails, DisplayName: HideDetails, FieldType: Boolean, DefaultValue: False, Description: HideDetails
 #DesignerProperty: Key: HideNoData, DisplayName: HideNoData, FieldType: Boolean, DefaultValue: False, Description: HideNoData
@@ -219,6 +220,7 @@ Private bRequired As Boolean
 Private sRequired As String
 Private sValue As String
 Private bColorList As Boolean
+private bShrink as boolean
 	End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -333,6 +335,8 @@ bValidateOnBlur = Props.Get("ValidateOnBlur")
 sItemTitles = Props.GetDefault("ItemTitles", "")
 bColorList = Props.GetDefault("ColorList", False)
 bColorList = BANanoShared.parseBool(bColorList)
+bShrink = Props.GetDefault("Shrink", False)
+ bShrink = BANanoShared.parseBool(bShrink)
 	End If 
 	'
 	bDisabled = BANanoShared.parseBool(bDisabled)

@@ -19,6 +19,7 @@ Version=7
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: UseAllowedDates, DisplayName: UseAllowedDates, FieldType: Boolean, DefaultValue: False, Description: UseAllowedDates
 #DesignerProperty: Key: FullWidth, DisplayName: FullWidth, FieldType: Boolean, DefaultValue: False, Description: FullWidth
+#DesignerProperty: Key: Shrink, DisplayName: Shrink, FieldType: Boolean, DefaultValue: False, Description: Shrink
 #DesignerProperty: Key: Today, DisplayName: Today, FieldType: Boolean, DefaultValue: True, Description: Today
 #DesignerProperty: Key: DateType, DisplayName: DateType, FieldType: String, DefaultValue: date, Description: DateType, List: date|month
 #DesignerProperty: Key: ActivePicker, DisplayName: ActivePicker, FieldType: String, DefaultValue: DATE, Description: ActivePicker, List: DATE|MONTH|NONE|YEAR
@@ -130,6 +131,7 @@ Sub Class_Globals
 	Private sDateType As String
 	Private bUseAllowedDates As Boolean
 	Private xAllowedDates As List
+	private bShrink as boolean
 End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -207,6 +209,8 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bFullWidth = Props.GetDefault("FullWidth", False)
 		sDateType = Props.GetDefault("DateType", "date")
 		bUseAllowedDates = Props.GetDefault("UseAllowedDates", False)
+		bShrink = Props.GetDefault("Shrink", False)
+ bShrink = BANanoShared.parseBool(bShrink)
  	End If 
 	' 
 	bToday = BANanoShared.parseBool(bToday)

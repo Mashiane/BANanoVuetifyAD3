@@ -1961,3 +1961,12 @@ Sub GetBindingCode(sVariables As String) As String
 	Next
 	Return sb.tostring
 End Sub
+
+Sub UseVJSF
+	If components.ContainsKey("v-jsf") = False Then
+		Dim VJsf As BANanoObject
+		VJsf.Initialize("VJsf")
+		Dim boVJsf As BANanoObject = VJsf.GetField("default")
+		components.Put("v-jsf", boVJsf)
+	End If	
+End Sub

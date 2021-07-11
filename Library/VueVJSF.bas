@@ -18,6 +18,7 @@ Sub Class_Globals
 	Private mVA As VuetifyApp
 	Public ID As String
 	Private BANano As BANano
+	Public required As List
 End Sub
 
 Public Sub Initialize(VA As VuetifyApp, parentID As String, elID As String)
@@ -30,7 +31,8 @@ Public Sub Initialize(VA As VuetifyApp, parentID As String, elID As String)
 	model.Initialize 
 	properties.Initialize 
 	options.Initialize
-	schema.Initialize  
+	schema.Initialize 
+	required.Initialize  
 	'
 	elID = elID.tolowercase
 	modelname = $"${elID}model"$
