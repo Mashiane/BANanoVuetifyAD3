@@ -121,7 +121,7 @@ Version=8.5
 #DesignerProperty: Key: ItemIcons, DisplayName: Action Icons (;), FieldType: String, DefaultValue:  , Description: Action Icons
 #DesignerProperty: Key: ItemColors, DisplayName: Action Colors (;), FieldType: String, DefaultValue:  green; amber; red, Description: Action Colors
 
-#DesignerProperty: Key: FixedHeader, DisplayName: Fixed Header, FieldType: Boolean, DefaultValue:  False, Description: 
+#DesignerProperty: Key: FixedHeader, DisplayName: Fixed Header, FieldType: Boolean, DefaultValue:  True, Description: 
 #DesignerProperty: Key: HideDefaultHeader, DisplayName: Hide Default Header, FieldType: Boolean, DefaultValue:  False, Description: 
 #DesignerProperty: Key: HideDefaultFooter, DisplayName: Hide Default Footer, FieldType: Boolean, DefaultValue:  False, Description: 
 #DesignerProperty: Key: ShowExpand, DisplayName: ShowExpand, FieldType: Boolean, DefaultValue:  False, Description: 
@@ -321,6 +321,7 @@ Private xPageCount As String
 Private xPagination As String
 Private sColumnAvatarText As String
 Private sColumnAvatarIcon As String
+private sCurrentItems as string
 End Sub
 
 'initialize the custom view
@@ -364,6 +365,7 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	xPageCount = $"${mName}pagecount"$
 	xPage = $"${mName}page"$
 	stVShow = $"${mName}show"$
+	sCurrentItems = $"${mname}currentitems"$
 End Sub
 
 'Create view in the designer
@@ -4020,7 +4022,7 @@ Sub Refresh
 	'build the headers
 	BuildHeaders(columnsM)	
 	BuildSlots
-	
+	VElement.BindAllEvents
 	'SetData(keyID, DateTime.Now)
 	If Items.Size > 0 Then
 		SetData(itemsname, Items)
@@ -4220,10 +4222,20 @@ Sub SetFileSizeColumns(dates As List)
 	Next
 End Sub
 
+'set the current items
+Sub setCurrentItems(theItems As List)
+	VC.SetData(sCurrentItems, theItems)
+End Sub
+
+'get the current items
+Sub getCurrentItems As List
+	Dim res As List = VC.GetData(sCurrentItems)
+	Return res
+End Sub
+
 Sub SetColumnsFormatFileSize(dates As List)
 	SetFileSizeColumns(dates)
 End Sub
-
 
 'set the column type to time for these columns
 Sub SetTimeColumns(dates As List)
@@ -4567,7 +4579,7 @@ Sub BindState(VS As VueComponent)
 End Sub
 
 'build a table from the table description
-Sub BuildFromTableDescription(TD As TableDescription, ShowPrimaryKey As Boolean, ShowBlobs As Boolean, PdfBlobs As Boolean, ExcelBlobs As Boolean)
+Sub BuildFromTableDescription(TD As TableDescription, ShowPrimaryKey As Boolean, ShowBlobs As Boolean, PdfBlobs As Boolean, ExcelBlobs As Boolean, FormBlobs As Boolean)
 	'reset the table
 	Reset
 	'update the table title
@@ -4576,10 +4588,8 @@ Sub BuildFromTableDescription(TD As TableDescription, ShowPrimaryKey As Boolean,
 	setItemKey(TD.PrimaryKey)
 	'get the fields
 	Dim fields As List = TD.Fields
-	Dim sorts As List = VC.NewList
-	Dim pdfs As List = VC.newlist
 	Dim pk As String = TD.PrimaryKey
-	'
+		'
 	Dim fldTot As Int = fields.Size - 1
 	Dim fldCnt As Int
 	
@@ -4593,6 +4603,7 @@ Sub BuildFromTableDescription(TD As TableDescription, ShowPrimaryKey As Boolean,
 		colm.Put("ontable", "Yes")
 		colm.Put("onpdf", "Yes")
 		colm.Put("onxls", "Yes")
+		colm.Put("onform", "Yes")
 			
 		'check against blob
 		If sfieldtype.EqualsIgnoreCase("blob") Then
@@ -4614,21 +4625,16 @@ Sub BuildFromTableDescription(TD As TableDescription, ShowPrimaryKey As Boolean,
 			Else
 				colm.Put("onxls", "No")				
 			End If
+			'can form
+			If FormBlobs Then
+				colm.Put("onform", "Yes")
+			Else
+				colm.Put("onform", "No")	
+			End If
 			fields.set(fldCnt, colm)
 		End If
 		
 		Dim sontable As String = colm.Get("ontable")
-		Dim ssortdb As String = colm.GetDefault("sortdb","No")
-		Dim sonpdf As String = colm.GetDefault("onpdf", "No")
-		
-		'columns to select
-		If ssortdb = "Yes" Then
-			sorts.Add(sfieldname.tolowercase)
-		End If
-		If sonpdf = "Yes" Then
-			pdfs.Add(colm)
-		End If
-
 		'this field will be in the table
 		If sontable = "Yes" Then
 			If sfieldname.EqualsIgnoreCase(pk) Then 
@@ -4638,6 +4644,7 @@ Sub BuildFromTableDescription(TD As TableDescription, ShowPrimaryKey As Boolean,
 			End If
 			'add the column to the collection
 			AddColumn(sfieldname.tolowercase, sfieldname)
+			SetColumnFilterable(sfieldname, True)
 		End If
 	Next
 	'add actions
@@ -4647,4 +4654,26 @@ Sub BuildFromTableDescription(TD As TableDescription, ShowPrimaryKey As Boolean,
 	UpdateHeaders
 	'save the fields
 	VC.SetData("fields", fields)
+End Sub
+
+'get filtered items for table
+Sub getFilteredItems As List
+	Dim schildren As String = "$children"
+	'get the table
+	Dim refs As BANanoObject = VC.refs
+	Dim children As List = refs.GetField(mName).GetField(schildren)
+	Dim fChild As Map = children.Get(0)
+	Dim filteredItems As List = fChild.Get("filteredItems")
+	Return filteredItems
+End Sub
+
+'get computed items for table
+Sub getComputedItems As List
+	Dim schildren As String = "$children"
+	'get the table
+	Dim refs As BANanoObject = VC.refs
+	Dim children As List = refs.GetField(mName).GetField(schildren)
+	Dim fChild As Map = children.Get(0)
+	Dim computedItems As List = fChild.Get("computedItems")
+	Return computedItems
 End Sub
