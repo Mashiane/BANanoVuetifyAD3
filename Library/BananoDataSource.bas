@@ -1070,6 +1070,9 @@ private Sub MySQLExecute As Boolean    'ignore
 		If pkValue = "" Then
 			BANano.ReturnThen(True)
 		End If
+		'read the record to update
+		Record = ParentComponent.GetData(sRecordSource)
+		CorrectDataTypes(Record)
 		Log($"Delete: ${pkValue}"$)
 		MySQL.Delete(pkValue)
 		If bShowLog Then
@@ -1573,7 +1576,11 @@ private Sub SQLiteExecute As Boolean    'ignore
 	BANano.ReturnThen(True)
 End Sub
 
-
+'show first record
+Sub SHOWFIRSTRECORD
+	Record = GetFirstRecord
+	SetRecord(Record)
+End Sub
 
 'get the first record
 Sub GetFirstRecord As Map
@@ -1676,8 +1683,12 @@ private Sub JRDCExecute
 	Case ACTION_DELETE
 		'get the key for the record
 		Dim pkValue As String = ParentComponent.GetData(dsKey)
+		'read the record to update
+		Record = ParentComponent.GetData(sRecordSource)
+		CorrectDataTypes(Record)
 		Log($"Delete: ${pkValue}"$)
 		MySQL.Delete(pkValue)
+		mPayload = MySQL.Build
 	Case ACTION_SELECTALL, ACTION_PDF, ACTION_REPORT, ACTION_EXCEL, ACTION_SELECTFORCOMBO, ACTION_CHART
 		MySQL.SelectAll(schemaSelectFields, schemaOrderBy)
 		mPayload = MySQL.Build
