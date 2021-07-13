@@ -100,7 +100,7 @@ public Sub AddToParent(targetID As String)
 End Sub
 
 public Sub Remove()
-	mTarget.Empty
+	mElement.Remove
 	BANano.SetMeToNull
 End Sub
 

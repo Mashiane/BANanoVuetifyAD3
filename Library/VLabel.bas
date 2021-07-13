@@ -9,10 +9,11 @@ Version=8.9
 
 #DesignerProperty: Key: SetName, DisplayName: SetName, FieldType: Boolean, DefaultValue: false, Description: SetName
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
+#DesignerProperty: Key: DFlex, DisplayName: DFlex, FieldType: Boolean, DefaultValue: false, Description: DFlex
 #DesignerProperty: Key: Caption, DisplayName: Caption, FieldType: String, DefaultValue: , Description: Caption
 #DesignerProperty: Key: VHtml, DisplayName: VHtml, FieldType: String, DefaultValue: , Description: VHtml
 #DesignerProperty: Key: VText, DisplayName: VText, FieldType: String, DefaultValue: , Description: VText
-#DesignerProperty: Key: Size, DisplayName: Tag, FieldType: String, DefaultValue: div, Description: Size, List: a|div|h1|h2|h3|h4|h5|h6|label|p|span|v-spacer|v-responsive|v-divider|nav|v-subheader|v-main|slot|v-tabs-slider|router-view|router-link|v-list-item-action|v-list-item-title|v-list-item-subtitle|v-list-item-icon|v-list-item-content|v-list-item-action-text|strong|blockquote|i|img|a|ul|li|ol|v-stepper-content|v-stepper-header|v-stepper-items|small
+#DesignerProperty: Key: Size, DisplayName: Tag, FieldType: String, DefaultValue: div, Description: Size, List: a|div|h1|h2|h3|h4|h5|h6|label|p|span|v-spacer|v-responsive|v-divider|nav|v-subheader|v-main|slot|v-tabs-slider|router-view|router-link|v-list-item-action|v-list-item-title|v-list-item-subtitle|v-list-item-icon|v-list-item-content|v-list-item-action-text|strong|blockquote|i|img|a|ul|li|ol|v-stepper-content|v-stepper-header|v-stepper-items|small|thead|tbody|tr
 #DesignerProperty: Key: KeepAlive, DisplayName: KeepAlive, FieldType: Boolean, DefaultValue: False, Description: KeepAlive
 #DesignerProperty: Key: OwnTag, DisplayName: OwnTag, FieldType: String, DefaultValue: , Description: OwnTag
 #DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: , Description: Width
@@ -129,7 +130,8 @@ Private sHeight As String
 Private sStyleHeight As String
 Private sSrc As String
 Private sAlt As String
-private bKeepAlive as boolean
+Private bKeepAlive As Boolean
+private bDFlex as boolean
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -210,6 +212,8 @@ sVOn = Props.Get("VOn")
 		sKey = Props.GetDefault("Key", "")
 		bKeepAlive = Props.GetDefault("KeepAlive", False)
 		bKeepAlive = BANanoShared.parseBool(bKeepAlive)
+		bDFlex = Props.GetDefault("DFlex", False)
+		bDFlex = BANanoShared.parseBool(bDFlex)
 	End If
 	'
 	bLoremIpsum = BANanoShared.parseBool(bLoremIpsum)
@@ -284,6 +288,7 @@ VElement.VText = sVText
 VElement.VHtml = sVHtml
 VElement.VFor = sVFor
 VElement.Key = sKey
+VElement.AddClassOnCondition("dflex", bDFlex, True)
 VElement.AddStyle("text-align", sTextAlign)
 If sTextDecoration <> "none" Then
 	VElement.AddStyle("text-decoration", sTextDecoration)
@@ -301,7 +306,7 @@ public Sub AddToParent(targetID As String)
 End Sub
 
 public Sub Remove()
-	mTarget.Empty
+	mElement.Remove
 	BANano.SetMeToNull
 End Sub
 

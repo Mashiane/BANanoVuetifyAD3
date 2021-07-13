@@ -4343,6 +4343,10 @@ Sub GetRecursive(data As Map, path As String) As Object
 End Sub
 
 Sub PutRecursive(data As Map, path As String, value As Object)
+	If BANano.IsNull(path) Or BANano.IsUndefined(path) Then
+		path = ""
+	End If
+	If path = "" Then Return
 	Dim prevObj As BANanoObject = data
 	Dim items As List = BANano.Split(".", path)
 	Dim iTot As Int = items.Size

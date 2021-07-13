@@ -1034,7 +1034,18 @@ Sub SetDataFreeze(prop As String, xvalue As Object) As VueComponent
 End Sub
 
 'update the state
-Sub SetData(prop As String, xvalue As Object) As VueComponent
+Sub SetData(prop As String, value As Object)
+	If BANano.IsNull(prop) Or BANano.IsUndefined(prop) Then Return
+	prop = CStr(prop)
+	prop = prop.Trim
+	prop = prop.ToLowerCase
+	If prop = "" Then Return
+	BANanoShared.PutRecursive(data, prop, value)
+End Sub
+
+
+'update the state
+Sub SetData1(prop As String, xvalue As Object) As VueComponent
 	If BANano.IsNull(prop) Or BANano.IsUndefined(prop) Then
 		prop = ""
 	End If
@@ -1220,7 +1231,7 @@ Sub RemoveData(key As String)
 	data.Remove(key)
 End Sub
 
-Sub GetData(prop As String) As Object
+Sub GetData1(prop As String) As Object
 	prop = prop.tolowercase
 	Dim obj As Object = Null
 	Dim dotPos As Int = BANanoShared.InStr(prop, ".")
@@ -1243,10 +1254,21 @@ Sub GetData(prop As String) As Object
 	Return obj
 End Sub
 
+Sub GetData(prop As String) As Object
+	prop = prop.tolowercase
+	Dim obj As Object = BANanoShared.GetRecursive(data, prop)
+	If BANano.IsNull(obj) Or BANano.IsUndefined(obj) Then 
+		obj = CStr(obj)
+	End If
+	Return obj
+End Sub
+
+
 'add a string property
 Sub AddProperty(propName As String)
 	Dim mprop As Map = CreateMap()
 	mprop.Put("type", jsString)
+	mprop.Put("default", "")
 	mprops.Put(propName, mprop)
 End Sub
 

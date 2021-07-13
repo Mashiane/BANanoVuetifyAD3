@@ -9,6 +9,7 @@ Version=8.9
 #DesignerProperty: Key: Align, DisplayName: Vertical Align, FieldType: String, DefaultValue: normal, Description: Align, List: normal|start|center|end|baseline|stretch
 #DesignerProperty: Key: Justify, DisplayName: Horizontal Align, FieldType: String, DefaultValue: normal, Description: Justify, List: normal|start|center|end|space-between|space-around
 #DesignerProperty: Key: Fluid, DisplayName: Fluid, FieldType: Boolean, DefaultValue: false, Description: Fluid
+#DesignerProperty: Key: DFlex, DisplayName: DFlex, FieldType: Boolean, DefaultValue: false, Description: DFlex
 #DesignerProperty: Key: FillHeight, DisplayName: FillHeight, FieldType: Boolean, DefaultValue: false, Description: FillHeight
 #DesignerProperty: Key: BackgroundImage, DisplayName: BackgroundImage, FieldType: String, DefaultValue:  , Description: BackgroundImage
 #DesignerProperty: Key: FitScreen, DisplayName: Fit Screen VH, FieldType: Boolean, DefaultValue: False, Description: FitScreen VH
@@ -118,6 +119,7 @@ Private sBorderStyle As String
 Private sBorderWidth As String
 Private bNoGutters As Boolean
 Private bDebugBorder As Boolean
+private bDFlex as boolean
 'Private sVShow As String
 End Sub
 
@@ -189,6 +191,8 @@ sBorderStyle = Props.Get("BorderStyle")
 sBorderWidth = Props.Get("BorderWidth")
 bNoGutters = Props.GetDefault("NoGutters",False)
 bDebugBorder = Props.GetDefault("DebugBorder",False)
+bDFlex = Props.GetDefault("DFlex", False)
+bDFlex = BANanoShared.parseBool(bDFlex)
 	End If
 	'
 	bFillHeight = BANanoShared.parseBool(bFillHeight)
@@ -263,6 +267,7 @@ bDebugBorder = BANanoShared.parseBool(bDebugBorder)
 	VElement.BorderRadius = sBorderRadius
 	VElement.BorderStyle = sBorderStyle
 	VElement.BorderWidth = sBorderWidth
+	VElement.AddClassOnCondition("dflex", bDFlex, True)
 	'VElement.VShow = sVShow
 	'VElement.SetData(sVShow, True)
 	VElement.SetAttrOnTrue(":no-gutters", bNoGutters, True)
@@ -282,7 +287,7 @@ public Sub AddToParent(targetID As String)
 End Sub
 
 public Sub Remove()
-	mTarget.Empty
+	mElement.Remove
 	BANano.SetMeToNull
 End Sub
 

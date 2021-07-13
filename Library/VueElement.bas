@@ -1200,6 +1200,12 @@ Sub Shrink As VueElement
 	Return Me
 End Sub
 
+Sub Shrink1(b As Boolean) As VueElement
+	If b = False Then Return Me
+	AddClass("shrink")
+	Return Me
+End Sub
+
 Sub AddClassShrink As VueElement
 	AddClass("shrink")
 	Return Me
@@ -8629,6 +8635,22 @@ Sub GetTemplate As VueElement
 	Return GetVueElement($"${mName}template"$)
 End Sub
 
+Sub GetTHead As VueElement
+	Return GetVueElement($"${mName}thead"$)
+End Sub
+
+Sub GetTBody As VueElement
+	Return GetVueElement($"${mName}tbody"$)
+End Sub
+
+Sub GetTH As VueElement
+	Return GetVueElement($"${mName}th"$)
+End Sub
+
+Sub GetTR As VueElement
+	Return GetVueElement($"${mName}tr"$)
+End Sub
+
 Sub AddButtonWithIconWithBadge(elID As String, eIcon As String, btnColor As String, vmodel As String, badgeIcon As String, badgeColor As String, btnprops As Map, iconprops As Map, badgeProperties As Map) As VueElement
 	Dim parentID As String = CleanID(mName)
 	elID = elID.ToLowerCase
@@ -10485,15 +10507,6 @@ Sub AddColorGroup(elID As String, vModel As String, colors As List) As VueElemen
 	colorgroup.BindVueElement(colorItem)
 	colorgroup.SetData($"${elID}colors"$, colors)
 	Return colorgroup
-End Sub
-
-
-Sub GetTHead As VueElement
-	Return GetVueElement($"${mName}thead"$)
-End Sub
-
-Sub GetTBody As VueElement
-	Return GetVueElement($"${mName}tbody"$)
 End Sub
 
 'get the table heading

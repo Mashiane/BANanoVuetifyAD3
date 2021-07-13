@@ -358,7 +358,7 @@ End Sub
 
 'remove the component
 public Sub Remove() 
-	mTarget.Empty 
+	mElement.Remove 
 	BANano.SetMeToNull 
 End Sub
 

@@ -254,7 +254,7 @@ public Sub AddToParent(targetID As String)
 	DesignerCreateView(mTarget, Null)
 End Sub
 public Sub Remove()
-	mTarget.Empty
+	mElement.Remove
 	BANano.SetMeToNull
 End Sub
 Sub AddClass(s As String) As VCarousel

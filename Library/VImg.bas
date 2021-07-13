@@ -14,6 +14,7 @@ Version=8.9
 #DesignerProperty: Key: Alt, DisplayName: Alt, FieldType: String, DefaultValue: , Description: Alt
 #DesignerProperty: Key: AspectRatio, DisplayName: AspectRatio, FieldType: String, DefaultValue: , Description: AspectRatio
 #DesignerProperty: Key: Contain, DisplayName: Contain, FieldType: Boolean, DefaultValue: false, Description: Contain
+#DesignerProperty: Key: Shrink, DisplayName: Shrink, FieldType: Boolean, DefaultValue: false, Description: Shrink
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: false, Description: Dark
 #DesignerProperty: Key: Height, DisplayName: Height, FieldType: String, DefaultValue: , Description: Height
 #DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: , Description: Width
@@ -74,6 +75,7 @@ Private bAnimeLoop As Boolean
 Private sAnimeTranslateX As String
 Private sAnimeTranslateY As String
 Public Animate As BANanoAnimeJS
+private bShrink as boolean
 	End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -122,6 +124,8 @@ sAnimeEasing = Props.Get("AnimeEasing")
 bAnimeLoop = Props.Get("AnimeLoop")
 sAnimeTranslateX = Props.Get("AnimeTranslateX")
 sAnimeTranslateY = Props.Get("AnimeTranslateY")
+bShrink = Props.GetDefault("Shrink", False)
+bShrink = BANanoShared.parseBool(bShrink)
 	End If
 	'
 	bContain = BANanoShared.parseBool(bContain)
@@ -154,6 +158,7 @@ VElement.MaxHeight = sMaxHeight
 VElement.MaxWidth = sMaxWidth
 VElement.MinHeight = sMinHeight
 VElement.MinWidth = sMinWidth
+VElement.Shrink1(bShrink)
 VElement.Sizes = sSizes
 VElement.Src = sSrc
 VElement.Srcset = sSrcset
@@ -183,7 +188,7 @@ public Sub AddToParent(targetID As String)
 End Sub
 
 public Sub Remove()
-	mTarget.Empty
+	mElement.Remove
 	BANano.SetMeToNull
 End Sub
 

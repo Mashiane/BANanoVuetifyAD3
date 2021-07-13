@@ -41,85 +41,89 @@ Version=8.5
 #Event: Filter_Click(e As BANanoEvent)
 #Event: Back_Click (e As BANanoEvent)
 
-#DesignerProperty: Key: Title, DisplayName: Title, FieldType: String, DefaultValue:  , Description: 
+#DesignerProperty: Key: Title, DisplayName: Title, FieldType: String, DefaultValue:  , Description: The title on the table
 #DesignerProperty: Key: AutoID, DisplayName: Auto ID/Name, FieldType: Boolean, DefaultValue: False, Description: Overrides the ID/Name with a random string.
 #DesignerProperty: Key: Manual, DisplayName: Manual, FieldType: Boolean, DefaultValue: False, Description: Table created manually.
-#DesignerProperty: Key: ItemKey, DisplayName: ItemKey, FieldType: String, DefaultValue:  , Description: 
-#DesignerProperty: Key: ItemsPerPage, DisplayName: ItemsPerPage, FieldType: String, DefaultValue:  , Description: 
-#DesignerProperty: Key: Dense, DisplayName: Dense, FieldType: Boolean, DefaultValue:  False, Description: 
-#DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue:  False, Description:
-#DesignerProperty: Key: HasSearch, DisplayName: Has Search, FieldType: Boolean, DefaultValue:  False, Description:
-#DesignerProperty: Key: ShowSelect, DisplayName: ShowSelect, FieldType: Boolean, DefaultValue:  False, Description: 
-#DesignerProperty: Key: SingleSelect, DisplayName: SingleSelect, FieldType: Boolean, DefaultValue:  False, Description: 
-#DesignerProperty: Key: MultiSort, DisplayName: Multi Sort, FieldType: Boolean, DefaultValue:  False, Description: 
-#DesignerProperty: Key: MustSort, DisplayName: Must Sort, FieldType: Boolean, DefaultValue:  False, Description: 
-#DesignerProperty: Key: Loading, DisplayName: Loading, FieldType: Boolean, DefaultValue:  False, Description: 
-#DesignerProperty: Key: ExternalPagination, DisplayName: ExternalPagination, FieldType: Boolean, DefaultValue:  True, Description: ExternalPagination
+#DesignerProperty: Key: ItemKey, DisplayName: ItemKey, FieldType: String, DefaultValue:  , Description: The primary key of your records
+#DesignerProperty: Key: ItemsPerPage, DisplayName: ItemsPerPage, FieldType: String, DefaultValue:  , Description: Number of items per page
+#DesignerProperty: Key: Dense, DisplayName: Dense, FieldType: Boolean, DefaultValue:  False, Description: The table should be dense
+#DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue:  False, Description: The table is dark
+#DesignerProperty: Key: HasSearch, DisplayName: Has Search, FieldType: Boolean, DefaultValue:  False, Description: Have a search input box
+#DesignerProperty: Key: ShowSelect, DisplayName: ShowSelect, FieldType: Boolean, DefaultValue:  False, Description: Show select for all records
+#DesignerProperty: Key: SingleSelect, DisplayName: SingleSelect, FieldType: Boolean, DefaultValue:  False, Description: Single selection mode
+#DesignerProperty: Key: MultiSort, DisplayName: Multi Sort, FieldType: Boolean, DefaultValue:  False, Description: Can multi sort
+#DesignerProperty: Key: MustSort, DisplayName: Must Sort, FieldType: Boolean, DefaultValue:  False, Description: Records must be sortable
+#DesignerProperty: Key: Loading, DisplayName: Loading, FieldType: Boolean, DefaultValue:  False, Description: Show progress loading
+#DesignerProperty: Key: ExternalPagination, DisplayName: ExternalPagination, FieldType: Boolean, DefaultValue:  True, Description: Use External Pagination
 #DesignerProperty: Key: MaxPages, DisplayName: Total Visible, FieldType: String, DefaultValue:  5, Description: Total Visible
-#DesignerProperty: Key: PageLength, DisplayName: Pager Length, FieldType: String, DefaultValue:  5, Description: PageLength
+#DesignerProperty: Key: PageLength, DisplayName: Pager Length, FieldType: String, DefaultValue:  5, Description: Page Length
 #DesignerProperty: Key: PaginationPosition, DisplayName: PaginationPosition, FieldType: String, DefaultValue:  bottom, Description: PaginationPosition, List: top|bottom|both 
-#DesignerProperty: Key: DateFormat, DisplayName: DateFormat, FieldType: String, DefaultValue: , Description: DateFormat
-#DesignerProperty: Key: DateTimeFormat, DisplayName: DateTimeFormat, FieldType: String, DefaultValue: , Description: DateTimeFormat
-#DesignerProperty: Key: MoneyFormat, DisplayName: MoneyFormat, FieldType: String, DefaultValue: , Description: MoneyFormat
-#DesignerProperty: Key: TimeFormat, DisplayName: TimeFormat, FieldType: String, DefaultValue: HH:MM, Description: TimeFormat
+'#DesignerProperty: Key: DateFormat, DisplayName: DateFormat, FieldType: String, DefaultValue: , Description: Date Format
+'#DesignerProperty: Key: DateTimeFormat, DisplayName: DateTimeFormat, FieldType: String, DefaultValue: , Description: Date Time Format
+'#DesignerProperty: Key: MoneyFormat, DisplayName: MoneyFormat, FieldType: String, DefaultValue: , Description: Money Format
+'#DesignerProperty: Key: TimeFormat, DisplayName: TimeFormat, FieldType: String, DefaultValue: HH:MM, Description: Time Format
+#DesignerProperty: Key: PreDisplay, DisplayName: PreDisplay (JSON), FieldType: String, DefaultValue: , Description: PreDisplay
+#DesignerProperty: Key: ConditionalClass, DisplayName: ConditionalClass (JSON), FieldType: String, DefaultValue: , Description: ConditionalClass
+#DesignerProperty: Key: ConditionalColor, DisplayName: ConditionalColor (JSON), FieldType: String, DefaultValue: , Description: ConditionalColor
+#DesignerProperty: Key: ConditionalStyle, DisplayName: ConditionalStyle (JSON), FieldType: String, DefaultValue: , Description: ConditionalStyle
 
-#DesignerProperty: Key: HasAddnew, DisplayName: HasAddnew, FieldType: Boolean, DefaultValue: False, Description: HasAddnew
-#DesignerProperty: Key: HasClearSort, DisplayName: HasClearSort, FieldType: Boolean, DefaultValue: False, Description: HasClearSort
-#DesignerProperty: Key: HasFilter, DisplayName: HasFilter, FieldType: Boolean, DefaultValue: False, Description: HasFilter
-#DesignerProperty: Key: HasPdf, DisplayName: HasPdf, FieldType: Boolean, DefaultValue: False, Description: HasPdf
-#DesignerProperty: Key: HasExcel, DisplayName: HasExcel, FieldType: Boolean, DefaultValue: False, Description: HasExcel
-#DesignerProperty: Key: HasRefresh, DisplayName: HasRefresh, FieldType: Boolean, DefaultValue: False, Description: HasRefresh
-#DesignerProperty: Key: HasBack, DisplayName: HasBack, FieldType: Boolean, DefaultValue: False, Description: HasBack
+#DesignerProperty: Key: HasAddnew, DisplayName: HasAddNew, FieldType: Boolean, DefaultValue: False, Description: Show Add new on toolbar
+#DesignerProperty: Key: HasClearSort, DisplayName: HasClearSort, FieldType: Boolean, DefaultValue: False, Description: Show clear sort on toolbar
+#DesignerProperty: Key: HasFilter, DisplayName: HasFilter, FieldType: Boolean, DefaultValue: False, Description: Show filter for columns
+#DesignerProperty: Key: HasPdf, DisplayName: HasPdf, FieldType: Boolean, DefaultValue: False, Description: Show pdf button on toolbar
+#DesignerProperty: Key: HasExcel, DisplayName: HasExcel, FieldType: Boolean, DefaultValue: False, Description: Show excel on toolbar
+#DesignerProperty: Key: HasRefresh, DisplayName: HasRefresh, FieldType: Boolean, DefaultValue: False, Description: Show refresh on toolbar
+#DesignerProperty: Key: HasBack, DisplayName: HasBack, FieldType: Boolean, DefaultValue: False, Description: Show back button on toolbar
 '
-#DesignerProperty: Key: HasEdit, DisplayName: HasEdit, FieldType: Boolean, DefaultValue: False, Description: HasEdit
+#DesignerProperty: Key: HasEdit, DisplayName: HasEdit, FieldType: Boolean, DefaultValue: False, Description: Has Edit Column
 #DesignerProperty: Key: EditColor, DisplayName: EditColor, FieldType: String, DefaultValue: green, Description: EditColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
-#DesignerProperty: Key: HasDelete, DisplayName: HasDelete, FieldType: Boolean, DefaultValue: False, Description: HasDelete
+#DesignerProperty: Key: HasDelete, DisplayName: HasDelete, FieldType: Boolean, DefaultValue: False, Description: Has Delete Column
 #DesignerProperty: Key: DeleteColor, DisplayName: DeleteColor, FieldType: String, DefaultValue: red, Description: DeleteColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
-#DesignerProperty: Key: HasClone, DisplayName: HasClone, FieldType: Boolean, DefaultValue: False, Description: HasClone
+#DesignerProperty: Key: HasClone, DisplayName: HasClone, FieldType: Boolean, DefaultValue: False, Description: Has Clone Column
 #DesignerProperty: Key: CloneColor, DisplayName: CloneColor, FieldType: String, DefaultValue: amber, Description: CloneColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
-#DesignerProperty: Key: HasPrint, DisplayName: HasPrint, FieldType: Boolean, DefaultValue: False, Description: HasPrint
+#DesignerProperty: Key: HasPrint, DisplayName: HasPrint, FieldType: Boolean, DefaultValue: False, Description: Has Print Column
 #DesignerProperty: Key: PrintColor, DisplayName: PrintColor, FieldType: String, DefaultValue: print, Description: PrintColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
-#DesignerProperty: Key: HasSave, DisplayName: HasSave, FieldType: Boolean, DefaultValue: False, Description: HasSave
+#DesignerProperty: Key: HasSave, DisplayName: HasSave, FieldType: Boolean, DefaultValue: False, Description: Has Save Column
 #DesignerProperty: Key: SaveColor, DisplayName: SaveColor, FieldType: String, DefaultValue: blue-grey, Description: SaveColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
-#DesignerProperty: Key: HasCancel, DisplayName: HasCancel, FieldType: Boolean, DefaultValue: False, Description: HasCancel
+#DesignerProperty: Key: HasCancel, DisplayName: HasCancel, FieldType: Boolean, DefaultValue: False, Description: Has Cancel Column
 #DesignerProperty: Key: CancelColor, DisplayName: CancelColor, FieldType: String, DefaultValue: brown, Description: CancelColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
-#DesignerProperty: Key: HasDownload, DisplayName: HasDownload, FieldType: Boolean, DefaultValue: False, Description: HasDownload
+#DesignerProperty: Key: HasDownload, DisplayName: HasDownload, FieldType: Boolean, DefaultValue: False, Description: Has Download Column
 #DesignerProperty: Key: DownloadColor, DisplayName: DownloadColor, FieldType: String, DefaultValue: cyan, Description: DownloadColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
-#DesignerProperty: Key: HasMenu, DisplayName: HasMenu, FieldType: Boolean, DefaultValue: False, Description: HasMenu
+#DesignerProperty: Key: HasMenu, DisplayName: HasMenu, FieldType: Boolean, DefaultValue: False, Description: Has Menu Column
 #DesignerProperty: Key: MenuColor, DisplayName: MenuColor, FieldType: String, DefaultValue: indigo, Description: MenuColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 '
-#DesignerProperty: Key: ColumnFields, DisplayName: ColumnFields (;), FieldType: String, DefaultValue: , Description: ColumnFields
-#DesignerProperty: Key: ColumnTitles, DisplayName: ColumnTitles (;), FieldType: String, DefaultValue: , Description: ColumnTitles
-#DesignerProperty: Key: ColumnWidths, DisplayName: ColumnWidths (;), FieldType: String, DefaultValue: , Description: ColumnWidths
-#DesignerProperty: Key: ColumIcons, DisplayName: ColumIcons (;), FieldType: String, DefaultValue: , Description: ColumIcons
-#DesignerProperty: Key: ColumnAutoComplete, DisplayName: ColumnAutoComplete (;), FieldType: String, DefaultValue: , Description: ColumnAutoComplete
-#DesignerProperty: Key: ColumnAvatar, DisplayName: ColumnAvatar (;), FieldType: String, DefaultValue: , Description: ColumnAvatar
-#DesignerProperty: Key: ColumnAvatarText, DisplayName: ColumnAvatarText (;), FieldType: String, DefaultValue: , Description: ColumnAvatarText
-#DesignerProperty: Key: ColumnAvatarIcon, DisplayName: ColumnAvatarIcon (;), FieldType: String, DefaultValue: , Description: ColumnAvatarIcon
-#DesignerProperty: Key: ColumnButton, DisplayName: ColumnButton (;), FieldType: String, DefaultValue: , Description: ColumnButton
-#DesignerProperty: Key: ColumnCheckbox, DisplayName: ColumnCheckbox (;), FieldType: String, DefaultValue: , Description: ColumnCheckbox
-#DesignerProperty: Key: ColumnChip, DisplayName: ColumnChip (;), FieldType: String, DefaultValue: , Description: ColumnChip
-#DesignerProperty: Key: ColumnCircularProgress, DisplayName: ColumnCircularProgress (;), FieldType: String, DefaultValue: , Description: ColumnCircularProgress
-#DesignerProperty: Key: ColumnCombobox, DisplayName: ColumnCombobox (;), FieldType: String, DefaultValue: , Description: ColumnCombobox
-#DesignerProperty: Key: ColumnDate, DisplayName: ColumnDate (;), FieldType: String, DefaultValue: , Description: ColumnDate
-#DesignerProperty: Key: ColumnDateTime, DisplayName: ColumnDateTime (;), FieldType: String, DefaultValue: , Description: ColumnDateTime
-#DesignerProperty: Key: ColumnFileSize, DisplayName: ColumnFileSize (;), FieldType: String, DefaultValue: , Description: ColumnFileSize
-#DesignerProperty: Key: ColumnImage, DisplayName: ColumnImage (;), FieldType: String, DefaultValue: , Description: ColumnImage
-#DesignerProperty: Key: ColumnLinearProgress, DisplayName: ColumnLinearProgress (;), FieldType: String, DefaultValue: , Description: ColumnLinearProgress
-#DesignerProperty: Key: ColumnLink, DisplayName: ColumnLink (;), FieldType: String, DefaultValue: , Description: ColumnLink
-#DesignerProperty: Key: ColumnMoney, DisplayName: ColumnMoney (;), FieldType: String, DefaultValue: , Description: ColumnMoney
-#DesignerProperty: Key: ColumnRating, DisplayName: ColumnRating (;), FieldType: String, DefaultValue: , Description: ColumnRating
-#DesignerProperty: Key: ColumnSortable, DisplayName: ColumnSortable (;), FieldType: String, DefaultValue: , Description: ColumnSortable
-#DesignerProperty: Key: ColumnFilterable, DisplayName: ColumnFilterable (;), FieldType: String, DefaultValue: , Description: ColumnFilterable
-#DesignerProperty: Key: ColumnSwitch, DisplayName: ColumnSwitch (;), FieldType: String, DefaultValue: , Description: ColumnSwitch
-#DesignerProperty: Key: ColumnTextarea, DisplayName: ColumnTextarea (;), FieldType: String, DefaultValue: , Description: ColumnTextarea
-#DesignerProperty: Key: ColumnTextfield, DisplayName: ColumnTextfield (;), FieldType: String, DefaultValue: , Description: ColumnTextfield
-#DesignerProperty: Key: ColumnTime, DisplayName: ColumnTime (;), FieldType: String, DefaultValue: , Description: ColumnTime
+#DesignerProperty: Key: ColumnFields, DisplayName: ColumnFields (;), FieldType: String, DefaultValue: , Description: Fields
+#DesignerProperty: Key: ColumnTitles, DisplayName: ColumnTitles (;), FieldType: String, DefaultValue: , Description: Titles for fields
+#DesignerProperty: Key: ColumnWidths, DisplayName: ColumnWidths (;), FieldType: String, DefaultValue: , Description: Widths
+#DesignerProperty: Key: ColumIcons, DisplayName: ColumIcons (;), FieldType: String, DefaultValue: , Description: Icon Fields
+#DesignerProperty: Key: ColumnAutoComplete, DisplayName: ColumnAutoComplete (;), FieldType: String, DefaultValue: , Description: Auto Complete Fields
+#DesignerProperty: Key: ColumnAvatar, DisplayName: ColumnAvatar (;), FieldType: String, DefaultValue: , Description: Avatar Fields
+#DesignerProperty: Key: ColumnAvatarText, DisplayName: ColumnAvatarText (;), FieldType: String, DefaultValue: , Description: Avatar Text Fields
+#DesignerProperty: Key: ColumnAvatarIcon, DisplayName: ColumnAvatarIcon (;), FieldType: String, DefaultValue: , Description: Avatar Icon Fields
+#DesignerProperty: Key: ColumnButton, DisplayName: ColumnButton (;), FieldType: String, DefaultValue: , Description: Button Fields
+#DesignerProperty: Key: ColumnCheckbox, DisplayName: ColumnCheckbox (;), FieldType: String, DefaultValue: , Description: Checkbox Fields
+#DesignerProperty: Key: ColumnChip, DisplayName: ColumnChip (;), FieldType: String, DefaultValue: , Description: Chip Fields
+#DesignerProperty: Key: ColumnCircularProgress, DisplayName: ColumnCircularProgress (;), FieldType: String, DefaultValue: , Description: Circular Progress Fields
+#DesignerProperty: Key: ColumnCombobox, DisplayName: ColumnCombobox (;), FieldType: String, DefaultValue: , Description: Combobox Fields
+#DesignerProperty: Key: ColumnDate, DisplayName: ColumnDate (;), FieldType: String, DefaultValue: , Description: Date Fields
+#DesignerProperty: Key: ColumnDateTime, DisplayName: ColumnDateTime (;), FieldType: String, DefaultValue: , Description: DateTime Fields
+#DesignerProperty: Key: ColumnFileSize, DisplayName: ColumnFileSize (;), FieldType: String, DefaultValue: , Description: FileSize Fields
+#DesignerProperty: Key: ColumnImage, DisplayName: ColumnImage (;), FieldType: String, DefaultValue: , Description: Image Fields
+#DesignerProperty: Key: ColumnLinearProgress, DisplayName: ColumnLinearProgress (;), FieldType: String, DefaultValue: , Description: LinearProgress Fields
+#DesignerProperty: Key: ColumnLink, DisplayName: ColumnLink (;), FieldType: String, DefaultValue: , Description: Link Fields
+#DesignerProperty: Key: ColumnMoney, DisplayName: ColumnMoney (;), FieldType: String, DefaultValue: , Description: Money Fields
+#DesignerProperty: Key: ColumnRating, DisplayName: ColumnRating (;), FieldType: String, DefaultValue: , Description: Rating Fields
+#DesignerProperty: Key: ColumnSortable, DisplayName: ColumnSortable (;), FieldType: String, DefaultValue: , Description: Sortable Fields
+#DesignerProperty: Key: ColumnFilterable, DisplayName: ColumnFilterable (;), FieldType: String, DefaultValue: , Description: Filterable Fields
+#DesignerProperty: Key: ColumnSwitch, DisplayName: ColumnSwitch (;), FieldType: String, DefaultValue: , Description: Switch Fields
+#DesignerProperty: Key: ColumnTextarea, DisplayName: ColumnTextarea (;), FieldType: String, DefaultValue: , Description: TextArea Fields
+#DesignerProperty: Key: ColumnTextfield, DisplayName: ColumnTextfield (;), FieldType: String, DefaultValue: , Description: TextField Fields
+#DesignerProperty: Key: ColumnTime, DisplayName: ColumnTime (;), FieldType: String, DefaultValue: , Description: Time Fields
 '
 #DesignerProperty: Key: ItemKeys, DisplayName: Action Keys (;), FieldType: String, DefaultValue:  , Description: Action Icons
 #DesignerProperty: Key: ItemTitles, DisplayName: Action Titles (;), FieldType: String, DefaultValue:  , Description: Action Titles
 #DesignerProperty: Key: ItemIcons, DisplayName: Action Icons (;), FieldType: String, DefaultValue:  , Description: Action Icons
-#DesignerProperty: Key: ItemColors, DisplayName: Action Colors (;), FieldType: String, DefaultValue:  green; amber; red, Description: Action Colors
+#DesignerProperty: Key: ItemColors, DisplayName: Action Colors (;), FieldType: String, DefaultValue:  , Description: Action Colors
 
 #DesignerProperty: Key: FixedHeader, DisplayName: Fixed Header, FieldType: Boolean, DefaultValue:  True, Description: 
 #DesignerProperty: Key: HideDefaultHeader, DisplayName: Hide Default Header, FieldType: Boolean, DefaultValue:  False, Description: 
@@ -233,7 +237,7 @@ Sub Class_Globals
 	Private search As String
 	Type DataTableColumn(value As String, text As String, align As String, sortable As Boolean, filterable As Boolean, divider As Boolean, _
 	className As String, width As String, filter As String, sort As String, ColType As String, extra As String, icon As String, Disabled As Boolean, imgWidth As String, imgHeight As String, avatarSize As String, iconSize As String, ReadOnly As Boolean, progressColor As String, progressRotate As String, progressSize As String, progressWidth As String, progressHeight As String, progressShowValue As Boolean, valueFormat As String, bindTotals As String, hasTotal As Boolean, depressed As Boolean, rounded As Boolean, dark As Boolean, label As String, color As String, outlined As Boolean, shaped As Boolean, target As String, prefix As String, colprops As Map, visible As Boolean, _
-	Large As Boolean, SourceTable As String, SourceField As String, DisplayField As String, ReturnObject As Boolean, PreDisplay As String, href As String, ConditionalClass As String, ConditionalColor As String)
+	Large As Boolean, SourceTable As String, SourceField As String, DisplayField As String, ReturnObject As Boolean, PreDisplay As String, href As String, ConditionalClass As String, ConditionalColor As String, ConditionalStyle As String)
 	Private hasTotals As Boolean
 	Private hasExternalPagination As Boolean
 	Private totalVisible As String
@@ -321,7 +325,16 @@ Private xPageCount As String
 Private xPagination As String
 Private sColumnAvatarText As String
 Private sColumnAvatarIcon As String
-private sCurrentItems as string
+Private sCurrentItems As String
+Private sPreDisplay As String
+Private sConditionalClass As String
+Private sConditionalColor As String	
+Private sConditionalStyle As String
+	'
+Private lstPreDisplay As List
+Private lstConditionalClass As List
+Private lstConditionalColor As List
+Private lstConditionalStyle As List
 End Sub
 
 'initialize the custom view
@@ -365,7 +378,7 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	xPageCount = $"${mName}pagecount"$
 	xPage = $"${mName}page"$
 	stVShow = $"${mName}show"$
-	sCurrentItems = $"${mname}currentitems"$
+	sCurrentItems = $"${mName}currentitems"$
 End Sub
 
 'Create view in the designer
@@ -464,39 +477,44 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sItemIcons = Props.GetDefault("ItemIcons","")
 		sItemColors = Props.GetDefault("ItemColors","")
 		sItemTitles = Props.getdefault("ItemTitles", "")
+		'
+		sPreDisplay = Props.getdefault("PreDisplay", "")
+		sConditionalClass = Props.GetDefault("ConditionalClass", "")
+		sConditionalColor = Props.GetDefault("ConditionalColor", "")
+		sConditionalStyle = Props.GetDefault("ConditionalStyle", "")
 	End If
 	'
 	bManual = BANanoShared.parseBool(bManual)
 	bDense = BANanoShared.parseBool(bDense)
-bShowGroupBy = BANanoShared.parseBool(bShowGroupBy)
-bShowSelect = BANanoShared.parseBool(bShowSelect)
-bSingleSelect = BANanoShared.parseBool(bSingleSelect)
-mHasSearch = BANanoShared.parseBool(mHasSearch)
-bMultiSort = BANanoShared.parseBool(bMultiSort)
-bMustSort = BANanoShared.parseBool(bMustSort)
-bFixedHeader = BANanoShared.parseBool(bFixedHeader)
-bHideDefaultHeader = BANanoShared.parseBool(bHideDefaultHeader)
-bHideDefaultFooter = BANanoShared.parseBool(bHideDefaultFooter)
-bShowExpand = BANanoShared.parseBool(bShowExpand)
-bLoading = BANanoShared.parseBool(bLoading)
-bDark = BANanoShared.parseBool(bDark)
-bHasAddnew = BANanoShared.parseBool(bHasAddnew)
-bHasBack = BANanoShared.parseBool(bHasBack)
-bHasCancel = BANanoShared.parseBool(bHasCancel)
-bHasClearSort = BANanoShared.parseBool(bHasClearSort)
-bHasClone = BANanoShared.parseBool(bHasClone)
-bHasDelete = BANanoShared.parseBool(bHasDelete)
-bHasDownload = BANanoShared.parseBool(bHasDownload)
-bHasEdit = BANanoShared.parseBool(bHasEdit)
-bHasExcel = BANanoShared.parseBool(bHasExcel)
-bHasFilter = BANanoShared.parseBool(bHasFilter)
-bHasMenu = BANanoShared.parseBool(bHasMenu)
-bHasPdf = BANanoShared.parseBool(bHasPdf)
-bHasPrint = BANanoShared.parseBool(bHasPrint)
-bHasRefresh = BANanoShared.parseBool(bHasRefresh)
-bHasSave = BANanoShared.parseBool(bHasSave)
-bExternalPagination = BANanoShared.parseBool(bExternalPagination)
-bHideDefaultFooter = BANanoShared.parseBool(bHideDefaultFooter)
+	bShowGroupBy = BANanoShared.parseBool(bShowGroupBy)
+	bShowSelect = BANanoShared.parseBool(bShowSelect)
+	bSingleSelect = BANanoShared.parseBool(bSingleSelect)
+	mHasSearch = BANanoShared.parseBool(mHasSearch)
+	bMultiSort = BANanoShared.parseBool(bMultiSort)
+	bMustSort = BANanoShared.parseBool(bMustSort)
+	bFixedHeader = BANanoShared.parseBool(bFixedHeader)
+	bHideDefaultHeader = BANanoShared.parseBool(bHideDefaultHeader)
+	bHideDefaultFooter = BANanoShared.parseBool(bHideDefaultFooter)
+	bShowExpand = BANanoShared.parseBool(bShowExpand)
+	bLoading = BANanoShared.parseBool(bLoading)
+	bDark = BANanoShared.parseBool(bDark)
+	bHasAddnew = BANanoShared.parseBool(bHasAddnew)
+	bHasBack = BANanoShared.parseBool(bHasBack)
+	bHasCancel = BANanoShared.parseBool(bHasCancel)
+	bHasClearSort = BANanoShared.parseBool(bHasClearSort)
+	bHasClone = BANanoShared.parseBool(bHasClone)
+	bHasDelete = BANanoShared.parseBool(bHasDelete)
+	bHasDownload = BANanoShared.parseBool(bHasDownload)
+	bHasEdit = BANanoShared.parseBool(bHasEdit)
+	bHasExcel = BANanoShared.parseBool(bHasExcel)
+	bHasFilter = BANanoShared.parseBool(bHasFilter)
+	bHasMenu = BANanoShared.parseBool(bHasMenu)
+	bHasPdf = BANanoShared.parseBool(bHasPdf)
+	bHasPrint = BANanoShared.parseBool(bHasPrint)
+	bHasRefresh = BANanoShared.parseBool(bHasRefresh)
+	bHasSave = BANanoShared.parseBool(bHasSave)
+	bExternalPagination = BANanoShared.parseBool(bExternalPagination)
+	bHideDefaultFooter = BANanoShared.parseBool(bHideDefaultFooter)
 
 	'		
 	Dim sb As StringBuilder
@@ -663,31 +681,94 @@ bHideDefaultFooter = BANanoShared.parseBool(bHideDefaultFooter)
 	
 	'***** DEPENDING ON WHAT HAS BEEN SPECIFIED, CREATE COLUMNS
 	Dim lsColumnAutoComplete As List = BANanoShared.StrParse(";", sColumnAutoComplete)
+	lsColumnAutoComplete = BANanoShared.ListTrimItems(lsColumnAutoComplete)
+	'
 	Dim lsColumnAvatar As List = BANanoShared.StrParse(";", sColumnAvatar)
+	lsColumnAvatar = BANanoShared.ListTrimItems(lsColumnAvatar)
+	'
 	Dim lsColumnButton As List = BANanoShared.StrParse(";", sColumnButton)
+	lsColumnButton = BANanoShared.ListTrimItems(lsColumnButton)
+	'
 	Dim lsColumnCheckbox As List = BANanoShared.StrParse(";", sColumnCheckbox)
+	lsColumnCheckbox = BANanoShared.ListTrimItems(lsColumnCheckbox)
+	'
 	Dim lsColumnChip As List = BANanoShared.StrParse(";", sColumnChip)
+	lsColumnChip = BANanoShared.ListTrimItems(lsColumnChip)
+	'
 	Dim lsColumnCircularProgress As List = BANanoShared.StrParse(";", sColumnCircularProgress)
+	lsColumnCircularProgress = BANanoShared.ListTrimItems(lsColumnCircularProgress)
+	'
 	Dim lsColumnCombobox As List = BANanoShared.strparse(";", sColumnCombobox)
+	lsColumnCombobox = BANanoShared.ListTrimItems(lsColumnCombobox)
+	'
 	Dim lsColumnDate As List = BANanoShared.strparse(";", sColumnDate)
+	lsColumnDate = BANanoShared.ListTrimItems(lsColumnDate)
+	'
 	Dim lsColumnDateTime As List = BANanoShared.StrParse(";", sColumnDateTime)
+	lsColumnDateTime = BANanoShared.ListTrimItems(lsColumnDateTime)
+	'
 	Dim lsColumnFields As List = BANanoShared.StrParse(";", sColumnFields)
+	lsColumnFields = BANanoShared.ListTrimItems(lsColumnFields)
+	'
 	Dim lsColumnFileSize As List = BANanoShared.StrParse(";", sColumnFileSize)
+	lsColumnFileSize = BANanoShared.ListTrimItems(lsColumnFileSize)
+	'
 	Dim lsColumnImage As List = BANanoShared.StrParse(";", sColumnImage)
+	lsColumnImage = BANanoShared.ListTrimItems(lsColumnImage)
+	'
 	Dim lsColumnLinearProgress As List = BANanoShared.StrParse(";", sColumnLinearProgress)
+	lsColumnLinearProgress = BANanoShared.ListTrimItems(lsColumnLinearProgress)
+	'
 	Dim lsColumnLink As List = BANanoShared.StrParse(";", sColumnLink)
+	lsColumnLink = BANanoShared.ListTrimItems(lsColumnLink)
+	'
 	Dim lsColumnMoney As List = BANanoShared.StrParse(";", sColumnMoney)
+	lsColumnMoney = BANanoShared.ListTrimItems(lsColumnMoney)
+	'
 	Dim lsColumnRating As List = BANanoShared.StrParse(";", sColumnRating)
+	lsColumnRating = BANanoShared.ListTrimItems(lsColumnRating)
+	'
 	Dim lsColumnSortable As List = BANanoShared.StrParse(";", sColumnSortable)
+	lsColumnSortable = BANanoShared.ListTrimItems(lsColumnSortable)
+	'
 	Dim lsColumnSwitch As List = BANanoShared.StrParse(";", sColumnSwitch)
+	lsColumnSwitch = BANanoShared.ListTrimItems(lsColumnSwitch)
+	'
 	Dim lsColumnTextarea As List = BANanoShared.StrParse(";", sColumnTextarea)
+	lsColumnTextarea = BANanoShared.ListTrimItems(lsColumnTextarea)
+	'
 	Dim lsColumnTextfield As List = BANanoShared.StrParse(";", sColumnTextfield)
+	lsColumnTextfield = BANanoShared.ListTrimItems(lsColumnTextfield)
+	'
 	Dim lsColumnTime As List = BANanoShared.StrParse(";", sColumnTime)
+	lsColumnTime = BANanoShared.ListTrimItems(lsColumnTime)
+	'
 	Dim lsColumnTitles As List = BANanoShared.StrParse(";", sColumnTitles)
+	lsColumnTitles = BANanoShared.ListTrimItems(lsColumnTitles)
+	'
 	Dim lsColumnWidths As List = BANanoShared.StrParse(";", sColumnWidths)
+	lsColumnWidths = BANanoShared.ListTrimItems(lsColumnWidths)
+	'
 	Dim lsColumnFilterable As List = BANanoShared.StrParse(";", sColumnFilterable)
+	lsColumnFilterable = BANanoShared.ListTrimItems(lsColumnFilterable)
+	'
 	Dim lsColumnAvatarTxt As List = BANanoShared.StrParse(";", sColumnAvatarText)
+	lsColumnAvatarTxt = BANanoShared.ListTrimItems(lsColumnAvatarTxt)
+	'
 	Dim lsColumnAvatarIcon As List = BANanoShared.StrParse(";", sColumnAvatarIcon)
+	lsColumnAvatarIcon = BANanoShared.ListTrimItems(lsColumnAvatarIcon)
+	'
+	lstPreDisplay = BANanoShared.StrParse(";",  sPreDisplay)
+	lstPreDisplay = BANanoShared.ListTrimItems(lstPreDisplay)
+	'
+	lstConditionalClass = BANanoShared.StrParse(";", sConditionalClass)
+	lstConditionalClass = BANanoShared.ListTrimItems(lstConditionalClass)
+	'
+	lstConditionalColor = BANanoShared.StrParse(";", sConditionalColor)
+	lstConditionalColor = BANanoShared.ListTrimItems(lstConditionalColor)
+	'
+	lstConditionalStyle = BANanoShared.StrParse(";", sConditionalStyle)
+	lstConditionalStyle = BANanoShared.ListTrimItems(lstConditionalStyle)	
 	'
 	Dim colTot As Int = lsColumnFields.Size - 1
 	Dim colCnt As Int
@@ -708,6 +789,56 @@ bHideDefaultFooter = BANanoShared.parseBool(bHideDefaultFooter)
 		
 		AddColumn(f, h)
 	Next
+	'
+	'pre-display progress
+	colTot = lstPreDisplay.Size - 1
+	For colCnt = 0 To colTot
+		Dim fc As String = lstPreDisplay.Get(colCnt)
+		Dim c As String = BANanoShared.mvfield(fc, 1, ":")
+		Dim m As String = BANanoShared.MvField(fc, 2, ":")
+		If lsColumnFields.IndexOf(c) >= 0 Then
+			SetColumnPreDisplay(c, m)
+		Else
+			Log($"DataTable Error: ${mName}.${f} pre-display column not found on column fields!"$)
+		End If
+	Next
+	'
+	colTot = lstConditionalClass.Size - 1
+	For colCnt = 0 To colTot
+		Dim fc As String = lstConditionalClass.Get(colCnt)
+		Dim c As String = BANanoShared.mvfield(fc, 1, ":")
+		Dim m As String = BANanoShared.MvField(fc, 2, ":")
+		If lsColumnFields.IndexOf(c) >= 0 Then
+			SetColumnClassOnCondition(c, m)
+		Else
+			Log($"DataTable Error: ${mName}.${f} conditional-class column not found on column fields!"$)
+		End If
+	Next
+	'
+	colTot = lstConditionalColor.Size - 1
+	For colCnt = 0 To colTot
+		Dim fc As String = lstConditionalColor.Get(colCnt)
+		Dim c As String = BANanoShared.mvfield(fc, 1, ":")
+		Dim m As String = BANanoShared.MvField(fc, 2, ":")
+		If lsColumnFields.IndexOf(c) >= 0 Then
+			SetColumnColorOnCondition(c, m)
+		Else
+			Log($"DataTable Error: ${mName}.${f} conditional-color column not found on column fields!"$)
+		End If
+	Next
+	'
+	colTot = lstConditionalStyle.Size - 1
+	For colCnt = 0 To colTot
+		Dim fc As String = lstConditionalStyle.Get(colCnt)
+		Dim c As String = BANanoShared.mvfield(fc, 1, ":")
+		Dim m As String = BANanoShared.MvField(fc, 2, ":")
+		If lsColumnFields.IndexOf(c) >= 0 Then
+			SetColumnStyleOnCondition(c, m)
+		Else
+			Log($"DataTable Error: ${mName}.${f} conditional-style column not found on column fields!"$)
+		End If
+	Next	
+	
 	'circular progress
 	colTot = lsColumnCircularProgress.Size - 1
 	For colCnt = 0 To colTot
@@ -1184,7 +1315,12 @@ Sub GetItemProps(lst As List, prop As String) As List
 	Return xlist
 End Sub
 
-'add a new record
+'to be compatible with the simple table, use .setrows
+Sub AddRowMap(row As Map)
+	Items.add(row)
+End Sub
+
+'add a new record, use .setrows
 Sub AddRow(rowData As Map)
 	Items.Add(rowData)
 End Sub
@@ -2319,6 +2455,7 @@ private Sub NewDataTableColumn(colname As String, coltitle As String) As DataTab
 	nf.PreDisplay = ""
 	nf.ConditionalClass = ""
 	nf.ConditionalColor = ""
+	nf.ConditionalStyle = ""
 	Return nf
 End Sub
 
@@ -2345,6 +2482,19 @@ Sub SetColumnTextColorOnCondition(colName As String, MethodName As String)
 	End If
 End Sub
 
+Sub SetColumnStyleOnCondition(colName As String, MethodName As String)
+	colName = colName.tolowercase
+	MethodName = MethodName.tolowercase
+	If columnsM.ContainsKey(colName) Then
+		Dim nf As DataTableColumn = columnsM.Get(colName)
+		nf.ConditionalStyle = MethodName
+		columnsM.Put(colName, nf)
+		Dim item As Map 
+		SetMethod(mCallBack, MethodName, Array(item))
+		VElement.RemoveBinding(MethodName)
+	End If
+End Sub
+
 'apply a class to a column based on a method result
 Sub SetColumnColorOnCondition(colName As String, MethodName As String)
 	colName = colName.tolowercase
@@ -2359,7 +2509,7 @@ Sub SetColumnColorOnCondition(colName As String, MethodName As String)
 End Sub
 
 'apply a class to a column based on a method result
-Sub SetColumnClassOnConditional(colName As String, ConditionalClass As String)
+Sub SetColumnClassOnCondition(colName As String, ConditionalClass As String)
 	colName = colName.tolowercase
 	ConditionalClass = ConditionalClass.tolowercase
 	If columnsM.ContainsKey(colName) Then
@@ -3079,6 +3229,7 @@ private Sub BuildSlots
 		Dim sbThisEvent As String = ""
 		Dim sbConditionalClass As String = ""
 		Dim sbConditionalColor As String = ""
+		Dim sbConditionalStyle As String = ""
 		
 		If nf.ConditionalClass <> "" Then
 			sbConditionalClass = $":class="${nf.ConditionalClass}(props.item)""$
@@ -3086,6 +3237,10 @@ private Sub BuildSlots
 		'
 		If nf.ConditionalColor <> "" Then
 			sbConditionalColor = $":color="${nf.ConditionalColor}(props.item)""$
+		End If
+		'
+		If nf.ConditionalStyle <> "" Then
+			sbConditionalStyle = $":style="${nf.ConditionalStyle}(props.item)""$
 		End If
 		'
 		'does it have a total
@@ -3120,7 +3275,7 @@ private Sub BuildSlots
 				
 				
 				Dim temp As String = $"<v-template v-slot:item.${value}="props">
-<v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" @open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy><span ${sbConditionalClass} ${sbConditionalColor}>{{ ${itemValue} }}</span>
+<v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" @open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy><span ${sbConditionalClass} ${sbConditionalColor} ${sbConditionalStyle}>{{ ${itemValue} }}</span>
 <v-template v-slot:input><v-select :items="${nf.sourceTable}" item-text="${nf.displayField}" item-value="${nf.sourcefield}" clearable v-model="props.item.${value}" :label="props.header.text" dense class="mt-2" outlined ${sbThisEvent}></v-select></v-template>
 </v-edit-dialog></v-template>"$
 				sb.Append(temp)
@@ -3147,7 +3302,7 @@ private Sub BuildSlots
 				
 				
 				Dim temp As String = $"<v-template v-slot:item.${value}="props">
-<v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" @open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy><span ${sbConditionalClass} ${sbConditionalColor}>{{ ${itemValue} }}</span>
+<v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" @open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy><span ${sbConditionalClass} ${sbConditionalColor} ${sbConditionalStyle}>{{ ${itemValue} }}</span>
 <v-template v-slot:input><v-combobox :items="${nf.SourceTable}" item-text="${nf.DisplayField}" item-value="${nf.sourcefield}" clearable :return-object=false v-model="props.item.${value}" :label="props.header.text" dense class="mt-2" outlined ${sbThisEvent}></v-combobox></v-template>
 </v-edit-dialog></v-template>"$
 				sb.Append(temp)
@@ -3172,7 +3327,7 @@ private Sub BuildSlots
 				
 				
 				Dim temp As String = $"<v-template v-slot:item.${value}="props">
-<v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" @open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy><span ${sbConditionalClass} ${sbConditionalColor}>{{ ${itemValue} }}</span>
+<v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" @open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy><span ${sbConditionalClass} ${sbConditionalColor} ${sbConditionalStyle}>{{ ${itemValue} }}</span>
 <v-template v-slot:input><v-autocomplete :items="${nf.SourceTable}" item-text="${nf.DisplayField}" item-value="${nf.sourcefield}" clearable v-model="props.item.${value}" :label="props.header.text" dense class="mt-2" outlined ${sbThisEvent}></v-autocomplete></v-template>
 </v-edit-dialog></v-template>"$
 				sb.Append(temp)
@@ -3198,7 +3353,7 @@ private Sub BuildSlots
 				
 Dim temp As String = $"<v-template v-slot:item.${value}="props">
 <v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" 
-@open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy><span ${sbConditionalClass} ${sbConditionalColor}>{{ ${itemValue} }}</span>
+@open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy><span ${sbConditionalClass} ${sbConditionalColor} ${sbConditionalStyle}>{{ ${itemValue} }}</span>
 <v-template v-slot:input><v-text-field dense class="mt-2" outlined v-model="props.item.${value}" ${sbThisEvent} :label="props.header.text" counter></v-text-field></v-template></v-edit-dialog></v-template>"$
 sb.Append(temp)
 
@@ -3224,7 +3379,7 @@ sb.Append(temp)
 						
 				
 				Dim temp As String = $"<v-template v-slot:item.${value}="props">
-<v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" @open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy><span ${sbConditionalClass} ${sbConditionalColor}>{{ ${itemValue} }}</span>
+<v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" @open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy><span ${sbConditionalClass} ${sbConditionalColor} ${sbConditionalStyle}>{{ ${itemValue} }}</span>
 <v-template v-slot:input><v-textarea dense class="mt-2" outlined v-model="props.item.${value}" ${sbThisEvent} :label="props.header.text" counter></v-textarea></v-template>
 </v-edit-dialog></v-template>"$
 				sb.Append(temp)
@@ -3270,7 +3425,7 @@ sb.Append(temp)
 				
 				Dim temp As String = $"<v-template v-slot:item.${value}="props">
 <v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" 
-@open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy><span ${sbConditionalClass} ${sbConditionalColor}>{{ ${itemValue} }}</span>
+@open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy><span ${sbConditionalClass} ${sbConditionalColor} ${sbConditionalStyle}>{{ ${itemValue} }}</span>
 <v-template v-slot:input><v-text-field dense class="mt-2" outlined v-model="props.item.${value}" ${sbThisEvent} :label="props.header.text" counter></v-text-field></v-template></v-edit-dialog></v-template>"$
 sb.Append(temp)
 
@@ -3284,6 +3439,9 @@ sb.Append(temp)
 				End If
 				If nf.ConditionalColor <> "" Then
 					aLink.Bind("color", $"${nf.ConditionalColor}(item)"$)
+				End If
+				If nf.ConditionalStyle <> "" Then
+					aLink.Bind("style", $"${nf.ConditionalStyle}(item)"$)
 				End If
 				Dim sLink As String = $"item.${nf.href}"$
 				aLink.AddAttr(":href", "'" & nf.prefix & "' + " & sLink)
@@ -3310,6 +3468,9 @@ sb.Append(temp)
 				End If
 				If nf.ConditionalColor <> "" Then
 					aLink.Bind("color", $"${nf.ConditionalColor}(item)"$)
+				End If
+				If nf.ConditionalStyle <> "" Then
+					aLink.Bind("style", $"${nf.ConditionalStyle}(item)"$)
 				End If
 				Dim sLink As String = $"item.${value}"$
 				aLink.AddAttr(":href", "'" & nf.prefix & "' + " & sLink)
@@ -3364,7 +3525,7 @@ sb.Append(temp)
 				
 				Dim temp As String = $"<v-template v-slot:item.${value}="props">
 <v-edit-dialog :return-value.sync="props.item.${value}" @save="${mName}_saveitem(props.item)" @cancel="${mName}_cancelitem(props.item)" 
-@open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy><span ${sbConditionalClass} ${sbConditionalColor}>{{ ${itemValue} }}</span>
+@open="${mName}_openitem(props.item)" @close="${mName}_closeitem(props.item)" ${slarge} lazy><span ${sbConditionalClass} ${sbConditionalColor} ${sbConditionalStyle}>{{ ${itemValue} }}</span>
 <v-template v-slot:input><v-text-field dense class="mt-2" outlined v-model="props.item.${value}" ${sbThisEvent} :label="props.header.text" counter></v-text-field></v-template></v-edit-dialog></v-template>"$
 sb.Append(temp)
 
@@ -3378,6 +3539,9 @@ sb.Append(temp)
 				End If
 				If nf.ConditionalColor <> "" Then
 					span.Bind("color", $"${nf.ConditionalColor}(item)"$)
+				End If
+				If nf.ConditionalStyle <> "" Then
+					span.Bind("style", $"${nf.ConditionalStyle}(item)"$)
 				End If
 				span.Append($"{{ getfilesize(item.${value}) }}"$)
 				
@@ -3410,6 +3574,9 @@ sb.Append(temp)
 				End If
 				If nf.ConditionalColor <> "" Then
 					pl.Bind("color", $"${nf.ConditionalColor}(item)"$)
+				End If
+				If nf.ConditionalStyle <> "" Then
+					pl.Bind("style", $"${nf.ConditionalStyle}(item)"$)
 				End If
 				'
 				Dim methodName As String = $"${mName}_change"$
@@ -3455,6 +3622,9 @@ sb.Append(temp)
 				If nf.ConditionalColor <> "" Then
 					pc.Bind("color", $"${nf.ConditionalColor}(item)"$)
 				End If
+				If nf.ConditionalStyle <> "" Then
+					pc.Bind("style", $"${nf.ConditionalStyle}(item)"$)
+				End If
 				
 '				Dim props As Map = nf.props
 '				For Each k As String In props.Keys
@@ -3494,6 +3664,9 @@ sb.Append(temp)
 				End If
 				If nf.ConditionalColor <> "" Then
 					rat.Bind("color", $"${nf.ConditionalColor}(item)"$)
+				End If
+				If nf.ConditionalStyle <> "" Then
+					rat.Bind("style", $"${nf.ConditionalStyle}(item)"$)
 				End If
 '				Dim props As Map = nf.props
 '				For Each k As String In props.Keys
@@ -3549,6 +3722,9 @@ sb.Append(temp)
 				If nf.ConditionalColor <> "" Then
 					avt.Bind("color", $"${nf.ConditionalColor}(item)"$)
 				End If
+				If nf.ConditionalStyle <> "" Then
+					avt.Bind("style", $"${nf.ConditionalStyle}(item)"$)
+				End If
 '								
 				avt.Append(avtimg.ToString)
 				'
@@ -3590,6 +3766,9 @@ sb.Append(temp)
 				End If
 				If nf.ConditionalColor <> "" Then
 					avt.Bind("color", $"${nf.ConditionalColor}(item)"$)
+				End If
+				If nf.ConditionalStyle <> "" Then
+					avt.Bind("style", $"${nf.ConditionalStyle}(item)"$)
 				End If
 '								
 				avt.Append(avtimg.ToString)
@@ -3635,6 +3814,9 @@ sb.Append(temp)
 				If nf.ConditionalColor <> "" Then
 					avt.Bind("color", $"${nf.ConditionalColor}(item)"$)
 				End If
+				If nf.ConditionalStyle <> "" Then
+					avt.Bind("style", $"${nf.ConditionalStyle}(item)"$)
+				End If
 				'
 '				Dim props As Map = nf.props
 '				For Each k As String In props.Keys
@@ -3673,6 +3855,9 @@ sb.Append(temp)
 				End If
 				If nf.ConditionalColor <> "" Then
 					swt.Bind("color", $"${nf.ConditionalColor}(item)"$)
+				End If
+				If nf.ConditionalStyle <> "" Then
+					swt.Bind("style", $"${nf.ConditionalStyle}(item)"$)
 				End If
 				'
 '				Dim props As Map = nf.props
@@ -3719,6 +3904,9 @@ sb.Append(temp)
 				If nf.ConditionalColor <> "" Then
 					aicon.Bind("color", $"${nf.ConditionalColor}(item)"$)
 				End If
+				If nf.ConditionalStyle <> "" Then
+					aicon.Bind("style", $"${nf.ConditionalStyle}(item)"$)
+				End If
 				'
 '				Dim props As Map = nf.props
 '				For Each k As String In props.Keys
@@ -3762,6 +3950,9 @@ sb.Append(temp)
 				If nf.ConditionalColor <> "" Then
 					avtimg.Bind("color", $"${nf.ConditionalColor}(item)"$)
 				End If
+				If nf.ConditionalStyle <> "" Then
+					avtimg.Bind("style", $"${nf.ConditionalStyle}(item)"$)
+				End If
 				'
 '				Dim props As Map = nf.props
 '				For Each k As String In props.Keys
@@ -3803,6 +3994,9 @@ sb.Append(temp)
 				If nf.ConditionalColor <> "" Then
 					chp.Bind("color", $"${nf.ConditionalColor}(item)"$)
 				End If
+				If nf.ConditionalStyle <> "" Then
+					chp.Bind("style", $"${nf.ConditionalStyle}(item)"$)
+				End If
 
 '				Dim colprops As Map = nf.colprops
 '				For Each k As String In colprops.Keys
@@ -3836,6 +4030,9 @@ sb.Append(temp)
 				End If
 				If nf.ConditionalColor <> "" Then
 					abtn.Bind("color", $"${nf.ConditionalColor}(item)"$)
+				End If
+				If nf.ConditionalStyle <> "" Then
+					abtn.Bind("style", $"${nf.ConditionalStyle}(item)"$)
 				End If
 				'
 '				Dim props As Map = nf.props
@@ -3879,6 +4076,9 @@ sb.Append(temp)
 				End If
 				If nf.ConditionalColor <> "" Then
 					abtn.Bind("color", $"${nf.ConditionalColor}(item)"$)
+				End If
+				If nf.ConditionalStyle <> "" Then
+					abtn.Bind("style", $"${nf.ConditionalStyle}(item)"$)
 				End If
 				'
 '				Dim props As Map = nf.props
@@ -3926,6 +4126,9 @@ sb.Append(temp)
 				End If
 				If nf.ConditionalColor <> "" Then
 					pc.Bind("color", $"${nf.ConditionalColor}(item)"$)
+				End If
+				If nf.ConditionalStyle <> "" Then
+					pc.Bind("style", $"${nf.ConditionalStyle}(item)"$)
 				End If
 				'define template
 				Dim tmp As VueElement
@@ -4676,4 +4879,60 @@ Sub getComputedItems As List
 	Dim fChild As Map = children.Get(0)
 	Dim computedItems As List = fChild.Get("computedItems")
 	Return computedItems
+End Sub
+
+
+'read an item where
+Sub Read(V As VueComponent, prop As String, value As String) As Map
+	Dim m As Map = CreateMap()
+	m.Put(prop, value)
+	'find the record at a position
+	Dim mpos As Int = V.GetDataPositionWhere(itemsname, m)
+	Dim res As Map = CreateMap()
+	If mpos >= 0 Then
+		res = FindItemAtPosition1(V, mpos)
+	End If
+	Return res
+End Sub
+
+'add a new row at the end of the items in realtime
+Sub Add(V As VueComponent, rowdata As Map)
+	V.SetDataPush(itemsname, rowdata)
+End Sub
+
+'add a row at the top of the list
+Sub AddOnTop(V As VueComponent, rowdata As Map)
+	V.SetDataUnshift(itemsname, rowdata)
+End Sub
+
+'remove an item where
+Sub Delete(V As VueComponent, prop As String, value As String)
+	Dim m As Map = CreateMap()
+	m.Put(prop, value)
+	'find the record at a position
+	Dim mpos As Int = V.GetDataPositionWhere(itemsname, m)
+	If mpos >= 0 Then
+		VC.SetDataSpliceRemove(itemsname, mpos, 1)
+	End If
+End Sub
+
+'update item where
+Sub Update(V As VueComponent, prop As String, value As String, item As Map)
+	Dim m As Map = CreateMap()
+	m.Put(prop, value)
+	'find the record at a position
+	Dim mpos As Int = V.GetDataPositionWhere(itemsname, m)
+	If mpos >= 0 Then
+		Dim oldm As Map = FindItemAtPosition1(V, mpos)
+		oldm = BANanoShared.Merge(oldm, item)
+		VC.SetDataSplice(itemsname, mpos, 1, oldm)
+	End If
+End Sub
+
+
+'find item at position
+private Sub FindItemAtPosition1(V As VueComponent, pos As Int) As Map
+	Dim recs As List = V.GetData(itemsname)
+	Dim rec As Map = recs.Get(pos)
+	Return rec
 End Sub

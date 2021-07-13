@@ -109,7 +109,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 End Sub
 
 public Sub Remove() 
-	mTarget.Empty 
+	mElement.Remove 
 	BANano.SetMeToNull 
 End Sub
 

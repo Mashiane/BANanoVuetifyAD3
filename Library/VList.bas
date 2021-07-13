@@ -38,6 +38,40 @@ Version=8.95
 #DesignerProperty: Key: TextColorIntensity, DisplayName: TextColorIntensity, FieldType: String, DefaultValue: , Description: TextColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 
 #DesignerProperty: Key: Tile, DisplayName: Tile, FieldType: Boolean, DefaultValue: false, Description: Tile
+'
+#DesignerProperty: Key: UseLeftAction, DisplayName: UseLeftAction, FieldType: Boolean, DefaultValue: True, Description: UseLeftAction
+#DesignerProperty: Key: UseLeftActionButton, DisplayName: UseLeftActionButton, FieldType: Boolean, DefaultValue: True, Description: UseLeftActionButton
+#DesignerProperty: Key: UseLeftActionCheckBox, DisplayName: UseLeftActionCheckBox, FieldType: Boolean, DefaultValue: True, Description: UseLeftActionCheckBox
+#DesignerProperty: Key: UseLeftActionSwitch, DisplayName: UseLeftActionSwitch, FieldType: Boolean, DefaultValue: True, Description: UseLeftActionSwitch
+
+#DesignerProperty: Key: UseLeftAvatar, DisplayName: UseLeftAvatar, FieldType: Boolean, DefaultValue: True, Description: UseLeftAvatar
+#DesignerProperty: Key: UseLeftAvatarImage, DisplayName: UseLeftAvatarImage, FieldType: Boolean, DefaultValue: True, Description: UseLeftAvatarImage
+#DesignerProperty: Key: UseLeftAvatarIcon, DisplayName: UseLeftAvatarIcon, FieldType: Boolean, DefaultValue: True, Description: UseLeftAvatarIcon
+#DesignerProperty: Key: UseLeftAvatarText, DisplayName: UseLeftAvatarText, FieldType: Boolean, DefaultValue: True, Description: UseLeftAvatarText
+
+#DesignerProperty: Key: UseIcon, DisplayName: UseIcon, FieldType: Boolean, DefaultValue: True, Description: UseIcon
+#DesignerProperty: Key: UseTitle, DisplayName: UseTitle, FieldType: Boolean, DefaultValue: True, Description: UseTitle
+#DesignerProperty: Key: UseSubTitle, DisplayName: UseSubTitle, FieldType: Boolean, DefaultValue: True, Description: UseSubTitle
+#DesignerProperty: Key: UseSubTitle1, DisplayName: UseSubTitle1, FieldType: Boolean, DefaultValue: True, Description: UseSubTitle1
+#DesignerProperty: Key: UseSubTitle2, DisplayName: UseSubTitle2, FieldType: Boolean, DefaultValue: True, Description: UseSubTitle2
+#DesignerProperty: Key: UseSubTitle3, DisplayName: UseSubTitle3, FieldType: Boolean, DefaultValue: True, Description: UseSubTitle3
+#DesignerProperty: Key: UseSubTitle4, DisplayName: UseSubTitle4, FieldType: Boolean, DefaultValue: True, Description: UseSubTitle4
+
+#DesignerProperty: Key: UseRightAvatar, DisplayName: UseRightAvatar, FieldType: Boolean, DefaultValue: True, Description: UseRightAvatar
+#DesignerProperty: Key: UseRightAvatarIcon, DisplayName: UseRightAvatarIcon, FieldType: Boolean, DefaultValue: True, Description: UseRightAvatarIcon
+#DesignerProperty: Key: UseRightAvatarImage, DisplayName: UseRightAvatarImage, FieldType: Boolean, DefaultValue: True, Description: UseRightAvatarImage
+#DesignerProperty: Key: UseRightAvatarText, DisplayName: UseRightAvatarText, FieldType: Boolean, DefaultValue: True, Description: UseRightAvatarText
+
+#DesignerProperty: Key: UseRightChip, DisplayName: UseRightChip, FieldType: Boolean, DefaultValue: True, Description: UseRightChip
+
+#DesignerProperty: Key: UseRightAction, DisplayName: UseRightAction, FieldType: Boolean, DefaultValue: True, Description: UseRightAction
+#DesignerProperty: Key: UseRightActionButton, DisplayName: UseRightActionButton, FieldType: Boolean, DefaultValue: True, Description: UseRightActionButton
+#DesignerProperty: Key: UseRightActionCheckBox, DisplayName: UseRightActionCheckBox, FieldType: Boolean, DefaultValue: True, Description: UseRightActionCheckBox
+#DesignerProperty: Key: UseRightActionRating, DisplayName: UseRightActionRating, FieldType: Boolean, DefaultValue: True, Description: UseRightActionRating
+#DesignerProperty: Key: UseRightActionSwitch, DisplayName: UseRightActionSwitch, FieldType: Boolean, DefaultValue: True, Description: UseRightActionSwitch
+#DesignerProperty: Key: UseRightActionText, DisplayName: UseRightActionText, FieldType: Boolean, DefaultValue: True, Description: UseRightActionText
+
+
 #DesignerProperty: Key: VBind, DisplayName: VBind, FieldType: String, DefaultValue: , Description: VBind
 #DesignerProperty: Key: VFor, DisplayName: VFor, FieldType: String, DefaultValue: , Description: VFor
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
@@ -97,6 +131,32 @@ Private xTemplate As String
 Private bDisabled As Boolean
 Private bHidden As Boolean
 Private bPlaceAtBottom As Boolean
+	Private bUseIcon As Boolean
+Private bUseLeftAction As Boolean
+Private bUseLeftActionButton As Boolean
+Private bUseLeftActionCheckBox As Boolean
+Private bUseLeftActionSwitch As Boolean
+Private bUseLeftAvatar As Boolean
+Private bUseLeftAvatarIcon As Boolean
+Private bUseLeftAvatarImage As Boolean
+Private bUseLeftAvatarText As Boolean
+Private bUseRightAction As Boolean
+Private bUseRightActionButton As Boolean
+Private bUseRightActionCheckBox As Boolean
+Private bUseRightActionRating As Boolean
+Private bUseRightActionSwitch As Boolean
+Private bUseRightActionText As Boolean
+Private bUseRightAvatar As Boolean
+Private bUseRightAvatarIcon As Boolean
+Private bUseRightAvatarImage As Boolean
+Private bUseRightAvatarText As Boolean
+Private bUseRightChip As Boolean
+Private bUseSubTitle As Boolean
+Private bUseSubTitle1 As Boolean
+Private bUseSubTitle2 As Boolean
+Private bUseSubTitle3 As Boolean
+Private bUseSubTitle4 As Boolean
+Private bUseTitle As Boolean
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -117,6 +177,33 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	sDisabled = $"${mName}disabled"$
 	'sVShow = $"${mName}show"$
 	NewListViewItemOptions
+	'
+	bUseIcon = True
+	bUseLeftAction = True
+	bUseLeftActionButton = True
+	bUseLeftActionCheckBox = True
+	bUseLeftActionSwitch = True
+	bUseLeftAvatar = True
+	bUseLeftAvatarIcon = True
+	bUseLeftAvatarImage = True
+	bUseLeftAvatarText = True
+	bUseRightAction = True
+	bUseRightActionButton = True
+	bUseRightActionCheckBox = True
+	bUseRightActionRating = True
+	bUseRightActionSwitch = True
+	bUseRightActionText = True
+	bUseRightAvatar = True
+	bUseRightAvatarIcon = True
+	bUseRightAvatarImage = True
+	bUseRightAvatarText = True
+	bUseRightChip = True
+	bUseSubTitle = True
+	bUseSubTitle1 = True
+	bUseSubTitle2 = True
+	bUseSubTitle3 = True
+	bUseSubTitle4 = True
+	bUseTitle = True
 End Sub
 	
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
@@ -157,6 +244,58 @@ sVOn = Props.Get("VOn")
 bHidden = Props.GetDefault("Hidden", False)
 sWidth = Props.Get("Width")
 bPlaceAtBottom = Props.GetDefault("PlaceAtBottom", False)
+		bUseIcon = Props.GetDefault("UseIcon", True)
+bUseIcon = BANanoShared.parseBool(bUseIcon)
+bUseLeftAction = Props.GetDefault("UseLeftAction", True)
+bUseLeftAction = BANanoShared.parseBool(bUseLeftAction)
+bUseLeftActionButton = Props.GetDefault("UseLeftActionButton", True)
+bUseLeftActionButton = BANanoShared.parseBool(bUseLeftActionButton)
+bUseLeftActionCheckBox = Props.GetDefault("UseLeftActionCheckBox", True)
+bUseLeftActionCheckBox = BANanoShared.parseBool(bUseLeftActionCheckBox)
+bUseLeftActionSwitch = Props.GetDefault("UseLeftActionSwitch", True)
+bUseLeftActionSwitch = BANanoShared.parseBool(bUseLeftActionSwitch)
+bUseLeftAvatar = Props.GetDefault("UseLeftAvatar", True)
+bUseLeftAvatar = BANanoShared.parseBool(bUseLeftAvatar)
+bUseLeftAvatarIcon = Props.GetDefault("UseLeftAvatarIcon", True)
+bUseLeftAvatarIcon = BANanoShared.parseBool(bUseLeftAvatarIcon)
+bUseLeftAvatarImage = Props.GetDefault("UseLeftAvatarImage", True)
+bUseLeftAvatarImage = BANanoShared.parseBool(bUseLeftAvatarImage)
+bUseLeftAvatarText = Props.GetDefault("UseLeftAvatarText", True)
+bUseLeftAvatarText = BANanoShared.parseBool(bUseLeftAvatarText)
+bUseRightAction = Props.GetDefault("UseRightAction", True)
+bUseRightAction = BANanoShared.parseBool(bUseRightAction)
+bUseRightActionButton = Props.GetDefault("UseRightActionButton", True)
+bUseRightActionButton = BANanoShared.parseBool(bUseRightActionButton)
+bUseRightActionCheckBox = Props.GetDefault("UseRightActionCheckBox", True)
+bUseRightActionCheckBox = BANanoShared.parseBool(bUseRightActionCheckBox)
+bUseRightActionRating = Props.GetDefault("UseRightActionRating", True)
+bUseRightActionRating = BANanoShared.parseBool(bUseRightActionRating)
+bUseRightActionSwitch = Props.GetDefault("UseRightActionSwitch", True)
+bUseRightActionSwitch = BANanoShared.parseBool(bUseRightActionSwitch)
+bUseRightActionText = Props.GetDefault("UseRightActionText", True)
+bUseRightActionText = BANanoShared.parseBool(bUseRightActionText)
+bUseRightAvatar = Props.GetDefault("UseRightAvatar", True)
+bUseRightAvatar = BANanoShared.parseBool(bUseRightAvatar)
+bUseRightAvatarIcon = Props.GetDefault("UseRightAvatarIcon", True)
+bUseRightAvatarIcon = BANanoShared.parseBool(bUseRightAvatarIcon)
+bUseRightAvatarImage = Props.GetDefault("UseRightAvatarImage", True)
+bUseRightAvatarImage = BANanoShared.parseBool(bUseRightAvatarImage)
+bUseRightAvatarText = Props.GetDefault("UseRightAvatarText", True)
+bUseRightAvatarText = BANanoShared.parseBool(bUseRightAvatarText)
+bUseRightChip = Props.GetDefault("UseRightChip", True)
+bUseRightChip = BANanoShared.parseBool(bUseRightChip)
+bUseSubTitle = Props.GetDefault("UseSubTitle", True)
+bUseSubTitle = BANanoShared.parseBool(bUseSubTitle)
+bUseSubTitle1 = Props.GetDefault("UseSubTitle1", True)
+bUseSubTitle1 = BANanoShared.parseBool(bUseSubTitle1)
+bUseSubTitle2 = Props.GetDefault("UseSubTitle2", True)
+bUseSubTitle2 = BANanoShared.parseBool(bUseSubTitle2)
+bUseSubTitle3 = Props.GetDefault("UseSubTitle3", True)
+bUseSubTitle3 = BANanoShared.parseBool(bUseSubTitle3)
+bUseSubTitle4 = Props.GetDefault("UseSubTitle4", True)
+bUseSubTitle4 = BANanoShared.parseBool(bUseSubTitle4)
+bUseTitle = Props.GetDefault("UseTitle", True)
+bUseTitle = BANanoShared.parseBool(bUseTitle)
 	End If
 	'
 	bDark = BANanoShared.parseBool(bDark)
@@ -254,7 +393,7 @@ public Sub AddToParent(targetID As String)
 End Sub
 
 public Sub Remove()
-	mTarget.Empty
+	mElement.Remove
 	BANano.SetMeToNull
 End Sub
 
@@ -465,10 +604,10 @@ Sub AddListItemGroupTemplate(props As ListViewItemOptions)
 <v-list-item-avatar id="${avatarID}" class="${xitemavatarclass}" v-if="item.${xavatar} || item.${xavataricon} || item.${props.avatartext}">
 <v-img id="${avatarImgID}" ${props.avatarattr} :src="item.${xavatar}" class="${xavatarclass}" v-if="item.${xavatar}"></v-img>
 <v-icon id="${avatarIconID}" ${props.avatariconattr} v-if="item.${xavataricon}" :color="item.${xavatariconcolor}" class="${xavatariconclass}" v-html="item.${xavataricon}"></v-icon>
+<span id="${avatarTextID}" v-if="item.${props.avatartext}" :color="item.${props.avatartextcolor}" class="${props.avatartextclass}" v-html="item.${props.avatartext}"></span>
 </v-list-item-avatar>
 <v-list-item-icon id="${itemiconID}" v-if="item.${xicon}">
 <v-icon id="${iconID}" ${props.iconattr} :color="item.${xiconcolor}" class="${xiconclass}" v-html="item.${xicon}"></v-icon>
-<span id="${avatarTextID}" v-if="item.${props.avatartext}" :color="item.${props.avatartextcolor}" class="${props.avatartextclass}" v-html="item.${props.avatartext}"></span>
 </v-list-item-icon>
 <v-list-item-content id="${contentID}" v-if="item.${xtitle} || item.${xsubtitle} || item.${xsubtitle1} || item.${xsubtitle2} || item.${xsubtitle3} || item.${xsubtitle4}">
 <v-list-item-title id="${titleID}" v-if="item.${xtitle}" v-html="item.${xtitle}"></v-list-item-title>
@@ -558,6 +697,7 @@ Sub AddListItemGroupTemplate(props As ListViewItemOptions)
 '	vlistitem.BindVueElement(vrightcheckbox)
 '	vlistitem.BindVueElement(vrightswitch)
 '	vlistitem.BindVueElement(vleftswitch)
+	CleanUp
 End Sub
 
 'add a list item template to draw item
@@ -670,8 +810,9 @@ Sub AddListViewGroupTemplate(props As ListViewItemOptions)
 	sTemplate.Append($"<v-list-item-title id="${titleID}" v-html="item.${xtitle}"></v-list-item-title>"$)
 	sTemplate.Append($"</v-list-item-content>"$)
 	sTemplate.Append($"</v-template>"$)
-	'
-sTemplate.Append($"<v-list-item id="${listitemID}" v-for="child in item.items" :key="child.${key}" :to="child.${xurl}" active-class="${xactiveclass}" :href="child.${xhref}" :target="child.${xtarget}">
+
+	sTemplate.Append($"<v-template v-for="child in item.items">"$)
+sTemplate.Append($"<v-list-item id="${listitemID}" :key="child.${key}" :to="child.${xurl}" active-class="${xactiveclass}" :href="child.${xhref}" :target="child.${xtarget}">
 <v-list-item-action id="${leftactionID}" v-if="child.${xlefticon} || ${xshowleftcheckboxes} || ${xshowleftswitch}">
 <v-btn id="${leftactionBtnID}" :icon="true" v-if="child.${xlefticon}">
 <v-icon id="${leftactionIconID}" ${props.lefticonattr} :color="child.${xlefticoncolor}" v-html="child.${xlefticon}" class="${xlefticonclass}"></v-icon>
@@ -711,6 +852,8 @@ sTemplate.Append($"<v-list-item id="${listitemID}" v-for="child in item.items" :
 <v-switch id="${rightswitchID}" ${props.rightswitchattr} v-if="${xshowrightswitch}" :inset="${xswitchinset}" :item="child" v-model="child.${xrightswitch}" :input-value="child.${xrightswitch}"></v-switch>
 </v-list-item-action>
 </v-list-item>
+<v-divider v-if="${props.hasdivider}" :inset="${props.insetdivider}"></v-divider>
+</v-template>
 </v-list-group>"$)
 '
 sTemplate.Append($"<v-list-item v-else id="${listitemID}" :key="item.${key}" :to="item.${xurl}" active-class="${xactiveclass}" :href="item.${xhref}" :target="item.${xtarget}">
@@ -753,7 +896,6 @@ sTemplate.Append($"<v-list-item v-else id="${listitemID}" :key="item.${key}" :to
 <v-switch id="${rightswitchID}" ${props.rightswitchattr} v-if="${xshowrightswitch}" :inset="${xswitchinset}" :item="item" v-model="item.${xrightswitch}" :input-value="item.${xrightswitch}"></v-switch>
 </v-list-item-action>
 </v-list-item>"$)
-sTemplate.Append($"<v-divider v-if="${props.hasdivider}" :inset="${props.insetdivider}"></v-divider>"$)
 sTemplate.Append("</v-template>")
 	'
 	BANano.GetElement(parentID).Append(sTemplate.tostring)
@@ -771,6 +913,7 @@ sTemplate.Append("</v-template>")
 	'
 	VElement.SetData(DataSource, VElement.NewList)
 	VElement.BindVueElement(vlistitemx)
+	CleanUp
 End Sub
 
 private Sub NewListViewItemOptions
@@ -1066,6 +1209,97 @@ Sub AddListViewTemplate(props As ListViewItemOptions)
 '	vlistitem.BindVueElement(vrightcheckbox)
 '	vlistitem.BindVueElement(vrightswitch)
 '	vlistitem.BindVueElement(vleftswitch)
+	CleanUp
+End Sub
+
+private Sub CleanUp
+	
+If bUseIcon = False Then
+		ListItemIcon1.Remove
+End If
+
+If bUseLeftAction = False Then
+		ListItemLeftAction.Remove
+Else
+	If  bUseLeftActionButton = False Then
+		ListItemLeftButton.Remove
+	End If
+	If  bUseLeftActionCheckBox = False Then
+		ListItemLeftCheckBox.Remove
+	End If
+	If  bUseLeftActionSwitch = False Then
+		ListItemLeftSwitch.Remove
+	End If
+End If
+
+If  bUseLeftAvatar = False Then
+	ListItemAvatar.Remove
+Else
+	If  bUseLeftAvatarIcon = False Then
+		ListItemAvatarIcon.Remove
+	End If
+	If  bUseLeftAvatarImage = False Then
+		ListItemAvatarImage.Remove	
+	End If
+	If  bUseLeftAvatarText = False Then
+		ListItemAvatarText.Remove
+	End If
+End If
+
+If  bUseRightAction = False Then
+	ListItemRightAction.Remove
+Else
+	If  bUseRightActionButton = False Then
+		ListItemRightButton.Remove
+	End If
+	If  bUseRightActionCheckBox = False Then
+		ListItemRightCheckBox.Remove
+	End If
+	If  bUseRightActionRating = False Then
+		ListItemRightRating.Remove
+	End If
+	If  bUseRightActionSwitch = False Then
+		ListItemRightSwitch.Remove
+	End If	
+	If  bUseRightActionText = False Then
+		ListItemRightText.Remove
+	End If
+End If
+
+If  bUseRightAvatar = False Then
+	ListItemRightAvatar.Remove
+Else
+	If  bUseRightAvatarIcon = False Then
+		ListItemRightAvatarIcon.remove
+	End If
+	If  bUseRightAvatarImage = False Then
+		ListItemRightAvatarImage.Remove
+	End If
+	If  bUseRightAvatarText = False Then
+		ListItemRightAvatarText.Remove
+	End If
+End If
+If  bUseRightChip = False Then
+	ListItemRightChip.Remove
+End If
+If bUseSubTitle = False Then
+	ListItemSubTitle.Remove
+End If
+If bUseSubTitle1 = False Then
+	ListItemSubTitle1.Remove
+End If
+If bUseSubTitle2 = False Then
+	ListItemSubTitle2.remove
+End If
+If bUseSubTitle3 = False Then
+	ListItemSubTitle3.remove
+End If
+If bUseSubTitle4 = False Then
+	ListItemSubTitle4.remove
+End If
+If bUseTitle = False Then
+	ListItemTitle.Remove
+End If
 End Sub
 
 Sub ListItemTitle As VueElement
@@ -1078,6 +1312,18 @@ End Sub
 
 Sub ListItemSubTitle1 As VueElement
 	Return VElement.GetVueElement($"${mName}subtitle1"$)
+End Sub
+
+Sub ListItemSubTitle2 As VueElement
+	Return VElement.GetVueElement($"${mName}subtitle2"$)
+End Sub
+
+Sub ListItemSubTitle3 As VueElement
+	Return VElement.GetVueElement($"${mName}subtitle3"$)
+End Sub
+
+Sub ListItemSubTitle4 As VueElement
+	Return VElement.GetVueElement($"${mName}subtitle4"$)
 End Sub
 
 Sub ListItemRightChip As VueElement
@@ -1106,6 +1352,10 @@ End Sub
 
 Sub ListItemIcon As VueElement
 	Return VElement.GetVueElement($"${mName}icon"$)
+End Sub
+
+Sub ListItemIcon1 As VueElement
+	Return VElement.GetVueElement($"${mName}itemicon"$)
 End Sub
 
 Sub ListItemRightIcon As VueElement
@@ -1142,10 +1392,6 @@ End Sub
 
 Sub ListItemAvatarIcon As VueElement
 	Return VElement.GetVueElement($"${mName}avataricon"$)
-End Sub
-
-Sub ListItemIcon1 As VueElement
-	Return VElement.GetVueElement($"${mName}itemicon"$)
 End Sub
 
 Sub ListItemContent As VueElement
@@ -1330,7 +1576,7 @@ Sub SetItemRightRating(itemID As String, sIcon As String) As VList
 	Return Me
 End Sub
 
-Sub SetItemTo(itemID As String, sTo As String) as vlist
+Sub SetItemTo(itemID As String, sTo As String) As VList
 	Dim m As Map = CreateMap()
 	m.Put("to", sTo)
 	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
@@ -1654,4 +1900,52 @@ Sub BindState(VC As VueComponent)
 		Dim cb As BANanoObject = mmethods.Get(k)
 		VC.SetCallBack(k, cb)
 	Next
+End Sub
+
+
+'read an item where
+Sub Read(V As VueComponent, prop As String, value As String) As Map
+	Dim m As Map = CreateMap()
+	m.Put(prop, value)
+	'find the record at a position
+	Dim mpos As Int = V.GetDataPositionWhere(DataSource, m)
+	Dim res As Map = CreateMap()
+	If mpos >= 0 Then
+		res = FindItemAtPosition(V, mpos)
+	End If
+	Return res
+End Sub
+
+'add a new row at the end of the items in realtime
+Sub Add(V As VueComponent, rowdata As Map)
+	V.SetDataPush(DataSource, rowdata)
+End Sub
+
+'add a row at the top of the list
+Sub AddOnTop(V As VueComponent, rowdata As Map)
+	V.SetDataUnshift(DataSource, rowdata)
+End Sub
+
+'remove an item where
+Sub Delete(V As VueComponent, prop As String, value As String)
+	Dim m As Map = CreateMap()
+	m.Put(prop, value)
+	'find the record at a position
+	Dim mpos As Int = V.GetDataPositionWhere(DataSource, m)
+	If mpos >= 0 Then
+		V.SetDataSpliceRemove(DataSource, mpos, 1)
+	End If
+End Sub
+
+'update item where
+Sub Update(V As VueComponent, prop As String, value As String, item As Map)
+	Dim m As Map = CreateMap()
+	m.Put(prop, value)
+	'find the record at a position
+	Dim mpos As Int = V.GetDataPositionWhere(DataSource, m)
+	If mpos >= 0 Then
+		Dim oldm As Map = FindItemAtPosition(V, mpos)
+		oldm = BANanoShared.Merge(oldm, item)
+		V.SetDataSplice(DataSource, mpos, 1, oldm)
+	End If
 End Sub

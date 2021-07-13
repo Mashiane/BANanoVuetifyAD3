@@ -20,6 +20,7 @@ Version=8.95
 #Event: MouseDown (e As BANanoEvent)
 #Event: MouseUp (e As BANanoEvent)
 #Event: UpdateError (B As Boolean)
+#Event: KeyUpEnter (e As BANanoEvent)
 #Event: KeyUpEnterPrevent (e As BANanoEvent)
 
 #DesignerProperty: Key: Label, DisplayName: Label, FieldType: String, DefaultValue: fieldname, Description: Label
@@ -544,7 +545,7 @@ public Sub AddToParent(targetID As String)
 End Sub
 
 public Sub Remove()
-	mTarget.Empty
+	mElement.Remove
 	BANano.SetMeToNull
 End Sub
 

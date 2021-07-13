@@ -431,6 +431,11 @@ Sub FindProgressLoaderOn(appBar As VAppBar)
 	ProgressLoaderName = appBar.ProgressLoader
 End Sub
 
+'link the progress loader to the app by name
+Sub FindProgressLoaderOn1(appBar As String)
+	ProgressLoaderName = $"${appBar.tolowercase}progressshow"$
+End Sub
+
 'show the progress loader
 Sub PagePause
 	SetData(ProgressLoaderName, True)
@@ -2592,8 +2597,17 @@ Sub SetDataFreeze(prop As String, xvalue As Object)
 	SetData(prop, res)
 End Sub
 
-'update the state
 Sub SetData(prop As String, value As Object)
+	If BANano.IsNull(prop) Or BANano.IsUndefined(prop) Then Return
+	prop = CStr(prop)
+	prop = prop.Trim
+	prop = prop.ToLowerCase
+	If prop = "" Then Return
+	BANanoShared.PutRecursive(data, prop, value)
+End Sub
+
+'update the state
+Sub SetData1(prop As String, value As Object)
 	If BANano.IsNull(prop) Or BANano.IsUndefined(prop) Then
 		prop = ""
 	End If
@@ -2617,7 +2631,7 @@ Sub SetData(prop As String, value As Object)
 	End If
 End Sub
 
-Sub GetData(prop As String) As Object
+Sub GetData1(prop As String) As Object
 	prop = prop.ToLowerCase
 	Dim obj As Object = Null
 	Dim dotPos As Int = BANanoShared.InStr(prop, ".")
@@ -2641,6 +2655,16 @@ Sub GetData(prop As String) As Object
 	If BANano.IsNull(obj) Or BANano.IsUndefined(obj) Then obj = CStr(obj)
 	Return obj
 End Sub
+
+Sub GetData(prop As String) As Object
+	prop = prop.tolowercase
+	Dim obj As Object = BANanoShared.GetRecursive(data, prop)
+	If BANano.IsNull(obj) Or BANano.IsUndefined(obj) Then 
+		obj = CStr(obj)
+	End If
+	Return obj
+End Sub
+
 
 'format date to meet your needs
 Sub FormatDisplayDate(item As String, sFormat As String) As String
@@ -5924,4 +5948,13 @@ End Sub
 Sub UpdateBadgeColor(bID As String, color As String)
 	Dim skey As String = $"${bID}badgecolor"$
 	SetData(skey, color)
+End Sub
+
+'return line through if true
+Sub LineThroughIfTrue(b As Boolean) As String
+	If b Then
+		Return "text-decoration-line-through"
+	Else
+		Return ""
+	End If
 End Sub
