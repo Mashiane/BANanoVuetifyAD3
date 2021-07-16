@@ -24,6 +24,16 @@ Version=7
 #DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: Boolean, DefaultValue: False, Description: Disabled
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: Required, DisplayName: Required, FieldType: Boolean, DefaultValue: False, Description: Required
+'
+'#DesignerProperty: Key: ItemValue, DisplayName: ItemValue*, FieldType: String, DefaultValue: value, Description: ItemValue
+'#DesignerProperty: Key: ItemText, DisplayName: ItemText*, FieldType: String, DefaultValue: text, Description: ItemText
+'#DesignerProperty: Key: ItemColor, DisplayName: ItemColor*, FieldType: String, DefaultValue: color, Description: ItemColor
+'#DesignerProperty: Key: ItemDisabled, DisplayName: ItemDisabled*, FieldType: String, DefaultValue: disabled, Description: ItemDisabled
+''
+'#DesignerProperty: Key: Multiple, DisplayName: Multiple, FieldType: Boolean, DefaultValue: False, Description: Multiple
+'#DesignerProperty: Key: ItemKeys, DisplayName: Item Values (;), FieldType: String, DefaultValue:  , Description: Item Values
+'#DesignerProperty: Key: ItemTitles, DisplayName: Item Texts (;), FieldType: String, DefaultValue:  , Description: Item Texts
+'#DesignerProperty: Key: ItemColors, DisplayName: Item Colors (;), FieldType: String, DefaultValue:  , Description: Item Colors
 
 #DesignerProperty: Key: ActiveClass, DisplayName: ActiveClass, FieldType: String, DefaultValue: , Description: ActiveClass
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue: , Description: Color, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
@@ -35,7 +45,6 @@ Version=7
 #DesignerProperty: Key: Readonly, DisplayName: Readonly, FieldType: String, DefaultValue: , Description: Readonly
 #DesignerProperty: Key: Ripple, DisplayName: Ripple, FieldType: Boolean, DefaultValue: False, Description: Ripple
 #DesignerProperty: Key: VBind, DisplayName: VBind, FieldType: String, DefaultValue: , Description: VBind
-#DesignerProperty: Key: VFor, DisplayName: VFor, FieldType: String, DefaultValue: , Description: VFor
 #DesignerProperty: Key: Key, DisplayName: Key, FieldType: String, DefaultValue: , Description: Key
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
 #DesignerProperty: Key: VOn, DisplayName: VOn, FieldType: String, DefaultValue: , Description: VOn
@@ -55,31 +64,41 @@ Sub Class_Globals
 	Private mAttributes As String = "" 
 	Public VElement As VueElement 
 	Private sActiveClass As String
-Private sColor As String
-Private sColorIntensity As String
-Private bDark As Boolean
-Private sDisabled As String
-Private sKey As String
-Private sLabel As String
-Private bLight As Boolean
-Private sOffIcon As String
-Private sOnIcon As String
-Private sReadonly As String
-Private bRipple As Boolean
-Private sVBind As String
-Private sVFor As String
-Private sVIf As String
-Private sVModel As String
-Private sVOn As String
-Private sVShow As String
-Private sValue As String
- Private bDisabled As Boolean
- Private bReadOnly As Boolean
- Private bHidden As Boolean
- Private bChecked As Boolean
- Private bRequired As Boolean
- Private sRequired As String
-	End Sub
+	Private sColor As String
+	Private sColorIntensity As String
+	Private bDark As Boolean
+	Private sDisabled As String
+	Private sKey As String
+	Private sLabel As String
+	Private bLight As Boolean
+	Private sOffIcon As String
+	Private sOnIcon As String
+	Private sReadonly As String
+	Private bRipple As Boolean
+	Private sVBind As String
+	Private sVIf As String
+	Private sVModel As String
+	Private sVOn As String
+	Private sVShow As String
+	Private sValue As String
+	 Private bDisabled As Boolean
+	 Private bReadOnly As Boolean
+	 Private bHidden As Boolean
+	 Private bChecked As Boolean
+	 Private bRequired As Boolean
+	Private sRequired As String
+'	Private sItemKeys As String
+'	Private sItemTitles As String
+'	Private sItemColors As String
+'	Private sItemColor As String
+'	Private sItems As String
+'	Private xitems As List
+'	Private sValue As String
+'	Private sItemDisabled As String
+'	Private sItemText As String
+'	Private sItemValue As String
+'	Private bMultiple As Boolean
+End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
 	mName = Name.tolowercase 
@@ -97,7 +116,9 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	sReadonly = $"${mName}readonly"$
 	sVShow = $"${mName}show"$
 	sRequired = $"${mName}required"$
-	End Sub
+	'sItems = $"${mName}items"$
+	'xitems.Initialize 
+End Sub
 
 Sub DesignerCreateView (Target As BANanoElement, Props As Map) 
 	mTarget = Target 
@@ -106,42 +127,78 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mStyles = Props.Get("Styles") 
 		mAttributes = Props.Get("Attributes") 
 		sActiveClass = Props.GetDefault("ActiveClass", "")
-sColor = Props.GetDefault("Color", "")
-sColorIntensity = Props.GetDefault("ColorIntensity", "")
-bDark = Props.GetDefault("Dark", False)
-bDisabled = Props.GetDefault("Disabled", False)
-sKey = Props.GetDefault("Key", "")
-sLabel = Props.GetDefault("Label", "Radio1")
-bLight = Props.GetDefault("Light", False)
-sOffIcon = Props.GetDefault("OffIcon", "")
-sOnIcon = Props.GetDefault("OnIcon", "")
-bReadOnly = Props.GetDefault("Readonly", False)
-bRipple = Props.GetDefault("Ripple", False)
-sVBind = Props.GetDefault("VBind", "")
-sVFor = Props.GetDefault("VFor", "")
-sVIf = Props.GetDefault("VIf", "")
-sVModel = Props.GetDefault("VModel", "radio1")
-sVOn = Props.GetDefault("VOn", "")
-sValue = Props.GetDefault("Value", "")
-bHidden = Props.GetDefault("Hidden", False)
- bChecked = Props.GetDefault("Checked", False)
- bRequired = Props.GetDefault("Required", False)
+		sColor = Props.GetDefault("Color", "")
+		sColorIntensity = Props.GetDefault("ColorIntensity", "")
+		bDark = Props.GetDefault("Dark", False)
+		bDisabled = Props.GetDefault("Disabled", False)
+		sKey = Props.GetDefault("Key", "")
+		sLabel = Props.GetDefault("Label", "Radio1")
+		bLight = Props.GetDefault("Light", False)
+		sOffIcon = Props.GetDefault("OffIcon", "")
+		sOnIcon = Props.GetDefault("OnIcon", "")
+		bReadOnly = Props.GetDefault("Readonly", False)
+		bRipple = Props.GetDefault("Ripple", False)
+		sVBind = Props.GetDefault("VBind", "")
+		sVIf = Props.GetDefault("VIf", "")
+		sVModel = Props.GetDefault("VModel", "radio1")
+		sVOn = Props.GetDefault("VOn", "")
+		sValue = Props.GetDefault("Value", "")
+		bHidden = Props.GetDefault("Hidden", False)
+		bChecked = Props.GetDefault("Checked", False)
+		bRequired = Props.GetDefault("Required", False)
+'		sItemDisabled = Props.GetDefault("ItemDisabled", "disabled")
+'		sItemText = Props.GetDefault("ItemText","text")
+'		sItemValue = Props.GetDefault("ItemValue","value")
+'		sValue = Props.GetDefault("Value", "")
+'		sItemKeys = Props.GetDefault("ItemKeys", "")
+'		sItemTitles = Props.GetDefault("ItemTitles", "")
+'		sItemColors = Props.getdefault("ItemColors", "")
+'		sItemColor = Props.GetDefault("ItemColor", "color")
+'		bMultiple = Props.GetDefault("Multiple", False)
 	End If 
 	' 
 	bDark = BANanoShared.parseBool(bDark)
-bDisabled = BANanoShared.parseBool(bDisabled)
-bLight = BANanoShared.parseBool(bLight)
-bReadOnly = BANanoShared.parseBool(bReadOnly)
-bRipple = BANanoShared.parseBool(bRipple)
-bHidden = BANanoShared.parseBool(bHidden)
-bChecked = BANanoShared.parseBool(bChecked)
-bRequired = BANanoShared.parseBool(bRequired)
+	bDisabled = BANanoShared.parseBool(bDisabled)
+	bLight = BANanoShared.parseBool(bLight)
+	bReadOnly = BANanoShared.parseBool(bReadOnly)
+	bRipple = BANanoShared.parseBool(bRipple)
+	bHidden = BANanoShared.parseBool(bHidden)
+	bChecked = BANanoShared.parseBool(bChecked)
+	bRequired = BANanoShared.parseBool(bRequired)
+	'
+	'we have multiple items
+'	If bMultiple Then
+'		sItemKeys = sItemKeys.Replace(",", ";")
+'		sItemTitles = sItemTitles.Replace(",", ";")
+'		sItemColors = sItemColors.Replace(",", ";")
+'	
+'		Dim xkeys As List = BANanoShared.StrParse(";", sItemKeys)
+'		Dim xtitles As List = BANanoShared.StrParse(";", sItemTitles)
+'		Dim xcolors As List = BANanoShared.StrParse(";", sItemColors)
+'		'
+'		xkeys = BANanoShared.ListTrimItems(xkeys)
+'		xtitles = BANanoShared.ListTrimItems(xtitles)
+'		xcolors = BANanoShared.ListTrimItems(xcolors)
+'		'
+'		xitems.Initialize
+'		Dim tItems As Int = xkeys.Size - 1
+'		For itemCnt = 0 To tItems
+'			Dim iKey As String = xkeys.Get(itemCnt)
+'			Dim iTit As String = xtitles.Get(itemCnt)
+'			Dim iCol As String = xcolors.Get(itemCnt)
+'			AddItemColor(iKey, iTit, iCol)
+'		Next
+'	End If
 
 	'build and get the element 
 	If BANano.Exists($"#${mName}"$) Then 
 		mElement = BANano.GetElement($"#${mName}"$) 
 	Else	 
-		mElement = mTarget.Append($"<v-radio ref="${mName}" id="${mName}"></v-radio>"$).Get("#" & mName) 
+		'If bMultiple = False Then
+			mElement = mTarget.Append($"<v-radio ref="${mName}" id="${mName}"></v-radio>"$).Get("#" & mName)
+		'Else
+		'	mElement = mTarget.Append($"<v-radio ref="${mName} "id="${mName}" v-for="item in ${sItems}" :disabled="item.${sItemDisabled}" :key="item.${sItemValue}" :label="item.${sItemText}" :value="item.${sItemValue}" :color="item.${sItemColor}"></v-radio>"$).Get("#" & mName)
+		'End If
 	End If 
 	' 
 	VElement.Initialize(mCallBack, mName, mName) 
@@ -150,32 +207,40 @@ bRequired = BANanoShared.parseBool(bRequired)
 	VElement.Styles = mStyles 
 	VElement.Attributes = mAttributes 
 	VElement.AddAttr("active-class", sActiveClass)
-VElement.AddAttr("color", VElement.BuildColor(sColor, sColorIntensity))
-VElement.AddAttr(":dark", bDark)
-VElement.AddAttr(":disabled", sDisabled)
-VElement.SetData(sDisabled, bDisabled)
+	'If bMultiple = False Then
+		VElement.AddAttr("color", VElement.BuildColor(sColor, sColorIntensity))
+		VElement.AddAttr(":disabled", sDisabled)
+		VElement.SetData(sDisabled, bDisabled)
+		VElement.AddAttr("key", sKey)
+		VElement.AddAttr("label", sLabel)
+		VElement.AddAttr("value", sValue)		
+		VElement.AddAttr(":required", sRequired)
+		VElement.SetData(sRequired, bRequired)
+	'End If
+		
+	VElement.AddAttr(":dark", bDark)
+	VElement.AddAttr(":light", bLight)
+	VElement.AddAttr("off-icon", sOffIcon)
+	VElement.AddAttr("on-icon", sOnIcon)
+	VElement.AddAttr(":readonly", sReadonly)
+	VElement.SetData(sReadonly, bReadOnly)
 
-VElement.AddAttr("key", sKey)
-VElement.AddAttr("label", sLabel)
-VElement.AddAttr(":light", bLight)
-VElement.AddAttr("off-icon", sOffIcon)
-VElement.AddAttr("on-icon", sOnIcon)
-VElement.AddAttr(":readonly", sReadonly)
-VElement.SetData(sReadonly, bReadOnly)
-
-VElement.AddAttr(":ripple", bRipple)
-VElement.AddAttr("v-bind", sVBind)
-VElement.AddAttr("v-for", sVFor)
-VElement.AddAttr("v-if", sVIf)
-VElement.AddAttr("v-model", sVModel)
-VElement.SetData(sVModel, bChecked)
-VElement.AddAttr("v-on", sVOn)
-VElement.AddAttr("v-show", sVShow)
-VElement.SetData(sVShow, Not(bHidden))
-VElement.AddAttr("value", sValue)
-VElement.AddAttr(":required", sRequired)
-VElement.SetData(sRequired, bRequired)
-VElement.BindAllEvents
+	VElement.AddAttr(":ripple", bRipple)
+	VElement.AddAttr("v-bind", sVBind)
+	VElement.AddAttr("v-if", sVIf)
+	VElement.AddAttr("v-model", sVModel)
+	VElement.SetData(sVModel, bChecked)
+	VElement.AddAttr("v-on", sVOn)
+	VElement.AddAttr("v-show", sVShow)
+	VElement.SetData(sVShow, Not(bHidden))
+	'
+	'If bMultiple = False Then
+		VElement.SetData(sVModel, sValue)
+	'Else
+	'	VElement.SetData(sVModel, VElement.NewList)
+	'	VElement.SetData(sItems, xitems)
+	'End If
+	VElement.BindAllEvents
 End Sub
 
 public Sub AddToParent(targetID As String) 
@@ -240,8 +305,7 @@ End Sub
 
 'add a rule
 '<code>
-'Me.AddRule("methodName")
-'Sub Rule(v As String) As Object	'ignoredeadcode
+'Sub AddRule(v As String) As Object	'ignoredeadcode
 'If v = "" Then
 'return "This is required!"
 'Else
@@ -299,3 +363,69 @@ Sub BindState(VC As VueComponent)
 		VC.SetCallBack(k, cb)
 	Next
 End Sub
+
+
+Sub OnChange(args As String)
+	VElement.SetOnEventOwn(mCallBack, $"${mName}_change"$, "change", args)
+End Sub
+
+
+'
+''Clear Items
+'Sub Clear(VC As VueComponent)
+'	xitems.Initialize
+'	VC.SetData(sItems, VC.NewList)
+'End Sub
+'
+''add items
+'Sub AddItem(value As String, text As String)
+'	Dim nm As Map = CreateMap()
+'	nm.Put(sItemValue, value)
+'	nm.Put(sItemText, text)
+'	nm.Put(sItemDisabled, False)
+'	nm.Put(sItemColor, "")
+'	xitems.Add(nm)
+'End Sub
+'
+''add item with color
+'Sub AddItemColor(value As String, text As String, color As String)
+'	Dim nm As Map = CreateMap()
+'	nm.Put(sItemValue, value)
+'	nm.Put(sItemText, text)
+'	nm.Put(sItemDisabled, False)
+'	nm.Put(sItemColor, color)
+'	xitems.Add(nm)
+'End Sub
+'
+''add object
+'Sub AddObject(nm As Map)
+'	xitems.Add(nm)
+'End Sub
+'
+''Update Items backward compatibility
+'Sub Reload(VC As VueComponent, vItems As Object)
+'	VC.SetData(sItems, vItems)
+'End Sub
+'
+''Update Items
+'Sub UpdateItems(VC As VueComponent, vItems As Object)
+'	VC.SetData(sItems, vItems)
+'End Sub
+'
+''convert a normal list to key value pairs for switches
+'Sub UpdateItems1(VC As VueComponent, lst As List)
+'	Dim nl As List = BANanoShared.ListToDataSource(sItemValue, sItemText, lst)
+'	VC.SetData(sItems, nl)
+'End Sub
+'
+''set checked items
+'Sub SetChecked(VC As VueComponent, vItems As List)
+'	VC.SetData(sVModel, vItems)
+'End Sub
+'
+''get checked items
+'Sub GetChecked(VC As VueComponent) As List
+'	Dim selitems As List = VC.GetData(sVModel)
+'	Return selitems
+'End Sub
+'

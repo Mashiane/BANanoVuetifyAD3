@@ -1965,8 +1965,7 @@ End Sub
 
 'add a rule
 '<code>
-'Me.AddRule("methodName")
-'Sub Rule(v As String) As Object	'ignoredeadcode
+'Sub AddRule(v As String) As Object	'ignoredeadcode
 'If v = "" Then
 'return "This is required!"
 'Else
@@ -8037,6 +8036,7 @@ Sub BindAllEvents
 	SetOnEvent(mCallBack, "mouseover", "")
 	SetOnEvent(mCallBack, "mouseout", "")
 	SetOnEvent(mCallBack, "submit", "")
+	SetOnEvent(mCallBack, "submit.prevent", "")
 	SetOnEvent(mCallBack, "dblclick.prevent", "")
 	SetOnEvent(mCallBack, "keydown.enter.prevent", "")
 	SetOnEvent(mCallBack, "keydown.left.prevent", "")

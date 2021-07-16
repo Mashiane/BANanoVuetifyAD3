@@ -23,15 +23,17 @@ Version=7
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: Required, DisplayName: Required, FieldType: Boolean, DefaultValue: False, Description: Required
 #DesignerProperty: Key: Readonly, DisplayName: Readonly, FieldType: Boolean, DefaultValue: False, Description: Readonly
-#DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: rg1, Description: VModel
-#DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: , Description: Value
+#DesignerProperty: Key: VModel, DisplayName: VModel*, FieldType: String, DefaultValue: rg1, Description: VModel
+#DesignerProperty: Key: Value, DisplayName: Default Value, FieldType: String, DefaultValue: , Description: Value
 #DesignerProperty: Key: Mandatory, DisplayName: Mandatory, FieldType: Boolean, DefaultValue: False, Description: Mandatory
-#DesignerProperty: Key: ItemValue, DisplayName: ItemValue, FieldType: String, DefaultValue: value, Description: ItemValue
-#DesignerProperty: Key: ItemText, DisplayName: ItemText, FieldType: String, DefaultValue: text, Description: ItemText
-#DesignerProperty: Key: ItemDisabled, DisplayName: ItemDisabled, FieldType: String, DefaultValue: disabled, Description: ItemDisabled
+#DesignerProperty: Key: ItemValue, DisplayName: ItemValue*, FieldType: String, DefaultValue: value, Description: ItemValue
+#DesignerProperty: Key: ItemText, DisplayName: ItemText*, FieldType: String, DefaultValue: text, Description: ItemText
+#DesignerProperty: Key: ItemColor, DisplayName: ItemColor*, FieldType: String, DefaultValue: color, Description: ItemColor
+#DesignerProperty: Key: ItemDisabled, DisplayName: ItemDisabled*, FieldType: String, DefaultValue: disabled, Description: ItemDisabled
 '
 #DesignerProperty: Key: ItemKeys, DisplayName: Item Values (;), FieldType: String, DefaultValue:  , Description: Item Values
 #DesignerProperty: Key: ItemTitles, DisplayName: Item Texts (;), FieldType: String, DefaultValue:  , Description: Item Texts
+#DesignerProperty: Key: ItemColors, DisplayName: Item Colors (;), FieldType: String, DefaultValue:  , Description: Item Colors
 '
 #DesignerProperty: Key: ActiveClass, DisplayName: ActiveClass, FieldType: String, DefaultValue: , Description: ActiveClass
 #DesignerProperty: Key: Alignment, DisplayName: Alignment, FieldType: String, DefaultValue: row, Description: Alignment, List: column|none|row
@@ -64,6 +66,8 @@ Version=7
 Sub Class_Globals 
 	Private sItemKeys As String
 	Private sItemTitles As String
+	Private sItemColors As String
+	Private sItemColor As String
 	
     Private BANano As BANano 'ignore 
 	Private mName As String 'ignore 
@@ -181,6 +185,8 @@ sValue = Props.GetDefault("Value", "")
 bRequired = Props.GetDefault("Required", False)
 sItemKeys = Props.GetDefault("ItemKeys", "")
 sItemTitles = Props.GetDefault("ItemTitles", "")
+sItemColors = Props.getdefault("ItemColors", "")
+sItemColor = Props.GetDefault("ItemColor", "color")
 End If 
 '
 bDense = BANanoShared.parseBool(bDense)
@@ -199,19 +205,23 @@ bRequired = BANanoShared.parseBool(bRequired)
 	'
 	sItemKeys = sItemKeys.Replace(",", ";")
 	sItemTitles = sItemTitles.Replace(",", ";")
-		
+	sItemColors = sItemColors.Replace(",", ";")
+	
 	Dim xkeys As List = BANanoShared.StrParse(";", sItemKeys)
 	Dim xtitles As List = BANanoShared.StrParse(";", sItemTitles)
+	Dim xcolors As List = BANanoShared.StrParse(";", sItemColors)
 		'
 	xkeys = BANanoShared.ListTrimItems(xkeys)
 	xtitles = BANanoShared.ListTrimItems(xtitles)
+	xcolors = BANanoShared.ListTrimItems(xcolors)
 	'
 	xitems.Initialize 
 	Dim tItems As Int = xkeys.Size - 1
 	For itemCnt = 0 To tItems
 		Dim iKey As String = xkeys.Get(itemCnt)
 		Dim iTit As String = xtitles.Get(itemCnt)
-		AddItem(iKey, iTit)
+		Dim iCol As String = xcolors.Get(itemCnt)
+		AddItemColor(iKey, iTit, iCol)
 	Next
 	' 
 	'build and get the element 
@@ -225,7 +235,7 @@ bRequired = BANanoShared.parseBool(bRequired)
 	VElement.TagName = "v-radio-group" 
 	
 	VElement.Append($"<v-radio id="${mName}radio" v-for="(item, i) in ${sItems}" :disabled="item.${sItemDisabled}" _
-	:key="item.${sItemValue}" :label="item.${sItemText}" :value="item.${sItemValue}"></v-radio>"$)
+	:key="item.${sItemValue}" :label="item.${sItemText}" :value="item.${sItemValue}" :color="item.${sItemColor}"></v-radio>"$)
 	
 	VElement.Classes = mClasses 
 	VElement.Styles = mStyles 
@@ -291,8 +301,7 @@ End Sub
 
 'add a rule
 '<code>
-'Me.AddRule("methodName")
-'Sub Rule(v As String) As Object	'ignoredeadcode
+'Sub AddRule(v As String) As Object	'ignoredeadcode
 'If v = "" Then
 'return "This is required!"
 'Else
@@ -307,17 +316,16 @@ Sub AddRule(methodName As String)
 End Sub
 
 
-'Update VModel
+'Update selected value
 Sub SetValue(VC As VueComponent, vVModel As Object)
 VC.SetData(sVModel, vVModel)
 End Sub
 
-'get value
+'get select value
 Sub GetValue(VC As VueComponent) As Object
 	Dim res As Object = VC.GetData(sVModel)
 	Return res
 End Sub
-
 
 Sub getVModel As String
 	Return sVModel
@@ -343,11 +351,6 @@ End Sub
 Sub Clear(VC As VueComponent)
 xitems.Initialize 
 VC.SetData(sItems, VC.NewList)
-End Sub
-
-public Sub AddToParent(targetID As String) 
-	mTarget = BANano.GetElement("#" & targetID.ToLowerCase) 
-	DesignerCreateView(mTarget, Null) 
 End Sub
 
 public Sub Remove() 
@@ -386,59 +389,9 @@ Sub UpdateDisabled(VC As VueComponent, vDisabled As Object)
 VC.SetData(sDisabled, vDisabled)
 End Sub
 
-'Update Error
-Sub UpdateError(VC As VueComponent, vError As Object)
-VC.SetData(sError, vError)
-End Sub
-
-'Update ErrorMessages
-Sub UpdateErrorMessages(VC As VueComponent, vErrorMessages As Object)
-VC.SetData(sErrorMessages, vErrorMessages)
-End Sub
-
-'Clear ErrorMessages
-Sub ClearErrorMessages(VC As VueComponent)
-VC.SetData(sErrorMessages, VC.NewList)
-End Sub
-
-'Update Messages
-Sub UpdateMessages(VC As VueComponent, vMessages As Object)
-VC.SetData(sMessages, vMessages)
-End Sub
-
-'Clear Messages
-Sub ClearMessages(VC As VueComponent)
-VC.SetData(sMessages, VC.NewList)
-End Sub
-
 'Update Readonly
 Sub UpdateReadonly(VC As VueComponent, vReadonly As Object)
 VC.SetData(sReadOnly, vReadonly)
-End Sub
-
-'Update Rules
-Sub UpdateRules(VC As VueComponent, vRules As Object)
-VC.SetData(sRules, vRules)
-End Sub
-
-'Clear Rules
-Sub ClearRules(VC As VueComponent)
-VC.SetData(sRules, VC.NewList)
-End Sub
-
-'Update Success
-Sub UpdateSuccess(VC As VueComponent, vSuccess As Object)
-VC.SetData(sSuccess, vSuccess)
-End Sub
-
-'Update SuccessMessages
-Sub UpdateSuccessMessages(VC As VueComponent, vSuccessMessages As Object)
-VC.SetData(sSuccessMessages, vSuccessMessages)
-End Sub
-
-'Clear SuccessMessages
-Sub ClearSuccessMessages(VC As VueComponent)
-VC.SetData(sSuccessMessages, VC.NewList)
 End Sub
 
 'Update Value
@@ -446,55 +399,25 @@ Sub UpdateValue(VC As VueComponent, vValue As Object)
 VC.SetData(sVModel, vValue)
 End Sub
 
-
-'set the item-text attribute
-Sub setItemText(vItemText As String)
-	sItemText = vItemText
-End Sub
-
-'get the item-text attribute
-Sub getItemText As String
-	Return sItemText
-End Sub
-
-'get the item value attribute
-Sub getItemValue As String
-	Return sItemValue
-End Sub
-
-'set the item-value attribute
-Sub setItemValue(vItemValue As String)
-	sItemValue = vItemValue
-End Sub
-
-'get the item disabled attribute
-Sub getItemDisabled As String
-	Return sItemDisabled
-End Sub
-
-'get the items
-Sub getItems As String
-	Return sItems
-End Sub
-
-'set the item-disabled attribute
-Sub setItemDisabled(vItemDisabled As String)
-	sItemDisabled = vItemDisabled
-End Sub
-
-'set the items attribute
-Sub setItems(vItems As String)
-	sItems = vItems
-End Sub
-
 'add items
 Sub AddItem(value As String, text As String)
 	Dim nm As Map = CreateMap()
 	nm.Put(sItemValue, value)
 	nm.Put(sItemText, text)
+	nm.Put(sItemDisabled, False)
+	nm.Put(sItemColor, "")
 	xitems.Add(nm)
 End Sub
 
+'add item with color
+Sub AddItemColor(value As String, text As String, color As String)
+	Dim nm As Map = CreateMap()
+	nm.Put(sItemValue, value)
+	nm.Put(sItemText, text)
+	nm.Put(sItemDisabled, False)
+	nm.Put(sItemColor, color)
+	xitems.Add(nm)
+End Sub
 
 'add object
 Sub AddObject(nm As Map)
@@ -510,7 +433,6 @@ End Sub
 Sub UpdateItems(VC As VueComponent, vItems As Object)
 	VC.SetData(sItems, vItems)
 End Sub
-
 
 'convert a normal list to key value pairs
 Sub UpdateItems1(VC As VueComponent, lst As List)

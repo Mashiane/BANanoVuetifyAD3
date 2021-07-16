@@ -184,7 +184,12 @@ Sub Clear(VC As VueComponent)
 	xitems.Initialize 
 End Sub
 
-Sub AddItem(sID As String, sText As String, sTo As String, sHref As String, bExact As Boolean, bLink As Boolean,  bDisabled As Boolean) 
+Sub AddItem(sID As String, sText As String, sTo As String, sHref As String, bExact As Boolean, bLink As Boolean,  bDisabled As Boolean)
+	If BANano.IsNull(sID) Or BANano.IsUndefined(sID) Then sID = ""
+	If BANano.IsNull(sText) Or BANano.IsUndefined(sText) Then sText = ""
+	If BANano.IsNull(sTo) Or BANano.IsUndefined(sTo) Then sTo = ""
+	If BANano.IsNull(sHref) Or BANano.IsUndefined(sHref) Then sHref = ""
+	 
 	Dim ni As Map = CreateMap()
 	ni.Put("disabled", bDisabled)
 	ni.Put("exact", bExact)

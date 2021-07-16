@@ -11,6 +11,8 @@ Version=7
 
 #Event: Input (B As Boolean)
 #Event: Submit (e As BANanoEvent)
+#Event: SubmitPrevent (e As BANanoEvent)
+
 
 #DesignerProperty: Key: RecordSource, DisplayName: RecordSource, FieldType: String, DefaultValue: , Description: RecordSource
 #DesignerProperty: Key: LazyValidation, DisplayName: LazyValidation, FieldType: Boolean, DefaultValue: True, Description: LazyValidation

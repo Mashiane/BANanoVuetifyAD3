@@ -18,6 +18,10 @@ Version=7
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: Value, DisplayName: Open Panel, FieldType: String, DefaultValue: 1, Description: Open Panel
 #DesignerProperty: Key: Accordion, DisplayName: Accordion, FieldType: Boolean, DefaultValue: False, Description: Accordion
+'
+#DesignerProperty: Key: ItemKeys, DisplayName: Tab Keys (;)*, FieldType: String, DefaultValue:  , Description: Tab Keys
+#DesignerProperty: Key: ItemTitles, DisplayName: Tab Titles (;)*, FieldType: String, DefaultValue:  , Description: Tab Titles
+'
 #DesignerProperty: Key: ActiveClass, DisplayName: ActiveClass, FieldType: String, DefaultValue: , Description: ActiveClass
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: False, Description: Dark
 #DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: Boolean, DefaultValue: False, Description: Disabled
@@ -77,7 +81,11 @@ Private sValue As String
 Private sDisabled As String
 Private sReadOnly As String 
 Private xpanel As Int
-	End Sub
+Private sItemKeys As String
+	Private sItemTitles As String
+	Private lstItemKeys As List
+	Private lstItemTitles As List
+End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
 	mName = Name.tolowercase 
@@ -125,6 +133,8 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sVModel = Props.GetDefault("VModel", "")
 		sVOn = Props.GetDefault("VOn", "")
 		sValue = Props.GetDefault("Value", "") 
+		sItemKeys = Props.GetDefault("ItemKeys", "")
+		sItemTitles = Props.GetDefault("ItemTitles", "")
 	End If 
 	'
 	bAccordion = BANanoShared.parseBool(bAccordion)
@@ -152,6 +162,25 @@ bTile = BANanoShared.parseBool(bTile)
 	' 
 	VElement.Initialize(mCallBack, mName, mName) 
 	VElement.TagName = "v-expansion-panels" 
+	'
+	'we have multiple items
+	sItemKeys = sItemKeys.Replace(",", ";")
+	sItemTitles = sItemTitles.Replace(",", ";")
+	'
+	Dim xkeys As List = BANanoShared.StrParse(";", sItemKeys)
+	Dim xtitles As List = BANanoShared.StrParse(";", sItemTitles)
+	'
+	xkeys = BANanoShared.ListTrimItems(xkeys)
+	xtitles = BANanoShared.ListTrimItems(xtitles)
+	'
+	Dim tItems As Int = xkeys.Size - 1
+	For itemCnt = 0 To tItems
+		Dim iKey As String = xkeys.Get(itemCnt)
+		Dim iTit As String = xtitles.Get(itemCnt)
+		'	
+		AddItem1(iKey, iTit)
+	Next
+	
 	VElement.Classes = mClasses 
 	VElement.Styles = mStyles 
 	VElement.Attributes = mAttributes 
@@ -184,41 +213,46 @@ bTile = BANanoShared.parseBool(bTile)
 End Sub
 
 'add the next item
-Sub AddItem(sTitle As String)
-	xpanel = xpanel + 1
-	Dim panelID As String = $"${mName}${xpanel}panel"$
-	Dim headerID As String = $"${mName}${xpanel}header"$
-	Dim contentID As String = $"${mName}${xpanel}content"$
-	Dim disabledID As String = $"${mName}${xpanel}disabled"$
-	Dim readonlyID As String = $"${mName}${xpanel}readonly"$
+Sub AddItem1(sKey As String, sTitle As String)
+	Dim panelID As String = $"${mName}${sKey}panel"$
+	Dim headerID As String = $"${mName}${sKey}header"$
+	Dim contentID As String = $"${mName}${sKey}content"$
+	Dim disabledID As String = $"${mName}${sKey}disabled"$
+	Dim readonlyID As String = $"${mName}${sKey}readonly"$
 	
 	'add a panel
 	VElement.Append($"<v-expansion-panel :disabled="${disabledID}" :readonly="${readonlyID}" id="${panelID}"></v-expansion-panel>"$)
-	VElement.GetPanel(xpanel).Append($"<v-expansion-panel-header id="${headerID}">${sTitle}</v-expansion-panel-header>"$)
-	VElement.GetPanel(xpanel).Append($"<v-expansion-panel-content id="${contentID}"></v-expansion-panel-content>"$)
+	VElement.GetPanel(sKey).Append($"<v-expansion-panel-header id="${headerID}">${sTitle}</v-expansion-panel-header>"$)
+	VElement.GetPanel(sKey).Append($"<v-expansion-panel-content id="${contentID}"></v-expansion-panel-content>"$)
 	'
 	VElement.SetData(disabledID, False)
 	VElement.SetData(readonlyID, False)
 	'
-	Dim hdr As VueElement = VElement.GetPanelHeader(xpanel)
-	hdr.SetOnEventOwn(mCallBack, $"${mName}_headerclick"$, "click", xpanel)
+	Dim hdr As VueElement = VElement.GetPanelHeader(sKey)
+	hdr.SetOnEventOwn(mCallBack, $"${mName}_headerclick"$, "click", sKey)
 	VElement.BindVueElement(hdr)
 	'
-	Dim pnl As VueElement = VElement.GetPanel(xpanel)
-	pnl.SetOnEventOwn(mCallBack, $"${mName}_panelclick"$, "click", xpanel)
+	Dim pnl As VueElement = VElement.GetPanel(sKey)
+	pnl.SetOnEventOwn(mCallBack, $"${mName}_panelclick"$, "click", sKey)
 	pnl.SetOnEventOwn(mCallBack, $"${mName}_panelchange"$, "change", "")
 	VElement.BindVueElement(pnl)
 End Sub
 
+'add the next item
+Sub AddItem(sTitle As String)
+	xpanel = xpanel + 1
+	AddItem1(xpanel, sTitle)
+End Sub
+
 'disable item at position
-Sub UpdateItemDisabled(VC As VueComponent, pos As Int, b As Boolean) As VExpansionPanels 
+Sub UpdateItemDisabled(VC As VueComponent, pos As String, b As Boolean) As VExpansionPanels 
 	Dim disabledID As String = $"${mName}${pos}disabled"$
 	VC.SetData(disabledID, b) 
 	Return Me 
 End Sub
 
 'update readonly item at position
-Sub UpdateItemReadOnly(VC As VueComponent, pos As Int, b As Boolean) As VExpansionPanels 
+Sub UpdateItemReadOnly(VC As VueComponent, pos As String, b As Boolean) As VExpansionPanels 
 	Dim readonlyID As String = $"${mName}${pos}readonly"$
 	VC.SetData(readonlyID, b)
 	Return Me 
@@ -226,6 +260,13 @@ End Sub
 
 'content string for loadlayout
 Sub Content(sID As String) As String
+	Dim contentID As String = $"${mName}${sID}content"$
+	Dim sitem As String = $"#${contentID}"$
+	Return sitem
+End Sub
+
+'content string for loadlayout
+Sub Item(sID As String) As String
 	Dim contentID As String = $"${mName}${sID}content"$
 	Dim sitem As String = $"#${contentID}"$
 	Return sitem

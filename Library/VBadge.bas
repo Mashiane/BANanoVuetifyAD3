@@ -6,25 +6,23 @@ Version=8.9
 @EndOfDesignText@
 #IgnoreWarnings:12
 
+#DesignerProperty: Key: BadgeType, DisplayName: Badge Type, FieldType: String, DefaultValue: icon, Description: BadgeType, List: icon|avatar
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
-#DesignerProperty: Key: Value, DisplayName: BadgeText, FieldType: String, DefaultValue: 10, Description: Value
-#DesignerProperty: Key: Icon, DisplayName: BadgeIcon, FieldType: String, DefaultValue: , Description: The badge shows this icon 
+#DesignerProperty: Key: Value, DisplayName: Badge Value, FieldType: String, DefaultValue: 10, Description: Value
+#DesignerProperty: Key: Icon, DisplayName: Badge Icon, FieldType: String, DefaultValue: , Description: The badge shows this icon 
 
-'
-#DesignerProperty: Key: UseIcon, DisplayName: UseIcon, FieldType: Boolean, DefaultValue: True, Description: The badge shows on an icon
 #DesignerProperty: Key: IconName, DisplayName: IconName, FieldType: String, DefaultValue: , Description: IconName
 #DesignerProperty: Key: IconColor, DisplayName: IconColor, FieldType: String, DefaultValue: , Description: IconColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: IconColorIntensity, DisplayName: IconColorIntensity, FieldType: String, DefaultValue: , Description: ColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: IconSize, DisplayName: IconSize, FieldType: String, DefaultValue: , Description: IconSize, List: none|large|small|x-large|x-small
 
-#DesignerProperty: Key: Avatar, DisplayName: UseAvatar, FieldType: Boolean, DefaultValue: False, Description: The badge shows on an avatar
 #DesignerProperty: Key: AvatarImg, DisplayName: AvatarImg, FieldType: String, DefaultValue: , Description: AvatarImg
 #DesignerProperty: Key: AvatarIcon, DisplayName: AvatarIcon, FieldType: String, DefaultValue: , Description: AvatarIcon
 #DesignerProperty: Key: AvatarSize, DisplayName: AvatarSize, FieldType: String, DefaultValue: 48, Description: AvatarSize
 '
 #DesignerProperty: Key: Bordered, DisplayName: Bordered, FieldType: Boolean, DefaultValue: false, Description: Bordered
-#DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue:  blue, Description: , List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
-#DesignerProperty: Key: ColorIntensity, DisplayName: Color Intensity, FieldType: String, DefaultValue:  normal, Description: , List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
+#DesignerProperty: Key: Color, DisplayName: Badge Color*, FieldType: String, DefaultValue:  blue, Description: , List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
+#DesignerProperty: Key: ColorIntensity, DisplayName: Badge Color Intensity*, FieldType: String, DefaultValue:  normal, Description: , List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: Left, DisplayName: Left, FieldType: Boolean, DefaultValue: False, Description: Left
 #DesignerProperty: Key: Bottom, DisplayName: Bottom, FieldType: Boolean, DefaultValue: False, Description: Bottom
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: false, Description: Dark
@@ -85,6 +83,7 @@ Sub Class_Globals
 	Private sIconSize As String
 	Private xiconcolor As String
 	Private xbadgecolor As String
+	Private sBadgeType As String
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -117,7 +116,6 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mStyles = Props.Get("Styles")
 		mAttributes = Props.Get("Attributes")
 		mVIf = Props.Get("VIf")
-		bAvatar = Props.Get("Avatar")
 		bBordered = Props.Get("Bordered")
 		sColor = Props.Get("Color")
 		sColorintensity = Props.Get("ColorIntensity")
@@ -139,12 +137,19 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bHidden = Props.GetDefault("Hidden", False)
 		bHidden = BANanoShared.parseBool(bHidden)
 		sAvatarIcon = Props.GetDefault("AvatarIcon", "")
-		bUseIcon = Props.GetDefault("UseIcon", False)
-		bUseIcon = BANanoShared.parseBool(bUseIcon)
 		sIconSize = Props.GetDefault("IconSize", "")
+		sBadgeType = Props.GetDefault("BadgeType", "icon")
 	End If
 	'
-	bAvatar = BANanoShared.parseBool(bAvatar)
+	Select Case sBadgeType
+	Case "icon"
+		bUseIcon = True
+		bAvatar = False
+	Case "avatar"
+		bUseIcon  = False
+		bAvatar = True
+	End Select
+	
 	bBordered = BANanoShared.parseBool(bBordered)
 	bDark = BANanoShared.parseBool(bDark)
 	bDot = BANanoShared.parseBool(bDot)

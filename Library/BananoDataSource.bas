@@ -1164,7 +1164,7 @@ private Sub MySQLExecute As Boolean    'ignore
 		TD.TinyInts.Initialize 
 		TD.Fields.Initialize 
 		TD.Sorts.Initialize 
-		TD.FieldNames.Initialize 
+		TD.FieldNames.Initialize
 		
 		'will have the auto & primary keys
 		Dim fldnames As List
@@ -1237,7 +1237,8 @@ private Sub MySQLExecute As Boolean    'ignore
 			newfld.Put("fieldkey", $"${sTableName}.${sField}"$)
 			'add to collection
 			fldnames.Add(newfld)
-			
+			TD.Fields.Add(newfld)
+			'
 			'define the field types
 			Select Case fldType
 			Case "blob"
@@ -1253,7 +1254,6 @@ private Sub MySQLExecute As Boolean    'ignore
 				TD.Strings.Add(sField.ToLowerCase)
 			End Select
 		Next
-		TD.Fields = fldnames
 		MySQL.result = fldnames
 		MySQL.affectedRows = fldnames.Size
 	End Select
@@ -1460,7 +1460,7 @@ private Sub SQLiteExecute As Boolean    'ignore
 		TD.TinyInts.Initialize 
 		TD.Fields.Initialize 
 		TD.Sorts.Initialize 
-		TD.FieldNames.Initialize 
+		TD.FieldNames.Initialize
 		
 		'will have the auto & primary keys
 		Dim fldnames As List
@@ -1519,6 +1519,7 @@ private Sub SQLiteExecute As Boolean    'ignore
 			newfld.Put("fieldkey", $"${sTableName}.${sField}"$)
 			'add to collection
 			fldnames.Add(newfld)
+			TD.Fields.Add(newfld)
 			
 			'define the field types
 			Select Case fldType
@@ -1535,7 +1536,6 @@ private Sub SQLiteExecute As Boolean    'ignore
 				TD.Strings.Add(sField.ToLowerCase)
 			End Select
 		Next
-		TD.Fields = fldnames
 		SQLite.result = fldnames
 		SQLite.affectedRows = fldnames.Size
 	End Select

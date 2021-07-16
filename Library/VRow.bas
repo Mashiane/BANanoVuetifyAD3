@@ -11,6 +11,7 @@ Version=8.9
 #DesignerProperty: Key: VFor, DisplayName: V-For, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Key, DisplayName: Key, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: FillHeight, DisplayName: FillHeight, FieldType: Boolean, DefaultValue: False, Description: Fill Height
+#DesignerProperty: Key: TextCenter, DisplayName: TextCenter, FieldType: Boolean, DefaultValue: false, Description: TextCenter
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue:  , Description: , List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: ColorIntensity, DisplayName: Color Intensity, FieldType: String, DefaultValue:  normal, Description: , List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: TextColor, DisplayName: Text Color, FieldType: String, DefaultValue:  , Description: , List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
@@ -87,6 +88,7 @@ Private sBorderRadius As String
 Private sBorderStyle As String
 Private sBorderWidth As String
 Private bDebugBorder As Boolean
+	private bTextCenter as boolean
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -141,7 +143,10 @@ bDebugBorder = Props.GetDefault("DebugBorder",False)
 sBorderColor = Props.Get("BorderColor")
 sBorderRadius = Props.Get("BorderRadius")
 sBorderStyle = Props.Get("BorderStyle")
-sBorderWidth = Props.Get("BorderWidth")
+		sBorderWidth = Props.Get("BorderWidth")
+		bTextCenter = Props.GetDefault("TextCenter", False)
+		bTextCenter = BANanoShared.parseBool(bTextCenter)
+
 	End If
 	'
 	bFillHeight = BANanoShared.parseBool(bFillHeight)
@@ -182,6 +187,7 @@ VElement.PR = sPR
 VElement.PT = sPT
 VElement.PX = sPX
 VElement.PY = sPY
+	VElement.AddClassOnCondition("text-center", bTextCenter, True)
 VElement.SetAttrOnTrue(":no-gutters", bNoGutters, True)
 VElement.VFor = sVFor
 VElement.BindKey(sKey)

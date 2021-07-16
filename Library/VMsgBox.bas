@@ -321,7 +321,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.BindVueElement(VElement.GetCardTitle)
 	VElement.GetCard.Append($"<v-divider class="mx-2 mb-2"></v-divider>"$)
 	'
-	VElement.GetCard.Append($"<v-card-text id="${mName}cardtext"></v-card-text>"$)
+	VElement.GetCard.Append($"<v-card-text ref="${mName}cardtext" id="${mName}cardtext"></v-card-text>"$)
 	Select Case sDialogType
 	Case "message"	
 		'we will not append anything to it

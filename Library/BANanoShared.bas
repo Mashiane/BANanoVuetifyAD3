@@ -29,6 +29,12 @@ Sub Process_Globals
 	Type sequencePair(value As Int, numTimes As Int)
 End Sub
 
+Sub GetListItem(lst As List, pos As Int) As String
+	Dim obj As String = lst.Get(pos)
+	If BANano.IsUndefined(obj) Or BANano.IsNull(obj) Then obj = ""
+	Return obj
+End Sub
+
 Sub parseBool(v As Object) As Boolean
 	If BANano.IsNull(v) Or BANano.IsUndefined(v) Then
 		v = False

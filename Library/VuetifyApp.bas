@@ -1008,7 +1008,26 @@ End Sub
 
 'add html of component to app and this binds events and states
 Sub BindVueElement(elx As VueElement)
-	Dim mtag As String = elx.TagName
+	Dim mbindings As Map = elx.bindings
+	Dim mmethods As Map = elx.methods
+	'apply the binding for the control
+	For Each k As String In mbindings.Keys
+		Dim v As Object = mbindings.Get(k)
+		Select Case k
+		Case "key"
+		Case Else
+			SetData(k, v)
+		End Select
+	Next
+	'apply the events
+	For Each k As String In mmethods.Keys
+		Dim cb As BANanoObject = mmethods.Get(k)
+		SetCallBack(k, cb)
+	Next
+End Sub
+'
+'add html of component to app and this binds events and states
+Sub BindState(elx As VueElement)
 	Dim mbindings As Map = elx.bindings
 	Dim mmethods As Map = elx.methods
 	'apply the binding for the control
@@ -2501,7 +2520,7 @@ End Sub
 'add a rule
 '<code>
 'Me.AddRule("ruleName", "methodName")
-'Sub Rule(v As String) As Object	'ignoredeadcode
+'Sub AddRule(ruleName as string, methodName As String)	'ignoredeadcode
 'If v = "" Then
 'return "This is required!"
 'Else

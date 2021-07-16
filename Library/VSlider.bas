@@ -411,8 +411,7 @@ End Sub
 
 'add a rule
 '<code>
-'Me.AddRule("methodName")
-'Sub Rule(v As String) As Object	'ignoredeadcode
+'Sub AddRule(v As String) As Object	'ignoredeadcode
 'If v = "" Then
 'return "This is required!"
 'Else
@@ -423,7 +422,7 @@ End Sub
 Sub AddRule(methodName As String)
 	VElement.AddRule(methodName)
 		VElement.SetData(sRequired, True)
-	bRequired = true
+	bRequired = True
 End Sub
 
 'Clear Rules

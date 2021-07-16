@@ -7,8 +7,8 @@ Version=8.9
 #IgnoreWarnings:12
 
 'Custom BANano View class
-#Event: Click (e As BANanoEvent)
-#Event: ClickClose (e As BANanoEvent)
+#Event: Click (item As Object)
+#Event: ClickClose (item As Object)
 
 ' Properties that will be show in the ABStract Designer.  They will be passed in the props map in DesignerCreateView (Case Sensitive!)
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
@@ -35,6 +35,14 @@ Version=8.9
 #DesignerProperty: Key: IconName, DisplayName: Icon Name, FieldType: String, DefaultValue: , Description: Icon Name
 #DesignerProperty: Key: IconAlignment, DisplayName: Icon Alignment, FieldType: String, DefaultValue: normal, Description: Icon Alignment, List: normal|left|right
 #DesignerProperty: Key: IconDark, DisplayName: Icon Dark, FieldType: Boolean, DefaultValue: False, Description: Icon Dark
+'
+#DesignerProperty: Key: ItemType, DisplayName: ItemType, FieldType: String, DefaultValue:  none, Description: Item Type, List: avatar-left|avatar-right|icon-right|icon-left|none
+#DesignerProperty: Key: ItemKeys, DisplayName: Item Keys (;), FieldType: String, DefaultValue:  add; edit; delete, Description: Item Keys
+#DesignerProperty: Key: ItemIcons, DisplayName: Item Icons (;), FieldType: String, DefaultValue:  mdi-plus; mdi-pencil; mdi-delete, Description: Item Icons
+#DesignerProperty: Key: ItemAvatars, DisplayName: Item Avatars (;), FieldType: String, DefaultValue:  , Description: Item Avatars
+#DesignerProperty: Key: ItemColors, DisplayName: Item Colors (;), FieldType: String, DefaultValue:  green; amber; red, Description: Item Colors
+#DesignerProperty: Key: ItemTexts, DisplayName: Item Texts (;), FieldType: String, DefaultValue:  Add; Edit; Delete, Description: Item Texts
+
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
@@ -78,6 +86,15 @@ Sub Class_Globals
 	Private sVBind As String
 	Private sVOn As String
 	Private bHidden As Boolean
+	Private xitems As List
+	Private sItemKeys As String
+	Private sItemIcons As String
+	Private itemname As String
+	Private sItemType As String 
+	Private sItemTexts As String
+	Private sItemColors As String
+	Private bHasButtons As Boolean
+	Private sItemAvatars As String
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -93,6 +110,9 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 		End If
 	End If
 	sActive = $"${mName}show"$
+	itemname = $"${mName}items"$
+	bHasButtons = False
+	xitems.Initialize 
 End Sub
 
 ' this is the place where you create the view in html and run initialize javascript
@@ -129,27 +149,87 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sVBind = Props.Get("VBind")
 		bHidden = Props.GetDefault("Hidden", False)
 		bHidden = BANanoShared.parseBool(bHidden)
+		sItemKeys = Props.GetDefault("ItemKeys","")
+		sItemIcons = Props.GetDefault("ItemIcons","")
+		sItemColors = Props.GetDefault("ItemColors","")
+		sItemType = Props.GetDefault("ItemType", "none")
+		sItemTexts = Props.GetDefault("ItemTexts", "")
+		sItemAvatars = Props.GetDefault("ItemAvatars", "")
 	End If
 	'
 	bLabel = BANanoShared.parseBool(bLabel)
-bDark = BANanoShared.parseBool(bDark)
-bIconDark = BANanoShared.parseBool(bIconDark)
-bOutlined = BANanoShared.parseBool(bOutlined)
-bClose = BANanoShared.parseBool(bClose)
-bPill = BANanoShared.parseBool(bPill)
-bPointer = BANanoShared.parseBool(bPointer)
+	bDark = BANanoShared.parseBool(bDark)
+	bIconDark = BANanoShared.parseBool(bIconDark)
+	bOutlined = BANanoShared.parseBool(bOutlined)
+	bClose = BANanoShared.parseBool(bClose)
+	bPill = BANanoShared.parseBool(bPill)
+	bPointer = BANanoShared.parseBool(bPointer)
 
-	
+	sItemKeys = sItemKeys.Replace(",", ";")
+	sItemIcons = sItemIcons.Replace(",", ";")
+	sItemColors = sItemColors.Replace(",", ";")
+	sItemTexts = sItemTexts.Replace(",", ";")
+	sItemAvatars = sItemAvatars.Replace(",", ";")
+	'
+	Dim xkeys As List = BANanoShared.StrParse(";", sItemKeys)
+	Dim xicons As List = BANanoShared.StrParse(";", sItemIcons)
+	Dim xcolors As List = BANanoShared.StrParse(";", sItemColors)
+	Dim xtexts As List = BANanoShared.StrParse(";", sItemTexts)
+	Dim xavatars As List = BANanoShared.StrParse(";", sItemAvatars)
+		'
+	xkeys = BANanoShared.ListTrimItems(xkeys)
+	xicons = BANanoShared.ListTrimItems(xicons)
+	xcolors = BANanoShared.ListTrimItems(xcolors)
+	xavatars = BANanoShared.ListTrimItems(xavatars)
+		'
+	Dim tItems As Int = xkeys.Size - 1
+	For itemCnt = 0 To tItems
+		Dim iKey As String = xkeys.Get(itemCnt)
+		Dim iIco As String = xicons.Get(itemCnt)
+		Dim iCol As String = xcolors.Get(itemCnt)
+		Dim iTxt As String = xtexts.Get(itemCnt)
+		Dim iAva As String = xavatars.Get(itemCnt)
+		
+		If BANano.IsNull(iAva) Or BANano.IsUndefined(iAva) Then iAva = ""
+		If BANano.IsNull(iIco) Or BANano.IsUndefined(iIco) Then iIco = ""
+		If BANano.IsNull(iCol) Or BANano.IsUndefined(iCol) Then iCol = ""
+		If BANano.IsNull(iTxt) Or BANano.IsUndefined(iTxt) Then iTxt = ""
+		'
+		Dim nm As Map = CreateMap()
+		nm.Put("id", iKey)
+		If iIco <> "" Then nm.Put("icon", iIco)
+		If iCol <> "" Then nm.Put("color", iCol)
+		If iTxt <> "" Then nm.Put("text", iTxt)
+		If iAva <> "" Then nm.Put("avatar", iAva)
+		xitems.Add(nm)
+	Next
+	bHasButtons = False
+	If tItems >= 0 Then
+		bHasButtons = True
+	End If
+	If sItemType = "none" Then
+		bHasButtons = False	
+	End If
+
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
 		mElement = BANano.GetElement($"#${mName}"$)
 	Else
-		mElement = mTarget.Append($"<v-chip ref="${mName}" id="${mName}"></v-chip>"$).Get("#" & mName)
+		If bHasButtons = False Then
+			mElement = mTarget.Append($"<v-chip ref="${mName}" id="${mName}"></v-chip>"$).Get("#" & mName)
+		Else
+			mElement = mTarget.Append($"<v-chip ref="${mName}" id="${mName}" v-for="item in ${itemname}" :key="item.id" :color="item.color"></v-chip>"$).Get("#" & mName)
+		End If
 	End If
+	
 	VElement.Initialize(mCallBack, mName, mName)
 	VElement.TagName = "v-chip"
+	
 	VElement.Classes = mClasses
-	VElement.ColorAttr = VElement.BuildColor(mColor, mColorIntensity)
+	If bHasButtons = False Then
+		VElement.ColorAttr = VElement.BuildColor(mColor, mColorIntensity)
+		VElement.Value = sValue
+	End If
 	VElement.TextColor = mTextColor
 	VElement.TextColorIntensity = mTextColorIntensity
 	VElement.Styles = mStyles
@@ -165,7 +245,6 @@ bPointer = BANanoShared.parseBool(bPointer)
 	VElement.Target = sTarget
 	VElement.To = sTo
 	VElement.Pill = bPill
-	VElement.Value = sValue
 	VElement.bind("active", sActive)
 	VElement.SetData(sActive, Not(bHidden))
 	VElement.SetData(mVIf, False)
@@ -184,52 +263,111 @@ bPointer = BANanoShared.parseBool(bPointer)
 		VElement.XLarge = True
 	End Select
 	'
-	Dim iHasAvatar As Int = 0
-	Dim iHasicon As Int = 0
-	'
-	If BANano.IsNull(sAvatar) Then sAvatar = ""
-	If sAvatar <> "" Then 
-		iHasAvatar = iHasAvatar + 1
-	End If
-	'
-	If BANano.IsNull(sIconName) Then sIconName = ""
-	If sIconName <> "" Then 
-		iHasicon = iHasicon + 1
-	End If
-	'
-	If iHasAvatar >= 1 Then
-		'add the avatar
-		Dim xAvatar As String = $"${mName}avatar"$
-		Dim xImage As String = $"${mName}image"$
-		VElement.Append($"<v-avatar id="${xAvatar}"><v-img id="${xImage}" alt=""></v-img></v-avatar>"$)
-		VElement.GetAvatar.Left = True
-		VElement.GetImage.Src = sAvatar	
-		VElement.Append($"<span id="${mName}text">${mText}</span>"$)	
-	else If iHasicon >= 1 Then
-		Dim siconID As String = $"${mName}icon"$
-		Select Case sIconAlignment
-		Case "normal"
-			'VElement.Append($"<v-icon id="${siconID}">${sIconName}</v-icon>"$)
-			'VElement.GetIcon.Dark = bIconDark
-		Case "left"
+	Dim siconID As String = $"${mName}icon"$
+	Dim xAvatar As String = $"${mName}avatar"$
+	Dim xImage As String = $"${mName}image"$
+			
+	If bHasButtons = False Then
+		Dim iHasAvatar As Int = 0
+		Dim iHasicon As Int = 0
+		'
+		If BANano.IsNull(sAvatar) Then sAvatar = ""
+		If sAvatar <> "" Then 
+			iHasAvatar = iHasAvatar + 1
+		End If
+		'
+		If BANano.IsNull(sIconName) Then sIconName = ""
+		If sIconName <> "" Then 
+			iHasicon = iHasicon + 1
+		End If
+		'
+		If iHasAvatar >= 1 Then
+			'add the avatar
+			VElement.Append($"<v-avatar id="${xAvatar}"><v-img id="${xImage}" alt=""></v-img></v-avatar>"$)
+			VElement.GetAvatar.Left = True
+			VElement.GetImage.Src = sAvatar	
+			VElement.Append($"<span id="${mName}text">${mText}</span>"$)	
+		else If iHasicon >= 1 Then
+			Select Case sIconAlignment
+			Case "normal"
+				'VElement.Append($"<v-icon id="${siconID}">${sIconName}</v-icon>"$)
+				'VElement.GetIcon.Dark = bIconDark
+			Case "left"
+				VElement.Caption = ""
+				VElement.Append($"<v-icon id="${siconID}">${sIconName}</v-icon>"$)
+				VElement.GetIcon.Dark = bIconDark
+				VElement.GetIcon.Left = True
+				VElement.Append($"<span id="${mName}text">${mText}</span>"$)
+			Case "right"
+				VElement.Caption = ""
+				VElement.Append($"<span id="${mName}text">${mText}</span>"$)
+				VElement.Append($"<v-icon id="${siconID}">${sIconName}</v-icon>"$)
+				VElement.GetIcon.Dark = bIconDark
+				VElement.GetIcon.Right = True
+			End Select
+		Else
+			VElement.Caption = mText
+		End If
+	Else
+		'we have buttons
+		Select Case sItemType
+		Case "avatar-left"
 			VElement.Caption = ""
-			VElement.Append($"<v-icon id="${siconID}">${sIconName}</v-icon>"$)
-			VElement.GetIcon.Dark = bIconDark
-			VElement.GetIcon.Left = True
-			VElement.Append($"<span id="${mName}text">${mText}</span>"$)
-		Case "right"
+			VElement.Append($"<v-avatar v-if="item.avatar" id="${xAvatar}"><v-img id="${xImage}" :src="item.avatar" alt=""></v-img></v-avatar>"$)
+			VElement.GetAvatar.Left = True
+			VElement.Append($"<span v-if="item.text" id="${mName}text">{{ item.text }}</span>"$)	
+		Case "avatar-right"
 			VElement.Caption = ""
-			VElement.Append($"<span id="${mName}text">${mText}</span>"$)
-			VElement.Append($"<v-icon id="${siconID}">${sIconName}</v-icon>"$)
+			VElement.Append($"<span v-if="item.text" id="${mName}text">{{ item.text }}</span>"$)
+			VElement.Append($"<v-avatar v-if="item.avatar" id="${xAvatar}"><v-img id="${xImage}" :src="item.avatar" alt=""></v-img></v-avatar>"$)
+			VElement.GetAvatar.Right = True
+		Case "icon-right"
+			VElement.Caption = ""
+			VElement.Append($"<span v-if="item.text" id="${mName}text">{{ item.text }}</span>"$)
+			VElement.Append($"<v-icon v-if="item.icon" id="${siconID}">{{ item.icon}}</v-icon>"$)
 			VElement.GetIcon.Dark = bIconDark
 			VElement.GetIcon.Right = True
-		End Select
-	Else
-		VElement.Caption = mText
+		Case "icon-left"
+			VElement.Caption = ""
+			VElement.Append($"<v-icon v-if="item.icon" id="${siconID}">{{ item.icon }}</v-icon>"$)
+			VElement.Append($"<span v-if="item.text" id="${mName}text">{{ item.text }}</span>"$)
+			VElement.GetIcon.Dark = bIconDark
+			VElement.GetIcon.Left = True
+		Case "none"
+		End Select	
+		VElement.SetData(itemname, xitems)
 	End If
+	
 	VElement.AddAttr("v-on", sVOn)
 	VElement.AddAttr("v-bind", sVBind)
 	VElement.BindAllEvents
+	If bHasButtons Then
+		VElement.SetOnEvent(mCallBack, "click", "item.id")
+		VElement.SetOnEvent(mCallBack, "click:close", "item.id")
+	End If
+End Sub
+
+
+'clear the items
+Sub Clear(VC As VueComponent)
+	xitems.Initialize 
+	VC.SetData(itemname, xitems)
+End Sub
+
+'add an item
+Sub AddItem(iID As String, iAvatar As String, iIcon As String, iColor As String, iText As String)
+	Dim nm As Map = CreateMap()
+	nm.Put("id", iID)
+	If iAvatar <> "" Then nm.Put("avatar", iAvatar)
+	If iIcon <> "" Then nm.Put("icon", iIcon)
+	If iColor <> "" Then nm.Put("color", iColor)
+	If iText <> "" Then nm.Put("text", iText)
+	xitems.Add(nm)
+End Sub
+
+'refresh the items
+Sub Refresh(VC As VueComponent)
+	VC.SetData(itemname, xitems)
 End Sub
 
 Sub UpdateDisabled(VC As VueComponent, b As Boolean)

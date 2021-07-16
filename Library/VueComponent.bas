@@ -1528,7 +1528,7 @@ End Sub
 'add a rule
 'Me.AddRule("ruleName", "methodName")
 '<code>
-'Sub Rule(v As String) As Object	'ignoredeadcode
+'Sub AddRule(v As String) As Object	'ignoredeadcode
 'If v = "" Then
 'return "This is required!"
 'Else
@@ -1991,4 +1991,24 @@ Sub UseVJSF
 		Dim boVJsf As BANanoObject = VJsf.GetField("default")
 		components.Put("v-jsf", boVJsf)
 	End If	
+End Sub
+
+'add html of component to app and this binds events and states
+Sub BindState(elx As VueElement)
+	Dim mbindings As Map = elx.bindings
+	Dim mmethods As Map = elx.methods
+	'apply the binding for the control
+	For Each k As String In mbindings.Keys
+		Dim v As Object = mbindings.Get(k)
+		Select Case k
+		Case "key"
+		Case Else
+			SetData(k, v)
+		End Select
+	Next
+	'apply the events
+	For Each k As String In mmethods.Keys
+		Dim cb As BANanoObject = mmethods.Get(k)
+		SetCallBack(k, cb)
+	Next
 End Sub

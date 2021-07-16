@@ -130,6 +130,15 @@ Sub Class_Globals
 	Private bClearable As Boolean
 	Private bShaped As Boolean
 	Public required As List
+	Public TableName As String
+	Public PrimaryKey As String
+	Public AutoIncrement As String
+	'
+	Public Doubles As List
+	Public Strings As List
+	Public Integers As List
+	Public Blobs As List
+	Public TinyInts As List
 End Sub
 
 'initialize the custom view
@@ -218,6 +227,10 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	modelname = $"${mName}model"$
 	schemaname = $"${mName}schema"$
 	optionsname = $"${mName}options"$
+	'
+	TableName = ""
+	PrimaryKey = ""
+	AutoIncrement = ""
 End Sub
 
 'designer creation
@@ -467,6 +480,12 @@ Sub Clear
 	options.Initialize
 	schema.Initialize  
 	required.Initialize 
+	'
+	Doubles.Initialize 
+	Strings.Initialize 
+	Integers.Initialize 
+	Blobs.Initialize 
+	TinyInts.Initialize 
 End Sub
 
 'add a text field
@@ -782,6 +801,13 @@ Sub AddItem(vmodel As String, key As String, value As String)
 	'
 	BANanoShared.PutRecursive(properties, skey, items)
 End Sub
+
+Sub HideItem(vmodel As String)
+	vmodel = vmodel.ToLowerCase
+	Dim skey As String = $"${vmodel}.x-display"$
+	BANanoShared.PutRecursive(properties, skey, "hidden")
+End Sub
+
 
 'add a combo box
 'Sub AddComboBox1(vModel As String, sLabel As String, defValue As String, itemsSource As String, itemKey As String, itemValue As String, bReturnObject As Boolean) 
@@ -1439,4 +1465,92 @@ End Sub
 'update the form data
 Sub SetFormData(VC As VueComponent, mx As Map)
 	VC.SetData(modelname, mx)
+End Sub
+
+'reset the contents and apply designer contents
+Sub Reset
+	model.Initialize 
+	properties.Initialize 
+	options.Initialize
+	schema.Initialize  
+	required.Initialize 
+	TableName = ""
+	PrimaryKey = ""
+	AutoIncrement = ""
+	'
+	Doubles.Initialize
+	Strings.Initialize 
+	Integers.Initialize 
+	Blobs.Initialize 
+	TinyInts.Initialize 
+End Sub
+
+'build a table from the table description
+Sub BuildFromTableDescription(VC As VueComponent, TD As TableDescription, ShowPrimaryKey As Boolean, ShowBlobs As Boolean)
+	'reset the table
+	Reset
+	'update the table title
+	TableName = TD.tableName
+	'attribute cannot be changed at runtime
+	PrimaryKey = TD.PrimaryKey
+	'get the fields
+	Dim fields As List = TD.Fields
+	Dim pk As String = TD.PrimaryKey
+		'
+	Dim fldTot As Int = fields.Size - 1
+	Dim fldCnt As Int
+	
+	'loop through each column and create the structure
+	For fldCnt = 0 To fldTot
+		Dim colm As Map = fields.get(fldCnt)
+		Dim sfieldtype As String = colm.Get("fieldtype")
+		Dim sfieldname As String = colm.Get("fieldname")
+		Dim sdefaultvalue As String = colm.Get("defaultvalue")
+		Dim sfieldlen As String = colm.Get("fieldlen")
+		'
+		colm.Put("title", sfieldname)
+		colm.Put("onform", "Yes")
+			
+		'check against blob
+		If sfieldtype.EqualsIgnoreCase("blob") Then
+			'update blobs
+			Blobs.Add(sfieldname)
+			'can form
+			If ShowBlobs Then
+				colm.Put("onform", "Yes")
+			Else
+				colm.Put("onform", "No")	
+			End If
+		End If
+		'is the field on the form, if not exclude
+		Dim sonform As String = colm.Get("onform")
+		If sonform = "No" Then Continue
+		
+		Select Case sfieldtype
+		Case "date"
+			Strings.Add(sfieldname.ToLowerCase)
+			AddDate(sfieldname.tolowercase, sfieldname, sdefaultvalue, "")
+		Case "bigint", "int"
+			Integers.Add(sfieldname.ToLowerCase)
+			AddNumber(sfieldname.tolowercase, sfieldname, sdefaultvalue, -1, -1)
+		Case "longtext"
+			Strings.Add(sfieldname.ToLowerCase)
+			AddTextArea(sfieldname.tolowercase, sfieldname, sdefaultvalue, sfieldlen)
+		Case "tinyint"
+			Integers.Add(sfieldname.ToLowerCase)
+			TinyInts.Add(sfieldname.ToLowerCase)
+			AddCheckBox(sfieldname.tolowercase, sfieldname, False, "green")
+		Case Else
+			Strings.Add(sfieldname.ToLowerCase)
+			AddTextField(sfieldname.tolowercase, sfieldname, sdefaultvalue, sfieldlen)
+		End Select
+		'hide the id field
+		If sfieldname.EqualsIgnoreCase(pk) Then 
+			If ShowPrimaryKey = False Then
+				'hide the item
+				HideItem(sfieldname.ToLowerCase)
+			End If
+		End If
+	Next
+	Refresh(VC)
 End Sub

@@ -9,6 +9,7 @@ Version=8.9
 'Custom BANano View class
 ' Properties that will be show in the ABStract Designer.  They will be passed in the props map in DesignerCreateView (Case Sensitive!)
 #DesignerProperty: Key: AutoID, DisplayName: Auto ID/Name, FieldType: Boolean, DefaultValue: False, Description: Overrides the ID/Name with a random string.
+#DesignerProperty: Key: TextCenter, DisplayName: TextCenter, FieldType: Boolean, DefaultValue: false, Description: TextCenter
 #DesignerProperty: Key: VFor, DisplayName: V-For, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Key, DisplayName: Key, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Offset, DisplayName: Offset, FieldType: String, DefaultValue: , Description: Offset
@@ -113,6 +114,7 @@ Private sBorderStyle As String
 Private sBorderWidth As String
 Private bDebugBorder As Boolean
 Private bNoGutters As Boolean
+	private bTextCenter as boolean
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -173,19 +175,21 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sOffsetMD = Props.Get("OffsetMD")
 		sOffsetLG = Props.Get("OffsetLG")
 		sOffsetXL = Props.Get("OffsetXL")
-				sBorder = Props.Get("Border")
-sBorderColor = Props.Get("BorderColor")
-sBorderRadius = Props.Get("BorderRadius")
-sBorderStyle = Props.Get("BorderStyle")
-sBorderWidth = Props.Get("BorderWidth")
-bNoGutters = Props.GetDefault("NoGutters",False)
-bDebugBorder = Props.GetDefault("DebugBorder",False)
+		sBorder = Props.Get("Border")
+		sBorderColor = Props.Get("BorderColor")
+		sBorderRadius = Props.Get("BorderRadius")
+		sBorderStyle = Props.Get("BorderStyle")
+		sBorderWidth = Props.Get("BorderWidth")
+		bNoGutters = Props.GetDefault("NoGutters",False)
+		bDebugBorder = Props.GetDefault("DebugBorder",False)
+		bTextCenter = Props.GetDefault("TextCenter", False)
+		bTextCenter = BANanoShared.parseBool(bTextCenter)
 	End If
 	'
 	bDense = BANanoShared.parseBool(bDense)
-bFillHeight = BANanoShared.parseBool(bFillHeight)
-bNoGutters = BANanoShared.parseBool(bNoGutters)
-bDebugBorder = BANanoShared.parseBool(bDebugBorder)
+	bFillHeight = BANanoShared.parseBool(bFillHeight)
+	bNoGutters = BANanoShared.parseBool(bNoGutters)
+	bDebugBorder = BANanoShared.parseBool(bDebugBorder)
 
 	
 	'build and get the element
@@ -223,6 +227,7 @@ bDebugBorder = BANanoShared.parseBool(bDebugBorder)
 	VElement.PT = sPT
 	VElement.PX = sPX
 	VElement.PY = sPY
+	VElement.AddClassOnCondition("text-center", bTextCenter, True)
 	VElement.FillHeight = bFillHeight
 	VElement.AddAttr(":dense", bDense)
 	VElement.AddAttr("v-for", sVFor)

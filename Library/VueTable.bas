@@ -48,7 +48,6 @@ Version=8.5
 #DesignerProperty: Key: ItemsPerPage, DisplayName: ItemsPerPage, FieldType: String, DefaultValue:  , Description: Number of items per page
 #DesignerProperty: Key: Dense, DisplayName: Dense, FieldType: Boolean, DefaultValue:  False, Description: The table should be dense
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue:  False, Description: The table is dark
-#DesignerProperty: Key: HasSearch, DisplayName: Has Search, FieldType: Boolean, DefaultValue:  False, Description: Have a search input box
 #DesignerProperty: Key: ShowSelect, DisplayName: ShowSelect, FieldType: Boolean, DefaultValue:  False, Description: Show select for all records
 #DesignerProperty: Key: SingleSelect, DisplayName: SingleSelect, FieldType: Boolean, DefaultValue:  False, Description: Single selection mode
 #DesignerProperty: Key: MultiSort, DisplayName: Multi Sort, FieldType: Boolean, DefaultValue:  False, Description: Can multi sort
@@ -67,6 +66,7 @@ Version=8.5
 #DesignerProperty: Key: ConditionalColor, DisplayName: ConditionalColor (JSON), FieldType: String, DefaultValue: , Description: ConditionalColor
 #DesignerProperty: Key: ConditionalStyle, DisplayName: ConditionalStyle (JSON), FieldType: String, DefaultValue: , Description: ConditionalStyle
 
+#DesignerProperty: Key: HasSearch, DisplayName: Has Search, FieldType: Boolean, DefaultValue:  False, Description: Have a search input box
 #DesignerProperty: Key: HasAddnew, DisplayName: HasAddNew, FieldType: Boolean, DefaultValue: False, Description: Show Add new on toolbar
 #DesignerProperty: Key: HasClearSort, DisplayName: HasClearSort, FieldType: Boolean, DefaultValue: False, Description: Show clear sort on toolbar
 #DesignerProperty: Key: HasFilter, DisplayName: HasFilter, FieldType: Boolean, DefaultValue: False, Description: Show filter for columns
@@ -120,7 +120,7 @@ Version=8.5
 #DesignerProperty: Key: ColumnTextfield, DisplayName: ColumnTextfield (;), FieldType: String, DefaultValue: , Description: TextField Fields
 #DesignerProperty: Key: ColumnTime, DisplayName: ColumnTime (;), FieldType: String, DefaultValue: , Description: Time Fields
 '
-#DesignerProperty: Key: ItemKeys, DisplayName: Action Keys (;), FieldType: String, DefaultValue:  , Description: Action Icons
+#DesignerProperty: Key: ItemKeys, DisplayName: Action Keys (;), FieldType: String, DefaultValue:  , Description: Action Keys
 #DesignerProperty: Key: ItemTitles, DisplayName: Action Titles (;), FieldType: String, DefaultValue:  , Description: Action Titles
 #DesignerProperty: Key: ItemIcons, DisplayName: Action Icons (;), FieldType: String, DefaultValue:  , Description: Action Icons
 #DesignerProperty: Key: ItemColors, DisplayName: Action Colors (;), FieldType: String, DefaultValue:  , Description: Action Colors
@@ -2028,6 +2028,9 @@ End Sub
 
 'add an action
 Sub AddAction(colField As String, colTitle As String, colIcon As String)
+	If BANano.IsNull(colField) Or BANano.IsUndefined(colField) Then colField = ""
+	If BANano.IsNull(colTitle) Or BANano.IsUndefined(colTitle) Then colTitle = ""
+	If BANano.IsNull(colIcon) Or BANano.IsUndefined(colIcon) Then colIcon = ""
 	colField = colField.tolowercase
 	Dim dt As DataTableColumn = NewDataTableColumn(colField, colTitle)
 	dt.filterable = False
@@ -2041,6 +2044,12 @@ End Sub
 
 'add an action
 Sub AddAction1(colField As String, colTitle As String, colIcon As String, iconSize As String, iconColor As String)
+	If BANano.IsNull(colField) Or BANano.IsUndefined(colField) Then colField = ""
+	If BANano.IsNull(colTitle) Or BANano.IsUndefined(colTitle) Then colTitle = ""
+	If BANano.IsNull(colIcon) Or BANano.IsUndefined(colIcon) Then colIcon = ""
+	If BANano.IsNull(iconSize) Or BANano.IsUndefined(iconSize) Then iconSize = ""
+	If BANano.IsNull(iconColor) Or BANano.IsUndefined(iconColor) Then iconColor = ""
+	'
 	colField = colField.tolowercase
 	Dim dt As DataTableColumn = NewDataTableColumn(colField, colTitle)
 	dt.filterable = False
@@ -4834,7 +4843,6 @@ Sub BuildFromTableDescription(TD As TableDescription, ShowPrimaryKey As Boolean,
 			Else
 				colm.Put("onform", "No")	
 			End If
-			fields.set(fldCnt, colm)
 		End If
 		
 		Dim sontable As String = colm.Get("ontable")

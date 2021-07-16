@@ -143,4 +143,3 @@ Sub SetDescription(vModel As String, fldDescription As String) As VueVJSF
 	End If
 	Return Me
 End Sub
-

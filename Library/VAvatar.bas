@@ -6,6 +6,7 @@ Version=8.9
 @EndOfDesignText@
 #IgnoreWarnings:12
 
+#DesignerProperty: Key: AvatarType, DisplayName: Avatar Type, FieldType: String, DefaultValue: none, Description: AvatarType, List: text|icon|image|none
 #DesignerProperty: Key: Text, DisplayName: Caption, FieldType: String, DefaultValue: , Description: Text
 #DesignerProperty: Key: HeadLine, DisplayName: HeadLine, FieldType: Boolean, DefaultValue: false, Description: HeadLine
 #DesignerProperty: Key: Icon, DisplayName: Icon, FieldType: String, DefaultValue: , Description: Icon
@@ -48,6 +49,7 @@ Version=8.9
 #DesignerProperty: Key: PY, DisplayName: PY, FieldType: String, DefaultValue: , Description: PY
 '
 Sub Class_Globals
+	Private sAvatarType As String
     Private BANano As BANano 'ignore
 	Private mName As String 'ignore
 	Private mEventName As String 'ignore
@@ -96,7 +98,12 @@ Private sPR As String
 Private sPT As String
 Private sPX As String
 Private sPY As String
-	End Sub
+Private sAvatarType As String
+'Private xText As String
+'Private xIcon As String
+'Private xImage As String
+Private xColor As String
+End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	mName = Name.tolowercase
@@ -111,7 +118,11 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 		End If
 	End If
 	'mVShow = $"${mName}show"$
-	End Sub
+	'xText = $"${mName}textvalue"$
+	'xIcon = $"${mName}iconvalue"$
+	'xImage = $"${mName}imagevalue"$
+	xColor = $"${mName}colorvalue"$
+End Sub
 	
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	mTarget = Target
@@ -119,47 +130,49 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mClasses = Props.Get("Classes")
 		mStyles = Props.Get("Styles")
 		mAttributes = Props.Get("Attributes")
-		mVIf = Props.Get("VIf")
-		sColor = Props.Get("Color")
-		mColorIntensity = Props.Get("ColorIntensity")
-		mTextColor = Props.Get("TextColor")
+		mVIf = Props.GetDefault("VIf","")
+		sColor = Props.GetDefault("Color","")
+		mColorIntensity = Props.GetDefault("ColorIntensity","")
+		mTextColor = Props.GetDefault("TextColor","")
 		mTextColorIntensity = Props.Get("TextColorIntensity")
-sHeight = Props.Get("Height")
-sMaxHeight = Props.Get("MaxHeight")
-sMaxWidth = Props.Get("MaxWidth")
-sMinHeight = Props.Get("MinHeight")
-sMinWidth = Props.Get("MinWidth")
-sPosition = Props.Get("Position")
-sRounded = Props.Get("Rounded")
-sSize = Props.Get("Size")
-bTile = Props.Get("Tile")
-sWidth = Props.Get("Width")
-mText = Props.Get("Text")
-bHeadLine = Props.Get("HeadLine")
-mIcon = Props.Get("Icon")
-mImage = Props.Get("Image")
-bIconDark = Props.Get("IconDark")
-sVOn = Props.Get("VOn")
-		sVBind = Props.Get("VBind")
-		sElevation = Props.Get("Elevation")
+		sHeight = Props.GetDefault("Height","")
+		sMaxHeight = Props.GetDefault("MaxHeight","")
+		sMaxWidth = Props.GetDefault("MaxWidth","")
+		sMinHeight = Props.GetDefault("MinHeight","")
+		sMinWidth = Props.GetDefault("MinWidth","")
+		sPosition = Props.GetDefault("Position","")
+		sRounded = Props.GetDefault("Rounded","")
+		sSize = Props.GetDefault("Size","")
+		bTile = Props.GetDefault("Tile",False)
+		sWidth = Props.GetDefault("Width","")
+		mText = Props.GetDefault("Text","")
+		bHeadLine = Props.GetDefault("HeadLine",False)
+		mIcon = Props.GetDefault("Icon","")
+		mImage = Props.GetDefault("Image","")
+		bIconDark = Props.GetDefault("IconDark",False)
+		sVOn = Props.GetDefault("VOn","")
+		sVBind = Props.GetDefault("VBind","")
+		sElevation = Props.GetDefault("Elevation","")
 		sMA = Props.Get("MA")
-sMB = Props.Get("MB")
-sML = Props.Get("ML")
-sMR = Props.Get("MR")
-sMT = Props.Get("MT")
-sMX = Props.Get("MX")
-sMY = Props.Get("MY")
-sPA = Props.Get("PA")
-sPB = Props.Get("PB")
-sPL = Props.Get("PL")
-sPR = Props.Get("PR")
-sPT = Props.Get("PT")
-sPX = Props.Get("PX")
-sPY = Props.Get("PY")
+		sMB = Props.Get("MB")
+		sML = Props.Get("ML")
+		sMR = Props.Get("MR")
+		sMT = Props.Get("MT")
+		sMX = Props.Get("MX")
+		sMY = Props.Get("MY")
+		sPA = Props.Get("PA")
+		sPB = Props.Get("PB")
+		sPL = Props.Get("PL")
+		sPR = Props.Get("PR")
+		sPT = Props.Get("PT")
+		sPX = Props.Get("PX")
+		sPY = Props.Get("PY")
+		sAvatarType = Props.GetDefault("AvatarType","none")
 	End If
 	bTile = BANanoShared.parseBool(bTile)
 	bHeadLine = BANanoShared.parseBool(bHeadLine)
 	'
+	
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
 		mElement = BANano.GetElement($"#${mName}"$)
@@ -173,73 +186,101 @@ sPY = Props.Get("PY")
 	If BANano.IsNull(mText) Or BANano.IsUndefined(mText) Then 
 		mText = ""
 	End If
-	If mText <> "" Then
-		VElement.Append($"<span id="${mName}text">${mText}</span>"$)
-		VElement.GetText.TextColor = mTextColor
-		VElement.GetText.TextColorIntensity=  mTextColorIntensity
-		If bHeadLine = True Then
-			VElement.GetText.AddClass("headline")
-		End If
-	End If 
+	'
 	If BANano.IsNull(mIcon) Or BANano.IsUndefined(mIcon) Then
 		mIcon = ""
 	End If
-	If mIcon <> "" Then
-		VElement.Append($"<v-icon id="${mName}icon">${mIcon}</v-icon>"$)
-		VElement.GetIcon.Dark = bIconDark
-	End If
+	'
 	If BANano.IsNull(mImage) Or BANano.IsUndefined(mImage) Then
 		mImage = ""
 	End If
-	If mImage <> "" Then
-		VElement.Append($"<v-img id="${mName}image" alt="">${mIcon}</v-img>"$)
-		VElement.GetImage.Src = mImage
-	End If
+	'
+	Select Case sAvatarType
+		Case "text"
+			VElement.Append($"<span id="${mName}text">${mText}</span>"$)
+			VElement.GetText.TextColor = mTextColor
+			VElement.GetText.TextColorIntensity=  mTextColorIntensity
+			If bHeadLine = True Then
+				VElement.GetText.AddClass("headline")
+			End If
+			'VElement.SetData(xText, mText)
+		Case "icon"
+			VElement.Append($"<v-icon id="${mName}icon">${mIcon}</v-icon>"$)
+			VElement.GetIcon.Dark = bIconDark
+			'VElement.SetData(xIcon, mIcon)
+		Case "image"
+			VElement.Append($"<v-img id="${mName}image" alt=""></v-img>"$)
+			VElement.GetImage.AddAttr("src", mImage)
+			'VElement.SetData(xImage, mImage)
+		Case Else
+			If mText <> "" Then
+				VElement.Append($"<span id="${mName}text">${mText}</span>"$)
+				VElement.GetText.TextColor = mTextColor
+				VElement.GetText.TextColorIntensity=  mTextColorIntensity
+				If bHeadLine = True Then
+					VElement.GetText.AddClass("headline")
+				End If
+				'VElement.SetData(xText, mText)
+			End If 
+			
+			If mIcon <> "" Then
+				VElement.Append($"<v-icon id="${mName}icon">${mIcon}</v-icon>"$)
+				'VElement.SetData(xIcon, mIcon)
+				VElement.GetIcon.Dark = bIconDark
+			End If
+			
+			If mImage <> "" Then
+				VElement.Append($"<v-img id="${mName}image" alt=""></v-img>"$)
+				VElement.GetImage.AddAttr("src", mImage)
+				'VElement.SetData(xImage, mImage)
+			End If
+	End Select	
+	
+	'
 	VElement.Classes = mClasses
 	VElement.Styles = mStyles
 	VElement.Attributes = mAttributes
-	VElement.Color = VElement.BuildColor(sColor, mColorIntensity)
+	VElement.Bind("color", xColor)
+	sColor = VElement.BuildColor(sColor, mColorIntensity)
+	VElement.SetData(xColor, sColor)
 	'VElement.VShow = mVShow
 	'VElement.SetData(mVShow, True)
 	VElement.VIf = mVIf
-	'
-'	If hasText Then
-'	End If
-	
-VElement.Height = sHeight
-VElement.MaxHeight = sMaxHeight
-VElement.MaxWidth = sMaxWidth
-VElement.MinHeight = sMinHeight
-VElement.MinWidth = sMinWidth
-VElement.Elevation = sElevation
-Select Case sPosition
-Case "normal"	
-Case "left"
-VElement.Left = True
-Case "right"
-VElement.Right = True
-End Select
-VElement.AddClass(sRounded)
-VElement.Size = sSize
-VElement.Tile = bTile
-VElement.Width = sWidth
-VElement.AddAttr("v-on", sVOn)
-	VElement.AddAttr("v-bind", sVBind)
-	VElement.MA = sMA
-VElement.MB = sMB
-VElement.ML = sML
-VElement.MR = sMR
-VElement.MT = sMT
-VElement.MX = sMX
-VElement.MY = sMY
-VElement.PA = sPA
-VElement.PB = sPB
-VElement.PL = sPL
-VElement.PR = sPR
-VElement.PT = sPT
-VElement.PX = sPX
-VElement.PY = sPY
-VElement.BindAllEvents
+
+	VElement.Height = sHeight
+	VElement.MaxHeight = sMaxHeight
+	VElement.MaxWidth = sMaxWidth
+	VElement.MinHeight = sMinHeight
+	VElement.MinWidth = sMinWidth
+	VElement.Elevation = sElevation
+	Select Case sPosition
+	Case "normal"	
+	Case "left"
+	VElement.Left = True
+	Case "right"
+	VElement.Right = True
+	End Select
+	VElement.AddClass(sRounded)
+	VElement.Size = sSize
+	VElement.Tile = bTile
+	VElement.Width = sWidth
+	VElement.AddAttr("v-on", sVOn)
+		VElement.AddAttr("v-bind", sVBind)
+		VElement.MA = sMA
+	VElement.MB = sMB
+	VElement.ML = sML
+	VElement.MR = sMR
+	VElement.MT = sMT
+	VElement.MX = sMX
+	VElement.MY = sMY
+	VElement.PA = sPA
+	VElement.PB = sPB
+	VElement.PL = sPL
+	VElement.PR = sPR
+	VElement.PT = sPT
+	VElement.PX = sPX
+	VElement.PY = sPY
+	VElement.BindAllEvents
 End Sub
 
 public Sub AddToParent(targetID As String)
@@ -277,11 +318,25 @@ Sub UpdateVisible(VC As VueComponent, b As Boolean)
 	'VC.SetData(mVShow, b)
 End Sub
 
+'Sub UpdateText(VC As VueComponent, s As String)
+'	'VC.SetData(xText, S)
+'End Sub
+'
+'Sub UpdateImage(VC As VueComponent, s As String)
+'	'VC.SetData(xImage, S)
+'End Sub
+'
+'Sub UpdateIcon(VC As VueComponent, s As String)
+'	'VC.SetData(xIcon, S)
+'End Sub
+
+Sub UpdateColor(VC As VueComponent, s As String)
+	VC.SetData(xColor, S)
+End Sub
 
 Sub getID As String
 	Return mName
 End Sub
-
 
 Sub getHere As String
 	Return $"#${mName}"$

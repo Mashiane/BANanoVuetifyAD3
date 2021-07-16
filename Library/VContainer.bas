@@ -10,6 +10,7 @@ Version=8.9
 #DesignerProperty: Key: Justify, DisplayName: Horizontal Align, FieldType: String, DefaultValue: normal, Description: Justify, List: normal|start|center|end|space-between|space-around
 #DesignerProperty: Key: Fluid, DisplayName: Fluid, FieldType: Boolean, DefaultValue: false, Description: Fluid
 #DesignerProperty: Key: DFlex, DisplayName: DFlex, FieldType: Boolean, DefaultValue: false, Description: DFlex
+#DesignerProperty: Key: TextCenter, DisplayName: TextCenter, FieldType: Boolean, DefaultValue: false, Description: TextCenter
 #DesignerProperty: Key: FillHeight, DisplayName: FillHeight, FieldType: Boolean, DefaultValue: false, Description: FillHeight
 #DesignerProperty: Key: BackgroundImage, DisplayName: BackgroundImage, FieldType: String, DefaultValue:  , Description: BackgroundImage
 #DesignerProperty: Key: FitScreen, DisplayName: Fit Screen VH, FieldType: Boolean, DefaultValue: False, Description: FitScreen VH
@@ -119,7 +120,8 @@ Private sBorderStyle As String
 Private sBorderWidth As String
 Private bNoGutters As Boolean
 Private bDebugBorder As Boolean
-private bDFlex as boolean
+Private bDFlex As Boolean
+	Private bTextCenter As Boolean
 'Private sVShow As String
 End Sub
 
@@ -192,7 +194,10 @@ sBorderWidth = Props.Get("BorderWidth")
 bNoGutters = Props.GetDefault("NoGutters",False)
 bDebugBorder = Props.GetDefault("DebugBorder",False)
 bDFlex = Props.GetDefault("DFlex", False)
-bDFlex = BANanoShared.parseBool(bDFlex)
+		bDFlex = BANanoShared.parseBool(bDFlex)
+		bTextCenter = Props.GetDefault("TextCenter", False)
+		bTextCenter = BANanoShared.parseBool(bTextCenter)
+
 	End If
 	'
 	bFillHeight = BANanoShared.parseBool(bFillHeight)
@@ -271,6 +276,7 @@ bDebugBorder = BANanoShared.parseBool(bDebugBorder)
 	'VElement.VShow = sVShow
 	'VElement.SetData(sVShow, True)
 	VElement.SetAttrOnTrue(":no-gutters", bNoGutters, True)
+	VElement.AddClassOnCondition("text-center", bTextCenter, True)
 	If bDebugBorder Then
 		VElement.Border = ""
 		VElement.BorderColor = "red"
