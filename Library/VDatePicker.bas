@@ -131,7 +131,7 @@ Sub Class_Globals
 	Private sDateType As String
 	Private bUseAllowedDates As Boolean
 	Private xAllowedDates As List
-	private bShrink as boolean
+	Private bShrink As Boolean
 End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 

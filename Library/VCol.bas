@@ -9,6 +9,7 @@ Version=8.9
 'Custom BANano View class
 ' Properties that will be show in the ABStract Designer.  They will be passed in the props map in DesignerCreateView (Case Sensitive!)
 #DesignerProperty: Key: AutoID, DisplayName: Auto ID/Name, FieldType: Boolean, DefaultValue: False, Description: Overrides the ID/Name with a random string.
+'#DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: TextCenter, DisplayName: TextCenter, FieldType: Boolean, DefaultValue: false, Description: TextCenter
 #DesignerProperty: Key: VFor, DisplayName: V-For, FieldType: String, DefaultValue:  , Description: 
 #DesignerProperty: Key: Key, DisplayName: Key, FieldType: String, DefaultValue:  , Description: 
@@ -76,7 +77,6 @@ Sub Class_Globals
 	Private mTextColorIntensity As String = ""
 	
 	Private mColorIntensity As String = ""
-	'Private mVShow As String = ""
 	Private mVIf As String = ""
 	Private mCols As String = ""
 	Private mAlignSelf As String = ""
@@ -114,7 +114,9 @@ Private sBorderStyle As String
 Private sBorderWidth As String
 Private bDebugBorder As Boolean
 Private bNoGutters As Boolean
-	private bTextCenter as boolean
+	Private bTextCenter As Boolean
+	Private bHidden As Boolean
+	Private mVShow As String
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -129,7 +131,7 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey)
 		End If
 	End If
-	'mVShow = $"${mName}show"$
+	mVShow = $"${mName}show"$
 End Sub
 
 ' this is the place where you create the view in html and run initialize javascript
@@ -184,6 +186,8 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bDebugBorder = Props.GetDefault("DebugBorder",False)
 		bTextCenter = Props.GetDefault("TextCenter", False)
 		bTextCenter = BANanoShared.parseBool(bTextCenter)
+		bHidden = Props.GetDefault("Hidden", False)
+		bHidden = BANanoShared.parseBool(bHidden)
 	End If
 	'
 	bDense = BANanoShared.parseBool(bDense)
@@ -212,7 +216,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.Cols = mCols
 	VElement.AlignSelf = mAlignSelf
 	'VElement.VShow = mVShow
-	'VElement.SetData(mVShow, False)
+	'VElement.SetData(mVShow, Not(bHidden))
 	VElement.MA = sMA
 	VElement.MB = sMB
 	VElement.ML = sML
@@ -289,7 +293,7 @@ End Sub
 
 
 Sub UpdateVisible(VC As VueComponent, b As Boolean)
-	'VC.SetData(mVShow, b)
+	VC.SetData(mVShow, b)
 	VC.SetData(mVIf, b)
 End Sub
 

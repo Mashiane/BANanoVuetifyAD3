@@ -328,7 +328,7 @@ bLoading = BANanoShared.parseBool(bLoading)
 			Dim sbTemplate As String = $"<v-menu id="${menuref}" :close-on-content-click="false" transition="scale-transition" :offset-y="true"
 			ref="${menuref}" :return-value.sync="${sVModel}" v-model="${menuref}" min-width="460px" max-width="460px" :nudge-right="40">
 			<v-template id="${tempID}" v-slot:activator="{ on, attrs }">
-			<v-text-field id="${mName}" v-on="on" v-bind="attrs" v-model="${sVModel}" ref="${mName}" autocomplete="off"></v-text-field>
+			<v-text-field id="${mName}" v-on="on" v-bind="attrs" v-model="${sVModel}fmt" ref="${mName}" autocomplete="off"></v-text-field>
 			</v-template>
 			<v-date-picker id="${dtpicker}" :scrollable="true" v-model="${sVModel}" :landscape="true">
 			<v-btn id="${btnclear}" color="error" :text="true" v-on:click="${sVModel} = ''" :outlined="true">Clear</v-btn>
@@ -447,12 +447,14 @@ bLoading = BANanoShared.parseBool(bLoading)
 		VElement.SetData(sSuccessMessages, VElement.NewList)
 		VElement.AddAttr("suffix", sSuffix)
 		VElement.AddAttr("type", sTypeOf)
-		VElement.AddAttr("v-bind", sVBind)
 		VElement.AddAttr("v-for", sVFor)
 		VElement.AddAttr("v-if", sVIf)
-		VElement.AddAttr("v-model", sVModel)
-		VElement.SetData(sVModel, sValue)
-		VElement.AddAttr("v-on", sVOn)
+		If bDatePicker = False Or bTimePicker = False Then
+			VElement.AddAttr("v-model", sVModel)
+			VElement.SetData(sVModel, sValue)
+			VElement.AddAttr("v-on", sVOn)
+			VElement.AddAttr("v-bind", sVBind)
+		End If
 		VElement.AddAttr("v-show", sVShow)
 		VElement.SetData(sVShow, Not(bHidden))
 		VElement.AddAttr(":validate-on-blur", bValidateOnBlur)
@@ -477,8 +479,26 @@ bLoading = BANanoShared.parseBool(bLoading)
 		VElement.BindVueElement(vdatepickerx)
 		VElement.SetData(menuref, False)
 	End If
-	'
+	If bDatePicker Then
+		VElement.AddAttr("v-model", sVModel & "fmt")
+		VElement.SetData($"${sVModel}fmt"$, Null)
+	End If
 	VElement.BindAllEvents
+End Sub
+
+'get the date
+Sub GetDate(VC As VueComponent) As String
+	Dim res As String = VC.GetData(sVModel)
+	Return res
+End Sub
+
+'set formmated date
+Sub FormatDate(VC As VueComponent)
+	Dim sDate As String = VC.GetData(sVModel)
+	If sDate = "" Then Return
+	Dim xDate As String = VC.NiceDate(sDate)
+	Dim res As String = $"${sVModel}fmt"$
+	VC.SetData(res, xDate)
 End Sub
 
 'toggle the password

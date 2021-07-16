@@ -31,7 +31,8 @@ Version=7
 #DesignerProperty: Key: Loading, DisplayName: Loading, FieldType: Boolean, DefaultValue: False, Description: Loading
 #DesignerProperty: Key: Readonly, DisplayName: Readonly, FieldType: Boolean, DefaultValue: False, Description: Readonly
 #DesignerProperty: Key: Required, DisplayName: Required, FieldType: Boolean, DefaultValue: False, Description: Required 
-
+#DesignerProperty: Key: HasPrependTextField, DisplayName: HasPrependTextField, FieldType: Boolean, DefaultValue: False, Description: HasPrependTextField 
+#DesignerProperty: Key: HasAppendTextField, DisplayName: HasAppendTextField, FieldType: Boolean, DefaultValue: False, Description: HasAppendTextField 
 
 #DesignerProperty: Key: PrependIcon, DisplayName: PrependIcon, FieldType: String, DefaultValue: , Description: PrependIcon
 #DesignerProperty: Key: AppendIcon, DisplayName: AppendIcon, FieldType: String, DefaultValue: , Description: AppendIcon
@@ -145,7 +146,9 @@ Private bReadonly As Boolean
 Private bRequired As Boolean
 Private sRequired As String
 Private sValue As String
-	End Sub
+Private bHasPrependTextField As Boolean
+Private bHasAppendTextField As Boolean
+End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
 	mName = Name.tolowercase 
@@ -164,7 +167,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	sReadonly = $"${mName}readonly"$
 	sVShow = $"${mName}show"$
 	sLoading = $"${mName}loading"$
-	End Sub
+End Sub
 
 Sub DesignerCreateView (Target As BANanoElement, Props As Map) 
 	mTarget = Target 
@@ -225,7 +228,11 @@ sVOn = Props.Get("VOn")
 bValidateOnBlur = Props.Get("ValidateOnBlur")
 bVertical = Props.Get("Vertical")
  sValue = Props.GetDefault("Value", 1)
-	End If 
+ bHasPrependTextField = Props.GetDefault("HasPrependTextField", False)
+ bHasPrependTextField = BANanoShared.parseBool(bHasPrependTextField)
+ bHasAppendTextField = Props.GetDefault("HasAppendTextField", False)
+ bHasAppendTextField = BANanoShared.parseBool(bHasAppendTextField)
+End If 
 	'
 	bDisabled = BANanoShared.parseBool(bDisabled)
 bHidden = BANanoShared.parseBool(bHidden)
@@ -244,7 +251,6 @@ bDisabled = BANanoShared.parseBool(bDisabled)
 bRequired = BANanoShared.parseBool(bRequired)
 bLoading = BANanoShared.parseBool(bLoading)
 
-	
 	' 
 	'build and get the element 
 	If BANano.Exists($"#${mName}"$) Then 
@@ -255,6 +261,16 @@ bLoading = BANanoShared.parseBool(bLoading)
 	' 
 	VElement.Initialize(mCallBack, mName, mName) 
 	VElement.TagName = "v-slider" 
+	'
+	If bHasPrependTextField Then
+		VElement.Append($"<v-template v-slot:prepend><v-text-field id="${mName}prependtext" v-model="${sVModel}" class="mt-0 pt-0" hide-details single-line type="number" style="width: 60px"></v-text-field></v-template>"$)		
+	End If
+	
+	If bHasAppendTextField Then
+		VElement.Append($"<v-template v-slot:append><v-text-field id="${mName}appendtext" v-model="${sVModel}" class="mt-0 pt-0" hide-details single-line type="number"
+              style="width: 60px"></v-text-field></v-template>"$)
+	End If
+	
 	VElement.Classes = mClasses 
 	VElement.Styles = mStyles 
 	VElement.Attributes = mAttributes 
