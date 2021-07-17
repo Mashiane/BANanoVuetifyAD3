@@ -512,14 +512,14 @@ Sub AppStart (Form1 As Form, Args() As String)
 	BANano.header.AddJavaScriptfile("https://www.gstatic.com/firebasejs/8.6.8/firebase-performance.js")
 	BANano.header.AddJavaScriptfile("https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js")
 	BANano.header.AddJavaScriptfile("https://www.gstatic.com/firebasejs/8.6.8/firebase-functions.js")
+	BANano.Header.AddJavascriptFile("firesql.umd.js")
 	'
 	'TIPPY
 	BANano.Header.AddJavascriptFile("vue-tippy.min.js")
 	BANano.Header.AddCSSFile("tippygoogle.css")
 	BANano.Header.AddJavascriptFile("vue-session.js")
 	BANano.Header.AddJavascriptFile("collect.min.js")
-	BANano.Header.AddJavascriptFile("firesql.umd.js")
-	'
+		'
 	BANano.Header.AddJavascriptFile("md5.min.js")
 	
 	' start the build
