@@ -983,6 +983,26 @@ Sub SetActivated(Module As Object, methodName As String, args As List) As VueCom
 	Return Me
 End Sub
 
+Sub AddPropertyArray(propName As String, propDefault As Object, propRequired As Boolean)
+	AddProperty1(propName, jsArray, propDefault, propRequired)
+End Sub
+
+Sub AddPropertyNumber(propName As String, propDefault As Object, propRequired As Boolean)
+	AddProperty1(propName, jsNumber, propDefault, propRequired)
+End Sub
+
+Sub AddPropertyBoolean(propName As String, propDefault As Object, propRequired As Boolean)
+	AddProperty1(propName, jsBoolean, propDefault, propRequired)
+End Sub
+
+Sub AddPropertyObject(propName As String, propDefault As Object, propRequired As Boolean)
+	AddProperty1(propName, jsObject, propDefault, propRequired)
+End Sub
+
+Sub AddPropertyString(propName As String, propDefault As Object, propRequired As Boolean)
+	AddProperty1(propName, jsString, propDefault, propRequired)
+End Sub
+
 Sub AddProperty1(propName As String, propType As BANanoObject, propDefault As Object, propRequired As Boolean)
 	Dim mprop As Map = CreateMap()
 	If BANano.IsNull(propType) = False Then mprop.Put("type", propType)

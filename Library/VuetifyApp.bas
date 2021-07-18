@@ -1090,6 +1090,11 @@ Sub getMainNode As BANanoElement
 	Return el
 End Sub
 
+Sub UseJsPDF
+	Dim pdf As BANanoObject = BANano.Window.GetField("jspdf").GetField("jsPDF")
+	BANano.Window.SetField("jsPDF", pdf)
+End Sub
+
 'initialize the app with where to render and where to .GetHTML
 Sub Initialize(Module As Object, myapp As String) 
 	BANano.DependsOnAsset("sweetalert2.all.min.js")
@@ -1107,9 +1112,6 @@ Sub Initialize(Module As Object, myapp As String)
 	BANano.DependsOnAsset("tippygoogle.css")
 	BANano.DependsOnAsset("collect.min.js")
 	
-	Dim pdf As BANanoObject = BANano.Window.GetField("jspdf").GetField("jsPDF")
-	BANano.Window.SetField("jsPDF", pdf)
-
 	AppName = myapp.ToLowerCase
 	'get the body of the page
 	Body = BANano.GetElement("#body")

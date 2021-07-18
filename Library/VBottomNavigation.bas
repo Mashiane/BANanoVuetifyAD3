@@ -11,6 +11,7 @@ Version=8.9
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: ActiveClass, DisplayName: ActiveClass, FieldType: String, DefaultValue: , Description: ActiveClass
 #DesignerProperty: Key: App, DisplayName: App, FieldType: Boolean, DefaultValue: True, Description: App
+#DesignerProperty: Key: Value, DisplayName: Default Value, FieldType: String, DefaultValue: , Description: Value
 #DesignerProperty: Key: BackgroundColor, DisplayName: BackgroundColor, FieldType: String, DefaultValue: , Description: BackgroundColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: BackgroundColorIntensity, DisplayName: BackgroundColorIntensity, FieldType: String, DefaultValue: , Description: BackgroundColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue: , Description: Color, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
@@ -19,6 +20,7 @@ Version=8.9
 #DesignerProperty: Key: Fixed, DisplayName: Fixed, FieldType: Boolean, DefaultValue: false, Description: Fixed
 #DesignerProperty: Key: Grow, DisplayName: Grow, FieldType: Boolean, DefaultValue: false, Description: Grow
 #DesignerProperty: Key: Height, DisplayName: Height, FieldType: String, DefaultValue: 56 , Description: Height
+#DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: , Description: Width
 #DesignerProperty: Key: HideOnScroll, DisplayName: HideOnScroll, FieldType: Boolean, DefaultValue: false, Description: HideOnScroll
 #DesignerProperty: Key: Horizontal, DisplayName: Horizontal, FieldType: Boolean, DefaultValue: false, Description: Horizontal
 #DesignerProperty: Key: Light, DisplayName: Light, FieldType: Boolean, DefaultValue: false, Description: Light
@@ -30,14 +32,32 @@ Version=8.9
 #DesignerProperty: Key: ScrollTarget, DisplayName: ScrollTarget, FieldType: String, DefaultValue: , Description: ScrollTarget
 #DesignerProperty: Key: ScrollThreshold, DisplayName: ScrollThreshold, FieldType: String, DefaultValue: , Description: ScrollThreshold
 #DesignerProperty: Key: Shift, DisplayName: Shift, FieldType: Boolean, DefaultValue: false, Description: Shift
+'
+#DesignerProperty: Key: ItemType, DisplayName: ItemType, FieldType: String, DefaultValue:  none, Description: Item Type, List: normal|badge|none
+#DesignerProperty: Key: ItemKeys, DisplayName: Item Keys (;), FieldType: String, DefaultValue:  , Description: Item Icons
+#DesignerProperty: Key: ItemIcons, DisplayName: Item Icons (;), FieldType: String, DefaultValue:  , Description: Item Icons
+#DesignerProperty: Key: ItemColors, DisplayName: Item Colors (;), FieldType: String, DefaultValue:  , Description: Item Colors
+#DesignerProperty: Key: ItemTo, DisplayName: Item To (;), FieldType: String, DefaultValue:  , Description: Item To
+#DesignerProperty: Key: ItemTexts, DisplayName: Item Texts (;), FieldType: String, DefaultValue:  , Description: Item Texts
+#DesignerProperty: Key: ItemBadges, DisplayName: Item Badges (;), FieldType: String, DefaultValue:  , Description: Item Badges
+#DesignerProperty: Key: ItemBadgeColors, DisplayName: Item Badge Colors (;), FieldType: String, DefaultValue:  , Description: Item Badge Colors
+'
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
-#DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: , Description: Value
-#DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: , Description: Width
+
+
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
 
 Sub Class_Globals
+	Private sItemType As String
+	Private sItemKeys As String
+	Private sItemIcons As String
+	Private sItemColors As String
+	Private sItemTexts As String
+	Private sItemBadges As String
+	Private sItemBadgeColors As String
+	'
     Private BANano As BANano 'ignore
 	Private mName As String 'ignore
 	Private mEventName As String 'ignore
@@ -77,6 +97,7 @@ Sub Class_Globals
 	Private itemsName As String
 	Private bHidden As Boolean
 	Private svmodel As String
+	private sItemTo as string
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -129,18 +150,71 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bHidden = BANanoShared.parseBool(bHidden)
 		sValue = Props.Get("Value")
 		sWidth = Props.Get("Width")
+		sItemType = Props.GetDefault("ItemType", "")
+		sItemKeys = Props.GetDefault("ItemKeys", "")
+		sItemIcons = Props.GetDefault("ItemIcons", "")
+		sItemColors = Props.GetDefault("ItemColors", "")
+		sItemTexts = Props.GetDefault("ItemTexts", "")
+		sItemBadges = Props.GetDefault("ItemBadges", "")
+		sItemBadgeColors = Props.GetDefault("ItemBadgeColors", "")
+		sItemTo = Props.GetDefault("ItemTo", "")
 	End If
 	'
 	bApp = BANanoShared.parseBool(bApp)
-bDark = BANanoShared.parseBool(bDark)
-bFixed = BANanoShared.parseBool(bFixed)
-bGrow = BANanoShared.parseBool(bGrow)
-bHideOnScroll = BANanoShared.parseBool(bHideOnScroll)
-bHorizontal = BANanoShared.parseBool(bHorizontal)
-bLight = BANanoShared.parseBool(bLight)
-bMandatory = BANanoShared.parseBool(bMandatory)
-bShift = BANanoShared.parseBool(bShift)
-
+	bDark = BANanoShared.parseBool(bDark)
+	bFixed = BANanoShared.parseBool(bFixed)
+	bGrow = BANanoShared.parseBool(bGrow)
+	bHideOnScroll = BANanoShared.parseBool(bHideOnScroll)
+	bHorizontal = BANanoShared.parseBool(bHorizontal)
+	bLight = BANanoShared.parseBool(bLight)
+	bMandatory = BANanoShared.parseBool(bMandatory)
+	bShift = BANanoShared.parseBool(bShift)
+	'
+	sItemKeys = sItemKeys.Replace(",", ";")
+	sItemIcons = sItemIcons.Replace(",", ";")
+	sItemColors = sItemColors.Replace(",", ";")
+	sItemTexts = sItemTexts.Replace(",", ";")
+	sItemBadges = sItemBadges.Replace(",", ";")
+	sItemBadgeColors = sItemBadgeColors.Replace(",", ";")
+	sItemTo = sItemTo.Replace(",", ";")
+	'
+	Dim lstsItemKeys As List = BANanoShared.StrParse(";", sItemKeys)
+	Dim lstsItemIcons As List = BANanoShared.StrParse(";", sItemIcons)
+	Dim lstsItemColors As List = BANanoShared.StrParse(";", sItemColors)
+	Dim lstsItemTexts As List = BANanoShared.StrParse(";", sItemTexts)
+	Dim lstsItemBadges As List = BANanoShared.StrParse(";", sItemBadges)
+	Dim lstsItemBadgeColors As List = BANanoShared.StrParse(";", sItemBadgeColors)
+	Dim lstsItemTo As List = BANanoShared.StrParse(";", sItemTo)
+	'
+	lstsItemKeys = BANanoShared.ListTrimItems(lstsItemKeys)
+	lstsItemIcons = BANanoShared.ListTrimItems(lstsItemIcons)
+	lstsItemColors = BANanoShared.ListTrimItems(lstsItemColors)
+	lstsItemTexts = BANanoShared.ListTrimItems(lstsItemTexts)
+	lstsItemBadges = BANanoShared.ListTrimItems(lstsItemBadges)
+	lstsItemBadgeColors = BANanoShared.ListTrimItems(lstsItemBadgeColors)
+	lstsItemTo = BANanoShared.ListTrimItems(lstsItemTo)
+		
+	Dim tItems As Int = lstsItemKeys.Size - 1
+	Dim cItems As Int
+	'
+	xitems.Initialize 
+	For cItems = 0 To tItems
+		Dim iKey As String = BANanoShared.GetListItem(lstsItemKeys, cItems)
+		Dim icon As String = BANanoShared.getlistitem(lstsItemIcons, cItems)
+		Dim color As String = BANanoShared.GetListItem(lstsItemColors, cItems)
+		Dim txt As String = BANanoShared.GetListItem(lstsItemTexts, cItems)
+		Dim bdg As String = BANanoShared.GetListItem(lstsItemBadges, cItems)
+		Dim bdgcolor As String = BANanoShared.GetListItem(lstsItemBadgeColors, cItems)
+		Dim ito As String = BANanoShared.GetListItem(lstsItemTo, cItems)
+		
+		Select Case sItemType
+		Case "normal"
+			AddItem(iKey, txt, color, icon, ito)
+		Case "badge"	
+			AddItem1(iKey, txt, color, icon, bdg, bdgcolor, ito)
+		End Select
+	Next
+		
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
 		mElement = BANano.GetElement($"#${mName}"$)
@@ -195,7 +269,7 @@ bShift = BANanoShared.parseBool(bShift)
 	VElement.AddAttr(":value", svmodel)
 	VElement.SetData(svmodel, sValue)
 	VElement.AddAttr("width", sWidth)
-	VElement.SetData(itemsName, VElement.NewList)
+	VElement.SetData(itemsName, xitems)
 	VElement.BindAllEvents
 End Sub
 
