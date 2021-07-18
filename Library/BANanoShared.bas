@@ -48,6 +48,61 @@ Sub parseBool(v As Object) As Boolean
 	Return v
 End Sub
 
+
+'format date to meet your needs
+Sub FormatDisplayDate(item As String, sFormat As String) As String			'ignoredeadcode
+	Try
+		item = "" & item
+		If item = "" Then Return ""
+		If BANano.isnull(item) Or BANano.IsUndefined(item) Then Return ""
+		Dim bo As BANanoObject = BANano.RunJavascriptMethod("dayjs", Array(item))
+		Dim sDate As String = bo.RunMethod("format", Array(sFormat)).Result
+		Return sDate
+	Catch
+		Return ""
+	End Try	
+End Sub
+
+'format numeric display
+Sub FormatDisplayNumber(item As String, sFormat As String) As String			'ignoredeadcode
+	Try
+		item = "" & item
+		If item = "" Then Return ""
+		If BANano.isnull(item) Or BANano.IsUndefined(item) Then Return ""
+		item = Val(item)
+		item = BANano.parseFloat(item)
+		Dim bo As BANanoObject = BANano.RunJavascriptMethod("numeral", Array(item))
+		Dim sDate As String = bo.RunMethod("format", Array(sFormat)).Result
+		Return sDate
+	Catch
+		Return ""
+	End Try	
+End Sub
+
+Sub FormatFileSize(Bytes As Float) As String					'ignoredeadcode
+	If BANano.IsNull(Bytes) Or BANano.IsUndefined(Bytes) Then
+		Bytes = 0
+	End If
+	Bytes = BANano.parsefloat(Bytes)
+	Try
+		Private Unit() As String = Array As String(" Byte", " KB", " MB", " GB", " TB", " PB", " EB", " ZB", " YB")
+		If Bytes = 0 Then
+			Return "0 Bytes"
+		Else
+			Private Po, Si As Double
+			Private I As Int
+			Bytes = Abs(Bytes)
+			I = Floor(Logarithm(Bytes, 1024))
+			Po = Power(1024, I)
+			Si = Bytes / Po
+			Return NumberFormat(Si, 1, 3) & Unit(I)
+		End If
+	Catch
+		Return "0 Bytes"
+	End Try
+End Sub
+
+
 Sub ListTrimItems(cols As List) As List
 	Dim colTot As Int = cols.Size - 1
 	Dim colCnt As Int
@@ -179,55 +234,9 @@ Sub AppendPlaceHolderTo(target As String)
 	elx.append(stemplate)
 End Sub
 
-'format numeric display
-Sub FormatDisplayNumber(item As String, sFormat As String) As String			'ignoredeadcode
-	item = "" & item
-	If item = "" Then Return ""
-	If BANano.isnull(item) Or BANano.IsUndefined(item) Then Return ""
-	item = Val(item)
-	item = BANano.parseFloat(item)
-	Dim bo As BANanoObject = BANano.RunJavascriptMethod("numeral", Array(item))
-	Dim sDate As String = bo.RunMethod("format", Array(sFormat)).Result
-	Return sDate
-End Sub
-
 'return the nice file size
 Sub NiceFileSize(fsx As String) As String				'ignoredeadcode
 	Return FormatFileSize(fsx)
-End Sub
-
-'returns a nice file size
-Sub FormatFileSize(Bytes As Float) As String			'ignoredeadcode		'ignoredeadcode
-	If BANano.IsNull(Bytes) Or BANano.IsUndefined(Bytes) Then
-		Bytes = 0
-	End If
-	Bytes = BANano.parsefloat(Bytes)
-	Try
-		Private Unit() As String = Array As String(" Byte", " KB", " MB", " GB", " TB", " PB", " EB", " ZB", " YB")
-		If Bytes = 0 Then
-			Return "0 Bytes"
-		Else
-			Private Po, Si As Double
-			Private I As Int
-			Bytes = Abs(Bytes)
-			I = Floor(Logarithm(Bytes, 1024))
-			Po = Power(1024, I)
-			Si = Bytes / Po
-			Return NumberFormat(Si, 1, 3) & Unit(I)
-		End If
-	Catch
-		Return "0 Bytes"
-	End Try
-End Sub
-
-'format date to meet your needs
-Sub FormatDisplayDate(item As String, sFormat As String) As String			'ignoredeadcode
-	item = "" & item
-	If item = "" Then Return ""
-	If BANano.isnull(item) Or BANano.IsUndefined(item) Then Return ""
-	Dim bo As BANanoObject = BANano.RunJavascriptMethod("dayjs", Array(item))
-	Dim sDate As String = bo.RunMethod("format", Array(sFormat)).Result
-	Return sDate
 End Sub
 
 'set basic authorization for http request

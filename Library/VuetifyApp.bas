@@ -1155,6 +1155,11 @@ Sub Initialize(Module As Object, myapp As String)
 	SetMethod(Me, "nicemonth", Null)
 	SetMethod(Me, "niceyear", Null)
 	SetMethod(Me, "json2list", Null)
+	Dim x As Object, y As Object
+	SetMethod(Me, "getdateformat", Array(x, y))
+	SetMethod(Me, "getmoneyformat", Array(x, y))
+	SetMethod(Me, "getfilesize", Array(x))
+	SetMethod(Me, "FormatDisplayDate", Array(x, y))
 	'set the full screen to false
 	SetData(sFullScreen, False)
 	UseVBlur
@@ -1162,6 +1167,23 @@ Sub Initialize(Module As Object, myapp As String)
 	
 	'turn authentication off
 	setAuthenticated(False)
+End Sub
+
+
+private Sub getdateformat(item As String, sFormat As String) As String		'ignoredeadcode
+	Dim svalue As String = FormatDisplayDate(item, sFormat)
+	Return svalue
+End Sub
+
+
+private Sub getmoneyformat(item As String, sformat As String) As String		'ignoredeadcode
+	Dim svalue As String = FormatDisplayNumber(item, sformat)
+	Return svalue
+End Sub
+
+private Sub getfilesize(item As String) As String							'ignoredeadcode
+	Dim svalue As String = FormatFileSize(item)
+	Return svalue
 End Sub
 
 'Sub UseVueDraggable
@@ -2689,12 +2711,16 @@ End Sub
 
 'format date to meet your needs
 Sub FormatDisplayDate(item As String, sFormat As String) As String
-	item = "" & item
-	If item = "" Then Return ""
-	If BANano.isnull(item) Or BANano.IsUndefined(item) Then Return ""
-	Dim bo As BANanoObject = BANano.RunJavascriptMethod("dayjs", Array(item))
-	Dim sDate As String = bo.RunMethod("format", Array(sFormat)).Result
-	Return sDate
+	Try
+		item = "" & item
+		If item = "" Then Return ""
+		If BANano.isnull(item) Or BANano.IsUndefined(item) Then Return ""
+		Dim bo As BANanoObject = BANano.RunJavascriptMethod("dayjs", Array(item))
+		Dim sDate As String = bo.RunMethod("format", Array(sFormat)).Result
+		Return sDate
+	Catch
+		Return ""
+	End Try	
 End Sub
 
 'format numeric display
@@ -2712,8 +2738,8 @@ End Sub
 'add html of component to app and this binds events and states
 Sub BindVueTable(el As VueTable)
 	el.Refresh
-	Dim mbindings As Map = el.bindings
-	Dim mmethods As Map = el.methods
+	Dim mbindings As Map = el.VElement.bindings
+	Dim mmethods As Map = el.VElement.methods
 	'apply the binding for the control
 	For Each k As String In mbindings.Keys
 		Dim v As Object = mbindings.Get(k)

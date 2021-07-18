@@ -155,8 +155,6 @@ Sub Class_Globals
 	Private attributeList As Map
 	'Private mTagName As String = "v-data-table"
 	Private mStates As String
-	Public bindings As Map
-	Public methods As Map
 	Private stVElse As String = ""
 	Private stVElseIf As String = ""
 	Private stVIf As String = ""
@@ -180,10 +178,6 @@ Sub Class_Globals
 	Private bManual As Boolean
 	'
 	Public Items As List
-	Public AppTemplateName As String = "#apptemplate"
-	Public AppendHolderName As String = "#appendholder"
-	Public PlaceHolderName As String = "#placeholder"
-	'
 	Private hdr As List
 	'***** DATA TABLE
 	Public PrimaryKey As String = "id"
@@ -345,8 +339,6 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	classList.Initialize
 	styleList.Initialize
 	attributeList.Initialize
-	bindings.Initialize
-	methods.Initialize
 	Items.Initialize
 	columnsM.Initialize
 	hasTotals = False
@@ -615,8 +607,8 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	End If
 	'
 	AddClass(mClasses)
-	setAttributes(mAttributes)
-	setStyles(mStyle)
+	VElement.Attributes = mAttributes
+	VElement.Styles = mStyle
 	'
 	SetOnItemSelected($"${mName}_ItemSelected"$)
 	SetOnClickRow($"${mName}_ClickRow"$)
@@ -1616,48 +1608,6 @@ public Sub setStates(varBindings As String)
 	Next
 End Sub
 
-''add an element to the text
-'Sub AddElement(elID As String, tag As String, props As Map, styleProps As Map, classNames As List, loose As List, Text As String)
-'	elID = elID.tolowercase
-'	elID = elID.Replace("#","")
-'	Dim elIT As VueElement
-'	elIT.Initialize(mCallBack, elID, tag)
-'	elIT.Append(Text)
-'	If loose <> Null Then
-'		For Each k As String In loose
-'			elIT.SetAttr(k, True)
-'		Next
-'	End If
-'	If props <> Null Then
-'		For Each k As String In props.Keys
-'			Dim v As String = props.Get(k)
-'			elIT.SetAttr(k, v)
-'		Next
-'	End If
-'	If styleProps <> Null Then
-'		For Each k As String In styleProps.Keys
-'			Dim v As String = styleProps.Get(k)
-'			elIT.SetAttr(k, v)
-'		Next
-'	End If
-'	If classNames <> Null Then
-'		elIT.AddClasses(classNames)
-'	End If
-'	'convert to string
-'	Dim sElement As String = elIT.tostring
-'	mElement.Append(sElement)
-'End Sub
-
-'returns the BANanoElement
-public Sub getElement() As BANanoElement
-	Return mElement
-End Sub
-
-'sets the BANanoElement
-Sub setElement(varElement As BANanoElement)
-	mElement = varElement
-End Sub
-
 'returns the tag id
 public Sub getID() As String
 	Return mName
@@ -1716,11 +1666,6 @@ Sub SetAttr(varProp As String, varValue As String)
 	VElement.SetAttr(varProp, varValue)
 End Sub
 
-'change the text of the element
-Sub SetText(varText As String)
-	AddChild(varText)
-End Sub
-
 Sub Bind(attr As String, value As String)
 	AddAttr($":${attr}"$, value)
 End Sub
@@ -1753,237 +1698,23 @@ End Sub
 Sub RemoveCodeBindings(b As List)
 	For Each k As String In b
 		If k <> "" Then
-			bindings.Remove(k)
+			VElement.RemoveBinding(k)
 		End If
 	Next
-End Sub
-
-'returns the class names
-Public Sub getClasses() As String
-	Dim sbClass As StringBuilder
-	sbClass.Initialize
-	For Each k As String In classList.Keys
-		sbClass.Append(k).Append(" ")
-	Next
-	mClasses = sbClass.ToString
-	Return mClasses
-End Sub
-
-Sub setClasses(varClasses As String)
-	AddClass(varClasses)
-End Sub
-
-'set the style use a valid JSON string with {}
-public Sub setStyle(varStyle As String)
-	setStyles(varStyle)
-End Sub
-
-'returns the style as JSON
-public Sub getStyle() As String
-	Dim sbStyle As StringBuilder
-	sbStyle.Initialize
-	sbStyle.Append("{")
-	For Each k As String In styleList.Keys
-		Dim v As String = styleList.Get(k)
-		sbStyle.Append(k).Append(":").Append(v).Append(",")
-	Next
-	sbStyle.Append("}")
-	mStyle = sbStyle.ToString
-	Return mStyle
-End Sub
-
-'sets the attributes
-public Sub setAttributes(varAttributes As String)
-	Dim mxItems As List = BANanoShared.StrParse(";", varAttributes)
-	For Each mt As String In mxItems
-		Dim k As String = BANanoShared.MvField(mt,1,"=")
-		Dim v As String = BANanoShared.MvField(mt,2,"=")
-		If mElement <> Null Then
-			mElement.SetAttr(k, v)
-		Else
-			attributeList.put(k, v)
-		End If
-	Next
-End Sub
-
-'sets the styles from the designer
-public Sub setStyles(varStyles As String)
-	Dim mxItems As List = BANanoShared.StrParse(";", varStyles)
-	For Each mt As String In mxItems
-		Dim k As String = BANanoShared.MvField(mt,1,"=")
-		Dim v As String = BANanoShared.MvField(mt,2,"=")
-		AddStyle(k, v)
-	Next
-End Sub
-
-'returns the attributes
-public Sub getAttributes() As String
-	Dim sbAttr As StringBuilder
-	sbAttr.Initialize
-	For Each k As String In attributeList.Keys
-		Dim v As String = attributeList.Get(k)
-		sbAttr.Append(k).Append("=").Append(v).Append(";")
-	Next
-	mAttributes = sbAttr.ToString
-	Return mAttributes
-End Sub
-
-public Sub setVElse(varVElse As String)
-	AddAttr("v-else", varVElse)
-	stVElse = varVElse
-End Sub
-
-public Sub getVElse() As String
-	Return stVElse
-End Sub
-
-public Sub setVElseIf(varVElseIf As String)
-	AddAttr("v-else-if", varVElseIf)
-	stVElseIf = varVElseIf
-End Sub
-
-public Sub getVElseIf() As String
-	Return stVElseIf
-End Sub
-
-public Sub setVIf(varVIf As String)
-	AddAttr("v-if", varVIf)
-	stVIf = varVIf
-End Sub
-
-public Sub getVIf() As String
-	Return stVIf
-End Sub
-
-public Sub setVShow(varVShow As String)
-	AddAttr("v-show", varVShow)
-	stVShow = varVShow
-End Sub
-
-public Sub getVShow() As String
-	Return stVShow
-End Sub
-
-'add a child component
-Sub AddChild(child As String)
-	mElement.Append(child)
 End Sub
 
 'set a call back
 Sub SetCallBack(methodName As String, cb As BANanoObject)
-	methodName = methodName.ToLowerCase
-	methods.Put(methodName, cb)
+	VElement.SetCallBack(methodName, cb)
 End Sub
 
 Sub SetOnEvent(eventHandler As Object, event As String, args As String)
-	event = event.ToLowerCase
-	'
-	Dim attrName As String = event
-	attrName = attrName.tolowercase
-	attrName = attrName.Replace(":","")
-	attrName = attrName.Replace(".","")
-	attrName = attrName.Replace("-","")
-	'
-	Dim methodName As String = $"${mName}_${attrName}"$
-	'
-	If SubExists(eventHandler, methodName) = False Then Return
-	If BANano.IsUndefined(args) Or BANano.IsNull(args) Then args = ""
-	Dim sCode As String = $"${methodName}(${args})"$
-	AddAttr($"v-on:${event}"$, sCode)
-	'arguments for the event
-	Dim e As Object 'ignore
-	Dim cb As BANanoObject = BANano.CallBack(eventHandler, methodName, Array(e))
-	methods.Put(methodName, cb)
+	VElement.SetOnEvent(eventHandler, event, args)
 End Sub
 
 'on event
 Sub On(eventName As String, args As String)    'ignoredeadcode
-	eventName = eventName.tolowercase
-	'
-	Dim seventname As String = eventName
-	seventname = seventname.Replace(".", "")
-	seventname = seventname.Replace(":", "")
-	seventname = seventname.Replace("-","")
-	'
-	Dim sName As String = $"${mEventName}_${seventname}"$
-	If SubExists(mCallBack, sName) = False Then Return
-	'
-	If BANano.IsUndefined(args) Or BANano.IsNull(args) Then args = ""
-	Dim sCode As String = $"${sName}(${args})"$
-	AddAttr($"v-on:${eventName}"$, sCode)
-	'arguments for the event
-	Dim e As BANanoEvent 'ignore
-	Dim cb As BANanoObject = BANano.CallBack(mCallBack, sName, Array(e))
-	methods.Put(sName, cb)
-End Sub
-
-Sub IsValidID(idName As String) As Boolean
-	If idName = "" Then Return True
-	Dim slen As Int = idName.Length
-	Dim i As Int = 0
-	For i = 0 To slen - 1
-		Dim mout As String = idName.CharAt(i)
-		If "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".IndexOf(mout) = -1 Then
-			Return False
-		End If
-	Next
-	Return True
-End Sub
-'
-'
-'Sub AppendElement(parent As String, tag As String, id As String, text As String) As BANanoElement
-'	parent = parent.ToLowerCase
-'	parent = parent.Replace("#","")
-'	Dim item As String = $"<${tag} id="${id}"></${tag}>"$
-'	Dim el As BANanoElement = BANano.GetElement($"#${parent}"$).Append(item).Get($"#${id}"$)
-'	el.SetText(text)
-'	Return el
-'End Sub
-'
-''banano helper class
-'Sub AppendElement1(parentID As String, tag As String, id As String, text As String, props As Map, styles As Map, classes As String) As BANanoElement
-'	parentID = parentID.ToLowerCase
-'	parentID = parentID.Replace("#","")
-'	id = id.tolowercase
-'	Dim el As BANanoElement = BANano.GetElement($"#${parentID}"$).Append($"<${tag} id="${id}"></${tag}>"$).Get($"#${id}"$)
-'	If BANano.IsNull(props) = False Then
-'		For Each k As String In props.Keys
-'			Dim v As String = props.Get(k)
-'			el.SetAttr(k, v)
-'		Next
-'	End If
-'	'
-'	If BANano.IsNull(styles) = False Then
-'		Dim strStyle As String = BANano.ToJson(styles)
-'		el.SetStyle(strStyle)
-'	End If
-'	'
-'	If classes <> "" Then el.AddClass(classes)
-'	el.settext(text)
-'	Return el
-'End Sub
-
-Sub CStr(o As Object) As String
-	If BANano.isnull(o) Or BANano.IsUndefined(o) Then o = ""
-	Return "" & o
-End Sub
-
-'convert a map to a list
-Sub Map2List(moptions As Map, sourcefield As String, displayfield As String) As List
-	sourcefield = sourcefield.ToLowerCase
-	displayfield = displayfield.ToLowerCase
-	Dim recs As List
-	recs.Initialize
-	For Each k As String In moptions.Keys
-		Dim v As String = moptions.Get(k)
-		k = CStr(k)
-		v = CStr(v)
-		Dim nrec As Map = CreateMap()
-		nrec.Put(sourcefield, k)
-		nrec.Put(displayfield, v)
-		recs.Add(nrec)
-	Next
-	Return recs
+	VElement.SetOnEvent(mCallBack, eventName, args)
 End Sub
 
 'add save icon
@@ -3123,43 +2854,43 @@ Sub SetColumnType(colName As String, colType As String)
 	If columnsM.ContainsKey(colName) Then
 		Dim col As DataTableColumn = columnsM.Get(colName)
 		col.ColType = colType
-		Dim item As Map
-		Dim value As String
+		'Dim item As Map
+		'Dim value As String
 		Select Case colType
 			Case COLUMN_IMAGE, COLUMN_AVATARIMG, COLUMN_SWITCH, COLUMN_BUTTON
 				col.filterable = False
 			Case COLUMN_NUMBER
 				col.align = ALIGN_RIGHT
 				col.valueFormat = "0"
-				Dim cb As BANanoObject = BANano.CallBack(Me, "getmoneyformat", Array(item, value))
+				'Dim cb As BANanoObject = BANano.CallBack(Me, "getmoneyformat", Array(item, value))
 				'add to methods
-				SetCallBack("getmoneyformat", cb)
+				'SetCallBack("getmoneyformat", cb)
 			Case COLUMN_MONEY
 				col.align = ALIGN_RIGHT
 				col.valueFormat = "0,0.00"
-				Dim cb As BANanoObject = BANano.CallBack(Me, "getmoneyformat", Array(item, value))
+				'Dim cb As BANanoObject = BANano.CallBack(Me, "getmoneyformat", Array(item, value))
 				'add to methods
-				SetCallBack("getmoneyformat", cb)
+				'SetCallBack("getmoneyformat", cb)
 			Case COLUMN_FILESIZE
 				col.align = ALIGN_RIGHT
-				Dim cb As BANanoObject = BANano.CallBack(Me, "getfilesize", Array(item))
+				'Dim cb As BANanoObject = BANano.CallBack(Me, "getfilesize", Array(item))
 				'add to methods
-				SetCallBack("getfilesize", cb)
+				'SetCallBack("getfilesize", cb)
 			Case COLUMN_DATE
 				col.valueFormat = "yyyy-MM-dd"
-				Dim cb As BANanoObject = BANano.CallBack(Me, "getdateformat", Array(item, value))
+				'Dim cb As BANanoObject = BANano.CallBack(Me, "getdateformat", Array(item, value))
 				'add to methods
-				SetCallBack("getdateformat", cb)
+				'SetCallBack("getdateformat", cb)
 			Case COLUMN_TIME
 				col.valueFormat = "HH:MM"
-				Dim cb As BANanoObject = BANano.CallBack(Me, "getdateformat", Array(item, value))
+				'Dim cb As BANanoObject = BANano.CallBack(Me, "getdateformat", Array(item, value))
 				'add to methods
-				SetCallBack("getdateformat", cb)
+				'SetCallBack("getdateformat", cb)
 			Case COLUMN_DATETIME
 				col.valueFormat = "yyyy-MM-dd HH:MM"
-				Dim cb As BANanoObject = BANano.CallBack(Me, "getdateformat", Array(item, value))
+				'Dim cb As BANanoObject = BANano.CallBack(Me, "getdateformat", Array(item, value))
 				'add to methods
-				SetCallBack("getdateformat", cb)
+				'SetCallBack("getdateformat", cb)
 		End Select
 		columnsM.Put(colName,col)
 	End If
@@ -3569,6 +3300,7 @@ sb.Append(temp)
 				pl.VModel = $"item.${value}"$
 				pl.Reactive = True
 				pl.Rounded = True
+				pl.Dense = bDense
 				If nf.ConditionalClass <> "" Then
 					pl.Bind("class", $"${nf.ConditionalClass}(item)"$)
 				End If
@@ -3621,6 +3353,7 @@ sb.Append(temp)
 				Else
 					pc.Append($"{{ ${nf.predisplay}(item.${value}) }}"$)
 				End If
+				pc.Dense = bDense
 				If nf.progressRotate <> "" Then pc.Rotate = nf.progressRotate
 				If nf.progressSize <> "" Then pc.Size = nf.progressSize
 				If nf.progressWidth <> "" Then pc.Width = nf.progressWidth
@@ -3653,7 +3386,7 @@ sb.Append(temp)
 				Dim rat As VueElement
 				rat.Initialize(mCallBack, akey, akey)
 				rat.TagName = "v-rating"
-				rat.Dense = True
+				rat.Dense = bDense
 				rat.VModel = $"item.${value}"$
 				If nf.Disabled Then rat.disabled = True
 				If nf.ReadOnly Then rat.readonly = True
@@ -3705,6 +3438,10 @@ sb.Append(temp)
 				avt.Initialize(mCallBack, akey, akey)
 				avt.TagName = "v-avatar"
 				avt.Size = "36"
+				avt.Dense = bDense
+				If bDense Then
+					avt.Size = "30"
+				End If
 				'
 				If nf.color.StartsWith("item.") Then
 					avt.AddAttr(":color", nf.color)
@@ -3750,6 +3487,7 @@ sb.Append(temp)
 				Dim avt As VueElement
 				avt.Initialize(mCallBack, akey, akey)
 				avt.TagName = "v-avatar"
+				avt.Dense = bDense
 				'
 				If nf.color.StartsWith("item.") Then
 					avt.AddAttr(":color", nf.color)
@@ -3795,6 +3533,7 @@ sb.Append(temp)
 				Dim avt As VueElement
 				avt.Initialize(mCallBack, akey, akey)
 				avt.TagName = "v-avatar"
+				avt.Dense = bDense
 				'
 				Dim avtimg As VueElement
 				avtimg.Initialize(mCallBack, "", "")
@@ -3849,6 +3588,7 @@ sb.Append(temp)
 				swt.TagName = "v-checkbox"
 				swt.MA = 0
 				swt.HideDetails = True
+				swt.Dense = bDense
 				'
 				If ct = COLUMN_SWITCH Then
 					swt.tagname = "v-switch"
@@ -3895,6 +3635,10 @@ sb.Append(temp)
 				Dim aicon As VueElement
 				aicon.Initialize(mCallBack, akey, akey)
 				aicon.TagName = "v-icon"
+				aicon.Dense = bDense
+				If bDense Then 
+					nf.iconSize = ""
+				End If
 				If nf.PreDisplay = "" Then
 					aicon.Append($"{{ item.${value} }}"$)
 				Else
@@ -3935,6 +3679,11 @@ sb.Append(temp)
 				Dim akey As String = $"${mName}_${value}"$
 				avtimg.Initialize(mCallBack,akey, akey)
 				avtimg.TagName = "v-img"
+				avtimg.Dense = bDense
+				If bDense Then
+					nf.imgHeight = "30"
+					nf.imgWidth = "30"
+				End If
 				If nf.PreDisplay = "" Then
 					avtimg.AddAttr(":src", $"item.${value}"$)
 					avtimg.AddAttr(":lazy-src", $"item.${value}"$)
@@ -3982,7 +3731,11 @@ sb.Append(temp)
 				chp.Initialize(mCallBack, akey, akey)
 				chp.TagName = "v-chip"
 				chp.dark = True
-				chp.Elevation = "4"
+				chp.Dense = bDense
+				If bDense Then
+				Else	
+					chp.Elevation = "4"
+				End If
 				If nf.PreDisplay = "" Then
 					chp.Append($"{{ item.${value} }}"$)
 				Else
@@ -4034,6 +3787,10 @@ sb.Append(temp)
 				abtn.Color = nf.color
 				abtn.Outlined = nf.outlined
 				abtn.Shaped = nf.shaped
+				abtn.Dense = bDense
+				If bDense Then
+					abtn.Size = "small"
+				End If
 				If nf.ConditionalClass <> "" Then
 					abtn.Bind("class", $"${nf.ConditionalClass}(item)"$)
 				End If
@@ -4069,7 +3826,13 @@ sb.Append(temp)
 				Dim akey As String = $"${mName}_${value}"$
 				abtn.Initialize(mCallBack, akey, akey)
 				abtn.TagName = "v-btn"
-				abtn.Elevation = "4"
+				abtn.Dense = bDense
+				If bDense Then
+					abtn.Size = "small"
+					nf.iconSize = ""
+				Else
+					abtn.Elevation = "4"
+				End If
 				'abtn.Small = True
 				'abtn.dark = True
 				abtn.ButtonIcon = True
@@ -4498,10 +4261,10 @@ Sub SetColumnDateFormat(colName As String, colFormat As String)
 		col.valueFormat = colFormat
 		columnsM.Put(colName,col)
 		'
-		Dim item As Map
-		Dim cb As BANanoObject = BANano.CallBack(Me, "getdateformat", Array(item, colFormat))
+		'Dim item As Map
+		'Dim cb As BANanoObject = BANano.CallBack(Me, "getdateformat", Array(item, colFormat))
 		'add to methods
-		SetCallBack("getdateformat", cb)
+		'SetCallBack("getdateformat", cb)
 	End If
 End Sub
 
@@ -4514,10 +4277,10 @@ Sub SetColumnDateTimeFormat(colName As String, colFormat As String)
 		col.valueFormat = colFormat
 		columnsM.Put(colName,col)
 		'
-		Dim item As Map
-		Dim cb As BANanoObject = BANano.CallBack(Me, "getdateformat", Array(item, colFormat))
+		'Dim item As Map
+		'Dim cb As BANanoObject = BANano.CallBack(Me, "getdateformat", Array(item, colFormat))
 		'add to methods
-		SetCallBack("getdateformat", cb)
+		'SetCallBack("getdateformat", cb)
 	End If
 End Sub
 
@@ -4531,72 +4294,11 @@ Sub SetColumnNumberFormat(colName As String, colFormat As String)
 		col.align = ALIGN_RIGHT
 		columnsM.Put(colName,col)
 		'
-		Dim item As Map
-		Dim cb As BANanoObject = BANano.CallBack(Me, "getmoneyformat", Array(item, colFormat))
+		'Dim item As Map
+		'Dim cb As BANanoObject = BANano.CallBack(Me, "getmoneyformat", Array(item, colFormat))
 		'add to methods
-		SetCallBack("getmoneyformat", cb)
+		'SetCallBack("getmoneyformat", cb)
 	End If
-End Sub
-
-private Sub getdateformat(item As String, sFormat As String) As String		'ignoredeadcode
-	Dim svalue As String = FormatDisplayDate(item, sFormat)
-	Return svalue
-End Sub
-
-
-private Sub getmoneyformat(item As String, sformat As String) As String		'ignoredeadcode
-	Dim svalue As String = FormatDisplayNumber(item, sformat)
-	Return svalue
-End Sub
-
-private Sub getfilesize(item As String) As String							'ignoredeadcode
-	Dim svalue As String = FormatFileSize(item)
-	Return svalue
-End Sub
-
-'format date to meet your needs
-Sub FormatDisplayDate(item As String, sFormat As String) As String			'ignoredeadcode
-	item = "" & item
-	If item = "" Then Return ""
-	If BANano.isnull(item) Or BANano.IsUndefined(item) Then Return ""
-	Dim bo As BANanoObject = BANano.RunJavascriptMethod("dayjs", Array(item))
-	Dim sDate As String = bo.RunMethod("format", Array(sFormat)).Result
-	Return sDate
-End Sub
-
-'format numeric display
-Sub FormatDisplayNumber(item As String, sFormat As String) As String			'ignoredeadcode
-	item = "" & item
-	If item = "" Then Return ""
-	If BANano.isnull(item) Or BANano.IsUndefined(item) Then Return ""
-	item = BANanoShared.Val(item)
-	item = BANano.parseFloat(item)
-	Dim bo As BANanoObject = BANano.RunJavascriptMethod("numeral", Array(item))
-	Dim sDate As String = bo.RunMethod("format", Array(sFormat)).Result
-	Return sDate
-End Sub
-
-Sub FormatFileSize(Bytes As Float) As String					'ignoredeadcode
-	If BANano.IsNull(Bytes) Or BANano.IsUndefined(Bytes) Then
-		Bytes = 0
-	End If
-	Bytes = BANano.parsefloat(Bytes)
-	Try
-		Private Unit() As String = Array As String(" Byte", " KB", " MB", " GB", " TB", " PB", " EB", " ZB", " YB")
-		If Bytes = 0 Then
-			Return "0 Bytes"
-		Else
-			Private Po, Si As Double
-			Private I As Int
-			Bytes = Abs(Bytes)
-			I = Floor(Logarithm(Bytes, 1024))
-			Po = Power(1024, I)
-			Si = Bytes / Po
-			Return NumberFormat(Si, 1, 3) & Unit(I)
-		End If
-	Catch
-		Return "0 Bytes"
-	End Try
 End Sub
 
 

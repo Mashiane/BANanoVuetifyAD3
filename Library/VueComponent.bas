@@ -227,11 +227,32 @@ Public Sub Initialize (CallBack As Object, Name As String) As VueComponent
 	SetMethod(Me, "nicemonth", Null)
 	SetMethod(Me, "niceyear", Null)
 	SetMethod(Me, "json2list", Null)
+	Dim x As Object, y As Object
+	SetMethod(Me, "getdateformat", Array(x, y))
+	SetMethod(Me, "getmoneyformat", Array(x, y))
+	SetMethod(Me, "getfilesize", Array(x))
 	Dim x As Object
 	Dim y As Object
 	SetMethod(Me, "FormatDisplayDate", Array(x, y))
 	Return Me
 End Sub
+
+private Sub getdateformat(item As String, sFormat As String) As String		'ignoredeadcode
+	Dim svalue As String = FormatDisplayDate(item, sFormat)
+	Return svalue
+End Sub
+
+
+private Sub getmoneyformat(item As String, sformat As String) As String		'ignoredeadcode
+	Dim svalue As String = FormatDisplayNumber(item, sformat)
+	Return svalue
+End Sub
+
+private Sub getfilesize(item As String) As String							'ignoredeadcode
+	Dim svalue As String = FormatFileSize(item)
+	Return svalue
+End Sub
+
 
 'Sub UseVueDraggable
 '	If components.ContainsKey("vuedraggable") = False Then
@@ -442,13 +463,17 @@ End Sub
 
 'format date to meet your needs
 Sub FormatDisplayDate(item As String, sFormat As String) As String			'ignoredeadcode
-	item = "" & item
-	If item = "" Then Return ""
-	If sFormat = "" Then sFormat = "YYYY-MM-DD"
-	If BANano.isnull(item) Or BANano.IsUndefined(item) Then Return ""
-	Dim bo As BANanoObject = BANano.RunJavascriptMethod("dayjs", Array(item))
-	Dim sDate As String = bo.RunMethod("format", Array(sFormat)).Result
-	Return sDate
+	Try
+		item = "" & item
+		If item = "" Then Return ""
+		If sFormat = "" Then sFormat = "YYYY-MM-DD"
+		If BANano.isnull(item) Or BANano.IsUndefined(item) Then Return ""
+		Dim bo As BANanoObject = BANano.RunJavascriptMethod("dayjs", Array(item))
+		Dim sDate As String = bo.RunMethod("format", Array(sFormat)).Result
+		Return sDate
+	Catch
+		Return ""
+	End Try		
 End Sub
 
 Sub DateDisplayFormat(vmodel As String, sformat As String) As String   'IgnoreDeadCode
@@ -742,8 +767,8 @@ End Sub
 'add html of component to app and this binds events and states
 Sub BindVueTable(el As VueTable)
 	el.Refresh
-	Dim mbindings As Map = el.bindings
-	Dim mmethods As Map = el.methods
+	Dim mbindings As Map = el.VElement.bindings
+	Dim mmethods As Map = el.VElement.methods
 	'apply the binding for the control
 	For Each k As String In mbindings.Keys
 		Dim v As Object = mbindings.Get(k)

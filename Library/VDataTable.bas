@@ -543,8 +543,8 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	End If
 	'
 	AddClass(mClasses)
-	setAttributes(mAttributes)
-	setStyles(mStyle)
+	VElement.Attributes = mAttributes
+	VElement.Styles = mStyle
 	'
 	SetOnItemSelected($"${mName}_ItemSelected"$)
 	SetOnClickRow($"${mName}_ClickRow"$)
@@ -1364,11 +1364,6 @@ Sub SetAttr(varProp As String, varValue As String)
 	VElement.SetAttr(varProp, varValue)
 End Sub
 
-'change the text of the element
-Sub SetText(varText As String)
-	AddChild(varText)
-End Sub
-
 Sub Bind(attr As String, value As String)
 	AddAttr($":${attr}"$, value)
 End Sub
@@ -1404,117 +1399,6 @@ Sub RemoveCodeBindings(b As List)
 			VElement.RemoveBinding(k)
 		End If
 	Next
-End Sub
-
-'returns the class names
-Public Sub getClasses() As String
-	Dim sbClass As StringBuilder
-	sbClass.Initialize
-	For Each k As String In classList.Keys
-		sbClass.Append(k).Append(" ")
-	Next
-	mClasses = sbClass.ToString
-	Return mClasses
-End Sub
-
-Sub setClasses(varClasses As String)
-	AddClass(varClasses)
-End Sub
-
-'set the style use a valid JSON string with {}
-public Sub setStyle(varStyle As String)
-	setStyles(varStyle)
-End Sub
-
-'returns the style as JSON
-public Sub getStyle() As String
-	Dim sbStyle As StringBuilder
-	sbStyle.Initialize
-	sbStyle.Append("{")
-	For Each k As String In styleList.Keys
-		Dim v As String = styleList.Get(k)
-		sbStyle.Append(k).Append(":").Append(v).Append(",")
-	Next
-	sbStyle.Append("}")
-	mStyle = sbStyle.ToString
-	Return mStyle
-End Sub
-
-'sets the attributes
-public Sub setAttributes(varAttributes As String)
-	Dim mxItems As List = BANanoShared.StrParse(";", varAttributes)
-	For Each mt As String In mxItems
-		Dim k As String = BANanoShared.MvField(mt,1,"=")
-		Dim v As String = BANanoShared.MvField(mt,2,"=")
-		If mElement <> Null Then
-			mElement.SetAttr(k, v)
-		Else
-			attributeList.put(k, v)
-		End If
-	Next
-End Sub
-
-'sets the styles from the designer
-public Sub setStyles(varStyles As String)
-	Dim mxItems As List = BANanoShared.StrParse(";", varStyles)
-	For Each mt As String In mxItems
-		Dim k As String = BANanoShared.MvField(mt,1,"=")
-		Dim v As String = BANanoShared.MvField(mt,2,"=")
-		AddStyle(k, v)
-	Next
-End Sub
-
-'returns the attributes
-public Sub getAttributes() As String
-	Dim sbAttr As StringBuilder
-	sbAttr.Initialize
-	For Each k As String In attributeList.Keys
-		Dim v As String = attributeList.Get(k)
-		sbAttr.Append(k).Append("=").Append(v).Append(";")
-	Next
-	mAttributes = sbAttr.ToString
-	Return mAttributes
-End Sub
-
-public Sub setVElse(varVElse As String)
-	AddAttr("v-else", varVElse)
-	stVElse = varVElse
-End Sub
-
-public Sub getVElse() As String
-	Return stVElse
-End Sub
-
-public Sub setVElseIf(varVElseIf As String)
-	AddAttr("v-else-if", varVElseIf)
-	stVElseIf = varVElseIf
-End Sub
-
-public Sub getVElseIf() As String
-	Return stVElseIf
-End Sub
-
-public Sub setVIf(varVIf As String)
-	AddAttr("v-if", varVIf)
-	stVIf = varVIf
-End Sub
-
-public Sub getVIf() As String
-	Return stVIf
-End Sub
-
-public Sub setVShow(varVShow As String)
-	AddAttr("v-show", varVShow)
-	stVShow = varVShow
-End Sub
-
-public Sub getVShow() As String
-	Return stVShow
-End Sub
-
-'add a child component
-Sub AddChild(child As String)
-	mElement.Append(child)
 End Sub
 
 'set a call back
@@ -2676,35 +2560,35 @@ Sub SetColumnType(colName As String, colType As String)
 			Case COLUMN_NUMBER
 				col.align = ALIGN_RIGHT
 				col.valueFormat = "0"
-				Dim cb As BANanoObject = BANano.CallBack(Me, "getmoneyformat", Array(item, value))
+				'Dim cb As BANanoObject = BANano.CallBack(Me, "getmoneyformat", Array(item, value))
 				'add to methods
-				SetCallBack("getmoneyformat", cb)
+				'SetCallBack("getmoneyformat", cb)
 			Case COLUMN_MONEY
 				col.align = ALIGN_RIGHT
 				col.valueFormat = "0,0.00"
-				Dim cb As BANanoObject = BANano.CallBack(Me, "getmoneyformat", Array(item, value))
+				'Dim cb As BANanoObject = BANano.CallBack(Me, "getmoneyformat", Array(item, value))
 				'add to methods
-				SetCallBack("getmoneyformat", cb)
+				'SetCallBack("getmoneyformat", cb)
 			Case COLUMN_FILESIZE
 				col.align = ALIGN_RIGHT
-				Dim cb As BANanoObject = BANano.CallBack(Me, "getfilesize", Array(item))
+				'Dim cb As BANanoObject = BANano.CallBack(Me, "getfilesize", Array(item))
 				'add to methods
-				SetCallBack("getfilesize", cb)
+				'SetCallBack("getfilesize", cb)
 			Case COLUMN_DATE
 				col.valueFormat = "yyyy-MM-dd"
-				Dim cb As BANanoObject = BANano.CallBack(Me, "getdateformat", Array(item, value))
+				'Dim cb As BANanoObject = BANano.CallBack(Me, "getdateformat", Array(item, value))
 				'add to methods
-				SetCallBack("getdateformat", cb)
+				'SetCallBack("getdateformat", cb)
 			Case COLUMN_TIME
 				col.valueFormat = "HH:MM"
-				Dim cb As BANanoObject = BANano.CallBack(Me, "getdateformat", Array(item, value))
+				'Dim cb As BANanoObject = BANano.CallBack(Me, "getdateformat", Array(item, value))
 				'add to methods
-				SetCallBack("getdateformat", cb)
+				'SetCallBack("getdateformat", cb)
 			Case COLUMN_DATETIME
 				col.valueFormat = "yyyy-MM-dd HH:MM"
-				Dim cb As BANanoObject = BANano.CallBack(Me, "getdateformat", Array(item, value))
+				'Dim cb As BANanoObject = BANano.CallBack(Me, "getdateformat", Array(item, value))
 				'add to methods
-				SetCallBack("getdateformat", cb)
+				'SetCallBack("getdateformat", cb)
 		End Select
 		columnsM.Put(colName,col)
 	End If
@@ -4043,10 +3927,10 @@ Sub SetColumnDateFormat(colName As String, colFormat As String)
 		col.valueFormat = colFormat
 		columnsM.Put(colName,col)
 		'
-		Dim item As Map
-		Dim cb As BANanoObject = BANano.CallBack(Me, "getdateformat", Array(item, colFormat))
+		'Dim item As Map
+		'Dim cb As BANanoObject = BANano.CallBack(Me, "getdateformat", Array(item, colFormat))
 		'add to methods
-		SetCallBack("getdateformat", cb)
+		'SetCallBack("getdateformat", cb)
 	End If
 End Sub
 
@@ -4059,10 +3943,10 @@ Sub SetColumnDateTimeFormat(colName As String, colFormat As String)
 		col.valueFormat = colFormat
 		columnsM.Put(colName,col)
 		'
-		Dim item As Map
-		Dim cb As BANanoObject = BANano.CallBack(Me, "getdateformat", Array(item, colFormat))
+		'Dim item As Map
+		'Dim cb As BANanoObject = BANano.CallBack(Me, "getdateformat", Array(item, colFormat))
 		'add to methods
-		SetCallBack("getdateformat", cb)
+		'SetCallBack("getdateformat", cb)
 	End If
 End Sub
 
@@ -4076,74 +3960,12 @@ Sub SetColumnNumberFormat(colName As String, colFormat As String)
 		col.align = ALIGN_RIGHT
 		columnsM.Put(colName,col)
 		'
-		Dim item As Map
-		Dim cb As BANanoObject = BANano.CallBack(Me, "getmoneyformat", Array(item, colFormat))
+		'Dim item As Map
+		'Dim cb As BANanoObject = BANano.CallBack(Me, "getmoneyformat", Array(item, colFormat))
 		'add to methods
-		SetCallBack("getmoneyformat", cb)
+		'SetCallBack("getmoneyformat", cb)
 	End If
 End Sub
-
-private Sub getdateformat(item As String, sFormat As String) As String		'ignoredeadcode
-	Dim svalue As String = FormatDisplayDate(item, sFormat)
-	Return svalue
-End Sub
-
-
-private Sub getmoneyformat(item As String, sformat As String) As String		'ignoredeadcode
-	Dim svalue As String = FormatDisplayNumber(item, sformat)
-	Return svalue
-End Sub
-
-private Sub getfilesize(item As String) As String							'ignoredeadcode
-	Dim svalue As String = FormatFileSize(item)
-	Return svalue
-End Sub
-
-'format date to meet your needs
-Sub FormatDisplayDate(item As String, sFormat As String) As String			'ignoredeadcode
-	item = "" & item
-	If item = "" Then Return ""
-	If BANano.isnull(item) Or BANano.IsUndefined(item) Then Return ""
-	Dim bo As BANanoObject = BANano.RunJavascriptMethod("dayjs", Array(item))
-	Dim sDate As String = bo.RunMethod("format", Array(sFormat)).Result
-	Return sDate
-End Sub
-
-'format numeric display
-Sub FormatDisplayNumber(item As String, sFormat As String) As String			'ignoredeadcode
-	item = "" & item
-	If item = "" Then Return ""
-	If BANano.isnull(item) Or BANano.IsUndefined(item) Then Return ""
-	item = BANanoShared.Val(item)
-	item = BANano.parseFloat(item)
-	Dim bo As BANanoObject = BANano.RunJavascriptMethod("numeral", Array(item))
-	Dim sDate As String = bo.RunMethod("format", Array(sFormat)).Result
-	Return sDate
-End Sub
-
-Sub FormatFileSize(Bytes As Float) As String					'ignoredeadcode
-	If BANano.IsNull(Bytes) Or BANano.IsUndefined(Bytes) Then
-		Bytes = 0
-	End If
-	Bytes = BANano.parsefloat(Bytes)
-	Try
-		Private Unit() As String = Array As String(" Byte", " KB", " MB", " GB", " TB", " PB", " EB", " ZB", " YB")
-		If Bytes = 0 Then
-			Return "0 Bytes"
-		Else
-			Private Po, Si As Double
-			Private I As Int
-			Bytes = Abs(Bytes)
-			I = Floor(Logarithm(Bytes, 1024))
-			Po = Power(1024, I)
-			Si = Bytes / Po
-			Return NumberFormat(Si, 1, 3) & Unit(I)
-		End If
-	Catch
-		Return "0 Bytes"
-	End Try
-End Sub
-
 
 'set dense
 public Sub setDense(varDense As Boolean)

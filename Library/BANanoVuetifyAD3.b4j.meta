@@ -427,6 +427,6 @@ ModuleClosedNodes96=
 ModuleClosedNodes97=
 ModuleClosedNodes98=
 ModuleClosedNodes99=
-NavigationStack=VueComponent,AddPropertyNumber,988,0,VueComponent,AddPropertyBoolean,991,0,VueComponent,AddPropertyObject,995,0,VueComponent,AddPropertyString,996,0,VueComponent,AddProperty1,1001,0,BANanoCollectJS,Initialize,10,1,VuetifyApp,getMainNode,1086,0,VuetifyApp,UseJsPDF,1089,0,Main,AppStart,19,0
+NavigationStack=BananoDataSource,DesignerCreateView,374,0,BananoDataSource,AddDefault,521,0,BananoDataSource,SchemaReset,496,0,BananoDataSource,SchemaBuild,461,0,BANanoDataSourceFireBase,CREATE_OR_UPDATE,668,0,BVAD3FBRecordSet,CREATE_OR_UPDATE,425,0,BananoDataSource,MySQLExecute,1087,0,BananoDataSource,SQLiteExecute,1386,0,BananoDataSource,JRDCExecute,1728,0,Main,AppStart,17,0,Main,Process_Globals,10,0
 SelectedBuild=0
 VisibleModules=

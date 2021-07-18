@@ -411,11 +411,17 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		Log("Relationships...")
 		Log(Relationships)
 	End If
+	'
+	SchemaBuild
 	
 	VElement.Initialize(mCallBack, mName, mName) 
 	VElement.TagName = "div" 
 	VElement.AddStyle("display", "none")
-	
+	Tag = ""
+	IsBound = False
+End Sub
+
+Sub SchemaBuild
 	Strings.Initialize 
 	Doubles.Initialize 
 	Blobs.Initialize 
@@ -490,8 +496,6 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		'then its a string
 		Strings.Add(fld)
 	Next
-	Tag = ""
-	IsBound = False
 End Sub
 
 'reset the datasource to be able to use with another table
@@ -601,6 +605,8 @@ Sub CREATE_OR_UPDATE
 	If IsBound = False Then
 		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
 	End If
+	'only use fields on the fields list
+	'schemaSelectFields
 	'determinate the mode
 	Select Case Mode
 	Case MODE_CREATE
@@ -1014,6 +1020,12 @@ private Sub MySQLExecute As Boolean    'ignore
 	Case ACTION_CREATE
 		'remove auto-increment
 		Record = ParentComponent.GetData(sRecordSource)
+		Dim nr As Map = CreateMap()
+		For Each fld As String In schemaFields
+			Dim value As String = Record.GetDefault(fld, "")
+			nr.Put(fld, value)
+		Next
+		Record = nr
 		CorrectDataTypes(Record)
 		If sAutoIncrement <> "" Then
 			Record.Remove(sAutoIncrement)
@@ -1055,6 +1067,12 @@ private Sub MySQLExecute As Boolean    'ignore
 		End If
 		'read the record to update
 		Record = ParentComponent.GetData(sRecordSource)
+		Dim nr As Map = CreateMap()
+		For Each fld As String In schemaFields
+			Dim value As String = Record.GetDefault(fld, "")
+			nr.Put(fld, value)
+		Next
+		Record = nr
 		CorrectDataTypes(Record)
 		'we need to remove the auto-increment key from the record
 		Record.Remove(sPrimaryKey)
@@ -1072,6 +1090,12 @@ private Sub MySQLExecute As Boolean    'ignore
 		End If
 		'read the record to update
 		Record = ParentComponent.GetData(sRecordSource)
+		Dim nr As Map = CreateMap()
+		For Each fld As String In schemaFields
+			Dim value As String = Record.GetDefault(fld, "")
+			nr.Put(fld, value)
+		Next
+		Record = nr
 		CorrectDataTypes(Record)
 		Log($"Delete: ${pkValue}"$)
 		MySQL.Delete(pkValue)
@@ -1318,6 +1342,12 @@ private Sub SQLiteExecute As Boolean    'ignore
 	Case ACTION_CREATE
 		'remove auto-increment
 		Record = ParentComponent.GetData(sRecordSource)
+		Dim nr As Map = CreateMap()
+		For Each fld As String In schemaFields
+			Dim value As String = Record.GetDefault(fld, "")
+			nr.Put(fld, value)
+		Next
+		Record = nr
 		CorrectDataTypes(Record)
 		If sAutoIncrement <> "" Then
 			Record.Remove(sAutoIncrement)
@@ -1359,6 +1389,12 @@ private Sub SQLiteExecute As Boolean    'ignore
 		End If
 		'read the record to update
 		Record = ParentComponent.GetData(sRecordSource)
+		Dim nr As Map = CreateMap()
+		For Each fld As String In schemaFields
+			Dim value As String = Record.GetDefault(fld, "")
+			nr.Put(fld, value)
+		Next
+		Record = nr
 		CorrectDataTypes(Record)
 		'we need to remove the auto-increment key from the record
 		Record.Remove(sPrimaryKey)
@@ -1654,6 +1690,12 @@ private Sub JRDCExecute
 	Case ACTION_CREATE
 		'remove auto-increment
 		Record = ParentComponent.GetData(sRecordSource)
+		Dim nr As Map = CreateMap()
+		For Each fld As String In schemaFields
+			Dim value As String = Record.GetDefault(fld, "")
+			nr.Put(fld, value)
+		Next
+		Record = nr
 		CorrectDataTypes(Record)
 		If sAutoIncrement <> "" Then
 			Record.Remove(sAutoIncrement)
@@ -1674,6 +1716,12 @@ private Sub JRDCExecute
 		Dim pkValue As String = ParentComponent.GetData(dsKey)
 		'read the record to update
 		Record = ParentComponent.GetData(sRecordSource)
+		Dim nr As Map = CreateMap()
+		For Each fld As String In schemaFields
+			Dim value As String = Record.GetDefault(fld, "")
+			nr.Put(fld, value)
+		Next
+		Record = nr
 		CorrectDataTypes(Record)
 		'we need to remove the auto-increment key from the record
 		Record.Remove(sPrimaryKey)
@@ -1685,6 +1733,12 @@ private Sub JRDCExecute
 		Dim pkValue As String = ParentComponent.GetData(dsKey)
 		'read the record to update
 		Record = ParentComponent.GetData(sRecordSource)
+		Dim nr As Map = CreateMap()
+		For Each fld As String In schemaFields
+			Dim value As String = Record.GetDefault(fld, "")
+			nr.Put(fld, value)
+		Next
+		Record = nr
 		CorrectDataTypes(Record)
 		Log($"Delete: ${pkValue}"$)
 		MySQL.Delete(pkValue)

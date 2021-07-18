@@ -5427,24 +5427,32 @@ End Sub
 
 'format date to meet your needs
 Sub FormatDisplayDate(item As String, sFormat As String) As String			'ignoredeadcode
-	item = "" & item
-	If item = "" Then Return ""
-	If BANano.isnull(item) Or BANano.IsUndefined(item) Then Return ""
-	Dim bo As BANanoObject = BANano.RunJavascriptMethod("dayjs", Array(item))
-	Dim sDate As String = bo.RunMethod("format", Array(sFormat)).Result
-	Return sDate
+	Try
+		item = "" & item
+		If item = "" Then Return ""
+		If BANano.isnull(item) Or BANano.IsUndefined(item) Then Return ""
+		Dim bo As BANanoObject = BANano.RunJavascriptMethod("dayjs", Array(item))
+		Dim sDate As String = bo.RunMethod("format", Array(sFormat)).Result
+		Return sDate
+	Catch
+		Return ""
+	End Try	
 End Sub
 
 'format numeric display
 Sub FormatDisplayNumber(item As String, sFormat As String) As String			'ignoredeadcode
-	item = "" & item
-	If item = "" Then Return ""
-	If BANano.isnull(item) Or BANano.IsUndefined(item) Then Return ""
-	item = BANanoShared.Val(item)
-	item = BANano.parseFloat(item)
-	Dim bo As BANanoObject = BANano.RunJavascriptMethod("numeral", Array(item))
-	Dim sDate As String = bo.RunMethod("format", Array(sFormat)).Result
-	Return sDate
+	Try
+		item = "" & item
+		If item = "" Then Return ""
+		If BANano.isnull(item) Or BANano.IsUndefined(item) Then Return ""
+		item = BANanoShared.Val(item)
+		item = BANano.parseFloat(item)
+		Dim bo As BANanoObject = BANano.RunJavascriptMethod("numeral", Array(item))
+		Dim sDate As String = bo.RunMethod("format", Array(sFormat)).Result
+		Return sDate
+	Catch
+		Return ""
+	End Try	
 End Sub
 
 
