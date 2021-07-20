@@ -41,30 +41,32 @@ Version=8.5
 #Event: Filter_Click(e As BANanoEvent)
 #Event: Back_Click (e As BANanoEvent)
 
+#DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue:  False, Description: Hidden
+#DesignerProperty: Key: ShowInsideCard, DisplayName: ShowInsideCard, FieldType: Boolean, DefaultValue:  True, Description: Show table inside the v-card
 #DesignerProperty: Key: Title, DisplayName: Title, FieldType: String, DefaultValue:  , Description: The title on the table
 #DesignerProperty: Key: AutoID, DisplayName: Auto ID/Name, FieldType: Boolean, DefaultValue: False, Description: Overrides the ID/Name with a random string.
 #DesignerProperty: Key: Manual, DisplayName: Manual, FieldType: Boolean, DefaultValue: False, Description: Table created manually.
 #DesignerProperty: Key: ItemKey, DisplayName: ItemKey, FieldType: String, DefaultValue:  , Description: The primary key of your records
 #DesignerProperty: Key: ItemsPerPage, DisplayName: ItemsPerPage, FieldType: String, DefaultValue:  , Description: Number of items per page
 #DesignerProperty: Key: Dense, DisplayName: Dense, FieldType: Boolean, DefaultValue:  False, Description: The table should be dense
-#DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue:  False, Description: The table is dark
+#DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue:  False, Description: The table should be dark
 #DesignerProperty: Key: ShowSelect, DisplayName: ShowSelect, FieldType: Boolean, DefaultValue:  False, Description: Show select for all records
 #DesignerProperty: Key: SingleSelect, DisplayName: SingleSelect, FieldType: Boolean, DefaultValue:  False, Description: Single selection mode
 #DesignerProperty: Key: MultiSort, DisplayName: Multi Sort, FieldType: Boolean, DefaultValue:  False, Description: Can multi sort
 #DesignerProperty: Key: MustSort, DisplayName: Must Sort, FieldType: Boolean, DefaultValue:  False, Description: Records must be sortable
 #DesignerProperty: Key: Loading, DisplayName: Loading, FieldType: Boolean, DefaultValue:  False, Description: Show progress loading
 #DesignerProperty: Key: ExternalPagination, DisplayName: ExternalPagination, FieldType: Boolean, DefaultValue:  True, Description: Use External Pagination
-#DesignerProperty: Key: MaxPages, DisplayName: Total Visible, FieldType: String, DefaultValue:  5, Description: Total Visible
+#DesignerProperty: Key: MaxPages, DisplayName: Total Visible, FieldType: String, DefaultValue:  5, Description: Total Visible Pages
 #DesignerProperty: Key: PageLength, DisplayName: Pager Length, FieldType: String, DefaultValue:  5, Description: Page Length
-#DesignerProperty: Key: PaginationPosition, DisplayName: PaginationPosition, FieldType: String, DefaultValue:  bottom, Description: PaginationPosition, List: top|bottom|both 
+#DesignerProperty: Key: PaginationPosition, DisplayName: PaginationPosition, FieldType: String, DefaultValue:  bottom, Description: Pagination Position, List: top|bottom|both 
 '#DesignerProperty: Key: DateFormat, DisplayName: DateFormat, FieldType: String, DefaultValue: , Description: Date Format
 '#DesignerProperty: Key: DateTimeFormat, DisplayName: DateTimeFormat, FieldType: String, DefaultValue: , Description: Date Time Format
 '#DesignerProperty: Key: MoneyFormat, DisplayName: MoneyFormat, FieldType: String, DefaultValue: , Description: Money Format
 '#DesignerProperty: Key: TimeFormat, DisplayName: TimeFormat, FieldType: String, DefaultValue: HH:MM, Description: Time Format
-#DesignerProperty: Key: PreDisplay, DisplayName: PreDisplay (JSON), FieldType: String, DefaultValue: , Description: PreDisplay
-#DesignerProperty: Key: ConditionalClass, DisplayName: ConditionalClass (JSON), FieldType: String, DefaultValue: , Description: ConditionalClass
-#DesignerProperty: Key: ConditionalColor, DisplayName: ConditionalColor (JSON), FieldType: String, DefaultValue: , Description: ConditionalColor
-#DesignerProperty: Key: ConditionalStyle, DisplayName: ConditionalStyle (JSON), FieldType: String, DefaultValue: , Description: ConditionalStyle
+#DesignerProperty: Key: PreDisplay, DisplayName: Before Display (JSON), FieldType: String, DefaultValue: , Description: For each column specified run this callback before displaying
+#DesignerProperty: Key: ConditionalClass, DisplayName: Conditional Class (JSON), FieldType: String, DefaultValue: , Description: For each column specified apply class from callback
+#DesignerProperty: Key: ConditionalColor, DisplayName: Conditional Color (JSON), FieldType: String, DefaultValue: , Description: For each column specified apply the color from the callback
+#DesignerProperty: Key: ConditionalStyle, DisplayName: Conditional Style (JSON), FieldType: String, DefaultValue: , Description: For each column specified apply the style from the callback
 
 #DesignerProperty: Key: HasSearch, DisplayName: Has Search, FieldType: Boolean, DefaultValue:  False, Description: Have a search input box
 #DesignerProperty: Key: HasAddnew, DisplayName: HasAddNew, FieldType: Boolean, DefaultValue: False, Description: Show Add new on toolbar
@@ -92,46 +94,47 @@ Version=8.5
 #DesignerProperty: Key: HasMenu, DisplayName: HasMenu, FieldType: Boolean, DefaultValue: False, Description: Has Menu Column
 #DesignerProperty: Key: MenuColor, DisplayName: MenuColor, FieldType: String, DefaultValue: indigo, Description: MenuColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 '
-#DesignerProperty: Key: ColumnFields, DisplayName: ColumnFields (;), FieldType: String, DefaultValue: , Description: Fields
+#DesignerProperty: Key: ColumnFields, DisplayName: ColumnFields (;), FieldType: String, DefaultValue: , Description: Fields to show based on database table
 #DesignerProperty: Key: ColumnTitles, DisplayName: ColumnTitles (;), FieldType: String, DefaultValue: , Description: Titles for fields
-#DesignerProperty: Key: ColumnWidths, DisplayName: ColumnWidths (;), FieldType: String, DefaultValue: , Description: Widths
-#DesignerProperty: Key: ColumIcons, DisplayName: ColumIcons (;), FieldType: String, DefaultValue: , Description: Icon Fields
-#DesignerProperty: Key: ColumnAutoComplete, DisplayName: ColumnAutoComplete (;), FieldType: String, DefaultValue: , Description: Auto Complete Fields
-#DesignerProperty: Key: ColumnAvatar, DisplayName: ColumnAvatar (;), FieldType: String, DefaultValue: , Description: Avatar Fields
-#DesignerProperty: Key: ColumnAvatarText, DisplayName: ColumnAvatarText (;), FieldType: String, DefaultValue: , Description: Avatar Text Fields
-#DesignerProperty: Key: ColumnAvatarIcon, DisplayName: ColumnAvatarIcon (;), FieldType: String, DefaultValue: , Description: Avatar Icon Fields
-#DesignerProperty: Key: ColumnButton, DisplayName: ColumnButton (;), FieldType: String, DefaultValue: , Description: Button Fields
-#DesignerProperty: Key: ColumnCheckbox, DisplayName: ColumnCheckbox (;), FieldType: String, DefaultValue: , Description: Checkbox Fields
-#DesignerProperty: Key: ColumnChip, DisplayName: ColumnChip (;), FieldType: String, DefaultValue: , Description: Chip Fields
-#DesignerProperty: Key: ColumnCircularProgress, DisplayName: ColumnCircularProgress (;), FieldType: String, DefaultValue: , Description: Circular Progress Fields
-#DesignerProperty: Key: ColumnCombobox, DisplayName: ColumnCombobox (;), FieldType: String, DefaultValue: , Description: Combobox Fields
-#DesignerProperty: Key: ColumnDate, DisplayName: ColumnDate (;), FieldType: String, DefaultValue: , Description: Date Fields
-#DesignerProperty: Key: ColumnDateTime, DisplayName: ColumnDateTime (;), FieldType: String, DefaultValue: , Description: DateTime Fields
+#DesignerProperty: Key: ColumnWidths, DisplayName: ColumnWidths (;), FieldType: String, DefaultValue: , Description: Widths of the fields
+#DesignerProperty: Key: ColumIcons, DisplayName: ColumIcons (;), FieldType: String, DefaultValue: , Description: These fields will show icons
+#DesignerProperty: Key: ColumnAutoComplete, DisplayName: ColumnAutoComplete (;), FieldType: String, DefaultValue: , Description: These fields will show auto complete for inline edit
+#DesignerProperty: Key: ColumnAvatar, DisplayName: ColumnAvatar (;), FieldType: String, DefaultValue: , Description: These fields will show an avatar image
+#DesignerProperty: Key: ColumnAvatarText, DisplayName: ColumnAvatarText (;), FieldType: String, DefaultValue: , Description: These fields will show avatar text
+#DesignerProperty: Key: ColumnAvatarIcon, DisplayName: ColumnAvatarIcon (;), FieldType: String, DefaultValue: , Description: These fields will show avatar icons
+#DesignerProperty: Key: ColumnButton, DisplayName: ColumnButton (;), FieldType: String, DefaultValue: , Description: These fields will show buttons
+#DesignerProperty: Key: ColumnCheckbox, DisplayName: ColumnCheckbox (;), FieldType: String, DefaultValue: , Description: These fields will show checkboxes
+#DesignerProperty: Key: ColumnChip, DisplayName: ColumnChip (;), FieldType: String, DefaultValue: , Description: These fields will show chips
+#DesignerProperty: Key: ColumnCircularProgress, DisplayName: ColumnCircularProgress (;), FieldType: String, DefaultValue: , Description: These fields will show circular progress
+#DesignerProperty: Key: ColumnCombobox, DisplayName: ColumnCombobox (;), FieldType: String, DefaultValue: , Description: These fields will show comboboxes
+#DesignerProperty: Key: ColumnDate, DisplayName: ColumnDate (;), FieldType: String, DefaultValue: , Description: These fields will show dates
+#DesignerProperty: Key: ColumnDateTime, DisplayName: ColumnDateTime (;), FieldType: String, DefaultValue: , Description: These fields will show date-time
 #DesignerProperty: Key: ColumnFileSize, DisplayName: ColumnFileSize (;), FieldType: String, DefaultValue: , Description: FileSize Fields
-#DesignerProperty: Key: ColumnImage, DisplayName: ColumnImage (;), FieldType: String, DefaultValue: , Description: Image Fields
-#DesignerProperty: Key: ColumnLinearProgress, DisplayName: ColumnLinearProgress (;), FieldType: String, DefaultValue: , Description: LinearProgress Fields
-#DesignerProperty: Key: ColumnLink, DisplayName: ColumnLink (;), FieldType: String, DefaultValue: , Description: Link Fields
-#DesignerProperty: Key: ColumnMoney, DisplayName: ColumnMoney (;), FieldType: String, DefaultValue: , Description: Money Fields
-#DesignerProperty: Key: ColumnRating, DisplayName: ColumnRating (;), FieldType: String, DefaultValue: , Description: Rating Fields
-#DesignerProperty: Key: ColumnSortable, DisplayName: ColumnSortable (;), FieldType: String, DefaultValue: , Description: Sortable Fields
-#DesignerProperty: Key: ColumnFilterable, DisplayName: ColumnFilterable (;), FieldType: String, DefaultValue: , Description: Filterable Fields
-#DesignerProperty: Key: ColumnSwitch, DisplayName: ColumnSwitch (;), FieldType: String, DefaultValue: , Description: Switch Fields
-#DesignerProperty: Key: ColumnTextarea, DisplayName: ColumnTextarea (;), FieldType: String, DefaultValue: , Description: TextArea Fields
-#DesignerProperty: Key: ColumnTextfield, DisplayName: ColumnTextfield (;), FieldType: String, DefaultValue: , Description: TextField Fields
-#DesignerProperty: Key: ColumnTime, DisplayName: ColumnTime (;), FieldType: String, DefaultValue: , Description: Time Fields
-'
-#DesignerProperty: Key: ItemKeys, DisplayName: Action Keys (;), FieldType: String, DefaultValue:  , Description: Action Keys
-#DesignerProperty: Key: ItemTitles, DisplayName: Action Titles (;), FieldType: String, DefaultValue:  , Description: Action Titles
-#DesignerProperty: Key: ItemIcons, DisplayName: Action Icons (;), FieldType: String, DefaultValue:  , Description: Action Icons
-#DesignerProperty: Key: ItemColors, DisplayName: Action Colors (;), FieldType: String, DefaultValue:  , Description: Action Colors
+#DesignerProperty: Key: ColumnImage, DisplayName: ColumnImage (;), FieldType: String, DefaultValue: , Description: These fields will show images
+#DesignerProperty: Key: ColumnLinearProgress, DisplayName: ColumnLinearProgress (;), FieldType: String, DefaultValue: , Description: These fields will show linear progress
+#DesignerProperty: Key: ColumnLink, DisplayName: ColumnLink (;), FieldType: String, DefaultValue: , Description: These fields will show links
+#DesignerProperty: Key: ColumnMoney, DisplayName: ColumnMoney (;), FieldType: String, DefaultValue: , Description: These fields will show money
+#DesignerProperty: Key: ColumnRating, DisplayName: ColumnRating (;), FieldType: String, DefaultValue: , Description: These fields will show rating
+#DesignerProperty: Key: ColumnSwitch, DisplayName: ColumnSwitch (;), FieldType: String, DefaultValue: , Description: These fields will show switches
+#DesignerProperty: Key: ColumnTextarea, DisplayName: ColumnTextarea (;), FieldType: String, DefaultValue: , Description: These fields will show text-areas
+#DesignerProperty: Key: ColumnTextfield, DisplayName: ColumnTextfield (;), FieldType: String, DefaultValue: , Description: These fields will show text-fields
+#DesignerProperty: Key: ColumnTime, DisplayName: ColumnTime (;), FieldType: String, DefaultValue: , Description: These fields will show time
 
-#DesignerProperty: Key: FixedHeader, DisplayName: Fixed Header, FieldType: Boolean, DefaultValue:  True, Description: 
-#DesignerProperty: Key: HideDefaultHeader, DisplayName: Hide Default Header, FieldType: Boolean, DefaultValue:  False, Description: 
-#DesignerProperty: Key: HideDefaultFooter, DisplayName: Hide Default Footer, FieldType: Boolean, DefaultValue:  False, Description: 
-#DesignerProperty: Key: ShowExpand, DisplayName: ShowExpand, FieldType: Boolean, DefaultValue:  False, Description: 
-#DesignerProperty: Key: Elevation, DisplayName: Elevation, FieldType: String, DefaultValue:  , Description: 
-#DesignerProperty: Key: GroupBy, DisplayName: GroupBy, FieldType: String, DefaultValue:  , Description: 
-#DesignerProperty: Key: ShowGroupBy, DisplayName: ShowGroupBy, FieldType: Boolean, DefaultValue:  False, Description:
+#DesignerProperty: Key: ColumnSortable, DisplayName: ColumnSortable (;), FieldType: String, DefaultValue: , Description: These fields will be sortable
+#DesignerProperty: Key: ColumnFilterable, DisplayName: ColumnFilterable (;), FieldType: String, DefaultValue: , Description: These fields will be filterable
+'
+#DesignerProperty: Key: ItemKeys, DisplayName: Action Keys (;), FieldType: String, DefaultValue:  , Description: Additional Action Buttons
+#DesignerProperty: Key: ItemTitles, DisplayName: Action Titles (;), FieldType: String, DefaultValue:  , Description: Additional Action Titles
+#DesignerProperty: Key: ItemIcons, DisplayName: Action Icons (;), FieldType: String, DefaultValue:  , Description: Additional Action Icons
+#DesignerProperty: Key: ItemColors, DisplayName: Action Colors (;), FieldType: String, DefaultValue:  , Description: Additional Action Colors
+
+#DesignerProperty: Key: FixedHeader, DisplayName: Fixed Header, FieldType: Boolean, DefaultValue:  True, Description: The header should be fixed works with height
+#DesignerProperty: Key: HideDefaultHeader, DisplayName: Hide Default Header, FieldType: Boolean, DefaultValue:  False, Description: Hide the default header
+#DesignerProperty: Key: HideDefaultFooter, DisplayName: Hide Default Footer, FieldType: Boolean, DefaultValue:  False, Description: Hide the default footer
+#DesignerProperty: Key: ShowExpand, DisplayName: ShowExpand, FieldType: Boolean, DefaultValue:  False, Description: Show the expansion slot
+#DesignerProperty: Key: Elevation, DisplayName: Elevation, FieldType: String, DefaultValue:  , Description: Set elevation
+#DesignerProperty: Key: GroupBy, DisplayName: GroupBy, FieldType: String, DefaultValue:  , Description: Group by column
+#DesignerProperty: Key: ShowGroupBy, DisplayName: ShowGroupBy, FieldType: Boolean, DefaultValue:  False, Description: Show should by functionality
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String.
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Style, DisplayName: Style, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String.
@@ -174,7 +177,7 @@ Sub Class_Globals
 	Private bShowExpand As Boolean
 	Private bDark As Boolean
 	Private bLoading As Boolean
-	Private sPageLength As String 
+	Private sPageLength As String    'ignore
 	Private bManual As Boolean
 	'
 	Public Items As List
@@ -233,8 +236,8 @@ Sub Class_Globals
 	className As String, width As String, filter As String, sort As String, ColType As String, extra As String, icon As String, Disabled As Boolean, imgWidth As String, imgHeight As String, avatarSize As String, iconSize As String, ReadOnly As Boolean, progressColor As String, progressRotate As String, progressSize As String, progressWidth As String, progressHeight As String, progressShowValue As Boolean, valueFormat As String, bindTotals As String, hasTotal As Boolean, depressed As Boolean, rounded As Boolean, dark As Boolean, label As String, color As String, outlined As Boolean, shaped As Boolean, target As String, prefix As String, colprops As Map, visible As Boolean, _
 	Large As Boolean, SourceTable As String, SourceField As String, DisplayField As String, ReturnObject As Boolean, PreDisplay As String, href As String, ConditionalClass As String, ConditionalColor As String, ConditionalStyle As String)
 	Private hasTotals As Boolean
-	Private hasExternalPagination As Boolean
-	Private totalVisible As String
+	Private hasExternalPagination As Boolean    'ignore
+	Private totalVisible As String      'ignore
 	Public selected As String
 	Public itemsname As String
 	Public groupby As String
@@ -280,7 +283,7 @@ Private sMenuColor As String
 Private sPrintColor As String
 Private sSaveColor As String
 '
-Private sColumIcons As String
+Private sColumIcons As String            'ignore
 Private sColumnAutoComplete As String
 Private sColumnAvatar As String
 Private sColumnButton As String
@@ -304,19 +307,19 @@ Private sColumnTextfield As String
 Private sColumnTime As String
 Private sColumnTitles As String
 Private sColumnWidths As String
-Private sDateFormat As String
-Private sDateTimeFormat As String
-Private sMoneyFormat As String
-Private sTimeFormat As String
+Private sDateFormat As String				'ignore
+Private sDateTimeFormat As String			'ignore
+Private sMoneyFormat As String				'ignore
+Private sTimeFormat As String				'ignore
 Private sColumnFilterable As String
 Public VElement As VueElement
 Private sitemsperpage As String
 Private bExternalPagination As Boolean
-Private sPaginationPosition As String
+Private sPaginationPosition As String  'ignore
 Private showpagination As String
-Private xPage As String
-Private xPageCount As String
-Private xPagination As String
+Private xPage As String		'ignore
+Private xPageCount As String	'ignore
+Private xPagination As String	'ignore
 Private sColumnAvatarText As String
 Private sColumnAvatarIcon As String
 Private sCurrentItems As String
@@ -329,6 +332,8 @@ Private lstPreDisplay As List
 Private lstConditionalClass As List
 Private lstConditionalColor As List
 Private lstConditionalStyle As List
+Private bShowInsideCard As Boolean
+Private bHidden As Boolean
 End Sub
 
 'initialize the custom view
@@ -343,6 +348,7 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	columnsM.Initialize
 	hasTotals = False
 	hasExternalPagination = False
+	bShowInsideCard = True
 	totalVisible = ""
 	hdr.Initialize
 	'keyID = $"${mName}key"$
@@ -474,6 +480,10 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sConditionalClass = Props.GetDefault("ConditionalClass", "")
 		sConditionalColor = Props.GetDefault("ConditionalColor", "")
 		sConditionalStyle = Props.GetDefault("ConditionalStyle", "")
+		bShowInsideCard = Props.GetDefault("ShowInsideCard", True)
+		bShowInsideCard = BANanoShared.parseBool(bShowInsideCard)
+		bHidden = Props.getdefault("Hidden", False)
+		bHidden = BANanoShared.parseBool(bHidden)
 	End If
 	'
 	bManual = BANanoShared.parseBool(bManual)
@@ -522,12 +532,17 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	sb.Append($"<div class="text-center pa-2" v-show="${showpagination}"><v-pagination id="${mName}pagination" circle></v-pagination></div>"$)
 	sb.Append($"</v-card>"$)
 	
-	mElement = mTarget.Append(sb.tostring).Get("#" & mName)
+	If bShowInsideCard Then
+		mElement = mTarget.Append(sb.tostring).Get("#" & mName)
+	Else
+		mElement = mTarget.Append($"<v-data-table ref="${mName}" id="${mName}"></v-data-table>"$).Get("#" & mName)
+	End If	
+	
 	VElement.Initialize(mCallBack, mName, mName)
 	VElement.TagName = "v-data-table"
 	'we have external pagination
 	'
-	If bExternalPagination Then
+	If bExternalPagination And bShowInsideCard Then
 		bHideDefaultFooter = True
 		GetPagination.AddAttr(":length", $"${mName}pagecount"$)
 		'GetPagination.AddAttr("length", sPageLength)
@@ -544,31 +559,38 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	Else
 		VElement.SetData(showpagination, False)
 	End If
-	'
-	AddAttr(":loading", sloading)
-	AddAttr(":items", itemsname)
-	AddAttr(":headers", headers)
-	AddAttr(":value", selected)
-	AddAttr(":group-by.sync", groupby)
-	AddAttr(":sort-by.sync", sortby)
-	AddAttr(":group-desc.sync", groupdesc)
-	AddAttr(":sort-desc.sync", sortdesc)
-	AddAttr(":expanded.sync", expanded)
-	AddAttr(":items-per-page.sync", sitemsperpage)
-	SetData(sitemsperpage, stItemsPerPage)
-	AddAttr(":search", search)
-	AddAttr("v-else", stVElse)
-	AddAttr("v-else-if", stVElseIf)
-	AddAttr("v-if", stVIf)
-	'AddAttr("v-show", stVShow)
-	AddAttr("item-key", PrimaryKey)
-	AddAttr(":dense", bDense)
-	setElevation(stElevation)
-	AddAttr(":show-select", bShowSelect)
-	If bSingleSelect Then
-		AddAttr(":single-select", bSingleSelect)
+	
+	'we will use the table caption
+	'not the card title
+	If bShowInsideCard = False Then
+		VElement.Bind("caption", titleText)
 	End If
-	AddAttr(":show-group-by", bShowGroupBy)
+	
+	VElement.AddAttr(":loading", sloading)
+	VElement.AddAttr(":items", itemsname)
+	VElement.AddAttr(":headers", headers)
+	VElement.AddAttr(":value", selected)
+	VElement.AddAttr(":group-by.sync", groupby)
+	VElement.AddAttr(":sort-by.sync", sortby)
+	VElement.AddAttr(":group-desc.sync", groupdesc)
+	VElement.AddAttr(":sort-desc.sync", sortdesc)
+	VElement.AddAttr(":expanded.sync", expanded)
+	VElement.AddAttr(":items-per-page.sync", sitemsperpage)
+	VElement.SetData(sitemsperpage, stItemsPerPage)
+	VElement.AddAttr(":search", search)
+	VElement.AddAttr("v-else", stVElse)
+	VElement.AddAttr("v-else-if", stVElseIf)
+	VElement.AddAttr("v-if", stVIf)
+	VElement.AddAttr("v-show", stVShow)
+	VElement.SetData(stVShow, Not(bHidden))
+	VElement.AddAttr("item-key", PrimaryKey)
+	VElement.AddAttr(":dense", bDense)
+	VElement.Elevation = stElevation
+	VElement.AddAttr(":show-select", bShowSelect)
+	If bSingleSelect Then
+		VElement.AddAttr(":single-select", bSingleSelect)
+	End If
+	VElement.AddAttr(":show-group-by", bShowGroupBy)
 	'
 	Dim sb As StringBuilder
 	sb.Initialize
@@ -586,8 +608,8 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	sb.Append($"${titleText}=string;"$)
 	sb.Append($"${filtershow}=false;"$)
 	sb.Append($"${sloading}=false"$)
-	setStates(sb.ToString)
-	SetData(filtershow, False)
+	VElement.States = sb.ToString
+	VElement.SetData(filtershow, False)
 	filterList.Initialize 
 	
 	setNoDataText("Working on it, please wait...")
@@ -618,7 +640,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	setTitle(mTitle)
 	'
 	If bManual = False Then
-	If mHasSearch = True Then
+	If mHasSearch And bShowInsideCard Then
 		AddSpacer
 		AddSearch
 		'
@@ -633,133 +655,133 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	End If
 	'
 	
-	If bHasAddnew Then
+	If bHasAddnew And bShowInsideCard Then
 		AddNew
 		AddDivider
 	End If
 	
-	If bHasClearSort Then
+	If bHasClearSort And bShowInsideCard Then
 		AddClearSort
 		AddDivider
 	End If
 	
-	If bHasFilter Then
+	If bHasFilter And bShowInsideCard Then
 		AddFilter("primary--text")
 		AddDivider
 		AddClearFilter
 		AddDivider
 	End If
 	
-	If bHasPdf Then
+	If bHasPdf And bShowInsideCard Then
 		AddPDF
 		AddDivider
 	End If
 	'
-	If bHasExcel Then
+	If bHasExcel And bShowInsideCard Then
 		AddExcel
 		AddDivider
 	End If
 	
-	If bHasRefresh Then
+	If bHasRefresh And bShowInsideCard Then
 		AddRefresh
 		AddDivider
 	End If
 	
-	If bHasBack Then
+	If bHasBack And bShowInsideCard Then
 		AddBack
 		AddDivider
 	End If
 	'
 	
 	'***** DEPENDING ON WHAT HAS BEEN SPECIFIED, CREATE COLUMNS
-	Dim lsColumnAutoComplete As List = BANanoShared.StrParse(";", sColumnAutoComplete)
+	Dim lsColumnAutoComplete As List = BANanoShared.StrParseComma(";", sColumnAutoComplete)
 	lsColumnAutoComplete = BANanoShared.ListTrimItems(lsColumnAutoComplete)
 	'
-	Dim lsColumnAvatar As List = BANanoShared.StrParse(";", sColumnAvatar)
+	Dim lsColumnAvatar As List = BANanoShared.StrParseComma(";", sColumnAvatar)
 	lsColumnAvatar = BANanoShared.ListTrimItems(lsColumnAvatar)
 	'
-	Dim lsColumnButton As List = BANanoShared.StrParse(";", sColumnButton)
+	Dim lsColumnButton As List = BANanoShared.StrParseComma(";", sColumnButton)
 	lsColumnButton = BANanoShared.ListTrimItems(lsColumnButton)
 	'
-	Dim lsColumnCheckbox As List = BANanoShared.StrParse(";", sColumnCheckbox)
+	Dim lsColumnCheckbox As List = BANanoShared.StrParseComma(";", sColumnCheckbox)
 	lsColumnCheckbox = BANanoShared.ListTrimItems(lsColumnCheckbox)
 	'
-	Dim lsColumnChip As List = BANanoShared.StrParse(";", sColumnChip)
+	Dim lsColumnChip As List = BANanoShared.StrParseComma(";", sColumnChip)
 	lsColumnChip = BANanoShared.ListTrimItems(lsColumnChip)
 	'
-	Dim lsColumnCircularProgress As List = BANanoShared.StrParse(";", sColumnCircularProgress)
+	Dim lsColumnCircularProgress As List = BANanoShared.StrParseComma(";", sColumnCircularProgress)
 	lsColumnCircularProgress = BANanoShared.ListTrimItems(lsColumnCircularProgress)
 	'
-	Dim lsColumnCombobox As List = BANanoShared.strparse(";", sColumnCombobox)
+	Dim lsColumnCombobox As List = BANanoShared.StrParseComma(";", sColumnCombobox)
 	lsColumnCombobox = BANanoShared.ListTrimItems(lsColumnCombobox)
 	'
-	Dim lsColumnDate As List = BANanoShared.strparse(";", sColumnDate)
+	Dim lsColumnDate As List = BANanoShared.StrParseComma(";", sColumnDate)
 	lsColumnDate = BANanoShared.ListTrimItems(lsColumnDate)
 	'
-	Dim lsColumnDateTime As List = BANanoShared.StrParse(";", sColumnDateTime)
+	Dim lsColumnDateTime As List = BANanoShared.StrParseComma(";", sColumnDateTime)
 	lsColumnDateTime = BANanoShared.ListTrimItems(lsColumnDateTime)
 	'
-	Dim lsColumnFields As List = BANanoShared.StrParse(";", sColumnFields)
+	Dim lsColumnFields As List = BANanoShared.StrParseComma(";", sColumnFields)
 	lsColumnFields = BANanoShared.ListTrimItems(lsColumnFields)
 	'
-	Dim lsColumnFileSize As List = BANanoShared.StrParse(";", sColumnFileSize)
+	Dim lsColumnFileSize As List = BANanoShared.StrParseComma(";", sColumnFileSize)
 	lsColumnFileSize = BANanoShared.ListTrimItems(lsColumnFileSize)
 	'
-	Dim lsColumnImage As List = BANanoShared.StrParse(";", sColumnImage)
+	Dim lsColumnImage As List = BANanoShared.StrParseComma(";", sColumnImage)
 	lsColumnImage = BANanoShared.ListTrimItems(lsColumnImage)
 	'
-	Dim lsColumnLinearProgress As List = BANanoShared.StrParse(";", sColumnLinearProgress)
+	Dim lsColumnLinearProgress As List = BANanoShared.StrParseComma(";", sColumnLinearProgress)
 	lsColumnLinearProgress = BANanoShared.ListTrimItems(lsColumnLinearProgress)
 	'
-	Dim lsColumnLink As List = BANanoShared.StrParse(";", sColumnLink)
+	Dim lsColumnLink As List = BANanoShared.StrParseComma(";", sColumnLink)
 	lsColumnLink = BANanoShared.ListTrimItems(lsColumnLink)
 	'
-	Dim lsColumnMoney As List = BANanoShared.StrParse(";", sColumnMoney)
+	Dim lsColumnMoney As List = BANanoShared.StrParseComma(";", sColumnMoney)
 	lsColumnMoney = BANanoShared.ListTrimItems(lsColumnMoney)
 	'
-	Dim lsColumnRating As List = BANanoShared.StrParse(";", sColumnRating)
+	Dim lsColumnRating As List = BANanoShared.StrParseComma(";", sColumnRating)
 	lsColumnRating = BANanoShared.ListTrimItems(lsColumnRating)
 	'
-	Dim lsColumnSortable As List = BANanoShared.StrParse(";", sColumnSortable)
+	Dim lsColumnSortable As List = BANanoShared.StrParseComma(";", sColumnSortable)
 	lsColumnSortable = BANanoShared.ListTrimItems(lsColumnSortable)
 	'
-	Dim lsColumnSwitch As List = BANanoShared.StrParse(";", sColumnSwitch)
+	Dim lsColumnSwitch As List = BANanoShared.StrParseComma(";", sColumnSwitch)
 	lsColumnSwitch = BANanoShared.ListTrimItems(lsColumnSwitch)
 	'
-	Dim lsColumnTextarea As List = BANanoShared.StrParse(";", sColumnTextarea)
+	Dim lsColumnTextarea As List = BANanoShared.StrParseComma(";", sColumnTextarea)
 	lsColumnTextarea = BANanoShared.ListTrimItems(lsColumnTextarea)
 	'
-	Dim lsColumnTextfield As List = BANanoShared.StrParse(";", sColumnTextfield)
+	Dim lsColumnTextfield As List = BANanoShared.StrParseComma(";", sColumnTextfield)
 	lsColumnTextfield = BANanoShared.ListTrimItems(lsColumnTextfield)
 	'
-	Dim lsColumnTime As List = BANanoShared.StrParse(";", sColumnTime)
+	Dim lsColumnTime As List = BANanoShared.StrParseComma(";", sColumnTime)
 	lsColumnTime = BANanoShared.ListTrimItems(lsColumnTime)
 	'
-	Dim lsColumnTitles As List = BANanoShared.StrParse(";", sColumnTitles)
+	Dim lsColumnTitles As List = BANanoShared.StrParseComma(";", sColumnTitles)
 	lsColumnTitles = BANanoShared.ListTrimItems(lsColumnTitles)
 	'
-	Dim lsColumnWidths As List = BANanoShared.StrParse(";", sColumnWidths)
+	Dim lsColumnWidths As List = BANanoShared.StrParseComma(";", sColumnWidths)
 	lsColumnWidths = BANanoShared.ListTrimItems(lsColumnWidths)
 	'
-	Dim lsColumnFilterable As List = BANanoShared.StrParse(";", sColumnFilterable)
+	Dim lsColumnFilterable As List = BANanoShared.StrParseComma(";", sColumnFilterable)
 	lsColumnFilterable = BANanoShared.ListTrimItems(lsColumnFilterable)
 	'
-	Dim lsColumnAvatarTxt As List = BANanoShared.StrParse(";", sColumnAvatarText)
+	Dim lsColumnAvatarTxt As List = BANanoShared.StrParseComma(";", sColumnAvatarText)
 	lsColumnAvatarTxt = BANanoShared.ListTrimItems(lsColumnAvatarTxt)
 	'
-	Dim lsColumnAvatarIcon As List = BANanoShared.StrParse(";", sColumnAvatarIcon)
+	Dim lsColumnAvatarIcon As List = BANanoShared.StrParseComma(";", sColumnAvatarIcon)
 	lsColumnAvatarIcon = BANanoShared.ListTrimItems(lsColumnAvatarIcon)
 	'
-	lstPreDisplay = BANanoShared.StrParse(";",  sPreDisplay)
+	lstPreDisplay = BANanoShared.StrParseComma(";",  sPreDisplay)
 	lstPreDisplay = BANanoShared.ListTrimItems(lstPreDisplay)
 	'
-	lstConditionalClass = BANanoShared.StrParse(";", sConditionalClass)
+	lstConditionalClass = BANanoShared.StrParseComma(";", sConditionalClass)
 	lstConditionalClass = BANanoShared.ListTrimItems(lstConditionalClass)
 	'
-	lstConditionalColor = BANanoShared.StrParse(";", sConditionalColor)
+	lstConditionalColor = BANanoShared.StrParseComma(";", sConditionalColor)
 	lstConditionalColor = BANanoShared.ListTrimItems(lstConditionalColor)
 	'
-	lstConditionalStyle = BANanoShared.StrParse(";", sConditionalStyle)
+	lstConditionalStyle = BANanoShared.StrParseComma(";", sConditionalStyle)
 	lstConditionalStyle = BANanoShared.ListTrimItems(lstConditionalStyle)	
 	'
 	Dim colTot As Int = lsColumnFields.Size - 1
@@ -1122,15 +1144,10 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	Dim rs As List
 	rs.Initialize 
 	'
-	sItemKeys = sItemKeys.Replace(",", ";")
-	sItemIcons = sItemIcons.Replace(",", ";")
-	sItemColors = sItemColors.Replace(",", ";")
-	sItemTitles = sItemTitles.Replace(",", ";")
-		
-	Dim xkeys As List = BANanoShared.StrParse(";", sItemKeys)
-	Dim xicons As List = BANanoShared.StrParse(";", sItemIcons)
-	Dim xcolors As List = BANanoShared.StrParse(";", sItemColors)
-	Dim xtitles As List = BANanoShared.StrParse(";", sItemTitles)
+	Dim xkeys As List = BANanoShared.StrParseComma(";", sItemKeys)
+	Dim xicons As List = BANanoShared.StrParseComma(";", sItemIcons)
+	Dim xcolors As List = BANanoShared.StrParseComma(";", sItemColors)
+	Dim xtitles As List = BANanoShared.StrParseComma(";", sItemTitles)
 		'
 	xkeys = BANanoShared.ListTrimItems(xkeys)
 	xicons = BANanoShared.ListTrimItems(xicons)
@@ -1400,6 +1417,7 @@ End Sub
 
 'add a spacer to the card title
 Sub AddSpacer
+	If bShowInsideCard = False Then Return
 	Dim ct As BANanoElement
 	ct.Initialize($"#${titleID}"$)
 	ct.Append("<v-spacer></v-spacer>")
@@ -1407,6 +1425,7 @@ End Sub
 
 'add a spacer to the card title
 Sub AddDivider
+	If bShowInsideCard = False Then Return
 	Dim ct As BANanoElement
 	ct.Initialize($"#${titleID}"$)
 	ct.Append($"<v-divider vertical class="mx-2"></v-divider>"$)
@@ -1414,30 +1433,35 @@ End Sub
 
 'add a column to add a new
 Sub AddNew
+	If bShowInsideCard = False Then Return
 	Dim btnKey As String = $"${mName}_add"$
 	AddTitleIcon(btnKey, "mdi-plus", "blue")
 End Sub
 
 'add a column to clear sort
 Sub AddClearSort
+	If bShowInsideCard = False Then Return
 	Dim btnKey As String = $"${mName}_clearsort"$
 	AddTitleIcon(btnKey, "mdi-sort-variant-remove", "orange")
 End Sub
 
 'add a column to clear filters
 Sub AddClearFilter
+	If bShowInsideCard = False Then Return
 	Dim btnKey As String = $"${mName}_clearfilter"$
 	AddTitleIcon(btnKey, "mdi-filter-remove", "red")
 End Sub
 
 'add a back button 
 Sub AddBack
+	If bShowInsideCard = False Then Return
 	Dim btnKey As String = $"${mName}_back"$
 	AddTitleIcon(btnKey, "mdi-chevron-left", "cyan")
 End Sub
 
 'add a back button 
 Sub AddRefresh
+	If bShowInsideCard = False Then Return
 	Dim btnKey As String = $"${mName}_refresh"$
 	AddTitleIcon(btnKey, "mdi-reload", "purple")
 End Sub
@@ -1449,16 +1473,19 @@ End Sub
 
 'add export to pdf
 Sub AddPDF
+	If bShowInsideCard = False Then Return
 	Dim btnKey As String = $"${mName}_pdf"$
 	AddTitleIcon(btnKey, "mdi-file-pdf-outline", "brown")
 End Sub
 
 Sub AddExcel
+	If bShowInsideCard = False Then Return
 	Dim btnKey As String = $"${mName}_excel"$
 	AddTitleIcon(btnKey, "mdi-file-excel-box-outline", "cyan")
 End Sub
 
 Sub AddToolbarIcon(elID As String, eIcon As String, btnColor As String)
+	If bShowInsideCard = False Then Return
 	Dim btnKey As String = $"${mName}_${elID}"$
 	btnKey = btnKey.tolowercase
 	AddTitleIcon(btnKey, eIcon, btnColor)
@@ -1466,6 +1493,7 @@ End Sub
 
 'a button with an icon on the left
 Sub AddTitleIcon(elID As String, eIcon As String, btnColor As String)
+	If bShowInsideCard = False Then Return
 	Dim ct As BANanoElement
 	ct.Initialize($"#${titleID}"$)
 	elID = elID.ToLowerCase
@@ -1491,6 +1519,7 @@ End Sub
 
 'add a filter, after all columns are added
 Sub AddFilter(activeClass As String)
+	If bShowInsideCard = False Then Return
 	'show the filter
 	SetData(filtershow, True)
 	Dim btnKey As String = $"${mName}_filter"$
@@ -1531,6 +1560,7 @@ End Sub
 
 'add a search to the card title
 Sub AddSearch
+	If bShowInsideCard = False Then Return
 	Dim str As String = $"<v-text-field id="${searchID}" @keydown.native.escape="${search}=''" v-model="${search}" append-icon="mdi-magnify" label="Search" single-line hide-details clearable class="shrink"></v-text-field>"$
 	Dim ct As BANanoElement
 	ct.Initialize($"#${titleID}"$)
@@ -1559,53 +1589,7 @@ End Sub
 
 'sets the state bindings
 public Sub setStates(varBindings As String)
-	If BANano.IsNull(varBindings) Or BANano.IsUndefined(varBindings) Then Return
-	If varBindings = "" Then Return
-	Dim mxItems As List = BANanoShared.StrParse(";", varBindings)
-	For Each mt As String In mxItems
-		Dim k As String = BANanoShared.MvField(mt,1,"=")
-		Dim v As String = BANanoShared.MvField(mt,2,"=")
-		If v.EqualsIgnoreCase("false") Then
-			If k <> "" Then
-				SetData(k, False)
-			End If
-		else if v.EqualsIgnoreCase("true") Then
-			If k <> "" Then
-				SetData(k, True)
-			End If
-		else if v.EqualsIgnoreCase("array") Then
-			If k <> "" Then
-				Dim nl As List = NewList
-				SetData(k, nl)
-			End If
-		else if v.EqualsIgnoreCase("object") Then
-			If k <> "" Then
-				Dim nm As Map = CreateMap()
-				SetData(k, nm)
-			End If
-		else if v.EqualsIgnoreCase("map") Then
-			If k <> "" Then
-				Dim nm As Map = CreateMap()
-				SetData(k, nm)
-			End If
-		else if v.EqualsIgnoreCase("string") Then
-			If k <> "" Then
-				SetData(k, "")
-			End If
-		else if v.EqualsIgnoreCase("boolean") Then
-			If k <> "" Then
-				SetData(k, False)
-			End If
-		else if v.EqualsIgnoreCase("int") Then
-			If k <> "" Then
-				SetData(k, 0)
-			End If
-		Else
-			If k <> "" Then
-				SetData(k, v)
-			End If
-		End If
-	Next
+	VElement.States = varBindings
 End Sub
 
 'returns the tag id
@@ -2123,7 +2107,7 @@ Sub Clear
 	Reload(Items)
 End Sub
 
-'update the records
+'update the records to refresh everything
 Sub Reload(records As List)
 	Dim args As List = NewList
 	Items = records
@@ -2474,9 +2458,7 @@ Sub SetButtonShaped(colName As String)
 		col.shaped = True
 		columnsM.Put(colName,col)
 	End If
-	
 End Sub
-
 
 
 'make the button to be round

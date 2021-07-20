@@ -390,3 +390,5 @@ Sub BindState(VS As VueComponent)
 		VC.SetCallBack(k, cb)
 	Next
 End Sub
+
+	

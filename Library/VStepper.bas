@@ -72,7 +72,7 @@ Private bDark As Boolean
 Private sElevation As String
 Private bFlat As Boolean
 Private sHeight As String
-Private bHidden As String
+Private bHidden As String   'ignore
 Private bLight As Boolean
 Private sMaxHeight As String
 Private sMaxWidth As String
@@ -386,4 +386,112 @@ Sub BindState(VC As VueComponent)
 		Dim cb As BANanoObject = mmethods.Get(k)
 		VC.SetCallBack(k, cb)
 	Next
+End Sub
+
+Sub HiddenXSOnly
+	AddClass("hidden-xs-only")
+End Sub
+
+Sub HiddenSMOnly
+	AddClass("hidden-sm-only")
+End Sub
+	
+Sub HiddenMDOnly
+	AddClass("hidden-md-only")
+End Sub
+	
+Sub HiddenLGOnly
+	AddClass("hidden-lg-only")
+End Sub
+	
+Sub HiddenXLOnly
+	AddClass("hidden-xl-only")
+End Sub
+'
+Sub HiddenXSAndDown
+	AddClass("hidden-xs-and-down")
+End Sub
+
+Sub HiddenSMAndDown
+	AddClass("hidden-sm-and-down")
+End Sub
+	
+Sub HiddenMDAndDown
+	AddClass("hidden-md-and-down")
+End Sub
+	
+Sub HiddenLGAndDown
+	AddClass("hidden-lg-and-down")
+End Sub
+	
+Sub HiddenXLAndDown
+	AddClass("hidden-xl-and-down")
+End Sub
+'
+Sub HiddenXSAndUp
+	AddClass("hidden-xs-and-up")
+End Sub
+
+Sub HiddenSMAndUp
+	AddClass("hidden-sm-and-up")
+End Sub
+	
+Sub HiddenMDAndUp
+	AddClass("hidden-md-and-up")
+End Sub
+	
+Sub HiddenLGAndUp
+	AddClass("hidden-lg-and-up")
+End Sub
+	
+Sub HiddenXLAndUp
+	AddClass("hidden-xl-and-up")
+End Sub	
+
+Sub HideOnAll
+	AddClass("d-none")
+End Sub
+
+Sub HideOnlyOnXS
+	AddClass("d-none d-sm-flex")
+End Sub
+
+Sub HideOnlyOnSM
+	AddClass("d-sm-none d-md-flex")
+End Sub
+
+Sub HideOnlyOnMD
+	AddClass("d-md-none d-lg-flex")
+End Sub
+
+Sub HideOnlyOnLG
+	AddClass("d-lg-none d-xl-flex")
+End Sub
+
+Sub HideOnlyOnXL
+	AddClass("d-xl-none")
+End Sub
+
+Sub VisibleOnAll
+	AddClass("d-flex")
+End Sub
+
+Sub VisibleOnlyOnXS
+	AddClass("d-flex d-sm-none")
+End Sub
+
+Sub VisibleOnlyOnSM
+	AddClass("d-none d-sm-flex d-md-none")
+End Sub
+
+Sub VisibleOnlyOnMD
+	AddClass("d-none d-md-flex d-lg-none")
+End Sub
+
+Sub VisibleOnlyOnLG
+	AddClass("d-none d-lg-flex d-xl-none")
+End Sub
+
+Sub VisibleOnlyOnXL
+	AddClass("d-none d-xl-flex")
 End Sub

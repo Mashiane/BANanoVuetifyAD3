@@ -153,7 +153,7 @@ Private sTitle As String
 Private sTo As String
 Public Options As ListViewItemOptions
 Private sRightSwitch As String
-Private sRightSwitchColor As String
+Private sRightSwitchColor As String 'ignore
 Public Template As String = "none"
 End Sub
 	

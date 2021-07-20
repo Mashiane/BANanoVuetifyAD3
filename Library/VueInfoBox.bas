@@ -29,7 +29,7 @@ Version=8.9
 #DesignerProperty: Key: OnClick, DisplayName: On Click, FieldType: String, DefaultValue: , Description: Event arguments to be passed to the attribute.
 Sub Class_Globals
 	Private mCallBack As Object
-	Private mEvent As String
+	Private mEvent As String    'ignore
 	Public methods As Map
 	Private BANano As BANano  'ignore
 	Private mName As String
@@ -614,3 +614,4 @@ Sub BindState(Vs As VueComponent)
 		Vs.SetCallBack(k, cb)
 	Next
 End Sub
+

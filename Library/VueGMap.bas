@@ -1246,3 +1246,4 @@ Sub AddRectangle(rectID As String, rectTitle As String, rectLat1 As Double, rect
 	
 	rectangles.Put(rectID,mc)
 End Sub
+

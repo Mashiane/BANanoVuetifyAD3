@@ -10,8 +10,8 @@ Sub Class_Globals
 	Private banano As BANano 'ignore
 	Private DocChangeCallBack As Object
 	Private DocChangeMethod As String
-	Private GetCallBack As Object
-	Private GetMethod As String
+	Private GetCallBack As Object    'ignore
+	Private GetMethod As String     'ignore
 	Private Schema As Map
 	'
 	Public const DB_STRING As String = "TEXT"

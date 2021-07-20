@@ -83,7 +83,7 @@ Sub Class_Globals
 	Private sAuthDomain As String
 	Private sAutoIncrement As String
 	Private sBlobs As String
-	Private sCustomQuery As String
+	Private sCustomQuery As String   'ignore
 	Private sDatabaseUrl As String
 	Private sDefaults As String
 	Private sDisplayField As String
@@ -109,12 +109,12 @@ Sub Class_Globals
 	Private bUseDatabase As Boolean
 	Private bUsePerformance As Boolean
 	Private bUseStorage As Boolean
-	Private sVapidKey As String
-	Private sWhereFields As String
+	Private sVapidKey As String   'ignore
+	Private sWhereFields As String   'ignore
  	Private bShowLog As Boolean
 	'
 	Private schemaIntegers As List
-	Private schemaStrings As List
+	Private schemaStrings As List    'ignore
 	Private schemaDoubles As List
 	Private schemaBlobs As List
 	Private schemaFields As List
@@ -130,8 +130,8 @@ Sub Class_Globals
 	Private schemaSelectFields As List
 	Private dsKey As String
 	Public Tag As String
-	Private sUserName As String
-	Private sPassword As String
+	Private sUserName As String    'ignore
+	Private sPassword As String    'ignore
 	'
 	Public const ACTION_CREATE_TABLE As String = "CreateTable"
 	Public const ACTION_CREATE As String = "Create"
@@ -163,7 +163,7 @@ Sub Class_Globals
 	Public Mode As String 
 	Public IsBound As Boolean
 	Private Record As Map
-	Private sPrimaryKeyValue As String
+	Private sPrimaryKeyValue As String   'ignore
 	Private firebaseConfig As Map
 	Public firebase As BANanoObject
 	Public firebaseApp As BANanoObject
@@ -991,8 +991,8 @@ private Sub FireStoreExecute As Boolean    'ignore
 	db.SchemaAddText(Strings)
 	'
 	Dim bRead As Boolean = False
-	Dim bSelect As Boolean = False
-	Dim bCount As Boolean = False
+	Dim bSelect As Boolean = False  'ignore
+	Dim bCount As Boolean = False    'ignore
 	'
 	'
 	Tag = sAction

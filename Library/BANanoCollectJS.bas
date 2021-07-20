@@ -166,13 +166,13 @@ Sub concat(objects As List) As BANanoCollectJS
 End Sub
 
 'contains a property
-Sub contains(fld As String) As Boolean
+Sub contains1(fld As String) As Boolean
 	Dim res As Boolean = collect.RunMethod("contains", Array(fld)).Result
 	Return res
 End Sub
 
 'contains a property with value
-Sub contains1(fld As String, value As String) As Boolean
+Sub contains2(fld As String, value As String) As Boolean
 	Dim res As Boolean = collect.RunMethod("contains", Array(fld,value)).Result
 	Return res
 End Sub

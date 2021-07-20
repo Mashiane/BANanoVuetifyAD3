@@ -88,7 +88,7 @@ Sub Class_Globals
 	Private sDefaults As String
 	
 	Private schemaIntegers As List
-	Private schemaStrings As List
+	Private schemaStrings As List   'ignore
 	Private schemaDoubles As List
 	Private schemaBlobs As List
 	Private schemaFields As List
@@ -107,7 +107,7 @@ Sub Class_Globals
 	Private sSingular As String
 	Private sPlural As String
 	Private sDisplayField As String
-	Private sPrimaryKeyValue As String
+	Private sPrimaryKeyValue As String   'ignore
 	'
 	Public const ACTION_CREATE_TABLE As String = "CreateTable"
 	Public const ACTION_CREATE As String = "Create"
@@ -1501,7 +1501,7 @@ private Sub SQLiteExecute As Boolean    'ignore
 		'will have the auto & primary keys
 		Dim fldnames As List
 		fldnames.Initialize 
-		Dim sauto As String = ""
+		Dim sauto As String = ""  'ignore
 		Dim spri As String = ""
 		'loop through each field
 		For Each fldm As Map In SQLite.result

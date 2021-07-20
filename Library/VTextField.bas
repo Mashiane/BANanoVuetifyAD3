@@ -41,6 +41,8 @@ Version=8.95
 #DesignerProperty: Key: AppendIcon, DisplayName: AppendIcon, FieldType: String, DefaultValue: , Description: AppendIcon
 #DesignerProperty: Key: AppendOuterIcon, DisplayName: AppendOuterIcon, FieldType: String, DefaultValue: , Description: AppendOuterIcon
 #DesignerProperty: Key: AutoGrow, DisplayName: TextArea AutoGrow, FieldType: Boolean, DefaultValue: false, Description: AutoGrow
+#DesignerProperty: Key: Rows, DisplayName: TextArea Rows, FieldType: String, DefaultValue: , Description: Rows
+#DesignerProperty: Key: NoResize, DisplayName: TextArea NoResize, FieldType: Boolean, DefaultValue: false, Description: NoResize
 #DesignerProperty: Key: Autofocus, DisplayName: Autofocus, FieldType: Boolean, DefaultValue: false, Description: Autofocus
 #DesignerProperty: Key: BackgroundColor, DisplayName: BackgroundColor, FieldType: String, DefaultValue: , Description: BackgroundColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: BackgroundColorIntensity, DisplayName: BackgroundColorIntensity, FieldType: String, DefaultValue: , Description: BackgroundColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
@@ -62,7 +64,7 @@ Version=8.95
 #DesignerProperty: Key: Key, DisplayName: Key, FieldType: String, DefaultValue: , Description: Key
 #DesignerProperty: Key: Light, DisplayName: Light, FieldType: Boolean, DefaultValue: false, Description: Light
 #DesignerProperty: Key: LoaderHeight, DisplayName: LoaderHeight, FieldType: String, DefaultValue: , Description: LoaderHeight
-#DesignerProperty: Key: NoResize, DisplayName: TextArea NoResize, FieldType: Boolean, DefaultValue: false, Description: NoResize
+
 #DesignerProperty: Key: Outlined, DisplayName: Outlined, FieldType: Boolean, DefaultValue: false, Description: Outlined
 #DesignerProperty: Key: PersistentHint, DisplayName: PersistentHint, FieldType: Boolean, DefaultValue: false, Description: PersistentHint
 #DesignerProperty: Key: PersistentPlaceholder, DisplayName: PersistentPlaceholder, FieldType: Boolean, DefaultValue: false, Description: PersistentPlaceholder
@@ -73,7 +75,7 @@ Version=8.95
 #DesignerProperty: Key: Reverse, DisplayName: Reverse, FieldType: Boolean, DefaultValue: false, Description: Reverse
 #DesignerProperty: Key: Rounded, DisplayName: Rounded, FieldType: Boolean, DefaultValue: false, Description: Rounded
 #DesignerProperty: Key: RowHeight, DisplayName: RowHeight, FieldType: String, DefaultValue: , Description: RowHeight
-#DesignerProperty: Key: Rows, DisplayName: TextArea Rows, FieldType: String, DefaultValue: , Description: Rows
+
 #DesignerProperty: Key: Shaped, DisplayName: Shaped, FieldType: Boolean, DefaultValue: false, Description: Shaped
 #DesignerProperty: Key: SingleLine, DisplayName: SingleLine, FieldType: Boolean, DefaultValue: false, Description: SingleLine
 #DesignerProperty: Key: Solo, DisplayName: Solo, FieldType: Boolean, DefaultValue: false, Description: Solo
@@ -647,4 +649,112 @@ Sub BindState(VC As VueComponent)
 		Dim cb As BANanoObject = mmethods.Get(k)
 		VC.SetCallBack(k, cb)
 	Next
+End Sub
+
+Sub HiddenXSOnly
+	AddClass("hidden-xs-only")
+End Sub
+
+Sub HiddenSMOnly
+	AddClass("hidden-sm-only")
+End Sub
+	
+Sub HiddenMDOnly
+	AddClass("hidden-md-only")
+End Sub
+	
+Sub HiddenLGOnly
+	AddClass("hidden-lg-only")
+End Sub
+	
+Sub HiddenXLOnly
+	AddClass("hidden-xl-only")
+End Sub
+'
+Sub HiddenXSAndDown
+	AddClass("hidden-xs-and-down")
+End Sub
+
+Sub HiddenSMAndDown
+	AddClass("hidden-sm-and-down")
+End Sub
+	
+Sub HiddenMDAndDown
+	AddClass("hidden-md-and-down")
+End Sub
+	
+Sub HiddenLGAndDown
+	AddClass("hidden-lg-and-down")
+End Sub
+	
+Sub HiddenXLAndDown
+	AddClass("hidden-xl-and-down")
+End Sub
+'
+Sub HiddenXSAndUp
+	AddClass("hidden-xs-and-up")
+End Sub
+
+Sub HiddenSMAndUp
+	AddClass("hidden-sm-and-up")
+End Sub
+	
+Sub HiddenMDAndUp
+	AddClass("hidden-md-and-up")
+End Sub
+	
+Sub HiddenLGAndUp
+	AddClass("hidden-lg-and-up")
+End Sub
+	
+Sub HiddenXLAndUp
+	AddClass("hidden-xl-and-up")
+End Sub	
+
+Sub HideOnAll
+	AddClass("d-none")
+End Sub
+
+Sub HideOnlyOnXS
+	AddClass("d-none d-sm-flex")
+End Sub
+
+Sub HideOnlyOnSM
+	AddClass("d-sm-none d-md-flex")
+End Sub
+
+Sub HideOnlyOnMD
+	AddClass("d-md-none d-lg-flex")
+End Sub
+
+Sub HideOnlyOnLG
+	AddClass("d-lg-none d-xl-flex")
+End Sub
+
+Sub HideOnlyOnXL
+	AddClass("d-xl-none")
+End Sub
+
+Sub VisibleOnAll
+	AddClass("d-flex")
+End Sub
+
+Sub VisibleOnlyOnXS
+	AddClass("d-flex d-sm-none")
+End Sub
+
+Sub VisibleOnlyOnSM
+	AddClass("d-none d-sm-flex d-md-none")
+End Sub
+
+Sub VisibleOnlyOnMD
+	AddClass("d-none d-md-flex d-lg-none")
+End Sub
+
+Sub VisibleOnlyOnLG
+	AddClass("d-none d-lg-flex d-xl-none")
+End Sub
+
+Sub VisibleOnlyOnXL
+	AddClass("d-none d-xl-flex")
 End Sub

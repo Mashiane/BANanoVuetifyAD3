@@ -23,11 +23,6 @@ Version=8.9
 #DesignerProperty: Key: Divider, DisplayName: HasCardTextDivider, FieldType: Boolean, DefaultValue: True, Description: Add a divider after card text
 #DesignerProperty: Key: Actions, DisplayName: HasActions, FieldType: Boolean, DefaultValue: True, Description: Actions
 '
-#DesignerProperty: Key: ItemKeys, DisplayName: Action Keys (;), FieldType: String, DefaultValue:  , Description: Item Icons
-#DesignerProperty: Key: ItemIcons, DisplayName: Action Icons (;), FieldType: String, DefaultValue:  , Description: Item Icons
-#DesignerProperty: Key: ItemColors, DisplayName: Action Colors (;), FieldType: String, DefaultValue:  , Description: Item Colors
-#DesignerProperty: Key: ItemTextx, DisplayName: Action Texts (;), FieldType: String, DefaultValue:  , Description: Item Texts
-
 #DesignerProperty: Key: ActiveClass, DisplayName: ActiveClass, FieldType: String, DefaultValue: , Description: ActiveClass
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue: , Description: Color, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: ColorIntensity, DisplayName: Colorintensity, FieldType: String, DefaultValue: , Description: Colorintensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
@@ -141,10 +136,6 @@ Private sPY As String
 Private bdisabled As Boolean
 Private bLoading As Boolean
 Private bHidden As Boolean
-Private sItemKeys As String
-Private sItemColors As String
-Private sItemIcons As String
-private sItemTexts as string
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -252,11 +243,6 @@ sPR = Props.Get("PR")
 sPT = Props.Get("PT")
 sPX = Props.Get("PX")
 sPY = Props.Get("PY")
-'
-sItemKeys = Props.GetDefault("ItemKeys","")
-		sItemIcons = Props.GetDefault("ItemIcons","")
-		sItemColors = Props.GetDefault("ItemColors","")
-		sItemTexts = Props.GetDefault("ItemTexts","")
 	End If
 	'
 	bOutlined = BANanoShared.parseBool(bOutlined)
@@ -496,4 +482,112 @@ End Sub
 
 Sub OnClick(args As String)
 	VElement.SetOnEventOwn(mCallBack, $"${mName}_click"$, "click", args)
+End Sub
+
+Sub HiddenXSOnly
+	AddClass("hidden-xs-only")
+End Sub
+
+Sub HiddenSMOnly
+	AddClass("hidden-sm-only")
+End Sub
+	
+Sub HiddenMDOnly
+	AddClass("hidden-md-only")
+End Sub
+	
+Sub HiddenLGOnly
+	AddClass("hidden-lg-only")
+End Sub
+	
+Sub HiddenXLOnly
+	AddClass("hidden-xl-only")
+End Sub
+'
+Sub HiddenXSAndDown
+	AddClass("hidden-xs-and-down")
+End Sub
+
+Sub HiddenSMAndDown
+	AddClass("hidden-sm-and-down")
+End Sub
+	
+Sub HiddenMDAndDown
+	AddClass("hidden-md-and-down")
+End Sub
+	
+Sub HiddenLGAndDown
+	AddClass("hidden-lg-and-down")
+End Sub
+	
+Sub HiddenXLAndDown
+	AddClass("hidden-xl-and-down")
+End Sub
+'
+Sub HiddenXSAndUp
+	AddClass("hidden-xs-and-up")
+End Sub
+
+Sub HiddenSMAndUp
+	AddClass("hidden-sm-and-up")
+End Sub
+	
+Sub HiddenMDAndUp
+	AddClass("hidden-md-and-up")
+End Sub
+	
+Sub HiddenLGAndUp
+	AddClass("hidden-lg-and-up")
+End Sub
+	
+Sub HiddenXLAndUp
+	AddClass("hidden-xl-and-up")
+End Sub	
+
+Sub HideOnAll
+	AddClass("d-none")
+End Sub
+
+Sub HideOnlyOnXS
+	AddClass("d-none d-sm-flex")
+End Sub
+
+Sub HideOnlyOnSM
+	AddClass("d-sm-none d-md-flex")
+End Sub
+
+Sub HideOnlyOnMD
+	AddClass("d-md-none d-lg-flex")
+End Sub
+
+Sub HideOnlyOnLG
+	AddClass("d-lg-none d-xl-flex")
+End Sub
+
+Sub HideOnlyOnXL
+	AddClass("d-xl-none")
+End Sub
+
+Sub VisibleOnAll
+	AddClass("d-flex")
+End Sub
+
+Sub VisibleOnlyOnXS
+	AddClass("d-flex d-sm-none")
+End Sub
+
+Sub VisibleOnlyOnSM
+	AddClass("d-none d-sm-flex d-md-none")
+End Sub
+
+Sub VisibleOnlyOnMD
+	AddClass("d-none d-md-flex d-lg-none")
+End Sub
+
+Sub VisibleOnlyOnLG
+	AddClass("d-none d-lg-flex d-xl-none")
+End Sub
+
+Sub VisibleOnlyOnXL
+	AddClass("d-none d-xl-flex")
 End Sub

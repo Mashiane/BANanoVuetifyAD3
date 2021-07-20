@@ -167,11 +167,11 @@ Sub Class_Globals
 	Private mStyles As String = "" 
 	Private mAttributes As String = "" 
 	Public VElement As VueElement 
-	Private sBounds As String
+	Private sBounds As String   'ignore
 	Private sCenterLat As String
 	Private sCenterLng As String
 	Private bClosePopupOnClick As Boolean
-	Private sCrs As String
+	Private sCrs As String     'ignore
 	Private bDisabled As String
 	Private bDoubleClickZoom As Boolean
 	Private iEaseLinearity As Int
@@ -186,14 +186,14 @@ Sub Class_Globals
 	Private sLayerToken As String
 	Private sLayerUrl As String = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
 	Private bMarkerZoomAnimation As Boolean
-	Private sMaxBounds As String
+	Private sMaxBounds As String    'ignore
 	Private iMaxBoundsViscosity As Int
 	Private iMaxZoom As Int
 	Private iMinZoom As Int
 	Private bNoBlockingAnimations As Boolean
-	Private sPadding As String
-	Private sPaddingBottomRight As String
-	Private sPaddingTopLeft As String
+	Private sPadding As String   'ignore
+	Private sPaddingBottomRight As String    'ignore
+	Private sPaddingTopLeft As String    'ignore
 	Private sTitle As String
 	Private sVBind As String
 	Private sVIf As String
@@ -207,11 +207,11 @@ Sub Class_Globals
 	Private bUseMakiMarkers As Boolean
 	Private OpenPopUpMap As Map 
 	Private bInsideVCard As Boolean
-	Private zZIndex As String
+	Private zZIndex As String 'ignore
  	'
 	Dim xTitle As String
 	Dim xoptions As String
-	Dim xbounds As String
+	Dim xbounds As String 'ignore
 	Dim xDisabled As String
 	Dim xcenter As String
 	Dim xtoken As String
@@ -224,7 +224,7 @@ Sub Class_Globals
 	Private xmarker As String
 	Private xmarkers As String
 	Private xresize As String
-	Private xkey As String
+	Private xkey As String 'ignore
 	Private xpolygons As String
 	Private polygons As Map
 	Private xpolygon As String
@@ -1247,7 +1247,7 @@ Sub stopLocate(VC As VueComponent)
 End Sub
 
 'native locate
-Sub locate(VC As VueComponent, bWatch As Boolean, bSetView As Boolean, maxZoom As Int, timeOut As Int, maximumAge As Int, enableHighAccuracy As Boolean)
+Sub locate(VC As VueComponent, bWatch As Boolean, bSetView As Boolean, maxZoom As Int, timeOut As Int, maximumAge As Int, enableHighAccuracy As Boolean)   'ignore
 	
 	
 End Sub
@@ -1542,7 +1542,7 @@ Sub SetPopUp(markerID As String, markerTitle As String)
 End Sub
 
 'add a rectangle
-Sub AddRectangle(rectID As String, rectTitle As String, rectLat1 As Double, rectLng1 As Double, rectLat2 As Double, rectLng2 As Double, rectColor As String, rectWeight As Int)
+Sub AddRectangle(rectID As String, rectTitle As String, rectLat1 As Double, rectLng1 As Double, rectLat2 As Double, rectLng2 As Double, rectColor As String, rectWeight As Int)     'ignore
 	rectID = rectID.tolowercase
 	Dim mc As VPolyLine
 	mc.Initialize
@@ -1769,4 +1769,112 @@ Sub SetCenterOnLastPos(VC As VueComponent)
 	Catch
 		Log(LastException)
 	End Try		
+End Sub
+
+Sub HiddenXSOnly
+	AddClass("hidden-xs-only")
+End Sub
+
+Sub HiddenSMOnly
+	AddClass("hidden-sm-only")
+End Sub
+	
+Sub HiddenMDOnly
+	AddClass("hidden-md-only")
+End Sub
+	
+Sub HiddenLGOnly
+	AddClass("hidden-lg-only")
+End Sub
+	
+Sub HiddenXLOnly
+	AddClass("hidden-xl-only")
+End Sub
+'
+Sub HiddenXSAndDown
+	AddClass("hidden-xs-and-down")
+End Sub
+
+Sub HiddenSMAndDown
+	AddClass("hidden-sm-and-down")
+End Sub
+	
+Sub HiddenMDAndDown
+	AddClass("hidden-md-and-down")
+End Sub
+	
+Sub HiddenLGAndDown
+	AddClass("hidden-lg-and-down")
+End Sub
+	
+Sub HiddenXLAndDown
+	AddClass("hidden-xl-and-down")
+End Sub
+'
+Sub HiddenXSAndUp
+	AddClass("hidden-xs-and-up")
+End Sub
+
+Sub HiddenSMAndUp
+	AddClass("hidden-sm-and-up")
+End Sub
+	
+Sub HiddenMDAndUp
+	AddClass("hidden-md-and-up")
+End Sub
+	
+Sub HiddenLGAndUp
+	AddClass("hidden-lg-and-up")
+End Sub
+	
+Sub HiddenXLAndUp
+	AddClass("hidden-xl-and-up")
+End Sub	
+
+Sub HideOnAll
+	AddClass("d-none")
+End Sub
+
+Sub HideOnlyOnXS
+	AddClass("d-none d-sm-flex")
+End Sub
+
+Sub HideOnlyOnSM
+	AddClass("d-sm-none d-md-flex")
+End Sub
+
+Sub HideOnlyOnMD
+	AddClass("d-md-none d-lg-flex")
+End Sub
+
+Sub HideOnlyOnLG
+	AddClass("d-lg-none d-xl-flex")
+End Sub
+
+Sub HideOnlyOnXL
+	AddClass("d-xl-none")
+End Sub
+
+Sub VisibleOnAll
+	AddClass("d-flex")
+End Sub
+
+Sub VisibleOnlyOnXS
+	AddClass("d-flex d-sm-none")
+End Sub
+
+Sub VisibleOnlyOnSM
+	AddClass("d-none d-sm-flex d-md-none")
+End Sub
+
+Sub VisibleOnlyOnMD
+	AddClass("d-none d-md-flex d-lg-none")
+End Sub
+
+Sub VisibleOnlyOnLG
+	AddClass("d-none d-lg-flex d-xl-none")
+End Sub
+
+Sub VisibleOnlyOnXL
+	AddClass("d-none d-xl-flex")
 End Sub

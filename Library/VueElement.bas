@@ -699,11 +699,11 @@ Sub AddStepHorizontal(stepID As String, stepLabel As String, stepComplete As Str
 		GetVueElement(stepperHeader).AddDivider
 	End If
 		
-	Dim vsteppercontent As VueElement = AddVueElement2(stepperItems, childContentKey, "v-stepper-content", Null)
-	vsteppercontent.AddAttr("step", Steps)
+	Dim vsteppercontentx As VueElement = AddVueElement2(stepperItems, childContentKey, "v-stepper-content", Null)
+	vsteppercontentx.AddAttr("step", Steps)
 	'
-	vsteppercontent.BindVueElement(vstepperstepx)
-	Return vsteppercontent
+	vsteppercontentx.BindVueElement(vstepperstepx)
+	Return vsteppercontentx
 End Sub
 
 Sub GetVueElement(elID As String) As VueElement
@@ -737,11 +737,11 @@ Sub AddStep(stepID As String, stepLabel As String, stepComplete As String, stepE
 	vstepperstepx.Caption = stepLabel
 	If stepEditable <> "" Then vstepperstepx.AddAttr("editable", stepEditable)
 		
-	Dim vsteppercontent As VueElement = AddVueElement2(parentID, childContentKey, "v-stepper-content", Null)
-	vsteppercontent.AddAttr("step", Steps)
+	Dim vsteppercontentx As VueElement = AddVueElement2(parentID, childContentKey, "v-stepper-content", Null)
+	vsteppercontentx.AddAttr("step", Steps)
 	'
-	vsteppercontent.BindVueElement(vstepperstepx)
-	Return vsteppercontent
+	vsteppercontentx.BindVueElement(vstepperstepx)
+	Return vsteppercontentx
 End Sub
 
 Sub AddTab(tabID As String, Caption As String, Icon As String, IconOnLeft As Boolean) As VueElement
@@ -12061,3 +12061,4 @@ Sub BindState(VC As VueComponent)
 		VC.SetCallBack(k, cb)
 	Next
 End Sub
+

@@ -29,12 +29,28 @@ Sub Process_Globals
 	Type sequencePair(value As Int, numTimes As Int)
 End Sub
 
+'join map keys and return a delimited string
+Sub JoinKeys(m As Map, delim As String, props As List) As String
+	Dim res As StringBuilder
+	res.Initialize 
+	For Each prop As String In props
+		Dim v As String = m.GetDefault(prop, "")
+		res.Append(v).Append(delim)
+	Next
+	Dim sout As String = res.ToString
+	sout = sout.trim
+	sout = RemDelim(sout, delim)
+	Return sout
+End Sub
+
+'return a list item or blank if null
 Sub GetListItem(lst As List, pos As Int) As String
 	Dim obj As String = lst.Get(pos)
 	If BANano.IsUndefined(obj) Or BANano.IsNull(obj) Then obj = ""
 	Return obj
 End Sub
 
+'parseBool
 Sub parseBool(v As Object) As Boolean
 	If BANano.IsNull(v) Or BANano.IsUndefined(v) Then
 		v = False
@@ -102,7 +118,7 @@ Sub FormatFileSize(Bytes As Float) As String					'ignoredeadcode
 	End Try
 End Sub
 
-
+'trim list items
 Sub ListTrimItems(cols As List) As List
 	Dim colTot As Int = cols.Size - 1
 	Dim colCnt As Int
@@ -114,6 +130,7 @@ Sub ListTrimItems(cols As List) As List
 	Return cols
 End Sub
 
+'list items to integer
 Sub ListItemsToInt(cols As List) As List
 	Dim colTot As Int = cols.Size - 1
 	Dim colCnt As Int
@@ -126,6 +143,7 @@ Sub ListItemsToInt(cols As List) As List
 	Return cols
 End Sub
 
+'list items to float
 Sub ListItemsToFloat(cols As List) As List
 	Dim colTot As Int = cols.Size - 1
 	Dim colCnt As Int
@@ -138,7 +156,7 @@ Sub ListItemsToFloat(cols As List) As List
 	Return cols
 End Sub
 
-
+'increment map key
 Sub IncrementMap(m As Map, k As String)
 	If m.ContainsKey(k) Then
 		Dim lc As Int = m.Get(k)
@@ -609,6 +627,21 @@ Sub Capitalize(t As String) As String
 	Return ProperCase(t)
 End Sub
 
+'capitalize a name
+Sub CapitalizeEach(t As String, delim As String) As String
+	Dim cols As List = StrParse(delim, t)
+	'
+	Dim items As List
+	items.Initialize 
+	'
+	For Each item As String In cols
+		item = ProperCase(item)
+		items.Add(item)
+	Next
+	Dim sout As String = Join(delim, items)
+	Return sout
+End Sub
+
 'parse a string
 Sub StrParse(delim As String, inputString As String) As List
 	Dim nl As List
@@ -619,8 +652,23 @@ Sub StrParse(delim As String, inputString As String) As List
 	If inputString.IndexOf(delim) = -1 Then
 		nl.Add(inputString)
 	Else	
-		Dim values() As String = BANano.Split(delim,inputString)
-		nl.AddAll(values)
+		nl = BANano.Split(delim,inputString)
+	End If
+	Return nl
+End Sub
+
+'parse a string
+Sub StrParseComma(delim As String, inputString As String) As List
+	inputString = inputString.Replace(",", delim)
+	Dim nl As List
+	nl.Initialize
+	inputString = CStr(inputString)
+	If BANano.IsNull(inputString) Or BANano.IsUndefined(inputString) Then inputString = ""
+	If inputString = "" Then Return nl
+	If inputString.IndexOf(delim) = -1 Then
+		nl.Add(inputString)
+	Else	
+		nl = BANano.Split(delim,inputString)
 	End If
 	Return nl
 End Sub
@@ -4386,4 +4434,29 @@ Sub PutRecursive(data As Map, path As String, value As Object)
 		End If
 	Next
 	prevObj.SetField(litem, value)
+End Sub
+
+'make a single map of all records using a key
+Sub ListOfMapsToSingleMap(source As List, prop As String) As Map
+	Dim xmap As Map = CreateMap()
+	For Each rec As Map In source
+		Dim k As String = rec.Get(prop)
+		xmap.Put(k, rec)
+	Next
+	Return xmap
+End Sub
+
+'convert a list of maps to key value pairs using id and text
+Sub ListOfMapsToOptions(source As List, key As String, value As String) As List
+	Dim xlist As List
+	xlist.Initialize
+	For Each rec As Map In source
+		Dim k As String = rec.Get(key)
+		Dim v As String = rec.get(value)
+		Dim nr As Map = CreateMap()
+		nr.Put("id", k)
+		nr.Put("text", v)
+		xlist.Add(nr)
+	Next
+	Return xlist
 End Sub

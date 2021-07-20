@@ -325,10 +325,10 @@ Sub Class_Globals
 	Private dlgoktitle As String
 	Private dlgokshow As String
 	Private dlgcancelshow As String
-	Private dlgwidth As String
-	Private dlgpersistent As String
-	Private dlgokcolor As String
-	Private dlgcancelcolor As String
+	Private dlgwidth As String		'ignore
+	Private dlgpersistent As String		'ignore
+	Private dlgokcolor As String			'ignore
+	Private dlgcancelcolor As String		'ignore
 	Private dlgpromptlabel As String
 	Private dlgpromptvalue As String
 	Private dlgprompthint As String

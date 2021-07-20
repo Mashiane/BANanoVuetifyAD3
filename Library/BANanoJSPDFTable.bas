@@ -9,7 +9,7 @@ Sub Class_Globals
 	Public rows As List
 	Public columns As List
 	Public head As List
-	Private ocolumns As Map
+	Private ocolumns As Map   'ignore
 	Private StylesM As Map
 	Private ColumnStylesM As Map
 	Private MarginM As Map

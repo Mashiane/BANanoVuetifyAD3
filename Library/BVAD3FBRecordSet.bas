@@ -53,7 +53,7 @@ Sub Class_Globals
 	Private sAscDesc As String
 	Private sAutoIncrement As String
 	Private sBlobs As String
-	Private sCustomQuery As String
+	Private sCustomQuery As String   'ignore
 	Private sDefaults As String
 	Private sDisplayField As String
 	Private sDoubles As String
@@ -67,11 +67,11 @@ Sub Class_Globals
 	Private sSelectFields As String
 	Private sSingular As String
 	Private sTableName As String
-	Private sWhereFields As String
+	Private sWhereFields As String    'ignore
  	Private bShowLog As Boolean
 	'
 	Private schemaIntegers As List
-	Private schemaStrings As List
+	Private schemaStrings As List    'ignore
 	Private schemaDoubles As List
 	Private schemaBlobs As List
 	Private schemaFields As List
@@ -118,7 +118,7 @@ Sub Class_Globals
 	Public Mode As String 
 	Public IsBound As Boolean
 	Private Record As Map
-	Private sPrimaryKeyValue As String
+	Private sPrimaryKeyValue As String   'ignore
 	Public const FB_EQ As String = "=="
 	Public const FB_GT As String = ">"
 	Public const FB_GE As String = ">="
@@ -145,8 +145,8 @@ Sub Class_Globals
 	Private db As BVAD3FBCollection
 	Private firestore As BANanoObject
 	Private fireSQL As BANanoObject
-	Private fldKey As String
-	Private fldVal As String
+	Private fldKey As String   'ignore
+	Private fldVal As String   'ignore
 End Sub
 
 
@@ -770,8 +770,8 @@ private Sub FireStoreExecute As Boolean    'ignore
 	db.SchemaAddText(Strings)
 	'
 	Dim bRead As Boolean = False
-	Dim bSelect As Boolean = False
-	Dim bCount As Boolean = False
+	Dim bSelect As Boolean = False    'ignore
+	Dim bCount As Boolean = False     'ignore
 	'
 	'
 	Tag = sAction
