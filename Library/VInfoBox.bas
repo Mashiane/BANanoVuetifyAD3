@@ -93,11 +93,12 @@ mUseEasing = BANanoShared.parseBool(mUseEasing)
 
 	'
 	Dim strHTML As String
-	strHTML = $"<v-card ref="${mName}" id="${mName}" class="ma-3 rounded-lg">
+	strHTML = $"<v-card ref="${mName}" id="${mName}" class="ma-3 max-width="344" rounded-lg">
 	<v-list-item id="${mName}listitem">
 	<v-list-item-avatar id="${mName}listitemavatar" class="mt-n7 rounded-lg elevation-10" size="80" elevation="10">
 	<v-sheet id="${mName}sheet" color="${mColor}" elevation="10" height="80px" width="80px">
-	<v-icon id="${mName}icon" :dark="true" :x-large="true">${mIcon}</v-icon></v-sheet>
+	<v-icon id="${mName}icon" :dark="true" :x-large="true">${mIcon}</v-icon>
+	</v-sheet>
 	</v-list-item-avatar>
 	<v-list-item-content id="${mName}listitemcontent">
 	<div id="${mName}caption" class="overline text-right">${mCaption}</div>

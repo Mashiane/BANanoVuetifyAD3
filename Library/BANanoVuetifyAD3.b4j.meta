@@ -424,6 +424,6 @@ ModuleClosedNodes96=
 ModuleClosedNodes97=
 ModuleClosedNodes98=
 ModuleClosedNodes99=
-NavigationStack=VSparkline,Remove,187,0,VSparkline,RemoveAttr,204,0,VSparkline,BindState,263,0,VSparkline,Refresh,251,0,VSparkline,Initialize,88,4,VSparkline,Clear,240,0,VSparkline,VisibleOnlyOnXL,383,0,Main,Process_Globals,12,0,VSparkline,Class_Globals,64,4,VSparkline,DesignerCreateView,163,6
+NavigationStack=VueTable,DesignerCreateView,1085,6,VueTable,Class_Globals,188,4,VueTable,SetColumnType,2885,0,BANanoShared,NiceDate,182,0,BANanoShared,NiceMoney,201,0,BANanoShared,NiceMonth,186,0,BANanoShared,NiceYear,195,0,VueComponent,Initialize,224,0,VueElement,getdateformat,5405,0,VueTable,BuildSlots,4038,6
 SelectedBuild=0
 VisibleModules=

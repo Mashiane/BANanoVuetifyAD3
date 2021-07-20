@@ -113,6 +113,7 @@ Version=8.5
 #DesignerProperty: Key: ColumnImage, DisplayName: ColumnImage (;), FieldType: String, DefaultValue: , Description: These fields will show images
 #DesignerProperty: Key: ColumnLinearProgress, DisplayName: ColumnLinearProgress (;), FieldType: String, DefaultValue: , Description: These fields will show linear progress
 #DesignerProperty: Key: ColumnLink, DisplayName: ColumnLink (;), FieldType: String, DefaultValue: , Description: These fields will show links
+#DesignerProperty: Key: ColumnEmail, DisplayName: ColumnEmail (;), FieldType: String, DefaultValue: , Description: These fields will show email addresses
 #DesignerProperty: Key: ColumnMoney, DisplayName: ColumnMoney (;), FieldType: String, DefaultValue: , Description: These fields will show money
 #DesignerProperty: Key: ColumnRating, DisplayName: ColumnRating (;), FieldType: String, DefaultValue: , Description: These fields will show rating
 #DesignerProperty: Key: ColumnSwitch, DisplayName: ColumnSwitch (;), FieldType: String, DefaultValue: , Description: These fields will show switches
@@ -327,6 +328,7 @@ Private sPreDisplay As String
 Private sConditionalClass As String
 Private sConditionalColor As String	
 Private sConditionalStyle As String
+private sColumnEmail as string
 	'
 Private lstPreDisplay As List
 Private lstConditionalClass As List
@@ -449,6 +451,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sColumnImage = Props.GetDefault("ColumnImage", "")
 		sColumnLinearProgress = Props.GetDefault("ColumnLinearProgress", "")
 		sColumnLink = Props.GetDefault("ColumnLink", "")
+		sColumnEmail = props.GetDefault("ColumnEmail", "")
 		sColumnMoney = Props.GetDefault("ColumnMoney", "")
 		sColumnRating = Props.GetDefault("ColumnRating", "")
 		sColumnSortable = Props.GetDefault("ColumnSortable", "")
@@ -736,6 +739,10 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	Dim lsColumnLink As List = BANanoShared.StrParseComma(";", sColumnLink)
 	lsColumnLink = BANanoShared.ListTrimItems(lsColumnLink)
 	'
+	Dim lsColumnEmail As List = BANanoShared.StrParseComma(";", sColumnEmail)
+	lsColumnEmail = BANanoShared.ListTrimItems(lsColumnEmail)
+	
+	'
 	Dim lsColumnMoney As List = BANanoShared.StrParseComma(";", sColumnMoney)
 	lsColumnMoney = BANanoShared.ListTrimItems(lsColumnMoney)
 	'
@@ -893,8 +900,22 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		f = f.trim
 		If lsColumnFields.IndexOf(f) >= 0 Then
 			SetColumnType(f, COLUMN_LINK)
+			SetColumnTarget(f, "_blank")
 		Else
 			Log($"DataTable Error: ${mName}.${f} link column not found on column fields!"$)
+		End If
+	Next
+	'email address
+	colTot = lsColumnEmail.Size - 1
+	For colCnt = 0 To colTot
+		f = lsColumnEmail.Get(colCnt)
+		f = f.trim
+		If lsColumnFields.IndexOf(f) >= 0 Then
+			SetColumnType(f, COLUMN_LINK)
+			SetColumnTarget(f, "_blank")
+			SetColumnPrefix(f, "mailto:")
+		Else
+			Log($"DataTable Error: ${mName}.${f} email column not found on column fields!"$)
 		End If
 	Next
 	'combobox
@@ -2985,8 +3006,14 @@ private Sub BuildSlots
 				If nf.PreDisplay = "" Then
 					itemValue = $"props.item.${value}"$
 				Else
-					itemValue = $"props.item.${value}"$
-					itemValue = $"${nf.predisplay}(${itemValue})"$
+					If nf.PreDisplay.Contains("()") Then
+						'we use the item
+						nf.PreDisplay = nf.PreDisplay.Replace("()", "")
+						itemValue = $"{{ ${nf.predisplay}(props.item) }}"$
+					Else
+						itemValue = $"props.item.${value}"$
+						itemValue = $"${nf.predisplay}(${itemValue})"$
+					End If
 				End If
 				'
 				If SubExists(mCallBack, changeEvent) Then
@@ -3012,8 +3039,14 @@ private Sub BuildSlots
 				If nf.PreDisplay = "" Then
 					itemValue = $"props.item.${value}"$
 				Else
-					itemValue = $"props.item.${value}"$
-					itemValue = $"${nf.predisplay}(${itemValue})"$
+					If nf.PreDisplay.Contains("()") Then
+						'we use the item
+						nf.PreDisplay = nf.PreDisplay.Replace("()", "")
+						itemValue = $"{{ ${nf.predisplay}(props.item) }}"$
+					Else
+						itemValue = $"props.item.${value}"$
+						itemValue = $"${nf.predisplay}(${itemValue})"$
+					End If
 				End If
 				
 				If SubExists(mCallBack, changeEvent) Then
@@ -3037,8 +3070,14 @@ private Sub BuildSlots
 				If nf.PreDisplay = "" Then
 					itemValue = $"props.item.${value}"$
 				Else
-					itemValue = $"props.item.${value}"$
-					itemValue = $"${nf.predisplay}(${itemValue})"$
+					If nf.PreDisplay.Contains("()") Then
+						'we use the item
+						nf.PreDisplay = nf.PreDisplay.Replace("()", "")
+						itemValue = $"{{ ${nf.predisplay}(props.item) }}"$
+					Else
+						itemValue = $"props.item.${value}"$
+						itemValue = $"${nf.predisplay}(${itemValue})"$
+					End If
 				End If
 				
 				If SubExists(mCallBack, changeEvent) Then
@@ -3062,8 +3101,14 @@ private Sub BuildSlots
 				If nf.PreDisplay = "" Then
 					itemValue = $"props.item.${value}"$
 				Else
-					itemValue = $"props.item.${value}"$
-					itemValue = $"${nf.predisplay}(${itemValue})"$
+					If nf.PreDisplay.Contains("()") Then
+						'we use the item
+						nf.PreDisplay = nf.PreDisplay.Replace("()", "")
+						itemValue = $"{{ ${nf.predisplay}(props.item) }}"$
+					Else
+						itemValue = $"props.item.${value}"$
+						itemValue = $"${nf.predisplay}(${itemValue})"$
+					End If
 				End If				
 				
 				If SubExists(mCallBack, changeEvent) Then
@@ -3089,8 +3134,14 @@ sb.Append(temp)
 				If nf.PreDisplay = "" Then
 					itemValue = $"props.item.${value}"$
 				Else
-					itemValue = $"props.item.${value}"$
-					itemValue = $"${nf.predisplay}(${itemValue})"$
+					If nf.PreDisplay.Contains("()") Then
+						'we use the item
+						nf.PreDisplay = nf.PreDisplay.Replace("()", "")
+						itemValue = $"{{ ${nf.predisplay}(props.item) }}"$
+					Else
+						itemValue = $"props.item.${value}"$
+						itemValue = $"${nf.predisplay}(${itemValue})"$
+					End If
 				End If		
 				
 				If SubExists(mCallBack, changeEvent) Then
@@ -3171,7 +3222,13 @@ sb.Append(temp)
 				If nf.PreDisplay = "" Then
 					aLink.Append($"{{ item.${value} }}"$)
 				Else
-					aLink.Append($"{{ ${nf.predisplay}(item.${value}) }}"$)
+					If nf.PreDisplay.Contains("()") Then
+						'we use the item
+						nf.PreDisplay = nf.PreDisplay.Replace("()", "")
+						aLink.Append($"{{ ${nf.predisplay}(item) }}"$)
+					Else
+						aLink.Append($"{{ ${nf.predisplay}(item.${value}) }}"$)
+					End If
 				End If
 				'define template
 				Dim tmp As VueElement
@@ -3200,7 +3257,13 @@ sb.Append(temp)
 				If nf.PreDisplay = "" Then
 					aLink.Append($"{{ item.${value} }}"$)
 				Else
-					aLink.Append($"{{ ${nf.predisplay}(item.${value}) }}"$)
+					If nf.PreDisplay.Contains("()") Then
+						'we use the item
+						nf.PreDisplay = nf.PreDisplay.Replace("()", "")
+						aLink.Append($"{{ ${nf.predisplay}(item) }}"$)
+					Else
+						aLink.Append($"{{ ${nf.predisplay}(item.${value}) }}"$)
+					End If
 				End If
 				'define template
 				Dim tmp As VueElement
@@ -3333,7 +3396,13 @@ sb.Append(temp)
 				If nf.PreDisplay = "" Then
 					pc.Append($"{{ item.${value} }}"$)
 				Else
-					pc.Append($"{{ ${nf.predisplay}(item.${value}) }}"$)
+					If nf.PreDisplay.Contains("()") Then
+						'we use the item
+						nf.PreDisplay = nf.PreDisplay.Replace("()", "")
+						pc.Append($"{{ ${nf.predisplay}(item) }}"$)
+					Else
+						pc.Append($"{{ ${nf.predisplay}(item.${value}) }}"$)
+					End If
 				End If
 				pc.Dense = bDense
 				If nf.progressRotate <> "" Then pc.Rotate = nf.progressRotate
@@ -3441,7 +3510,13 @@ sb.Append(temp)
 				If nf.PreDisplay = "" Then
 					avtimg.AddAttr("v-text", $"item.${value}"$)
 				Else
-					avtimg.AddAttr("v-text", $"${nf.predisplay}(item.${value})"$)
+					If nf.PreDisplay.Contains("()") Then
+						'we use the item
+						nf.PreDisplay = nf.PreDisplay.Replace("()", "")
+						avtimg.AddAttr("v-text", $"{{ ${nf.predisplay}(item) }}"$)
+					Else
+						avtimg.AddAttr("v-text", $"${nf.predisplay}(item.${value})"$)
+					End If
 				End If
 					
 				If nf.ConditionalClass <> "" Then
@@ -3487,7 +3562,13 @@ sb.Append(temp)
 				If nf.PreDisplay = "" Then
 					avtimg.AddAttr("v-text", $"item.${value}"$)
 				Else
-					avtimg.AddAttr("v-text", $"${nf.predisplay}(item.${value})"$)
+					If nf.PreDisplay.Contains("()") Then
+						'we use the item
+						nf.PreDisplay = nf.PreDisplay.Replace("()", "")
+						avtimg.AddAttr("v-text", $"{{ ${nf.predisplay}(item) }}"$)
+					Else
+						avtimg.AddAttr("v-text", $"${nf.predisplay}(item.${value})"$)
+					End If
 				End If
 					
 				If nf.ConditionalClass <> "" Then
@@ -3524,8 +3605,15 @@ sb.Append(temp)
 					avtimg.AddAttr(":src", $"item.${value}"$)
 					avtimg.AddAttr(":lazy-src", $"item.${value}"$)
 				Else
-					avtimg.AddAttr(":src", $"${nf.predisplay}(item.${value})"$)
-					avtimg.AddAttr(":lazy-src", $"${nf.predisplay}(item.${value})"$)
+					If nf.PreDisplay.Contains("()") Then
+						'we use the item
+						nf.PreDisplay = nf.PreDisplay.Replace("()", "")
+						avtimg.AddAttr(":src", $"{{ ${nf.predisplay}(item) }}"$)
+						avtimg.AddAttr(":lazy-src", $"{{ ${nf.predisplay}(item) }}"$)
+					Else
+						avtimg.AddAttr(":src", $"${nf.predisplay}(item.${value})"$)
+						avtimg.AddAttr(":lazy-src", $"${nf.predisplay}(item.${value})"$)
+					End If
 				End If
 					
 				avtimg.Alt = ""
@@ -3624,7 +3712,13 @@ sb.Append(temp)
 				If nf.PreDisplay = "" Then
 					aicon.Append($"{{ item.${value} }}"$)
 				Else
-					aicon.Append($"{{ ${nf.predisplay}(item.${value}) }}"$)
+					If nf.PreDisplay.Contains("()") Then
+						'we use the item
+						nf.PreDisplay = nf.PreDisplay.Replace("()", "")
+						aicon.Append($"{{ ${nf.predisplay}(item) }}"$)
+					Else
+						aicon.Append($"{{ ${nf.predisplay}(item.${value}) }}"$)
+					End If
 				End If
 				If nf.Disabled Then aicon.disabled = True
 				If nf.iconSize <> "" Then aicon.Size = nf.iconSize
@@ -3670,8 +3764,15 @@ sb.Append(temp)
 					avtimg.AddAttr(":src", $"item.${value}"$)
 					avtimg.AddAttr(":lazy-src", $"item.${value}"$)
 				Else
-					avtimg.AddAttr(":src", $"${nf.predisplay}(item.${value})"$)
-					avtimg.AddAttr(":lazy-src", $"${nf.predisplay}(item.${value})"$)
+					If nf.PreDisplay.Contains("()") Then
+						'we use the item
+						nf.PreDisplay = nf.PreDisplay.Replace("()", "")
+						avtimg.AddAttr(":src", $"{{ ${nf.predisplay}(item) }}"$)
+						avtimg.AddAttr(":lazy-src", $"{{ ${nf.predisplay}(item) }}"$)
+					Else
+						avtimg.AddAttr(":src", $"${nf.predisplay}(item.${value})"$)
+						avtimg.AddAttr(":lazy-src", $"${nf.predisplay}(item.${value})"$)
+					End If
 				End If	
 				avtimg.Alt = ""
 				If nf.Disabled Then avtimg.disabled = True
@@ -3721,7 +3822,13 @@ sb.Append(temp)
 				If nf.PreDisplay = "" Then
 					chp.Append($"{{ item.${value} }}"$)
 				Else
-					chp.Append($"{{ ${nf.predisplay}(item.${value}) }}"$)
+					If nf.PreDisplay.Contains("()") Then
+						'we use the item
+						nf.PreDisplay = nf.PreDisplay.Replace("()", "")
+						chp.Append($"{{ ${nf.predisplay}(item) }}"$)
+					Else
+						chp.Append($"{{ ${nf.predisplay}(item.${value}) }}"$)
+					End If
 				End If	
 				If nf.Disabled Then chp.disabled = True
 				If nf.color.StartsWith("item.") Then
@@ -3873,7 +3980,13 @@ sb.Append(temp)
 				If nf.PreDisplay = "" Then
 					pc.Append($"{{ item.${value} }}"$)
 				Else
-					pc.Append($"{{ ${nf.predisplay}(item.${value}) }}"$)
+					If nf.PreDisplay.Contains("()") Then
+						'we use the item
+						nf.PreDisplay = nf.PreDisplay.Replace("()", "")
+						pc.Append($"{{ ${nf.predisplay}(item) }}"$)
+					Else	
+						pc.Append($"{{ ${nf.predisplay}(item.${value}) }}"$)
+					End If
 				End If
 				If nf.ConditionalClass <> "" Then
 					pc.Bind("class", $"${nf.ConditionalClass}(item)"$)
