@@ -3666,8 +3666,15 @@ Sub SetOnEvent(eventHandler As Object, event As String, args As String)
 	End If
 	AddAttr($"v-on:${event}"$, scode)
 	'arguments for the event
-	Dim e As BANanoEvent 'ignore
-	Dim cb As BANanoObject = BANano.CallBack(eventHandler, methodName, Array(e))
+	Dim e As Object 'ignore
+	Dim cb As BANanoObject
+	Select Case event
+	Case "dblclick:row", "contextmenu:row", "click:row"	
+		Dim other As Object
+		cb = BANano.CallBack(eventHandler, methodName, Array(e, other))
+	Case Else
+		cb = BANano.CallBack(eventHandler, methodName, Array(e))
+	End Select
 	methods.Put(methodName, cb)
 End Sub
 
@@ -3685,7 +3692,7 @@ Sub SetOnEventOwn(eventHandler As Object, methodName As String, event As String,
 	End If
 	AddAttr($"v-on:${event}"$, scode)
 	'arguments for the event
-	Dim e As BANanoEvent 'ignore
+	Dim e As Object 'ignore
 	Dim cb As BANanoObject = BANano.CallBack(eventHandler, methodName, Array(e))
 	methods.Put(methodName, cb)
 End Sub
@@ -7125,6 +7132,7 @@ sTemplate.Append("</v-template>")
 	vlistitemx.SetOnEventOwn(mCallBack, $"${elID}_click"$, "click", "child")
 	'left action
 	'
+	vlistitemx.SetData("child" , Null)
 	vlistitemx.SetData(datasource, NewList)
 	vlistitemx.BindVueElement(vlistitemx)
 	BindVueElement(vlistitemx)
@@ -7210,24 +7218,24 @@ Sub HiddenXSOnly
 End Sub
 
 Sub HiddenSMOnly
-	AddClass("hidden-sm-only")
+	AddClass("d-sm-none d-md-flex")
 End Sub
 	
 Sub HiddenMDOnly
-	AddClass("hidden-md-only")
+	AddClass("d-md-none d-lg-flex")
 End Sub
 	
 Sub HiddenLGOnly
-	AddClass("hidden-lg-only")
+	AddClass("d-lg-none d-xl-flex")
 End Sub
 	
 Sub HiddenXLOnly
-	AddClass("hidden-xl-only")
+	AddClass("d-xl-none")
 End Sub
 '
-Sub HiddenXSAndDown
-	AddClass("hidden-xs-and-down")
-End Sub
+'Sub HiddenXSAndDown
+	
+'End Sub
 
 Sub HiddenSMAndDown
 	AddClass("hidden-sm-and-down")
@@ -7241,13 +7249,13 @@ Sub HiddenLGAndDown
 	AddClass("hidden-lg-and-down")
 End Sub
 	
-Sub HiddenXLAndDown
-	AddClass("hidden-xl-and-down")
-End Sub
+'Sub HiddenXLAndDown
+	
+'End Sub
 '
-Sub HiddenXSAndUp
-	AddClass("hidden-xs-and-up")
-End Sub
+'Sub HiddenXSAndUp
+	
+'End Sub
 
 Sub HiddenSMAndUp
 	AddClass("hidden-sm-and-up")
@@ -7261,16 +7269,16 @@ Sub HiddenLGAndUp
 	AddClass("hidden-lg-and-up")
 End Sub
 	
-Sub HiddenXLAndUp
-	AddClass("hidden-xl-and-up")
-End Sub	
+'Sub HiddenXLAndUp
+	
+'End Sub	
 
-Sub HideOnAll
+Sub HiddenOnAll
 	AddClass("d-none")
 End Sub
 
 Sub HideOnlyOnXS
-	AddClass("d-none d-sm-flex")
+	AddClass("hidden-xs-only")
 End Sub
 
 Sub HideOnlyOnSM
@@ -8084,6 +8092,8 @@ Sub BindAllEvents
 	SetOnEvent(mCallBack, "click:more", "")
 	SetOnEvent(mCallBack, "click:time", "")
 	SetOnEvent(mCallBack, "click:time-category", "")
+	SetOnEvent(mCallBack, "contextmenu:row", "")
+	SetOnEvent(mCallBack, "contextmenu:row.prevent", "")
 	SetOnEvent(mCallBack, "contextmenu:date", "")
 	SetOnEvent(mCallBack, "contextmenu:day", "")
 	SetOnEvent(mCallBack, "contextmenu:day-category", "")

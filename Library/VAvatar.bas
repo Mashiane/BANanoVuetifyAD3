@@ -6,6 +6,8 @@ Version=8.9
 @EndOfDesignText@
 #IgnoreWarnings:12
 
+#Event: Click (e As BANanoEvent)
+
 #DesignerProperty: Key: AvatarType, DisplayName: Avatar Type, FieldType: String, DefaultValue: none, Description: AvatarType, List: text|icon|image|none
 #DesignerProperty: Key: Text, DisplayName: Caption, FieldType: String, DefaultValue: , Description: Text
 #DesignerProperty: Key: HeadLine, DisplayName: HeadLine, FieldType: Boolean, DefaultValue: false, Description: HeadLine
@@ -372,24 +374,24 @@ Sub HiddenXSOnly
 End Sub
 
 Sub HiddenSMOnly
-	AddClass("hidden-sm-only")
+	AddClass("d-sm-none d-md-flex")
 End Sub
 	
 Sub HiddenMDOnly
-	AddClass("hidden-md-only")
+	AddClass("d-md-none d-lg-flex")
 End Sub
 	
 Sub HiddenLGOnly
-	AddClass("hidden-lg-only")
+	AddClass("d-lg-none d-xl-flex")
 End Sub
 	
 Sub HiddenXLOnly
-	AddClass("hidden-xl-only")
+	AddClass("d-xl-none")
 End Sub
 '
-Sub HiddenXSAndDown
-	AddClass("hidden-xs-and-down")
-End Sub
+'Sub HiddenXSAndDown
+	
+'End Sub
 
 Sub HiddenSMAndDown
 	AddClass("hidden-sm-and-down")
@@ -403,13 +405,13 @@ Sub HiddenLGAndDown
 	AddClass("hidden-lg-and-down")
 End Sub
 	
-Sub HiddenXLAndDown
-	AddClass("hidden-xl-and-down")
-End Sub
+'Sub HiddenXLAndDown
+	
+'End Sub
 '
-Sub HiddenXSAndUp
-	AddClass("hidden-xs-and-up")
-End Sub
+'Sub HiddenXSAndUp
+	
+'End Sub
 
 Sub HiddenSMAndUp
 	AddClass("hidden-sm-and-up")
@@ -423,16 +425,16 @@ Sub HiddenLGAndUp
 	AddClass("hidden-lg-and-up")
 End Sub
 	
-Sub HiddenXLAndUp
-	AddClass("hidden-xl-and-up")
-End Sub	
+'Sub HiddenXLAndUp
+	
+'End Sub	
 
-Sub HideOnAll
+Sub HiddenOnAll
 	AddClass("d-none")
 End Sub
 
 Sub HideOnlyOnXS
-	AddClass("d-none d-sm-flex")
+	AddClass("hidden-xs-only")
 End Sub
 
 Sub HideOnlyOnSM

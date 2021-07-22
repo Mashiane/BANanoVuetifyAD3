@@ -6,6 +6,8 @@ Version=8.9
 @EndOfDesignText@
 #IgnoreWarnings:12
 
+#Event: Click (e As BANanoEvent)
+
 #DesignerProperty: Key: BadgeType, DisplayName: Badge Type, FieldType: String, DefaultValue: icon, Description: BadgeType, List: icon|avatar
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: Value, DisplayName: Badge Value, FieldType: String, DefaultValue: 10, Description: Value
@@ -352,24 +354,24 @@ Sub HiddenXSOnly
 End Sub
 
 Sub HiddenSMOnly
-	AddClass("hidden-sm-only")
+	AddClass("d-sm-none d-md-flex")
 End Sub
 	
 Sub HiddenMDOnly
-	AddClass("hidden-md-only")
+	AddClass("d-md-none d-lg-flex")
 End Sub
 	
 Sub HiddenLGOnly
-	AddClass("hidden-lg-only")
+	AddClass("d-lg-none d-xl-flex")
 End Sub
 	
 Sub HiddenXLOnly
-	AddClass("hidden-xl-only")
+	AddClass("d-xl-none")
 End Sub
 '
-Sub HiddenXSAndDown
-	AddClass("hidden-xs-and-down")
-End Sub
+'Sub HiddenXSAndDown
+	
+'End Sub
 
 Sub HiddenSMAndDown
 	AddClass("hidden-sm-and-down")
@@ -383,13 +385,13 @@ Sub HiddenLGAndDown
 	AddClass("hidden-lg-and-down")
 End Sub
 	
-Sub HiddenXLAndDown
-	AddClass("hidden-xl-and-down")
-End Sub
+'Sub HiddenXLAndDown
+	
+'End Sub
 '
-Sub HiddenXSAndUp
-	AddClass("hidden-xs-and-up")
-End Sub
+'Sub HiddenXSAndUp
+	
+'End Sub
 
 Sub HiddenSMAndUp
 	AddClass("hidden-sm-and-up")
@@ -403,16 +405,16 @@ Sub HiddenLGAndUp
 	AddClass("hidden-lg-and-up")
 End Sub
 	
-Sub HiddenXLAndUp
-	AddClass("hidden-xl-and-up")
-End Sub	
+'Sub HiddenXLAndUp
+	
+'End Sub	
 
-Sub HideOnAll
+Sub HiddenOnAll
 	AddClass("d-none")
 End Sub
 
 Sub HideOnlyOnXS
-	AddClass("d-none d-sm-flex")
+	AddClass("hidden-xs-only")
 End Sub
 
 Sub HideOnlyOnSM

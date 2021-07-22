@@ -8,6 +8,8 @@ Version=8.95
 
 #Event: Blur (e As BANanoEvent)
 #Event: Change (item As Object)
+#Event: Time_Change (item As String)
+#Event: Date_Change (item As String)
 #Event: Click (e As BANanoEvent)
 #Event: ClickAppend (e As BANanoEvent)
 #Event: ClickAppendOuter (e As BANanoEvent)
@@ -37,6 +39,8 @@ Version=8.95
 #DesignerProperty: Key: Required, DisplayName: Required, FieldType: Boolean, DefaultValue: False, Description: Required
 #DesignerProperty: Key: DatePicker, DisplayName: DatePicker, FieldType: Boolean, DefaultValue: False, Description: DatePicker
 #DesignerProperty: Key: TimePicker, DisplayName: TimePicker, FieldType: Boolean, DefaultValue: False, Description: TimePicker
+#DesignerProperty: Key: DateTimePicker, DisplayName: DateTimePicker, FieldType: Boolean, DefaultValue: False, Description: DateTimePicker
+#DesignerProperty: Key: ColorPicker, DisplayName: ColorPicker, FieldType: Boolean, DefaultValue: False, Description: ColorPicker
 
 #DesignerProperty: Key: AppendIcon, DisplayName: AppendIcon, FieldType: String, DefaultValue: , Description: AppendIcon
 #DesignerProperty: Key: AppendOuterIcon, DisplayName: AppendOuterIcon, FieldType: String, DefaultValue: , Description: AppendOuterIcon
@@ -174,6 +178,10 @@ Sub Class_Globals
 	Private bTimePicker As Boolean
 	Private sAutoComplete As String
 	Private bShrink As Boolean
+	Private bColorPicker As Boolean
+	Private bDateTimePicker As Boolean
+	Private dateModel As String
+	Private timeModel As String
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -201,6 +209,8 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	sSuccess = $"${mName}success"$
 	sSuccessMessages = $"${mName}successmessages"$
 	sShowEyes = $"${mName}eyes"$
+	dateModel = $"${mName}date"$
+	timeModel = $"${mName}time"$
 End Sub
 	
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
@@ -269,7 +279,11 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bTimePicker = Props.getdefault("TimePicker", False)
 		sAutoComplete = Props.GetDefault("AutoComplete", "none")
 		bShrink = Props.GetDefault("Shrink", False)
- bShrink = BANanoShared.parseBool(bShrink)
+ 		bShrink = BANanoShared.parseBool(bShrink)
+		bColorPicker = Props.GetDefault("ColorPicker", False)
+		bColorPicker = BANanoShared.parseBool(bColorPicker)
+		bDateTimePicker = Props.GetDefault("DateTimePicker", False)
+		bDateTimePicker = BANanoShared.parseBool(bDateTimePicker)
 	End If
 	'
 	bDisabled = BANanoShared.parseBool(bDisabled)
@@ -316,26 +330,28 @@ bLoading = BANanoShared.parseBool(bLoading)
 	End If
 	'
 	Dim menuref As String = $"${mName}menu"$
+	Dim menushow As String = $"${mName}menushow"$
 	Dim btnok As String = $"${mName}ok"$
 	Dim btncancel As String = $"${mName}cancel"$
-	Dim dtpicker As String = $"${mName}picker"$
 	Dim btnclear As String = $"${mName}clear"$
 	Dim spacer As String = $"${mName}spacer"$
 	Dim tempID As String = $"${mName}template"$
+	Dim datepicker As String = $"${mName}_date"$
+	Dim timepicker As String = $"${mName}_time"$
 	
 	If bDatePicker = True Or bTimePicker = True Then
 		If bDatePicker Then
 			sVOn = "on"
 			sVBind = "attrs"
-			Dim sbTemplate As String = $"<v-menu id="${menuref}" :close-on-content-click="false" transition="scale-transition" :offset-y="true"
-			ref="${menuref}" :return-value.sync="${sVModel}" v-model="${menuref}" min-width="460px" max-width="460px" :nudge-right="40">
+			Dim sbTemplate As String = $"<v-menu id="${menuref}" :close-on-content-click="false" max-width="290px" min-width="290px" transition="scale-transition" :offset-y="true"
+			ref="${menuref}" :return-value.sync="${sVModel}" v-model="${menushow}" :nudge-right="40">
 			<v-template id="${tempID}" v-slot:activator="{ on, attrs }">
 			<v-text-field id="${mName}" v-on="on" v-bind="attrs" v-model="${sVModel}fmt" ref="${mName}" autocomplete="off"></v-text-field>
 			</v-template>
-			<v-date-picker id="${dtpicker}" :scrollable="true" v-model="${sVModel}" :landscape="true">
-			<v-btn id="${btnclear}" color="error" :text="true" v-on:click="${sVModel} = ''" :outlined="true">Clear</v-btn>
+			<v-date-picker id="${datepicker}" :scrollable="true" v-model="${sVModel}">
+			<v-btn id="${btnclear}" color="error" :text="true" v-on:click="${sVModel} = '';${sVModel}fmt = ''" :outlined="true">Clear</v-btn>
 			<v-spacer id="${spacer}"></v-spacer>
-			<v-btn id="${btncancel}" color="primary" :text="true" v-on:click="${menuref} = false" :outlined="true">
+			<v-btn id="${btncancel}" color="primary" :text="true" v-on:click="${menushow} = false" :outlined="true">
 			Cancel</v-btn>
 			<v-btn id="${btnok}" color="primary" :text="true" v-on:click="~refs.${menuref}.save(${sVModel})" :outlined="true">
 			Ok</v-btn>
@@ -353,15 +369,15 @@ bLoading = BANanoShared.parseBool(bLoading)
 		If bTimePicker Then
 			sVOn = "on"
 			sVBind = "attrs"
-			Dim sbTemplate As String = $"<v-menu id="${menuref}" :close-on-content-click="false" transition="scale-transition" :offset-y="true"
-			ref="${menuref}" :return-value.sync="${sVModel}" v-model="${menuref}" min-width="460px" max-width="460px" :nudge-right="40">
+			Dim sbTemplate As String = $"<v-menu id="${menuref}" :close-on-content-click="false" max-width="290px" min-width="290px" transition="scale-transition" :offset-y="true"
+			ref="${menuref}" :return-value.sync="${sVModel}" v-model="${menushow}" :nudge-right="40">
 			<v-template id="${tempID}" v-slot:activator="{ on, attrs }">
 			<v-text-field ref="${mName}" id="${mName}" v-on="on" v-bind="attrs" v-model="${sVModel}" autocomplete="off"></v-text-field>
 			</v-template>
-			<v-time-picker id="${dtpicker}" :scrollable="true" v-model="${sVModel}" :landscape="true">
+			<v-time-picker id="${timepicker}" :scrollable="true" v-model="${sVModel}">
 			<v-btn id="${btnclear}" color="error" :text="true" v-on:click="${sVModel} = ''" :outlined="true">Clear</v-btn>
 			<v-spacer id="${spacer}"></v-spacer>
-			<v-btn id="${btncancel}" color="primary" :text="true" v-on:click="${menuref} = false" :outlined="true">
+			<v-btn id="${btncancel}" color="primary" :text="true" v-on:click="${menushow} = false" :outlined="true">
 			Cancel</v-btn>
 			<v-btn id="${btnok}" color="primary" :text="true" v-on:click="~refs.${menuref}.save(${sVModel})" :outlined="true">
 			Ok</v-btn>
@@ -375,7 +391,65 @@ bLoading = BANanoShared.parseBool(bLoading)
 				mElement = mTarget.Append(sbTemplate)
 			End If
 		End If
-	Else
+	End If
+	
+	If bDateTimePicker Then
+		sVOn = "on"
+		sVBind = "attrs"
+		Dim sbTemplate As String = $"<v-menu id="${menuref}" ref="${menuref}" v-model="${menushow}" :close-on-content-click="false" :nudge-right="40" lazy transition="scale-transition" offset-y full-width>
+    <v-template id="${tempID}" v-slot:activator="{ on, attrs }">
+        <v-text-field ref="${mName}" id="${mName}" v-model="${sVModel}fmt" v-on="on" v-bind="attrs" autocomplete="off"></v-text-field>
+    </v-template>
+    <v-card>
+        <v-card-text>
+		<v-row>
+			<v-col sm=12 md=6>
+                <v-date-picker id="${datepicker}" :scrollable="true" v-model="${dateModel}"></v-date-picker>
+            </v-col>
+            <v-col sm=12 md=6>
+                <v-time-picker id="${timepicker}" :scrollable="true" v-model="${timeModel}"></v-time-picker>
+				<h3 class="text-center">{{ ${sVModel}fmt }}</h3>
+            </v-col>
+        </v-row>
+		</v-card-text>
+		<v-card-actions>
+			<v-spacer id="${spacer}"></v-spacer>
+			<v-btn id="${btnclear}" class="mr-2" color="error" :text="true" :outlined="true" v-on:click="${sVModel}='';${timeModel}='';${dateModel}='';${sVModel}fmt=''">Clear</v-btn>
+			<v-btn id="${btncancel}" class="mr-2" color="primary" :text="true" v-on:click="${menushow}=false" :outlined="true">Cancel</v-btn>
+			<v-btn id="${btnok}" color="primary" :text="true" :outlined="true" v-on:click="${sVModel}=${dateModel} + ' ' + ${timeModel};${menushow}=false">Ok</v-btn>
+		</v-card-actions>
+    </v-card>
+</v-menu>"$
+		If BANano.Exists($"#${mName}"$) Then
+			mElement = BANano.GetElement($"#${mName}"$)
+		Else	
+			mElement = mTarget.Append(sbTemplate)
+		End If
+	End If
+	
+	
+	If bColorPicker Then
+		Dim sbTemplate As String = $"<v-text-field ref="${mName}" id="${mName}" v-model="${sVModel}" autocomplete="off">
+		<v-template v-slot:append-outer>
+    <v-menu id="${menuref}" ref="${menuref}" v-model="${menushow}" top nudge-bottom="97" nudge-left="16" :close-on-content-click="false">
+        <v-template v-slot:activator="{ on }">
+            <v-avatar class="mt=0 pt=0" style="cursor:pointer;border:1px black solid" :color="${sVModel}" v-on="on" size="30">
+        </v-template>
+        <v-card>
+            <v-card-text class="pa-0">
+                <v-color-picker v-model="${sVModel}" flat />
+            </v-card-text>
+        </v-card>
+    </v-menu>
+</v-template></v-text-field>"$
+		If BANano.Exists($"#${mName}"$) Then
+			mElement = BANano.GetElement($"#${mName}"$)
+		Else	
+			mElement = mTarget.Append(sbTemplate)
+		End If
+	End If
+	
+	If bColorPicker = False And bDatePicker = False And bTimePicker = False And bDateTimePicker = False Then
 		'build and get the element
 		If BANano.Exists($"#${mName}"$) Then
 			mElement = BANano.GetElement($"#${mName}"$)
@@ -474,18 +548,77 @@ bLoading = BANanoShared.parseBool(bLoading)
 		Dim vmenux As VueElement
 		vmenux.Initialize(mCallBack, menuref, menuref)
 		'
-		Dim vdatepickerx As VueElement
-		vdatepickerx.Initialize(mCallBack, dtpicker, dtpicker)
-		'
 		VElement.BindVueElement(vmenux)
-		VElement.BindVueElement(vdatepickerx)
-		VElement.SetData(menuref, False)
+		VElement.SetData(menushow, False)
 	End If
+	
 	If bDatePicker Then
+		Dim dp As VueElement
+		dp.Initialize(mCallBack, datepicker, datepicker)
+		dp.SetOnEventOwn(mCallBack, $"${datepicker}_change"$, "change", "")
+		VElement.BindVueElement(dp)
+	
 		VElement.AddAttr("v-model", sVModel & "fmt")
 		VElement.SetData($"${sVModel}fmt"$, Null)
 	End If
+	
+	'
+	If bTimePicker Then
+		Dim dp As VueElement
+		dp.Initialize(mCallBack, timepicker, timepicker)
+		dp.SetOnEventOwn(mCallBack, $"${timepicker}_change"$, "input", "")
+		'dp.SetOnEventOwn(mCallBack, $"${timepicker}_change"$, "click:hour", "")
+		'dp.SetOnEventOwn(mCallBack, $"${timepicker}_change"$, "click:minute", "")
+		'dp.SetOnEventOwn(mCallBack, $"${timepicker}_change"$, "update:period", "")
+		VElement.BindVueElement(dp)
+	End If
+	
+	
+	If bColorPicker Then
+		sValue = "#000000"
+		VElement.AddAttr("v-model", sVModel)
+		VElement.SetData(sVModel, sValue)
+		VElement.SetData(menushow, False)
+	End If
+	
+	If bDateTimePicker Then
+		VElement.AddAttr("v-model", sVModel & "fmt")
+		VElement.SetData($"${sVModel}fmt"$, Null)
+		VElement.SetData(sVModel, sValue)
+		VElement.setdata(dateModel, "")
+		VElement.SetData(timeModel, "")
+		VElement.SetData(menushow, False)
+		'
+		Dim dp As VueElement
+		dp.Initialize(mCallBack, datepicker, datepicker)
+		dp.SetOnEvent(mCallBack, "change", "")
+		VElement.BindVueElement(dp)
+		'		
+		Dim tp As VueElement
+		tp.Initialize(mCallBack, timepicker, timepicker)
+		tp.SetOnEventOwn(mCallBack, $"${timepicker}_change"$, "input", "")
+		'tp.SetOnEvent(mCallBack, "change", "")
+		'tp.SetOnEvent(mCallBack, "input", "")
+		'tp.SetOnEventOwn(mCallBack, $"${timepicker}_change"$, "click:hour", "")
+		'tp.SetOnEventOwn(mCallBack, $"${timepicker}_change"$, "click:minute", "")
+		'tp.SetOnEventOwn(mCallBack, $"${timepicker}_change"$, "update:period", "")
+		VElement.BindVueElement(tp)
+	End If
 	VElement.BindAllEvents
+End Sub
+
+'get the date from date time picker
+Sub FormatDateTime(VC As VueComponent)
+	Dim res1 As String = VC.GetData(dateModel)
+	Dim res2 As String = VC.GetData(timeModel)
+	Dim xDate As String = ""
+	If res1 <> "" Then
+		xDate = VC.NiceDate(res1)
+	End If
+	Dim res As String = $"${xDate} ${res2}"$
+	res = res.Trim
+	Dim resx As String = $"${sVModel}fmt"$
+	VC.SetData(resx, res)
 End Sub
 
 'get the date
@@ -656,24 +789,24 @@ Sub HiddenXSOnly
 End Sub
 
 Sub HiddenSMOnly
-	AddClass("hidden-sm-only")
+	AddClass("d-sm-none d-md-flex")
 End Sub
 	
 Sub HiddenMDOnly
-	AddClass("hidden-md-only")
+	AddClass("d-md-none d-lg-flex")
 End Sub
 	
 Sub HiddenLGOnly
-	AddClass("hidden-lg-only")
+	AddClass("d-lg-none d-xl-flex")
 End Sub
 	
 Sub HiddenXLOnly
-	AddClass("hidden-xl-only")
+	AddClass("d-xl-none")
 End Sub
 '
-Sub HiddenXSAndDown
-	AddClass("hidden-xs-and-down")
-End Sub
+'Sub HiddenXSAndDown
+	
+'End Sub
 
 Sub HiddenSMAndDown
 	AddClass("hidden-sm-and-down")
@@ -687,13 +820,13 @@ Sub HiddenLGAndDown
 	AddClass("hidden-lg-and-down")
 End Sub
 	
-Sub HiddenXLAndDown
-	AddClass("hidden-xl-and-down")
-End Sub
+'Sub HiddenXLAndDown
+	
+'End Sub
 '
-Sub HiddenXSAndUp
-	AddClass("hidden-xs-and-up")
-End Sub
+'Sub HiddenXSAndUp
+	
+'End Sub
 
 Sub HiddenSMAndUp
 	AddClass("hidden-sm-and-up")
@@ -707,16 +840,16 @@ Sub HiddenLGAndUp
 	AddClass("hidden-lg-and-up")
 End Sub
 	
-Sub HiddenXLAndUp
-	AddClass("hidden-xl-and-up")
-End Sub	
+'Sub HiddenXLAndUp
+	
+'End Sub	
 
-Sub HideOnAll
+Sub HiddenOnAll
 	AddClass("d-none")
 End Sub
 
 Sub HideOnlyOnXS
-	AddClass("d-none d-sm-flex")
+	AddClass("hidden-xs-only")
 End Sub
 
 Sub HideOnlyOnSM

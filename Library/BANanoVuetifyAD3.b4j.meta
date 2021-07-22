@@ -424,6 +424,6 @@ ModuleClosedNodes96=
 ModuleClosedNodes97=
 ModuleClosedNodes98=
 ModuleClosedNodes99=
-NavigationStack=VueTable,DesignerCreateView,1085,6,VueTable,Class_Globals,188,4,VueTable,SetColumnType,2885,0,BANanoShared,NiceDate,182,0,BANanoShared,NiceMoney,201,0,BANanoShared,NiceMonth,186,0,BANanoShared,NiceYear,195,0,VueComponent,Initialize,224,0,VueElement,getdateformat,5405,0,VueTable,BuildSlots,4038,6
+NavigationStack=VueElement,AddDatePickerInput,9147,0,VTextField,FormatDate,623,0,VTextField,FormatDateTime,604,6,VTextField,ClearRules,656,0,VTextField,GetValue,724,0,VTextField,UpdateVisible,722,0,VTextField,Class_Globals,174,0,VTextField,GetDate,617,0,VTextField,DesignerCreateView,403,6,VInfoBox,Class_Globals,42,0,VInfoBox,DesignerCreateView,104,1
 SelectedBuild=0
 VisibleModules=

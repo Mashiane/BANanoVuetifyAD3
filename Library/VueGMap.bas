@@ -442,7 +442,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	Dim cb As BANanoObject = BANano.CallBack(Me, "toggleInfoWindow", Array(m, i))
 	VElement.SetCallBack("toggleInfoWindow", cb)
 	'
-	Dim e As BANanoEvent
+	Dim e As Object
 	Dim cb As BANanoObject = BANano.CallBack(Me, "closeInfoWindow", Array(e))
 	VElement.SetCallBack("closeInfoWindow", cb)
 	'
@@ -1043,23 +1043,19 @@ Sub HiddenXSOnly
 End Sub
 
 Sub HiddenSMOnly
-	VElement.AddClass("hidden-sm-only")
+	VElement.AddClass("d-sm-none d-md-flex")
 End Sub
 	
 Sub HiddenMDOnly
-	VElement.AddClass("hidden-md-only")
+	VElement.AddClass("d-md-none d-lg-flex")
 End Sub
 	
 Sub HiddenLGOnly
-	VElement.AddClass("hidden-lg-only")
+	VElement.AddClass("d-lg-none d-xl-flex")
 End Sub
 	
 Sub HiddenXLOnly
-	VElement.AddClass("hidden-xl-only")
-End Sub
-'
-Sub HiddenXSAndDown
-	VElement.AddClass("hidden-xs-and-down")
+	VElement.AddClass("d-xl-none")
 End Sub
 
 Sub HiddenSMAndDown
@@ -1073,14 +1069,7 @@ End Sub
 Sub HiddenLGAndDown
 	VElement.AddClass("hidden-lg-and-down")
 End Sub
-	
-Sub HiddenXLAndDown
-	VElement.AddClass("hidden-xl-and-down")
-End Sub
-'
-Sub HiddenXSAndUp
-	VElement.AddClass("hidden-xs-and-up")
-End Sub
+
 
 Sub HiddenSMAndUp
 	VElement.AddClass("hidden-sm-and-up")
@@ -1094,16 +1083,9 @@ Sub HiddenLGAndUp
 	VElement.AddClass("hidden-lg-and-up")
 End Sub
 	
-Sub HiddenXLAndUp
-	VElement.AddClass("hidden-xl-and-up")
-End Sub	
 
-Sub HideOnAll
+Sub HiddenOnAll
 	VElement.AddClass("d-none")
-End Sub
-
-Sub HideOnlyOnXS
-	VElement.AddClass("d-none d-sm-flex")
 End Sub
 
 Sub HideOnlyOnSM

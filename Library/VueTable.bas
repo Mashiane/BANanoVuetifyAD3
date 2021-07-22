@@ -8,20 +8,24 @@ Version=8.5
 'Custom BANano View class
 
 #Event: Add_Click (e As BANanoEvent)
-#Event: Save (item As Map)
+#Event: ClearSort_Click (e As BANanoEvent)
+#Event: ClearFilter_Click (e As BANanoEvent)
+#Event: Refresh_Click (e As BANanoEvent)
+#Event: Pdf_Click (e As BANanoEvent)
+#Event: Excel_Click (e As BANanoEvent)
+#Event: Filter_Click(e As BANanoEvent)
+#Event: Back_Click (e As BANanoEvent)
+
 #Event: Edit (item As Map)
-#Event: Pdf (item As Map)
 #Event: Delete (item As Map)
+#Event: Save (item As Map)
+#Event: Clone (item As Map)
 #Event: Print (item As Map)
 #Event: Cancel (item As Map)
 #Event: Change (item As Map)
+#Event: Pdf (item As Map)
 #Event: Download (item As Map)
 #Event: Menu (item As Map)
-#Event: Clone (item As Map)
-#Event: Refresh_Click (e As BANanoEvent)
-#Event: Input (items As List)
-#Event: PDF_Click (e As BANanoEvent)
-#Event: ItemSelected (item As Map)
 #Event: SaveItem (item As Map)
 #Event: CancelItem (item As Map) 
 #Event: OpenItem (item As Map)
@@ -29,20 +33,20 @@ Version=8.5
 #Event: ColumnName (item As Map)
 #Event: ColumnName_Change (item As Map)
 
-#Event: ClickRow (e As BANanoEvent)
+#Event: ClickRow (item As Map, other As Map)
+#Event: ContextMenuRow(e As BANanoEvent, other As Map)
 #Event: CurrentItems(items As List)
-#Event: DblClickRow (e As BANanoEvent)
+#Event: Input (items As List)
+#Event: DblClickRow (e As BANanoEvent, other As Map)
 #Event: ItemExpanded (item As Map)
+#Event: ItemSelected (item As Map)
 #Event: ToggleSelectAll (e As BANanoEvent)
-
-#Event: ClearSort_Click (e As BANanoEvent)
-#Event: ClearFilter_Click (e As BANanoEvent)
 #Event: FilterChange(e As BANanoEvent)
-#Event: Filter_Click(e As BANanoEvent)
-#Event: Back_Click (e As BANanoEvent)
+
 
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue:  False, Description: Hidden
 #DesignerProperty: Key: ShowInsideCard, DisplayName: ShowInsideCard, FieldType: Boolean, DefaultValue:  True, Description: Show table inside the v-card
+#DesignerProperty: Key: HideToolBarOnSM, DisplayName: HideToolBarOnSM, FieldType: Boolean, DefaultValue:  True, Description: Hide toolbar on SM
 #DesignerProperty: Key: Title, DisplayName: Title, FieldType: String, DefaultValue:  , Description: The title on the table
 #DesignerProperty: Key: AutoID, DisplayName: Auto ID/Name, FieldType: Boolean, DefaultValue: False, Description: Overrides the ID/Name with a random string.
 #DesignerProperty: Key: Manual, DisplayName: Manual, FieldType: Boolean, DefaultValue: False, Description: Table created manually.
@@ -232,7 +236,6 @@ Sub Class_Globals
 	'
 	Private columnsM As Map
 	Private headers As String
-	Private search As String
 	Type DataTableColumn(value As String, text As String, align As String, sortable As Boolean, filterable As Boolean, divider As Boolean, _
 	className As String, width As String, filter As String, sort As String, ColType As String, extra As String, icon As String, Disabled As Boolean, imgWidth As String, imgHeight As String, avatarSize As String, iconSize As String, ReadOnly As Boolean, progressColor As String, progressRotate As String, progressSize As String, progressWidth As String, progressHeight As String, progressShowValue As Boolean, valueFormat As String, bindTotals As String, hasTotal As Boolean, depressed As Boolean, rounded As Boolean, dark As Boolean, label As String, color As String, outlined As Boolean, shaped As Boolean, target As String, prefix As String, colprops As Map, visible As Boolean, _
 	Large As Boolean, SourceTable As String, SourceField As String, DisplayField As String, ReturnObject As Boolean, PreDisplay As String, href As String, ConditionalClass As String, ConditionalColor As String, ConditionalStyle As String)
@@ -328,7 +331,7 @@ Private sPreDisplay As String
 Private sConditionalClass As String
 Private sConditionalColor As String	
 Private sConditionalStyle As String
-private sColumnEmail as string
+Private sColumnEmail As String
 	'
 Private lstPreDisplay As List
 Private lstConditionalClass As List
@@ -336,6 +339,8 @@ Private lstConditionalColor As List
 Private lstConditionalStyle As List
 Private bShowInsideCard As Boolean
 Private bHidden As Boolean
+Private bHideToolBarOnSM As Boolean
+Private toolbarID As String
 End Sub
 
 'initialize the custom view
@@ -379,6 +384,7 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	xPage = $"${mName}page"$
 	stVShow = $"${mName}show"$
 	sCurrentItems = $"${mName}currentitems"$
+	toolbarID = $"${mName}toolbar"$
 End Sub
 
 'Create view in the designer
@@ -451,7 +457,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sColumnImage = Props.GetDefault("ColumnImage", "")
 		sColumnLinearProgress = Props.GetDefault("ColumnLinearProgress", "")
 		sColumnLink = Props.GetDefault("ColumnLink", "")
-		sColumnEmail = props.GetDefault("ColumnEmail", "")
+		sColumnEmail = Props.GetDefault("ColumnEmail", "")
 		sColumnMoney = Props.GetDefault("ColumnMoney", "")
 		sColumnRating = Props.GetDefault("ColumnRating", "")
 		sColumnSortable = Props.GetDefault("ColumnSortable", "")
@@ -487,6 +493,8 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bShowInsideCard = BANanoShared.parseBool(bShowInsideCard)
 		bHidden = Props.getdefault("Hidden", False)
 		bHidden = BANanoShared.parseBool(bHidden)
+		bHideToolBarOnSM = Props.GetDefault("HideToolBarOnSM", True)
+		bHideToolBarOnSM = BANanoShared.parseBool(bHideToolBarOnSM)
 	End If
 	'
 	bManual = BANanoShared.parseBool(bManual)
@@ -525,11 +533,14 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	Dim sb As StringBuilder
 	sb.Initialize 
 	sb.Append($"<v-card id="${mName}card">"$)
-	sb.Append($"<v-card-title id="${titleID}">"$)
+	sb.Append($"<v-toolbar id="${toolbarID}" flat>"$)
+	sb.Append($"<v-toolbar-title id="${titleID}">"$)
 	sb.Append($"{{ ${titleText} }}"$)
 	sb.Append($"</v-card-title>"$)
+	sb.Append($"</v-toolbar>"$)
 	sb.Append($"<v-divider v-show="${filtershow}"></v-divider>"$)
 	sb.Append($"<v-card-text id="${mName}cardtext" v-show="${filtershow}"><p>Choose Filter Columns</p><div id="${mName}filter"></div></v-card-text>"$)
+	sb.Append($"<v-divider v-show="${filtershow}"></v-divider>"$)
 	sb.Append($"<v-data-table ref="${mName}" id="${mName}"></v-data-table>"$)
 	sb.Append($"<v-divider v-show="${showpagination}"></v-divider>"$)
 	sb.Append($"<div class="text-center pa-2" v-show="${showpagination}"><v-pagination id="${mName}pagination" circle></v-pagination></div>"$)
@@ -567,6 +578,11 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	'not the card title
 	If bShowInsideCard = False Then
 		VElement.Bind("caption", titleText)
+	Else
+		If bHideToolBarOnSM Then
+			GetToolBar.HiddenSMAndDown
+			VElement.GetCardText.HiddenSMAndDown
+		End If	
 	End If
 	
 	VElement.AddAttr(":loading", sloading)
@@ -642,19 +658,22 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	setStates(mStates)
 	setTitle(mTitle)
 	'
+	If bShowInsideCard Then
+		'GetToolBar.Append($"<v-row id="${mName}separator"><v-col sm="12"><div> </div></v-col></v-row>"$)
+		'VElement.GetVueElement($"${mName}separator"$).HiddenSMAndUp
+	End If
+	
+	
 	If bManual = False Then
 	If mHasSearch And bShowInsideCard Then
+		'GetToolBar.Append($"<v-spacer id="${mName}spacer1"></v-spacer>"$)
+		'VElement.GetVueElement($"${mName}spacer1"$).HiddenXSOnly
 		AddSpacer
 		AddSearch
 		'
+		'GetToolBar.Append($"<v-divider vertical class="mx-2" id="${mName}divider1"></v-divider>"$)
+		'VElement.GetVueElement($"${mName}divider1"$).HiddenXSOnly
 		AddDivider
-		'
-		Dim txtSearch As VueElement = GetSearchText
-		txtSearch.Rounded = True
-		txtSearch.BindAllEvents
-		txtSearch.Dense = True
-		txtSearch.Solo = True
-		VElement.BindVueElement(txtSearch)
 	End If
 	'
 	
@@ -1395,6 +1414,12 @@ Sub GetFilter As VueElement
 	Return elx
 End Sub
 
+Sub GetToolBar As VueElement
+	Dim elx As VueElement
+	elx.Initialize(mCallBack, toolbarID, toolbarID)
+	Return elx
+End Sub
+
 'return the table title
 Sub GetTableTitle As VueElement
 	Dim elx As VueElement
@@ -1440,7 +1465,7 @@ End Sub
 Sub AddSpacer
 	If bShowInsideCard = False Then Return
 	Dim ct As BANanoElement
-	ct.Initialize($"#${titleID}"$)
+	ct.Initialize($"#${toolbarID}"$)
 	ct.Append("<v-spacer></v-spacer>")
 End Sub
 
@@ -1448,7 +1473,7 @@ End Sub
 Sub AddDivider
 	If bShowInsideCard = False Then Return
 	Dim ct As BANanoElement
-	ct.Initialize($"#${titleID}"$)
+	ct.Initialize($"#${toolbarID}"$)
 	ct.Append($"<v-divider vertical class="mx-2"></v-divider>"$)
 End Sub
 
@@ -1516,14 +1541,16 @@ End Sub
 Sub AddTitleIcon(elID As String, eIcon As String, btnColor As String)
 	If bShowInsideCard = False Then Return
 	Dim ct As BANanoElement
-	ct.Initialize($"#${titleID}"$)
+	ct.Initialize($"#${toolbarID}"$)
 	elID = elID.ToLowerCase
 	Dim siconright As String = $"${elID}icon"$
 	ct.Append($"<v-btn icon id="${elID}"><v-icon id="${elID}icon"></v-icon></v-btn>"$)
 	Dim vbtnright As VueElement
 	vbtnright.Initialize(mCallBack, elID, elID)
-	'vbtnright.Small = True
-	If btnColor <> "" Then vbtnright.Color = btnColor
+	vbtnright.Fab = True
+	If btnColor <> "" Then 
+		vbtnright.Color = btnColor
+	End If
 	vbtnright.Elevation = 4
 	vbtnright.VShow = $"${elID}show"$
 	vbtnright.SetData($"${elID}show"$, True)
@@ -1582,10 +1609,20 @@ End Sub
 'add a search to the card title
 Sub AddSearch
 	If bShowInsideCard = False Then Return
+	'
 	Dim str As String = $"<v-text-field id="${searchID}" @keydown.native.escape="${search}=''" v-model="${search}" append-icon="mdi-magnify" label="Search" single-line hide-details clearable class="shrink"></v-text-field>"$
 	Dim ct As BANanoElement
-	ct.Initialize($"#${titleID}"$)
+	ct.Initialize($"#${toolbarID}"$)
 	ct.Append(str)
+	Dim txtSearch As VueElement = GetSearchText
+	txtSearch.Rounded = True
+	txtSearch.BindAllEvents
+	txtSearch.Dense = True
+	txtSearch.Solo = True
+	VElement.BindVueElement(txtSearch)
+	'
+	'GetToolBar.Append($"<v-row id="${mName}searchdiv"><v-col sm="12"><div> </div></v-col></v-row>"$)
+	'VElement.GetVueElement($"${mName}searchdiv"$).HiddenMDAndUp
 End Sub
 
 'return html of the element
@@ -4256,7 +4293,7 @@ End Sub
 Sub SetOnClickRow(methodName As String)
 	methodName = methodName.tolowercase
 	If SubExists(mCallBack, methodName) = False Then Return
-	Dim e As BANanoEvent
+	Dim e As Object
 	Dim cb As BANanoObject = BANano.CallBack(mCallBack, methodName, Array(e))
 	AddAttr("v-on:click:row", methodName)
 	'add to methods
@@ -4267,7 +4304,7 @@ End Sub
 Sub SetOnItemSelected(methodName As String)
 	methodName = methodName.tolowercase
 	If SubExists(mCallBack, methodName) = False Then Return
-	Dim e As BANanoEvent
+	Dim e As Object
 	Dim cb As BANanoObject = BANano.CallBack(mCallBack, methodName, Array(e))
 	AddAttr("v-on:item-selected", methodName)
 	'add to methods
@@ -4446,24 +4483,24 @@ Sub HiddenXSOnly
 End Sub
 
 Sub HiddenSMOnly
-	AddClass("hidden-sm-only")
+	AddClass("d-sm-none d-md-flex")
 End Sub
 	
 Sub HiddenMDOnly
-	AddClass("hidden-md-only")
+	AddClass("d-md-none d-lg-flex")
 End Sub
 	
 Sub HiddenLGOnly
-	AddClass("hidden-lg-only")
+	AddClass("d-lg-none d-xl-flex")
 End Sub
 	
 Sub HiddenXLOnly
-	AddClass("hidden-xl-only")
+	AddClass("d-xl-none")
 End Sub
 '
-Sub HiddenXSAndDown
-	AddClass("hidden-xs-and-down")
-End Sub
+'Sub HiddenXSAndDown
+	
+'End Sub
 
 Sub HiddenSMAndDown
 	AddClass("hidden-sm-and-down")
@@ -4477,13 +4514,13 @@ Sub HiddenLGAndDown
 	AddClass("hidden-lg-and-down")
 End Sub
 	
-Sub HiddenXLAndDown
-	AddClass("hidden-xl-and-down")
-End Sub
+'Sub HiddenXLAndDown
+	
+'End Sub
 '
-Sub HiddenXSAndUp
-	AddClass("hidden-xs-and-up")
-End Sub
+'Sub HiddenXSAndUp
+	
+'End Sub
 
 Sub HiddenSMAndUp
 	AddClass("hidden-sm-and-up")
@@ -4497,16 +4534,16 @@ Sub HiddenLGAndUp
 	AddClass("hidden-lg-and-up")
 End Sub
 	
-Sub HiddenXLAndUp
-	AddClass("hidden-xl-and-up")
-End Sub	
+'Sub HiddenXLAndUp
+	
+'End Sub	
 
-Sub HideOnAll
+Sub HiddenOnAll
 	AddClass("d-none")
 End Sub
 
 Sub HideOnlyOnXS
-	AddClass("d-none d-sm-flex")
+	AddClass("hidden-xs-only")
 End Sub
 
 Sub HideOnlyOnSM
@@ -4740,4 +4777,13 @@ private Sub FindItemAtPosition1(V As VueComponent, pos As Int) As Map
 	Dim recs As List = V.GetData(itemsname)
 	Dim rec As Map = recs.Get(pos)
 	Return rec
+End Sub
+
+'get double clicked item / right clicked
+Sub GetItem(other As Map) As Map
+	Dim i As Map = CreateMap()
+	If other.ContainsKey("item") Then
+		i = other.Get("item")
+	End If
+	Return i
 End Sub

@@ -282,7 +282,7 @@ Sub Class_Globals
 	Public const VISIBILITY_HIDDEN_SM_AND_UP As String = "hidden-sm-and-up"
 	Public const VISIBILITY_HIDDEN_XL_AND_UP As String = "hidden-xl-and-up"
 	Public const VISIBILITY_HIDDEN_XS_ONLY As String = "hidden-xs-only"
-	Public const VISIBILITY_HIDDEN_XL_ONLY As String = "hidden-xl-only"
+	Public const VISIBILITY_HIDDEN_XL_ONLY As String = "d-xl-none"
 	
 	Public const ALERT_BORDER_LEFT As String = "left"
 	Public const ALERT_BORDER_RIGHT As String = "right"
