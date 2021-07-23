@@ -13,7 +13,6 @@ Version=7
 #Event: Submit (e As BANanoEvent)
 #Event: SubmitPrevent (e As BANanoEvent)
 
-
 #DesignerProperty: Key: RecordSource, DisplayName: RecordSource, FieldType: String, DefaultValue: , Description: RecordSource
 #DesignerProperty: Key: LazyValidation, DisplayName: LazyValidation, FieldType: Boolean, DefaultValue: True, Description: LazyValidation
 #DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: Boolean, DefaultValue: False, Description: Disabled
@@ -178,6 +177,7 @@ End Sub
 
 'reset the form
 Sub Reset(VC As VueComponent)
+	SetValue(VC, True)
 	Dim refs As BANanoObject = VC.refs
 	refs.GetField(mName).runmethod("reset", Null)
 End Sub
@@ -193,6 +193,27 @@ Sub Validate(VC As VueComponent) As Boolean
 	Dim refs As BANanoObject = VC.refs
 	Dim res As Boolean = refs.GetField(mName).runmethod("validate", Null).Result
 	Return res
+End Sub
+
+Sub ValidateBlankOutMinusOne(VC As VueComponent) As Boolean
+	BlankOutMinusOne(VC)
+	Dim refs As BANanoObject = VC.refs
+	Dim res As Boolean = refs.GetField(mName).runmethod("validate", Null).Result
+	Return res
+End Sub
+
+'blank out -1, for validation
+Sub BlankOutMinusOne(VC As VueComponent)
+	If sRecordSource = "" Then Return
+	Dim rec As Map = VC.GetData(sRecordSource)
+	For Each k As String In rec.Keys
+		Dim v As String = rec.Get(k)
+		v = BANanoShared.CStr(v)
+		If v = "-1" Then
+			rec.Put(k, "")
+		End If
+	Next
+	VC.SetData(sRecordSource, rec)
 End Sub
 
 'get the data of the form

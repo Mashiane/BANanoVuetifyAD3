@@ -9,6 +9,8 @@ Version=8.9
 #Event: ok_click (e As BANanoEvent)
 #Event: cancel_click (e As BANanoEvent)
 #Event: ClickOutside (e as bananoevent)
+#Event: Visible
+
 
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: True, Description: Hidden
 #DesignerProperty: Key: Default, DisplayName: Default*, FieldType: Boolean, DefaultValue: False, Description: Default
@@ -426,6 +428,9 @@ bDisabled = BANanoShared.parseBool(bDisabled)
 	End If
 End Sub
 
+private Sub WatchVisibility(VC As VueComponent)
+	VC.SetWatch(sVModel, True, True, mCallBack, $"${mName}_visible"$, Null)
+End Sub
 
 'update the card text
 Sub UpdateCardText(VC As VueComponent, vCardTextx As String)
@@ -736,6 +741,7 @@ Sub BindState(VC As VueComponent)
 		Dim cb As BANanoObject = mmethods.Get(k)
 		VC.SetCallBack(k, cb)
 	Next
+	WatchVisibility(VC)
 End Sub
 
 'get the process

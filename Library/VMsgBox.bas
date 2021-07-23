@@ -9,6 +9,7 @@ Version=9
 #Event: ok_click (e As BANanoEvent)
 #Event: cancel_click (e As BANanoEvent)
 #Event: clickoutside (e as bananoevent)
+#Event: Visible
 
 #DesignerProperty: Key: DialogType, DisplayName: DialogType, FieldType: String, DefaultValue: message, Description: DialogType, List: message|input
 #DesignerProperty: Key: ToolbarCaption, DisplayName: Title, FieldType: String, DefaultValue: Title, Description: Title
@@ -51,7 +52,7 @@ Version=9
 #DesignerProperty: Key: ContentClass, DisplayName: ContentClass, FieldType: String, DefaultValue: , Description: ContentClass
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: false, Description: Dark
 #DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: Boolean, DefaultValue: false, Description: Disabled
-#DesignerProperty: Key: Eager, DisplayName: Eager, FieldType: Boolean, DefaultValue: false, Description: Eager
+#DesignerProperty: Key: Eager, DisplayName: Eager, FieldType: Boolean, DefaultValue: True, Description: Eager
 #DesignerProperty: Key: Fullscreen, DisplayName: Fullscreen, FieldType: Boolean, DefaultValue: false, Description: Fullscreen
 #DesignerProperty: Key: FullscreenOnMobile, DisplayName: FullscreenOnMobile, FieldType: Boolean, DefaultValue: false, Description: FullscreenOnMobile
 #DesignerProperty: Key: OverlayColor, DisplayName: OverlayColor, FieldType: String, DefaultValue: , Description: OverlayColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
@@ -394,6 +395,10 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	Dim ccb As VueElement = VElement.GetCancel1
 	ccb.BindAllEvents
 	VElement.BindVueElement(ccb)
+End Sub
+
+private Sub WatchVisibility(VC As VueComponent)
+	VC.SetWatch(sVModel, True, True, mCallBack, $"${mName}_visible"$, Null)
 End Sub
 
 'get the process
@@ -759,6 +764,7 @@ End Sub
 Sub BindState(VC As VueComponent)
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
+	
 	'apply the binding for the control
 	For Each k As String In mbindings.Keys
 		Dim v As Object = mbindings.Get(k)
@@ -773,6 +779,8 @@ Sub BindState(VC As VueComponent)
 		Dim cb As BANanoObject = mmethods.Get(k)
 		VC.SetCallBack(k, cb)
 	Next
+	'watch visibility
+	WatchVisibility(VC)
 End Sub
 
 'return html of the element
@@ -839,6 +847,16 @@ End Sub
 Sub HiddenLGAndUp
 	AddClass("hidden-lg-and-up")
 End Sub
+
+Sub IsVisible(VC As VueComponent) As Boolean
+	Dim res As Boolean = VC.GetData(sVModel)
+	Return res
+End Sub
+
+Sub IsVisibleOnApp(V As VuetifyApp) As Boolean
+	Dim res As Boolean = V.GetData(sVModel)
+	Return res
+End Sub
 	
 'Sub HiddenXLAndUp
 	
@@ -890,4 +908,15 @@ End Sub
 
 Sub VisibleOnlyOnXL
 	AddClass("d-none d-xl-flex")
+End Sub
+
+'<code>
+'Dim bVisible As Boolean = inputdialog.IsVisible(component)
+'If bVisible Then 
+'component.refs = vuetify.GetRefs
+'form.ResetValidation(component)
+'End If
+'</code>	
+Sub Visible
+	
 End Sub

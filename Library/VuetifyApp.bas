@@ -1691,6 +1691,14 @@ Sub SetMounted(Module As Object, methodName As String, args As List)
 	SetMethod(Module, methodName, args)
 End Sub
 
+Sub SetReady(Module As Object, methodName As String, args As List)
+	methodName = methodName.ToLowerCase
+	If SubExists(Module, methodName) = False Then Return
+	Dim mounted As BANanoObject = BANano.CallBack(Module, methodName, args)
+	Options.Put("ready", mounted)
+	SetMethod(Module, methodName, args)
+End Sub
+
 Sub SetDestroyed(Module As Object, methodName As String, args As List)
 	methodName = methodName.ToLowerCase
 	If SubExists(Module, methodName) = False Then Return
@@ -6004,4 +6012,10 @@ Sub LineThroughIfTrue(b As Boolean) As String
 	Else
 		Return ""
 	End If
+End Sub
+
+'check if value isNaN
+Sub isNaN(obj As Object) As Boolean
+	Dim res As Boolean = BANano.Window.RunMethod("isNaN", Array(obj)).Result
+	Return res
 End Sub

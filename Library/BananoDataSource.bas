@@ -605,6 +605,9 @@ Sub CREATE_OR_UPDATE
 	If IsBound = False Then
 		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
 	End If
+	If bShowLog Then
+		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.CREATE_OR_UPDATE"$)
+	End If
 	'only use fields on the fields list
 	'schemaSelectFields
 	'determinate the mode
@@ -994,6 +997,12 @@ Sub AddWhere(fld As String, operator As String, value As Object) As BananoDataSo
 End Sub
 
 private Sub MySQLExecute As Boolean    'ignore
+	If IsBound = False Then
+		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+	End If
+	If bShowLog Then
+		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.MySQLExecute"$)
+	End If
 	Dim MySQL As BANanoMySQLE
 	MySQL.Initialize(sDatabaseName, sTableName, sPrimaryKey, sAutoIncrement) 
 	If bDynamic Then

@@ -10,7 +10,7 @@ Version=8.95
 #Event: Change (item As String)
 
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
-#DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: tabs1, Description: VModel
+#DesignerProperty: Key: ActiveTab, DisplayName: Active Tab, FieldType: String, DefaultValue: tab1item, Description: Active Tab
 #DesignerProperty: Key: Grow, DisplayName: Grow, FieldType: Boolean, DefaultValue: false, Description: Grow
 #DesignerProperty: Key: IconsAndText, DisplayName: IconsAndText, FieldType: Boolean, DefaultValue: false, Description: IconsAndText
 #DesignerProperty: Key: Vertical, DisplayName: Vertical, FieldType: Boolean, DefaultValue: false, Description: Vertical
@@ -59,6 +59,7 @@ Version=8.95
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
 
 Sub Class_Globals
+	Private sActiveTab As String
     Private BANano As BANano 'ignore
 	Private mName As String 'ignore
 	Private mEventName As String 'ignore
@@ -98,7 +99,7 @@ Sub Class_Globals
 	Private sVIf As String
 	Private sVModel As String
 	Private sVOn As String
-	'Private sVShow As String
+	Private sVShow As String
 	Private bVertical As Boolean
 	Private sSliderColorIntensity As String
 	Private bHidden As Boolean
@@ -128,7 +129,8 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey)
 		End If
 	End If
-	'sVShow = $"${mName}show"$
+	sVShow = $"${mName}show"$
+	sVModel = $"${mName}value"$
 	xTabs = 0
 	vlist1.Initialize 
 End Sub
@@ -136,6 +138,7 @@ End Sub
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	mTarget = Target
 	If Props <> Null Then
+		sActiveTab = Props.GetDefault("ActiveTab", "")
 		bIsExtension = Props.GetDefault("IsExtension", False)
 		bIsExtension = BANanoShared.parseBool(bIsExtension)
 		mClasses = Props.Get("Classes")
@@ -168,7 +171,6 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sVBind = Props.Get("VBind")
 		sVFor = Props.Get("VFor")
 		sVIf = Props.Get("VIf")
-		sVModel = Props.Get("VModel")
 		sVOn = Props.Get("VOn")
 		bHidden = Props.GetDefault("Hidden", False)
 		bVertical = Props.GetDefault("Vertical",False)
@@ -215,25 +217,31 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mElement = BANano.GetElement($"#${mName}"$)
 	Else
 		If bIsExtension Then
-			mElement = mTarget.Append($"<v-template id="${mName}template" v-slot:extension><v-tabs ref="${mName}" id="${mName}"></v-tabs></v-template>"$).Get("#" & mName)
+			mElement = mTarget.Append($"<v-template id="${mName}template" v-slot:extension>
+			<v-card id="${mName}card">
+			<v-tabs ref="${mName}" id="${mName}"></v-tabs>
+			<v-tabs-items id="${mName}tabitems">
+			</v-tabs-items>
+			</v-card>
+			</v-template>"$).Get("#" & mName)
 		Else		
-			mElement = mTarget.Append($"<v-tabs ref="${mName}" id="${mName}"></v-tabs>"$).Get("#" & mName)
+			mElement = mTarget.Append($"<v-card id="${mName}card">
+			<v-tabs ref="${mName}" id="${mName}"></v-tabs>
+			<v-tabs-items id="${mName}tabitems"></v-tabs-items>
+			</v-card>"$).Get("#" & mName)
 		End If
 	End If
 	'
 	VElement.Initialize(mCallBack, mName, mName)
 	VElement.TagName = "v-tabs"
 	
-	'we have multiple items
-	sItemKeys = sItemKeys.Replace(",", ";")
-	sItemTitles = sItemTitles.Replace(",", ";")
-	sItemBadges = sItemBadges.Replace(",", ";")
-	sItemIcons = sItemIcons.Replace(",", ";")
-
-	Dim xkeys As List = BANanoShared.StrParse(";", sItemKeys)
-	Dim xtitles As List = BANanoShared.StrParse(";", sItemTitles)
-	Dim xbadges As List = BANanoShared.StrParse(";", sItemBadges)
-	Dim xicons As List = BANanoShared.StrParse(";", sItemIcons)
+	'set the vmodel for the children
+	VElement.GetVueElement($"${mName}tabitems"$).VModel = sVModel
+	
+	Dim xkeys As List = BANanoShared.StrParseComma(";", sItemKeys)
+	Dim xtitles As List = BANanoShared.StrParseComma(";", sItemTitles)
+	Dim xbadges As List = BANanoShared.StrParseComma(";", sItemBadges)
+	Dim xicons As List = BANanoShared.StrParseComma(";", sItemIcons)
 	'
 	xkeys = BANanoShared.ListTrimItems(xkeys)
 	xtitles = BANanoShared.ListTrimItems(xtitles)
@@ -279,12 +287,32 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.AddAttr("v-for", sVFor)
 	VElement.AddAttr("v-if", sVIf)
 	VElement.AddAttr("v-model", sVModel)
-	VElement.SetData(sVModel, Null)
+	VElement.SetData(sVModel, sActiveTab)
 	VElement.AddAttr("v-on", sVOn)
-	'VElement.AddAttr("v-show", sVShow)
-	'VElement.SetData(sVShow, Not(bHidden))
+	VElement.AddAttr("v-show", sVShow)
+	VElement.SetData(sVShow, Not(bHidden))
 	VElement.AddAttr(":vertical", bVertical)
 	VElement.BindAllEvents
+End Sub
+
+'use on initialize
+Sub Clear
+	VElement.Empty
+	xTabs = 0
+	vlist1.Initialize
+	GetTabItems.Empty
+End Sub
+
+'use on initialize
+Sub Refresh
+	Build
+End Sub
+
+'update the active item
+Sub UpdateActive(VC As VueComponent, itm As String)
+	Dim tabID As String = $"${mName}${itm}"$
+	Dim tabItem As String = $"${tabID}item"$
+	VC.SetData(sVModel, tabItem)
 End Sub
 
 'add item using own key
@@ -321,13 +349,19 @@ End Sub
 
 'build the tab Items, automatically done by BindState
 private Sub Build
-	VElement.Initialize(mCallBack, mName, mName)
+	'get the tab items
+	Dim tabs As VueElement = VElement.GetVueElement($"${mName}tabitems"$)
 	For Each sItem As String In vlist1
 		Dim tabID As String = $"${mName}${sItem}"$
 		Dim tabItem As String = $"${tabID}item"$
 		Dim tabcontent As String = $"${tabID}content"$
-		VElement.Append($"<v-tab-item id="${tabItem}" value="${tabItem}"><span id="${tabcontent}"></span></v-tab-item>"$)	
+		tabs.Append($"<v-tab-item id="${tabItem}" value="${tabItem}"><span id="${tabcontent}"></span></v-tab-item>"$)	
 	Next
+End Sub
+
+Sub GetTabItems As VueElement
+	Dim tabs As VueElement = VElement.GetVueElement($"${mName}tabitems"$)
+	Return tabs
 End Sub
 
 'add items using internal increment

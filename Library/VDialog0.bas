@@ -9,6 +9,8 @@ Version=7
 'https://github.com/Mashiane/BANano-Custom-View-Creator
 'Custom BANano View class
 #Event: ClickOutside (e as bananoevent)
+#Event: Visible
+
 
 #DesignerProperty: Key: Activator, DisplayName: Activator, FieldType: String, DefaultValue: , Description: Activator
 #DesignerProperty: Key: Attach, DisplayName: Attach, FieldType: String, DefaultValue: , Description: Attach
@@ -271,6 +273,7 @@ Sub BindState(VC As VueComponent)
 		Dim cb As BANanoObject = mmethods.Get(k)
 		VC.SetCallBack(k, cb)
 	Next
+	WatchVisibility(VC)
 End Sub
 
 Sub HiddenXSOnly
@@ -379,4 +382,8 @@ End Sub
 
 Sub VisibleOnlyOnXL
 	AddClass("d-none d-xl-flex")
+End Sub
+
+private Sub WatchVisibility(VC As VueComponent)
+	VC.SetWatch(sVModel, True, True, mCallBack, $"${mName}_visible"$, Null)
 End Sub
