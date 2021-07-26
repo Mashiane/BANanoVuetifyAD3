@@ -1484,11 +1484,31 @@ Sub AddNew
 	AddTitleIcon(btnKey, "mdi-plus", "blue")
 End Sub
 
+Sub UpdateVisibleNew(b As Boolean)
+	Dim btnKey As String = $"${mName}_addshow"$
+	VC.SetData(btnKey, b)
+End Sub
+
+Sub UpdateDisabledNew(b As Boolean)
+	Dim btnKey As String = $"${mName}_adddisabled"$
+	VC.SetData(btnKey, b)
+End Sub
+
 'add a column to clear sort
 Sub AddClearSort
 	If bShowInsideCard = False Then Return
 	Dim btnKey As String = $"${mName}_clearsort"$
 	AddTitleIcon(btnKey, "mdi-sort-variant-remove", "orange")
+End Sub
+
+Sub UpdateVisibleClearSort(b As Boolean)
+	Dim btnKey As String = $"${mName}_clearsortshow"$
+	VC.SetData(btnKey, b)
+End Sub
+
+Sub UpdateDisabledClearSort(b As Boolean)
+	Dim btnKey As String = $"${mName}_clearsortdisabled"$
+	VC.SetData(btnKey, b)
 End Sub
 
 'add a column to clear filters
@@ -1498,6 +1518,16 @@ Sub AddClearFilter
 	AddTitleIcon(btnKey, "mdi-filter-remove", "red")
 End Sub
 
+Sub UpdateVisibleClearFilter(b As Boolean)
+	Dim btnKey As String = $"${mName}_clearfiltershow"$
+	VC.SetData(btnKey, b)
+End Sub
+
+Sub UpdateDisabledClearFilter(b As Boolean)
+	Dim btnKey As String = $"${mName}_clearfilterdisabled"$
+	VC.SetData(btnKey, b)
+End Sub
+
 'add a back button 
 Sub AddBack
 	If bShowInsideCard = False Then Return
@@ -1505,11 +1535,31 @@ Sub AddBack
 	AddTitleIcon(btnKey, "mdi-chevron-left", "cyan")
 End Sub
 
+Sub UpdateVisibleBack(b As Boolean)
+	Dim btnKey As String = $"${mName}_backshow"$
+	VC.SetData(btnKey, b)
+End Sub
+
+Sub UpdateDisabledBack(b As Boolean)
+	Dim btnKey As String = $"${mName}_backdisabled"$
+	VC.SetData(btnKey, b)
+End Sub
+
 'add a back button 
 Sub AddRefresh
 	If bShowInsideCard = False Then Return
 	Dim btnKey As String = $"${mName}_refresh"$
 	AddTitleIcon(btnKey, "mdi-reload", "purple")
+End Sub
+
+Sub UpdateVisibleRefresh(b As Boolean)
+	Dim btnKey As String = $"${mName}_refreshshow"$
+	VC.SetData(btnKey, b)
+End Sub
+
+Sub UpdateDisabledRefresh(b As Boolean)
+	Dim btnKey As String = $"${mName}_refreshdisabled"$
+	VC.SetData(btnKey, b)
 End Sub
 
 'add a button to the header
@@ -1524,10 +1574,30 @@ Sub AddPDF
 	AddTitleIcon(btnKey, "mdi-file-pdf-outline", "brown")
 End Sub
 
+Sub UpdateVisiblePDF(b As Boolean)
+	Dim btnKey As String = $"${mName}_pdfshow"$
+	VC.SetData(btnKey, b)
+End Sub
+
+Sub UpdateDisabledPDF(b As Boolean)
+	Dim btnKey As String = $"${mName}_pdfdisabled"$
+	VC.SetData(btnKey, b)
+End Sub
+
 Sub AddExcel
 	If bShowInsideCard = False Then Return
 	Dim btnKey As String = $"${mName}_excel"$
 	AddTitleIcon(btnKey, "mdi-file-excel-box-outline", "cyan")
+End Sub
+
+Sub UpdateVisibleExcel(b As Boolean)
+	Dim btnKey As String = $"${mName}_excelshow"$
+	VC.SetData(btnKey, b)
+End Sub
+
+Sub UpdateDisabledExcel(b As Boolean)
+	Dim btnKey As String = $"${mName}_exceldisabled"$
+	VC.SetData(btnKey, b)
 End Sub
 
 Sub AddToolbarIcon(elID As String, eIcon As String, btnColor As String)
@@ -1554,6 +1624,8 @@ Sub AddTitleIcon(elID As String, eIcon As String, btnColor As String)
 	vbtnright.Elevation = 4
 	vbtnright.VShow = $"${elID}show"$
 	vbtnright.SetData($"${elID}show"$, True)
+	vbtnright.Disabled = $"${elID}disabled"$
+	vbtnright.SetData($"${elID}disabled"$, False)
 	'
 	Dim viconright As VueElement
 	viconright.Initialize(mCallBack, siconright, siconright)

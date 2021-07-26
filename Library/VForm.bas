@@ -72,7 +72,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	mTarget = Target 
 	If Props <> Null Then 
 		bDisabled = Props.GetDefault("Disabled",False)
-		bReadonly = Props.Get("Readonly")
+		bReadonly = Props.GetDefault("Readonly",False)
 		mClasses = Props.Get("Classes") 
 		mStyles = Props.Get("Styles") 
 		mAttributes = Props.Get("Attributes") 

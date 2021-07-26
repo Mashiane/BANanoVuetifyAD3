@@ -25,7 +25,7 @@ Sub Class_Globals
 	Public Themes As Map
 	Private ColorMap As Map
 	Public Vuetify As BANanoObject
-	Private data As BANanoObject
+	Public data As BANanoObject
 	Public AppName As String
 	Public Root As BANanoObject
 	Public Route As BANanoObject
@@ -417,7 +417,7 @@ Sub Class_Globals
 	rightswitchattr As String, rightchipattr As String, iconattr As String, hasdivider As Boolean, insetdivider As Boolean, _
 	rightavatar As String, rightavatarclass As String, rightavataricon As String, _
 	rightavatariconcolor As String, rightavatariconclass As String, rightavatarattr As String, rightavatariconattr As String, _
-	rightitemavatarclass As String, avatartext As String, rightavatartext As String, avatartextcolor As String, rightavatartextcolor As String, avatartextclass As String, rightavatartextclass As String, subtitle2 As String, subtitle3 As String, subtitle4 As String, href As String, target As String)
+	rightitemavatarclass As String, avatartext As String, rightavatartext As String, avatartextcolor As String, rightavatartextcolor As String, avatartextclass As String, rightavatartextclass As String, subtitle2 As String, subtitle3 As String, subtitle4 As String, href As String, target As String, visible As String)
 	'
 	Public RouterViewName As String
 	Public DatabaseName As String
@@ -6018,4 +6018,170 @@ End Sub
 Sub isNaN(obj As Object) As Boolean
 	Dim res As Boolean = BANano.Window.RunMethod("isNaN", Array(obj)).Result
 	Return res
+End Sub
+
+'find item at position
+Sub FindItemAtPosition(lstName As String, pos As Int) As Map
+	Dim recs As List = GetData(lstName)
+	Dim rec As Map = recs.Get(pos)
+	Return rec
+End Sub
+
+
+'REALTIME
+Sub RealTimeListDelete(lstName As String, prop As String, value As String)
+	Dim m As Map = CreateMap()
+	m.Put(prop, value)
+	'find the record at a position
+	Dim mpos As Int = RealTimeListGetDataPositionWhere(lstName, m)
+	If mpos >= 0 Then
+		RealTimeListSetDataSpliceRemove(lstName, mpos, 1)
+	End If
+End Sub
+
+'update item where
+Sub RealTimeListUpdateVisible(lstName As String, prop As String, value As String, b As Boolean)
+	RealTimeListUpdate(lstName, prop, value, CreateMap("visible": b))
+End Sub
+
+'update item where
+Sub RealTimeListUpdate(lstName As String, prop As String, value As String, item As Map)
+	Dim m As Map = CreateMap()
+	m.Put(prop, value)
+	'find the record at a position
+	Dim mpos As Int = RealTimeListGetDataPositionWhere(lstName, m)
+	If mpos >= 0 Then
+		Dim oldm As Map = RealTimeListFindItemAtPosition(lstName, mpos)
+		oldm = BANanoShared.Merge(oldm, item)
+		RealTimeListSetDataSplice(lstName, mpos, 1, oldm)
+	End If
+End Sub
+
+'add a new row at the end of the items in realtime
+Sub RealTimeListAdd(lstName As String, rowdata As Map)
+	RealTimeListSetDataPush(lstName, rowdata)
+End Sub
+
+'read an item where
+Sub RealTimeListRead(lstName As String, prop As String, value As String) As Map
+	Dim m As Map = CreateMap()
+	m.Put(prop, value)
+	'find the record at a position
+	Dim mpos As Int = RealTimeListGetDataPositionWhere(lstName, m)
+	Dim res As Map = CreateMap()
+	If mpos >= 0 Then
+		res = RealTimeListFindItemAtPosition(lstName, mpos)
+	End If
+	Return res
+End Sub
+
+'update item where
+Sub RealTimeListUpdateItemAtPosition(lstName As String, pos As Int, item As Map)
+	If pos >= 0 Then
+		Dim oldm As Map = RealTimeListFindItemAtPosition(lstName, pos)
+		oldm = BANanoShared.Merge(oldm, item)
+		RealTimeListSetDataSplice(lstName, pos, 1, oldm)
+	End If
+End Sub
+
+'get data where
+Sub RealTimeListFindItem(lstName As String, whereMap As Map) As Map
+	Dim rm As Map = CreateMap()
+	'find the item
+	Dim recpos As Int = RealTimeListGetDataPositionWhere(lstName, whereMap)
+	If recpos = -1 Then Return rm
+	Dim recs As List = GetData(lstName)
+	Dim rec As Map = recs.Get(recpos)
+	Return rec
+End Sub
+
+'find item at position
+Sub RealTimeListFindItemAtPosition(lstName As String, pos As Int) As Map
+	Dim recs As List = GetData(lstName)
+	Dim rec As Map = recs.Get(pos)
+	Return rec
+End Sub
+
+'find item position
+Sub RealTimeListFindItemPosition(lstName As String, whereMap As Map) As Int
+	Dim mpos As Int = RealTimeListGetDataPositionWhere(lstName, whereMap)
+	Return mpos
+End Sub
+
+'remove an item where
+Sub RealTimeListRemoveItem(lstName As String, prop As String, value As String)
+	Dim m As Map = CreateMap()
+	m.Put(prop, value)
+	'find the record at a position
+	Dim mpos As Int = RealTimeListGetDataPositionWhere(lstName, m)
+	If mpos >= 0 Then
+		RealTimeListSetDataSpliceRemove(lstName, mpos, 1)
+	End If
+End Sub
+
+'update item where
+Sub RealTimeListUpdateItem(lstName As String, prop As String, value As String, item As Map)
+	Dim m As Map = CreateMap()
+	m.Put(prop, value)
+	'find the record at a position
+	Dim mpos As Int = RealTimeListGetDataPositionWhere(lstName, m)
+	If mpos >= 0 Then
+		Dim oldm As Map = RealTimeListFindItemAtPosition(lstName, mpos)
+		oldm = BANanoShared.Merge(oldm, item)
+		RealTimeListSetDataSplice(lstName, mpos, 1, oldm)
+	End If
+End Sub
+
+'remove item at position
+Sub RealTimeListRemoveItemAtPosition(lstName As String, pos As Int)
+	If pos >= 0 Then
+		RealTimeListSetDataSpliceRemove(lstName, pos, 1)
+	End If
+End Sub
+
+Sub RealTimeListGetDataPositionWhere(lstName As String, props As Map) As Int
+	lstName = lstName.tolowercase
+	Dim res As List = GetData(lstName)
+	Dim rCnt As Int = 0
+	Dim rTot As Int = res.Size - 1
+	Dim pTot As Int = props.size
+	For rCnt = 0 To rTot
+		Dim iFound As Int = 0
+		'get the record at the position
+		Dim rec As Map = res.Get(rCnt)
+		'loop through each position
+		For Each k As String In props.Keys
+			Dim v As String = props.GetDefault(k,"")
+			'does the field at that position match
+			If rec.ContainsKey(k) Then
+				Dim recvalue As String = rec.GetDefault(k, "")
+				v = BANanoShared.CStr(v)
+				recvalue = BANanoShared.CStr(recvalue)
+				If recvalue.EqualsIgnoreCase(v) Then
+					iFound = iFound + 1
+				End If
+			End If
+		Next
+		If iFound = pTot Then
+			Return rCnt
+		End If
+	Next
+	Return -1
+End Sub
+
+Sub RealTimeListSetDataSpliceRemove(lstname As String, pos As Int, removeHowMany As Int)
+	lstname = lstname.tolowercase
+	data.GetField(lstname).RunMethod("splice", Array(pos, removeHowMany))
+End Sub
+
+'splice an array, add item at a position
+Sub RealTimeListSetDataSplice(lstname As String, pos As Int, removeHowMany As Int, obj As Object)
+	lstname = lstname.tolowercase
+	data.GetField(lstname).RunMethod("splice", Array(pos, removeHowMany, obj))
+End Sub
+
+'add item at end of the list
+Sub RealTimeListSetDataPush(listName As String, item As Object)
+	listName = listName.ToLowerCase
+	data.GetField(listName).RunMethod("push", item)
 End Sub

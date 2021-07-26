@@ -11,8 +11,9 @@ File105=vue-session.js
 File106=vuetify.min.css
 File107=vuetify.min.js
 File108=vue-tippy.min.js
-File109=xlsx.full.min.js
+File109=vuewebcam.js
 File11=bvad31.png
+File110=xlsx.full.min.js
 File12=chart.js
 File13=Chart.min.css
 File14=chartjs-adapter-date-fns.bundle.min.js
@@ -122,6 +123,7 @@ FileGroup107=Default Group
 FileGroup108=Default Group
 FileGroup109=Default Group
 FileGroup11=Default Group
+FileGroup110=Default Group
 FileGroup12=Default Group
 FileGroup13=Default Group
 FileGroup14=Default Group
@@ -271,6 +273,7 @@ Module139=VuetifyApp
 Module14=BVAD3FBAuth
 Module140=VueVJSF
 Module141=VVirtualScroll
+Module142=VWebCam
 Module15=BVAD3FBCollection
 Module16=BVAD3FBDocument
 Module17=BVAD3FBRecordSet
@@ -364,9 +367,9 @@ Module96=VPagination
 Module97=VPanelItem
 Module98=VParallax
 Module99=VPrism
-NumberOfFiles=109
+NumberOfFiles=110
 NumberOfLibraries=4
-NumberOfModules=141
+NumberOfModules=142
 Version=9.1
 @EndOfDesignText@
 #Region Project Attributes 
@@ -381,7 +384,7 @@ Version=9.1
 
 Sub Process_Globals
 	Private BANano As BANano 'ignore
-	Public Version As String = "5.75"
+	Public Version As String = "5.77"
 	Public AppName As String = "BANanoVuetifyAD3"
 End Sub
 
@@ -522,6 +525,7 @@ Sub AppStart (Form1 As Form, Args() As String)
 	BANano.Header.AddJavascriptFile("collect.min.js")
 		'
 	BANano.Header.AddJavascriptFile("md5.min.js")
+	BANano.Header.AddJavascriptFile("vuewebcam.js")
 	
 	' start the build
 	#if release

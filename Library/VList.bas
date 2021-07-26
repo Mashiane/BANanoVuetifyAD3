@@ -586,14 +586,17 @@ Sub AddListItemGroupTemplate(props As ListViewItemOptions)
 	Dim xrightchipcolor As String = props.rightchipcolor
 	Dim xhref As String = props.href
 	Dim xtarget As String = props.target
+	Dim xvisible As String = props.visible
+	'
 	If xhref = "" Then xhref = "href"
 	If xtarget = "" Then xtarget = "target"
+	If xvisible = "" Then xvisible = "visible"
 	
 	Dim xrightitemavatarclass As String = props.rightitemavatarclass
 	
 	Dim sTemplate As String = $"<v-list-item-group id="${templateID}" active-class="${xactiveclass}">
 	<v-template v-for="(item, index) in ${DataSource}">
-<v-list-item id="${listitemID}" :key="item.${key}" :to="item.${xurl}" :href="item.${xhref}" :target="item.${xtarget}">
+<v-list-item id="${listitemID}" :key="item.${key}" :to="item.${xurl}" v-show="item.${xvisible}" :href="item.${xhref}" :target="item.${xtarget}">
 <v-list-item-action id="${leftactionID}" v-if="item.${xlefticon} || ${xshowleftcheckboxes} || ${xshowleftswitch}">
 <v-btn id="${leftactionBtnID}" :icon="true" v-if="item.${xlefticon}">
 <v-icon id="${leftactionIconID}" ${props.lefticonattr} :color="item.${xlefticoncolor}" v-html="item.${xlefticon}" class="${xlefticonclass}"></v-icon>
@@ -793,8 +796,11 @@ Sub AddListViewGroupTemplate(props As ListViewItemOptions)
 	Dim xrightchipcolor As String = props.rightchipcolor
 	Dim xhref As String = props.href
 	Dim xtarget As String = props.target
+	Dim xvisible As String = props.visible
+	'
 	If xhref = "" Then xhref = "href"
 	If xtarget = "" Then xtarget = "target"
+	If xvisible = "" Then xvisible = "visible"
 	
 	DataSource = DataSource.ToLowerCase
 	key = key.ToLowerCase
@@ -802,7 +808,7 @@ Sub AddListViewGroupTemplate(props As ListViewItemOptions)
 	Dim sTemplate As StringBuilder
 	sTemplate.Initialize
 	sTemplate.Append($"<v-template v-for="item in ${DataSource}">"$)
-	sTemplate.Append($"<v-list-group v-if="item.items" :key="item.${key}" v-model="item.model" no-action active-class="${xactiveclass}">"$)
+	sTemplate.Append($"<v-list-group v-if="item.items" :key="item.${key}" v-show="item.${xvisible}" v-model="item.model" no-action active-class="${xactiveclass}">"$)
 	sTemplate.Append($"<v-icon id="${iconID}" slot="prependIcon" ${props.iconattr} :color="item.${xiconcolor}" v-html="item.${xicon}"></v-icon>"$)
 	'
 	sTemplate.Append($"<v-template v-slot:activator>"$)
@@ -812,7 +818,7 @@ Sub AddListViewGroupTemplate(props As ListViewItemOptions)
 	sTemplate.Append($"</v-template>"$)
 
 	sTemplate.Append($"<v-template v-for="child in item.items">"$)
-sTemplate.Append($"<v-list-item id="${listitemID}" :key="child.${key}" :to="child.${xurl}" active-class="${xactiveclass}" :href="child.${xhref}" :target="child.${xtarget}">
+sTemplate.Append($"<v-list-item id="${listitemID}" :key="child.${key}" :to="child.${xurl}" v-show="child.${xvisible}" active-class="${xactiveclass}" :href="child.${xhref}" :target="child.${xtarget}">
 <v-list-item-action id="${leftactionID}" v-if="child.${xlefticon} || ${xshowleftcheckboxes} || ${xshowleftswitch}">
 <v-btn id="${leftactionBtnID}" :icon="true" v-if="child.${xlefticon}">
 <v-icon id="${leftactionIconID}" ${props.lefticonattr} :color="child.${xlefticoncolor}" v-html="child.${xlefticon}" class="${xlefticonclass}"></v-icon>
@@ -856,7 +862,7 @@ sTemplate.Append($"<v-list-item id="${listitemID}" :key="child.${key}" :to="chil
 </v-template>
 </v-list-group>"$)
 '
-sTemplate.Append($"<v-list-item v-else id="${listitemID}" :key="item.${key}" :to="item.${xurl}" active-class="${xactiveclass}" :href="item.${xhref}" :target="item.${xtarget}">
+sTemplate.Append($"<v-list-item v-else id="${listitemID}" :key="item.${key}" v-show="item.${xvisible}" :to="item.${xurl}" active-class="${xactiveclass}" :href="item.${xhref}" :target="item.${xtarget}">
 <v-list-item-action id="${leftactionID}" v-if="item.${xlefticon} || ${xshowleftcheckboxes} || ${xshowleftswitch}">
 <v-btn id="${leftactionBtnID}" :icon="true" v-if="item.${xlefticon}">
 <v-icon id="${leftactionIconID}" ${props.lefticonattr} :color="item.${xlefticoncolor}" v-html="item.${xlefticon}" class="${xlefticonclass}"></v-icon>
@@ -1002,6 +1008,7 @@ private Sub NewListViewItemOptions
 	Options.rightavatartextcolor = "rightavatartextcolor"
 	Options.avatartextclass = ""
 	Options.rightavatartextclass = ""
+	Options.Visible = "visible"
 End Sub
 
 'add a list item template to draw item
@@ -1094,6 +1101,7 @@ Sub AddListViewTemplate(props As ListViewItemOptions)
 	'
 	Dim xrightchip As String = props.rightchip
 	Dim xrightchipcolor As String = props.rightchipcolor
+	Dim xvisible As String = props.visible
 	'
 	DataSource = DataSource.ToLowerCase
 	key = key.ToLowerCase
@@ -1102,12 +1110,12 @@ Sub AddListViewTemplate(props As ListViewItemOptions)
 	Dim xtarget As String = props.target
 	If xhref = "" Then xhref = "href"
 	If xtarget = "" Then xtarget = "target"
-	
+	If xvisible = "" Then xvisible = "visible"
 	'
 	Dim sTemplate As String = $"<v-template id="${templateID}" v-for="(item, index) in ${DataSource}">
 <v-subheader id="${headerID}" v-if="item.header">{{ item.header }}</v-subheader>
 <v-divider id="${dividerID}" v-else-if="item.divider" :inset="item.inset"></v-divider>
-<v-list-item id="${listitemID}" v-else="true" :key="item.${key}" :to="item.${xurl}" :href="item.${xhref}" :target="item.${xtarget}"  active-class="${xactiveclass}">
+<v-list-item id="${listitemID}" v-else="true" :key="item.${key}" :to="item.${xurl}" v-show="item.${xvisible}" :href="item.${xhref}" :target="item.${xtarget}"  active-class="${xactiveclass}">
 <v-list-item-action id="${leftactionID}" v-if="item.${xlefticon} || ${xshowleftcheckboxes} || ${xshowleftswitch}">
 <v-btn id="${leftactionBtnID}" :icon="true" v-if="item.${xlefticon}">
 <v-icon id="${leftactionIconID}" ${props.lefticonattr} :color="item.${xlefticoncolor}" v-html="item.${xlefticon}" class="${xlefticonclass}"></v-icon>
@@ -1440,7 +1448,16 @@ Sub AddItem(parent As String, key As String, iconName As String, iconColor As St
 	If title <> "" Then nitem.Put("title", title)
 	If url <> "" Then nitem.Put("to", url)
 	nitem.Put("parentid", parent)
+	nitem.Put("visible", True)
 	Records.Add(nitem)
+	Return Me
+End Sub
+
+'the url should be replaced
+Sub SetItemVisible(itemID As String, bVisible As Boolean) As VList
+	Dim m As Map = CreateMap()
+	m.Put("visible", bVisible)
+	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
 	Return Me
 End Sub
 
@@ -1633,6 +1650,7 @@ Sub AddItemLeftCheckBox(id As String, bChecked As Boolean, title As String, subt
 	If title <> "" Then rec.Put("title", title)
 	If subtitle <> "" Then rec.Put("subtitle", subtitle)
 	If subtitle1 <> "" Then rec.Put("subtitle1", subtitle1)
+	rec.Put("visible", True)
 	Records.Add(rec)
 End Sub
 
@@ -1643,6 +1661,7 @@ Sub AddItemLeftSwitch(id As String, bChecked As Boolean, title As String, subtit
 	If title <> "" Then rec.Put("title", title)
 	If subtitle <> "" Then rec.Put("subtitle", subtitle)
 	If subtitle1 <> "" Then rec.Put("subtitle1", subtitle1)
+	rec.Put("visible", True)
 	Records.Add(rec)
 End Sub
 
@@ -1653,6 +1672,7 @@ Sub AddItemRightSwitch(id As String, bChecked As Boolean, title As String, subti
 	If title <> "" Then rec.Put("title", title)
 	If subtitle <> "" Then rec.Put("subtitle", subtitle)
 	If subtitle1 <> "" Then rec.Put("subtitle1", subtitle1)
+	rec.Put("visible", True)
 	Records.Add(rec)
 End Sub
 
@@ -1663,6 +1683,7 @@ Sub AddItemRightCheckBox(id As String, bChecked As Boolean, title As String, sub
 	If title <> "" Then rec.Put("title", title)
 	If subtitle <> "" Then rec.Put("subtitle", subtitle)
 	If subtitle1 <> "" Then rec.Put("subtitle1", subtitle1)
+	rec.Put("visible", True)
 	Records.Add(rec)
 End Sub
 
@@ -1816,6 +1837,7 @@ End Sub
 
 'add an item at realtime
 Sub AddItem3(VC As VueComponent, rowData As Map)
+	rowData.Put("visible", True)
 	VC.SetDataPush(DataSource, rowData)
 End Sub
 
@@ -1844,7 +1866,7 @@ Sub UpdateItem(VC As VueComponent, prop As String, value As String, item As Map)
 	'find the record at a position
 	Dim mpos As Int = VC.GetDataPositionWhere(DataSource, m)
 	If mpos >= 0 Then
-		Dim oldm As Map = FindItemAtPosition(VC, mpos)
+		Dim oldm As Map = VC.FindItemAtPosition(DataSource, mpos)
 		oldm = BANanoShared.Merge(oldm, item)
 		VC.SetDataSplice(DataSource, mpos, 1, oldm)
 	End If
@@ -1853,7 +1875,7 @@ End Sub
 'update item where
 Sub UpdateItemAtPosition(VC As VueComponent, pos As Int, item As Map)
 	If pos >= 0 Then
-		Dim oldm As Map = FindItemAtPosition(VC, pos)
+		Dim oldm As Map = VC.FindItemAtPosition(DataSource, pos)
 		oldm = BANanoShared.Merge(oldm, item)
 		VC.SetDataSplice(DataSource, pos, 1, oldm)
 	End If
@@ -1945,9 +1967,50 @@ Sub Update(V As VueComponent, prop As String, value As String, item As Map)
 	'find the record at a position
 	Dim mpos As Int = V.GetDataPositionWhere(DataSource, m)
 	If mpos >= 0 Then
-		Dim oldm As Map = FindItemAtPosition(V, mpos)
+		Dim oldm As Map = V.FindItemAtPosition(DataSource, mpos)
 		oldm = BANanoShared.Merge(oldm, item)
 		V.SetDataSplice(DataSource, mpos, 1, oldm)
+	End If
+End Sub
+
+'read an item where
+Sub ReadOnApp(V As VuetifyApp, prop As String, value As String) As Map
+	Dim m As Map = CreateMap()
+	m.Put(prop, value)
+	'find the record at a position
+	Dim mpos As Int = V.GetDataPositionWhere(DataSource, m)
+	Dim res As Map = CreateMap()
+	If mpos >= 0 Then
+		res = V.FindItemAtPosition(DataSource, mpos)
+	End If
+	Return res
+End Sub
+
+'add a new row at the end of the items in realtime
+Sub AddOnApp(V As VuetifyApp, rowdata As Map)
+	V.SetDataPush(DataSource, rowdata)
+End Sub
+
+Sub UpdateOnApp(V As VuetifyApp, prop As String, value As String, item As Map)
+	Dim m As Map = CreateMap()
+	m.Put(prop, value)
+	'find the record at a position
+	Dim mpos As Int = V.GetDataPositionWhere(DataSource, m)
+	If mpos >= 0 Then
+		Dim oldm As Map = V.FindItemAtPosition(DataSource, mpos)
+		oldm = BANanoShared.Merge(oldm, item)
+		V.SetDataSplice(DataSource, mpos, 1, oldm)
+	End If
+End Sub
+
+'remove an item where
+Sub DeleteOnApp(V As VuetifyApp, prop As String, value As String)
+	Dim m As Map = CreateMap()
+	m.Put(prop, value)
+	'find the record at a position
+	Dim mpos As Int = V.GetDataPositionWhere(DataSource, m)
+	If mpos >= 0 Then
+		V.SetDataSpliceRemove(DataSource, mpos, 1)
 	End If
 End Sub
 
@@ -2057,4 +2120,10 @@ End Sub
 
 Sub VisibleOnlyOnXL
 	AddClass("d-none d-xl-flex")
+End Sub
+
+'get the items
+Sub GetItems(VC As VueComponent) As List
+	Dim res As List = VC.GetData(DataSource)
+	Return res
 End Sub

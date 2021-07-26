@@ -220,7 +220,7 @@ Private bRequired As Boolean
 Private sRequired As String
 Private sValue As String
 Private bColorList As Boolean
-private bShrink as boolean
+Private bShrink As Boolean
 	End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -311,7 +311,6 @@ sPlaceholder = Props.Get("Placeholder")
 sPrefix = Props.Get("Prefix")
 sPrependIcon = Props.Get("PrependIcon")
 sPrependInnerIcon = Props.Get("PrependInnerIcon")
-sReadonly = Props.Get("Readonly")
 bReturnObject = Props.Get("ReturnObject")
 bReverse = Props.Get("Reverse")
 bRounded = Props.Get("Rounded")

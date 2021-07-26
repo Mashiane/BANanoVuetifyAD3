@@ -21,6 +21,7 @@ Version=7
 #Event: Exists (Success As Boolean, Response As String, Error As String, affectedRows As Int, Result As List)
 #Event: TableNames (Success As Boolean, Response As String, Error As String, affectedRows As Int, Result As List)
 #Event: DescribeTable (Success As Boolean, Response As String, Error As String, affectedRows As Int, Result As List)
+#Event: Undo (Success As Boolean, Response As String, Error As String, affectedRows As Int, Result As List)
 
 #DesignerProperty: Key: ShowLog, DisplayName: ShowLog, FieldType: Boolean, DefaultValue: False, Description: ShowLog
 #DesignerProperty: Key: DatabaseType, DisplayName: DatabaseType*, FieldType: String, DefaultValue: mysql, Description: DatabaseType, List: mysql|jrdc|sqlite
@@ -129,6 +130,7 @@ Sub Class_Globals
 	Public const ACTION_EXISTS As String = "Exists"
 	Public const ACTION_TABLENAMES As String = "TableNames"
 	Public const ACTION_DESCRIBETABLE As String = "DescribeTable"
+	Public const ACTION_UNDO As String = "Undo"
 	'
 	Public const MODE_CREATE As String = "C"
 	Public const MODE_UPDATE As String = "U"
@@ -244,6 +246,14 @@ Sub setPrimaryKey(p As String)
 	End If
 	sPrimaryKey = p
 	dsKey = $"${sRecordSource}.${sPrimaryKey}"$
+End Sub
+
+'set sAutoIncrement
+Sub setAutoIncrement(p As String)
+	If IsBound = False Then
+		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+	End If
+	sAutoIncrement = p
 End Sub
 
 'return the primary key field bame
@@ -364,11 +374,18 @@ Sub setRecordSource(p As String)
 	dsKey = $"${sRecordSource}.${sPrimaryKey}"$
 End Sub
 
+'set DatabaseType
+Sub setDatabaseType(dt As String)
+	If IsBound = False Then
+		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+	End If
+	sDatabaseType = dt
+End Sub
+
 
 Sub DesignerCreateView (Target As BANanoElement, Props As Map) 
 	mTarget = Target 
 	If Props <> Null Then 
-		sAction = Props.GetDefault("Action", "")
 		sAutoIncrement = Props.GetDefault("AutoIncrement", "")
 		sAutoIncrement = sAutoIncrement.tolowercase
 		sBlobs = Props.GetDefault("Blobs", "")
@@ -772,13 +789,26 @@ Sub UPDATE
 	Execute(ACTION_UPDATE)
 End Sub
 
+'update existing record from existing recordsource, use setRecord first
+Sub UNDO
+	If IsBound = False Then
+		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+	End If
+	If bShowLog Then
+		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.UNDO"$)
+	End If
+	UPDATE_MODE
+	Tag = ACTION_UNDO
+	Execute(ACTION_UNDO)
+End Sub
+
 'run your own query
 Sub CUSTOM(ActionName As String)
 	If IsBound = False Then
 		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
 	End If
 	If bShowLog Then
-		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.UPDATE"$)
+		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.CUSTOM"$)
 	End If
 	Tag = ActionName
 	Execute(ACTION_CUSTOM)
@@ -1018,7 +1048,6 @@ private Sub MySQLExecute As Boolean    'ignore
 	Dim bRead As Boolean = False
 	Dim bSelect As Boolean = False  'ignore
 	Dim bCount As Boolean = False
-	Tag = sAction
 	Select Case sAction
 	Case ACTION_CREATE_TABLE
 		MySQL.SchemaCreateTable
@@ -1068,7 +1097,7 @@ private Sub MySQLExecute As Boolean    'ignore
 			Log(MySQL.query)
 			Log(MySQL.args)
 		End If
-	Case ACTION_UPDATE
+	Case ACTION_UPDATE, ACTION_UNDO
 		'get the key for the record
 		Dim pkValue As String = ParentComponent.GetData(dsKey)
 		If pkValue = "" Then
@@ -1340,7 +1369,6 @@ private Sub SQLiteExecute As Boolean    'ignore
 	Dim bRead As Boolean = False
 	Dim bSelect As Boolean = False  'ignore
 	Dim bCount As Boolean = False
-	Tag = sAction
 	Select Case sAction
 	Case ACTION_CREATE_TABLE
 		SQLite.SchemaCreateTable
@@ -1390,7 +1418,7 @@ private Sub SQLiteExecute As Boolean    'ignore
 			Log(SQLite.query)
 			Log(SQLite.args)
 		End If
-	Case ACTION_UPDATE
+	Case ACTION_UPDATE, ACTION_UNDO
 		'get the key for the record
 		Dim pkValue As String = ParentComponent.GetData(dsKey)
 		If pkValue = "" Then
@@ -1720,7 +1748,7 @@ private Sub JRDCExecute
 		'execute the read
 		MySQL.Read(pkValue)
 		mPayload = MySQL.Build
-	Case ACTION_UPDATE
+	Case ACTION_UPDATE, ACTION_UNDO
 		'get the key for the record
 		Dim pkValue As String = ParentComponent.GetData(dsKey)
 		'read the record to update

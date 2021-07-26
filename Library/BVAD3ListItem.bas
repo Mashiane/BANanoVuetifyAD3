@@ -20,6 +20,11 @@ Sub Item As Map
 	Return options
 End Sub
 
+Sub SetVisible(v As String) As BVAD3ListItem
+	options.Put("visible", v)
+	Return
+End Sub
+
 Sub SetParentID(v As String) As BVAD3ListItem
 	options.Put("parentid", v)
 	Return Me

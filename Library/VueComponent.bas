@@ -253,6 +253,14 @@ private Sub getfilesize(item As String) As String							'ignoredeadcode
 	Return svalue
 End Sub
 
+Sub ComponentExists(compName As String) As Boolean
+	If components.ContainsKey(compName) Then
+		Return True
+	Else
+		Return False	
+	End If
+End Sub
+
 
 'Sub UseVueDraggable
 '	If components.ContainsKey("vuedraggable") = False Then
@@ -2056,4 +2064,11 @@ Sub BindState(elx As VueElement)
 		Dim cb As BANanoObject = mmethods.Get(k)
 		SetCallBack(k, cb)
 	Next
+End Sub
+
+'find item at position
+Sub FindItemAtPosition(dsName As String, pos As Int) As Map
+	Dim recs As List = GetData(dsName)
+	Dim rec As Map = recs.Get(pos)
+	Return rec
 End Sub

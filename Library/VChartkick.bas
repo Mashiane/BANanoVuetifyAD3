@@ -870,17 +870,19 @@ End Sub
 
 'add a new series without data
 Sub AddSeries1(seriesCaption As String, seriesColor As String, seriesCurve As Boolean)
-	Dim nd As Map = CreateMap()
-	Dim obj As Map = CreateMap()
-	obj.Put("name", seriesCaption)
-	obj.Put("curve", seriesCurve)
-	obj.Put("label", seriesCaption)
-	obj.Put("data", nd)
-	If seriesColor <> "" Then
-		Dim xColor As String = GetColorHex(seriesColor)
-		obj.Put("color", xColor)
+	If series.ContainsKey(seriesCaption) = False Then
+		Dim nd As Map = CreateMap()
+		Dim obj As Map = CreateMap()
+		obj.Put("name", seriesCaption)
+		obj.Put("curve", seriesCurve)
+		obj.Put("label", seriesCaption)
+		obj.Put("data", nd)
+		If seriesColor <> "" Then
+			Dim xColor As String = GetColorHex(seriesColor)
+			obj.Put("color", xColor)
+		End If
+		series.Put(seriesCaption, obj)
 	End If
-	series.Put(seriesCaption, obj)
 End Sub
 
 'add a new series with color and data
