@@ -127,6 +127,7 @@ Version=8.5
 
 #DesignerProperty: Key: ColumnSortable, DisplayName: ColumnSortable (;), FieldType: String, DefaultValue: , Description: These fields will be sortable
 #DesignerProperty: Key: ColumnFilterable, DisplayName: ColumnFilterable (;), FieldType: String, DefaultValue: , Description: These fields will be filterable
+#DesignerProperty: Key: ColumnTotals, DisplayName: ColumnTotals (;), FieldType: String, DefaultValue: , Description: These fields will have totals
 '
 #DesignerProperty: Key: ItemKeys, DisplayName: Action Keys (;), FieldType: String, DefaultValue:  , Description: Additional Action Buttons
 #DesignerProperty: Key: ItemTitles, DisplayName: Action Titles (;), FieldType: String, DefaultValue:  , Description: Additional Action Titles
@@ -316,6 +317,7 @@ Private sDateTimeFormat As String			'ignore
 Private sMoneyFormat As String				'ignore
 Private sTimeFormat As String				'ignore
 Private sColumnFilterable As String
+private sColumnTotals as string
 Public VElement As VueElement
 Private sitemsperpage As String
 Private bExternalPagination As Boolean
@@ -472,6 +474,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sMoneyFormat = Props.GetDefault("MoneyFormat", "")
 		sTimeFormat = Props.GetDefault("TimeFormat", "")
 		sColumnFilterable = Props.GetDefault("ColumnFilterable", "")
+		sColumnTotals = props.GetDefault("ColumnTotals", "")
 		bExternalPagination = Props.GetDefault("ExternalPagination", True)
 		sPaginationPosition = Props.getdefault("PaginationPosition", "top")
 		sMaxPages = Props.GetDefault("MaxPages", "5")
@@ -791,6 +794,9 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	'
 	Dim lsColumnFilterable As List = BANanoShared.StrParseComma(";", sColumnFilterable)
 	lsColumnFilterable = BANanoShared.ListTrimItems(lsColumnFilterable)
+	'
+	Dim lColumnTotals As List = BANanoShared.StrParseComma(";", sColumnTotals)
+	lColumnTotals = bananoshared.ListTrimItems(lColumnTotals)
 	'
 	Dim lsColumnAvatarTxt As List = BANanoShared.StrParseComma(";", sColumnAvatarText)
 	lsColumnAvatarTxt = BANanoShared.ListTrimItems(lsColumnAvatarTxt)
@@ -1144,6 +1150,18 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 			SetColumnFilterable(f, True) 
 		Else
 			Log($"DataTable Error: ${mName}.${f} filterable column not found on column fields!"$)
+		End If
+	Next
+	'totals
+	colTot = lColumnTotals.Size - 1
+	For colCnt = 0 To colTot
+		f = lColumnTotals.Get(colCnt)
+		Dim c As String = BANanoShared.mvfield(f, 1, ":")
+		Dim m As String = BANanoShared.MvField(f, 2, ":")
+		If lsColumnFields.IndexOf(f) >= 0 Then
+			SetColumnTotal(c, m) 
+		Else
+			Log($"DataTable Error: ${mName}.${c} has total column not found on column fields!"$)
 		End If
 	Next
 	'
@@ -2760,6 +2778,24 @@ End Sub
 Sub GetData As List
 	Dim lst As List = VC.GetData(itemsname)
 	Return lst
+End Sub
+
+'sum a column
+Sub SumColumn(colName As String) As String
+	colName = colName.tolowercase
+	'get the data
+	Dim lst As List = GetData
+	Dim totSum As Double = BANanoShared.ListSumProperty(lst, colName)
+	Return totSum
+End Sub
+
+'get data for the column
+Sub GetDataColumn(colName As String) As List
+	colName = colName.tolowercase
+	'get the data
+	Dim lst As List = GetData
+	Dim lsto As List = GetItemProps(lst, colName)
+	Return lsto
 End Sub
 
 'get headers

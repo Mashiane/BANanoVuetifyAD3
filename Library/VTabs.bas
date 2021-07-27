@@ -16,6 +16,8 @@ Version=8.95
 #DesignerProperty: Key: Vertical, DisplayName: Vertical, FieldType: Boolean, DefaultValue: false, Description: Vertical
 #DesignerProperty: Key: IsExtension, DisplayName: IsExtension, FieldType: Boolean, DefaultValue: false, Description: IsExtension
 #DesignerProperty: Key: AlignWithTitle, DisplayName: AlignWithTitle, FieldType: Boolean, DefaultValue: false, Description: AlignWithTitle
+#DesignerProperty: Key: UsesCard, DisplayName: UsesCard, FieldType: Boolean, DefaultValue: True, Description: UsesCard
+#DesignerProperty: Key: Elevation, DisplayName: Elevation, FieldType: String, DefaultValue: 1, Description: Elevation
 
 #DesignerProperty: Key: HideSlider, DisplayName: HideSlider, FieldType: Boolean, DefaultValue: False, Description: HideSlider
 #DesignerProperty: Key: SliderColor, DisplayName: SliderColor, FieldType: String, DefaultValue: , Description: SliderColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
@@ -115,6 +117,8 @@ Sub Class_Globals
 	Private lstItemIcons As List
 	Private lstItemBadges As List
 	Private vlist1 As List
+	Private sElevation As String
+	Private bUsesCard As Boolean
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -180,6 +184,9 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sItemTitles = Props.GetDefault("ItemTitles", "")
 		sItemIcons = Props.GetDefault("ItemIcons", "")
 		sItemBadges = Props.GetDefault("ItemBadges", "")
+		sElevation = Props.GetDefault("Elevation", "1")
+		bUsesCard = Props.GetDefault("UsesCard", False)
+		bUsesCard = BANanoShared.parseBool(bUsesCard)
 	End If
 	'
 	bAlignWithTitle = BANanoShared.parseBool(bAlignWithTitle)
@@ -212,28 +219,35 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bIconsAndText = False
 	End If
 	
+	Dim cardTag As String = "v-card"
+	If bUsesCard = False Then
+		cardTag = "span"
+	End If
+	
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
 		mElement = BANano.GetElement($"#${mName}"$)
 	Else
 		If bIsExtension Then
 			mElement = mTarget.Append($"<v-template id="${mName}template" v-slot:extension>
-			<v-card id="${mName}card">
+			<${cardTag} id="${mName}card">
 			<v-tabs ref="${mName}" id="${mName}"></v-tabs>
 			<v-tabs-items id="${mName}tabitems">
 			</v-tabs-items>
-			</v-card>
+			</${cardTag}>
 			</v-template>"$).Get("#" & mName)
 		Else		
-			mElement = mTarget.Append($"<v-card id="${mName}card">
+			mElement = mTarget.Append($"<${cardTag} id="${mName}card">
 			<v-tabs ref="${mName}" id="${mName}"></v-tabs>
 			<v-tabs-items id="${mName}tabitems"></v-tabs-items>
-			</v-card>"$).Get("#" & mName)
+			</${cardTag}>"$).Get("#" & mName)
 		End If
 	End If
+	
 	'
 	VElement.Initialize(mCallBack, mName, mName)
 	VElement.TagName = "v-tabs"
+	VElement.GetCard.Elevation = sElevation
 	
 	'set the vmodel for the children
 	VElement.GetVueElement($"${mName}tabitems"$).VModel = sVModel
@@ -263,7 +277,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.Attributes = mAttributes
 	VElement.AddAttr("active-class", sActiveClass)
 	VElement.AddAttr(":align-with-title", bAlignWithTitle)
-	VElement.BackgroundColor = VElement.BuildColor(sBackgroundColor, sBackgroundColorIntensity)
+	VElement.BackgroundColorAttr = VElement.BuildColor(sBackgroundColor, sBackgroundColorIntensity)
 	VElement.AddAttr(":center-active", bCenterActive)
 	VElement.AddAttr(":centered", bCentered)
 	VElement.Color = VElement.BuildColor(sColor, sColorIntensity)
@@ -313,6 +327,13 @@ Sub UpdateActive(VC As VueComponent, itm As String)
 	Dim tabID As String = $"${mName}${itm}"$
 	Dim tabItem As String = $"${tabID}item"$
 	VC.SetData(sVModel, tabItem)
+End Sub
+
+'update the active item
+Sub UpdateActiveOnApp(V As VuetifyApp, itm As String)
+	Dim tabID As String = $"${mName}${itm}"$
+	Dim tabItem As String = $"${tabID}item"$
+	V.SetData(sVModel, tabItem)
 End Sub
 
 'add item using own key
@@ -408,7 +429,13 @@ End Sub
 
 Sub UpdateVisible(VC As VueComponent, b As Boolean) As VTabs
 	VC.SetData(sVIf, b)
-	'VC.SetData(sVShow, b)
+	VC.SetData(sVShow, b)
+	Return Me
+End Sub
+
+Sub UpdateVisibleOnApp(V As VuetifyApp, b As Boolean) As VTabs
+	V.SetData(sVIf, b)
+	V.SetData(sVShow, b)
 	Return Me
 End Sub
 

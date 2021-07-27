@@ -161,7 +161,7 @@ bStriped = BANanoShared.parseBool(bStriped)
 	VElement.Attributes = mAttributes
 	VElement.AddAttr(":absolute", bAbsolute)
 VElement.AddAttr(":active", bActive)
-VElement.BackgroundColor = VElement.BuildColor(sBackgroundColor, sBackgroundColorIntensity)
+VElement.BackgroundColorAttr = VElement.BuildColor(sBackgroundColor, sBackgroundColorIntensity)
 VElement.AddAttr("background-opacity", sBackgroundOpacity)
 VElement.AddAttr("buffer-value", sBufferValue)
 VElement.Color = VElement.BuildColor(sColor, sColorIntensity)

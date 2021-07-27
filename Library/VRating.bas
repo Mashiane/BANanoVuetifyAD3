@@ -172,7 +172,7 @@ bRequired = BANanoShared.parseBool(bRequired)
 	VElement.Classes = mClasses
 	VElement.Styles = mStyles
 	VElement.Attributes = mAttributes
-	VElement.BackgroundColor = VElement.BuildColor(sBackgroundColor, sBackgroundColorIntensity)
+	VElement.BackgroundColorAttr = VElement.BuildColor(sBackgroundColor, sBackgroundColorIntensity)
 VElement.AddAttr(":clearable", bClearable)
 VElement.AddAttr("close-delay", sCloseDelay)
 VElement.Color = VElement.BuildColor(sColor, sColorIntensity)

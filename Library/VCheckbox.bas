@@ -306,7 +306,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		If bMultiple = False Then
 			mElement = mTarget.Append($"<v-checkbox ref="${mName}" id="${mName}"></v-checkbox>"$).Get("#" & mName)
 		Else
-			mElement = mTarget.Append($"<v-checkbox ref="${mName} "id="${mName}" v-for="item in ${sItems}" :disabled="item.${sItemDisabled}" :key="item.${sItemValue}" :label="item.${sItemText}" :value="item.${sItemValue}" :color="item.${sItemColor}"></v-checkbox>"$).Get("#" & mName)
+			mElement = mTarget.Append($"<v-checkbox ref="${mName}" id="${mName}" v-for="item in ${sItems}" :disabled="item.${sItemDisabled}" :key="item.${sItemValue}" :label="item.${sItemText}" :value="item.${sItemValue}" :color="item.${sItemColor}"></v-checkbox>"$).Get("#" & mName)
 		End If
 	End If
 	'
@@ -321,16 +321,16 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.AddAttr(":required", sRequired)
 	VElement.SetData(sRequired, bRequired)
 	If bMultiple = False Then
-		VElement.BackgroundColor = VElement.BuildColor(sBackgroundColor, sBackgroundColorIntensity)
+		VElement.BackgroundColorAttr = VElement.BuildColor(sBackgroundColor, sBackgroundColorIntensity)
 		VElement.Color = VElement.BuildColor(sColor, sColorIntensity)
 		VElement.AddAttr(":disabled", sDisabled)
 		VElement.SetData(sDisabled, bDisabled)
 	End If
-	VElement.AddAttr(":error", sError)
-	VElement.SetData(sError, False)
-	VElement.AddAttr("error-count", sErrorCount)
-	VElement.AddAttr(":error-messages", sErrorMessages)
-	VElement.SetData(sErrorMessages, VElement.NewList)
+	'VElement.AddAttr(":error", sError)
+	'VElement.SetData(sError, False)
+	'VElement.AddAttr("error-count", sErrorCount)
+	'VElement.AddAttr(":error-messages", sErrorMessages)
+	'VElement.SetData(sErrorMessages, VElement.NewList)
 	If bMultiple = False Then
 		VElement.AddAttr("false-value", sFalseValue)
 		VElement.AddAttr("true-value", sTrueValue)
@@ -342,27 +342,27 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	'VElement.AddAttr("input-value", sInputValue)
 	VElement.AddAttr(":inset", bInset)
 	If bMultiple = False Then
-		VElement.AddAttr("key", sKey)
+		'VElement.AddAttr("key", sKey)
 		VElement.AddAttr("label", sLabel)
 		VElement.AddAttr(":loading", sLoading)
 		VElement.SetData(sLoading, bLoading)
 	End If
 
 	VElement.AddAttr(":light", bLight)
-	VElement.AddAttr(":messages", sMessages)
-	VElement.SetData(sMessages, VElement.newlist)
+	'VElement.AddAttr(":messages", sMessages)
+	'VElement.SetData(sMessages, VElement.newlist)
 	VElement.AddAttr(":multiple", bMultiple)
 	VElement.AddAttr(":persistent-hint", bPersistentHint)
 	VElement.AddAttr("prepend-icon", sPrependIcon)
-	VElement.AddAttr(":readonly", sReadonly)
-	VElement.SetData(sReadonly, bReadonly)
+	'VElement.AddAttr(":readonly", sReadonly)
+	'VElement.SetData(sReadonly, bReadonly)
 	VElement.AddAttr(":ripple", bRipple)
 	VElement.AddAttr(":rules", sRules)
 	VElement.SetData(sRules, VElement.NewList)
-	VElement.AddAttr(":success", sSuccess)
-	VElement.SetData(sSuccess, False)
-	VElement.AddAttr(":success-messages", sSuccessMessages)
-	VElement.SetData(sSuccessMessages, VElement.NewList)
+	'VElement.AddAttr(":success", sSuccess)
+	'VElement.SetData(sSuccess, False)
+	'VElement.AddAttr(":success-messages", sSuccessMessages)
+	'VElement.SetData(sSuccessMessages, VElement.NewList)
 	VElement.AddAttr("v-bind", sVBind)
 	VElement.AddAttr("v-if", sVIf)
 	VElement.AddAttr("v-model", sVModel)
@@ -393,7 +393,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		If BANano.IsNull(sFalseValue) Then
 			sFalseValue = False
 		End If
-		VElement.AddAttr("value", sTrueValue)
+		'VElement.AddAttr("value", sTrueValue)
 
 		If bChecked Then
 			sValue = sTrueValue
