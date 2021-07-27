@@ -101,6 +101,10 @@ Version=8.5
 #DesignerProperty: Key: ColumnFields, DisplayName: ColumnFields (;), FieldType: String, DefaultValue: , Description: Fields to show based on database table
 #DesignerProperty: Key: ColumnTitles, DisplayName: ColumnTitles (;), FieldType: String, DefaultValue: , Description: Titles for fields
 #DesignerProperty: Key: ColumnWidths, DisplayName: ColumnWidths (;), FieldType: String, DefaultValue: , Description: Widths of the fields
+#DesignerProperty: Key: ColumnSortable, DisplayName: ColumnSortable (;), FieldType: String, DefaultValue: , Description: These fields will be sortable
+#DesignerProperty: Key: ColumnFilterable, DisplayName: ColumnFilterable (;), FieldType: String, DefaultValue: , Description: These fields will be filterable
+#DesignerProperty: Key: ColumnTotals, DisplayName: ColumnTotals (;), FieldType: String, DefaultValue: , Description: These fields will have totals
+
 #DesignerProperty: Key: ColumIcons, DisplayName: ColumIcons (;), FieldType: String, DefaultValue: , Description: These fields will show icons
 #DesignerProperty: Key: ColumnAutoComplete, DisplayName: ColumnAutoComplete (;), FieldType: String, DefaultValue: , Description: These fields will show auto complete for inline edit
 #DesignerProperty: Key: ColumnAvatar, DisplayName: ColumnAvatar (;), FieldType: String, DefaultValue: , Description: These fields will show an avatar image
@@ -125,9 +129,6 @@ Version=8.5
 #DesignerProperty: Key: ColumnTextfield, DisplayName: ColumnTextfield (;), FieldType: String, DefaultValue: , Description: These fields will show text-fields
 #DesignerProperty: Key: ColumnTime, DisplayName: ColumnTime (;), FieldType: String, DefaultValue: , Description: These fields will show time
 
-#DesignerProperty: Key: ColumnSortable, DisplayName: ColumnSortable (;), FieldType: String, DefaultValue: , Description: These fields will be sortable
-#DesignerProperty: Key: ColumnFilterable, DisplayName: ColumnFilterable (;), FieldType: String, DefaultValue: , Description: These fields will be filterable
-#DesignerProperty: Key: ColumnTotals, DisplayName: ColumnTotals (;), FieldType: String, DefaultValue: , Description: These fields will have totals
 '
 #DesignerProperty: Key: ItemKeys, DisplayName: Action Keys (;), FieldType: String, DefaultValue:  , Description: Additional Action Buttons
 #DesignerProperty: Key: ItemTitles, DisplayName: Action Titles (;), FieldType: String, DefaultValue:  , Description: Additional Action Titles
@@ -317,7 +318,7 @@ Private sDateTimeFormat As String			'ignore
 Private sMoneyFormat As String				'ignore
 Private sTimeFormat As String				'ignore
 Private sColumnFilterable As String
-private sColumnTotals as string
+Private sColumnTotals As String
 Public VElement As VueElement
 Private sitemsperpage As String
 Private bExternalPagination As Boolean
@@ -474,7 +475,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sMoneyFormat = Props.GetDefault("MoneyFormat", "")
 		sTimeFormat = Props.GetDefault("TimeFormat", "")
 		sColumnFilterable = Props.GetDefault("ColumnFilterable", "")
-		sColumnTotals = props.GetDefault("ColumnTotals", "")
+		sColumnTotals = Props.GetDefault("ColumnTotals", "")
 		bExternalPagination = Props.GetDefault("ExternalPagination", True)
 		sPaginationPosition = Props.getdefault("PaginationPosition", "top")
 		sMaxPages = Props.GetDefault("MaxPages", "5")
@@ -796,7 +797,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	lsColumnFilterable = BANanoShared.ListTrimItems(lsColumnFilterable)
 	'
 	Dim lColumnTotals As List = BANanoShared.StrParseComma(";", sColumnTotals)
-	lColumnTotals = bananoshared.ListTrimItems(lColumnTotals)
+	lColumnTotals = BANanoShared.ListTrimItems(lColumnTotals)
 	'
 	Dim lsColumnAvatarTxt As List = BANanoShared.StrParseComma(";", sColumnAvatarText)
 	lsColumnAvatarTxt = BANanoShared.ListTrimItems(lsColumnAvatarTxt)
@@ -1853,9 +1854,7 @@ End Sub
 Sub AddSave()
 	Dim colField As String = "save"
 	Dim dt As DataTableColumn = NewDataTableColumn(colField, "Save")
-	dt.filterable = False
 	dt.ColType = COLUMN_SAVE
-	dt.sortable = False
 	dt.align = ALIGN_CENTER
 	dt.icon = "mdi-content-save"
 	dt.width = 80
@@ -1866,9 +1865,7 @@ End Sub
 Sub AddCancel()
 	Dim colField As String = "cancel"
 	Dim dt As DataTableColumn = NewDataTableColumn(colField, "Cancel")
-	dt.filterable = False
 	dt.ColType = COLUMN_CANCEL
-	dt.sortable = False
 	dt.align = ALIGN_CENTER
 	dt.icon = "mdi-cancel"
 	dt.width = 80
@@ -1896,9 +1893,7 @@ Sub AddAction(colField As String, colTitle As String, colIcon As String)
 	If BANano.IsNull(colIcon) Or BANano.IsUndefined(colIcon) Then colIcon = ""
 	colField = colField.tolowercase
 	Dim dt As DataTableColumn = NewDataTableColumn(colField, colTitle)
-	dt.filterable = False
 	dt.ColType = COLUMN_ACTION
-	dt.sortable = False
 	dt.align = ALIGN_CENTER
 	dt.icon = colIcon
 	dt.width = 80
@@ -1915,9 +1910,7 @@ Sub AddAction1(colField As String, colTitle As String, colIcon As String, iconSi
 	'
 	colField = colField.tolowercase
 	Dim dt As DataTableColumn = NewDataTableColumn(colField, colTitle)
-	dt.filterable = False
 	dt.ColType = COLUMN_ACTION
-	dt.sortable = False
 	dt.align = ALIGN_CENTER
 	dt.icon = colIcon
 	dt.width = 80
@@ -1930,9 +1923,7 @@ End Sub
 Sub AddIconView(colField As String, colTitle As String, colColor As String)
 	colField = colField.tolowercase
 	Dim dt As DataTableColumn = NewDataTableColumn(colField, colTitle)
-	dt.filterable = False
 	dt.ColType = COLUMN_ICON
-	dt.sortable = False
 	If colColor <> "" Then dt.color = colColor
 	columnsM.Put(colField, dt)
 End Sub
@@ -1941,9 +1932,7 @@ End Sub
 Sub AddChip(colField As String, colTitle As String, colColor As String)
 	colField = colField.tolowercase
 	Dim dt As DataTableColumn = NewDataTableColumn(colField, colTitle)
-	dt.filterable = False
 	dt.ColType = COLUMN_CHIP
-	dt.sortable = False
 	If colColor <> "" Then dt.color = colColor
 	columnsM.Put(colField, dt)
 End Sub
@@ -1952,9 +1941,7 @@ End Sub
 Sub AddSwitch(colField As String, colTitle As String)
 	colField = colField.tolowercase
 	Dim dt As DataTableColumn = NewDataTableColumn(colField, colTitle)
-	dt.filterable = False
 	dt.ColType = COLUMN_SWITCH
-	dt.sortable = False
 	columnsM.Put(colField, dt)
 End Sub
 
@@ -1962,9 +1949,7 @@ End Sub
 Sub AddCheckBox(colField As String, colTitle As String)
 	colField = colField.tolowercase
 	Dim dt As DataTableColumn = NewDataTableColumn(colField, colTitle)
-	dt.filterable = False
 	dt.ColType = COLUMN_CHECKBOX
-	dt.sortable = False
 	columnsM.Put(colField, dt)
 End Sub
 
@@ -1976,8 +1961,6 @@ Sub SetColumnsSwitch(colFields As List)
 		If columnsM.ContainsKey(col) Then
 			Dim colx As DataTableColumn = columnsM.Get(col)
 			colx.ColType = COLUMN_SWITCH
-			colx.filterable = False
-			colx.sortable = False
 			columnsM.Put(col, colx)
 		End If
 	Next
@@ -2006,8 +1989,6 @@ Sub SetColumnsCheckBox(colFields As List)
 		If columnsM.ContainsKey(col) Then
 			Dim colx As DataTableColumn = columnsM.Get(col)
 			colx.ColType = COLUMN_CHECKBOX
-			colx.filterable = False
-			colx.sortable = False
 			columnsM.Put(col, colx)
 		End If
 	Next
@@ -2017,9 +1998,7 @@ End Sub
 Sub AddImage(colField As String, colTitle As String)
 	colField = colField.tolowercase
 	Dim dt As DataTableColumn = NewDataTableColumn(colField, colTitle)
-	dt.filterable = False
 	dt.ColType = COLUMN_IMAGE
-	dt.sortable = False
 	columnsM.Put(colField, dt)
 End Sub
 
@@ -2048,8 +2027,6 @@ Sub AddAvatarImg(colField As String, colTitle As String)
 	colField = colField.tolowercase
 	Dim dt As DataTableColumn = NewDataTableColumn(colField, colTitle)
 	dt.ColType = COLUMN_AVATARIMG
-	dt.filterable = False
-	dt.sortable = False
 	columnsM.Put(colField, dt)
 End Sub
 
@@ -2058,8 +2035,6 @@ Sub AddAvatarTxt(colField As String, colTitle As String)
 	colField = colField.tolowercase
 	Dim dt As DataTableColumn = NewDataTableColumn(colField, colTitle)
 	dt.ColType = COLUMN_AVATARTXT
-	dt.filterable = False
-	dt.sortable = True
 	columnsM.Put(colField, dt)
 End Sub
 
@@ -2068,8 +2043,6 @@ Sub AddAvatarIcon(colField As String, colTitle As String)
 	colField = colField.tolowercase
 	Dim dt As DataTableColumn = NewDataTableColumn(colField, colTitle)
 	dt.ColType = COLUMN_AVATARICON
-	dt.filterable = False
-	dt.sortable = False
 	columnsM.Put(colField, dt)
 End Sub
 
@@ -2132,7 +2105,7 @@ End Sub
 
 'add a column
 Sub AddColumn(colName As String, colTitle As String)
-	AddColumn1(colName, colTitle, COLUMN_TEXT, 0, True, ALIGN_LEFT)
+	AddColumn1(colName, colTitle, COLUMN_TEXT, 0, False, ALIGN_LEFT)
 End Sub
 
 'add date column and use any of dayjs formats
@@ -2299,8 +2272,8 @@ private Sub NewDataTableColumn(colname As String, coltitle As String) As DataTab
 	nf.text = coltitle
 	nf.value = colname
 	nf.align = ALIGN_LEFT
-	nf.sortable = True
-	nf.filterable = True
+	nf.sortable = False
+	nf.filterable = False
 	nf.divider = False
 	nf.className = Null
 	nf.width = 0
@@ -3005,8 +2978,6 @@ Sub SetColumnType(colName As String, colType As String)
 		'Dim item As Map
 		'Dim value As String
 		Select Case colType
-			Case COLUMN_IMAGE, COLUMN_AVATARIMG, COLUMN_SWITCH, COLUMN_BUTTON
-				col.filterable = False
 			Case COLUMN_NUMBER
 				col.align = ALIGN_RIGHT
 				col.valueFormat = "0"

@@ -27,7 +27,7 @@ Version=8.95
 #DesignerProperty: Key: ItemKeys, DisplayName: Tab Keys (;)*, FieldType: String, DefaultValue:  , Description: Tab Keys
 #DesignerProperty: Key: ItemTitles, DisplayName: Tab Titles (;)*, FieldType: String, DefaultValue:  , Description: Tab Titles
 #DesignerProperty: Key: ItemIcons, DisplayName: Tab Icons (;)*, FieldType: String, DefaultValue:  , Description: Tab Icons
-#DesignerProperty: Key: ItemBadges, DisplayName: Tab With Badges (;), FieldType: String, DefaultValue:  , Description: Tab ItemBadges
+#DesignerProperty: Key: ItemBadges, DisplayName: Tab With Badges (";"), FieldType: String, DefaultValue:  , Description: Tab ItemBadges
 
 #DesignerProperty: Key: ActiveClass, DisplayName: ActiveClass, FieldType: String, DefaultValue: , Description: ActiveClass
 
@@ -207,11 +207,12 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	sItemKeys = sItemKeys.ToLowerCase
 	sItemBadges = sItemBadges.ToLowerCase
 	
-	lstItemKeys = BANanoShared.StrParse(";", sItemKeys)
+	lstItemKeys = BANanoShared.StrParseComma(";", sItemKeys)
 	lstItemKeys = BANanoShared.ListTrimItems(lstItemKeys)
-	lstItemTitles = BANanoShared.StrParse(";", sItemTitles)
+	lstItemTitles = BANanoShared.StrParseComma(";", sItemTitles)
 	lstItemTitles = BANanoShared.ListTrimItems(lstItemTitles)
 	lstItemIcons = BANanoShared.ListTrimItems(lstItemIcons)
+	lstItemBadges = BANanoShared.StrParseComma(";", sItemBadges)
 	lstItemBadges = BANanoShared.ListTrimItems(lstItemBadges)
 	'
 	'fix just in case
@@ -264,11 +265,18 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	'
 	Dim tItems As Int = xkeys.Size - 1
 	For itemCnt = 0 To tItems
-		Dim iKey As String = xkeys.Get(itemCnt)
-		Dim iTit As String = xtitles.Get(itemCnt)
-		Dim iCon As String = xicons.Get(itemCnt)
+		Dim iKey As String = ""
+		Dim iTit As String = ""
+		Dim iCon As String = ""
+		Dim iBdg As String = ""
+		'
+		iKey = BANanoShared.GetListItem(xkeys, itemCnt)
+		iTit = BANanoShared.GetListItem(xtitles, itemCnt)
+		iCon = BANanoShared.GetListItem(xicons, itemCnt)
+		iBdg = BANanoShared.GetListItem(xbadges, itemCnt)
+		
 		'	
-		AddItem1(iKey, iTit, iCon)
+		AddItem2(iKey, iTit, iCon, iBdg)
 	Next
 	Build
 		
@@ -338,34 +346,103 @@ End Sub
 
 'add item using own key
 Sub AddItem1(iKey As String, sTitle As String, sIcon As String)
+	AddItem2(iKey, sTitle, sIcon, "")
+End Sub
+
+'add item using own key with badge
+Sub AddItem2(iKey As String, sTitle As String, sIcon As String, sBadge As String)
 	Dim tabID As String = $"${mName}${iKey}"$
 	Dim tabItem As String = $"${tabID}item"$
+	Dim tabBadge As String = $"${tabID}badge"$
+	Dim tabBadgeContent As String = $"${tabID}badgecontent"$
+	Dim tabBadgeColor As String = $"${tabID}badgecolor"$
 	'
 	If BANano.IsNull(sTitle) Or BANano.IsUndefined(sTitle) Then sTitle = ""
 	If BANano.IsNull(sIcon) Or BANano.IsUndefined(sIcon) Then sIcon = ""
 		
 	'add a tab
-	VElement.Initialize(mCallBack, mName, mName)
 	VElement.Append($"<v-tab href="#${tabItem}" id="${tabID}"></v-tab>"$)
-		'
-	Dim vTabx As VueElement
-	vTabx.Initialize(mCallBack, tabID, tabID)
-	If bVertical Then
-		If sIcon <> "" Then
-			vTabx.Append($"<v-icon left id="${tabID}icon">${sIcon}</v-icon>"$)
-		End If
-		If sTitle <> "" Then
-			vTabx.Append($"<span id="${tabID}title">${sTitle}</span>"$)
+	'we dont have a badge
+	If sBadge = "" Then
+		Dim vTabx As VueElement
+		vTabx.Initialize(mCallBack, tabID, tabID)
+		If bVertical Then
+			If sIcon <> "" Then
+				vTabx.Append($"<v-icon left id="${tabID}icon">${sIcon}</v-icon>"$)
+			End	If
+			If sTitle <> "" Then
+				vTabx.Append($"<span id="${tabID}title">${sTitle}</span>"$)
+			End If
+		Else
+			If sTitle <> "" Then
+				vTabx.Append($"<span id="${tabID}title">${sTitle}</span>"$)
+			End If
+			If sIcon <> "" Then
+				vTabx.Append($"<v-icon id="${tabID}icon">${sIcon}</v-icon>"$)
+			End If
 		End If
 	Else
-		If sTitle <> "" Then
-			vTabx.Append($"<span id="${tabID}title">${sTitle}</span>"$)
-		End If
-		If sIcon <> "" Then
-			vTabx.Append($"<v-icon id="${tabID}icon">${sIcon}</v-icon>"$)
+		Dim vTabx As VueElement
+		vTabx.Initialize(mCallBack, tabID, tabID)
+		vTabx.Append($"<v-badge id="${tabBadge}"></v-badge>"$)
+		vTabx.GetBadge.Bind("content", tabBadgeContent)
+		vTabx.GetBadge.Bind("color", tabBadgeColor)
+		VElement.SetData(tabBadgeContent, sBadge)
+		VElement.SetData(tabBadgeColor, "primary")
+		'
+		If bVertical Then
+			If sIcon <> "" Then
+				vTabx.GetBadge.Append($"<v-icon left id="${tabID}icon">${sIcon}</v-icon>"$)
+			End	If
+			If sTitle <> "" Then
+				vTabx.GetBadge.Append($"<span id="${tabID}title">${sTitle}</span>"$)
+			End If
+		Else
+			If sTitle <> "" Then
+				vTabx.GetBadge.Append($"<span id="${tabID}title">${sTitle}</span>"$)
+			End If
+			If sIcon <> "" Then
+				vTabx.GetBadge.Append($"<v-icon id="${tabID}icon">${sIcon}</v-icon>"$)
+			End If
 		End If
 	End If
 	vlist1.Add(iKey)
+End Sub
+
+'get the tab item to put content
+Sub GetBadge(sID As String) As VueElement
+	Dim sitem As String = $"${mName}${sID}badge"$
+	Dim elx As VueElement
+	elx.Initialize(mCallBack, sitem, sitem)
+	Return elx
+End Sub
+
+'get the tab item to put content
+Sub GetIcon(sID As String) As VueElement
+	Dim sitem As String = $"${mName}${sID}icon"$
+	Dim elx As VueElement
+	elx.Initialize(mCallBack, sitem, sitem)
+	Return elx
+End Sub
+
+Sub UpdateBadge(VC As VueComponent, key As String, value As Int)
+	Dim sitem As String = $"${mName}${key}badgecontent"$
+	VC.SetData(sitem, value)
+End Sub
+
+Sub UpdateBadgeOnApp(V As VuetifyApp, key As String, value As Int)
+	Dim sitem As String = $"${mName}${key}badgecontent"$
+	V.SetData(sitem, value)
+End Sub
+
+Sub UpdateBadgeColor(VC As VueComponent, key As String, value As Int)
+	Dim sitem As String = $"${mName}${key}badgecolor"$
+	VC.SetData(sitem, value)
+End Sub
+
+Sub UpdateBadgeColorOnApp(V As VuetifyApp, key As String, value As Int)
+	Dim sitem As String = $"${mName}${key}badgecolor"$
+	V.SetData(sitem, value)
 End Sub
 
 'build the tab Items, automatically done by BindState

@@ -41,20 +41,20 @@ Version=7
 #DesignerProperty: Key: BackgroundColor, DisplayName: BackgroundColor, FieldType: String, DefaultValue: , Description: BackgroundColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: BackgroundColorIntensity, DisplayName: Backgroundcolorintensity, FieldType: String, DefaultValue: , Description: Backgroundcolorintensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: Dense, DisplayName: Dense, FieldType: Boolean, DefaultValue: False, Description: Dense
-#DesignerProperty: Key: Error, DisplayName: Error, FieldType: String, DefaultValue: , Description: Error
-#DesignerProperty: Key: ErrorCount, DisplayName: ErrorCount, FieldType: String, DefaultValue: , Description: ErrorCount
-#DesignerProperty: Key: ErrorMessages, DisplayName: ErrorMessages, FieldType: String, DefaultValue: , Description: ErrorMessages
+'#DesignerProperty: Key: Error, DisplayName: Error, FieldType: String, DefaultValue: , Description: Error
+'#DesignerProperty: Key: ErrorCount, DisplayName: ErrorCount, FieldType: String, DefaultValue: , Description: ErrorCount
+'#DesignerProperty: Key: ErrorMessages, DisplayName: ErrorMessages, FieldType: String, DefaultValue: , Description: ErrorMessages
 #DesignerProperty: Key: HideDetails, DisplayName: HideDetails, FieldType: Boolean, DefaultValue: False, Description: HideDetails
 #DesignerProperty: Key: Hint, DisplayName: Hint, FieldType: String, DefaultValue: , Description: Hint
 #DesignerProperty: Key: Light, DisplayName: Light, FieldType: Boolean, DefaultValue: False, Description: Light
 #DesignerProperty: Key: MaxValue, DisplayName: Max, FieldType: String, DefaultValue: , Description: MaxValue
-#DesignerProperty: Key: Messages, DisplayName: Messages, FieldType: String, DefaultValue: , Description: Messages
+'#DesignerProperty: Key: Messages, DisplayName: Messages, FieldType: String, DefaultValue: , Description: Messages
 #DesignerProperty: Key: Multiple, DisplayName: Multiple, FieldType: Boolean, DefaultValue: False, Description: Multiple
 #DesignerProperty: Key: PersistentHint, DisplayName: PersistentHint, FieldType: Boolean, DefaultValue: False, Description: PersistentHint
 #DesignerProperty: Key: PrependIcon, DisplayName: PrependIcon, FieldType: String, DefaultValue: , Description: PrependIcon
 #DesignerProperty: Key: Rules, DisplayName: Rules, FieldType: String, DefaultValue: , Description: Rules
-#DesignerProperty: Key: Success, DisplayName: Success, FieldType: String, DefaultValue: , Description: Success
-#DesignerProperty: Key: SuccessMessages, DisplayName: SuccessMessages, FieldType: String, DefaultValue: , Description: SuccessMessages
+'#DesignerProperty: Key: Success, DisplayName: Success, FieldType: String, DefaultValue: , Description: Success
+'#DesignerProperty: Key: SuccessMessages, DisplayName: SuccessMessages, FieldType: String, DefaultValue: , Description: SuccessMessages
 #DesignerProperty: Key: VBind, DisplayName: VBind, FieldType: String, DefaultValue: , Description: VBind
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
 #DesignerProperty: Key: VOn, DisplayName: VOn, FieldType: String, DefaultValue: , Description: VOn
@@ -253,12 +253,12 @@ VElement.AddAttr(":dense", bDense)
 VElement.AddAttr(":disabled", sDisabled)
 VElement.SetData(sDisabled, bDisabled)
 
-VElement.AddAttr(":error", sError)
-VElement.SetData(sError, False)
+'VElement.AddAttr(":error", sError)
+'VElement.SetData(sError, False)
 
-VElement.AddAttr("error-count", sErrorCount)
-VElement.AddAttr(":error-messages", sErrorMessages)
-VElement.SetData(sErrorMessages, VElement.NewList)
+'VElement.AddAttr("error-count", sErrorCount)
+'VElement.AddAttr(":error-messages", sErrorMessages)
+'VElement.SetData(sErrorMessages, VElement.NewList)
 
 VElement.AddAttr(":hide-details", bHideDetails)
 VElement.AddAttr("hint", sHint)
@@ -266,8 +266,8 @@ VElement.AddAttr("label", sLabel)
 VElement.AddAttr(":light", bLight)
 VElement.AddAttr(":mandatory", bMandatory)
 VElement.AddAttr("max", sMaxValue)
-VElement.AddAttr(":messages", sMessages)
-VElement.SetData(sMessages, VElement.NewList)
+'VElement.AddAttr(":messages", sMessages)
+'VElement.SetData(sMessages, VElement.NewList)
 
 VElement.AddAttr(":multiple", bMultiple)
 VElement.AddAttr(":persistent-hint", bPersistentHint)
@@ -278,11 +278,11 @@ VElement.SetData(sReadOnly, bReadonly)
 VElement.AddAttr(":rules", sRules)
 VElement.SetData(sRules, VElement.NewList)
 
-VElement.AddAttr(":success", sSuccess)
-VElement.SetData(sSuccess, False)
+'VElement.AddAttr(":success", sSuccess)
+'VElement.SetData(sSuccess, False)
 
-VElement.AddAttr(":success-messages", sSuccessMessages)
-VElement.SetData(sSuccessMessages, VElement.NewList)
+'VElement.AddAttr(":success-messages", sSuccessMessages)
+'VElement.SetData(sSuccessMessages, VElement.NewList)
 
 VElement.AddAttr("v-bind", sVBind)
 VElement.AddAttr("v-if", sVIf)

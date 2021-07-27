@@ -57,7 +57,7 @@ Version=8.95
 #DesignerProperty: Key: Counter, DisplayName: Counter, FieldType: String, DefaultValue: , Description: Counter
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: false, Description: Dark
 #DesignerProperty: Key: Dense, DisplayName: Dense, FieldType: Boolean, DefaultValue: false, Description: Dense
-#DesignerProperty: Key: ErrorCount, DisplayName: ErrorCount, FieldType: String, DefaultValue: , Description: ErrorCount
+'#DesignerProperty: Key: ErrorCount, DisplayName: ErrorCount, FieldType: String, DefaultValue: , Description: ErrorCount
 #DesignerProperty: Key: Filled, DisplayName: Filled, FieldType: Boolean, DefaultValue: false, Description: Filled
 #DesignerProperty: Key: Flat, DisplayName: Flat, FieldType: Boolean, DefaultValue: false, Description: Flat
 #DesignerProperty: Key: FullWidth, DisplayName: FullWidth, FieldType: Boolean, DefaultValue: false, Description: FullWidth
@@ -478,11 +478,11 @@ bLoading = BANanoShared.parseBool(bLoading)
 		VElement.SetData(sRequired, bRequired)
 		VElement.AddAttr(":disabled", sDisabled)
 		VElement.SetData(sDisabled, bDisabled)
-		VElement.AddAttr(":error", sError)
-		VElement.SetData(sError, False)
-		VElement.AddAttr("error-count", sErrorCount)
-		VElement.AddAttr(":error-messages", sErrorMessages)
-		VElement.SetData(sErrorMessages, VElement.NewList)
+		'VElement.AddAttr(":error", sError)
+		'VElement.SetData(sError, False)
+		'VElement.AddAttr("error-count", sErrorCount)
+		'VElement.AddAttr(":error-messages", sErrorMessages)
+		'VElement.SetData(sErrorMessages, VElement.NewList)
 		VElement.AddAttr(":filled", bFilled)
 		VElement.AddAttr(":flat", bFlat)
 		VElement.AddAttr(":full-width", bFullWidth)
@@ -495,8 +495,8 @@ bLoading = BANanoShared.parseBool(bLoading)
 		VElement.AddAttr("loader-height", sLoaderHeight)
 		VElement.AddAttr(":loading", sLoading)
 		VElement.SetData(sLoading, bLoading)
-		VElement.AddAttr(":messages", sMessages)
-		VElement.SetData(sMessages, VElement.newlist)
+		'VElement.AddAttr(":messages", sMessages)
+		'VElement.SetData(sMessages, VElement.newlist)
 		VElement.AddAttr(":no-resize", bNoResize)
 		VElement.AddAttr(":outlined", bOutlined)
 		VElement.AddAttr(":persistent-hint", bPersistentHint)
@@ -517,10 +517,10 @@ bLoading = BANanoShared.parseBool(bLoading)
 		VElement.AddAttr(":single-line", bSingleLine)
 		VElement.AddAttr(":solo", bSolo)
 		VElement.AddAttr(":solo-inverted", bSoloInverted)
-		VElement.AddAttr(":success", sSuccess)
-		VElement.SetData(sSuccess, False)
-		VElement.AddAttr(":success-messages", sSuccessMessages)
-		VElement.SetData(sSuccessMessages, VElement.NewList)
+		'VElement.AddAttr(":success", sSuccess)
+		'VElement.SetData(sSuccess, False)
+		'VElement.AddAttr(":success-messages", sSuccessMessages)
+		'VElement.SetData(sSuccessMessages, VElement.NewList)
 		VElement.AddAttr("suffix", sSuffix)
 		VElement.AddAttr("type", sTypeOf)
 		VElement.AddAttr("v-for", sVFor)
@@ -737,6 +737,12 @@ End Sub
 
 Sub SetValue(VC As VueComponent, txt As String)
 	VC.SetData(sVModel, txt)
+	If bDateTimePicker Then
+		Dim d As String = BANanoShared.MvField(txt,1, " ")
+		Dim t As String = BANanoShared.MvField(txt,2, " ")
+		VC.SetData(dateModel, d)
+		VC.SetData(timeModel, t)
+	End If
 End Sub
 
 'add a rule

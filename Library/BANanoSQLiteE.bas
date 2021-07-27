@@ -1558,6 +1558,26 @@ Sub FromJSON As BANanoSQLiteE
 	Return Me
 End Sub
 
+'select sum(receiptamount) as amount from receipts
+'get a sum of all records
+'<code>
+'dbConnect.GetSum
+'dbConnect.JSON = BANano.CallInlinePHPWait(dbConnect.MethodName, dbConnect.Build)
+'dbConnect.FromJSON
+'Select Case dbConnect.OK
+'Case False
+'Dim strError As String = dbConnect.Error
+'Log(strError)
+'End Select
+'for each rec As Map in dbConnect.Result
+'log(rec)
+'next
+'</code>
+Sub GetSum
+	query = $"select sum(${PrimaryKey}) as ${PrimaryKey} from ${TableName}"$
+	command = "select"
+End Sub
+
 'return a sql to select record of table where one exists
 '<code>
 ''select all records

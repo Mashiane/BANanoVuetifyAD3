@@ -42,9 +42,9 @@ Version=7
 #DesignerProperty: Key: ColorIntensity, DisplayName: Colorintensity, FieldType: String, DefaultValue: , Description: Colorintensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: False, Description: Dark
 #DesignerProperty: Key: Dense, DisplayName: Dense, FieldType: Boolean, DefaultValue: False, Description: Dense
-#DesignerProperty: Key: Error, DisplayName: Error, FieldType: String, DefaultValue: , Description: Error
-#DesignerProperty: Key: ErrorCount, DisplayName: ErrorCount, FieldType: String, DefaultValue: , Description: ErrorCount
-#DesignerProperty: Key: ErrorMessages, DisplayName: ErrorMessages, FieldType: String, DefaultValue: , Description: ErrorMessages
+'#DesignerProperty: Key: Error, DisplayName: Error, FieldType: String, DefaultValue: , Description: Error
+'#DesignerProperty: Key: ErrorCount, DisplayName: ErrorCount, FieldType: String, DefaultValue: , Description: ErrorCount
+'#DesignerProperty: Key: ErrorMessages, DisplayName: ErrorMessages, FieldType: String, DefaultValue: , Description: ErrorMessages
 #DesignerProperty: Key: Height, DisplayName: Height, FieldType: String, DefaultValue: , Description: Height
 #DesignerProperty: Key: HideDetails, DisplayName: HideDetails, FieldType: Boolean, DefaultValue: False, Description: HideDetails
 #DesignerProperty: Key: Hint, DisplayName: Hint, FieldType: String, DefaultValue: , Description: Hint
@@ -52,11 +52,11 @@ Version=7
 #DesignerProperty: Key: Key, DisplayName: Key, FieldType: String, DefaultValue: , Description: Key
 #DesignerProperty: Key: Light, DisplayName: Light, FieldType: Boolean, DefaultValue: False, Description: Light
 #DesignerProperty: Key: LoaderHeight, DisplayName: LoaderHeight, FieldType: String, DefaultValue: , Description: LoaderHeight
-#DesignerProperty: Key: Messages, DisplayName: Messages, FieldType: String, DefaultValue: , Description: Messages
+'#DesignerProperty: Key: Messages, DisplayName: Messages, FieldType: String, DefaultValue: , Description: Messages
 #DesignerProperty: Key: PersistentHint, DisplayName: PersistentHint, FieldType: Boolean, DefaultValue: False, Description: PersistentHint
 #DesignerProperty: Key: Rules, DisplayName: Rules, FieldType: String, DefaultValue: , Description: Rules
-#DesignerProperty: Key: Success, DisplayName: Success, FieldType: String, DefaultValue: , Description: Success
-#DesignerProperty: Key: SuccessMessages, DisplayName: SuccessMessages, FieldType: String, DefaultValue: , Description: SuccessMessages
+'#DesignerProperty: Key: Success, DisplayName: Success, FieldType: String, DefaultValue: , Description: Success
+'#DesignerProperty: Key: SuccessMessages, DisplayName: SuccessMessages, FieldType: String, DefaultValue: , Description: SuccessMessages
 #DesignerProperty: Key: ThumbColor, DisplayName: ThumbColor, FieldType: String, DefaultValue: , Description: ThumbColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: ThumbColorIntensity, DisplayName: Thumbcolorintensity, FieldType: String, DefaultValue: , Description: Thumbcolorintensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: ThumbLabel, DisplayName: ThumbLabel, FieldType: String, DefaultValue: none, Description: ThumbLabel, List: always|none
@@ -283,12 +283,12 @@ VElement.SetData(sDisabled, bDisabled)
 VElement.AddAttr(":required", sRequired)
 VElement.SetData(sRequired, bRequired)
 
-VElement.AddAttr(":error", sError)
-VElement.SetData(sError, False)
+'VElement.AddAttr(":error", sError)
+'VElement.SetData(sError, False)
 
-VElement.AddAttr("error-count", sErrorCount)
-VElement.AddAttr(":error-messages", sErrorMessages)
-VElement.SetData(sErrorMessages, VElement.newlist)
+'VElement.AddAttr("error-count", sErrorCount)
+'VElement.AddAttr(":error-messages", sErrorMessages)
+'VElement.SetData(sErrorMessages, VElement.newlist)
 
 VElement.AddAttr("height", sHeight)
 VElement.AddAttr(":hide-details", bHideDetails)
@@ -302,8 +302,8 @@ VElement.AddAttr(":loading", sLoading)
 VElement.SetData(sLoading, bLoading)
 
 VElement.AddAttr("max", sMaxValue)
-VElement.AddAttr(":messages", sMessages)
-VElement.SetData(sMessages, VElement.newlist)
+'VElement.AddAttr(":messages", sMessages)
+'VElement.SetData(sMessages, VElement.newlist)
 
 VElement.AddAttr("min", sMinValue)
 VElement.AddAttr(":persistent-hint", bPersistentHint)
@@ -315,11 +315,11 @@ VElement.AddAttr(":rules", sRules)
 VElement.SetData(sRules, VElement.newlist)
 
 VElement.AddAttr("step", sStepValue)
-VElement.AddAttr(":success", sSuccess)
-VElement.SetData(sSuccess, False)
+'VElement.AddAttr(":success", sSuccess)
+'VElement.SetData(sSuccess, False)
 
-VElement.AddAttr(":success-messages", sSuccessMessages)
-VElement.SetData(sSuccessMessages, VElement.newlist)
+'VElement.AddAttr(":success-messages", sSuccessMessages)
+'VElement.SetData(sSuccessMessages, VElement.newlist)
 
 VElement.AddAttr("thumb-color", VElement.BuildColor(sThumbColor, sThumbColorIntensity))
 VElement.AddAttr("thumb-label", sThumbLabel)

@@ -2,19 +2,18 @@
 Build1=Default,b4j.example
 File1=1.png
 File10=beautify-html.min.js
-File100=vue-clipboard.min.js
-File101=vue-count-to.min.js
-File102=vue-form-wizard.js
-File103=vue-form-wizard.min.css
-File104=vue-prism-component.min.js
-File105=vue-router.min.js
-File106=vue-session.js
-File107=vuetify.min.css
-File108=vuetify.min.js
-File109=vue-tippy.min.js
+File100=vue-count-to.min.js
+File101=vue-form-wizard.js
+File102=vue-form-wizard.min.css
+File103=vue-prism-component.min.js
+File104=vue-router.min.js
+File105=vue-session.js
+File106=vuetify.min.css
+File107=vuetify.min.js
+File108=vue-tippy.min.js
+File109=vuewebcam.js
 File11=bvad31.png
-File110=vuewebcam.js
-File111=xlsx.full.min.js
+File110=xlsx.full.min.js
 File12=chart.js
 File13=Chart.min.css
 File14=chartjs-adapter-date-fns.bundle.min.js
@@ -107,10 +106,10 @@ File92=upload.php
 File93=v-blur.min.js
 File94=vjsf.css
 File95=vjsf.js
-File96=vue.js
-File97=vue.min.js
-File98=vue2-leaflet.min.js
-File99=vue2-leaflet-movingmarker.umd.min.js
+File96=vue.min.js
+File97=vue2-leaflet.min.js
+File98=vue2-leaflet-movingmarker.umd.min.js
+File99=vue-clipboard.min.js
 FileGroup1=Default Group
 FileGroup10=Default Group
 FileGroup100=Default Group
@@ -125,7 +124,6 @@ FileGroup108=Default Group
 FileGroup109=Default Group
 FileGroup11=Default Group
 FileGroup110=Default Group
-FileGroup111=Default Group
 FileGroup12=Default Group
 FileGroup13=Default Group
 FileGroup14=Default Group
@@ -370,7 +368,7 @@ Module96=VPagination
 Module97=VPanelItem
 Module98=VParallax
 Module99=VPrism
-NumberOfFiles=111
+NumberOfFiles=110
 NumberOfLibraries=4
 NumberOfModules=143
 Version=9.1
@@ -387,7 +385,7 @@ Version=9.1
 
 Sub Process_Globals
 	Private BANano As BANano 'ignore
-	Public Version As String = "5.77"
+	Public Version As String = "5.78"
 	Public AppName As String = "BANanoVuetifyAD3"
 End Sub
 
@@ -419,8 +417,8 @@ Sub AppStart (Form1 As Form, Args() As String)
 	BANano.Header.AddCSSFile("material-ui.min.css")
 	'
 	BANano.Header.AddCSSFile("vuetify.min.css")
-	BANano.Header.AddJavascriptFile("vue.js")
-	'BANano.Header.AddJavascriptFile("vue.min.js")
+	'BANano.Header.AddJavascriptFile("vue.js")
+	BANano.Header.AddJavascriptFile("vue.min.js")
 	BANano.Header.AddJavascriptFile("vuetify.min.js")
 	BANano.Header.AddJavascriptFile("vue-router.min.js")
 	BANano.Header.AddJavascriptFile("dayjs.min.js")

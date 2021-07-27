@@ -58,8 +58,15 @@ Sub parseBool(v As Object) As Boolean
 	If GetType(v) = "string" Or GetType(v) = "object" Then
 		Dim s As String = v & ""
 		s = s.tolowercase
+		If s = "" Then Return False
 		If s = "false" Then Return False
 		If S = "true" Then Return True
+		If s = "1" Then Return True
+		If s = "y" Then Return True
+		If s = "0" Then Return False
+		If s = "n" Then Return False
+		If s = "no" Then Return False
+		If s = "yes" Then Return False
 	End If
 	Return v
 End Sub

@@ -47,7 +47,7 @@ Version=7
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue: , Description: Color, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: ColorIntensity, DisplayName: ColorIntensity, FieldType: String, DefaultValue: , Description: ColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: false, Description: Dark
-#DesignerProperty: Key: ErrorCount, DisplayName: ErrorCount, FieldType: String, DefaultValue: , Description: ErrorCount
+'#DesignerProperty: Key: ErrorCount, DisplayName: ErrorCount, FieldType: String, DefaultValue: , Description: ErrorCount
 #DesignerProperty: Key: Filled, DisplayName: Filled, FieldType: Boolean, DefaultValue: false, Description: Filled
 #DesignerProperty: Key: Flat, DisplayName: Flat, FieldType: Boolean, DefaultValue: false, Description: Flat
 
@@ -342,7 +342,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	'VElement.AddAttr("input-value", sInputValue)
 	VElement.AddAttr(":inset", bInset)
 	If bMultiple = False Then
-		'VElement.AddAttr("key", sKey)
+		VElement.AddAttr("key", sKey)
 		VElement.AddAttr("label", sLabel)
 		VElement.AddAttr(":loading", sLoading)
 		VElement.SetData(sLoading, bLoading)
@@ -354,8 +354,9 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.AddAttr(":multiple", bMultiple)
 	VElement.AddAttr(":persistent-hint", bPersistentHint)
 	VElement.AddAttr("prepend-icon", sPrependIcon)
-	'VElement.AddAttr(":readonly", sReadonly)
-	'VElement.SetData(sReadonly, bReadonly)
+	VElement.AddAttr(":readonly", sReadonly)
+	VElement.SetData(sReadonly, bReadonly)
+	'
 	VElement.AddAttr(":ripple", bRipple)
 	VElement.AddAttr(":rules", sRules)
 	VElement.SetData(sRules, VElement.NewList)
@@ -393,7 +394,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		If BANano.IsNull(sFalseValue) Then
 			sFalseValue = False
 		End If
-		'VElement.AddAttr("value", sTrueValue)
+		VElement.AddAttr("value", sTrueValue)
 
 		If bChecked Then
 			sValue = sTrueValue

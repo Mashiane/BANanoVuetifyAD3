@@ -409,6 +409,9 @@ Sub Refresh(VC As VueComponent)
 	VC.SetData(modelname, model)
 	VC.SetData(schemaname, schema)
 	VC.SetData(optionsname, options)
+	
+	'turn off global setting
+	textareaProps.Put("filled", False)
 	'
 	VC.SetData(sSectionsTitlesClasses, sectionsTitlesClasses)
 	VC.SetData(sFieldProps, FieldProps)

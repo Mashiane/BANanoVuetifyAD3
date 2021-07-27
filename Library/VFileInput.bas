@@ -53,9 +53,9 @@ Version=7
 #DesignerProperty: Key: CounterString, DisplayName: CounterString, FieldType: String, DefaultValue: , Description: CounterString
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: False, Description: Dark
 #DesignerProperty: Key: Dense, DisplayName: Dense, FieldType: Boolean, DefaultValue: False, Description: Dense
-#DesignerProperty: Key: Error, DisplayName: Error, FieldType: String, DefaultValue: , Description: Error
-#DesignerProperty: Key: ErrorCount, DisplayName: ErrorCount, FieldType: String, DefaultValue: , Description: ErrorCount
-#DesignerProperty: Key: ErrorMessages, DisplayName: ErrorMessages, FieldType: String, DefaultValue: , Description: ErrorMessages
+'#DesignerProperty: Key: Error, DisplayName: Error, FieldType: String, DefaultValue: , Description: Error
+'#DesignerProperty: Key: ErrorCount, DisplayName: ErrorCount, FieldType: String, DefaultValue: , Description: ErrorCount
+'#DesignerProperty: Key: ErrorMessages, DisplayName: ErrorMessages, FieldType: String, DefaultValue: , Description: ErrorMessages
 #DesignerProperty: Key: Filled, DisplayName: Filled, FieldType: Boolean, DefaultValue: False, Description: Filled
 #DesignerProperty: Key: Flat, DisplayName: Flat, FieldType: Boolean, DefaultValue: False, Description: Flat
 #DesignerProperty: Key: FullWidth, DisplayName: FullWidth, FieldType: Boolean, DefaultValue: False, Description: FullWidth
@@ -67,7 +67,7 @@ Version=7
 #DesignerProperty: Key: Indeterminate, DisplayName: Indeterminate, FieldType: String, DefaultValue: , Description: Indeterminate
 #DesignerProperty: Key: Light, DisplayName: Light, FieldType: Boolean, DefaultValue: False, Description: Light
 #DesignerProperty: Key: LoaderHeight, DisplayName: LoaderHeight, FieldType: String, DefaultValue: , Description: LoaderHeight
-#DesignerProperty: Key: Messages, DisplayName: Messages, FieldType: String, DefaultValue: , Description: Messages
+'#DesignerProperty: Key: Messages, DisplayName: Messages, FieldType: String, DefaultValue: , Description: Messages
 #DesignerProperty: Key: Multiple, DisplayName: Multiple, FieldType: Boolean, DefaultValue: False, Description: Multiple
 #DesignerProperty: Key: Outlined, DisplayName: Outlined, FieldType: Boolean, DefaultValue: False, Description: Outlined
 #DesignerProperty: Key: PersistentHint, DisplayName: PersistentHint, FieldType: Boolean, DefaultValue: False, Description: PersistentHint
@@ -86,8 +86,8 @@ Version=7
 #DesignerProperty: Key: SmallChips, DisplayName: SmallChips, FieldType: Boolean, DefaultValue: False, Description: SmallChips
 #DesignerProperty: Key: Solo, DisplayName: Solo, FieldType: Boolean, DefaultValue: False, Description: Solo
 #DesignerProperty: Key: SoloInverted, DisplayName: SoloInverted, FieldType: Boolean, DefaultValue: False, Description: SoloInverted
-#DesignerProperty: Key: Success, DisplayName: Success, FieldType: String, DefaultValue: , Description: Success
-#DesignerProperty: Key: SuccessMessages, DisplayName: SuccessMessages, FieldType: String, DefaultValue: , Description: SuccessMessages
+'#DesignerProperty: Key: Success, DisplayName: Success, FieldType: String, DefaultValue: , Description: Success
+'#DesignerProperty: Key: SuccessMessages, DisplayName: SuccessMessages, FieldType: String, DefaultValue: , Description: SuccessMessages
 #DesignerProperty: Key: Suffix, DisplayName: Suffix, FieldType: String, DefaultValue: , Description: Suffix
 #DesignerProperty: Key: TruncateLength, DisplayName: TruncateLength, FieldType: String, DefaultValue: , Description: TruncateLength
 #DesignerProperty: Key: UpdateThisOnUpload, DisplayName: UpdateThisOnUpload, FieldType: String, DefaultValue: , Description: UpdateThisOnUpload
@@ -382,12 +382,12 @@ VElement.AddAttr(":readonly", sReadonly)
 VElement.SetData(sReadonly, bReadonly)
 VElement.AddAttr("accept", sAccept)
 
-VElement.AddAttr(":error", sError)
-VElement.SetData(sError, False)
+'VElement.AddAttr(":error", sError)
+'VElement.SetData(sError, False)
 
-VElement.AddAttr("error-count", sErrorCount)
-VElement.AddAttr(":error-messages", sErrorMessages)
-VElement.SetData(sErrorMessages, VElement.newlist)
+'VElement.AddAttr("error-count", sErrorCount)
+'VElement.AddAttr(":error-messages", sErrorMessages)
+'VElement.SetData(sErrorMessages, VElement.newlist)
 
 VElement.AddAttr(":filled", bFilled)
 VElement.AddAttr(":flat", bFlat)
@@ -405,8 +405,8 @@ VElement.AddAttr("loader-height", sLoaderHeight)
 VElement.AddAttr(":loading", sLoading)
 VElement.SetData(sLoading, bLoading)
 
-VElement.AddAttr(":messages", sMessages)
-VElement.SetData(sMessages, VElement.NewList)
+'VElement.AddAttr(":messages", sMessages)
+'VElement.SetData(sMessages, VElement.NewList)
 
 VElement.AddAttr(":multiple", bMultiple)
 VElement.AddAttr(":outlined", bOutlined)
@@ -429,11 +429,11 @@ VElement.AddAttr(":single-line", bSingleLine)
 VElement.AddAttr(":small-chips", bSmallChips)
 VElement.AddAttr(":solo", bSolo)
 VElement.AddAttr(":solo-inverted", bSoloInverted)
-VElement.AddAttr(":success", sSuccess)
-VElement.SetData(sSuccess, False)
+'VElement.AddAttr(":success", sSuccess)
+'VElement.SetData(sSuccess, False)
 
-VElement.AddAttr(":success-messages", sSuccessMessages)
-VElement.SetData(sSuccessMessages, VElement.NewList)
+'VElement.AddAttr(":success-messages", sSuccessMessages)
+'VElement.SetData(sSuccessMessages, VElement.NewList)
 
 VElement.AddAttr("suffix", sSuffix)
 VElement.AddAttr("truncate-length", sTruncateLength)
