@@ -97,9 +97,9 @@ Sub Class_Globals
 	Private bDark As Boolean
 	Private bDense As Boolean
 	Private sDisabled As String
-	Private sError As String
-	Private sErrorCount As String
-	Private sErrorMessages As String
+	'Private sError As String
+	'Private sErrorCount As String
+	'Private sErrorMessages As String
 	Private sFalseValue As String
 	Private bFilled As Boolean
 	Private bFlat As Boolean
@@ -118,8 +118,8 @@ Sub Class_Globals
 	Private sReadonly As String
 	Private bRipple As Boolean
 	Private sRules As String
-	Private sSuccess As String
-	Private sSuccessMessages As String
+	'Private sSuccess As String
+	'Private sSuccessMessages As String
 	Private sTrueValue As String
 	Private sVBind As String
 	Private sVFor As String    'ignore
@@ -178,10 +178,10 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	sDisabled = $"${mName}disabled"$
 	sMessages = $"${mName}messages"$
 	sRules = $"${mName}rules"$
-	sError = $"${mName}error"$
-	sErrorMessages = $"${mName}errormessages"$
-	sSuccess = $"${mName}success"$
-	sSuccessMessages = $"${mName}successmessages"$
+	'sError = $"${mName}error"$
+	'sErrorMessages = $"${mName}errormessages"$
+	'sSuccess = $"${mName}success"$
+	'sSuccessMessages = $"${mName}successmessages"$
 	sReadonly = $"${mName}readonly"$
 	sVShow = $"${mName}show"$
 	sLoading = $"${mName}loading"$
@@ -207,7 +207,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sColorIntensity = Props.Get("ColorIntensity")
 		bDark = Props.Get("Dark")
 		bDense = Props.Get("Dense")
-		sErrorCount = Props.Get("ErrorCount")
+		'sErrorCount = Props.Get("ErrorCount")
 		sFalseValue = Props.GetDefault("FalseValue",False)
 		bFilled = Props.Get("Filled")
 		bFlat = Props.Get("Flat")
@@ -342,7 +342,7 @@ VElement.AddAttr("hint", sHint)
 'VElement.AddAttr("input-value", sInputValue)
 VElement.AddAttr(":inset", bInset)
 If bMultiple = False Then
-	'VElement.AddAttr("key", sKey)
+	VElement.AddAttr("key", sKey)
 	VElement.AddAttr("label", sLabel)
 	VElement.AddAttr(":loading", sLoading)
 	VElement.SetData(sLoading, bLoading)
@@ -354,12 +354,12 @@ VElement.SetData(sMessages, VElement.newlist)
 VElement.AddAttr(":multiple", bMultiple)
 VElement.AddAttr(":persistent-hint", bPersistentHint)
 VElement.AddAttr("prepend-icon", sPrependIcon)
-'VElement.AddAttr(":readonly", sReadonly)
-'VElement.SetData(sReadonly, bReadonly)
+VElement.AddAttr(":readonly", sReadonly)
+VElement.SetData(sReadonly, bReadonly)
 VElement.AddAttr(":ripple", bRipple)
 VElement.AddAttr(":rules", sRules)
 VElement.SetData(sRules, VElement.NewList)
-VElement.AddAttr(":success", sSuccess)
+'VElement.AddAttr(":success", sSuccess)
 'VElement.SetData(sSuccess, False)
 'VElement.AddAttr(":success-messages", sSuccessMessages)
 'VElement.SetData(sSuccessMessages, VElement.NewList)

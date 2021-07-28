@@ -11,6 +11,8 @@ Version=8.9
 
 #DesignerProperty: Key: Src, DisplayName: Src, FieldType: String, DefaultValue: ./assets/bvad31.png, Description: Src
 #DesignerProperty: Key: LazySrc, DisplayName: LazySrc, FieldType: String, DefaultValue: , Description: LazySrc
+#DesignerProperty: Key: SrcBind, DisplayName: Src Binding, FieldType: String, DefaultValue: , Description: SrcBind Binding
+#DesignerProperty: Key: LazySrcBind, DisplayName: LazySrcBind, FieldType: String, DefaultValue: , Description: LazySrcBind
 #DesignerProperty: Key: Alt, DisplayName: Alt, FieldType: String, DefaultValue: , Description: Alt
 #DesignerProperty: Key: AspectRatio, DisplayName: AspectRatio, FieldType: String, DefaultValue: , Description: AspectRatio
 #DesignerProperty: Key: Contain, DisplayName: Contain, FieldType: Boolean, DefaultValue: false, Description: Contain
@@ -75,7 +77,9 @@ Private bAnimeLoop As Boolean
 Private sAnimeTranslateX As String
 Private sAnimeTranslateY As String
 Public Animate As BANanoAnimeJS
-private bShrink as boolean
+Private bShrink As Boolean
+Private sSrcBind As String
+Private sLazySrcBind As String
 	End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -126,7 +130,9 @@ sAnimeTranslateX = Props.Get("AnimeTranslateX")
 sAnimeTranslateY = Props.Get("AnimeTranslateY")
 bShrink = Props.GetDefault("Shrink", False)
 bShrink = BANanoShared.parseBool(bShrink)
-	End If
+sSrcBind = Props.GetDefault("SrcBind", "")
+sLazySrcBind = Props.GetDefault("LazySrcBind", "")
+End If
 	'
 	bContain = BANanoShared.parseBool(bContain)
 bDark = BANanoShared.parseBool(bDark)
@@ -162,6 +168,14 @@ VElement.Shrink1(bShrink)
 VElement.Sizes = sSizes
 VElement.Src = sSrc
 VElement.Srcset = sSrcset
+If sSrcBind <> "" Then
+	VElement.Bind("src", sSrcBind)
+	VElement.SetData(sSrcBind, sSrc)
+End If
+If sLazySrcBind <> "" Then
+	VElement.Bind("lazy-src", sLazySrcBind)
+	VElement.SetData(sLazySrcBind, sLazySrc)
+End If
 VElement.Transition = sTransition
 VElement.Width = sWidth
 VElement.AddAttr("v-on", sVOn)
@@ -218,11 +232,17 @@ Sub UpdateVisible(VC As VueComponent, b As Boolean) As VImg
 	Return Me
 End Sub
 
+Sub UpdateSrc(VC As VueComponent, s As String)
+	VC.SetData(sSrcBind, S)
+End Sub
+
+Sub UpdatesLazySrcBind(VC As VueComponent, s As String)
+	VC.SetData(sLazySrcBind, S)
+End Sub
 
 Sub getID As String
 	Return mName
 End Sub
-
 
 Sub getHere As String
 	Return $"#${mName}"$

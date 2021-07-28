@@ -28,7 +28,7 @@ Version=8.95
 #DesignerProperty: Key: Label, DisplayName: Label, FieldType: String, DefaultValue: fieldname, Description: Label
 #DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: tablename.fieldname, Description: VModel
 #DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: , Description: Value
-#DesignerProperty: Key: TypeOf, DisplayName: TypeOf, FieldType: String, DefaultValue: text, Description: TypeOf, List: text|password|email|tel|email|url|number|search|time|button|hidden|reset|submit
+#DesignerProperty: Key: TypeOf, DisplayName: TypeOf, FieldType: String, DefaultValue: text, Description: TypeOf, List: text|password|email|tel|url|number|search|date|time|button|hidden|reset|submit
 #DesignerProperty: Key: AutoComplete, DisplayName: AutoComplete, FieldType: String, DefaultValue: none, Description: AutoComplete, List: none|on|off|username|new-password|current-password|cc-name|cc-number|cc-csc|cc-exp|name|email|shipping street-address|shipping locality|shipping region|shipping postal-code|shipping country|tel
 #DesignerProperty: Key: ShowEyes, DisplayName: ShowEyes, FieldType: Boolean, DefaultValue: false, Description: ShowEyes
 #DesignerProperty: Key: TextArea, DisplayName: TextArea, FieldType: Boolean, DefaultValue: false, Description: TextArea
@@ -119,9 +119,9 @@ Sub Class_Globals
 	Private bDark As Boolean
 	Private bDense As Boolean
 	Private sDisabled As String
-	Private sError As String
-	Private sErrorCount As String
-	Private sErrorMessages As String
+	'Private sError As String
+	'Private sErrorCount As String
+	'Private sErrorMessages As String
 	Private bFilled As Boolean
 	Private bFlat As Boolean
 	Private bFullWidth As Boolean
@@ -152,8 +152,8 @@ Sub Class_Globals
 	Private bSingleLine As Boolean
 	Private bSolo As Boolean
 	Private bSoloInverted As Boolean
-	Private sSuccess As String
-	Private sSuccessMessages As String
+	'Private sSuccess As String
+	'Private sSuccessMessages As String
 	Private sSuffix As String
 	Private bTextArea As Boolean
 	Private sTypeOf As String
@@ -204,10 +204,10 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	
 	sMessages = $"${mName}messages"$
 	sRules = $"${mName}rules"$
-	sError = $"${mName}error"$
-	sErrorMessages = $"${mName}errormessages"$
-	sSuccess = $"${mName}success"$
-	sSuccessMessages = $"${mName}successmessages"$
+	'sError = $"${mName}error"$
+	'sErrorMessages = $"${mName}errormessages"$
+	'sSuccess = $"${mName}success"$
+	'sSuccessMessages = $"${mName}successmessages"$
 	sShowEyes = $"${mName}eyes"$
 	dateModel = $"${mName}date"$
 	timeModel = $"${mName}time"$
@@ -237,7 +237,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sCounter = Props.Get("Counter")
 		bDark = Props.Get("Dark")
 		bDense = Props.Get("Dense")
-		sErrorCount = Props.Get("ErrorCount")
+		'sErrorCount = Props.Get("ErrorCount")
 		bFilled = Props.Get("Filled")
 		bFlat = Props.Get("Flat")
 		bFullWidth = Props.Get("FullWidth")
@@ -453,7 +453,7 @@ bLoading = BANanoShared.parseBool(bLoading)
 		'build and get the element
 		If BANano.Exists($"#${mName}"$) Then
 			mElement = BANano.GetElement($"#${mName}"$)
-		Else	
+		Else
 			mElement = mTarget.Append($"<${stagName} ref="${mName}" id="${mName}"></${stagName}>"$).Get("#" & mName)
 		End If
 	End If
@@ -655,9 +655,9 @@ Sub UpdateRequired(VC As VueComponent, b As Boolean)
 	VC.SetData(sRequired, b)
 End Sub
 
-Sub ClearSuccessMessages(VC As VueComponent)
-	VC.SetData(sSuccessMessages, VC.NewList)
-End Sub
+'Sub ClearSuccessMessages(VC As VueComponent)
+'	VC.SetData(sSuccessMessages, VC.NewList)
+'End Sub
 
 Sub ClearRules(VC As VueComponent)
 	VC.SetData(sRules, VC.NewList)
@@ -677,17 +677,17 @@ Sub UpdateDisabled(VC As VueComponent, b As Boolean)
 	VC.SetData(sDisabled, b)
 End Sub
 
-Sub UpdateError(VC As VueComponent, b As Boolean)
-	VC.SetData(sError, b)
-End Sub
-
-Sub UpdateSuccess(VC As VueComponent, b As Boolean)
-	VC.SetData(sSuccess, b)
-End Sub
-
-Sub ClearErrorMessages(VC As VueComponent)
-	VC.SetData(sErrorMessages, VC.NewList)
-End Sub
+'Sub UpdateError(VC As VueComponent, b As Boolean)
+'	VC.SetData(sError, b)
+'End Sub
+'
+'Sub UpdateSuccess(VC As VueComponent, b As Boolean)
+'	VC.SetData(sSuccess, b)
+'End Sub
+'
+'Sub ClearErrorMessages(VC As VueComponent)
+'	VC.SetData(sErrorMessages, VC.NewList)
+'End Sub
 
 Sub UpdateLoading(VC As VueComponent, b As Boolean)
 	bLoading = b

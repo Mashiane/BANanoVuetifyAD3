@@ -127,9 +127,9 @@ Private sCounterString As String
 Private bDark As Boolean
 Private bDense As Boolean
 Private sDisabled As String
-Private sError As String
-Private sErrorCount As String
-Private sErrorMessages As String
+'Private sError As String
+'Private sErrorCount As String
+'Private sErrorMessages As String
 Private bFilled As Boolean
 Private bFlat As Boolean
 Private bFullWidth As Boolean
@@ -161,8 +161,8 @@ Private bSingleLine As Boolean
 Private bSmallChips As Boolean
 Private bSolo As Boolean
 Private bSoloInverted As Boolean
-Private sSuccess As String
-Private sSuccessMessages As String
+'Private sSuccess As String
+'Private sSuccessMessages As String
 Private sSuffix As String
 Private sTruncateLength As String
 Private sUpdateThisOnUpload As String  'ignore
@@ -233,9 +233,9 @@ sCounterSizeString = Props.Get("CounterSizeString")
 sCounterString = Props.Get("CounterString")
 bDark = Props.Get("Dark")
 bDense = Props.Get("Dense")
-sError = Props.Get("Error")
-sErrorCount = Props.Get("ErrorCount")
-sErrorMessages = Props.Get("ErrorMessages")
+'sError = Props.Get("Error")
+'sErrorCount = Props.Get("ErrorCount")
+'sErrorMessages = Props.Get("ErrorMessages")
 bFilled = Props.Get("Filled")
 bFlat = Props.Get("Flat")
 bFullWidth = Props.Get("FullWidth")
@@ -267,8 +267,8 @@ bSingleLine = Props.Get("SingleLine")
 bSmallChips = Props.Get("SmallChips")
 bSolo = Props.Get("Solo")
 bSoloInverted = Props.Get("SoloInverted")
-sSuccess = Props.Get("Success")
-sSuccessMessages = Props.Get("SuccessMessages")
+'sSuccess = Props.Get("Success")
+'sSuccessMessages = Props.Get("SuccessMessages")
 sSuffix = Props.Get("Suffix")
 sTruncateLength = Props.Get("TruncateLength")
 sUpdateThisOnUpload = Props.Get("UpdateThisOnUpload")
@@ -279,9 +279,9 @@ sVModel = Props.Get("VModel")
 sVOn = Props.Get("VOn")
 bValidateOnBlur = Props.Get("ValidateOnBlur")
  sAccept = Props.Get("Accept")
- bIsGoogle = Props.Get("IsGoogle")
- sButtonWidth = Props.Get("ButtonWidth")
- sButtonHeight = Props.Get("ButtonHeight")
+ bIsGoogle = Props.GetDefault("IsGoogle",False)
+ sButtonWidth = Props.GetDefault("ButtonWidth","104px")
+ sButtonHeight = Props.GetDefault("ButtonHeight", "104px")
  bShrink = Props.GetDefault("Shrink", False)
  bShrink = BANanoShared.parseBool(bShrink)
 	End If 
@@ -499,20 +499,20 @@ Sub UpdateDisabled(VC As VueComponent, vDisabled As Object)
 VC.SetData(sDisabled, vDisabled)
 End Sub
 
-'Update Error
-Sub UpdateError(VC As VueComponent, vError As Object)
-VC.SetData(sError, vError)
-End Sub
-
-'Update ErrorMessages
-Sub UpdateErrorMessages(VC As VueComponent, vErrorMessages As Object)
-VC.SetData(sErrorMessages, vErrorMessages)
-End Sub
-
-'Clear ErrorMessages
-Sub ClearErrorMessages(VC As VueComponent)
-VC.SetData(sErrorMessages, VC.NewList)
-End Sub
+''Update Error
+'Sub UpdateError(VC As VueComponent, vError As Object)
+'VC.SetData(sError, vError)
+'End Sub
+'
+''Update ErrorMessages
+'Sub UpdateErrorMessages(VC As VueComponent, vErrorMessages As Object)
+'VC.SetData(sErrorMessages, vErrorMessages)
+'End Sub
+'
+''Clear ErrorMessages
+'Sub ClearErrorMessages(VC As VueComponent)
+'VC.SetData(sErrorMessages, VC.NewList)
+'End Sub
 
 'Update Indeterminate
 Sub UpdateIndeterminate(VC As VueComponent, vIndeterminate As Object)
@@ -539,20 +539,20 @@ Sub ClearRules(VC As VueComponent)
 VC.SetData(sRules, VC.NewList)
 End Sub
 
-'Update Success
-Sub UpdateSuccess(VC As VueComponent, vSuccess As Object)
-VC.SetData(sSuccess, vSuccess)
-End Sub
-
-'Update SuccessMessages
-Sub UpdateSuccessMessages(VC As VueComponent, vSuccessMessages As Object)
-VC.SetData(sSuccessMessages, vSuccessMessages)
-End Sub
-
-'Clear SuccessMessages
-Sub ClearSuccessMessages(VC As VueComponent)
-VC.SetData(sSuccessMessages, VC.NewList)
-End Sub
+''Update Success
+'Sub UpdateSuccess(VC As VueComponent, vSuccess As Object)
+'VC.SetData(sSuccess, vSuccess)
+'End Sub
+'
+''Update SuccessMessages
+'Sub UpdateSuccessMessages(VC As VueComponent, vSuccessMessages As Object)
+'VC.SetData(sSuccessMessages, vSuccessMessages)
+'End Sub
+'
+''Clear SuccessMessages
+'Sub ClearSuccessMessages(VC As VueComponent)
+'VC.SetData(sSuccessMessages, VC.NewList)
+'End Sub
 
 'get value
 Sub GetValue(VC As VueComponent) As Object

@@ -1350,7 +1350,7 @@ Sub Build As Map
 	Dim b As Map = CreateMap()
 	b.Put("dbname", DBase)
 	b.Put("command", command)
-	b.Put("query", query)
+	b.Put("query", query.tolowercase)
 	b.Put("args", largs)
 	b.Put("types", ltypes)
 	Return b
@@ -1365,7 +1365,7 @@ Sub Build1 As Map
 	Dim b As Map = CreateMap()
 	b.Put("dbname", DBase)
 	b.Put("command", command)
-	b.Put("query", query)
+	b.Put("query", query.tolowercase)
 	b.Put("args", largs)
 	b.Put("types", ltypes)
 	b.Put("view", view)

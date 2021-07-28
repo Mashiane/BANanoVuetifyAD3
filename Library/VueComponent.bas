@@ -62,6 +62,29 @@ Sub Page As VueElement
 	Return GetVueElement(mCallBack, Here)
 End Sub
 
+'get the date from date time picker
+Sub FormatDateTime(elName As String, svModel As String)
+	Dim res1 As String = GetData(elName & "date")
+	Dim res2 As String = GetData(elName & "time")
+	Dim xDate As String = ""
+	If res1 <> "" Then
+		xDate = NiceDate(res1)
+	End If
+	Dim res As String = $"${xDate} ${res2}"$
+	res = res.Trim
+	Dim resx As String = $"${svModel}fmt"$
+	SetData(resx, res)
+End Sub
+
+'set formmated date
+Sub FormatDate(svModel As String)
+	Dim sDate As String = GetData(svModel)
+	If sDate = "" Then Return
+	Dim xDate As String = NiceDate(sDate)
+	Dim res As String = $"${svModel}fmt"$
+	SetData(res, xDate)
+End Sub
+
 'SetBeforeEnter
 '<code>
 'X.SetBeforeEnter("checkThis")
@@ -2071,4 +2094,77 @@ Sub FindItemAtPosition(dsName As String, pos As Int) As Map
 	Dim recs As List = GetData(dsName)
 	Dim rec As Map = recs.Get(pos)
 	Return rec
+End Sub
+
+
+'toggle the password
+Sub TogglePassword(elID As String)
+	Dim sShowEyes As String = $"${elID}eyes"$
+	Toggle(sShowEyes)
+End Sub
+
+'update the items of a list
+Sub UpdateItems(elID As String, items As List)
+	Dim xitems As String = $"${elID}items"$
+	SetData(xitems, items)
+End Sub
+
+
+'add a new row at the end of the items in realtime
+Sub AddItem(elID As String, rowdata As Map)
+	Dim xitems As String = $"${elID}items"$
+	SetDataPush(xitems, rowdata)
+End Sub
+
+'remove an item where
+Sub RemoveItem(elID As String, prop As String, value As String)
+	Dim xitems As String = $"${elID}items"$
+	Dim m As Map = CreateMap()
+	m.Put(prop, value)
+	'find the record at a position
+	Dim mpos As Int = GetDataPositionWhere(xitems, m)
+	If mpos >= 0 Then
+		SetDataSpliceRemove(xitems, mpos, 1)
+	End If
+End Sub
+
+'update item where
+Sub UpdateItem(elID As String, prop As String, value As String, item As Map)
+	Dim xitems As String = $"${elID}items"$
+	Dim m As Map = CreateMap()
+	m.Put(prop, value)
+	'find the record at a position
+	Dim mpos As Int = GetDataPositionWhere(xitems, m)
+	If mpos >= 0 Then
+		Dim oldm As Map = FindItemAtPosition(xitems, mpos)
+		oldm = BANanoShared.Merge(oldm, item)
+		SetDataSplice(xitems, mpos, 1, oldm)
+	End If
+End Sub
+
+'get data where
+Sub FindItem(elID As String, whereMap As Map) As Map
+	Dim xitems As String = $"${elID}items"$
+	Dim rm As Map = CreateMap()
+	'find the item
+	Dim recpos As Int = GetDataPositionWhere(xitems, whereMap)
+	If recpos = -1 Then Return rm
+	Dim recs As List = GetData(xitems)
+	Dim rec As Map = recs.Get(recpos)
+	Return rec
+End Sub
+
+
+'read an item where
+Sub ReadItem(elID As String, prop As String, value As String) As Map
+	Dim xitems As String = $"${elID}items"$
+	Dim m As Map = CreateMap()
+	m.Put(prop, value)
+	'find the record at a position
+	Dim mpos As Int = GetDataPositionWhere(elID, m)
+	Dim res As Map = CreateMap()
+	If mpos >= 0 Then
+		res = FindItemAtPosition(xitems, mpos)
+	End If
+	Return res
 End Sub

@@ -6,6 +6,7 @@ Version=8.9
 @EndOfDesignText@
 #IgnoreWarnings:12
 
+#DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: false, Description: Hidden
 #DesignerProperty: Key: Align, DisplayName: Vertical Align, FieldType: String, DefaultValue: normal, Description: Align, List: normal|start|center|end|baseline|stretch
 #DesignerProperty: Key: Justify, DisplayName: Horizontal Align, FieldType: String, DefaultValue: normal, Description: Justify, List: normal|start|center|end|space-between|space-around
 #DesignerProperty: Key: Fluid, DisplayName: Fluid, FieldType: Boolean, DefaultValue: false, Description: Fluid
@@ -65,6 +66,7 @@ Sub Class_Globals
 	Private BANano As BANano 'ignore
 	Private mVIf As String = ""
 	Private bFluid As Boolean
+	Private bHidden As Boolean
 	Private sColor As String
 	Private sColorintensity As String
 	Private mName As String 'ignore
@@ -122,7 +124,16 @@ Private bNoGutters As Boolean
 Private bDebugBorder As Boolean
 Private bDFlex As Boolean
 	Private bTextCenter As Boolean
-'Private sVShow As String
+	Private sVShow As String
+	Public Integers As List
+	Public Strings As List
+	Public Doubles  As List
+	Public Blobs As List 
+	Public Filterable As List 
+	Public Sortable As List 
+	Public Fields As List 
+	Public matrix As List
+	Public matrixMap As Map 
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -138,7 +149,7 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 		End If
 	End If
 	'sFluid = $"${mName}fluid"$
-	'sVShow = $"${mName}show"$
+	sVShow = $"${mName}show"$
 End Sub
 
 ' this is the place where you create the view in html and run initialize javascript
@@ -199,14 +210,15 @@ bDFlex = Props.GetDefault("DFlex", False)
 		bTextCenter = BANanoShared.parseBool(bTextCenter)
 		bFluid = Props.GetDefault("Fluid", False)
 		bFluid = BANanoShared.parseBool(bFluid)
+		bHidden = Props.GetDefault("Hidden", False)
+		bHidden = BANanoShared.parseBool(bHidden)
 	End If
 	'
 	bFillHeight = BANanoShared.parseBool(bFillHeight)
-bFitScreen = BANanoShared.parseBool(bFitScreen)
-bNoGutters = BANanoShared.parseBool(bNoGutters)
-bDebugBorder = BANanoShared.parseBool(bDebugBorder)
-
-	'
+	bFitScreen = BANanoShared.parseBool(bFitScreen)
+	bNoGutters = BANanoShared.parseBool(bNoGutters)
+	bDebugBorder = BANanoShared.parseBool(bDebugBorder)
+'
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
 		mElement = BANano.GetElement($"#${mName}"$)
@@ -274,8 +286,8 @@ bDebugBorder = BANanoShared.parseBool(bDebugBorder)
 	VElement.BorderStyle = sBorderStyle
 	VElement.BorderWidth = sBorderWidth
 	VElement.AddClassOnCondition("dflex", bDFlex, True)
-	'VElement.VShow = sVShow
-	'VElement.SetData(sVShow, True)
+'	VElement.VShow = sVShow
+'	VElement.SetData(sVShow, Not(bHidden))
 	VElement.SetAttrOnTrue(":no-gutters", bNoGutters, True)
 	VElement.AddClassOnCondition("text-center", bTextCenter, True)
 	If bDebugBorder Then
@@ -319,7 +331,7 @@ Sub RemoveAttr(p As String) As VContainer
 End Sub
 
 Sub UpdateVisible(VC As VueComponent, b As Boolean)
-	'VC.SetData(mVShow, b)
+	VC.SetData(sVShow, b)
 	VC.SetData(mVIf, b)
 End Sub
 

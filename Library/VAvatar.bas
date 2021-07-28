@@ -13,13 +13,15 @@ Version=8.9
 #DesignerProperty: Key: HeadLine, DisplayName: HeadLine, FieldType: Boolean, DefaultValue: false, Description: HeadLine
 #DesignerProperty: Key: Icon, DisplayName: Icon, FieldType: String, DefaultValue: , Description: Icon
 #DesignerProperty: Key: IconDark, DisplayName: IconDark, FieldType: Boolean, DefaultValue: True, Description: IconDark
-#DesignerProperty: Key: Image, DisplayName: Image, FieldType: String, DefaultValue: ./assets/bvad31.png, Description: Image
+#DesignerProperty: Key: Image, DisplayName: Src, FieldType: String, DefaultValue: ./assets/bvad31.png, Description: Src
+#DesignerProperty: Key: SrcBind, DisplayName: SrcBind, FieldType: String, DefaultValue: , Description: SrcBind
 #DesignerProperty: Key: Elevation, DisplayName: Elevation, FieldType: String, DefaultValue: , Description: Elevation
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue: primary, Description: Color, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: ColorIntensity, DisplayName: Color Intensity, FieldType: String, DefaultValue:  normal, Description: , List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: TextColor, DisplayName: Text Color, FieldType: String, DefaultValue: white , Description: , List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: TextColorIntensity, DisplayName: Text Color Intensity, FieldType: String, DefaultValue:  normal, Description: , List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: Height, DisplayName: Height, FieldType: String, DefaultValue: , Description: Height
+#DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: , Description: Width
 #DesignerProperty: Key: MaxHeight, DisplayName: MaxHeight, FieldType: String, DefaultValue: , Description: MaxHeight
 #DesignerProperty: Key: MaxWidth, DisplayName: MaxWidth, FieldType: String, DefaultValue: , Description: MaxWidth
 #DesignerProperty: Key: MinHeight, DisplayName: MinHeight, FieldType: String, DefaultValue: , Description: MinHeight
@@ -28,7 +30,6 @@ Version=8.9
 #DesignerProperty: Key: Rounded, DisplayName: Rounded, FieldType: String, DefaultValue: none, Description: Rounded, List: none|rounded-0|rounded|rounded-sm|rounded-lg|rounded-xl|rounded-t-xl|rounded-r-xl|rounded-b-xl|rounded-l-xl|rounded-tl-xl|rounded-tr-xl|rounded-br-xl|rounded-bl-xl|rounded-pill|rounded-circle
 #DesignerProperty: Key: Size, DisplayName: Size, FieldType: String, DefaultValue: 48, Description: Size
 #DesignerProperty: Key: Tile, DisplayName: Tile, FieldType: Boolean, DefaultValue: false, Description: Tile
-#DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: , Description: Width
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
@@ -105,6 +106,7 @@ Private sAvatarType As String
 'Private xIcon As String
 'Private xImage As String
 Private xColor As String
+Private sSrcBind As String
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -170,6 +172,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sPX = Props.Get("PX")
 		sPY = Props.Get("PY")
 		sAvatarType = Props.GetDefault("AvatarType","none")
+		sSrcBind = Props.GetDefault("SrcBind", "")
 	End If
 	bTile = BANanoShared.parseBool(bTile)
 	bHeadLine = BANanoShared.parseBool(bHeadLine)
@@ -213,6 +216,10 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		Case "image"
 			VElement.Append($"<v-img id="${mName}image" alt=""></v-img>"$)
 			VElement.GetImage.AddAttr("src", mImage)
+			If sSrcBind <> "" Then
+				VElement.GetImage.AddAttr(":src", sSrcBind)
+				VElement.SetData(sSrcBind, mImage)
+			End If
 			'VElement.SetData(xImage, mImage)
 		Case Else
 			If mText <> "" Then
@@ -235,6 +242,10 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 				VElement.Append($"<v-img id="${mName}image" alt=""></v-img>"$)
 				VElement.GetImage.AddAttr("src", mImage)
 				'VElement.SetData(xImage, mImage)
+				If sSrcBind <> "" Then
+					VElement.GetImage.AddAttr(":src", sSrcBind)
+					VElement.SetData(sSrcBind, mImage)
+				End If
 			End If
 	End Select	
 	
@@ -318,6 +329,10 @@ End Sub
 Sub UpdateVisible(VC As VueComponent, b As Boolean)
 	VC.SetData(mVIf, b)
 	'VC.SetData(mVShow, b)
+End Sub
+
+Sub UpdateSrc(VC As VueComponent, s As String)
+	VC.SetData(sSrcBind, S)
 End Sub
 
 'Sub UpdateText(VC As VueComponent, s As String)

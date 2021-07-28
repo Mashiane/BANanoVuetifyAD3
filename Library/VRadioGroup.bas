@@ -36,7 +36,7 @@ Version=7
 #DesignerProperty: Key: ItemColors, DisplayName: Item Colors (;), FieldType: String, DefaultValue:  , Description: Item Colors
 '
 #DesignerProperty: Key: ActiveClass, DisplayName: ActiveClass, FieldType: String, DefaultValue: , Description: ActiveClass
-#DesignerProperty: Key: Alignment, DisplayName: Alignment, FieldType: String, DefaultValue: row, Description: Alignment, List: column|none|row
+#DesignerProperty: Key: Alignment, DisplayName: Alignment, FieldType: String, DefaultValue: column, Description: Alignment, List: column|none|row
 #DesignerProperty: Key: AppendIcon, DisplayName: AppendIcon, FieldType: String, DefaultValue: , Description: AppendIcon
 #DesignerProperty: Key: BackgroundColor, DisplayName: BackgroundColor, FieldType: String, DefaultValue: , Description: BackgroundColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: BackgroundColorIntensity, DisplayName: Backgroundcolorintensity, FieldType: String, DefaultValue: , Description: Backgroundcolorintensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
@@ -86,9 +86,9 @@ Private sBackgroundColor As String
 Private sBackgroundColorIntensity As String
 Private bDense As Boolean
 Private bDisabled As Boolean
-Private sError As String
-Private sErrorCount As String
-Private sErrorMessages As String
+'Private sError As String
+'Private sErrorCount As String
+'Private sErrorMessages As String
 Private bHidden As Boolean
 Private bHideDetails As Boolean
 Private sHint As String
@@ -96,14 +96,14 @@ Private sLabel As String
 Private bLight As Boolean
 Private bMandatory As Boolean
 Private sMaxValue As String
-Private sMessages As String
+'Private sMessages As String
 Private bMultiple As Boolean
 Private bPersistentHint As Boolean
 Private sPrependIcon As String
 Private bReadonly As Boolean
 Private sRules As String
-Private sSuccess As String
-Private sSuccessMessages As String
+'Private sSuccess As String
+'Private sSuccessMessages As String
 Private sVBind As String
 Private sVIf As String
 Private sVModel As String
@@ -155,9 +155,9 @@ sBackgroundColor = Props.GetDefault("BackgroundColor", "")
 sBackgroundColorIntensity = Props.GetDefault("BackgroundColorIntensity", "")
 bDense = Props.GetDefault("Dense", False)
 bDisabled = Props.GetDefault("Disabled", False)
-sError = Props.GetDefault("Error", "")
-sErrorCount = Props.GetDefault("ErrorCount", "")
-sErrorMessages = Props.GetDefault("ErrorMessages", "")
+'sError = Props.GetDefault("Error", "")
+'sErrorCount = Props.GetDefault("ErrorCount", "")
+'sErrorMessages = Props.GetDefault("ErrorMessages", "")
 bHidden = Props.GetDefault("Hidden", False)
 bHideDetails = Props.GetDefault("HideDetails", False)
 sHint = Props.GetDefault("Hint", "")
@@ -165,14 +165,14 @@ sLabel = Props.GetDefault("Label", "")
 bLight = Props.GetDefault("Light", False)
 bMandatory = Props.GetDefault("Mandatory", False)
 sMaxValue = Props.GetDefault("MaxValue", "")
-sMessages = Props.GetDefault("Messages", "")
+'sMessages = Props.GetDefault("Messages", "")
 bMultiple = Props.GetDefault("Multiple", False)
 bPersistentHint = Props.GetDefault("PersistentHint", False)
 sPrependIcon = Props.GetDefault("PrependIcon", "")
 bReadonly = Props.GetDefault("Readonly", False)
 sRules = Props.GetDefault("Rules", "")
-sSuccess = Props.GetDefault("Success", "")
-sSuccessMessages = Props.GetDefault("SuccessMessages", "")
+'sSuccess = Props.GetDefault("Success", "")
+'sSuccessMessages = Props.GetDefault("SuccessMessages", "")
 sVBind = Props.GetDefault("VBind", "")
 sVIf = Props.GetDefault("VIf", "")
 sVModel = Props.GetDefault("VModel", "")

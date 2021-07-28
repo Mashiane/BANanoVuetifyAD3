@@ -142,9 +142,9 @@ Private bDense As Boolean
 Private bDisableLookup As Boolean
 Private sDisabled As String
 Private bEager As Boolean
-Private sError As String
-Private sErrorCount As String
-Private sErrorMessages As String
+'Private sError As String
+'Private sErrorCount As String
+'Private sErrorMessages As String
 Private bFilled As Boolean
 Private bFlat As Boolean
 Private bFullWidth As Boolean
@@ -186,8 +186,8 @@ Private bSingleLine As Boolean
 Private bSmallChips As Boolean
 Private bSolo As Boolean
 Private bSoloInverted As Boolean
-Private sSuccess As String
-Private sSuccessMessages As String
+'Private sSuccess As String
+'Private sSuccessMessages As String
 Private sSuffix As String
 Private sVBind As String
 Private sVFor As String
@@ -208,7 +208,7 @@ Private sRequired As String
 Private sValue As String
 Private sItemKeys As String
 	Private sItemTitles As String
-	private bShrink as boolean
+	Private bShrink As Boolean
 	End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -262,9 +262,9 @@ bDeletableChips = Props.Get("DeletableChips")
 bDense = Props.Get("Dense")
 bDisableLookup = Props.Get("DisableLookup")
 bEager = Props.Get("Eager")
-sError = Props.Get("Error")
-sErrorCount = Props.Get("ErrorCount")
-sErrorMessages = Props.Get("ErrorMessages")
+'sError = Props.Get("Error")
+'sErrorCount = Props.Get("ErrorCount")
+'sErrorMessages = Props.Get("ErrorMessages")
 bFilled = Props.Get("Filled")
 bFlat = Props.Get("Flat")
 bFullWidth = Props.Get("FullWidth")
@@ -304,8 +304,8 @@ bSingleLine = Props.Get("SingleLine")
 bSmallChips = Props.Get("SmallChips")
 bSolo = Props.Get("Solo")
 bSoloInverted = Props.Get("SoloInverted")
-sSuccess = Props.Get("Success")
-sSuccessMessages = Props.Get("SuccessMessages")
+'sSuccess = Props.Get("Success")
+'sSuccessMessages = Props.Get("SuccessMessages")
 sSuffix = Props.Get("Suffix")
 sVBind = Props.Get("VBind")
 sVFor = Props.Get("VFor")
@@ -550,20 +550,20 @@ Sub UpdateDisabled(VC As VueComponent, vDisabled As Object)
 VC.SetData(sDisabled, vDisabled)
 End Sub
 
-'Update Error
-Sub UpdateError(VC As VueComponent, vError As Object)
-VC.SetData(sError, vError)
-End Sub
-
-'Update ErrorMessages
-Sub UpdateErrorMessages(VC As VueComponent, vErrorMessages As Object)
-VC.SetData(sErrorMessages, vErrorMessages)
-End Sub
-
-'Clear ErrorMessages
-Sub ClearErrorMessages(VC As VueComponent)
-VC.SetData(sErrorMessages, VC.NewList)
-End Sub
+''Update Error
+'Sub UpdateError(VC As VueComponent, vError As Object)
+'VC.SetData(sError, vError)
+'End Sub
+'
+''Update ErrorMessages
+'Sub UpdateErrorMessages(VC As VueComponent, vErrorMessages As Object)
+'VC.SetData(sErrorMessages, vErrorMessages)
+'End Sub
+'
+''Clear ErrorMessages
+'Sub ClearErrorMessages(VC As VueComponent)
+'VC.SetData(sErrorMessages, VC.NewList)
+'End Sub
 
 'Update ItemColor
 Sub UpdateItemColor(VC As VueComponent, vItemColor As Object)
@@ -689,20 +689,20 @@ Sub ClearRules(VC As VueComponent)
 VC.SetData(sRules, VC.NewList)
 End Sub
 
-'Update Success
-Sub UpdateSuccess(VC As VueComponent, vSuccess As Object)
-VC.SetData(sSuccess, vSuccess)
-End Sub
-
-'Update SuccessMessages
-Sub UpdateSuccessMessages(VC As VueComponent, vSuccessMessages As Object)
-VC.SetData(sSuccessMessages, vSuccessMessages)
-End Sub
-
-'Clear SuccessMessages
-Sub ClearSuccessMessages(VC As VueComponent)
-VC.SetData(sSuccessMessages, VC.NewList)
-End Sub
+''Update Success
+'Sub UpdateSuccess(VC As VueComponent, vSuccess As Object)
+'VC.SetData(sSuccess, vSuccess)
+'End Sub
+'
+''Update SuccessMessages
+'Sub UpdateSuccessMessages(VC As VueComponent, vSuccessMessages As Object)
+'VC.SetData(sSuccessMessages, vSuccessMessages)
+'End Sub
+'
+''Clear SuccessMessages
+'Sub ClearSuccessMessages(VC As VueComponent)
+'VC.SetData(sSuccessMessages, VC.NewList)
+'End Sub
 
 'Update VModel
 Sub SetValue(VC As VueComponent, vVModel As Object)

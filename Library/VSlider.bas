@@ -97,9 +97,9 @@ Private sColorIntensity As String
 Private bDark As Boolean
 Private bDense As Boolean
 Private sDisabled As String
-Private sError As String
-Private sErrorCount As String
-Private sErrorMessages As String
+'Private sError As String
+'Private sErrorCount As String
+'Private sErrorMessages As String
 Private sHeight As String
 Private bHideDetails As Boolean
 Private sHint As String
@@ -117,8 +117,8 @@ Private sPrependIcon As String
 Private sReadonly As String
 Private sRules As String
 Private sStepValue As String
-Private sSuccess As String
-Private sSuccessMessages As String
+'Private sSuccess As String
+'Private sSuccessMessages As String
 Private sThumbColor As String
 Private sThumbColorIntensity As String
 Private sThumbLabel As String
@@ -187,9 +187,9 @@ sColor = Props.Get("Color")
 sColorIntensity = Props.Get("ColorIntensity")
 bDark = Props.Get("Dark")
 bDense = Props.Get("Dense")
-sError = Props.Get("Error")
-sErrorCount = Props.Get("ErrorCount")
-sErrorMessages = Props.Get("ErrorMessages")
+'sError = Props.Get("Error")
+'sErrorCount = Props.Get("ErrorCount")
+'sErrorMessages = Props.Get("ErrorMessages")
 sHeight = Props.Get("Height")
 bHideDetails = Props.Get("HideDetails")
 sHint = Props.Get("Hint")
@@ -206,8 +206,8 @@ bPersistentHint = Props.Get("PersistentHint")
 sPrependIcon = Props.Get("PrependIcon")
 sRules = Props.Get("Rules")
 sStepValue = Props.Get("StepValue")
-sSuccess = Props.Get("Success")
-sSuccessMessages = Props.Get("SuccessMessages")
+'sSuccess = Props.Get("Success")
+'sSuccessMessages = Props.Get("SuccessMessages")
 sThumbColor = Props.Get("ThumbColor")
 sThumbColorIntensity = Props.Get("ThumbColorIntensity")
 sThumbLabel = Props.Get("ThumbLabel")
@@ -389,20 +389,20 @@ Sub UpdateDisabled(VC As VueComponent, vDisabled As Object)
 VC.SetData(sDisabled, vDisabled)
 End Sub
 
-'Update Error
-Sub UpdateError(VC As VueComponent, vError As Object)
-VC.SetData(sError, vError)
-End Sub
-
-'Update ErrorMessages
-Sub UpdateErrorMessages(VC As VueComponent, vErrorMessages As Object)
-VC.SetData(sErrorMessages, vErrorMessages)
-End Sub
-
-'Clear ErrorMessages
-Sub ClearErrorMessages(VC As VueComponent)
-VC.SetData(sErrorMessages, VC.NewList)
-End Sub
+''Update Error
+'Sub UpdateError(VC As VueComponent, vError As Object)
+'VC.SetData(sError, vError)
+'End Sub
+'
+''Update ErrorMessages
+'Sub UpdateErrorMessages(VC As VueComponent, vErrorMessages As Object)
+'VC.SetData(sErrorMessages, vErrorMessages)
+'End Sub
+'
+''Clear ErrorMessages
+'Sub ClearErrorMessages(VC As VueComponent)
+'VC.SetData(sErrorMessages, VC.NewList)
+'End Sub
 
 'Update Loading
 Sub UpdateLoading(VC As VueComponent, vLoading As Object)
@@ -445,20 +445,20 @@ Sub ClearRules(VC As VueComponent)
 VC.SetData(sRules, VC.NewList)
 End Sub
 
-'Update Success
-Sub UpdateSuccess(VC As VueComponent, vSuccess As Object)
-VC.SetData(sSuccess, vSuccess)
-End Sub
-
-'Update SuccessMessages
-Sub UpdateSuccessMessages(VC As VueComponent, vSuccessMessages As Object)
-VC.SetData(sSuccessMessages, vSuccessMessages)
-End Sub
-
-'Clear SuccessMessages
-Sub ClearSuccessMessages(VC As VueComponent)
-VC.SetData(sSuccessMessages, VC.NewList)
-End Sub
+''Update Success
+'Sub UpdateSuccess(VC As VueComponent, vSuccess As Object)
+'VC.SetData(sSuccess, vSuccess)
+'End Sub
+'
+''Update SuccessMessages
+'Sub UpdateSuccessMessages(VC As VueComponent, vSuccessMessages As Object)
+'VC.SetData(sSuccessMessages, vSuccessMessages)
+'End Sub
+'
+''Clear SuccessMessages
+'Sub ClearSuccessMessages(VC As VueComponent)
+''VC.SetData(sSuccessMessages, VC.NewList)
+'End Sub
 
 'Update TickLabels
 Sub UpdateTickLabels(VC As VueComponent, vTickLabels As Object)

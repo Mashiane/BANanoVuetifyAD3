@@ -31,10 +31,10 @@ Version=7
 #DesignerProperty: Key: PersistentHint, DisplayName: PersistentHint, FieldType: Boolean, DefaultValue: false, Description: PersistentHint
 #DesignerProperty: Key: ValidateOnBlur, DisplayName: ValidateOnBlur, FieldType: Boolean, DefaultValue: false, Description: ValidateOnBlur
 
-#DesignerProperty: Key: ItemValue, DisplayName: ItemValue*, FieldType: String, DefaultValue: value, Description: ItemValue
-#DesignerProperty: Key: ItemText, DisplayName: ItemText*, FieldType: String, DefaultValue: text, Description: ItemText
-#DesignerProperty: Key: ItemColor, DisplayName: ItemColor*, FieldType: String, DefaultValue: color, Description: ItemColor
-#DesignerProperty: Key: ItemDisabled, DisplayName: ItemDisabled*, FieldType: String, DefaultValue: disabled, Description: ItemDisabled
+#DesignerProperty: Key: ItemValue, DisplayName: Item Value*, FieldType: String, DefaultValue: value, Description: ItemValue
+#DesignerProperty: Key: ItemText, DisplayName: Item Text*, FieldType: String, DefaultValue: text, Description: ItemText
+#DesignerProperty: Key: ItemColor, DisplayName: Item Color*, FieldType: String, DefaultValue: color, Description: ItemColor
+#DesignerProperty: Key: ItemDisabled, DisplayName: Item Disabled*, FieldType: String, DefaultValue: disabled, Description: ItemDisabled
 '
 #DesignerProperty: Key: Multiple, DisplayName: Multiple, FieldType: Boolean, DefaultValue: False, Description: Multiple
 #DesignerProperty: Key: ItemKeys, DisplayName: Item Values (;), FieldType: String, DefaultValue:  , Description: Item Values
@@ -97,9 +97,9 @@ Sub Class_Globals
 	Private bDark As Boolean
 	Private bDense As Boolean
 	Private sDisabled As String
-	Private sError As String
-	Private sErrorCount As String
-	Private sErrorMessages As String
+'	Private sError As String
+'	Private sErrorCount As String
+'	Private sErrorMessages As String
 	Private sFalseValue As String
 	Private bFilled As Boolean
 	Private bFlat As Boolean
@@ -111,15 +111,15 @@ Sub Class_Globals
 	Private sLabel As String
 	Private bLight As Boolean
 	Private sLoading As String
-	Private sMessages As String
+'	Private sMessages As String
 	Private bMultiple As Boolean
 	Private bPersistentHint As Boolean
 	Private sPrependIcon As String
 	Private sReadonly As String
 	Private bRipple As Boolean
 	Private sRules As String
-	Private sSuccess As String
-	Private sSuccessMessages As String
+'	Private sSuccess As String
+'	Private sSuccessMessages As String
 	Private sTrueValue As String
 	Private sVBind As String
 	Private sVFor As String	'ignore
@@ -176,12 +176,12 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	End If
 	sRequired = $"${mName}required"$
 	sDisabled = $"${mName}disabled"$
-	sMessages = $"${mName}messages"$
+	'sMessages = $"${mName}messages"$
 	sRules = $"${mName}rules"$
-	sError = $"${mName}error"$
-	sErrorMessages = $"${mName}errormessages"$
-	sSuccess = $"${mName}success"$
-	sSuccessMessages = $"${mName}successmessages"$
+	'sError = $"${mName}error"$
+	'sErrorMessages = $"${mName}errormessages"$
+	'sSuccess = $"${mName}success"$
+	'sSuccessMessages = $"${mName}successmessages"$
 	sReadonly = $"${mName}readonly"$
 	sVShow = $"${mName}show"$
 	sLoading = $"${mName}loading"$
@@ -207,7 +207,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sColorIntensity = Props.Get("ColorIntensity")
 		bDark = Props.Get("Dark")
 		bDense = Props.Get("Dense")
-		sErrorCount = Props.Get("ErrorCount")
+		'sErrorCount = Props.Get("ErrorCount")
 		sFalseValue = Props.GetDefault("FalseValue",False)
 		bFilled = Props.Get("Filled")
 		bFlat = Props.Get("Flat")
