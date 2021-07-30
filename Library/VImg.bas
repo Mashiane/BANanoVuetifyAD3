@@ -181,6 +181,11 @@ VElement.Width = sWidth
 VElement.AddAttr("v-on", sVOn)
 	VElement.AddAttr("v-bind", sVBind)
 VElement.BindAllEvents
+
+'its clickable
+If SubExists(mCallBack, $"${mName}_click"$) Then
+	VElement.CursorPointer	
+End If
 '
 
 	Animate.Initialize(mCallBack, $"#${mName}"$)

@@ -10,6 +10,8 @@ Version=8.9
 'clicked
 #Event: UpdateActive (items As List)
 #Event: UpdateOpen (items As List)
+#Event: Delete (item As Map)
+
 
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: Activatable, DisplayName: Activatable, FieldType: Boolean, DefaultValue: True, Description: Activatable
@@ -41,6 +43,7 @@ Version=8.9
 #DesignerProperty: Key: SelectionType, DisplayName: SelectionType, FieldType: String, DefaultValue: leaf, Description: SelectionType, List: independent|leaf
 #DesignerProperty: Key: Shaped, DisplayName: Shaped, FieldType: Boolean, DefaultValue: false, Description: Shaped
 #DesignerProperty: Key: Transition, DisplayName: Transition, FieldType: Boolean, DefaultValue: false, Description: Transition
+#DesignerProperty: Key: Deletable, DisplayName: Deletable, FieldType: Boolean, DefaultValue: false, Description: Deletable
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
@@ -100,6 +103,7 @@ Private bHidden As Boolean
 Private xactive As List
 Private xopen As List
 Private xvalue As List
+Private bDeletable As Boolean
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -185,6 +189,8 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bTransition = Props.Get("Transition")
 		sVIf = Props.Get("VIf")
 		bHidden = Props.GetDefault("Hidden", False)
+		bDeletable = Props.GetDefault("Deletable", False)
+		bDeletable = BANanoShared.parseBool(bDeletable)
 	End If
 	'
 	bActivatable = BANanoShared.parseBool(bActivatable)
@@ -217,6 +223,14 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.Append($"<v-template v-slot:prepend="{ item }">
 <v-icon v-if="item.icon" v-text="item.icon"></v-icon>
 </v-template>"$)	
+	
+	'add delete button
+	If bDeletable Then
+		VElement.Append($"<v-template v-slot:append="{ item }"><v-btn id="${mName}delete" icon><v-icon>mdi-delete</v-icon></v-btn></v-template>"$)
+		Dim btn As VueElement = VElement.GetVueElement($"${mName}delete"$)
+		btn.SetOnEventOwn(mCallBack, $"${mName}_delete"$, "click.stop", "item")
+		VElement.BindVueElement(btn)
+	End If
 	
 	VElement.Classes = mClasses
 	VElement.Styles = mStyles

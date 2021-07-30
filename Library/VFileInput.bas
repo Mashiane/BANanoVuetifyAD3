@@ -447,6 +447,7 @@ VElement.AddAttr("v-on", sVOn)
 VElement.AddAttr("v-show", sVShow)
 VElement.SetData(sVShow, Not(bHidden))
 VElement.AddAttr(":validate-on-blur", bValidateOnBlur)
+VElement.AddAttr("value", "")
 VElement.BindAllEvents
 '
 If bIsGoogle Then

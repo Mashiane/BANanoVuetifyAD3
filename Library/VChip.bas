@@ -23,9 +23,9 @@ Version=8.9
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: False, Description: Dark
 #DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: Boolean, DefaultValue: False, Description: Disabled
 #DesignerProperty: Key: VIf, DisplayName: V-If, FieldType: String, DefaultValue:  , Description: 
-#DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue:  , Description:
+#DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue:  , Description: Value in Chip Group
 #DesignerProperty: Key: HREF, DisplayName: HREF, FieldType: String, DefaultValue: , Description: HREF
-#DesignerProperty: Key: Label, DisplayName: Label, FieldType: Boolean, DefaultValue: False, Description: Label
+#DesignerProperty: Key: Label, DisplayName: Label, FieldType: Boolean, DefaultValue: False, Description: Remove circle edges
 #DesignerProperty: Key: Pointer, DisplayName: Pointer, FieldType: Boolean, DefaultValue: False, Description: Pointer
 #DesignerProperty: Key: Outlined, DisplayName: Outlined, FieldType: Boolean, DefaultValue: False, Description: Outlined
 #DesignerProperty: Key: Pill, DisplayName: Pill, FieldType: Boolean, DefaultValue: False, Description: Pill
@@ -36,7 +36,7 @@ Version=8.9
 #DesignerProperty: Key: IconAlignment, DisplayName: Icon Alignment, FieldType: String, DefaultValue: normal, Description: Icon Alignment, List: normal|left|right
 #DesignerProperty: Key: IconDark, DisplayName: Icon Dark, FieldType: Boolean, DefaultValue: False, Description: Icon Dark
 '
-#DesignerProperty: Key: ItemType, DisplayName: ItemType, FieldType: String, DefaultValue:  none, Description: Item Type, List: avatar-left|avatar-right|icon-right|icon-left|none
+#DesignerProperty: Key: ItemType, DisplayName: ItemType, FieldType: String, DefaultValue:  none, Description: Item Type, List: avatar-left|avatar-right|icon-right|icon-left|none|text
 #DesignerProperty: Key: ItemKeys, DisplayName: Item Keys (;), FieldType: String, DefaultValue:  add; edit; delete, Description: Item Keys
 #DesignerProperty: Key: ItemIcons, DisplayName: Item Icons (;), FieldType: String, DefaultValue:  mdi-plus; mdi-pencil; mdi-delete, Description: Item Icons
 #DesignerProperty: Key: ItemAvatars, DisplayName: Item Avatars (;), FieldType: String, DefaultValue:  , Description: Item Avatars
@@ -164,18 +164,12 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	bClose = BANanoShared.parseBool(bClose)
 	bPill = BANanoShared.parseBool(bPill)
 	bPointer = BANanoShared.parseBool(bPointer)
-
-	sItemKeys = sItemKeys.Replace(",", ";")
-	sItemIcons = sItemIcons.Replace(",", ";")
-	sItemColors = sItemColors.Replace(",", ";")
-	sItemTexts = sItemTexts.Replace(",", ";")
-	sItemAvatars = sItemAvatars.Replace(",", ";")
 	'
-	Dim xkeys As List = BANanoShared.StrParse(";", sItemKeys)
-	Dim xicons As List = BANanoShared.StrParse(";", sItemIcons)
-	Dim xcolors As List = BANanoShared.StrParse(";", sItemColors)
-	Dim xtexts As List = BANanoShared.StrParse(";", sItemTexts)
-	Dim xavatars As List = BANanoShared.StrParse(";", sItemAvatars)
+	Dim xkeys As List = BANanoShared.StrParseComma(";", sItemKeys)
+	Dim xicons As List = BANanoShared.StrParseComma(";", sItemIcons)
+	Dim xcolors As List = BANanoShared.StrParseComma(";", sItemColors)
+	Dim xtexts As List = BANanoShared.StrParseComma(";", sItemTexts)
+	Dim xavatars As List = BANanoShared.StrParseComma(";", sItemAvatars)
 		'
 	xkeys = BANanoShared.ListTrimItems(xkeys)
 	xicons = BANanoShared.ListTrimItems(xicons)

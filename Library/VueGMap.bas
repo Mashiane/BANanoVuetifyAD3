@@ -319,13 +319,9 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		Dim rs As List
 		rs.Initialize 
 		'
-		sItemKeys = sItemKeys.Replace(",", ";")
-		sItemIcons = sItemIcons.Replace(",", ";")
-		sItemColors = sItemColors.Replace(",", ";")
-		
-		Dim xkeys As List = BANanoShared.StrParse(";", sItemKeys)
-		Dim xicons As List = BANanoShared.StrParse(";", sItemIcons)
-		Dim xcolors As List = BANanoShared.StrParse(";", sItemColors)
+		Dim xkeys As List = BANanoShared.StrParseComma(";", sItemKeys)
+		Dim xicons As List = BANanoShared.StrParseComma(";", sItemIcons)
+		Dim xcolors As List = BANanoShared.StrParseComma(";", sItemColors)
 		'
 		xkeys = BANanoShared.ListTrimItems(xkeys)
 		xicons = BANanoShared.ListTrimItems(xicons)
@@ -762,6 +758,7 @@ Sub AddMarker(mID As String, lat As Double, lng As Double, label As String, info
 	mID = mID.tolowercase
 	Dim marker As Map = CreateMap()
 	'
+	mID = BANanoShared.CStr(mID)
 	lat = BANano.parseFloat(lat)
 	lng = BANano.parseFloat(lng)
 	
@@ -777,6 +774,9 @@ End Sub
 Sub AddMarkerIcon(markerID As String, info As String, lat As Double, lng As Double, icon As String, SizeX As String, SizeY As String, AnchorX As Int, AnchorY As Int)
 	markerID = markerID.tolowercase
 	Dim marker As Map = CreateMap()
+	'
+	markerID = BANanoShared.CStr(markerID)
+	info = BANanoShared.CStr(info)
 	'
 	lat = BANano.parseFloat(lat)
 	lng = BANano.parseFloat(lng)

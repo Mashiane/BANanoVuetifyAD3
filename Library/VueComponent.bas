@@ -57,6 +57,54 @@ Sub Class_Globals
 	Public This As BANanoObject
 End Sub
 
+'get the file contents
+public Sub readAsText(fr As Map) As String
+	Try
+		Dim fd As Map = BANano.Await(BANanoShared.readAsText(fr))
+		Dim sname As String = fd.Get("name")			'ignore
+		Dim sresult As String = fd.Get("result")
+		Return sresult
+	Catch
+		Return ""
+	End Try	
+End Sub
+
+'get the file contents
+public Sub readAsBinaryString(fr As Map) As String
+	Try
+		Dim fd As Map = BANano.Await(BANanoShared.readAsBinaryString(fr))
+		Dim sname As String = fd.Get("name")			'ignore
+		Dim sresult As String = fd.Get("result")
+		Return sresult
+	Catch
+		Return ""
+	End Try	
+End Sub
+
+'get the file contents
+public Sub readAsDataURL(fr As Map) As String
+	Try
+		Dim fd As Map = BANano.Await(BANanoShared.readAsDataURL(fr))
+		Dim sname As String = fd.Get("name")			'ignore
+		Dim sresult As String = fd.Get("result")
+		Return sresult
+	Catch
+		Return ""
+	End Try	
+End Sub
+
+'get the file contents
+public Sub readAsArrayBuffer(fr As Map) As String
+	Try
+		Dim fd As Map = BANano.Await(BANanoShared.readAsArrayBuffer(fr))
+		Dim sname As String = fd.Get("name")		'ignore
+		Dim sresult As String = fd.Get("result")
+		Return sresult
+	Catch
+		Return ""
+	End Try	
+End Sub
+
 'return ths vue instance
 Sub Page As VueElement
 	Return GetVueElement(mCallBack, Here)

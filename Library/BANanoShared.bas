@@ -30,8 +30,12 @@ Sub Process_Globals
 End Sub
 
 
-
-
+'add an item to a list if the item is not blank
+Sub ListAddIfNotBlank(lstName As List, item As String)
+	item = item.Trim
+	If item = "" Then Return
+	lstName.Add(item)
+End Sub
 
 'join map keys and return a delimited string
 Sub JoinKeys(m As Map, delim As String, props As List) As String

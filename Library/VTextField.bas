@@ -28,8 +28,8 @@ Version=8.95
 #DesignerProperty: Key: Label, DisplayName: Label, FieldType: String, DefaultValue: fieldname, Description: Label
 #DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: tablename.fieldname, Description: VModel
 #DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: , Description: Value
-#DesignerProperty: Key: TypeOf, DisplayName: TypeOf, FieldType: String, DefaultValue: text, Description: TypeOf, List: text|password|email|tel|url|number|search|date|time|button|hidden|reset|submit
-#DesignerProperty: Key: AutoComplete, DisplayName: AutoComplete, FieldType: String, DefaultValue: none, Description: AutoComplete, List: none|on|off|username|new-password|current-password|cc-name|cc-number|cc-csc|cc-exp|name|email|shipping street-address|shipping locality|shipping region|shipping postal-code|shipping country|tel
+#DesignerProperty: Key: TypeOf, DisplayName: TypeOf, FieldType: String, DefaultValue: text, Description: TypeOf, List: text|password|email|tel|url|number|search|date|datetime-local|time|button|hidden|reset|submit|file|image|month|radio|range|week
+#DesignerProperty: Key: AutoComplete, DisplayName: AutoComplete, FieldType: String, DefaultValue: off, Description: AutoComplete, List: none|on|off|username|new-password|current-password|cc-name|cc-number|cc-csc|cc-exp|name|email|shipping street-address|shipping locality|shipping region|shipping postal-code|shipping country|tel|honorific-prefix|given-name|additional-name|family-name|honorific-suffix|nickname|one-time-code|organization-title
 #DesignerProperty: Key: ShowEyes, DisplayName: ShowEyes, FieldType: Boolean, DefaultValue: false, Description: ShowEyes
 #DesignerProperty: Key: TextArea, DisplayName: TextArea, FieldType: Boolean, DefaultValue: false, Description: TextArea
 #DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: Boolean, DefaultValue: False, Description: Disabled
@@ -277,7 +277,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sValue = Props.GetDefault("Value", "")
 		bDatePicker = Props.getDefault("DatePicker", False)
 		bTimePicker = Props.getdefault("TimePicker", False)
-		sAutoComplete = Props.GetDefault("AutoComplete", "none")
+		sAutoComplete = Props.GetDefault("AutoComplete", "off")
 		bShrink = Props.GetDefault("Shrink", False)
  		bShrink = BANanoShared.parseBool(bShrink)
 		bColorPicker = Props.GetDefault("ColorPicker", False)
@@ -525,6 +525,7 @@ bLoading = BANanoShared.parseBool(bLoading)
 		VElement.AddAttr("type", sTypeOf)
 		VElement.AddAttr("v-for", sVFor)
 		VElement.AddAttr("v-if", sVIf)
+		VElement.AddAttr("value", "")
 		If bDatePicker = False Or bTimePicker = False Then
 			VElement.AddAttr("v-model", sVModel)
 			VElement.SetData(sVModel, sValue)
@@ -534,10 +535,8 @@ bLoading = BANanoShared.parseBool(bLoading)
 		VElement.AddAttr("v-show", sVShow)
 		VElement.SetData(sVShow, Not(bHidden))
 		VElement.AddAttr(":validate-on-blur", bValidateOnBlur)
-		If sAutoComplete <> "none" Then
-			VElement.AddAttr("autocomplete", sAutoComplete)
-		End If
-'
+		VElement.AddAttr("autocomplete", sAutoComplete)
+	
 	If bShowEyes Then
 		VElement.Bind("append-icon", $"${sShowEyes} ? 'mdi-eye' : 'mdi-eye-off'"$)
 		VElement.Bind("type", $"${sShowEyes} ? 'text' : 'password'"$)

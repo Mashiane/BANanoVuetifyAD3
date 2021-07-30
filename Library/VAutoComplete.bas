@@ -534,7 +534,7 @@ VElement.AddAttr("v-bind", sVBind)
 VElement.AddAttr("v-for", sVFor)
 VElement.AddAttr("v-if", sVIf)
 VElement.AddAttr("v-model", sVModel)
-
+VElement.AddAttr("value", "")
 '
 If bMultiple = False Then
 	VElement.SetData(sVModel, sValue)

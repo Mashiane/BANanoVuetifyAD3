@@ -521,6 +521,7 @@ VElement.SetData(sVModel, sValue)
 VElement.AddAttr("v-on", sVOn)
 VElement.AddAttr("v-show", sVShow)
 VElement.SetData(sVShow, Not(bHidden))
+VElement.AddAttr("value", "")
 
 VElement.AddAttr(":validate-on-blur", bValidateOnBlur)
 VElement.BindAllEvents

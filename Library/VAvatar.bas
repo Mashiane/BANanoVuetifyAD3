@@ -294,6 +294,10 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.PX = sPX
 	VElement.PY = sPY
 	VElement.BindAllEvents
+	'its clickable
+	If SubExists(mCallBack, $"${mName}_click"$) Then
+		VElement.CursorPointer	
+	End If
 End Sub
 
 public Sub AddToParent(targetID As String)

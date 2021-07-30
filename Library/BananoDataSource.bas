@@ -164,7 +164,7 @@ End Sub
 'set the jrdc command
 Sub setJRDCCommand(p As String)
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}.JRDCCommand has not been bound to the component!"$)
 	End If
 	sjrdcCommand = p
 End Sub
@@ -225,7 +225,7 @@ End Sub
 'set the user name
 Sub setUserName(p As String)
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}.UserName has not been bound to the component!"$)
 	End If
 	sUserName = p
 End Sub
@@ -233,7 +233,7 @@ End Sub
 'set connection to be dynamic
 Sub setDynamic(b As Boolean)
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}.Dynamic has not been bound to the component!"$)
 	End If
 	b = BANanoShared.parsebool(b)
 	bDynamic = b
@@ -242,7 +242,7 @@ End Sub
 'set the primary key
 Sub setPrimaryKey(p As String)
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}.PrimaryKey has not been bound to the component!"$)
 	End If
 	sPrimaryKey = p
 	dsKey = $"${sRecordSource}.${sPrimaryKey}"$
@@ -251,7 +251,7 @@ End Sub
 'set sAutoIncrement
 Sub setAutoIncrement(p As String)
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}.AutoIncrement has not been bound to the component!"$)
 	End If
 	sAutoIncrement = p
 End Sub
@@ -259,7 +259,7 @@ End Sub
 'return the primary key field bame
 Sub getPrimaryKey As String
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}.PrimaryKey has not been bound to the component!"$)
 	End If
 	Return sPrimaryKey
 End Sub
@@ -267,7 +267,7 @@ End Sub
 'set singular
 Sub setSingular(p As String)
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}.Singular has not been bound to the component!"$)
 	End If
 	sSingular = p
 End Sub
@@ -275,7 +275,7 @@ End Sub
 'return the singular name of these records, this is used for deletes
 Sub getSingular As String
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}.Singular has not been bound to the component!"$)
 	End If
 	Return sSingular
 End Sub
@@ -283,7 +283,7 @@ End Sub
 'set plural
 Sub setPlural(p As String)
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}.Plural has not been bound to the component!"$)
 	End If
 	sPlural = p
 End Sub
@@ -291,7 +291,7 @@ End Sub
 'return the plural name of these records
 Sub getPlural As String
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}.Plural has not been bound to the component!"$)
 	End If
 	Return sPlural
 End Sub
@@ -299,7 +299,7 @@ End Sub
 'return the display field, this is used for deleted
 Sub getDisplayField As String
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}.DisplayField has not been bound to the component!"$)
 	End If
 	Return sDisplayField
 End Sub
@@ -307,7 +307,7 @@ End Sub
 'set display field
 Sub setDisplayField(p As String)
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}.DisplayField has not been bound to the component!"$)
 	End If
 	sDisplayField = p
 End Sub
@@ -315,7 +315,7 @@ End Sub
 'return the display value, this is used for deletes
 Sub getDisplayValue As String
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}.DisplayValue has not been bound to the component!"$)
 	End If
 	'get the record
 	Record = ParentComponent.GetData(sRecordSource)
@@ -328,7 +328,7 @@ End Sub
 'set CustomQuery
 Sub setCustomQuery(p As String)
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}.CustomQuery has not been bound to the component!"$)
 	End If
 	sCustomQuery = p
 End Sub
@@ -336,7 +336,7 @@ End Sub
 'set password
 Sub setPassword(p As String)
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}.Password has not been bound to the component!"$)
 	End If
 	sPassword = p
 End Sub
@@ -344,7 +344,7 @@ End Sub
 'set hostname
 Sub setHostName(p As String)
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}.HostName has not been bound to the component!"$)
 	End If
 	sHostName = p
 End Sub
@@ -352,7 +352,7 @@ End Sub
 'set database name
 Sub setDatabaseName(p As String)
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}.DatabaseName has not been bound to the component!"$)
 	End If
 	sDatabaseName = p
 End Sub
@@ -360,7 +360,7 @@ End Sub
 'set table name
 Sub setTableName(p As String)
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}.TableName has not been bound to the component!"$)
 	End If
 	sTableName = p
 End Sub
@@ -368,7 +368,7 @@ End Sub
 'set record source
 Sub setRecordSource(p As String)
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}.RecordSource has not been bound to the component!"$)
 	End If
 	sRecordSource = p
 	dsKey = $"${sRecordSource}.${sPrimaryKey}"$
@@ -377,7 +377,7 @@ End Sub
 'set DatabaseType
 Sub setDatabaseType(dt As String)
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}.DatabaseType has not been bound to the component!"$)
 	End If
 	sDatabaseType = dt
 End Sub
@@ -446,19 +446,6 @@ Sub SchemaBuild
 	schemaDefaultsM.Initialize 
 	'
 	'ensure consistency
-	sFields = sFields.Replace(",", ";")
-	sFields = sFields.tolowercase
-	sBlobs = sBlobs.Replace(",", ";")
-	sBlobs = sBlobs.tolowercase
-	sIntegers = sIntegers.Replace(",", ";")
-	sIntegers = sIntegers.tolowercase
-	sDoubles = sDoubles.Replace(",", ";") 
-	sDoubles = sDoubles.tolowercase
-	sSelectFields = sSelectFields.Replace(",", ";")
-	sSelectFields = sSelectFields.tolowercase
-	sOrderBy = sOrderBy.Replace(",", ";")
-	sOrderBy = sOrderBy.tolowercase
-	'
 	sDefaults = sDefaults.replace("=", ":")
 	schemaDefaults = BANano.Split(";", sDefaults)	
 	schemaDefaults = BANanoShared.ListTrimItems(schemaDefaults)
@@ -473,22 +460,22 @@ Sub SchemaBuild
 		End If
 	Next
 	'
-	schemaIntegers = BANano.Split(";", sIntegers)
+	schemaIntegers = BANanoShared.StrParseComma(";", sIntegers)
 	schemaIntegers = BANanoShared.ListTrimItems(schemaIntegers)
 	'
-	schemaDoubles = BANano.Split(";", sDoubles)
+	schemaDoubles = BANanoShared.StrParseComma(";", sDoubles)
 	schemaDoubles = BANanoShared.ListTrimItems(schemaDoubles)
 	'
-	schemaBlobs = BANano.Split(";", sBlobs)
+	schemaBlobs = BANanoShared.StrParseComma(";", sBlobs)
 	schemaBlobs = BANanoShared.ListTrimItems(schemaBlobs)
 	'
-	schemaFields = BANano.Split(";", sFields)
+	schemaFields = BANanoShared.StrParseComma(";", sFields)
 	schemaFields = BANanoShared.ListTrimItems(schemaFields)
 	'
-	schemaOrderBy = BANano.Split(";", sOrderBy)
+	schemaOrderBy = BANanoShared.StrParseComma(";", sOrderBy)
 	schemaOrderBy = BANanoShared.ListTrimItems(schemaOrderBy)
 	'
-	schemaSelectFields = BANano.Split(";", sSelectFields)
+	schemaSelectFields = BANanoShared.StrParseComma(";", sSelectFields)
 	schemaSelectFields = BANanoShared.ListTrimItems(schemaSelectFields)
 	'
 	dsKey = $"${sRecordSource}.${sPrimaryKey}"$
@@ -517,6 +504,9 @@ End Sub
 
 'reset the datasource to be able to use with another table
 Sub SchemaReset As BananoDataSource
+	If IsBound = False Then
+		BANano.Throw($"BANanoDataSource.${mName}.SchemaReset has not been bound to the component!"$)
+	End If
 	Tag = ""
 	Strings.Initialize 
 	Doubles.Initialize 
@@ -533,7 +523,7 @@ End Sub
 
 Sub AddDefault(fld As String, value As Object) As BananoDataSource
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}.AddDefault has not been bound to the component!"$)
 	End If
 	If bShowLog Then
 		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.AddDefault"$)
@@ -544,36 +534,57 @@ End Sub
 
 'set schema fields
 Sub SchemaSetFields(flds As List)
+	If IsBound = False Then
+		BANano.Throw($"BANanoDataSource.${mName}.SchemaSetFields has not been bound to the component!"$)
+	End If
 	schemaFields = flds
 End Sub
 
 'set integers
 Sub SchemaSetIntegers(flds As List)
+	If IsBound = False Then
+		BANano.Throw($"BANanoDataSource.${mName}.SchemaSetIntegers has not been bound to the component!"$)
+	End If
 	Integers = flds
 End Sub
 
 'set strings
 Sub SchemaSetStrings(flds As List)
+	If IsBound = False Then
+		BANano.Throw($"BANanoDataSource.${mName}.SchemaSetStrings has not been bound to the component!"$)
+	End If
 	Strings = flds
 End Sub
 
 'set doubles
 Sub SchemaSetDoubles(flds As List)
+	If IsBound = False Then
+		BANano.Throw($"BANanoDataSource.${mName}.SchemaSetDoubles has not been bound to the component!"$)
+	End If
 	Doubles = flds
 End Sub
 
 'set blobs
 Sub SchemaSetBlobs(flds As List)
+	If IsBound = False Then
+		BANano.Throw($"BANanoDataSource.${mName}.SchemaSetBlobs has not been bound to the component!"$)
+	End If
 	Blobs = flds
 End Sub
 
 'set order by
 Sub SchemaSetOrderBy(flds As List)
+	If IsBound = False Then
+		BANano.Throw($"BANanoDataSource.${mName}.SchemaSetOrderBy has not been bound to the component!"$)
+	End If
 	schemaOrderBy = flds
 End Sub
 
 'set select fields
 Sub SchemaSetSelectFields(flds As List)
+	If IsBound = False Then
+		BANano.Throw($"BANanoDataSource.${mName}.SchemaSetSelectFields has not been bound to the component!"$)
+	End If
 	schemaSelectFields = flds
 End Sub
 
@@ -592,7 +603,7 @@ End Sub
 'set the defaults for the form as specified in AD
 Sub DEFAULTS
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}.DEFAULTS has not been bound to the component!"$)
 	End If
 	If bShowLog Then
 		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.DEFAULTS"$)
@@ -620,7 +631,7 @@ End Sub
 'create or update based on the mode
 Sub CREATE_OR_UPDATE
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}.CREATE_OR_UPDATE has not been bound to the component!"$)
 	End If
 	If bShowLog Then
 		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.CREATE_OR_UPDATE"$)
@@ -661,7 +672,7 @@ End Sub
 'clear the record source linked to a form
 Sub RESET
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}.RESET has not been bound to the component!"$)
 	End If
 	If bShowLog Then
 		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.RESET"$)
@@ -678,7 +689,7 @@ End Sub
 'get the form contents
 Sub FORM As Map
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}.FORM has not been bound to the component!"$)
 	End If
 	If bShowLog Then
 		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.FORM"$)
@@ -689,6 +700,12 @@ End Sub
 
 'read a record from an existing one
 Sub READ
+	If IsBound = False Then
+		BANano.Throw($"BANanoDataSource.${mName}READ has not been bound to the component!"$)
+	End If
+	If bShowLog Then
+		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.READ"$)
+	End If
 	Record = ParentComponent.GetData(sRecordSource)
 	READ1(Record)	
 End Sub
@@ -696,7 +713,7 @@ End Sub
 'read a record using outside record map
 Sub READ1(rec As Map)
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}READ1 has not been bound to the component!"$)
 	End If
 	If bShowLog Then
 		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.READ1"$)
@@ -711,7 +728,7 @@ End Sub
 'create a new record from an outside map
 Sub CREATE1(rec As Map)
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}.CREATE1 has not been bound to the component!"$)
 	End If
 	If bShowLog Then
 		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.CREATE1"$)
@@ -725,7 +742,7 @@ End Sub
 'create a new record from existing recordsource, use setRecord first
 Sub CREATE
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}.CREATE has not been bound to the component!"$)
 	End If
 	If bShowLog Then
 		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.CREATE"$)
@@ -738,7 +755,7 @@ End Sub
 'delete the record internally, use setRecord first
 Sub DELETE
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}.DELETE has not been bound to the component!"$)
 	End If
 	If bShowLog Then
 		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.DELETE"$)
@@ -751,7 +768,7 @@ End Sub
 'delete a record from outside map
 Sub DELETE1(rec As Map)
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}.DELETE1 has not been bound to the component!"$)
 	End If
 	If bShowLog Then
 		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.DELETE1"$)
@@ -765,7 +782,7 @@ End Sub
 'update existing record from an outside map
 Sub UPDATE1(rec As Map)
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}.UPDATE1 has not been bound to the component!"$)
 	End If
 	If bShowLog Then
 		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.UPDATE1"$)
@@ -779,7 +796,7 @@ End Sub
 'update existing record from existing recordsource, use setRecord first
 Sub UPDATE
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}.UPDATE has not been bound to the component!"$)
 	End If
 	If bShowLog Then
 		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.UPDATE"$)
@@ -792,7 +809,7 @@ End Sub
 'update existing record from existing recordsource, use setRecord first
 Sub UNDO
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}.UNDO has not been bound to the component!"$)
 	End If
 	If bShowLog Then
 		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.UNDO"$)
@@ -805,7 +822,7 @@ End Sub
 'run your own query
 Sub CUSTOM(ActionName As String)
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}.CUSTOM has not been bound to the component!"$)
 	End If
 	If bShowLog Then
 		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.CUSTOM"$)
@@ -817,7 +834,7 @@ End Sub
 'get the table names
 Sub TABLE_NAMES
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}.TABLE_NAMES has not been bound to the component!"$)
 	End If
 	If bShowLog Then
 		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.TABLE_NAMES"$)
@@ -828,7 +845,7 @@ End Sub
 
 Sub DESCRIBE_TABLE
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}.DESCRIBE_TABLE has not been bound to the component!"$)
 	End If
 	If bShowLog Then
 		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.TABLE_NAMES"$)
@@ -840,7 +857,7 @@ End Sub
 'count total number of records
 Sub COUNT
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}.COUNT has not been bound to the component!"$)
 	End If
 	If bShowLog Then
 		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.COUNT"$)
@@ -852,7 +869,7 @@ End Sub
 'select all based on fields and order by
 Sub SELECTFORCOMBO
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}.SELECTFORCOMBO has not been bound to the component!"$)
 	End If
 	If bShowLog Then
 		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.SELECTFORCOMBO"$)
@@ -864,7 +881,7 @@ End Sub
 'select all based on fields and order by
 Sub SELECTALL
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}.SELECTALL has not been bound to the component!"$)
 	End If
 	If bShowLog Then
 		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.SELECTALL"$)
@@ -876,7 +893,7 @@ End Sub
 'select all based on fields and order by
 Sub SELECTWHERE
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}.SELECTWHERE has not been bound to the component!"$)
 	End If
 	If bShowLog Then
 		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.SELECTWHERE"$)
@@ -888,7 +905,7 @@ End Sub
 'select all based on fields and order by
 Sub EXISTS
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}.EXISTS has not been bound to the component!"$)
 	End If
 	If bShowLog Then
 		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.SELECTWHERE"$)
@@ -900,7 +917,7 @@ End Sub
 'select all based on fields and order by for PDF
 Sub PDF
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}.PDF has not been bound to the component!"$)
 	End If
 	If bShowLog Then
 		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.PDF"$)
@@ -912,7 +929,7 @@ End Sub
 'select all based on fields and order by for Chart
 Sub CHART
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}.CHART has not been bound to the component!"$)
 	End If
 	If bShowLog Then
 		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.Chart"$)
@@ -924,7 +941,7 @@ End Sub
 'select all based on fields and order by for Excel
 Sub EXCEL
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}.EXCEL has not been bound to the component!"$)
 	End If
 	If bShowLog Then
 		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.EXCEL"$)
@@ -936,7 +953,7 @@ End Sub
 'select all based on fields and order by for Excel
 Sub REPORT
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}.REPORT has not been bound to the component!"$)
 	End If
 	If bShowLog Then
 		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.REPORT"$)
@@ -1002,7 +1019,7 @@ End Sub
 'clear where clause
 Sub ClearWhere As BananoDataSource
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}.ClearWhere has not been bound to the component!"$)
 	End If
 	If bShowLog Then
 		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.ClearWhere"$)
@@ -1015,7 +1032,7 @@ End Sub
 'add a where clause for your select where
 Sub AddWhere(fld As String, operator As String, value As Object) As BananoDataSource
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}.AddWhere has not been bound to the component!"$)
 	End If
 	If bShowLog Then
 		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.AddWhere"$)
@@ -1027,7 +1044,7 @@ End Sub
 
 private Sub MySQLExecute As Boolean    'ignore
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}.MySQLExecute has not been bound to the component!"$)
 	End If
 	If bShowLog Then
 		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.MySQLExecute"$)
@@ -1338,7 +1355,7 @@ End Sub
 'key for deletes and reads
 Sub SetKey(keyValue As String)
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}.SetKey has not been bound to the component!"$)
 	End If
 	If bShowLog Then
 		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.SetKey.${keyValue}"$)
@@ -1349,7 +1366,7 @@ End Sub
 'set the record to update
 Sub SetRecord(rec As Map)
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}.SetRecord has not been bound to the component!"$)
 	End If
 	If bShowLog Then
 		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.SetRecord.${BANano.ToJson(rec)}"$)
@@ -1381,7 +1398,7 @@ End Sub
 
 private Sub JRDCExecute
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}.JRDCExecute has not been bound to the component!"$)
 	End If
 	If bShowLog Then
 		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.JRDCExecute"$)
@@ -1496,7 +1513,7 @@ End Sub
 
 private Sub SQLiteExecute As Boolean    'ignore
 	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName} has not been bound to the component!"$)
+		BANano.Throw($"BANanoDataSource.${mName}.SQLiteExecute has not been bound to the component!"$)
 	End If
 	If bShowLog Then
 		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.SQLiteExecute"$)

@@ -14,7 +14,7 @@ Version=7
 #DesignerProperty: Key: AutoComplete, DisplayName: Auto Complete, FieldType: Boolean, DefaultValue: False, Description: AutoComplete
 
 #DesignerProperty: Key: LazyValidation, DisplayName: LazyValidation, FieldType: Boolean, DefaultValue: True, Description: LazyValidation
-#DesignerProperty: Key: RecordSource, DisplayName: Record Source*, FieldType: String, DefaultValue: , Description: Record Source
+#DesignerProperty: Key: RecordSource, DisplayName: Record Source*, FieldType: String, DefaultValue: , Description: Record Source/Table Name
 #DesignerProperty: Key: Singular, DisplayName: Singular, FieldType: String, DefaultValue: , Description: Singular Name of Record
 #DesignerProperty: Key: Plural, DisplayName: Plural, FieldType: String, DefaultValue: , Description: Plural Name of Records
 #DesignerProperty: Key: PrimaryKey, DisplayName: Primary Key*, FieldType: String, DefaultValue: , Description: Primary Key Field Name
@@ -381,8 +381,8 @@ Sub BEToVueElement(be As BANanoElement)
 		setAutoIncrement(sFieldName)
 	End If
 	
-	Dim sAvatarSize As String = be.GetData("avatarsize")
-	If BANano.IsNull(sAvatarSize) Then sAvatarSize = ""
+	Dim sownsize As String = be.GetData("ownsize")
+	If BANano.IsNull(sownsize) Then sownsize = ""
 
 	Dim iColPos As String = be.GetData("colpos")
 	If BANano.IsNull(iColPos) Then iColPos = ""
@@ -421,14 +421,12 @@ Sub BEToVueElement(be As BANanoElement)
 	Dim bDbSort As String = be.GetData("dbsort")
 	bDbSort = BANanoShared.parseBool(bDbSort)
 	If bDbSort Then 
-		DBSort.Add(sFieldName)
+		BANanoShared.ListAddIfNotBlank(DBSort, sFieldName)
 	End If
 	
 	Dim sDefaultValue As String = be.GetData("defaultvalue")
 	If BANano.IsNull(sDefaultValue) Then sDefaultValue = ""
-	If sDefaultValue <> "" Then 
-		fData.Put(sVModel, sDefaultValue)
-	End If
+	fData.Put(sVModel, sDefaultValue)
 
 	Dim ssDisabled As String = be.GetData("disabled")
 	ssDisabled = BANanoShared.parseBool(ssDisabled)
@@ -439,12 +437,11 @@ Sub BEToVueElement(be As BANanoElement)
 	If sFalseValue <> "" Then
 		fBinding.Put("FalseValue", sFalseValue)
 	End If
-	
-	
+	'
 	Dim bFilterable As String = be.GetData("filterable")
 	bFilterable = BANanoShared.parseBool(bFilterable)
 	If bFilterable Then 
-		Filterable.Add(sFieldName)
+		BANanoShared.ListAddIfNotBlank(Filterable, sFieldName)
 	End If
 	
 	Dim sHeight As String = be.GetData("height")
@@ -474,6 +471,7 @@ Sub BEToVueElement(be As BANanoElement)
 	Dim iMaxLen As String = be.GetData("maxlen")
 	If BANano.IsNull(iMaxLen) Then iMaxLen = ""
 	If iMaxLen <> "0" Then
+		iMaxLen = BANano.parseInt(iMaxLen)
 		fBinding.Put("Counter", iMaxLen)
 	End If
 
@@ -486,25 +484,25 @@ Sub BEToVueElement(be As BANanoElement)
 	Dim bOnDb As String = be.GetData("ondb")
 	bOnDb = BANanoShared.parseBool(bOnDb)
 	If bOnDb Then
-		Fields.Add(sFieldName)
+		BANanoShared.ListAddIfNotBlank(Fields, sFieldName)
 	End If
 	
 	Dim bOnPdf As String = be.GetData("onpdf")
 	bOnPdf = BANanoShared.parseBool(bOnPdf)
 	If bOnPdf Then
-		OnPDF.Add(sFieldName)
+		BANanoShared.ListAddIfNotBlank(OnPDF, sFieldName)
 	End If
 	
 	Dim bOnTable As String = be.GetData("ontable")
 	bOnTable = BANanoShared.parseBool(bOnTable)
 	If bOnTable Then
-		OnTable.Add(sFieldName)
+		BANanoShared.ListAddIfNotBlank(OnTable, sFieldName)
 	End If
 	
 	Dim bOnXls As String = be.GetData("onxls")
 	bOnXls = BANanoShared.parseBool(bOnXls)
 	If bOnXls Then
-		OnXLS.Add(sFieldName)
+		BANanoShared.ListAddIfNotBlank(OnXLS, sFieldName)
 	End If
 	
 	Dim bPrimaryKey As String = be.GetData("primarykey")
@@ -537,7 +535,7 @@ Sub BEToVueElement(be As BANanoElement)
 	Dim bSortable As String = be.GetData("sortable")
 	bSortable = BANanoShared.parseBool(bSortable)
 	If bSortable Then
-		Sortable.Add(sFieldName)
+		BANanoShared.ListAddIfNotBlank(Sortable, sFieldName)
 	End If
 	
 	Dim sTitle As String = be.GetData("title")
@@ -587,8 +585,23 @@ Sub BEToVueElement(be As BANanoElement)
 		fBinding.put("LoremIpsum", True)
 	End If
 	'
+	Dim sMaxValue As String = be.GetData("maxvalue")
+	If BANano.IsNull(sMaxValue) Then sMaxValue = ""
+	
+	Dim sMinValue As String = be.GetData("minvalue")
+	If BANano.IsNull(sMinValue) Then sMinValue = ""
+	
+	Dim bChips As Boolean = be.GetData("chips")
+	If BANano.IsNull(bChips) Then bChips = False
+	
+	Dim ssize As String = be.GetData("size")
+	If BANano.IsNull(ssize) Then ssize = ""
+	'
 	Dim mparent As BANanoElement
 	mparent.Initialize($"#${mName}r${iRowPos}c${iColPos}"$)
+	'
+	Dim sIconName As String = be.GetData("iconname")
+	If BANano.IsNull(sIconName) Then sIconName = ""
 		
 	If bFilled Then
 		fBinding.Put("Filled", True)
@@ -614,6 +627,68 @@ Sub BEToVueElement(be As BANanoElement)
 	'
 	'process the component type
 	Select Case sComponentType
+	Case "Icon"
+		fBinding.Remove("Outlined")
+		fBinding.Remove("Rounded")
+		fBinding.Remove("Height")
+		fBinding.remove("Width")
+		fBinding.Remove("ReturnObject")
+		fBinding.Put("Size1", ssize)
+		fBinding.Put("Position", "none")
+		fBinding.Put("Caption", sIconName)
+		If sownsize <> "" Then
+			fBinding.Remove("Size1")
+			fBinding.Put("Size", sownsize)
+		End If
+		Dim icn As VIcon
+		icn.Initialize(mCallBack, sName, sName)
+		icn.DesignerCreateView(mparent, fBinding)
+		VElement.BindVueElement(icn.VElement)
+	Case "Button"
+		fBinding.Remove("Outlined")
+		fBinding.Remove("Rounded")
+		
+	Case "FAB"
+		fBinding.Remove("Outlined")
+		fBinding.Remove("Rounded")
+		fBinding.Remove("Height")
+		fBinding.remove("Width")
+		fBinding.Remove("ReturnObject")
+		fBinding.Put("Size", ssize)
+		fBinding.Put("IconName", sIconName)
+		fBinding.Put("Position", "normal")
+		If sownsize <> "" Then
+			fBinding.Put("Size", sownsize)
+		End If
+		Dim fab As VFAB
+		fab.Initialize(mCallBack, sName, sName)
+		fab.DesignerCreateView(mparent, fBinding)
+		VElement.BindVueElement(fab.VElement)
+	Case "Chip"
+		fBinding.Remove("Outlined")
+		fBinding.Remove("Rounded")
+		fBinding.Remove("Label")
+		fBinding.Put("Text", sTitle)
+		fBinding.Put("Value", "")
+		fBinding.Put("Size", ssize)
+		If sSrc <> "" Then
+			fBinding.Put("Avatar", sSrc)
+			fBinding.Put("ItemType", "avatar-left")
+		End If
+		'
+		If bUseItems Then
+			fBinding.Remove("Text")
+			fBinding.Remove("Value")
+			fBinding.Remove("Avatar")
+			fBinding.Put("ItemType", "text")
+			fBinding.Put("ItemKeys", sItemKeys)
+			fBinding.Put("ItemTexts", sItemValues)
+		End If
+		
+		Dim chp As VChip
+		chp.Initialize(mCallBack, sName, sName)
+		chp.DesignerCreateView(mparent, fBinding)
+		VElement.BindVueElement(chp.VElement)	
 	Case "P", "H6", "H1", "H2", "H3", "H4", "H5", "span", "div"
 		fBinding.Put("Caption", sTitle)
 		fBinding.Put("Size", sComponentType.tolowercase)
@@ -625,6 +700,7 @@ Sub BEToVueElement(be As BANanoElement)
 	Case "TextField"
 		fBinding.Put("TypeOf", "text")
 		fBinding.Remove("ReturnObject")
+		fBinding.Put("AutoComplete", "off")
 		Dim txtField As VTextField
 		txtField.Initialize(mCallBack, sName, sName)
 		txtField.DesignerCreateView(mparent, fBinding)
@@ -634,26 +710,29 @@ Sub BEToVueElement(be As BANanoElement)
 		fBinding.Put("TextArea", True)
 		fBinding.Put("AutoGrow", True)
 		fBinding.Remove("ReturnObject")
-		Dim txtField As VTextField
-		txtField.Initialize(mCallBack, sName, sName)
-		txtField.DesignerCreateView(mparent, fBinding)
-		VElement.BindVueElement(txtField.VElement)
+		fBinding.Put("AutoComplete", "off")
+		Dim txtFieldA As VTextField
+		txtFieldA.Initialize(mCallBack, sName, sName)
+		txtFieldA.DesignerCreateView(mparent, fBinding)
+		VElement.BindVueElement(txtFieldA.VElement)
 	Case "TimePicker"
 		fBinding.Put("TimePicker", True)
 		fBinding.Remove("ReturnObject")
-		Dim txtField As VTextField
-		txtField.Initialize(mCallBack, sName, sName)
-		txtField.DesignerCreateView(mparent, fBinding)
-		VElement.BindVueElement(txtField.VElement)
+		Dim txtTP As VTextField
+		txtTP.Initialize(mCallBack, sName, sName)
+		txtTP.DesignerCreateView(mparent, fBinding)
+		VElement.BindVueElement(txtTP.VElement)
 	Case "DatePicker"
 		fBinding.Put("DatePicker", True)
 		fBinding.Remove("ReturnObject")
-		Dim txtField As VTextField
-		txtField.Initialize(mCallBack, sName, sName)
-		txtField.DesignerCreateView(mparent, fBinding)
-		VElement.BindVueElement(txtField.VElement)
+		Dim txtD As VTextField
+		txtD.Initialize(mCallBack, sName, sName)
+		txtD.DesignerCreateView(mparent, fBinding)
+		VElement.BindVueElement(txtD.VElement)
 	Case "FileInput"
 		fBinding.Remove("ReturnObject")
+		fBinding.Put("TypeOf", "file")
+		fBinding.Put("Chips", bChips)
 		Dim fi As VFileInput
 		fi.Initialize(mCallBack, sName, sName)
 		fi.DesignerCreateView(mparent, fBinding)
@@ -662,6 +741,7 @@ Sub BEToVueElement(be As BANanoElement)
 		fBinding.Remove("ReturnObject")
 		fBinding.Put("IsGoogle", True)
 		fData.Put($"${sName}filehidden"$, False)
+		fBinding.Put("TypeOf", "file")
 		Dim gfi As VFileInput
 		gfi.Initialize(mCallBack, sName, sName)
 		gfi.DesignerCreateView(mparent, fBinding)
@@ -670,14 +750,19 @@ Sub BEToVueElement(be As BANanoElement)
 		fBinding.Put("TypeOf", "password")
 		fBinding.Put("ShowEyes", True)
 		fBinding.Remove("ReturnObject")
-		Dim txtField As VTextField
-		txtField.Initialize(mCallBack, sName, sName)
-		txtField.DesignerCreateView(mparent, fBinding)
-		VElement.BindVueElement(txtField.VElement)
+		fBinding.Put("AutoComplete", "off")
+		Dim txtP As VTextField
+		txtP.Initialize(mCallBack, sName, sName)
+		txtP.DesignerCreateView(mparent, fBinding)
+		VElement.BindVueElement(txtP.VElement)
 	Case "ComboBox"
 		If bUseItems Then
 			fBinding.Put("ItemKeys", sItemKeys)
 			fBinding.Put("ItemTitles", sItemValues)
+		End If
+		fBinding.Put("Chips", bChips)
+		If bChips Then
+			fBinding.Put("DeletableChips", True)
 		End If
 		Dim cbo As VComboBox
 		cbo.Initialize(mCallBack, sName, sName)
@@ -688,6 +773,10 @@ Sub BEToVueElement(be As BANanoElement)
 			fBinding.Put("ItemKeys", sItemKeys)
 			fBinding.Put("ItemTitles", sItemValues)
 		End If
+		fBinding.Put("Chips", bChips)
+		If bChips Then
+			fBinding.Put("DeletableChips", True)
+		End If
 		Dim ac As VAutoComplete
 		ac.Initialize(mCallBack, sName, sName)
 		ac.DesignerCreateView(mparent, fBinding)
@@ -697,13 +786,21 @@ Sub BEToVueElement(be As BANanoElement)
 			fBinding.Put("ItemKeys", sItemKeys)
 			fBinding.Put("ItemTitles", sItemValues)
 		End If
-		Dim selx As VAutoComplete
+		fBinding.Put("Chips", bChips)
+		If bChips Then
+			fBinding.Put("DeletableChips", True)
+		End If
+		Dim selx As VSelect
 		selx.Initialize(mCallBack, sName, sName)
 		selx.DesignerCreateView(mparent, fBinding)
 		VElement.BindVueElement(selx.VElement)
 	Case "Avatar"
+		fBinding.Remove("Outlined")
+		fBinding.Remove("Rounded")
 		fBinding.Remove("ReturnObject")
-		fBinding.Put("Size", sAvatarSize)
+		If sownsize <> "" Then
+			fBinding.Put("Size", sownsize)
+		End If
 		fBinding.put("AvatarType", "image")
 		If sSrc <> "" Then
 			fBinding.Put("Image", sSrc)
@@ -738,6 +835,8 @@ Sub BEToVueElement(be As BANanoElement)
 		rg.DesignerCreateView(mparent, fBinding)
 		VElement.BindVueElement(rg.VElement)
 	Case "Image"
+		fBinding.Remove("Outlined")
+		fBinding.Remove("Rounded")
 		fBinding.Remove("ReturnObject")
 		fBinding.Put("MinHeight", sHeight)
 		fBinding.Put("MinWidth", sWidth)
@@ -757,30 +856,93 @@ Sub BEToVueElement(be As BANanoElement)
 	Case "Telephone" , "Money", "Thousands"
 		fBinding.Put("TypeOf", "tel")
 		fBinding.Remove("ReturnObject")
-		Dim txtField As VTextField
-		txtField.Initialize(mCallBack, sName, sName)
-		txtField.DesignerCreateView(mparent, fBinding)
-		VElement.BindVueElement(txtField.VElement)
+		Dim txtT As VTextField
+		txtT.Initialize(mCallBack, sName, sName)
+		txtT.DesignerCreateView(mparent, fBinding)
+		VElement.BindVueElement(txtT.VElement)
 	Case "Email"
 		fBinding.Put("TypeOf", "email")
 		fBinding.Remove("ReturnObject")
-		Dim txtField As VTextField
-		txtField.Initialize(mCallBack, sName, sName)
-		txtField.DesignerCreateView(mparent, fBinding)
-		VElement.BindVueElement(txtField.VElement)
+		Dim txtE As VTextField
+		txtE.Initialize(mCallBack, sName, sName)
+		txtE.DesignerCreateView(mparent, fBinding)
+		VElement.BindVueElement(txtE.VElement)
 	Case "Slider"
+		fBinding.Remove("ReturnObject")
+		If sMinValue <> "" Then
+			fBinding.put("MinValue", sMinValue)
+		End If
+		If sMaxValue <> "" Then
+			fBinding.Put("MaxValue", sMaxValue)
+		End If
+		If sDefaultValue <> "" Then
+			fBinding.Put("Value", sDefaultValue)
+		End If
+		fBinding.Put("ThumbLabel", True)
+		Dim sld As VSlider
+		sld.Initialize(mCallBack, sName, sName)
+		sld.DesignerCreateView(mparent, fBinding)
+		VElement.BindVueElement(sld.VElement)
 	Case "Website"
 		fBinding.Put("TypeOf", "url")
 		fBinding.Remove("ReturnObject")
-		Dim txtField As VTextField
-		txtField.Initialize(mCallBack, sName, sName)
-		txtField.DesignerCreateView(mparent, fBinding)
-		VElement.BindVueElement(txtField.VElement)
-	Case "ChipAvatar"
-	Case "ChipGroup"
+		Dim txtW As VTextField
+		txtW.Initialize(mCallBack, sName, sName)
+		txtW.DesignerCreateView(mparent, fBinding)
+		VElement.BindVueElement(txtW.VElement)
 	Case "Rating"
+		fBinding.Remove("Outlined")
+		fBinding.Remove("Rounded")
+		fBinding.Remove("ReturnObject")
+		fBinding.Put("Length", iMaxLen)
+		fBinding.Put("Size1", ssize)
+		If sownsize <> "" Then
+			fBinding.Put("Size", sownsize)
+		End If
+		Dim rat As VRating
+		rat.Initialize(mCallBack, sName, sName)
+		rat.DesignerCreateView(mparent, fBinding)
+		VElement.BindVueElement(rat.VElement)
 	Case "ProgressCircular"
+		fBinding.Remove("Outlined")
+		fBinding.Remove("Rounded")
+		fBinding.Remove("ReturnObject")
+		fBinding.Remove("Height")
+		If ssVModel <> "" Then
+			fBinding.Put("Caption", $"{{ ${ssVModel} }}%"$)
+		End If
+		If sDefaultValue <> "" Then
+			fBinding.Put("Value", sDefaultValue)
+		End If
+		If sownsize <> "" Then
+			fBinding.Put("Size", sownsize)
+		End If
+		If sSrc <> "" Then
+			fBinding.Put("Avatar", sSrc)
+		End If
+		If sWidth <> "" Then
+			fBinding.Put("Width", sWidth)
+		End If
+		Dim prgc As VProgressCircular
+		prgc.Initialize(mCallBack, sName, sName)
+		prgc.DesignerCreateView(mparent, fBinding)
+		VElement.BindVueElement(prgc.VElement)
 	Case "ProgressLinear"
+		fBinding.Remove("Outlined")
+		fBinding.Remove("Rounded")
+		fBinding.Remove("ReturnObject")
+		If sHeight <> "" Then
+			fBinding.Put("Height", sHeight)
+		End If
+		fBinding.Put("ShowCaption", True)
+		fBinding.Put("Caption", "{{ Math.ceil(value) }}%")
+		If sDefaultValue <> "" Then
+			fBinding.Put("Value", sDefaultValue)
+		End If
+		Dim prg As VProgressLinear
+		prg.Initialize(mCallBack, sName, sName)
+		prg.DesignerCreateView(mparent, fBinding)
+		VElement.BindVueElement(prg.VElement)
 	End Select	
 	'eastablish bindings
 	For Each k As String In fData.Keys
@@ -788,7 +950,7 @@ Sub BEToVueElement(be As BANanoElement)
 		VElement.SetData(k, v)
 	Next
 	'remove the element
-	'be.Remove
+	be.Remove
 End Sub
 
 

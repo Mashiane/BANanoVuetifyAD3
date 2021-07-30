@@ -59,7 +59,7 @@ Version=7
 '#DesignerProperty: Key: SuccessMessages, DisplayName: SuccessMessages, FieldType: String, DefaultValue: , Description: SuccessMessages
 #DesignerProperty: Key: ThumbColor, DisplayName: ThumbColor, FieldType: String, DefaultValue: , Description: ThumbColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: ThumbColorIntensity, DisplayName: Thumbcolorintensity, FieldType: String, DefaultValue: , Description: Thumbcolorintensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
-#DesignerProperty: Key: ThumbLabel, DisplayName: ThumbLabel, FieldType: String, DefaultValue: none, Description: ThumbLabel, List: always|none
+#DesignerProperty: Key: ThumbLabel, DisplayName: ThumbLabel, FieldType: String, DefaultValue: none, Description: ThumbLabel, List: always|none|onchange
 #DesignerProperty: Key: ThumbSize, DisplayName: ThumbSize, FieldType: String, DefaultValue: , Description: ThumbSize
 #DesignerProperty: Key: TickLabels, DisplayName: TickLabels, FieldType: String, DefaultValue: , Description: TickLabels
 #DesignerProperty: Key: TickSize, DisplayName: TickSize, FieldType: String, DefaultValue: , Description: TickSize

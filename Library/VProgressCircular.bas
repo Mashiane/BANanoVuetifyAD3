@@ -7,15 +7,15 @@ Version=8.9
 #IgnoreWarnings:12
 
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
-#DesignerProperty: Key: Caption, DisplayName: Caption, FieldType: String, DefaultValue: {{ progress1 }}%, Description: Caption
-#DesignerProperty: Key: Rotate, DisplayName: Rotate, FieldType: String, DefaultValue: , Description: Rotate
-#DesignerProperty: Key: Size, DisplayName: Size, FieldType: String, DefaultValue: 32, Description: Size
-#DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: 4, Description: Width
 #DesignerProperty: Key: VModel, DisplayName: VModel, FieldType: String, DefaultValue: progress1 , Description: VModel
-#DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: 10 , Description: Value
+#DesignerProperty: Key: Value, DisplayName: Value, FieldType: String, DefaultValue: 10 , Description: Value, MinRange: 0, MaxRange: 100
+#DesignerProperty: Key: Caption, DisplayName: Caption VModel*, FieldType: String, DefaultValue: {{ progress1 }}%, Description: Caption
+#DesignerProperty: Key: Rotate, DisplayName: Rotate, FieldType: Int, DefaultValue: 0, Description: Rotate, MinRange: 0, MaxRange: 360
+#DesignerProperty: Key: Size, DisplayName: Size, FieldType: Int, DefaultValue: 32, Description: Size, MinRange: 0, MaxRange: 500
+#DesignerProperty: Key: Width, DisplayName: Width, FieldType: Int, DefaultValue: 4, Description: Width, MinRange: 0, MaxRange: 500
+
 #DesignerProperty: Key: Indeterminate, DisplayName: Indeterminate, FieldType: Boolean, DefaultValue: true, Description: Indeterminate
 #DesignerProperty: Key: Avatar, DisplayName: Avatar Image, FieldType: String, DefaultValue: , Description: Avatar Image
-#DesignerProperty: Key: Button, DisplayName: Button, FieldType: Boolean, DefaultValue: false, Description: Button
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue: primary, Description: Color, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: ColorIntensity, DisplayName: ColorIntensity, FieldType: String, DefaultValue: , Description: ColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: Key, DisplayName: Key, FieldType: String, DefaultValue: , Description: Key
@@ -55,7 +55,7 @@ Private sWidth As String
 Private sAvatar As String
 Private bHidden As Boolean
 Private sValue As String
-	End Sub
+End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	mName = Name.tolowercase
@@ -79,7 +79,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mStyles = Props.Get("Styles")
 		mAttributes = Props.Get("Attributes")
 		bButton = Props.Get("Button")
-		sCaption = Props.Get("Caption")
+		sCaption = Props.GetDefault("Caption", "{{ value }}%")
 		sColor = Props.Get("Color")
 		sColorIntensity = Props.Get("ColorIntensity")
 		bIndeterminate = Props.Get("Indeterminate")
@@ -139,6 +139,7 @@ VElement.AddAttr("v-if", sVIf)
 VElement.AddAttr("v-model", sVModel)
 VElement.AddAttr("v-on", sVOn)
 VElement.AddAttr("v-show", sVShow)
+VElement.AddAttr("value", sValue)
 VElement.SetData(sVShow, Not(bHidden))
 VElement.AddAttr("width", sWidth)
 VElement.SetData(sVModel, sValue)

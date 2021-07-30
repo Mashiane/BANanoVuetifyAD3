@@ -15,7 +15,7 @@ Version=8.9
 #DesignerProperty: Key: Required, DisplayName: Required, FieldType: Boolean, DefaultValue: False, Description: Required 
 #DesignerProperty: Key: Length, DisplayName: Length, FieldType: String, DefaultValue: 5, Description: Length
 #DesignerProperty: Key: Size, DisplayName: Size, FieldType: String, DefaultValue: , Description: Size
-#DesignerProperty: Key: Size1, DisplayName: Own Size, FieldType: String, DefaultValue: , Description: Size1, List: none|large|small|x-large|x-small
+#DesignerProperty: Key: Size1, DisplayName: Own Size, FieldType: String, DefaultValue: , Description: Size1, List: none|large|small|x-large|x-small|regular
 
 #DesignerProperty: Key: BackgroundColor, DisplayName: BackgroundColor, FieldType: String, DefaultValue: , Description: BackgroundColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: BackgroundColorIntensity, DisplayName: BackgroundColorIntensity, FieldType: String, DefaultValue: , Description: BackgroundColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
@@ -214,6 +214,7 @@ VElement.SetData(sVModel, sValue)
 VElement.AddAttr("v-on", sVOn)
 	VElement.AddAttr("v-bind", sVBind)
 VElement.BindAllEvents
+VElement.SetOnEventOwn(mCallBack, $"${mName}_change"$, "input", Null)
 End Sub
 
 public Sub AddToParent(targetID As String)
