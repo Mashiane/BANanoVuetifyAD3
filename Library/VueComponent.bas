@@ -55,6 +55,22 @@ Sub Class_Globals
 	Public vuetify As VuetifyApp
 	Public refs As BANanoObject
 	Public This As BANanoObject
+	Public ProgressLoaderName As String
+End Sub
+
+'link the progress loader to the app
+Sub FindProgressLoaderOn(appBar As VAppBar)
+	ProgressLoaderName = appBar.ProgressLoader
+End Sub
+
+'show the progress loader
+Sub PagePause
+	SetData(ProgressLoaderName, True)
+End Sub
+
+'hide the appbar progress loader
+Sub PageResume
+	SetData(ProgressLoaderName, False)
 End Sub
 
 'get the file contents

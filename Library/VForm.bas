@@ -343,6 +343,17 @@ Sub LinkDataSource(C As VueComponent, ds As BananoDataSource)
 	ds.SchemaSetOrderBy(DBSort)
 End Sub
 
+'link to the data table
+Sub LinkDataTable(c As VueComponent, dt As VueTable)
+	If IsCreated = False Then
+		BANano.Throw($"${mName}.LinkDataTable - the form needs to be created first. Call .CreateForm first."$)
+		Return
+	End If
+	dt.PrimaryKey = sPrimaryKey
+	dt.setTitle(sPlural)
+	
+End Sub
+
 
 private Sub BEForGrid(bc As BANanoElement)
 	Dim bActive As String = bc.GetData("active")

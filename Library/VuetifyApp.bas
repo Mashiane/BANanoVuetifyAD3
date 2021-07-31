@@ -616,6 +616,20 @@ Sub Import(comp As VueComponent)
 	components.Put(compname, compx)
 End Sub
 
+'import a component, the module should have the Initilize method without parameters
+Sub ImportVueComponent(comp As VueComponent)
+	Dim compname As String = comp.mName
+	compname = compname.tolowercase
+	If compname = "" Then
+		Log("Import: Please specify the name of the component!")
+	End If
+	comp.AppendPlaceHolder
+	If components.ContainsKey(compname) = True Then Return
+	Dim compx As BANanoObject = Vue.RunMethod("component", Array(compname, comp.component))
+	comp.This = compx
+	components.Put(compname, compx)
+End Sub
+
 'add anything from the appendholder
 Sub AppendHolderTo(target As String)
 	target = target.ToLowerCase
@@ -2090,6 +2104,24 @@ Sub ToggleItem(elID As String)
 	Toggle(sstate)	
 End Sub
 
+'toggle the visibility of an item using vshow
+Sub ToggleDrawer(elID As String) 
+	elID = elID.ToLowerCase
+	Dim sstate As String = $"${elID}show"$
+	Toggle(sstate)	
+End Sub
+
+Sub OpenDrawer(elID As String) 
+	elID = elID.ToLowerCase
+	Dim sstate As String = $"${elID}show"$
+	SetData(sstate, True)
+End Sub
+
+Sub CloseDrawer(elID As String) 
+	elID = elID.ToLowerCase
+	Dim sstate As String = $"${elID}show"$
+	SetData(sstate, False)
+End Sub
 
 'toggle the state value
 Sub Toggle(stateName As String) 

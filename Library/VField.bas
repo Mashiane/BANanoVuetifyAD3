@@ -25,13 +25,31 @@ Version=7
 #Event: KeyUpEnterPrevent (e As BANanoEvent)
 #Event: Button_Click (e As BANanoEvent)
 
-#DesignerProperty: Key: ComponentType, DisplayName: Component Type*, FieldType: String, DefaultValue: TextField, Description: Component Type, List: P|H6|H1|H2|H3|H4|H5|div|span|TextField|TextArea|TimePicker|DatePicker|FileInput|FileInputImage|Money|Thousands|Password|ComboBox|AutoComplete|Select|Avatar|CheckBox|Switch|RadioGroup|Image|Telephone|Email|Website|Slider|Chip|Rating|ProgressCircular|ProgressLinear|Icon|Button|FAB|ColorSelect|ColorTextField
-#DesignerProperty: Key: ColumnType, DisplayName: DT Column Type, FieldType: String, DefaultValue: Normal, Description: DT Column Type, List: Normal|TextArea|TextField|IconView|Chip|Switch|Action|Image|CheckBox|Time|Money|AvatarImg|Rating|ProgressCircular|ProgressLinear|DateColumn|DateTimeColumn|NumberColumn|ButtonColumn|LinkColumn|ComboBox|AutoComplete|Select
 #DesignerProperty: Key: FieldName, DisplayName: Field Name*, FieldType: String, DefaultValue: , Description: FieldName
+#DesignerProperty: Key: DataType, DisplayName: Data Type, FieldType: String, DefaultValue: string, Description: Data Type, List: integer|double|blob|string|none
 #DesignerProperty: Key: VModel, DisplayName: V-Model, FieldType: String, DefaultValue: , Description: V-Model
 #DesignerProperty: Key: Title, DisplayName: Title, FieldType: String, DefaultValue: , Description: Title
-#DesignerProperty: Key: Visible, DisplayName: Visible On Form, FieldType: Boolean, DefaultValue: True, Description: Visible On Form
+#DesignerProperty: Key: PrimaryKey, DisplayName: Primary Key, FieldType: Boolean, DefaultValue: False, Description: Primary Key
 #DesignerProperty: Key: DefaultValue, DisplayName: Default Value, FieldType: String, DefaultValue: , Description: Default Value
+#DesignerProperty: Key: AutoIncrement, DisplayName: Auto Increment, FieldType: Boolean, DefaultValue: False, Description: Auto Increment
+#DesignerProperty: Key: RowPos, DisplayName: Row Pos, FieldType: Int, DefaultValue: 1, Description: RowPos
+#DesignerProperty: Key: ColPos, DisplayName: Col Pos, FieldType: Int, DefaultValue: 1, Description: ColPos
+#DesignerProperty: Key: Active, DisplayName: Active, FieldType: Boolean, DefaultValue: True, Description: Active
+#DesignerProperty: Key: Visible, DisplayName: Visible On Form, FieldType: Boolean, DefaultValue: True, Description: Visible On Form
+#DesignerProperty: Key: OnDb, DisplayName: CRUD Use, FieldType: Boolean, DefaultValue: True, Description: Use for CRUD and Select Fields
+#DesignerProperty: Key: DbSort, DisplayName: Db Sort, FieldType: Boolean, DefaultValue: True, Description: Sort on DB
+
+#DesignerProperty: Key: OnTable, DisplayName: On DT Table, FieldType: Boolean, DefaultValue: True, Description: On Data Table
+#DesignerProperty: Key: ColumnPosition, DisplayName: DT Column Pos, FieldType: Int, DefaultValue: 0, Description: Data Table Column Position
+#DesignerProperty: Key: Filterable, DisplayName: DT Filterable, FieldType: Boolean, DefaultValue: True, Description: DT Filterable
+#DesignerProperty: Key: Sortable, DisplayName: DT Sortable, FieldType: Boolean, DefaultValue: True, Description: DT Sortable
+
+#DesignerProperty: Key: ComponentType, DisplayName: Component Type*, FieldType: String, DefaultValue: TextField, Description: Component Type, List: P|H6|H1|H2|H3|H4|H5|div|span|TextField|TextArea|TimePicker|DatePicker|FileInput|FileInputImage|Money|Thousands|Password|ComboBox|AutoComplete|Select|Avatar|CheckBox|Switch|RadioGroup|Image|Telephone|Email|Website|Slider|Chip|Rating|ProgressCircular|ProgressLinear|Icon|Button|FAB|ColorSelect|ColorTextField
+#DesignerProperty: Key: MaxLen, DisplayName: Counter/Length, FieldType: Int, DefaultValue: 0, Description: Counter/Length
+
+#DesignerProperty: Key: ColumnType, DisplayName: DT Column Type, FieldType: String, DefaultValue: Normal, Description: DT Column Type, List: Normal|TextArea|TextField|IconView|Chip|Switch|Action|Image|CheckBox|Time|Money|AvatarImg|Rating|ProgressCircular|ProgressLinear|DateColumn|DateTimeColumn|NumberColumn|ButtonColumn|LinkColumn|ComboBox|AutoComplete|Select
+#DesignerProperty: Key: ListItemType, DisplayName: List Item Type, FieldType: String, DefaultValue: , Description: List Item Type
+
 #DesignerProperty: Key: IconName, DisplayName: Icon Name, FieldType: String, DefaultValue: , Description: Icon Name
 #DesignerProperty: Key: LoremIpsum, DisplayName:LoremIpsum, FieldType: Boolean, DefaultValue: False, Description: LoremIpsum
 #DesignerProperty: Key: Placeholder, DisplayName: Place Holder, FieldType: String, DefaultValue: , Description: Placeholder
@@ -46,26 +64,11 @@ Version=7
 #DesignerProperty: Key: TextColorIntensity, DisplayName: Text Color Intensity, FieldType: String, DefaultValue:  normal, Description: , List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: BackgroundColor, DisplayName: BackgroundColor, FieldType: String, DefaultValue: none, Description: BackgroundColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: BackgroundColorIntensity, DisplayName: Backgroundcolorintensity, FieldType: String, DefaultValue: none, Description: Backgroundcolorintensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
-#DesignerProperty: Key: Chips, DisplayName: Chips (Drop Downs), FieldType: Boolean, DefaultValue: False, Description: Chips
 #DesignerProperty: Key: Shrink, DisplayName: Shrink, FieldType: Boolean, DefaultValue: False, Description: Shrink
-#DesignerProperty: Key: MaxLen, DisplayName: Counter/Length, FieldType: Int, DefaultValue: 0, Description: Counter/Length
 #DesignerProperty: Key: MinValue, DisplayName: Min Value, FieldType: Int, DefaultValue: 0, Description: MaxValue
 #DesignerProperty: Key: MaxValue, DisplayName: Max Value, FieldType: Int, DefaultValue: 100, Description: MaxValue
 #DesignerProperty: Key: Size, DisplayName: Size, FieldType: String, DefaultValue: regular, Description: Size, List: x-small|small|regular|large|x-large
 #DesignerProperty: Key: OwnSize, DisplayName: Own Size, FieldType: String, DefaultValue: , Description: Own Size
-#DesignerProperty: Key: DataType, DisplayName: Data Type, FieldType: String, DefaultValue: string, Description: Data Type, List: integer|double|blob|string|none
-#DesignerProperty: Key: ListItemType, DisplayName: List Item Type, FieldType: String, DefaultValue: , Description: List Item Type
-#DesignerProperty: Key: PrimaryKey, DisplayName: Primary Key, FieldType: Boolean, DefaultValue: False, Description: Primary Key
-#DesignerProperty: Key: AutoIncrement, DisplayName: Auto Increment, FieldType: Boolean, DefaultValue: False, Description: Auto Increment
-#DesignerProperty: Key: RowPos, DisplayName: Row Pos, FieldType: Int, DefaultValue: 1, Description: RowPos
-#DesignerProperty: Key: ColPos, DisplayName: Col Pos, FieldType: Int, DefaultValue: 1, Description: ColPos
-#DesignerProperty: Key: Active, DisplayName: Active, FieldType: Boolean, DefaultValue: True, Description: Active
-#DesignerProperty: Key: OnTable, DisplayName: On DT Table, FieldType: Boolean, DefaultValue: True, Description: On Data Table
-#DesignerProperty: Key: ColumnPosition, DisplayName: DT Column Pos, FieldType: Int, DefaultValue: 0, Description: Data Table Column Position
-#DesignerProperty: Key: Filterable, DisplayName: DT Filterable, FieldType: Boolean, DefaultValue: True, Description: DT Filterable
-#DesignerProperty: Key: Sortable, DisplayName: DT Sortable, FieldType: Boolean, DefaultValue: True, Description: DT Sortable
-#DesignerProperty: Key: OnDb, DisplayName: CRUD Use, FieldType: Boolean, DefaultValue: True, Description: Use for CRUD and Select Fields
-#DesignerProperty: Key: DbSort, DisplayName: Db Sort, FieldType: Boolean, DefaultValue: True, Description: Sort on DB
 #DesignerProperty: Key: OnPdf, DisplayName: On Pdf, FieldType: Boolean, DefaultValue: True, Description: On Pdf
 #DesignerProperty: Key: OnXls, DisplayName: On Xls, FieldType: Boolean, DefaultValue: True, Description: On Xls
 #DesignerProperty: Key: Src, DisplayName: Src, FieldType: String, DefaultValue: , Description: Img Src
@@ -73,8 +76,8 @@ Version=7
 #DesignerProperty: Key: Height, DisplayName: Height, FieldType: String, DefaultValue: , Description: Img Height
 #DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: , Description: Img Width
 #DesignerProperty: Key: Alt, DisplayName: Alt, FieldType: String, DefaultValue: , Description: Img Alt
-#DesignerProperty: Key: TrueValue, DisplayName: True Value CS, FieldType: String, DefaultValue: , Description: Checkbox & Switch True Value
-#DesignerProperty: Key: FalseValue, DisplayName: False Value CS, FieldType: String, DefaultValue: , Description: Checkbox & Switch False Value
+#DesignerProperty: Key: TrueValue, DisplayName: True Value C/S, FieldType: String, DefaultValue: , Description: Checkbox & Switch True Value
+#DesignerProperty: Key: FalseValue, DisplayName: False Value C/S, FieldType: String, DefaultValue: , Description: Checkbox & Switch False Value
 #DesignerProperty: Key: DataSource, DisplayName: Foreign Table, FieldType: String, DefaultValue: , Description: Foreign Table
 #DesignerProperty: Key: DataKey, DisplayName: Foreign Key Field, FieldType: String, DefaultValue: , Description: Foreign Key Field
 #DesignerProperty: Key: DataValue, DisplayName: Foreign Value Field, FieldType: String, DefaultValue: , Description: Foreign Value Field
@@ -84,6 +87,7 @@ Version=7
 #DesignerProperty: Key: UseItems, DisplayName: Use These Items, FieldType: Boolean, DefaultValue: False, Description: Use These Items
 #DesignerProperty: Key: ItemKeys, DisplayName: Item Values (;), FieldType: String, DefaultValue: , Description: Item Values
 #DesignerProperty: Key: ItemValues, DisplayName: Item Texts (;), FieldType: String, DefaultValue: , Description: Item Texts
+#DesignerProperty: Key: Chips, DisplayName: Chips (Drop Downs), FieldType: Boolean, DefaultValue: False, Description: Chips
 
 #DesignerProperty: Key: ButtonType, DisplayName: Button Type, FieldType: String, DefaultValue:  none, Description: Item Type, List: button|fab|icon-right|icon-left|none
 #DesignerProperty: Key: ButtonPosition, DisplayName: Button Position, FieldType: String, DefaultValue: normal, Description: Button Position, List: normal|top-left|top-right|bottom-left|bottom-right

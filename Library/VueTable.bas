@@ -44,20 +44,20 @@ Version=8.5
 #Event: FilterChange(e As BANanoEvent)
 
 
+#DesignerProperty: Key: AutoID, DisplayName: Auto ID/Name, FieldType: Boolean, DefaultValue: False, Description: Overrides the ID/Name with a random string.
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue:  False, Description: Hidden
 #DesignerProperty: Key: ShowInsideCard, DisplayName: ShowInsideCard, FieldType: Boolean, DefaultValue:  True, Description: Show table inside the v-card
 #DesignerProperty: Key: HideToolBarOnSM, DisplayName: HideToolBarOnSM, FieldType: Boolean, DefaultValue:  True, Description: Hide toolbar on SM
-#DesignerProperty: Key: Title, DisplayName: Title, FieldType: String, DefaultValue:  , Description: The title on the table
-#DesignerProperty: Key: AutoID, DisplayName: Auto ID/Name, FieldType: Boolean, DefaultValue: False, Description: Overrides the ID/Name with a random string.
+#DesignerProperty: Key: Title, DisplayName: Title, FieldType: String, DefaultValue:  Table, Description: The title on the table
 #DesignerProperty: Key: Manual, DisplayName: Manual, FieldType: Boolean, DefaultValue: False, Description: Table created manually.
 #DesignerProperty: Key: ItemKey, DisplayName: ItemKey, FieldType: String, DefaultValue:  , Description: The primary key of your records
-#DesignerProperty: Key: ItemsPerPage, DisplayName: ItemsPerPage, FieldType: String, DefaultValue:  , Description: Number of items per page
+#DesignerProperty: Key: ItemsPerPage, DisplayName: ItemsPerPage, FieldType: String, DefaultValue:  50, Description: Number of items per page
 #DesignerProperty: Key: Dense, DisplayName: Dense, FieldType: Boolean, DefaultValue:  False, Description: The table should be dense
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue:  False, Description: The table should be dark
 #DesignerProperty: Key: ShowSelect, DisplayName: ShowSelect, FieldType: Boolean, DefaultValue:  False, Description: Show select for all records
 #DesignerProperty: Key: SingleSelect, DisplayName: SingleSelect, FieldType: Boolean, DefaultValue:  False, Description: Single selection mode
-#DesignerProperty: Key: MultiSort, DisplayName: Multi Sort, FieldType: Boolean, DefaultValue:  False, Description: Can multi sort
-#DesignerProperty: Key: MustSort, DisplayName: Must Sort, FieldType: Boolean, DefaultValue:  False, Description: Records must be sortable
+#DesignerProperty: Key: MultiSort, DisplayName: Multi Sort, FieldType: Boolean, DefaultValue:  True, Description: Can multi sort
+#DesignerProperty: Key: MustSort, DisplayName: Must Sort, FieldType: Boolean, DefaultValue:  True, Description: Records must be sortable
 #DesignerProperty: Key: Loading, DisplayName: Loading, FieldType: Boolean, DefaultValue:  False, Description: Show progress loading
 #DesignerProperty: Key: ExternalPagination, DisplayName: ExternalPagination, FieldType: Boolean, DefaultValue:  True, Description: Use External Pagination
 #DesignerProperty: Key: MaxPages, DisplayName: Total Visible, FieldType: String, DefaultValue:  5, Description: Total Visible Pages
@@ -67,14 +67,10 @@ Version=8.5
 '#DesignerProperty: Key: DateTimeFormat, DisplayName: DateTimeFormat, FieldType: String, DefaultValue: , Description: Date Time Format
 '#DesignerProperty: Key: MoneyFormat, DisplayName: MoneyFormat, FieldType: String, DefaultValue: , Description: Money Format
 '#DesignerProperty: Key: TimeFormat, DisplayName: TimeFormat, FieldType: String, DefaultValue: HH:MM, Description: Time Format
-#DesignerProperty: Key: PreDisplay, DisplayName: Before Display (JSON), FieldType: String, DefaultValue: , Description: For each column specified run this callback before displaying
-#DesignerProperty: Key: ConditionalClass, DisplayName: Conditional Class (JSON), FieldType: String, DefaultValue: , Description: For each column specified apply class from callback
-#DesignerProperty: Key: ConditionalColor, DisplayName: Conditional Color (JSON), FieldType: String, DefaultValue: , Description: For each column specified apply the color from the callback
-#DesignerProperty: Key: ConditionalStyle, DisplayName: Conditional Style (JSON), FieldType: String, DefaultValue: , Description: For each column specified apply the style from the callback
 
-#DesignerProperty: Key: HasSearch, DisplayName: Has Search, FieldType: Boolean, DefaultValue:  False, Description: Have a search input box
-#DesignerProperty: Key: HasAddnew, DisplayName: HasAddNew, FieldType: Boolean, DefaultValue: False, Description: Show Add new on toolbar
-#DesignerProperty: Key: HasClearSort, DisplayName: HasClearSort, FieldType: Boolean, DefaultValue: False, Description: Show clear sort on toolbar
+#DesignerProperty: Key: HasSearch, DisplayName: Has Search, FieldType: Boolean, DefaultValue:  True, Description: Have a search input box
+#DesignerProperty: Key: HasAddnew, DisplayName: HasAddNew, FieldType: Boolean, DefaultValue: True, Description: Show Add new on toolbar
+#DesignerProperty: Key: HasClearSort, DisplayName: HasClearSort, FieldType: Boolean, DefaultValue: True, Description: Show clear sort on toolbar
 #DesignerProperty: Key: HasFilter, DisplayName: HasFilter, FieldType: Boolean, DefaultValue: False, Description: Show filter for columns
 #DesignerProperty: Key: HasPdf, DisplayName: HasPdf, FieldType: Boolean, DefaultValue: False, Description: Show pdf button on toolbar
 #DesignerProperty: Key: HasExcel, DisplayName: HasExcel, FieldType: Boolean, DefaultValue: False, Description: Show excel on toolbar
@@ -104,6 +100,11 @@ Version=8.5
 #DesignerProperty: Key: ColumnSortable, DisplayName: ColumnSortable (;), FieldType: String, DefaultValue: , Description: These fields will be sortable
 #DesignerProperty: Key: ColumnFilterable, DisplayName: ColumnFilterable (;), FieldType: String, DefaultValue: , Description: These fields will be filterable
 #DesignerProperty: Key: ColumnTotals, DisplayName: ColumnTotals (;), FieldType: String, DefaultValue: , Description: These fields will have totals
+'
+#DesignerProperty: Key: PreDisplay, DisplayName: Before Display (JSON), FieldType: String, DefaultValue: , Description: For each column specified run this callback before displaying
+#DesignerProperty: Key: ConditionalClass, DisplayName: Conditional Class (JSON), FieldType: String, DefaultValue: , Description: For each column specified apply class from callback
+#DesignerProperty: Key: ConditionalColor, DisplayName: Conditional Color (JSON), FieldType: String, DefaultValue: , Description: For each column specified apply the color from the callback
+#DesignerProperty: Key: ConditionalStyle, DisplayName: Conditional Style (JSON), FieldType: String, DefaultValue: , Description: For each column specified apply the style from the callback
 
 #DesignerProperty: Key: ColumIcons, DisplayName: ColumIcons (;), FieldType: String, DefaultValue: , Description: These fields will show icons
 #DesignerProperty: Key: ColumnAutoComplete, DisplayName: ColumnAutoComplete (;), FieldType: String, DefaultValue: , Description: These fields will show auto complete for inline edit
@@ -128,7 +129,6 @@ Version=8.5
 #DesignerProperty: Key: ColumnTextarea, DisplayName: ColumnTextarea (;), FieldType: String, DefaultValue: , Description: These fields will show text-areas
 #DesignerProperty: Key: ColumnTextfield, DisplayName: ColumnTextfield (;), FieldType: String, DefaultValue: , Description: These fields will show text-fields
 #DesignerProperty: Key: ColumnTime, DisplayName: ColumnTime (;), FieldType: String, DefaultValue: , Description: These fields will show time
-
 '
 #DesignerProperty: Key: ItemKeys, DisplayName: Action Keys (;), FieldType: String, DefaultValue:  , Description: Additional Action Buttons
 #DesignerProperty: Key: ItemTitles, DisplayName: Action Titles (;), FieldType: String, DefaultValue:  , Description: Additional Action Titles

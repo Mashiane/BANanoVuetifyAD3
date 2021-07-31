@@ -329,7 +329,7 @@ End Sub
 
 
 Sub BindState(C As VueComponent)
-	vc = c
+	VC = c
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control

@@ -53,19 +53,25 @@ Version=7
 #DesignerProperty: Key: NudgeTop, DisplayName: NudgeTop, FieldType: String, DefaultValue: , Description: NudgeTop
 #DesignerProperty: Key: OffsetOverflow, DisplayName: OffsetOverflow, FieldType: Boolean, DefaultValue: False, Description: OffsetOverflow
 #DesignerProperty: Key: OffsetX, DisplayName: OffsetX, FieldType: Boolean, DefaultValue: False, Description: OffsetX
-#DesignerProperty: Key: OffsetY, DisplayName: OffsetY, FieldType: Boolean, DefaultValue: False, Description: OffsetY
+#DesignerProperty: Key: OffsetY, DisplayName: OffsetY, FieldType: Boolean, DefaultValue: True, Description: OffsetY
 #DesignerProperty: Key: OpenDelay, DisplayName: OpenDelay, FieldType: String, DefaultValue: , Description: OpenDelay
 #DesignerProperty: Key: OpenOnClick, DisplayName: OpenOnClick, FieldType: Boolean, DefaultValue: False, Description: OpenOnClick
 #DesignerProperty: Key: OpenOnFocus, DisplayName: OpenOnFocus, FieldType: Boolean, DefaultValue: False, Description: OpenOnFocus
 #DesignerProperty: Key: OpenOnHover, DisplayName: OpenOnHover, FieldType: Boolean, DefaultValue: False, Description: OpenOnHover
 #DesignerProperty: Key: Origin, DisplayName: Origin, FieldType: String, DefaultValue: , Description: Origin
-#DesignerProperty: Key: Position, DisplayName: Position, FieldType: String, DefaultValue: , Description: Position, List: bottom|left|none|right|top
+#DesignerProperty: Key: Position, DisplayName: Position, FieldType: String, DefaultValue: bottom, Description: Position, List: bottom|left|none|right|top
 #DesignerProperty: Key: PositionX, DisplayName: PositionX, FieldType: String, DefaultValue: , Description: PositionX
 #DesignerProperty: Key: PositionY, DisplayName: PositionY, FieldType: String, DefaultValue: , Description: PositionY
 #DesignerProperty: Key: ReturnValueSync, DisplayName: ReturnValueSync, FieldType: String, DefaultValue: , Description: ReturnValueSync
 #DesignerProperty: Key: Rounded, DisplayName: Rounded, FieldType: Boolean, DefaultValue: False, Description: Rounded, List: none|true|rounded-0|rounded|rounded-sm|rounded-lg|rounded-xl|rounded-t-xl|rounded-r-xl|rounded-b-xl|rounded-l-xl|rounded-tl-xl|rounded-tr-xl|rounded-br-xl|rounded-bl-xl|rounded-pill|rounded-circle
 #DesignerProperty: Key: Tile, DisplayName: Tile, FieldType: String, DefaultValue: , Description: Tile
 #DesignerProperty: Key: Transition, DisplayName: Transition, FieldType: String, DefaultValue: fade-transition, Description: Transition, List: none|fab-transition|fade-transition|expand-transition|scale-transition|scroll-x-transition|scroll-x-reverse-transition|scroll-y-transition|scroll-y-reverse-transition|slide-x-transition|slide-x-reverse-transition|slide-y-transition|slide-y-reverse-transition
+'
+#DesignerProperty: Key: ItemKeys, DisplayName: Item Keys (;), FieldType: String, DefaultValue:  , Description: Item Icons
+#DesignerProperty: Key: ItemIcons, DisplayName: Item Icons (;), FieldType: String, DefaultValue:  , Description: Item Icons
+#DesignerProperty: Key: ItemColors, DisplayName: Item Colors (;), FieldType: String, DefaultValue:  , Description: Item Colors
+#DesignerProperty: Key: ItemTexts, DisplayName: Item Texts (;), FieldType: String, DefaultValue:  , Description: Item Texts
+#DesignerProperty: Key: ItemTo, DisplayName: Item To (;), FieldType: String, DefaultValue:  , Description: Item To
 
 #DesignerProperty: Key: VBind, DisplayName: VBind, FieldType: String, DefaultValue: , Description: VBind
 #DesignerProperty: Key: VFor, DisplayName: VFor, FieldType: String, DefaultValue: , Description: VFor
@@ -77,6 +83,11 @@ Version=7
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
 
 Sub Class_Globals 
+	Private sItemKeys As String
+	Private sItemIcons As String
+	Private sItemColors As String
+	Private sItemTexts As String
+	Private sItemTo As String
     Private BANano As BANano 'ignore 
 	Private mName As String 'ignore 
 	Private mEventName As String 'ignore 
@@ -229,6 +240,11 @@ sIconName = Props.Get("IconName")
 sTextColor = Props.Get("TextColor")
 sTextColorIntensity = Props.Get("TextColorIntensity")
 bDense = Props.GetDefault("Dense", True)
+sItemKeys = Props.GetDefault("ItemKeys", "")
+sItemIcons = Props.GetDefault("ItemIcons", "")
+sItemColors = Props.GetDefault("ItemColors", "")
+sItemTexts = Props.GetDefault("ItemTexts", "")
+sItemTo = Props.GetDefault("ItemTo", "")
 End If 
 	'
 	bAbsolute = BANanoShared.parseBool(bAbsolute)
@@ -372,7 +388,7 @@ VElement.AddAttr("v-on", sVOn)
 VElement.AddAttr("z-index", sZIndex)
 'VElement.AddAttr("v-show", sVShow)
 VElement.BindAllEvents
-'	
+'get the list inside the menu	
 Dim skey As String = $"${mName}list"$
 MenuItems.Initialize(mCallBack, skey, skey)
 End Sub
@@ -526,7 +542,36 @@ End Sub
 
 
 Sub BindState(C As VueComponent)
-	vc = c
+	VC = c
+	'if we have pre-fefined buttons, we add thense
+	'add items to the menu
+	Dim lstsItemKeys As List = BANanoShared.StrParseComma(";", sItemKeys)
+	Dim lstsItemIcons As List = BANanoShared.StrParseComma(";", sItemIcons)
+	Dim lstsItemColors As List = BANanoShared.StrParseComma(";", sItemColors)
+	Dim lstsItemTexts As List = BANanoShared.StrParseComma(";", sItemTexts)
+	Dim lstsItemTo As List = BANanoShared.StrParseComma(";", sItemTo)
+	'
+	lstsItemKeys = BANanoShared.ListTrimItems(lstsItemKeys)
+	lstsItemIcons = BANanoShared.ListTrimItems(lstsItemIcons)
+	lstsItemColors = BANanoShared.ListTrimItems(lstsItemColors)
+	lstsItemTexts = BANanoShared.ListTrimItems(lstsItemTexts)
+	lstsItemTo = BANanoShared.ListTrimItems(lstsItemTo)
+		
+	Dim tItems As Int = lstsItemKeys.Size - 1
+	Dim cItems As Int
+	If tItems >= 0 Then
+		MenuItems.Clear(C)
+		For cItems = 0 To tItems
+			Dim iKey As String = BANanoShared.GetListItem(lstsItemKeys, cItems)
+			Dim iIcon As String = BANanoShared.getlistitem(lstsItemIcons, cItems)
+			Dim icolor As String = BANanoShared.GetListItem(lstsItemColors, cItems)
+			Dim itxt As String = BANanoShared.GetListItem(lstsItemTexts, cItems)
+			Dim ito As String = BANanoShared.GetListItem(lstsItemTo, cItems)
+			'
+			MenuItems.AddItem("", iKey, iIcon, icolor, itxt, ito)
+		Next
+	End If
+
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control
