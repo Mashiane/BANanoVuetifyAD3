@@ -121,7 +121,6 @@ Sub Class_Globals
 	Private curMidx As String
 	Private kmlName As String
 	Private options As Map
-	Public VC As VueComponent	
 	Private bFullScreenControl As Boolean
 	Private bDisableDefaultUI As Boolean
 	Private bMapTypeControl As Boolean
@@ -187,6 +186,7 @@ Sub Class_Globals
 	Public const COLOR_BLACK As String = "./assets/marker-icon-2x-black.png"
 	Public MapObject As BANanoObject
 	Public google As BANanoObject
+	Private VC As VueComponent
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -237,8 +237,8 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 End Sub
 
 'set the parent component
-Sub setParentComponent(PVC As VueComponent)
-	VC = PVC
+Sub setParentComponent(PC As VueComponent)
+	VC = PC
 End Sub
 
 'GmapVue

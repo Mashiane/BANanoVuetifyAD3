@@ -93,6 +93,7 @@ Private xoutlined As String
 Private xleft As String
 Private xshaped As String
 Private forapp As String
+	Private VC As VueComponent				'ignore
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -272,13 +273,13 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 End Sub
 
 'update the label of the button
-Sub UpdateLabel(VC As VueComponent, s As String)
-	VC.SetData(xCaption, S)
+Sub UpdateLabel(C As VueComponent, s As String)
+	C.SetData(xCaption, S)
 End Sub
 
-Sub UpdateColor(VC As VueComponent, vColor As String, vIntensity As String)
+Sub UpdateColor(C As VueComponent, vColor As String, vIntensity As String)
 	sColor = VElement.BuildColor(vColor, vIntensity)
-	VC.SetData(xColor, sColor)
+	C.SetData(xColor, sColor)
 End Sub
 
 public Sub AddToParent(targetID As String)
@@ -311,14 +312,14 @@ Sub RemoveAttr(p As String) As VSnackBar
 	Return Me
 End Sub
 
-Sub UpdateVisible(VC As VueComponent, b As Boolean) As VSnackBar
-	VC.SetData(sVIf, b)
-	VC.SetData(sVModel, b)
+Sub UpdateVisible(C As VueComponent, b As Boolean) As VSnackBar
+	C.SetData(sVIf, b)
+	C.SetData(sVModel, b)
 	Return Me
 End Sub
 
-Sub UpdateTimeOut(VC As VueComponent, s As String) As VSnackBar
-	VC.SetData(xtimeout, s)
+Sub UpdateTimeOut(C As VueComponent, s As String) As VSnackBar
+	C.SetData(xtimeout, s)
 	Return Me
 End Sub
 
@@ -331,7 +332,8 @@ Sub getHere As String
 End Sub
 
 
-Sub BindState(VC As VueComponent)
+Sub BindState(C As VueComponent)
+	vc = c
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control
@@ -340,64 +342,64 @@ Sub BindState(VC As VueComponent)
 		Select Case k
 		Case "key"
 		Case Else
-			VC.SetData(k, v)
+			C.SetData(k, v)
 		End Select
 	Next
 	'apply the events
 	For Each k As String In mmethods.Keys
 		Dim cb As BANanoObject = mmethods.Get(k)
-		VC.SetCallBack(k, cb)
+		C.SetCallBack(k, cb)
 	Next
 End Sub
 
 
-Sub ShowError(VC As VueComponent, Message As String)
+Sub ShowError(C As VueComponent, Message As String)
 	If BANano.IsNull(Message) Then Return
-	VC.SetData(xCaption, Message)
-	VC.SetData(xColor, "error")
-	VC.SetData(sVModel, True)
+	C.SetData(xCaption, Message)
+	C.SetData(xColor, "error")
+	C.SetData(sVModel, True)
 End Sub
 
-Sub ShowSuccess(VC As VueComponent,  Message As String)
+Sub ShowSuccess(C As VueComponent,  Message As String)
 	If BANano.IsNull(Message) Then Return
-	VC.SetData(xCaption, Message)
-	VC.SetData(xColor, "success")
-	VC.SetData(sVModel, True)
+	C.SetData(xCaption, Message)
+	C.SetData(xColor, "success")
+	C.SetData(sVModel, True)
 End Sub
 
-Sub ShowPrimary(VC As VueComponent,  Message As String)
+Sub ShowPrimary(C As VueComponent,  Message As String)
 	If BANano.IsNull(Message) Then Return
-	VC.SetData(xCaption, Message)
-	VC.SetData(xColor, "primary")
-	VC.SetData(sVModel, True)
+	C.SetData(xCaption, Message)
+	C.SetData(xColor, "primary")
+	C.SetData(sVModel, True)
 End Sub
 
-Sub ShowSecondary(VC As VueComponent,  Message As String)
+Sub ShowSecondary(C As VueComponent,  Message As String)
 	If BANano.IsNull(Message) Then Return
-	VC.SetData(xCaption, Message)
-	VC.SetData(xColor, "secondary")
-	VC.SetData(sVModel, True)
+	C.SetData(xCaption, Message)
+	C.SetData(xColor, "secondary")
+	C.SetData(sVModel, True)
 End Sub
 
-Sub ShowInfo(VC As VueComponent,  Message As String)
+Sub ShowInfo(C As VueComponent,  Message As String)
 	If BANano.IsNull(Message) Then Return
-	VC.SetData(xCaption, Message)
-	VC.SetData(xColor, "info")
-	VC.SetData(sVModel, True)
+	C.SetData(xCaption, Message)
+	C.SetData(xColor, "info")
+	C.SetData(sVModel, True)
 End Sub
 
-Sub ShowWarning(VC As VueComponent,  Message As String)
+Sub ShowWarning(C As VueComponent,  Message As String)
 	If BANano.IsNull(Message) Then Return
-	VC.SetData(xCaption, Message)
-	VC.SetData(xColor, "warning")
-	VC.SetData(sVModel, True)
+	C.SetData(xCaption, Message)
+	C.SetData(xColor, "warning")
+	C.SetData(sVModel, True)
 End Sub
 
-Sub Show(VC As VueComponent,  Message As String)
+Sub Show(C As VueComponent,  Message As String)
 	If BANano.IsNull(Message) Then Return
-	VC.SetData(xCaption, Message)
-	VC.SetData(xColor, "")
-	VC.SetData(sVModel, True)
+	C.SetData(xCaption, Message)
+	C.SetData(xColor, "")
+	C.SetData(sVModel, True)
 End Sub
 
 Sub HiddenXSOnly

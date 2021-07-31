@@ -68,6 +68,7 @@ Private sVIf As String
 Private sKey As String
 Private sVFor As String
 Private bHidden As Boolean
+	Private VC As VueComponent						'ignore
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -203,9 +204,9 @@ Sub RemoveAttr(p As String) As VTemplate
 	Return Me
 End Sub
 
-Sub UpdateVisible(VC As VueComponent, b As Boolean) As VTemplate
-	VC.SetData(sVIf, b)
-	'VC.SetData(sVShow, b)
+Sub UpdateVisible(C As VueComponent, b As Boolean) As VTemplate
+	C.SetData(sVIf, b)
+	'C.SetData(sVShow, b)
 	Return Me
 End Sub
 
@@ -220,7 +221,8 @@ Sub getHere As String
 End Sub
 
 
-Sub BindState(VC As VueComponent)
+Sub BindState(C As VueComponent)
+	vc = c
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control
@@ -229,13 +231,13 @@ Sub BindState(VC As VueComponent)
 		Select Case k
 		Case "key"
 		Case Else
-			VC.SetData(k, v)
+			C.SetData(k, v)
 		End Select
 	Next
 	'apply the events
 	For Each k As String In mmethods.Keys
 		Dim cb As BANanoObject = mmethods.Get(k)
-		VC.SetCallBack(k, cb)
+		C.SetCallBack(k, cb)
 	Next
 End Sub
 

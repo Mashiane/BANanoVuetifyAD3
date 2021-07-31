@@ -65,6 +65,7 @@ Private sVOn As String
 Private sWidth As String
 Private bHidden As Boolean
 Private sElevation As String
+Private VC As VueComponent
 	End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -188,9 +189,9 @@ Sub RemoveAttr(p As String) As VListItemAvatar
 	Return Me
 End Sub
 
-Sub UpdateVisible(VC As VueComponent, b As Boolean) As VListItemAvatar
-	VC.SetData(sVIf, b)
-	'VC.SetData(sVShow, b)
+Sub UpdateVisible(C As VueComponent, b As Boolean) As VListItemAvatar
+	C.SetData(sVIf, b)
+	'C.SetData(sVShow, b)
 	Return Me
 End Sub
 
@@ -205,7 +206,8 @@ Sub getHere As String
 End Sub
 
 
-Sub BindState(VC As VueComponent)
+Sub BindState(C As VueComponent)
+	vc = c
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control
@@ -214,13 +216,13 @@ Sub BindState(VC As VueComponent)
 		Select Case k
 		Case "key"
 		Case Else
-			VC.SetData(k, v)
+			C.SetData(k, v)
 		End Select
 	Next
 	'apply the events
 	For Each k As String In mmethods.Keys
 		Dim cb As BANanoObject = mmethods.Get(k)
-		VC.SetCallBack(k, cb)
+		C.SetCallBack(k, cb)
 	Next
 End Sub
 
@@ -331,4 +333,12 @@ End Sub
 
 Sub VisibleOnlyOnXL
 	AddClass("d-none d-xl-flex")
+End Sub
+
+Sub Hide
+	UpdateVisible(VC, False)
+End Sub
+
+Sub Show
+	UpdateVisible(VC, True)
 End Sub

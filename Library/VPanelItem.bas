@@ -50,6 +50,7 @@ Sub Class_Globals
 	Private sSeparator As String
 	Private sPrefix As String
 	Private sSuffix As String
+	Private VC As VueComponent		'ignore
 End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -175,7 +176,8 @@ Sub getHere As String
 End Sub
 
 
-Sub BindState(VC As VueComponent)
+Sub BindState(C As VueComponent)
+	vc = c
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control
@@ -184,44 +186,44 @@ Sub BindState(VC As VueComponent)
 		Select Case k
 		Case "key"
 		Case Else
-			VC.SetData(k, v)
+			C.SetData(k, v)
 		End Select
 	Next
 	'apply the events
 	For Each k As String In mmethods.Keys
 		Dim cb As BANanoObject = mmethods.Get(k)
-		VC.SetCallBack(k, cb)
+		C.SetCallBack(k, cb)
 	Next
 End Sub
 
 'Update Color
-Sub UpdateColor(VC As VueComponent, vColor As String)
-	VC.SetData($"${mName}color"$, vColor)
+Sub UpdateColor(C As VueComponent, vColor As String)
+	C.SetData($"${mName}color"$, vColor)
 End Sub
 
 'Update Duration
-Sub UpdateDuration(VC As VueComponent, vDuration As Int)
-	VC.SetData($"${mName}duration"$, vDuration)
+Sub UpdateDuration(C As VueComponent, vDuration As Int)
+	C.SetData($"${mName}duration"$, vDuration)
 End Sub
 
 'Update EndNumber
-Sub UpdateEnd(VC As VueComponent, vEndNumber As Int)
-	VC.SetData($"${mName}end"$, vEndNumber)
+Sub UpdateEnd(C As VueComponent, vEndNumber As Int)
+	C.SetData($"${mName}end"$, vEndNumber)
 End Sub
 
 'Update Icon
-Sub UpdateIcon(VC As VueComponent, vIconx As String)
-	VC.SetData($"${mName}icon"$, vIconx)
+Sub UpdateIcon(C As VueComponent, vIconx As String)
+	C.SetData($"${mName}icon"$, vIconx)
 End Sub
 
 'Update StartNumber
-Sub UpdateStart(VC As VueComponent, vStartNumber As Int)	
-	VC.SetData($"${mName}start"$, vStartNumber)
+Sub UpdateStart(C As VueComponent, vStartNumber As Int)	
+	C.SetData($"${mName}start"$, vStartNumber)
 End Sub
 
 'Update Title
-Sub UpdateTitle(VC As VueComponent, vTitle As String)
-	VC.SetData($"${mName}title"$, vTitle)
+Sub UpdateTitle(C As VueComponent, vTitle As String)
+	C.SetData($"${mName}title"$, vTitle)
 End Sub
 
 

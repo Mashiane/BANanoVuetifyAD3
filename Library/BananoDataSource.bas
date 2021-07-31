@@ -222,12 +222,18 @@ Sub BEToRelationships(be As BANanoElement)
 	Next	
 End Sub
 
+
+
 'set the user name
 Sub setUserName(p As String)
 	If IsBound = False Then
 		BANano.Throw($"BANanoDataSource.${mName}.UserName has not been bound to the component!"$)
 	End If
 	sUserName = p
+End Sub
+
+Sub getUserName As String
+	Return sUserName
 End Sub
 
 'set connection to be dynamic
@@ -349,12 +355,20 @@ Sub setHostName(p As String)
 	sHostName = p
 End Sub
 
+Sub getHostName As String
+	Return sHostName
+End Sub
+
 'set database name
 Sub setDatabaseName(p As String)
 	If IsBound = False Then
 		BANano.Throw($"BANanoDataSource.${mName}.DatabaseName has not been bound to the component!"$)
 	End If
 	sDatabaseName = p
+End Sub
+
+Sub getDatabaseName As String
+	Return sDatabaseName
 End Sub
 
 'set table name
@@ -365,6 +379,10 @@ Sub setTableName(p As String)
 	sTableName = p
 End Sub
 
+Sub getTableName As String
+	Return sTableName
+End Sub
+
 'set record source
 Sub setRecordSource(p As String)
 	If IsBound = False Then
@@ -372,6 +390,10 @@ Sub setRecordSource(p As String)
 	End If
 	sRecordSource = p
 	dsKey = $"${sRecordSource}.${sPrimaryKey}"$
+End Sub
+
+Sub getRecordSource As String
+	Return sRecordSource
 End Sub
 
 'set DatabaseType
@@ -554,6 +576,18 @@ Sub SchemaSetStrings(flds As List)
 		BANano.Throw($"BANanoDataSource.${mName}.SchemaSetStrings has not been bound to the component!"$)
 	End If
 	Strings = flds
+End Sub
+
+'set defaults
+Sub SchemaSetDefaults(dm As Map)
+	If IsBound = False Then
+		BANano.Throw($"BANanoDataSource.${mName}.SchemaSetStrings has not been bound to the component!"$)
+	End If
+	schemaDefaultsM.Initialize 
+	For Each k As String In dm.Keys
+		Dim v As Object = dm.Get(k)
+		AddDefault(k, v)
+	Next
 End Sub
 
 'set doubles
@@ -1030,6 +1064,22 @@ Sub ClearWhere As BananoDataSource
 End Sub
 
 'add a where clause for your select where
+Sub AddWhereMap(fw As Map) As BananoDataSource
+	If IsBound = False Then
+		BANano.Throw($"BANanoDataSource.${mName}.AddWhere has not been bound to the component!"$)
+	End If
+	If bShowLog Then
+		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.AddWhereMap"$)
+	End If
+	ClearWhere
+	For Each k As String In fw.Keys
+		Dim v As Object = fw.Get(k)
+		AddWhere(k, "=", v)
+	Next
+	Return Me
+End Sub
+
+'add a where clause for your select where
 Sub AddWhere(fld As String, operator As String, value As Object) As BananoDataSource
 	If IsBound = False Then
 		BANano.Throw($"BANanoDataSource.${mName}.AddWhere has not been bound to the component!"$)
@@ -1048,6 +1098,20 @@ private Sub MySQLExecute As Boolean    'ignore
 	End If
 	If bShowLog Then
 		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.MySQLExecute"$)
+		Log($"Table Name: ${sTableName}"$)
+		Log($"Primary Key: ${sPrimaryKey}"$)
+		Log($"AutoIncrement: ${sAutoIncrement}"$)
+		Log($"RecordSource: ${sRecordSource}"$)
+		Log($"Singular: ${sSingular}"$)
+		Log($"Plural: ${sPlural}"$)
+		Log($"Display Field: ${sDisplayField}"$)
+		Log($"Fields: ${BANano.ToJson(schemaFields)}"$)
+		Log($"Select Fields: ${BANano.ToJson(schemaSelectFields)}"$)
+		Log($"Sort By: ${BANano.ToJson(schemaOrderBy)}"$)
+		Log($"Integers: ${BANano.ToJson(Integers)}"$)
+		Log($"Doubles: ${BANano.ToJson(Doubles)}"$)
+		Log($"Blobs: ${BANano.ToJson(Blobs)}"$)
+		Log($"Defaults: ${BANano.ToJson(schemaDefaultsM)}"$)		
 	End If
 	Dim MySQL As BANanoMySQLE
 	MySQL.Initialize(sDatabaseName, sTableName, sPrimaryKey, sAutoIncrement) 

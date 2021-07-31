@@ -95,6 +95,7 @@ Sub Class_Globals
 	Private sItemColors As String
 	Private bHasButtons As Boolean
 	Private sItemAvatars As String
+	Private VC As VueComponent
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -343,9 +344,9 @@ End Sub
 
 
 'clear the items
-Sub Clear(VC As VueComponent)
+Sub Clear(C As VueComponent)
 	xitems.Initialize 
-	VC.SetData(itemname, xitems)
+	C.SetData(itemname, xitems)
 End Sub
 
 'add an item
@@ -360,18 +361,18 @@ Sub AddItem(iID As String, iAvatar As String, iIcon As String, iColor As String,
 End Sub
 
 'refresh the items
-Sub Refresh(VC As VueComponent)
-	VC.SetData(itemname, xitems)
+Sub Refresh(C As VueComponent)
+	C.SetData(itemname, xitems)
 End Sub
 
-Sub UpdateDisabled(VC As VueComponent, b As Boolean)
-	VC.SetData($"${mName}disabled"$, b)
+Sub UpdateDisabled(C As VueComponent, b As Boolean)
+	C.SetData($"${mName}disabled"$, b)
 End Sub
 
 
-Sub UpdateVisible(VC As VueComponent, b As Boolean)
-	VC.SetData(mVIf, b)
-	VC.SetData(sActive, b)
+Sub UpdateVisible(C As VueComponent, b As Boolean)
+	C.SetData(mVIf, b)
+	C.SetData(sActive, b)
 End Sub
 
 public Sub AddToParent(targetID As String)
@@ -415,7 +416,8 @@ Sub getHere As String
 End Sub
 
 
-Sub BindState(VC As VueComponent)
+Sub BindState(C As VueComponent)
+	vc = c
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control
@@ -424,13 +426,13 @@ Sub BindState(VC As VueComponent)
 		Select Case k
 		Case "key"
 		Case Else
-			VC.SetData(k, v)
+			C.SetData(k, v)
 		End Select
 	Next
 	'apply the events
 	For Each k As String In mmethods.Keys
 		Dim cb As BANanoObject = mmethods.Get(k)
-		VC.SetCallBack(k, cb)
+		C.SetCallBack(k, cb)
 	Next
 End Sub
 
@@ -545,4 +547,20 @@ End Sub
 
 Sub VisibleOnlyOnXL
 	AddClass("d-none d-xl-flex")
+End Sub
+
+Sub Hide
+	UpdateVisible(VC, False)
+End Sub
+
+Sub Show
+	UpdateVisible(VC, True)
+End Sub
+
+Sub Enable
+	UpdateDisabled(VC, False)
+End Sub
+
+Sub Disable
+	UpdateDisabled(VC, True)
 End Sub

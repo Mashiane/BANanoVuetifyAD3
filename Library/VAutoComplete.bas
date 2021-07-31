@@ -221,6 +221,7 @@ Private sRequired As String
 Private sValue As String
 Private bColorList As Boolean
 Private bShrink As Boolean
+Private VC As VueComponent
 	End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -552,13 +553,13 @@ VElement.SetData(sItems, xitems)
 VElement.BindAllEvents
 End Sub
 
-Sub UpdateDisabled(VC As VueComponent, b As Boolean)
+Sub UpdateDisabled(C As VueComponent, b As Boolean)
 	bDisabled = b
-	VC.SetData(sDisabled, b)
+	C.SetData(sDisabled, b)
 End Sub
 
-Sub UpdateReturnObject(VC As VueComponent, b As Boolean)  
-	VC.SetData(xReturnObject, b)
+Sub UpdateReturnObject(C As VueComponent, b As Boolean)  
+	C.SetData(xReturnObject, b)
 End Sub
 
 
@@ -592,9 +593,9 @@ Sub RemoveAttr(p As String) As VAutoComplete
 	Return Me 
 End Sub
 
-Sub UpdateVisible(VC As VueComponent, b As Boolean) As VAutoComplete 
-	VC.SetData(sVIf, b) 
-	VC.SetData(sVShow, b) 
+Sub UpdateVisible(C As VueComponent, b As Boolean) As VAutoComplete 
+	C.SetData(sVIf, b) 
+	C.SetData(sVShow, b) 
 	Return Me 
 End Sub
 
@@ -617,104 +618,104 @@ End Sub
 
 '
 ''Update Error
-'Sub UpdateError(VC As VueComponent, vError As Object)
-'VC.SetData(sError, vError)
+'Sub UpdateError(C As VueComponent, vError As Object)
+'C.SetData(sError, vError)
 'End Sub
 '
 ''Update ErrorMessages
-'Sub UpdateErrorMessages(VC As VueComponent, vErrorMessages As Object)
-'VC.SetData(sErrorMessages, vErrorMessages)
+'Sub UpdateErrorMessages(C As VueComponent, vErrorMessages As Object)
+'C.SetData(sErrorMessages, vErrorMessages)
 'End Sub
 '
 ''Clear ErrorMessages
-'Sub ClearErrorMessages(VC As VueComponent)
-'VC.SetData(sErrorMessages, VC.NewList)
+'Sub ClearErrorMessages(C As VueComponent)
+'C.SetData(sErrorMessages, C.NewList)
 'End Sub
 
 'Update ItemColor
-Sub UpdateItemColor(VC As VueComponent, vItemColor As Object)
-VC.SetData(sItemColor, vItemColor)
+Sub UpdateItemColor(C As VueComponent, vItemColor As Object)
+C.SetData(sItemColor, vItemColor)
 End Sub
 
 'Update Items
-Sub UpdateItems(VC As VueComponent, vItems As Object)
-VC.SetData(sItems, vItems)
+Sub UpdateItems(C As VueComponent, vItems As Object)
+C.SetData(sItems, vItems)
 End Sub
 
 'Update Items
-Sub Reload(VC As VueComponent, vItems As Object)
-	VC.SetData(sItems, vItems)
+Sub Reload(C As VueComponent, vItems As Object)
+	C.SetData(sItems, vItems)
 End Sub
 
 'Clear Items
-Sub Clear(VC As VueComponent)
+Sub Clear(C As VueComponent)
 xitems.Initialize 
-VC.SetData(sItems, VC.NewList)
+C.SetData(sItems, C.NewList)
 End Sub
 
 'Update Loading
-Sub UpdateLoading(VC As VueComponent, vLoading As Object)
-VC.SetData(sLoading, vLoading)
+Sub UpdateLoading(C As VueComponent, vLoading As Object)
+C.SetData(sLoading, vLoading)
 End Sub
 
 'Update MenuProps
-Sub UpdateMenuProps(VC As VueComponent, vMenuProps As Object)
-VC.SetData(sMenuProps, vMenuProps)
+Sub UpdateMenuProps(C As VueComponent, vMenuProps As Object)
+C.SetData(sMenuProps, vMenuProps)
 End Sub
 
 'Update Messages
-Sub UpdateMessages(VC As VueComponent, vMessages As Object)
-VC.SetData(sMessages, vMessages)
+Sub UpdateMessages(C As VueComponent, vMessages As Object)
+C.SetData(sMessages, vMessages)
 End Sub
 
 'Clear Messages
-Sub ClearMessages(VC As VueComponent)
-VC.SetData(sMessages, VC.NewList)
+Sub ClearMessages(C As VueComponent)
+C.SetData(sMessages, C.NewList)
 End Sub
 
 'Update NoDataText
-Sub UpdateNoDataText(VC As VueComponent, vNoDataText As Object)
-VC.SetData(sNoDataText, vNoDataText)
+Sub UpdateNoDataText(C As VueComponent, vNoDataText As Object)
+C.SetData(sNoDataText, vNoDataText)
 End Sub
 
 'Update Readonly
-Sub UpdateReadonly(VC As VueComponent, vReadonly As Object)
-VC.SetData(sReadonly, vReadonly)
+Sub UpdateReadonly(C As VueComponent, vReadonly As Object)
+C.SetData(sReadonly, vReadonly)
 End Sub
 
 'Clear Rules
-Sub ClearRules(VC As VueComponent)
-VC.SetData(sRules, VC.NewList)
+Sub ClearRules(C As VueComponent)
+C.SetData(sRules, C.NewList)
 End Sub
 
 'Update SearchInput
-Sub UpdateSearchInput(VC As VueComponent, vSearchInput As Object)
-VC.SetData(sSearchInput, vSearchInput)
+Sub UpdateSearchInput(C As VueComponent, vSearchInput As Object)
+C.SetData(sSearchInput, vSearchInput)
 End Sub
 
 ''Update Success
-'Sub UpdateSuccess(VC As VueComponent, vSuccess As Object)
-'VC.SetData(sSuccess, vSuccess)
+'Sub UpdateSuccess(C As VueComponent, vSuccess As Object)
+'C.SetData(sSuccess, vSuccess)
 'End Sub
 '
 ''Update SuccessMessages
-'Sub UpdateSuccessMessages(VC As VueComponent, vSuccessMessages As Object)
-'VC.SetData(sSuccessMessages, vSuccessMessages)
+'Sub UpdateSuccessMessages(C As VueComponent, vSuccessMessages As Object)
+'C.SetData(sSuccessMessages, vSuccessMessages)
 'End Sub
 '
 ''Clear SuccessMessages
-'Sub ClearSuccessMessages(VC As VueComponent)
-'VC.SetData(sSuccessMessages, VC.NewList)
+'Sub ClearSuccessMessages(C As VueComponent)
+'C.SetData(sSuccessMessages, C.NewList)
 'End Sub
 
 'Update VModel
-Sub SetValue(VC As VueComponent, vVModel As Object)
-VC.SetData(sVModel, vVModel)
+Sub SetValue(C As VueComponent, vVModel As Object)
+C.SetData(sVModel, vVModel)
 End Sub
 
 'get value
-Sub GetValue(VC As VueComponent) As Object
-	Dim res As Object = VC.GetData(sVModel)
+Sub GetValue(C As VueComponent) As Object
+	Dim res As Object = C.GetData(sVModel)
 	Return res
 End Sub
 
@@ -734,8 +735,8 @@ End Sub
 
 
 'refresh the select
-Sub Refresh(VC As VueComponent)
-	VC.SetData(sItems, xitems)
+Sub Refresh(C As VueComponent)
+	C.SetData(sItems, xitems)
 End Sub
 
 
@@ -800,12 +801,13 @@ End Sub
 
 
 'convert a normal list to key value pairs
-Sub UpdateItems1(VC As VueComponent, lst As List)
+Sub UpdateItems1(C As VueComponent, lst As List)
 	Dim nl As List = BANanoShared.ListToDataSource(sItemValue, sItemText, lst)
-	VC.SetData(sItems, nl)
+	C.SetData(sItems, nl)
 End Sub
 
-Sub BindState(VC As VueComponent)
+Sub BindState(C As VueComponent)
+	VC = c
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control
@@ -814,13 +816,13 @@ Sub BindState(VC As VueComponent)
 		Select Case k
 		Case "key"
 		Case Else
-			VC.SetData(k, v)
+			C.SetData(k, v)
 		End Select
 	Next
 	'apply the events
 	For Each k As String In mmethods.Keys
 		Dim cb As BANanoObject = mmethods.Get(k)
-		VC.SetCallBack(k, cb)
+		C.SetCallBack(k, cb)
 	Next
 End Sub
 
@@ -935,4 +937,20 @@ End Sub
 
 Sub VisibleOnlyOnXL
 	AddClass("d-none d-xl-flex")
+End Sub
+
+Sub Hide
+	UpdateVisible(VC, False)
+End Sub
+
+Sub Show
+	UpdateVisible(VC, True)
+End Sub
+
+Sub Enable
+	UpdateDisabled(VC, False)
+End Sub
+
+Sub Disable
+	UpdateDisabled(VC, True)
 End Sub

@@ -166,6 +166,7 @@ Private sDisabled As String
 Private bHidden As Boolean
 Private sRounded As String
 Private bDefault As Boolean
+Private VC As VueComponent
 	End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -428,14 +429,14 @@ bDisabled = BANanoShared.parseBool(bDisabled)
 	End If
 End Sub
 
-private Sub WatchVisibility(VC As VueComponent)
-	VC.SetWatch(sVModel, True, True, mCallBack, $"${mName}_visible"$, Null)
+private Sub WatchVisibility(C As VueComponent)
+	C.SetWatch(sVModel, True, True, mCallBack, $"${mName}_visible"$, Null)
 End Sub
 
 'update the card text
-Sub UpdateCardText(VC As VueComponent, vCardTextx As String)
+Sub UpdateCardText(C As VueComponent, vCardTextx As String)
 	sCardTextCaption = vCardTextx
-	VC.SetData(xCardTextCaption, vCardTextx)
+	C.SetData(xCardTextCaption, vCardTextx)
 End Sub
 
 Sub UpdateCardTextOnApp(V As VuetifyApp, vCardTextx As String)
@@ -444,9 +445,9 @@ Sub UpdateCardTextOnApp(V As VuetifyApp, vCardTextx As String)
 End Sub
 
 'update the toolbar dark status
-Sub UpdateToolbarDark(VC As VueComponent, vDark As Boolean)
+Sub UpdateToolbarDark(C As VueComponent, vDark As Boolean)
 	bToolbarDark = vDark
-	VC.SetData(xToolBarDark, vDark)
+	C.SetData(xToolBarDark, vDark)
 End Sub
 
 Sub UpdateToolbarDarkOnApp(V As VuetifyApp, vDark As Boolean)
@@ -455,9 +456,9 @@ Sub UpdateToolbarDarkOnApp(V As VuetifyApp, vDark As Boolean)
 End Sub
 
 'update the toolbar color
-Sub UpdateToolbarColor(VC As VueComponent, vColor As String, vIntensity As String)
+Sub UpdateToolbarColor(C As VueComponent, vColor As String, vIntensity As String)
 	sToolBarColor = VElement.BuildColor(vColor, vIntensity)
-	VC.SetData(xToolBarColor, sToolBarColor)
+	C.SetData(xToolBarColor, sToolBarColor)
 End Sub
 
 Sub UpdateToolbarColorOnApp(V As VuetifyApp, vColor As String, vIntensity As String)
@@ -466,9 +467,9 @@ Sub UpdateToolbarColorOnApp(V As VuetifyApp, vColor As String, vIntensity As Str
 End Sub
 
 'update the ok color
-Sub UpdateOkColor(VC As VueComponent, vColor As String, vIntensity As String)
+Sub UpdateOkColor(C As VueComponent, vColor As String, vIntensity As String)
 	sOkColor = VElement.BuildColor(vColor, vIntensity)
-	VC.SetData(xOkColor, sOkColor)
+	C.SetData(xOkColor, sOkColor)
 End Sub
 
 Sub UpdateOkColorOnApp(V As VuetifyApp, vColor As String, vIntensity As String)
@@ -477,9 +478,9 @@ Sub UpdateOkColorOnApp(V As VuetifyApp, vColor As String, vIntensity As String)
 End Sub
 
 'update the cancel color
-Sub UpdateCancelColor(VC As VueComponent, vColor As String, vIntensity As String)
+Sub UpdateCancelColor(C As VueComponent, vColor As String, vIntensity As String)
 	sCancelColor = VElement.BuildColor(vColor, vIntensity)
-	VC.SetData(xCancelColor, sCancelColor)
+	C.SetData(xCancelColor, sCancelColor)
 End Sub
 
 Sub UpdateCancelColorOnApp(V As VuetifyApp, vColor As String, vIntensity As String)
@@ -488,9 +489,9 @@ Sub UpdateCancelColorOnApp(V As VuetifyApp, vColor As String, vIntensity As Stri
 End Sub
 
 'update the card title
-Sub UpdateCardTitle(VC As VueComponent, vCardTitleCaption As String)
+Sub UpdateCardTitle(C As VueComponent, vCardTitleCaption As String)
 	sCardTitleCaption = vCardTitleCaption
-	VC.SetData(xCardTitleCaption, vCardTitleCaption)
+	C.SetData(xCardTitleCaption, vCardTitleCaption)
 End Sub
 
 Sub UpdateCardTitleOnApp(V As VuetifyApp, vCardTitleCaption As String)
@@ -499,9 +500,9 @@ Sub UpdateCardTitleOnApp(V As VuetifyApp, vCardTitleCaption As String)
 End Sub
 
 'update the toolbar title
-Sub UpdateToolBarTitle(VC As VueComponent, vToolbarCaption As String)
+Sub UpdateToolBarTitle(C As VueComponent, vToolbarCaption As String)
 	sToolbarCaption = vToolbarCaption
-	VC.SetData(xToolbarCaption, vToolbarCaption)
+	C.SetData(xToolbarCaption, vToolbarCaption)
 End Sub
 
 Sub UpdateToolBarTitleOnApp(V As VuetifyApp, vToolbarCaption As String)
@@ -534,9 +535,9 @@ Sub RemoveAttr(p As String) As VDialog
 End Sub
 
 'turn visibility on and off
-Sub UpdateVisible(VC As VueComponent, b As Boolean) As VDialog
-	VC.SetData(sVIf, b)
-	VC.SetData(sVModel, b)
+Sub UpdateVisible(C As VueComponent, b As Boolean) As VDialog
+	C.SetData(sVIf, b)
+	C.SetData(sVModel, b)
 	Return Me
 End Sub
 
@@ -609,9 +610,9 @@ End Sub
 'End Sub
 
 'update the label of the ok button
-Sub UpdateOkLabel(VC As VueComponent, s As String)
+Sub UpdateOkLabel(C As VueComponent, s As String)
 	sOkCaption = s
-	VC.SetData(xOkCaption, sOkCaption)
+	C.SetData(xOkCaption, sOkCaption)
 End Sub
 
 Sub UpdateOkLabelOnApp(V As VuetifyApp, s As String)
@@ -620,9 +621,9 @@ Sub UpdateOkLabelOnApp(V As VuetifyApp, s As String)
 End Sub
 
 'update the label of the cancel button
-Sub UpdateCancelLabel(VC As VueComponent, s As String)
+Sub UpdateCancelLabel(C As VueComponent, s As String)
 	sCancelCaption = s
-	VC.SetData(xCancelCaption, sCancelCaption)
+	C.SetData(xCancelCaption, sCancelCaption)
 End Sub
 
 Sub UpdateCancelLabelOnApp(V As VuetifyApp, s As String)
@@ -631,9 +632,9 @@ Sub UpdateCancelLabelOnApp(V As VuetifyApp, s As String)
 End Sub
 
 'update the visibility of the ok button
-Sub UpdateOkVisible(VC As VueComponent, b As Boolean)
+Sub UpdateOkVisible(C As VueComponent, b As Boolean)
 	bOkVisible = b
-	VC.SetData(xOkVisible, bOkVisible)
+	C.SetData(xOkVisible, bOkVisible)
 End Sub
 
 Sub UpdateOkVisibleOnApp(V As VuetifyApp, b As Boolean)
@@ -642,9 +643,9 @@ Sub UpdateOkVisibleOnApp(V As VuetifyApp, b As Boolean)
 End Sub
 	
 'update the loading of the ok button
-Sub UpdateOkLoading(VC As VueComponent, b As Boolean)
+Sub UpdateOkLoading(C As VueComponent, b As Boolean)
 	bOkLoading = b
-	VC.SetData(xOkLoading, bOkLoading)
+	C.SetData(xOkLoading, bOkLoading)
 End Sub
 
 Sub UpdateOkLoadingOnApp(V As VuetifyApp, b As Boolean)
@@ -653,9 +654,9 @@ Sub UpdateOkLoadingOnApp(V As VuetifyApp, b As Boolean)
 End Sub	
 
 'update the disanled of the ok button
-Sub UpdateOkDisabled(VC As VueComponent, b As Boolean)
+Sub UpdateOkDisabled(C As VueComponent, b As Boolean)
 	bOkDisabled = b
-	VC.SetData(xOkDisabled, bOkDisabled)
+	C.SetData(xOkDisabled, bOkDisabled)
 End Sub
 
 Sub UpdateOkDisabledOnApp(V As VuetifyApp, b As Boolean)
@@ -664,9 +665,9 @@ Sub UpdateOkDisabledOnApp(V As VuetifyApp, b As Boolean)
 End Sub		
 
 'update the visibility of the cancel button
-Sub UpdateCancelVisible(VC As VueComponent, b As Boolean)
+Sub UpdateCancelVisible(C As VueComponent, b As Boolean)
 	bCancelVisible = b
-	VC.SetData(xCancelVisible, bCancelVisible)
+	C.SetData(xCancelVisible, bCancelVisible)
 End Sub
 
 Sub UpdateCancelVisibleOnApp(V As VuetifyApp, b As Boolean)
@@ -675,9 +676,9 @@ Sub UpdateCancelVisibleOnApp(V As VuetifyApp, b As Boolean)
 End Sub
 	
 'update the loading of the cancel button
-Sub UpdateCancelLoading(VC As VueComponent, b As Boolean)
+Sub UpdateCancelLoading(C As VueComponent, b As Boolean)
 	bCancelLoading = b
-	VC.SetData(xCancelLoading, bCancelLoading)
+	C.SetData(xCancelLoading, bCancelLoading)
 End Sub
 
 Sub UpdateCancelLoadingOnApp(V As VuetifyApp, b As Boolean)
@@ -686,9 +687,9 @@ Sub UpdateCancelLoadingOnApp(V As VuetifyApp, b As Boolean)
 End Sub	
 
 'update the disanled of the cancel button
-Sub UpdateCancelDisabled(VC As VueComponent, b As Boolean)
+Sub UpdateCancelDisabled(C As VueComponent, b As Boolean)
 	bCancelDisabled = b
-	VC.SetData(xCancelDisabled, bCancelDisabled)
+	C.SetData(xCancelDisabled, bCancelDisabled)
 End Sub
 
 Sub UpdateCancelDisabledOnApp(V As VuetifyApp, b As Boolean)
@@ -724,7 +725,8 @@ Sub OkButton As VBtn
 	Return elx
 End Sub
 
-Sub BindState(VC As VueComponent)
+Sub BindState(C As VueComponent)
+	vc = c
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control
@@ -733,20 +735,20 @@ Sub BindState(VC As VueComponent)
 		Select Case k
 		Case "key"
 		Case Else
-			VC.SetData(k, v)
+			C.SetData(k, v)
 		End Select
 	Next
 	'apply the events
 	For Each k As String In mmethods.Keys
 		Dim cb As BANanoObject = mmethods.Get(k)
-		VC.SetCallBack(k, cb)
+		C.SetCallBack(k, cb)
 	Next
 	WatchVisibility(VC)
 End Sub
 
 'get the process
-Sub Process(VC As VueComponent) As String
-	Dim sprocess As String = VC.GetData("confirmkey")
+Sub Process(C As VueComponent) As String
+	Dim sprocess As String = C.GetData("confirmkey")
 	Return sprocess
 End Sub
 
@@ -756,19 +758,19 @@ Sub ProcessOnApp(V As VuetifyApp) As String
 End Sub
 
 'show confirm dialog
-Sub Confirm(VC As VueComponent, sProcess As String, Title As String, Message As String, ConfirmText As String, CancelText As String)
+Sub Confirm(C As VueComponent, sProcess As String, Title As String, Message As String, ConfirmText As String, CancelText As String)
 	sProcess = sProcess.tolowercase
-	UpdateToolBarTitle(VC, Title)
-	UpdateCardTitle(VC, Title)
-	UpdateOkLabel(VC, ConfirmText)
-	UpdateCancelLabel(VC, CancelText)
-	UpdateOkVisible(VC, True)
-	UpdateCancelVisible(VC, True)
-	UpdateOkLoading(VC, False)
-	UpdateCancelLoading(VC, False)
-	UpdateCardText(VC, Message)
-	VC.SetData("confirmkey", sProcess)
-	UpdateVisible(VC, True)
+	UpdateToolBarTitle(C, Title)
+	UpdateCardTitle(C, Title)
+	UpdateOkLabel(C, ConfirmText)
+	UpdateCancelLabel(C, CancelText)
+	UpdateOkVisible(C, True)
+	UpdateCancelVisible(C, True)
+	UpdateOkLoading(C, False)
+	UpdateCancelLoading(C, False)
+	UpdateCardText(C, Message)
+	C.SetData("confirmkey", sProcess)
+	UpdateVisible(C, True)
 End Sub
 
 Sub ConfirmOnApp(V As VuetifyApp, sProcess As String, Title As String, Message As String, ConfirmText As String, CancelText As String)
@@ -787,16 +789,16 @@ Sub ConfirmOnApp(V As VuetifyApp, sProcess As String, Title As String, Message A
 End Sub
 
 'show confirm dialog
-Sub Alert(VC As VueComponent, sProcess As String, Title As String, Message As String, ConfirmText As String)
+Sub Alert(C As VueComponent, sProcess As String, Title As String, Message As String, ConfirmText As String)
 	sProcess = sProcess.tolowercase
-	UpdateToolBarTitle(VC, Title)
-	UpdateCardTitle(VC, Title)
-	UpdateCardText(VC, Message)
-	UpdateOkLabel(VC, ConfirmText)
-	UpdateOkVisible(VC, True)
-	UpdateCancelVisible(VC, False)
-	VC.SetData("confirmkey", sProcess)
-	UpdateVisible(VC, True)
+	UpdateToolBarTitle(C, Title)
+	UpdateCardTitle(C, Title)
+	UpdateCardText(C, Message)
+	UpdateOkLabel(C, ConfirmText)
+	UpdateOkVisible(C, True)
+	UpdateCancelVisible(C, False)
+	C.SetData("confirmkey", sProcess)
+	UpdateVisible(C, True)
 End Sub
 
 Sub AlertOnApp(V As VuetifyApp, sProcess As String, Title As String, Message As String, ConfirmText As String)
@@ -917,4 +919,12 @@ End Sub
 
 Sub VisibleOnlyOnXL
 	AddClass("d-none d-xl-flex")
+End Sub
+
+Sub Hide
+	UpdateVisible(VC, False)
+End Sub
+
+Sub Show
+	UpdateVisible(VC, True)
 End Sub

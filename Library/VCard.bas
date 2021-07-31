@@ -136,6 +136,7 @@ Private sPY As String
 Private bdisabled As Boolean
 Private bLoading As Boolean
 Private bHidden As Boolean
+Private VC As VueComponent
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -401,19 +402,19 @@ Sub RemoveAttr(p As String) As VCard
 	Return Me
 End Sub
 
-Sub UpdateVisible(VC As VueComponent, b As Boolean) As VCard
-	VC.SetData(mVIf, b)
-	'VC.SetData(mVShow, b)
+Sub UpdateVisible(C As VueComponent, b As Boolean) As VCard
+	C.SetData(mVIf, b)
+	'C.SetData(mVShow, b)
 	Return Me
 End Sub
 
-Sub UpdateLoading(VC As VueComponent, b As Boolean) As VCard
-	VC.SetData(sLoading, b)
+Sub UpdateLoading(C As VueComponent, b As Boolean) As VCard
+	C.SetData(sLoading, b)
 	Return Me
 End Sub
 
-Sub UpdateElevation(VC As VueComponent, b As Boolean) As VCard
-	VC.SetData(sElevation, b)
+Sub UpdateElevation(C As VueComponent, b As Boolean) As VCard
+	C.SetData(sElevation, b)
 	Return Me
 End Sub
 
@@ -447,13 +448,14 @@ Sub getHere As String
 	Return $"#${mName}"$
 End Sub
 
-Sub UpdateDisabled(VC As VueComponent, b As Boolean)
+Sub UpdateDisabled(C As VueComponent, b As Boolean)
 	bdisabled = b
-	VC.SetData(sDisabled, b)
+	C.SetData(sDisabled, b)
 End Sub
 
 
-Sub BindState(VC As VueComponent)
+Sub BindState(C As VueComponent)
+	VC = c
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control
@@ -462,13 +464,13 @@ Sub BindState(VC As VueComponent)
 		Select Case k
 		Case "key"
 		Case Else
-			VC.SetData(k, v)
+			C.SetData(k, v)
 		End Select
 	Next
 	'apply the events
 	For Each k As String In mmethods.Keys
 		Dim cb As BANanoObject = mmethods.Get(k)
-		VC.SetCallBack(k, cb)
+		C.SetCallBack(k, cb)
 	Next
 End Sub
 
@@ -590,4 +592,20 @@ End Sub
 
 Sub VisibleOnlyOnXL
 	AddClass("d-none d-xl-flex")
+End Sub
+
+Sub Hide
+	UpdateVisible(VC, False)
+End Sub
+
+Sub Show
+	UpdateVisible(VC, True)
+End Sub
+
+Sub Enable
+	UpdateDisabled(VC, False)
+End Sub
+
+Sub Disable
+	UpdateDisabled(VC, True)
 End Sub

@@ -97,7 +97,8 @@ Sub Class_Globals
 	Private itemsName As String
 	Private bHidden As Boolean
 	Private svmodel As String
-	private sItemTo as string
+	Private sItemTo As String
+	Private VC As VueComponent
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -303,14 +304,14 @@ Sub RemoveAttr(p As String) As VBottomNavigation
 	Return Me
 End Sub
 
-Sub UpdateVisible(VC As VueComponent, b As Boolean) As VBottomNavigation
-	VC.SetData(sVIf, b)
-	VC.SetData(sVShow, b)
+Sub UpdateVisible(C As VueComponent, b As Boolean) As VBottomNavigation
+	C.SetData(sVIf, b)
+	C.SetData(sVShow, b)
 	Return Me
 End Sub
 
-Sub Clear(VC As VueComponent)
-	VC.SetData(itemsName, VC.NewList)
+Sub Clear(C As VueComponent)
+	C.SetData(itemsName, C.NewList)
 	xitems.Initialize 
 End Sub
 
@@ -341,20 +342,20 @@ Sub AddItem1(elID As String, caption As String, color As String, iconName As Str
 	Return Me
 End Sub
 
-Sub UpdateBadge(VC As VueComponent, key As String, badge As Int)
+Sub UpdateBadge(C As VueComponent, key As String, badge As Int)
 	Dim ni As Map = CreateMap()
 	ni.Put("badge", badge)
-	VC.RealTimeUpdateItem(itemsName, "id", key, ni)
+	C.RealTimeUpdateItem(itemsName, "id", key, ni)
 End Sub
 
 
-Sub Refresh(VC As VueComponent)
-	VC.SetData(itemsName, xitems)
+Sub Refresh(C As VueComponent)
+	C.SetData(itemsName, xitems)
 End Sub
 
 'set active button
-Sub SetValue(VC As VueComponent, xvalue As String)
-	VC.SetData(svmodel, xvalue)
+Sub SetValue(C As VueComponent, xvalue As String)
+	C.SetData(svmodel, xvalue)
 End Sub
 
 Sub getID As String
@@ -367,7 +368,8 @@ Sub getHere As String
 End Sub
 
 
-Sub BindState(VC As VueComponent)
+Sub BindState(C As VueComponent)
+	VC = c
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control
@@ -376,13 +378,13 @@ Sub BindState(VC As VueComponent)
 		Select Case k
 		Case "key"
 		Case Else
-			VC.SetData(k, v)
+			C.SetData(k, v)
 		End Select
 	Next
 	'apply the events
 	For Each k As String In mmethods.Keys
 		Dim cb As BANanoObject = mmethods.Get(k)
-		VC.SetCallBack(k, cb)
+		C.SetCallBack(k, cb)
 	Next
 End Sub
 
@@ -492,4 +494,12 @@ End Sub
 
 Sub VisibleOnlyOnXL
 	AddClass("d-none d-xl-flex")
+End Sub
+
+Sub Hide
+	UpdateVisible(VC, False)
+End Sub
+
+Sub Show
+	UpdateVisible(VC, True)
 End Sub

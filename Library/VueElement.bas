@@ -5652,9 +5652,9 @@ Sub ClearItems()
 End Sub
 
 'update the records
-Sub RefreshItems(VC As VueComponent)
+Sub RefreshItems(C As VueComponent)
 	Records = GetData(stItems)
-	VC.setdata(stItems, Records)
+	C.setdata(stItems, Records)
 End Sub
 
 Sub ListViewClear
@@ -5951,11 +5951,11 @@ Sub AddItemRightCheckBox(id As String, bChecked As Boolean, title As String, sub
 End Sub
 
 'get checked / unchecked preferences
-Sub GetPreferencesChecked(VC As VueComponent, bShouldBe As Boolean) As List
+Sub GetPreferencesChecked(C As VueComponent, bShouldBe As Boolean) As List
 	Dim nl As List
 	nl.Initialize 
 	Dim ds As String = getDataSource
-	Dim rs1 As List = VC.GetData(ds)
+	Dim rs1 As List = c.GetData(ds)
 	For Each rsm As Map In rs1
 		Dim sid As String = rsm.Get("id")
 		Dim brs As Boolean = False
@@ -5980,9 +5980,9 @@ Sub GetPreferencesChecked(VC As VueComponent, bShouldBe As Boolean) As List
 End Sub
 
 'Check/Uncheck preferences
-Sub SetPreferencesChecked(VC As VueComponent, bShouldBe As Boolean)
+Sub SetPreferencesChecked(C As VueComponent, bShouldBe As Boolean)
 	Dim ds As String = getDataSource
-	Dim rs1 As List = VC.GetData(ds)
+	Dim rs1 As List = C.GetData(ds)
 	Dim rsTot As Int = rs1.Size - 1
 	Dim rsCnt As Int
 	For rsCnt = 0 To rsTot
@@ -6001,13 +6001,13 @@ Sub SetPreferencesChecked(VC As VueComponent, bShouldBe As Boolean)
 		End If
 		rs1.Set(rsCnt, rsm)
 	Next
-	VC.SetData(ds, rs1)
+	C.SetData(ds, rs1)
 End Sub
 
-Sub GetPreferences(VC As VueComponent) As Map
+Sub GetPreferences(C As VueComponent) As Map
 	Dim nm As Map = CreateMap()
 	Dim ds As String = getDataSource
-	Dim rs1 As List = VC.GetData(ds)
+	Dim rs1 As List = C.GetData(ds)
 	For Each rsm As Map In rs1
 		Dim sid As String = rsm.Get("id")
 		Dim brs As Boolean = False
@@ -6031,9 +6031,9 @@ Sub GetPreferences(VC As VueComponent) As Map
 	Return nm
 End Sub
 
-Sub SetPreferences(VC As VueComponent, prefM As Map)
+Sub SetPreferences(C As VueComponent, prefM As Map)
 	Dim ds As String = getDataSource
-	Dim rs1 As List = VC.GetData(ds)
+	Dim rs1 As List = C.GetData(ds)
 	Dim rsTot As Int = rs1.Size - 1
 	Dim rsCnt As Int
 	For rsCnt = 0 To rsTot
@@ -6057,7 +6057,7 @@ Sub SetPreferences(VC As VueComponent, prefM As Map)
 			rs1.Set(rsCnt, rsm)
 		End If
 	Next
-	VC.SetData(ds, rs1)
+	C.SetData(ds, rs1)
 End Sub
 
 'add an icon
@@ -9394,12 +9394,12 @@ End Sub
 'End Select
 'Dim fp As String = fileDet.FullPath
 ''update state of some element
-''VC.SetData("vmodel, fp)
+''C.SetData("vmodel, fp)
 'End Sub
 ''****for multiple files
 'Sub fi1_change(fileList As List)
 'If banano.IsNull(fileList) Or banano.IsUndefined(fileList) Then Return
-'Dim uploads As List = vc.NewList
+'Dim uploads As List = C.NewList
 'for each fileObj As Map in fileList
 ''get file details
 'Dim fileDet As FileObject
@@ -9463,12 +9463,12 @@ End Sub
 'End Select
 'Dim fp As String = fileDet.FullPath
 ''update state of some element
-''VC.SetData("vmodel, fp)
+''C.SetData("vmodel, fp)
 'End Sub
 ''****for multiple files
 'Sub fi1_change(fileList As List)
 'If banano.IsNull(fileList) Or banano.IsUndefined(fileList) Then Return
-'Dim uploads As List = vc.NewList
+'Dim uploads As List = C.NewList
 'for each fileObj As Map in fileList
 ''get file details
 'Dim fileDet As FileObject
@@ -11252,14 +11252,14 @@ End Sub
 'component.SetLoading("fi", False)
 'Dim fp As String = fileDet.FullPath
 ''update state of some element
-''VC.SetData("vmodel, fp)
+''C.SetData("vmodel, fp)
 'End Sub
 ''****for multiple files
 'Sub fifile_change(fileList As List)
 'component.SetLoading("fi", False)
 'If banano.IsNull(fileList) Or banano.IsUndefined(fileList) Then Return
 'component.SetLoading("fi", True)
-'Dim uploads As List = vc.NewList
+'Dim uploads As List = C.NewList
 'for each fileObj As Map in fileList
 ''get file details
 'Dim fileDet As FileObject
@@ -11421,36 +11421,36 @@ Sub setEventColor(ec As String)
 	AddAttr(":event-color", ec)
 End Sub
 
-Sub CalendarShowWeek(VC As VueComponent, elID As String)
+Sub CalendarShowWeek(C As VueComponent, elID As String)
 	elID = elID.tolowercase
-	VC.SetData($"${elID}type"$, "week")
+	C.SetData($"${elID}type"$, "week")
 End Sub
 
-Sub CalendarShowDay(VC As VueComponent, elID As String)
+Sub CalendarShowDay(C As VueComponent, elID As String)
 	elID = elID.tolowercase
-	VC.SetData($"${elID}type"$, "day")
+	C.SetData($"${elID}type"$, "day")
 End Sub
 
-Sub CalendarShowMonth(VC As VueComponent, elID As String)
+Sub CalendarShowMonth(C As VueComponent, elID As String)
 	elID = elID.tolowercase
-	VC.SetData($"${elID}type"$, "month")
+	C.SetData($"${elID}type"$, "month")
 End Sub
 
-Sub CalendarCheckChange(VC As VueComponent, elID As String)
+Sub CalendarCheckChange(C As VueComponent, elID As String)
 	elID = elID.tolowercase
-	Dim refs As BANanoObject = VC.refs
+	Dim refs As BANanoObject = C.refs
 	refs.GetField(elID).RunMethod("checkChange", Null)
 End Sub
 
-Sub CalendarPrev(VC As VueComponent, elID As String)
+Sub CalendarPrev(C As VueComponent, elID As String)
 	elID = elID.tolowercase
-	Dim refs As BANanoObject = VC.refs
+	Dim refs As BANanoObject = C.refs
 	refs.GetField(elID).RunMethod("prev", Null)
 End Sub
 
-Sub CalendarNext(VC As VueComponent, elID As String)
+Sub CalendarNext(C As VueComponent, elID As String)
 	elID = elID.tolowercase
-	Dim refs As BANanoObject = VC.refs
+	Dim refs As BANanoObject = C.refs
 	refs.GetField(elID).RunMethod("next", Null)
 End Sub
 
@@ -11713,12 +11713,12 @@ Sub AddTreeViewItemOpen(parentID As String, key As String, text As String, mhref
 	End If	
 End Sub
 
-Sub RefreshTreeView(VC As VueComponent)
+Sub RefreshTreeView(C As VueComponent)
 	'unflatten the data
 	Dim unflat As List = BANanoShared.Unflatten(Records, "children")
-	VC.SetData(stItems, unflat)
+	C.SetData(stItems, unflat)
 	If OpenItems.Size > 0 Then
-		VC.SetOpenItems(mName, OpenItems)
+		C.SetOpenItems(mName, OpenItems)
 	End If
 End Sub
 
@@ -12053,7 +12053,7 @@ Sub getHere As String
 	Return sHere
 End Sub
 
-Sub BindState(VC As VueComponent)
+Sub BindState(C As VueComponent)
 	Dim mbindings As Map = bindings
 	Dim mmethods As Map = methods
 	'apply the binding for the control
@@ -12062,13 +12062,13 @@ Sub BindState(VC As VueComponent)
 		Select Case k
 		Case "key"
 		Case Else
-			VC.SetData(k, v)
+			C.SetData(k, v)
 		End Select
 	Next
 	'apply the events
 	For Each k As String In mmethods.Keys
 		Dim cb As BANanoObject = mmethods.Get(k)
-		VC.SetCallBack(k, cb)
+		C.SetCallBack(k, cb)
 	Next
 End Sub
 

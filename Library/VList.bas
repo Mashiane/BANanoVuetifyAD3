@@ -157,6 +157,7 @@ Private bUseSubTitle2 As Boolean
 Private bUseSubTitle3 As Boolean
 Private bUseSubTitle4 As Boolean
 Private bUseTitle As Boolean
+Private VC As VueComponent
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -417,15 +418,15 @@ Sub RemoveAttr(p As String) As VList
 	Return Me
 End Sub
 
-Sub UpdateVisible(VC As VueComponent, b As Boolean) As VList
-	VC.SetData(sVIf, b)
-	'VC.SetData(sVShow, b)
+Sub UpdateVisible(C As VueComponent, b As Boolean) As VList
+	C.SetData(sVIf, b)
+	'C.SetData(sVShow, b)
 	Return Me
 End Sub
 
-Sub UpdateDisabled(VC As VueComponent, b As Boolean)
+Sub UpdateDisabled(C As VueComponent, b As Boolean)
 	bDisabled = b
-	VC.SetData(sDisabled, b)
+	C.SetData(sDisabled, b)
 End Sub
 
 
@@ -437,9 +438,9 @@ Sub getID As String
 	Return mName
 End Sub
 
-Sub Clear(VC As VueComponent)
+Sub Clear(C As VueComponent)
 	Records.Initialize
-	VC.SetData(DataSource, Records)
+	C.SetData(DataSource, Records)
 End Sub
 
 Sub ClearOnApp(app As VuetifyApp)
@@ -447,13 +448,13 @@ Sub ClearOnApp(app As VuetifyApp)
 	app.SetData(DataSource, Records)
 End Sub
 
-Sub Refresh(VC As VueComponent)
+Sub Refresh(C As VueComponent)
 	Select Case xTemplate
 	Case "tree"
 		Dim recs As List = BANanoShared.Unflatten(Records, "items")
-		VC.SetData(DataSource, recs)	
+		C.SetData(DataSource, recs)	
 	Case Else
-		VC.setdata(DataSource, Records)
+		C.setdata(DataSource, Records)
 	End Select
 End Sub
 
@@ -1688,11 +1689,11 @@ Sub AddItemRightCheckBox(id As String, bChecked As Boolean, title As String, sub
 End Sub
 
 'get checked / unchecked preferences
-Sub GetPreferencesChecked(VC As VueComponent, bShouldBe As Boolean) As List
+Sub GetPreferencesChecked(C As VueComponent, bShouldBe As Boolean) As List
 	Dim nl As List
 	nl.Initialize 
 	Dim ds As String = DataSource
-	Dim rs1 As List = VC.GetData(ds)
+	Dim rs1 As List = C.GetData(ds)
 	For Each rsm As Map In rs1
 		Dim sid As String = rsm.Get("id")
 		Dim brs As Boolean = False
@@ -1717,9 +1718,9 @@ Sub GetPreferencesChecked(VC As VueComponent, bShouldBe As Boolean) As List
 End Sub
 
 'Check/Uncheck preferences
-Sub SetPreferencesChecked(VC As VueComponent, bShouldBe As Boolean)
+Sub SetPreferencesChecked(C As VueComponent, bShouldBe As Boolean)
 	Dim ds As String = DataSource
-	Dim rs1 As List = VC.GetData(ds)
+	Dim rs1 As List = C.GetData(ds)
 	Dim rsTot As Int = rs1.Size - 1
 	Dim rsCnt As Int
 	For rsCnt = 0 To rsTot
@@ -1738,13 +1739,13 @@ Sub SetPreferencesChecked(VC As VueComponent, bShouldBe As Boolean)
 		End If
 		rs1.Set(rsCnt, rsm)
 	Next
-	VC.SetData(ds, rs1)
+	C.SetData(ds, rs1)
 End Sub
 
-Sub GetPreferences(VC As VueComponent) As Map
+Sub GetPreferences(C As VueComponent) As Map
 	Dim nm As Map = CreateMap()
 	Dim ds As String = DataSource
-	Dim rs1 As List = VC.GetData(ds)
+	Dim rs1 As List = C.GetData(ds)
 	For Each rsm As Map In rs1
 		Dim sid As String = rsm.Get("id")
 		Dim brs As Boolean = False
@@ -1768,9 +1769,9 @@ Sub GetPreferences(VC As VueComponent) As Map
 	Return nm
 End Sub
 
-Sub SetPreferences(VC As VueComponent, prefM As Map)
+Sub SetPreferences(C As VueComponent, prefM As Map)
 	Dim ds As String = DataSource
-	Dim rs1 As List = VC.GetData(ds)
+	Dim rs1 As List = C.GetData(ds)
 	Dim rsTot As Int = rs1.Size - 1
 	Dim rsCnt As Int
 	For rsCnt = 0 To rsTot
@@ -1794,7 +1795,7 @@ Sub SetPreferences(VC As VueComponent, prefM As Map)
 			rs1.Set(rsCnt, rsm)
 		End If
 	Next
-	VC.SetData(ds, rs1)
+	C.SetData(ds, rs1)
 End Sub
 
 Sub SetItemAvatarIcon(itemID As String, bChecked As Boolean) As VList
@@ -1836,77 +1837,78 @@ Sub BindVueElement(VE As VueElement)
 End Sub
 
 'add an item at realtime
-Sub AddItem3(VC As VueComponent, rowData As Map)
+Sub AddItem3(C As VueComponent, rowData As Map)
 	rowData.Put("visible", True)
-	VC.SetDataPush(DataSource, rowData)
+	C.SetDataPush(DataSource, rowData)
 End Sub
 
 'remove item at position
-Sub RemoveItemAtPosition(VC As VueComponent, pos As Int)
+Sub RemoveItemAtPosition(C As VueComponent, pos As Int)
 	If pos >= 0 Then
-		VC.SetDataSpliceRemove(DataSource, pos, 1)
+		C.SetDataSpliceRemove(DataSource, pos, 1)
 	End If
 End Sub
 
 'remove an item where
-Sub RemoveItem(VC As VueComponent, prop As String, value As String)
+Sub RemoveItem(C As VueComponent, prop As String, value As String)
 	Dim m As Map = CreateMap()
 	m.Put(prop, value)
 	'find the record at a position
-	Dim mpos As Int = VC.GetDataPositionWhere(DataSource, m)
+	Dim mpos As Int = C.GetDataPositionWhere(DataSource, m)
 	If mpos >= 0 Then
-		VC.SetDataSpliceRemove(DataSource, mpos, 1)
+		C.SetDataSpliceRemove(DataSource, mpos, 1)
 	End If
 End Sub
 
 'update item where
-Sub UpdateItem(VC As VueComponent, prop As String, value As String, item As Map)
+Sub UpdateItem(C As VueComponent, prop As String, value As String, item As Map)
 	Dim m As Map = CreateMap()
 	m.Put(prop, value)
 	'find the record at a position
-	Dim mpos As Int = VC.GetDataPositionWhere(DataSource, m)
+	Dim mpos As Int = C.GetDataPositionWhere(DataSource, m)
 	If mpos >= 0 Then
-		Dim oldm As Map = VC.FindItemAtPosition(DataSource, mpos)
+		Dim oldm As Map = C.FindItemAtPosition(DataSource, mpos)
 		oldm = BANanoShared.Merge(oldm, item)
-		VC.SetDataSplice(DataSource, mpos, 1, oldm)
+		C.SetDataSplice(DataSource, mpos, 1, oldm)
 	End If
 End Sub
 
 'update item where
-Sub UpdateItemAtPosition(VC As VueComponent, pos As Int, item As Map)
+Sub UpdateItemAtPosition(C As VueComponent, pos As Int, item As Map)
 	If pos >= 0 Then
-		Dim oldm As Map = VC.FindItemAtPosition(DataSource, pos)
+		Dim oldm As Map = C.FindItemAtPosition(DataSource, pos)
 		oldm = BANanoShared.Merge(oldm, item)
-		VC.SetDataSplice(DataSource, pos, 1, oldm)
+		C.SetDataSplice(DataSource, pos, 1, oldm)
 	End If
 End Sub
 
 'get data where
-Sub FindItem(VC As VueComponent, whereMap As Map) As Map
+Sub FindItem(C As VueComponent, whereMap As Map) As Map
 	Dim rm As Map = CreateMap()
 	'find the item
-	Dim recpos As Int = VC.GetDataPositionWhere(DataSource, whereMap)
+	Dim recpos As Int = C.GetDataPositionWhere(DataSource, whereMap)
 	If recpos = -1 Then Return rm
-	Dim recs As List = VC.GetData(DataSource)
+	Dim recs As List = C.GetData(DataSource)
 	Dim rec As Map = recs.Get(recpos)
 	Return rec
 End Sub
 
 'find item at position
-Sub FindItemAtPosition(VC As VueComponent, pos As Int) As Map
-	Dim recs As List = VC.GetData(DataSource)
+Sub FindItemAtPosition(C As VueComponent, pos As Int) As Map
+	Dim recs As List = C.GetData(DataSource)
 	Dim rec As Map = recs.Get(pos)
 	Return rec
 End Sub
 
 'find item position
-Sub FindItemPosition(VC As VueComponent, whereMap As Map) As Int
-	Dim mpos As Int = VC.GetDataPositionWhere(DataSource, whereMap)
+Sub FindItemPosition(C As VueComponent, whereMap As Map) As Int
+	Dim mpos As Int = C.GetDataPositionWhere(DataSource, whereMap)
 	Return mpos
 End Sub
 
 
-Sub BindState(VC As VueComponent)
+Sub BindState(C As VueComponent)
+	vc = c
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control
@@ -1915,13 +1917,13 @@ Sub BindState(VC As VueComponent)
 		Select Case k
 		Case "key"
 		Case Else
-			VC.SetData(k, v)
+			C.SetData(k, v)
 		End Select
 	Next
 	'apply the events
 	For Each k As String In mmethods.Keys
 		Dim cb As BANanoObject = mmethods.Get(k)
-		VC.SetCallBack(k, cb)
+		C.SetCallBack(k, cb)
 	Next
 End Sub
 
@@ -2123,7 +2125,23 @@ Sub VisibleOnlyOnXL
 End Sub
 
 'get the items
-Sub GetItems(VC As VueComponent) As List
-	Dim res As List = VC.GetData(DataSource)
+Sub GetItems(C As VueComponent) As List
+	Dim res As List = C.GetData(DataSource)
 	Return res
+End Sub
+
+Sub Hide
+	UpdateVisible(VC, False)
+End Sub
+
+Sub Show
+	UpdateVisible(VC, True)
+End Sub
+
+Sub Enable
+	UpdateDisabled(VC, False)
+End Sub
+
+Sub Disable
+	UpdateDisabled(VC, True)
 End Sub

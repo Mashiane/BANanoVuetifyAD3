@@ -12,6 +12,7 @@ Version=9.1
 ' Properties that will be show in the ABStract Designer.  They will be passed in the props map in DesignerCreateView (Case Sensitive!)
 #DesignerProperty: Key: AutoID, DisplayName: Auto ID/Name, FieldType: Boolean, DefaultValue: False, Description: Overrides the ID/Name with a random string.
 #DesignerProperty: Key: Raised, DisplayName: Raised/Text, FieldType: Boolean, DefaultValue: True, Description: Transparent Background Off
+#DesignerProperty: Key: Label, DisplayName: Label, FieldType: String, DefaultValue: , Description: Label
 #DesignerProperty: Key: Size, DisplayName: Size, FieldType: String, DefaultValue: small, Description: Size, List: x-small|small|normal|large|x-large
 #DesignerProperty: Key: FAB, DisplayName: FAB, FieldType: Boolean, DefaultValue: False, Description: FAB
 #DesignerProperty: Key: IconName, DisplayName: Icon Name, FieldType: String, DefaultValue: , Description: Icon Name
@@ -95,6 +96,8 @@ Sub Class_Globals
 	Private sItemTexts As String
 	Private sItemColors As String
 	Private bHasButtons As Boolean
+	Private sLabel As String
+	Private VC As VueComponent
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -158,6 +161,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sItemColors = Props.GetDefault("ItemColors","")
 		sItemType = Props.GetDefault("ItemType", "none")
 		sItemTexts = Props.GetDefault("ItemTexts", "")
+		sLabel = Props.GetDefault("Label", "")
 	End If
 	'
 	bDark = BANanoShared.parseBool(bDark)
@@ -168,27 +172,23 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	bRaised = BANanoShared.parseBool(bRaised)
 	bTile = BANanoShared.parseBool(bTile)
 	bAbsolute = BANanoShared.parseBool(bAbsolute)
-'	
-	sItemKeys = sItemKeys.Replace(",", ";")
-	sItemIcons = sItemIcons.Replace(",", ";")
-	sItemColors = sItemColors.Replace(",", ";")
-	sItemTexts = sItemTexts.Replace(",", ";")
-	
-	Dim xkeys As List = BANanoShared.StrParse(";", sItemKeys)
-	Dim xicons As List = BANanoShared.StrParse(";", sItemIcons)
-	Dim xcolors As List = BANanoShared.StrParse(";", sItemColors)
-	Dim xtexts As List = BANanoShared.StrParse(";", sItemTexts)
+	'	
+	Dim xkeys As List = BANanoShared.StrParseComma(";", sItemKeys)
+	Dim xicons As List = BANanoShared.StrParseComma(";", sItemIcons)
+	Dim xcolors As List = BANanoShared.StrParseComma(";", sItemColors)
+	Dim xtexts As List = BANanoShared.StrParseComma(";", sItemTexts)
 		'
 	xkeys = BANanoShared.ListTrimItems(xkeys)
 	xicons = BANanoShared.ListTrimItems(xicons)
 	xcolors = BANanoShared.ListTrimItems(xcolors)
+	xtexts = BANanoShared.ListTrimItems(xtexts)
 		'
 	Dim tItems As Int = xkeys.Size - 1
 	For itemCnt = 0 To tItems
-		Dim iKey As String = xkeys.Get(itemCnt)
-		Dim iIco As String = xicons.Get(itemCnt)
-		Dim iCol As String = xcolors.Get(itemCnt)
-		Dim iTxt As String = xtexts.Get(itemCnt)
+		Dim iKey As String = BANanoShared.GetListItem(xkeys, itemCnt)
+		Dim iIco As String = BANanoShared.GetListItem(xicons, itemCnt)
+		Dim iCol As String = BANanoShared.GetListItem(xcolors, itemCnt)
+		Dim iTxt As String = BANanoShared.GetListItem(xtexts, itemCnt)
 		'
 		Dim nm As Map = CreateMap()
 		nm.Put("id", iKey)
@@ -210,7 +210,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		mElement = BANano.GetElement($"#${mName}"$)
 	Else
 		If bHasButtons = False Then
-			mElement = mTarget.Append($"<v-btn ref="${mName}" id="${mName}"><v-icon id="${mName}icon"></v-icon></v-btn>"$).Get("#" & mName)
+			mElement = mTarget.Append($"<v-btn ref="${mName}" id="${mName}"></v-btn>"$).Get("#" & mName)
 		Else	
 			mElement = mTarget.Append($"<v-btn ref="${mName}" id="${mName}" v-for="item in ${mName}items" :key="item.id" :color="item.color"></v-btn>"$).Get("#" & mName)
 		End If
@@ -218,9 +218,9 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		
 	VElement.Initialize(mCallBack, mName, mName)
 	VElement.TagName = "v-btn"
+	Dim siconID As String = $"${mName}icon"$
 	
 	If bHasButtons Then
-		Dim siconID As String = $"${mName}icon"$
 		Select Case sItemType
 		Case "button"
 			VElement.Caption = "{{ item.text }}"
@@ -244,10 +244,31 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		End Select
 		VElement.SetData(itemname, xitems)
 	Else
-		VElement.GetIcon.Color = sIconColor
-		VElement.GetIcon.Caption = sIconName
-		VElement.GetIcon.Dark = bIconDark
-		VElement.GetIcon.Size = sIconSize
+		Select Case sItemType
+		Case "button"
+			VElement.Caption = sLabel
+		Case "fab"
+			VElement.Fab = True
+			VElement.Append($"<v-icon id="${siconID}">${sIconName}</v-icon>"$)
+			VElement.GetIcon.Dark = bIconDark
+			VElement.GetIcon.Size = sIconSize
+			VElement.GetIcon.Color = sIconColor
+		Case "icon-left"
+			VElement.Append($"<v-icon id="${siconID}">${sIconName}</v-icon>"$)
+			VElement.GetIcon.Left = True
+			VElement.Append($"<span>${sLabel}</span>"$)
+			VElement.GetIcon.Dark = bIconDark
+			VElement.GetIcon.Size = sIconSize
+			VElement.GetIcon.Color = sIconColor
+		Case "icon-right"
+			VElement.Append($"<span>${sLabel}</span>"$)
+			VElement.Append($"<v-icon id="${siconID}">${sIconName}</v-icon>"$)
+			VElement.GetIcon.Right = True
+			VElement.GetIcon.Dark = bIconDark
+			VElement.GetIcon.Size = sIconSize
+			VElement.GetIcon.Color = sIconColor
+		End Select
+		'
 		mColor = VElement.BuildColor(mColor, mColorIntensity)
 		VElement.Bind("color", xColor)
 		VElement.SetData(xColor, mColor)
@@ -310,9 +331,9 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 End Sub
 
 'clear the items
-Sub Clear(VC As VueComponent)
+Sub Clear(C As VueComponent)
 	xitems.Initialize 
-	VC.SetData(itemname, xitems)
+	C.SetData(itemname, xitems)
 End Sub
 
 'add an item
@@ -326,8 +347,8 @@ Sub AddItem(iID As String, iIcon As String, iColor As String, iText As String)
 End Sub
 
 'refresh the items
-Sub Refresh(VC As VueComponent)
-	VC.SetData(itemname, xitems)
+Sub Refresh(C As VueComponent)
+	C.SetData(itemname, xitems)
 End Sub
 
 'return html of the element
@@ -340,30 +361,30 @@ Sub getHTML As String
 End Sub
 
 'update the color of the button
-Sub UpdateColor(VC As VueComponent, s As String)
-	VC.SetData(xColor, S)
+Sub UpdateColor(C As VueComponent, s As String)
+	C.SetData(xColor, S)
 End Sub
 
-Sub UpdateColorOnApp(VC As VuetifyApp, s As String)
-	VC.SetData(xColor, S)
+Sub UpdateColorOnApp(C As VuetifyApp, s As String)
+	C.SetData(xColor, S)
 End Sub
 
 'update the loading state of the button
-Sub UpdateLoading(VC As VueComponent, b As Boolean)
-	VC.SetData(xLoading, b)
+Sub UpdateLoading(C As VueComponent, b As Boolean)
+	C.SetData(xLoading, b)
 End Sub
 
-Sub UpdateLoadingOnApp(VC As VuetifyApp, b As Boolean)
-	VC.SetData(xLoading, b)
+Sub UpdateLoadingOnApp(C As VuetifyApp, b As Boolean)
+	C.SetData(xLoading, b)
 End Sub
 
 'update the disabled state of the button
-Sub UpdateDisabled(VC As VueComponent, b As Boolean)
-	VC.SetData(xDisabled, b)
+Sub UpdateDisabled(C As VueComponent, b As Boolean)
+	C.SetData(xDisabled, b)
 End Sub
 
-Sub UpdateDisabledOnApp(VC As VuetifyApp, b As Boolean)
-	VC.SetData(xDisabled, b)
+Sub UpdateDisabledOnApp(C As VuetifyApp, b As Boolean)
+	C.SetData(xDisabled, b)
 End Sub
 
 'add to parent
@@ -399,14 +420,14 @@ Sub RemoveAttr(p As String)
 End Sub
 
 'change visibility of the button
-Sub UpdateVisible(VC As VueComponent, b As Boolean)
-	VC.SetData(mVIf, b)
-	VC.SetData(mVShow, b)
+Sub UpdateVisible(C As VueComponent, b As Boolean)
+	C.SetData(mVIf, b)
+	C.SetData(mVShow, b)
 End Sub
 
-Sub UpdateVisibleOnApp(VC As VuetifyApp, b As Boolean)
-	VC.SetData(mVIf, b)
-	VC.SetData(mVShow, b)
+Sub UpdateVisibleOnApp(C As VuetifyApp, b As Boolean)
+	C.SetData(mVIf, b)
+	C.SetData(mVShow, b)
 End Sub
 
 'get the id of the button
@@ -419,7 +440,8 @@ Sub getHere As String
 	Return $"#${mName}"$
 End Sub
 
-Sub BindState(VC As VueComponent)
+Sub BindState(C As VueComponent)
+	VC = c
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control
@@ -428,13 +450,13 @@ Sub BindState(VC As VueComponent)
 		Select Case k
 		Case "key"
 		Case Else
-			VC.SetData(k, v)
+			C.SetData(k, v)
 		End Select
 	Next
 	'apply the events
 	For Each k As String In mmethods.Keys
 		Dim cb As BANanoObject = mmethods.Get(k)
-		VC.SetCallBack(k, cb)
+		C.SetCallBack(k, cb)
 	Next
 End Sub
 
@@ -544,4 +566,20 @@ End Sub
 
 Sub VisibleOnlyOnXL
 	AddClass("d-none d-xl-flex")
+End Sub
+
+Sub Hide
+	UpdateVisible(VC, False)
+End Sub
+
+Sub Show
+	UpdateVisible(VC, True)
+End Sub
+
+Sub Enable
+	UpdateDisabled(VC, False)
+End Sub
+
+Sub Disable
+	UpdateDisabled(VC, True)
 End Sub

@@ -182,6 +182,7 @@ Sub Class_Globals
 	Private bDateTimePicker As Boolean
 	Private dateModel As String
 	Private timeModel As String
+	Private VC As VueComponent						'ignore
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -607,42 +608,42 @@ bLoading = BANanoShared.parseBool(bLoading)
 End Sub
 
 'get the date from date time picker
-Sub FormatDateTime(VC As VueComponent)
-	Dim res1 As String = VC.GetData(dateModel)
-	Dim res2 As String = VC.GetData(timeModel)
+Sub FormatDateTime(C As VueComponent)
+	Dim res1 As String = C.GetData(dateModel)
+	Dim res2 As String = C.GetData(timeModel)
 	Dim xDate As String = ""
 	If res1 <> "" Then
-		xDate = VC.NiceDate(res1)
+		xDate = C.NiceDate(res1)
 	End If
 	Dim res As String = $"${xDate} ${res2}"$
 	res = res.Trim
 	Dim resx As String = $"${sVModel}fmt"$
-	VC.SetData(resx, res)
+	C.SetData(resx, res)
 End Sub
 
 'get the date
-Sub GetDate(VC As VueComponent) As String
-	Dim res As String = VC.GetData(sVModel)
+Sub GetDate(C As VueComponent) As String
+	Dim res As String = C.GetData(sVModel)
 	Return res
 End Sub
 
 'set formmated date
-Sub FormatDate(VC As VueComponent)
-	Dim sDate As String = VC.GetData(sVModel)
+Sub FormatDate(C As VueComponent)
+	Dim sDate As String = C.GetData(sVModel)
 	If sDate = "" Then Return
-	Dim xDate As String = VC.NiceDate(sDate)
+	Dim xDate As String = C.NiceDate(sDate)
 	Dim res As String = $"${sVModel}fmt"$
-	VC.SetData(res, xDate)
+	C.SetData(res, xDate)
 End Sub
 
 'toggle the password
-Sub PasswordVisible(VC As VueComponent, b As Boolean)
-	VC.setdata(sShowEyes, b)
+Sub PasswordVisible(C As VueComponent, b As Boolean)
+	C.setdata(sShowEyes, b)
 End Sub
 
 'toggle the password
-Sub TogglePassword(VC As VueComponent)
-	VC.Toggle(sShowEyes)
+Sub TogglePassword(C As VueComponent)
+	C.Toggle(sShowEyes)
 End Sub
 
 'toggle the password
@@ -650,47 +651,47 @@ Sub TogglePasswordOnApp(app As VuetifyApp)
 	app.Toggle(sShowEyes)
 End Sub
 
-Sub UpdateRequired(VC As VueComponent, b As Boolean)
-	VC.SetData(sRequired, b)
+Sub UpdateRequired(C As VueComponent, b As Boolean)
+	C.SetData(sRequired, b)
 End Sub
 
-'Sub ClearSuccessMessages(VC As VueComponent)
-'	VC.SetData(sSuccessMessages, VC.NewList)
+'Sub ClearSuccessMessages(C As VueComponent)
+'	C.SetData(sSuccessMessages, C.NewList)
 'End Sub
 
-Sub ClearRules(VC As VueComponent)
-	VC.SetData(sRules, VC.NewList)
+Sub ClearRules(C As VueComponent)
+	C.SetData(sRules, C.NewList)
 End Sub
 
-Sub UpdateReadOnly(VC As VueComponent, b As Boolean)
+Sub UpdateReadOnly(C As VueComponent, b As Boolean)
 	bReadonly = b
-	VC.SetData(sReadonly, b)
+	C.SetData(sReadonly, b)
 End Sub
 
-Sub ClearMessages(VC As VueComponent)
-	VC.SetData(sMessages, VC.NewList)
+Sub ClearMessages(C As VueComponent)
+	C.SetData(sMessages, C.NewList)
 End Sub
 
-Sub UpdateDisabled(VC As VueComponent, b As Boolean)
+Sub UpdateDisabled(C As VueComponent, b As Boolean)
 	bDisabled = b 
-	VC.SetData(sDisabled, b)
+	C.SetData(sDisabled, b)
 End Sub
 
-'Sub UpdateError(VC As VueComponent, b As Boolean)
-'	VC.SetData(sError, b)
+'Sub UpdateError(C As VueComponent, b As Boolean)
+'	C.SetData(sError, b)
 'End Sub
 '
-'Sub UpdateSuccess(VC As VueComponent, b As Boolean)
-'	VC.SetData(sSuccess, b)
+'Sub UpdateSuccess(C As VueComponent, b As Boolean)
+'	C.SetData(sSuccess, b)
 'End Sub
 '
-'Sub ClearErrorMessages(VC As VueComponent)
-'	VC.SetData(sErrorMessages, VC.NewList)
+'Sub ClearErrorMessages(C As VueComponent)
+'	C.SetData(sErrorMessages, C.NewList)
 'End Sub
 
-Sub UpdateLoading(VC As VueComponent, b As Boolean)
+Sub UpdateLoading(C As VueComponent, b As Boolean)
 	bLoading = b
-	VC.SetData(sLoading, b)
+	C.SetData(sLoading, b)
 End Sub
 
 public Sub AddToParent(targetID As String)
@@ -723,24 +724,24 @@ Sub RemoveAttr(p As String) As VTextField
 	Return Me
 End Sub
 
-Sub UpdateVisible(VC As VueComponent, b As Boolean) As VTextField
-	VC.SetData(sVIf, b)
-	VC.SetData(sVShow, b)
+Sub UpdateVisible(C As VueComponent, b As Boolean) As VTextField
+	C.SetData(sVIf, b)
+	C.SetData(sVShow, b)
 	Return Me
 End Sub
 
-Sub GetValue(VC As VueComponent) As String
-	Dim res As String = VC.GetData(sVModel)
+Sub GetValue(C As VueComponent) As String
+	Dim res As String = C.GetData(sVModel)
 	Return res
 End Sub
 
-Sub SetValue(VC As VueComponent, txt As String)
-	VC.SetData(sVModel, txt)
+Sub SetValue(C As VueComponent, txt As String)
+	C.SetData(sVModel, txt)
 	If bDateTimePicker Then
 		Dim d As String = BANanoShared.MvField(txt,1, " ")
 		Dim t As String = BANanoShared.MvField(txt,2, " ")
-		VC.SetData(dateModel, d)
-		VC.SetData(timeModel, t)
+		C.SetData(dateModel, d)
+		C.SetData(timeModel, t)
 	End If
 End Sub
 
@@ -770,7 +771,8 @@ Sub getHere As String
 End Sub
 
 
-Sub BindState(VC As VueComponent)
+Sub BindState(C As VueComponent)
+	vc = c
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control
@@ -779,13 +781,13 @@ Sub BindState(VC As VueComponent)
 		Select Case k
 		Case "key"
 		Case Else
-			VC.SetData(k, v)
+			C.SetData(k, v)
 		End Select
 	Next
 	'apply the events
 	For Each k As String In mmethods.Keys
 		Dim cb As BANanoObject = mmethods.Get(k)
-		VC.SetCallBack(k, cb)
+		C.SetCallBack(k, cb)
 	Next
 End Sub
 

@@ -6,6 +6,7 @@ Version=8.9
 @EndOfDesignText@
 #IgnoreWarnings:12
 
+#DesignerProperty: Key: ParentID, DisplayName: ParentID, FieldType: String, DefaultValue: , Description: ParentID
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: false, Description: Hidden
 #DesignerProperty: Key: Align, DisplayName: Vertical Align, FieldType: String, DefaultValue: normal, Description: Align, List: normal|start|center|end|baseline|stretch
 #DesignerProperty: Key: Justify, DisplayName: Horizontal Align, FieldType: String, DefaultValue: normal, Description: Justify, List: normal|start|center|end|space-between|space-around
@@ -134,6 +135,8 @@ Private bDFlex As Boolean
 	Public Fields As List 
 	Public matrix As List
 	Public matrixMap As Map 
+	Private VC As VueComponent
+	Private sParentID As String
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -171,6 +174,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bShowGridDesign = Props.Get("ShowGridDesign")
 		sRows = Props.Get("Rows")
 		sColumns = Props.Get("Columns")
+		sParentID = Props.GetDefault("ParentID", "")
 		'
 		sMA = Props.Get("MA")
 		sMB = Props.Get("MB")
@@ -218,6 +222,12 @@ bDFlex = Props.GetDefault("DFlex", False)
 	bFitScreen = BANanoShared.parseBool(bFitScreen)
 	bNoGutters = BANanoShared.parseBool(bNoGutters)
 	bDebugBorder = BANanoShared.parseBool(bDebugBorder)
+	'
+	'the parent has been specified
+	If sParentID <> "" Then
+		sParentID = sParentID.tolowercase
+		mTarget.Initialize($"#${sParentID}"$)
+	End If
 '
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
@@ -330,9 +340,9 @@ Sub RemoveAttr(p As String) As VContainer
 	Return Me
 End Sub
 
-Sub UpdateVisible(VC As VueComponent, b As Boolean)
-	VC.SetData(sVShow, b)
-	VC.SetData(mVIf, b)
+Sub UpdateVisible(C As VueComponent, b As Boolean)
+	C.SetData(sVShow, b)
+	C.SetData(mVIf, b)
 End Sub
 
 Sub getID As String
@@ -345,7 +355,8 @@ Sub getHere As String
 End Sub
 
 
-Sub BindState(VC As VueComponent)
+Sub BindState(C As VueComponent)
+	vc = c
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control
@@ -354,13 +365,13 @@ Sub BindState(VC As VueComponent)
 		Select Case k
 		Case "key"
 		Case Else
-			VC.SetData(k, v)
+			C.SetData(k, v)
 		End Select
 	Next
 	'apply the events
 	For Each k As String In mmethods.Keys
 		Dim cb As BANanoObject = mmethods.Get(k)
-		VC.SetCallBack(k, cb)
+		C.SetCallBack(k, cb)
 	Next
 End Sub
 
@@ -475,4 +486,12 @@ End Sub
 
 Sub VisibleOnlyOnXL
 	AddClass("d-none d-xl-flex")
+End Sub
+
+Sub Hide
+	UpdateVisible(VC, False)
+End Sub
+
+Sub Show
+	UpdateVisible(VC, True)
 End Sub

@@ -79,7 +79,7 @@ Private sVOn As String
 Private sValue As String
 Private sWidth As String
  Private sDisabled As String
- 
+ Private VC As VueComponent
 	End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -228,30 +228,30 @@ Sub RemoveAttr(p As String) As VColorPicker
 	Return Me 
 End Sub
 
-Sub UpdateVisible(VC As VueComponent, b As Boolean) As VColorPicker 
-	VC.SetData(sVIf, b) 
-	'VC.SetData(sVShow, b) 
+Sub UpdateVisible(C As VueComponent, b As Boolean) As VColorPicker 
+	C.SetData(sVIf, b) 
+	'C.SetData(sVShow, b) 
 	Return Me 
 End Sub
 
 'Update Disabled
-Sub UpdateDisabled(VC As VueComponent, vDisabled As Object)
-VC.SetData(sDisabled, vDisabled)
+Sub UpdateDisabled(C As VueComponent, vDisabled As Object)
+C.SetData(sDisabled, vDisabled)
 End Sub
 
 'Update Swatches
-Sub UpdateSwatches(VC As VueComponent, vSwatches As Object)
-VC.SetData(sSwatches, vSwatches)
+Sub UpdateSwatches(C As VueComponent, vSwatches As Object)
+C.SetData(sSwatches, vSwatches)
 End Sub
 
 'Update Value
-Sub UpdateValue(VC As VueComponent, vValue As Object)
-VC.SetData(sVModel, vValue)
+Sub UpdateValue(C As VueComponent, vValue As Object)
+C.SetData(sVModel, vValue)
 End Sub
 
 
-Sub GetValue(VC As VueComponent) As String
-	Dim res As String = VC.GetData(sVModel)
+Sub GetValue(C As VueComponent) As String
+	Dim res As String = C.GetData(sVModel)
 	Return res
 End Sub
 
@@ -269,7 +269,8 @@ Sub getHere As String
 End Sub
 
 
-Sub BindState(VC As VueComponent)
+Sub BindState(C As VueComponent)
+	vc = c
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control
@@ -278,13 +279,13 @@ Sub BindState(VC As VueComponent)
 		Select Case k
 		Case "key"
 		Case Else
-			VC.SetData(k, v)
+			C.SetData(k, v)
 		End Select
 	Next
 	'apply the events
 	For Each k As String In mmethods.Keys
 		Dim cb As BANanoObject = mmethods.Get(k)
-		VC.SetCallBack(k, cb)
+		C.SetCallBack(k, cb)
 	Next
 End Sub
 
@@ -394,4 +395,20 @@ End Sub
 
 Sub VisibleOnlyOnXL
 	AddClass("d-none d-xl-flex")
+End Sub
+
+Sub Hide
+	UpdateVisible(VC, False)
+End Sub
+
+Sub Show
+	UpdateVisible(VC, True)
+End Sub
+
+Sub Enable
+	UpdateDisabled(VC, False)
+End Sub
+
+Sub Disable
+	UpdateDisabled(VC, True)
 End Sub

@@ -148,6 +148,7 @@ Private sRequired As String
 Private sValue As String
 Private bHasPrependTextField As Boolean
 Private bHasAppendTextField As Boolean
+	Private VC As VueComponent						'ignore
 End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -376,52 +377,52 @@ Sub RemoveAttr(p As String) As VSlider
 	Return Me 
 End Sub
 
-Sub UpdateVisible(VC As VueComponent, b As Boolean) As VSlider 
-	VC.SetData(sVIf, b) 
-	VC.SetData(sVShow, b) 
+Sub UpdateVisible(C As VueComponent, b As Boolean) As VSlider 
+	C.SetData(sVIf, b) 
+	C.SetData(sVShow, b) 
 	Return Me 
 End Sub
 
 
 
 'Update Disabled
-Sub UpdateDisabled(VC As VueComponent, vDisabled As Object)
-VC.SetData(sDisabled, vDisabled)
+Sub UpdateDisabled(C As VueComponent, vDisabled As Object)
+C.SetData(sDisabled, vDisabled)
 End Sub
 
 ''Update Error
-'Sub UpdateError(VC As VueComponent, vError As Object)
-'VC.SetData(sError, vError)
+'Sub UpdateError(C As VueComponent, vError As Object)
+'C.SetData(sError, vError)
 'End Sub
 '
 ''Update ErrorMessages
-'Sub UpdateErrorMessages(VC As VueComponent, vErrorMessages As Object)
-'VC.SetData(sErrorMessages, vErrorMessages)
+'Sub UpdateErrorMessages(C As VueComponent, vErrorMessages As Object)
+'C.SetData(sErrorMessages, vErrorMessages)
 'End Sub
 '
 ''Clear ErrorMessages
-'Sub ClearErrorMessages(VC As VueComponent)
-'VC.SetData(sErrorMessages, VC.NewList)
+'Sub ClearErrorMessages(C As VueComponent)
+'C.SetData(sErrorMessages, C.NewList)
 'End Sub
 
 'Update Loading
-Sub UpdateLoading(VC As VueComponent, vLoading As Object)
-VC.SetData(sLoading, vLoading)
+Sub UpdateLoading(C As VueComponent, vLoading As Object)
+C.SetData(sLoading, vLoading)
 End Sub
 
 'Update Messages
-Sub UpdateMessages(VC As VueComponent, vMessages As Object)
-VC.SetData(sMessages, vMessages)
+Sub UpdateMessages(C As VueComponent, vMessages As Object)
+C.SetData(sMessages, vMessages)
 End Sub
 
 'Clear Messages
-Sub ClearMessages(VC As VueComponent)
-VC.SetData(sMessages, VC.NewList)
+Sub ClearMessages(C As VueComponent)
+C.SetData(sMessages, C.NewList)
 End Sub
 
 'Update Readonly
-Sub UpdateReadonly(VC As VueComponent, vReadonly As Object)
-VC.SetData(sReadonly, vReadonly)
+Sub UpdateReadonly(C As VueComponent, vReadonly As Object)
+C.SetData(sReadonly, vReadonly)
 End Sub
 
 'add a rule
@@ -441,44 +442,44 @@ Sub AddRule(methodName As String)
 End Sub
 
 'Clear Rules
-Sub ClearRules(VC As VueComponent)
-VC.SetData(sRules, VC.NewList)
+Sub ClearRules(C As VueComponent)
+C.SetData(sRules, C.NewList)
 End Sub
 
 ''Update Success
-'Sub UpdateSuccess(VC As VueComponent, vSuccess As Object)
-'VC.SetData(sSuccess, vSuccess)
+'Sub UpdateSuccess(C As VueComponent, vSuccess As Object)
+'C.SetData(sSuccess, vSuccess)
 'End Sub
 '
 ''Update SuccessMessages
-'Sub UpdateSuccessMessages(VC As VueComponent, vSuccessMessages As Object)
-'VC.SetData(sSuccessMessages, vSuccessMessages)
+'Sub UpdateSuccessMessages(C As VueComponent, vSuccessMessages As Object)
+'C.SetData(sSuccessMessages, vSuccessMessages)
 'End Sub
 '
 ''Clear SuccessMessages
-'Sub ClearSuccessMessages(VC As VueComponent)
-''VC.SetData(sSuccessMessages, VC.NewList)
+'Sub ClearSuccessMessages(C As VueComponent)
+''C.SetData(sSuccessMessages, C.NewList)
 'End Sub
 
 'Update TickLabels
-Sub UpdateTickLabels(VC As VueComponent, vTickLabels As Object)
-VC.SetData(sTickLabels, vTickLabels)
+Sub UpdateTickLabels(C As VueComponent, vTickLabels As Object)
+C.SetData(sTickLabels, vTickLabels)
 End Sub
 
 'Clear TickLabels
-Sub ClearTickLabels(VC As VueComponent)
-VC.SetData(sTickLabels, VC.NewList)
+Sub ClearTickLabels(C As VueComponent)
+C.SetData(sTickLabels, C.NewList)
 End Sub
 
 'get value
-Sub GetValue(VC As VueComponent) As Int
-	Dim res As Int = VC.GetData(sVModel)
+Sub GetValue(C As VueComponent) As Int
+	Dim res As Int = C.GetData(sVModel)
 	Return res
 End Sub
 
 'Update value
-Sub SetValue(VC As VueComponent, vVModel As Object)
-	VC.SetData(sVModel, vVModel)
+Sub SetValue(C As VueComponent, vVModel As Object)
+	C.SetData(sVModel, vVModel)
 End Sub
 
 
@@ -487,7 +488,8 @@ Sub getVModel As String
 End Sub
 
 
-Sub BindState(VC As VueComponent)
+Sub BindState(C As VueComponent)
+	vc = c
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control
@@ -496,13 +498,13 @@ Sub BindState(VC As VueComponent)
 		Select Case k
 		Case "key"
 		Case Else
-			VC.SetData(k, v)
+			C.SetData(k, v)
 		End Select
 	Next
 	'apply the events
 	For Each k As String In mmethods.Keys
 		Dim cb As BANanoObject = mmethods.Get(k)
-		VC.SetCallBack(k, cb)
+		C.SetCallBack(k, cb)
 	Next
 End Sub
 

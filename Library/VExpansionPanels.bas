@@ -83,6 +83,7 @@ Private sReadOnly As String
 Private xpanel As Int
 Private sItemKeys As String
 	Private sItemTitles As String
+	Private VC As VueComponent
 End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -243,16 +244,16 @@ Sub AddItem(sTitle As String)
 End Sub
 
 'disable item at position
-Sub UpdateItemDisabled(VC As VueComponent, pos As String, b As Boolean) As VExpansionPanels 
+Sub UpdateItemDisabled(C As VueComponent, pos As String, b As Boolean) As VExpansionPanels 
 	Dim disabledID As String = $"${mName}${pos}disabled"$
-	VC.SetData(disabledID, b) 
+	C.SetData(disabledID, b) 
 	Return Me 
 End Sub
 
 'update readonly item at position
-Sub UpdateItemReadOnly(VC As VueComponent, pos As String, b As Boolean) As VExpansionPanels 
+Sub UpdateItemReadOnly(C As VueComponent, pos As String, b As Boolean) As VExpansionPanels 
 	Dim readonlyID As String = $"${mName}${pos}readonly"$
-	VC.SetData(readonlyID, b)
+	C.SetData(readonlyID, b)
 	Return Me 
 End Sub
 
@@ -307,24 +308,24 @@ Sub RemoveAttr(p As String) As VExpansionPanels
 	Return Me 
 End Sub
 
-Sub UpdateVisible(VC As VueComponent, b As Boolean) As VExpansionPanels 
-	VC.SetData(sVIf, b) 
-	'VC.SetData(sVShow, b) 
+Sub UpdateVisible(C As VueComponent, b As Boolean) As VExpansionPanels 
+	C.SetData(sVIf, b) 
+	'C.SetData(sVShow, b) 
 	Return Me 
 End Sub
 
-Sub UpdateDisabled(VC As VueComponent, b As Boolean) As VExpansionPanels 
-	VC.SetData(sDisabled, b) 
+Sub UpdateDisabled(C As VueComponent, b As Boolean) As VExpansionPanels 
+	C.SetData(sDisabled, b) 
 	Return Me 
 End Sub
 
-Sub UpdateReadOnly(VC As VueComponent, b As Boolean) As VExpansionPanels 
-	VC.SetData(sReadOnly, b)
+Sub UpdateReadOnly(C As VueComponent, b As Boolean) As VExpansionPanels 
+	C.SetData(sReadOnly, b)
 	Return Me 
 End Sub
 
-Sub UpdateOpen(VC As VueComponent, i As Int) As VExpansionPanels 
-	VC.SetData(sVModel, i)
+Sub UpdateOpen(C As VueComponent, i As Int) As VExpansionPanels 
+	C.SetData(sVModel, i)
 	Return Me 
 End Sub
 
@@ -337,13 +338,14 @@ Sub getHere As String
 End Sub
 
 'get open active panel
-Sub GetOpen(VC As VueComponent) As Int
-	Dim res As String = VC.GetData(sVModel)
+Sub GetOpen(C As VueComponent) As Int
+	Dim res As String = C.GetData(sVModel)
 	Return res
 End Sub
 
 
-Sub BindState(VC As VueComponent)
+Sub BindState(C As VueComponent)
+	vc = c
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control
@@ -352,13 +354,13 @@ Sub BindState(VC As VueComponent)
 		Select Case k
 		Case "key"
 		Case Else
-			VC.SetData(k, v)
+			C.SetData(k, v)
 		End Select
 	Next
 	'apply the events
 	For Each k As String In mmethods.Keys
 		Dim cb As BANanoObject = mmethods.Get(k)
-		VC.SetCallBack(k, cb)
+		C.SetCallBack(k, cb)
 	Next
 End Sub
 
@@ -468,4 +470,20 @@ End Sub
 
 Sub VisibleOnlyOnXL
 	AddClass("d-none d-xl-flex")
+End Sub
+
+Sub Hide
+	UpdateVisible(VC, False)
+End Sub
+
+Sub Show
+	UpdateVisible(VC, True)
+End Sub
+
+Sub Enable
+	UpdateDisabled(VC, False)
+End Sub
+
+Sub Disable
+	UpdateDisabled(VC, True)
 End Sub

@@ -39,6 +39,7 @@ Sub Class_Globals
 	Private sElevation As String
 	Private sHeight As String
 	Private sWidth As String
+	Private VC As VueComponent				'ignore
 End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -129,9 +130,9 @@ Sub RemoveAttr(p As String)
 	VElement.RemoveAttr(p) 
 End Sub
 
-Sub UpdateVisible(VC As VueComponent, b As Boolean) 
-	VC.SetData(sVIf, b) 
-	'VC.SetData(sVShow, b) 
+Sub UpdateVisible(C As VueComponent, b As Boolean) 
+	C.SetData(sVIf, b) 
+	'C.SetData(sVShow, b) 
 End Sub
 
 Sub getID As String 
@@ -143,6 +144,27 @@ Sub getHere As String
 End Sub
 
 'change the file name
-Sub SetValue(VC As VueComponent, vVModel As Object) 
-	VC.SetData(sVModel, vVModel) 
+Sub SetValue(C As VueComponent, vVModel As Object) 
+	C.SetData(sVModel, vVModel) 
+End Sub
+
+
+Sub BindState(C As VueComponent)
+	VC = c
+	Dim mbindings As Map = VElement.bindings
+	Dim mmethods As Map = VElement.methods
+	'apply the binding for the control
+	For Each k As String In mbindings.Keys
+		Dim v As Object = mbindings.Get(k)
+		Select Case k
+		Case "key"
+		Case Else
+			C.SetData(k, v)
+		End Select
+	Next
+	'apply the events
+	For Each k As String In mmethods.Keys
+		Dim cb As BANanoObject = mmethods.Get(k)
+		C.SetCallBack(k, cb)
+	Next
 End Sub

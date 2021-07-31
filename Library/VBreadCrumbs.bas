@@ -48,6 +48,7 @@ Sub Class_Globals
 	Private sItemKeys As String
 	Private sItemTitles As String
 	Private sItemTo As String
+	Private VC As VueComponent
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -173,14 +174,14 @@ Sub RemoveAttr(p As String) As VBreadCrumbs
 	Return Me
 End Sub
 
-Sub UpdateVisible(VC As VueComponent, b As Boolean) As VBreadCrumbs
-	VC.SetData(sVIf, b)
-	'VC.SetData(sVShow, b)
+Sub UpdateVisible(C As VueComponent, b As Boolean) As VBreadCrumbs
+	C.SetData(sVIf, b)
+	'C.SetData(sVShow, b)
 	Return Me
 End Sub
 
-Sub Clear(VC As VueComponent)
-	VC.SetData(sItems, VC.NewList)
+Sub Clear(C As VueComponent)
+	C.SetData(sItems, C.NewList)
 	xitems.Initialize 
 End Sub
 
@@ -201,8 +202,8 @@ Sub AddItem(sID As String, sText As String, sTo As String, sHref As String, bExa
 	xitems.Add(ni)
 End Sub
 
-Sub Refresh(VC As VueComponent)
-	VC.SetData(sItems, xitems)
+Sub Refresh(C As VueComponent)
+	C.SetData(sItems, xitems)
 End Sub
 
 
@@ -216,7 +217,8 @@ Sub getHere As String
 End Sub
 
 
-Sub BindState(VC As VueComponent)
+Sub BindState(C As VueComponent)
+	VC = c
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control
@@ -225,13 +227,13 @@ Sub BindState(VC As VueComponent)
 		Select Case k
 		Case "key"
 		Case Else
-			VC.SetData(k, v)
+			C.SetData(k, v)
 		End Select
 	Next
 	'apply the events
 	For Each k As String In mmethods.Keys
 		Dim cb As BANanoObject = mmethods.Get(k)
-		VC.SetCallBack(k, cb)
+		C.SetCallBack(k, cb)
 	Next
 End Sub
 
@@ -342,3 +344,19 @@ End Sub
 Sub VisibleOnlyOnXL
 	AddClass("d-none d-xl-flex")
 End Sub
+
+Sub Hide
+	UpdateVisible(VC, False)
+End Sub
+
+Sub Show
+	UpdateVisible(VC, True)
+End Sub
+
+'Sub Enable(C As VueComponent)
+'	updatedisabled(VC, False)
+'End Sub
+'
+'Sub Disable(C As VueComponent)
+'	updateDisabled(VC, True)
+'End Sub

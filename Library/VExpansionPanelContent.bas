@@ -29,7 +29,7 @@ Sub Class_Globals
 	Private sColor As String
 Private sColorIntensity As String
 Private bEager As Boolean
- 
+ Private VC As VueComponent		'ignore
 	End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -125,7 +125,8 @@ Sub getHere As String
 End Sub
 
 
-Sub BindState(VC As VueComponent)
+Sub BindState(C As VueComponent)
+	vc = c
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control
@@ -134,13 +135,13 @@ Sub BindState(VC As VueComponent)
 		Select Case k
 		Case "key"
 		Case Else
-			VC.SetData(k, v)
+			C.SetData(k, v)
 		End Select
 	Next
 	'apply the events
 	For Each k As String In mmethods.Keys
 		Dim cb As BANanoObject = mmethods.Get(k)
-		VC.SetCallBack(k, cb)
+		C.SetCallBack(k, cb)
 	Next
 End Sub
 

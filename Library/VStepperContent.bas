@@ -17,6 +17,7 @@ Sub Class_Globals
 	Private mTarget As BANanoElement 'ignore 
 	Private mElement As BANanoElement 'ignore 
 	Public VElement As VueElement 
+	Private VC As VueComponent					'ignore
 End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -56,7 +57,8 @@ public Sub Remove()
 	BANano.SetMeToNull 
 End Sub
 
-Sub BindState(VC As VueComponent)
+Sub BindState(C As VueComponent)
+	vc = c
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control
@@ -65,13 +67,13 @@ Sub BindState(VC As VueComponent)
 		Select Case k
 		Case "key"
 		Case Else
-			VC.SetData(k, v)
+			C.SetData(k, v)
 		End Select
 	Next
 	'apply the events
 	For Each k As String In mmethods.Keys
 		Dim cb As BANanoObject = mmethods.Get(k)
-		VC.SetCallBack(k, cb)
+		C.SetCallBack(k, cb)
 	Next
 End Sub
 

@@ -132,6 +132,7 @@ Sub Class_Globals
 	Private bUseAllowedDates As Boolean
 	Private xAllowedDates As List
 	Private bShrink As Boolean
+	Private VC As VueComponent
 End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -356,34 +357,34 @@ Sub RemoveAttr(p As String) As VDatePicker
 	Return Me 
 End Sub
 
-Sub UpdateVisible(VC As VueComponent, b As Boolean) As VDatePicker 
-	VC.SetData(sVIf, b) 
-	'VC.SetData(sVShow, b) 
+Sub UpdateVisible(C As VueComponent, b As Boolean) As VDatePicker 
+	C.SetData(sVIf, b) 
+	'C.SetData(sVShow, b) 
 	Return Me 
 End Sub
 
 'Update Disabled
-Sub UpdateDisabled(VC As VueComponent, vDisabled As Object)
-	VC.SetData(sDisabled, vDisabled)
+Sub UpdateDisabled(C As VueComponent, vDisabled As Object)
+	C.SetData(sDisabled, vDisabled)
 End Sub
 
-Sub ClearAllowedDates(VC As VueComponent)
+Sub ClearAllowedDates(C As VueComponent)
 	xAllowedDates.Initialize 
-	VC.SetData(sAllowedDates, xAllowedDates)
+	C.SetData(sAllowedDates, xAllowedDates)
 End Sub
 
 Sub AddAllowedDate(dt As String)
 	xAllowedDates.Add(dt)
 End Sub
 
-Sub RefreshAllowedDates(VC As VueComponent)
-	VC.SetData(sAllowedDates, xAllowedDates)
+Sub RefreshAllowedDates(C As VueComponent)
+	C.SetData(sAllowedDates, xAllowedDates)
 End Sub
 
 'clear events
-Sub Clear(VC As VueComponent)
+Sub Clear(C As VueComponent)
 	xEvents.clear
-	VC.SetData(sEvents, VC.NewList)
+	C.SetData(sEvents, C.NewList)
 End Sub
 
 'add an event
@@ -392,58 +393,58 @@ Sub AddItem(eDate As String, eColor As String)
 End Sub
 
 'Update Events
-Sub Refresh(VC As VueComponent)
-	VC.SetData(sEvents, xEvents)
+Sub Refresh(C As VueComponent)
+	C.SetData(sEvents, xEvents)
 End Sub
 
 'Update Locale
-Sub UpdateLocale(VC As VueComponent, vLocale As Object)
-	VC.SetData(xLocale, vLocale)
+Sub UpdateLocale(C As VueComponent, vLocale As Object)
+	C.SetData(xLocale, vLocale)
 End Sub
 
 'Update LocaleFirstDayOfYear
-Sub UpdateLocaleFirstDayOfYear(VC As VueComponent, vLocaleFirstDayOfYear As Object)
-	VC.SetData(xLocaleFirstDayOfYear, vLocaleFirstDayOfYear)
+Sub UpdateLocaleFirstDayOfYear(C As VueComponent, vLocaleFirstDayOfYear As Object)
+	C.SetData(xLocaleFirstDayOfYear, vLocaleFirstDayOfYear)
 End Sub
 
 'Update MaxValue
-Sub UpdateMax(VC As VueComponent, vMaxValue As Object)
-VC.SetData(xMaxValue, vMaxValue)
+Sub UpdateMax(C As VueComponent, vMaxValue As Object)
+C.SetData(xMaxValue, vMaxValue)
 End Sub
 
 'Update MinValue
-Sub UpdateMin(VC As VueComponent, vMinValue As Object)
-VC.SetData(xMinValue, vMinValue)
+Sub UpdateMin(C As VueComponent, vMinValue As Object)
+C.SetData(xMinValue, vMinValue)
 End Sub
 
 'Update Range
-Sub UpdateRange(VC As VueComponent, vRange As Object)
-VC.SetData(bRange, vRange)
+Sub UpdateRange(C As VueComponent, vRange As Object)
+C.SetData(bRange, vRange)
 End Sub
 
 'Update Reactive
-Sub UpdateReactive(VC As VueComponent, vReactive As Object)
-VC.SetData(bReactive, vReactive)
+Sub UpdateReactive(C As VueComponent, vReactive As Object)
+C.SetData(bReactive, vReactive)
 End Sub
 
 'Update Readonly
-Sub UpdateReadonly(VC As VueComponent, vReadonly As Object)
-VC.SetData(xReadOnly, vReadonly)
+Sub UpdateReadonly(C As VueComponent, vReadonly As Object)
+C.SetData(xReadOnly, vReadonly)
 End Sub
 
 'Update VModel
-Sub SetValue(VC As VueComponent, vVModel As Object)	
-	VC.SetData(sVModel, vVModel)
+Sub SetValue(C As VueComponent, vVModel As Object)	
+	C.SetData(sVModel, vVModel)
 End Sub
 
-Sub GetValue(VC As VueComponent) As Object
-	Dim res As Object = VC.GetData(sVModel)
+Sub GetValue(C As VueComponent) As Object
+	Dim res As Object = C.GetData(sVModel)
 	Return res
 End Sub
 
 'Update Value
-Sub UpdateValue(VC As VueComponent, vValue As Object)
-VC.SetData(sValue, vValue)
+Sub UpdateValue(C As VueComponent, vValue As Object)
+C.SetData(sValue, vValue)
 End Sub
 
 
@@ -460,7 +461,8 @@ Sub getHere As String
 	Return $"#${mName}"$
 End Sub
 
-Sub BindState(VC As VueComponent)
+Sub BindState(C As VueComponent)
+	vc = c
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control
@@ -469,13 +471,13 @@ Sub BindState(VC As VueComponent)
 		Select Case k
 		Case "key"
 		Case Else
-			VC.SetData(k, v)
+			C.SetData(k, v)
 		End Select
 	Next
 	'apply the events
 	For Each k As String In mmethods.Keys
 		Dim cb As BANanoObject = mmethods.Get(k)
-		VC.SetCallBack(k, cb)
+		C.SetCallBack(k, cb)
 	Next
 End Sub
 
@@ -585,4 +587,20 @@ End Sub
 
 Sub VisibleOnlyOnXL
 	AddClass("d-none d-xl-flex")
+End Sub
+
+Sub Hide
+	UpdateVisible(VC, False)
+End Sub
+
+Sub Show
+	UpdateVisible(VC, True)
+End Sub
+
+Sub Enable
+	UpdateDisabled(VC, False)
+End Sub
+
+Sub Disable
+	UpdateDisabled(VC, True)
 End Sub

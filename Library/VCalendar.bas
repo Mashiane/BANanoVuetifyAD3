@@ -158,6 +158,7 @@ Private sHeight As String
 Private sloading As String
 Private bLoading As Boolean
 Private sEventColor As String
+Private VC As VueComponent
 	End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -458,14 +459,14 @@ Sub RemoveAttr(p As String) As VCalendar
 	Return Me 
 End Sub
 
-Sub UpdateVisible(VC As VueComponent, b As Boolean) As VCalendar 
-	VC.SetData(sVIf, b) 
-	'VC.SetData(sVShow, b) 
+Sub UpdateVisible(C As VueComponent, b As Boolean) As VCalendar 
+	C.SetData(sVIf, b) 
+	'C.SetData(sVShow, b) 
 	Return Me 
 End Sub
 
-Sub UpdateLoading(VC As VueComponent, b As Boolean) As VCalendar 
-	VC.SetData(sloading, b) 
+Sub UpdateLoading(C As VueComponent, b As Boolean) As VCalendar 
+	C.SetData(sloading, b) 
 	Return Me 
 End Sub
 
@@ -478,61 +479,61 @@ Sub getHere As String
 End Sub
 
 'show selected date
-Sub OpenDate(VC As VueComponent, item As Map)
+Sub OpenDate(C As VueComponent, item As Map)
 	Dim tDate As String
 	If item.ContainsKey("date") Then
 		tDate = item.Get("date")
 	Else
 		tDate = item   'ignore
 	End If	
-	VC.SetData(sVModel, tDate)
-	VC.SetData(xType, "day")
+	C.SetData(sVModel, tDate)
+	C.SetData(xType, "day")
 End Sub
 
 'set the date of the calendar
-Sub SetDate(VC As VueComponent, vVModel As Object) 
-	VC.SetData(sVModel, vVModel)
+Sub SetDate(C As VueComponent, vVModel As Object) 
+	C.SetData(sVModel, vVModel)
 End Sub
 
 'set the date of the calendar
-Sub SetToday(VC As VueComponent)
+Sub SetToday(C As VueComponent)
 	Dim mNow As String = BANanoShared.DateNow 
-	VC.SetData(sVModel, mNow)
+	C.SetData(sVModel, mNow)
 End Sub
 
-Sub GetDate(VC As VueComponent) As Object 
-	Dim res As Object = VC.GetData(sVModel) 
+Sub GetDate(C As VueComponent) As Object 
+	Dim res As Object = C.GetData(sVModel) 
 	Return res 
 End Sub
 
-Sub UpdateCategories(VC As VueComponent, vCategories As List)
+Sub UpdateCategories(C As VueComponent, vCategories As List)
 	If BANano.IsNull(vCategories) Or BANano.IsUndefined(vCategories) Then Return
-	VC.SetData(sCategories, vCategories)
+	C.SetData(sCategories, vCategories)
 End Sub
 
-Sub UpdateEvents(VC As VueComponent, vEvents As List)
+Sub UpdateEvents(C As VueComponent, vEvents As List)
 	If BANano.IsNull(vEvents) Or BANano.IsUndefined(vEvents) Then Return
-	VC.SetData(sEvents, vEvents)
+	C.SetData(sEvents, vEvents)
 End Sub
 
 'Update Type
-Sub UpdateType(VC As VueComponent, vType As Object)
-	VC.SetData(sType, vType)
+Sub UpdateType(C As VueComponent, vType As Object)
+	C.SetData(sType, vType)
 End Sub
 
 'Update Week Days
-Sub UpdateWeekDays(VC As VueComponent, vWeekDays As List)
-	VC.SetData(sWeekdays, vWeekDays)
+Sub UpdateWeekDays(C As VueComponent, vWeekDays As List)
+	C.SetData(sWeekdays, vWeekDays)
 End Sub
 
 'clear events
-Sub Clear(VC As VueComponent)
-	VC.SetData(sEvents, VC.NewList)
+Sub Clear(C As VueComponent)
+	C.SetData(sEvents, C.NewList)
 End Sub
 
 'refresh
-Sub Refresh(VC As VueComponent)
-	VC.SetData(sEvents, mEvents)
+Sub Refresh(C As VueComponent)
+	C.SetData(sEvents, mEvents)
 End Sub
 
 'add an event
@@ -551,25 +552,26 @@ Sub AddItem(eID As String, eCategory As String, eName As String, eStart As Strin
 End Sub
 
 'check change
-Sub checkChange(VC As VueComponent)
-	Dim refs As BANanoObject = VC.refs
+Sub checkChange(C As VueComponent)
+	Dim refs As BANanoObject = C.refs
 	refs.GetField(mName).runmethod("checkChange", Null)
 End Sub
 
 'set the previous dat
-Sub prevDate(VC As VueComponent)
-	Dim refs As BANanoObject = VC.refs
+Sub prevDate(C As VueComponent)
+	Dim refs As BANanoObject = C.refs
 	refs.GetField(mName).runmethod("prev", Null)
 End Sub
 
 'set the next day
-Sub nextDate(VC As VueComponent)
-	Dim refs As BANanoObject = VC.refs
+Sub nextDate(C As VueComponent)
+	Dim refs As BANanoObject = C.refs
 	refs.GetField(mName).runmethod("next", Null)
 End Sub
 
 
-Sub BindState(VC As VueComponent)
+Sub BindState(C As VueComponent)
+	VC = c
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control
@@ -578,26 +580,26 @@ Sub BindState(VC As VueComponent)
 		Select Case k
 		Case "key"
 		Case Else
-			VC.SetData(k, v)
+			C.SetData(k, v)
 		End Select
 	Next
 	'apply the events
 	For Each k As String In mmethods.Keys
 		Dim cb As BANanoObject = mmethods.Get(k)
-		VC.SetCallBack(k, cb)
+		C.SetCallBack(k, cb)
 	Next
 End Sub
 
-Sub ShowWeekView(VC As VueComponent)
-	VC.SetData($"${mName}type"$, "week")
+Sub ShowWeekView(C As VueComponent)
+	C.SetData($"${mName}type"$, "week")
 End Sub
 
-Sub ShowDayView(VC As VueComponent)
-	VC.SetData($"${mName}type"$, "day")
+Sub ShowDayView(C As VueComponent)
+	C.SetData($"${mName}type"$, "day")
 End Sub
 
-Sub ShowMonthMonth(VC As VueComponent)
-	VC.SetData($"${mName}type"$, "month")
+Sub ShowMonthMonth(C As VueComponent)
+	C.SetData($"${mName}type"$, "month")
 End Sub
 
 Sub HiddenXSOnly
@@ -707,3 +709,19 @@ End Sub
 Sub VisibleOnlyOnXL
 	AddClass("d-none d-xl-flex")
 End Sub
+
+Sub Hide
+	UpdateVisible(VC, False)
+End Sub
+
+Sub Show
+	UpdateVisible(VC, True)
+End Sub
+'
+'Sub Enable(C As VueComponent)
+'	updatedisabled(VC, False)
+'End Sub
+'
+'Sub Disable(C As VueComponent)
+'	updateDisabled(VC, True)
+'End Sub

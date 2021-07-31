@@ -91,7 +91,8 @@ Private bHidden As Boolean
 Private xMiniVariant As String
 Private bUsesAuthentication As Boolean
 Private sRounded As String
-private bPermanentOnMdUp as boolean
+Private bPermanentOnMdUp As Boolean
+	Private VC As VueComponent			'ignore
 End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -258,26 +259,26 @@ Sub RemoveAttr(p As String) As VNavigationDrawer
 	Return Me
 End Sub
 
-Sub UpdateVisible(VC As VueComponent, b As Boolean) As VNavigationDrawer
-	VC.SetData(sVIf, b)
-	'VC.SetData(sVShow, b)
-	VC.SetData(sVModel, b)
+Sub UpdateVisible(C As VueComponent, b As Boolean) As VNavigationDrawer
+	C.SetData(sVIf, b)
+	'C.SetData(sVShow, b)
+	C.SetData(sVModel, b)
 	Return Me
 End Sub
 
-Sub UpdateVisibleOnApp(VC As VuetifyApp, b As Boolean) As VNavigationDrawer
-	VC.SetData(sVIf, b)
-	'VC.SetData(sVShow, b)
-	VC.SetData(sVModel, b)
+Sub UpdateVisibleOnApp(C As VuetifyApp, b As Boolean) As VNavigationDrawer
+	C.SetData(sVIf, b)
+	'C.SetData(sVShow, b)
+	C.SetData(sVModel, b)
 	Return Me
 End Sub
 
-Sub Open(VC As VueComponent)
-	VC.SetData(sVModel, True)
+Sub Open(C As VueComponent)
+	C.SetData(sVModel, True)
 End Sub
 
-Sub Close(VC As VueComponent)
-	VC.SetData(sVModel, False)
+Sub Close(C As VueComponent)
+	C.SetData(sVModel, False)
 End Sub
 
 Sub OpenOnApp(V As VuetifyApp)
@@ -294,8 +295,8 @@ Sub ToggleOnApp(v As VuetifyApp)
 End Sub
 
 'toggle the drawer visibility
-Sub Toggle(VC As VueComponent)
-	VC.Toggle(sVModel)
+Sub Toggle(C As VueComponent)
+	C.Toggle(sVModel)
 End Sub
 
 Sub getVModel As String
@@ -311,8 +312,8 @@ Sub getID As String
 End Sub
 
 'check if the drawer is open
-Sub IsOpen(VC As VueComponent) As Boolean
-	Dim res As Boolean = VC.GetData(sVModel)
+Sub IsOpen(C As VueComponent) As Boolean
+	Dim res As Boolean = C.GetData(sVModel)
 	Return res
 End Sub
 
@@ -327,7 +328,8 @@ Sub getHere As String
 End Sub
 
 
-Sub BindState(VC As VueComponent)
+Sub BindState(C As VueComponent)
+	vc = c
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control
@@ -336,13 +338,13 @@ Sub BindState(VC As VueComponent)
 		Select Case k
 		Case "key"
 		Case Else
-			VC.SetData(k, v)
+			C.SetData(k, v)
 		End Select
 	Next
 	'apply the events
 	For Each k As String In mmethods.Keys
 		Dim cb As BANanoObject = mmethods.Get(k)
-		VC.SetCallBack(k, cb)
+		C.SetCallBack(k, cb)
 	Next
 End Sub
 

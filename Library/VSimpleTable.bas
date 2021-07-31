@@ -121,6 +121,7 @@ Private sWidths As String
 	Private lstConditionalColor As List
 	Private lstConditionalStyle As List
 	Private bHideHeader As Boolean
+	Private VC As VueComponent
 End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -299,19 +300,20 @@ Sub AddRowMap(row As Map)
 End Sub
 
 'clear the rows
-Sub Clear(VC As VueComponent)
+Sub Clear(C As VueComponent)
 	dataRows.Initialize 
-	VC.SetData(xRows, dataRows)
+	C.SetData(xRows, dataRows)
 End Sub
 
-Sub BindState(VC As VueComponent)
+Sub BindState(C As VueComponent)
+	VC = c
 	BuildHeaders
-	VC.SetData(xRows, dataRows)
+	C.SetData(xRows, dataRows)
 	VElement.BindState(VC)
 End Sub
 
-Sub SetRows(VC As VueComponent)
-	VC.SetData(xRows, dataRows)
+Sub SetRows(C As VueComponent)
+	C.SetData(xRows, dataRows)
 End Sub
 
 private Sub BuildHeaders
@@ -501,9 +503,9 @@ Sub RemoveAttr(p As String) As VSimpleTable
 	Return Me 
 End Sub
 
-Sub UpdateVisible(VC As VueComponent, b As Boolean) As VSimpleTable 
-	VC.SetData(sVIf, b) 
-	VC.SetData(sHidden, b) 
+Sub UpdateVisible(C As VueComponent, b As Boolean) As VSimpleTable 
+	C.SetData(sVIf, b) 
+	C.SetData(sHidden, b) 
 	Return Me 
 End Sub
 
@@ -517,61 +519,61 @@ End Sub
 
 
 'add a new row at the end of the items in realtime
-Sub Add(VC As VueComponent, rowdata As Map)
-	VC.SetDataPush(xRows, rowdata)
+Sub Add(C As VueComponent, rowdata As Map)
+	C.SetDataPush(xRows, rowdata)
 End Sub
 
 'add a row at the top of the list
-Sub AddOnTop(VC As VueComponent, rowdata As Map)
-	VC.SetDataUnshift(xRows, rowdata)
+Sub AddOnTop(C As VueComponent, rowdata As Map)
+	C.SetDataUnshift(xRows, rowdata)
 End Sub
 
 'read an item where
-Sub Read(VC As VueComponent, prop As String, value As String) As Map
+Sub Read(C As VueComponent, prop As String, value As String) As Map
 	Dim m As Map = CreateMap()
 	m.Put(prop, value)
 	'find the record at a position
-	Dim mpos As Int = VC.GetDataPositionWhere(xRows, m)
+	Dim mpos As Int = C.GetDataPositionWhere(xRows, m)
 	Dim res As Map = CreateMap()
 	If mpos >= 0 Then
-		res = FindItemAtPosition(VC, mpos)
+		res = FindItemAtPosition(C, mpos)
 	End If
 	Return res
 End Sub
 
 'remove an item where
-Sub Delete(VC As VueComponent, prop As String, value As String)
+Sub Delete(C As VueComponent, prop As String, value As String)
 	Dim m As Map = CreateMap()
 	m.Put(prop, value)
 	'find the record at a position
-	Dim mpos As Int = VC.GetDataPositionWhere(xRows, m)
+	Dim mpos As Int = C.GetDataPositionWhere(xRows, m)
 	If mpos >= 0 Then
-		VC.SetDataSpliceRemove(xRows, mpos, 1)
+		C.SetDataSpliceRemove(xRows, mpos, 1)
 	End If
 End Sub
 
 'update item where
-Sub Update(VC As VueComponent, prop As String, value As String, item As Map)
+Sub Update(C As VueComponent, prop As String, value As String, item As Map)
 	Dim m As Map = CreateMap()
 	m.Put(prop, value)
 	'find the record at a position
-	Dim mpos As Int = VC.GetDataPositionWhere(xRows, m)
+	Dim mpos As Int = C.GetDataPositionWhere(xRows, m)
 	If mpos >= 0 Then
-		Dim oldm As Map = FindItemAtPosition(VC, mpos)
+		Dim oldm As Map = FindItemAtPosition(C, mpos)
 		oldm = BANanoShared.Merge(oldm, item)
-		VC.SetDataSplice(xRows, mpos, 1, oldm)
+		C.SetDataSplice(xRows, mpos, 1, oldm)
 	End If
 End Sub
 
 'find item position
-private Sub FindItemPosition(VC As VueComponent, whereMap As Map) As Int
-	Dim mpos As Int = VC.GetDataPositionWhere(xRows, whereMap)
+private Sub FindItemPosition(C As VueComponent, whereMap As Map) As Int
+	Dim mpos As Int = C.GetDataPositionWhere(xRows, whereMap)
 	Return mpos
 End Sub
 
 'find item at position
-private Sub FindItemAtPosition(VC As VueComponent, pos As Int) As Map
-	Dim recs As List = VC.GetData(xRows)
+private Sub FindItemAtPosition(C As VueComponent, pos As Int) As Map
+	Dim recs As List = C.GetData(xRows)
 	Dim rec As Map = recs.Get(pos)
 	Return rec
 End Sub

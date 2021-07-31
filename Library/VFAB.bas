@@ -72,6 +72,7 @@ Sub Class_Globals
 	Private bFixed As Boolean
 	Private bSettings As Boolean
 	Private bFlat As Boolean
+	Private VC As VueComponent
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -234,28 +235,28 @@ Sub getHTML As String
 	End If
 End Sub
 
-Sub UpdateColor(VC As VueComponent, s As String)
-	VC.SetData(sColor, s)
+Sub UpdateColor(C As VueComponent, s As String)
+	C.SetData(sColor, s)
 End Sub
 
-Sub UpdateColorOnApp(VC As VuetifyApp, s As String)
-	VC.SetData(sColor, s)
+Sub UpdateColorOnApp(C As VuetifyApp, s As String)
+	C.SetData(sColor, s)
 End Sub
 
-Sub UpdateLoading(VC As VueComponent, b As Boolean)
-	VC.SetData($"${mName}loading"$, b)
+Sub UpdateLoading(C As VueComponent, b As Boolean)
+	C.SetData($"${mName}loading"$, b)
 End Sub
 
-Sub UpdateLoadingOnApp(VC As VuetifyApp, b As Boolean)
-	VC.SetData($"${mName}loading"$, b)
+Sub UpdateLoadingOnApp(C As VuetifyApp, b As Boolean)
+	C.SetData($"${mName}loading"$, b)
 End Sub
 
-Sub UpdateDisabled(VC As VueComponent, b As Boolean)
-	VC.SetData($"${mName}disabled"$, b)
+Sub UpdateDisabled(C As VueComponent, b As Boolean)
+	C.SetData($"${mName}disabled"$, b)
 End Sub
 
-Sub UpdateDisabledOnApp(VC As VuetifyApp, b As Boolean)
-	VC.SetData($"${mName}disabled"$, b)
+Sub UpdateDisabledOnApp(C As VuetifyApp, b As Boolean)
+	C.SetData($"${mName}disabled"$, b)
 End Sub
 
 public Sub AddToParent(targetID As String)
@@ -288,14 +289,14 @@ Sub RemoveAttr(p As String) As VFAB
 	Return Me
 End Sub
 
-Sub UpdateVisible(VC As VueComponent, b As Boolean)
-	VC.SetData(mVIf, b)
-	'VC.SetData(mVShow, b)
+Sub UpdateVisible(C As VueComponent, b As Boolean)
+	C.SetData(mVIf, b)
+	'C.SetData(mVShow, b)
 End Sub
 
-Sub UpdateVisibleOnApp(VC As VuetifyApp, b As Boolean)
-	VC.SetData(mVIf, b)
-	'VC.SetData(mVShow, b)
+Sub UpdateVisibleOnApp(C As VuetifyApp, b As Boolean)
+	C.SetData(mVIf, b)
+	'C.SetData(mVShow, b)
 End Sub
 
 Sub getID As String
@@ -307,7 +308,8 @@ Sub getHere As String
 	Return $"#${mName}"$
 End Sub
 
-Sub BindState(VC As VueComponent)
+Sub BindState(C As VueComponent)
+	VC = c
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control
@@ -316,13 +318,13 @@ Sub BindState(VC As VueComponent)
 		Select Case k
 		Case "key"
 		Case Else
-			VC.SetData(k, v)
+			C.SetData(k, v)
 		End Select
 	Next
 	'apply the events
 	For Each k As String In mmethods.Keys
 		Dim cb As BANanoObject = mmethods.Get(k)
-		VC.SetCallBack(k, cb)
+		C.SetCallBack(k, cb)
 	Next
 End Sub
 
@@ -437,4 +439,20 @@ End Sub
 
 Sub VisibleOnlyOnXL
 	AddClass("d-none d-xl-flex")
+End Sub
+
+Sub Hide
+	UpdateVisible(VC, False)
+End Sub
+
+Sub Show
+	UpdateVisible(VC, True)
+End Sub
+
+Sub Enable
+	UpdateDisabled(VC, False)
+End Sub
+
+Sub Disable
+	UpdateDisabled(VC, True)
 End Sub

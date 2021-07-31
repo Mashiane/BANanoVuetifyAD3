@@ -86,6 +86,7 @@ Sub Class_Globals
 	Private xiconcolor As String
 	Private xbadgecolor As String
 	Private sBadgeType As String
+	Private VC As VueComponent
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -257,24 +258,24 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.BindAllEvents
 End Sub	
 
-Sub UpdateIconColor(VC As VueComponent, color As String, intensity As String)
+Sub UpdateIconColor(C As VueComponent, color As String, intensity As String)
 	sIconColor = VElement.BuildColor(color, intensity)
-	VC.SetData(xiconcolor, sIconColor)
+	C.SetData(xiconcolor, sIconColor)
 End Sub
 
-Sub UpdateIconColorOnApp(VC As VuetifyApp, color As String, intensity As String)
+Sub UpdateIconColorOnApp(C As VuetifyApp, color As String, intensity As String)
 	sIconColor = VElement.BuildColor(color, intensity)
-	VC.SetData(xiconcolor, sIconColor)
+	C.SetData(xiconcolor, sIconColor)
 End Sub
 
-Sub UpdateColor(VC As VueComponent, color As String, intensity As String)
+Sub UpdateColor(C As VueComponent, color As String, intensity As String)
 	sIconColor = VElement.BuildColor(color, intensity)
-	VC.SetData(xbadgecolor, sIconColor)
+	C.SetData(xbadgecolor, sIconColor)
 End Sub
 
-Sub UpdateColorOnApp(VC As VuetifyApp, color As String, intensity As String)
+Sub UpdateColorOnApp(C As VuetifyApp, color As String, intensity As String)
 	sIconColor = VElement.BuildColor(color, intensity)
-	VC.SetData(xbadgecolor, sIconColor)
+	C.SetData(xbadgecolor, sIconColor)
 End Sub
 
 public Sub AddToParent(targetID As String)
@@ -287,38 +288,38 @@ public Sub Remove()
 	BANano.SetMeToNull
 End Sub
 
-Sub UpdateVisible(VC As VueComponent, b As Boolean)
-	VC.SetData(xHidden, b)
-	VC.SetData(mVIf, b)
+Sub UpdateVisible(C As VueComponent, b As Boolean)
+	C.SetData(xHidden, b)
+	C.SetData(mVIf, b)
 End Sub
 
-Sub UpdateVisibleOnApp(VC As VuetifyApp, b As Boolean)
-	VC.SetData(xHidden, b)
-	VC.SetData(mVIf, b)
+Sub UpdateVisibleOnApp(C As VuetifyApp, b As Boolean)
+	C.SetData(xHidden, b)
+	C.SetData(mVIf, b)
 End Sub
 
-Sub UpdateValue(VC As VueComponent, sv As String)
-	VC.SetData(svModel, sv)
+Sub UpdateValue(C As VueComponent, sv As String)
+	C.SetData(svModel, sv)
 End Sub
 
-Sub UpdateValueOnApp(VC As VuetifyApp, sv As String)
-	VC.SetData(svModel, sv)
+Sub UpdateValueOnApp(C As VuetifyApp, sv As String)
+	C.SetData(svModel, sv)
 End Sub
 
-Sub Increment(VC As VueComponent)
-	VC.Increment(svModel)
+Sub Increment(C As VueComponent)
+	C.Increment(svModel)
 End Sub
 
-Sub IncrementOnApp(VC As VuetifyApp)
-	VC.Increment(svModel, 1)
+Sub IncrementOnApp(C As VuetifyApp)
+	C.Increment(svModel, 1)
 End Sub
 
-Sub Decrement(VC As VueComponent)
-	VC.Decrement(svModel)
+Sub Decrement(C As VueComponent)
+	C.Decrement(svModel)
 End Sub
 
-Sub DecrementOnApp(VC As VuetifyApp)
-	VC.Decrement(svModel, 1)
+Sub DecrementOnApp(C As VuetifyApp)
+	C.Decrement(svModel, 1)
 End Sub
 
 Sub getID As String
@@ -330,7 +331,8 @@ Sub getHere As String
 End Sub
 
 
-Sub BindState(VC As VueComponent)
+Sub BindState(C As VueComponent)
+	VC = c
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control
@@ -339,13 +341,13 @@ Sub BindState(VC As VueComponent)
 		Select Case k
 		Case "key"
 		Case Else
-			VC.SetData(k, v)
+			C.SetData(k, v)
 		End Select
 	Next
 	'apply the events
 	For Each k As String In mmethods.Keys
 		Dim cb As BANanoObject = mmethods.Get(k)
-		VC.SetCallBack(k, cb)
+		C.SetCallBack(k, cb)
 	Next
 End Sub
 
@@ -468,4 +470,12 @@ End Sub
 
 Sub AddStyle(p As String, v As String)
 	VElement.AddStyle(p, v)
+End Sub
+
+Sub Hide
+	UpdateVisible(VC, False)
+End Sub
+
+Sub Show
+	UpdateVisible(VC, True)
 End Sub

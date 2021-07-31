@@ -128,6 +128,7 @@ Private xTitle As String
 Private mAlign As String = ""
 Private mJustify As String = ""
 Private bDividersBetween As Boolean
+	Private VC As VueComponent							'ignore
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -437,15 +438,15 @@ Sub RemoveAttr(p As String) As VToolBar
 	Return Me
 End Sub
 
-Sub UpdateVisible(VC As VueComponent, b As Boolean) As VToolBar
-	VC.SetData(sVIf, b)
-	VC.SetData(sVShow, b)
+Sub UpdateVisible(C As VueComponent, b As Boolean) As VToolBar
+	C.SetData(sVIf, b)
+	C.SetData(sVShow, b)
 	Return Me
 End Sub
 
-Sub UpdateColor(VC As VueComponent, vColor As String, vIntensity As String)
+Sub UpdateColor(C As VueComponent, vColor As String, vIntensity As String)
 	sColor = VElement.BuildColor(vColor, vIntensity)
-	VC.SetData(xColor, sColor)
+	C.SetData(xColor, sColor)
 End Sub
 
 Sub getID As String
@@ -458,7 +459,8 @@ Sub getHere As String
 End Sub
 
 
-Sub BindState(VC As VueComponent)
+Sub BindState(C As VueComponent)
+	vc = c
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control
@@ -467,13 +469,13 @@ Sub BindState(VC As VueComponent)
 		Select Case k
 		Case "key"
 		Case Else
-			VC.SetData(k, v)
+			C.SetData(k, v)
 		End Select
 	Next
 	'apply the events
 	For Each k As String In mmethods.Keys
 		Dim cb As BANanoObject = mmethods.Get(k)
-		VC.SetCallBack(k, cb)
+		C.SetCallBack(k, cb)
 	Next
 End Sub
 
@@ -537,9 +539,9 @@ End Sub
 	
 'End Sub	
 
-Sub UpdateTitle(VC As VueComponent, sText As String)
+Sub UpdateTitle(C As VueComponent, sText As String)
 	sTitle = sText
-	VC.setdata(xTitle, sTitle)
+	C.setdata(xTitle, sTitle)
 End Sub
 
 Sub HiddenOnAll

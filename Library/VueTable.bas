@@ -1284,8 +1284,8 @@ Sub setTitle(vTitle As String)
 End Sub
 
 'set the parent component
-Sub setParentComponent(PVC As VueComponent)
-	VC = PVC
+Sub setParentComponent(PC As VueComponent)
+	VC = PC
 End Sub
 
 'update the title

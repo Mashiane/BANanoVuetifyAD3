@@ -160,6 +160,7 @@ Sub Class_Globals
 	Private sItemDisabled As String
 	Private sItemText As String
 	Private sItemValue As String
+	Private VC As VueComponent
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -442,45 +443,45 @@ Sub RemoveAttr(p As String) As VCheckBox
 	Return Me
 End Sub
 
-Sub UpdateVisible(VC As VueComponent, b As Boolean) As VCheckBox
-	VC.SetData(sVIf, b)
-	VC.SetData(sVShow, b)
+Sub UpdateVisible(C As VueComponent, b As Boolean) As VCheckBox
+	C.SetData(sVIf, b)
+	C.SetData(sVShow, b)
 	Return Me
 End Sub
 
-Sub UpdateRequired(VC As VueComponent, b As Boolean)
-	VC.SetData(sRequired, b)
+Sub UpdateRequired(C As VueComponent, b As Boolean)
+	C.SetData(sRequired, b)
 End Sub
 
-Sub UpdateReadOnly(VC As VueComponent, b As Boolean)
-	VC.SetData(sReadonly, b)
+Sub UpdateReadOnly(C As VueComponent, b As Boolean)
+	C.SetData(sReadonly, b)
 End Sub
 
-Sub UpdateDisabled(VC As VueComponent, b As Boolean)
+Sub UpdateDisabled(C As VueComponent, b As Boolean)
 	bDisabled = b
-	VC.SetData(sDisabled, b)
+	C.SetData(sDisabled, b)
 End Sub
 
-Sub UpdateLoading(VC As VueComponent, b As Boolean)
-	VC.SetData(sLoading, b)
+Sub UpdateLoading(C As VueComponent, b As Boolean)
+	C.SetData(sLoading, b)
 End Sub
 
-Sub GetValue(VC As VueComponent) As Object
-	Dim res As String = VC.GetData(sVModel)
+Sub GetValue(C As VueComponent) As Object
+	Dim res As String = C.GetData(sVModel)
 	Return res
 End Sub
 
-Sub SetValue(VC As VueComponent, b As Boolean)
+Sub SetValue(C As VueComponent, b As Boolean)
 	If b Then
-		VC.SetData(sVModel, sTrueValue)
+		C.SetData(sVModel, sTrueValue)
 	Else
-		VC.SetData(sVModel, sFalseValue)
+		C.SetData(sVModel, sFalseValue)
 	End If
 End Sub
 
 'Update Value
-Sub UpdateValue(VC As VueComponent, vValue As Object)
-	VC.SetData(sVModel, vValue)
+Sub UpdateValue(C As VueComponent, vValue As Object)
+	C.SetData(sVModel, vValue)
 End Sub
 
 'add a rule
@@ -515,7 +516,8 @@ Sub getVModel As String
 End Sub
 
 
-Sub BindState(VC As VueComponent)
+Sub BindState(C As VueComponent)
+	vc = c
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control
@@ -524,13 +526,13 @@ Sub BindState(VC As VueComponent)
 		Select Case k
 			Case "key"
 			Case Else
-				VC.SetData(k, v)
+				C.SetData(k, v)
 		End Select
 	Next
 	'apply the events
 	For Each k As String In mmethods.Keys
 		Dim cb As BANanoObject = mmethods.Get(k)
-		VC.SetCallBack(k, cb)
+		C.SetCallBack(k, cb)
 	Next
 End Sub
 
@@ -541,9 +543,9 @@ End Sub
 
 
 'Clear Items
-Sub Clear(VC As VueComponent)
+Sub Clear(C As VueComponent)
 	xitems.Initialize
-	VC.SetData(sItems, VC.NewList)
+	C.SetData(sItems, C.NewList)
 End Sub
 
 'add items
@@ -572,29 +574,29 @@ Sub AddObject(nm As Map)
 End Sub
 
 'Update Items backward compatibility
-Sub Reload(VC As VueComponent, vItems As Object)
-	VC.SetData(sItems, vItems)
+Sub Reload(C As VueComponent, vItems As Object)
+	C.SetData(sItems, vItems)
 End Sub
 
 'Update Items
-Sub UpdateItems(VC As VueComponent, vItems As Object)
-	VC.SetData(sItems, vItems)
+Sub UpdateItems(C As VueComponent, vItems As Object)
+	C.SetData(sItems, vItems)
 End Sub
 
 'convert a normal list to key value pairs for switches
-Sub UpdateItems1(VC As VueComponent, lst As List)
+Sub UpdateItems1(C As VueComponent, lst As List)
 	Dim nl As List = BANanoShared.ListToDataSource(sItemValue, sItemText, lst)
-	VC.SetData(sItems, nl)
+	C.SetData(sItems, nl)
 End Sub
 
 'set checked items
-Sub SetChecked(VC As VueComponent, vItems As List)
-	VC.SetData(sVModel, vItems)
+Sub SetChecked(C As VueComponent, vItems As List)
+	C.SetData(sVModel, vItems)
 End Sub
 
 'get checked items
-Sub GetChecked(VC As VueComponent) As List
-	Dim selitems As List = VC.GetData(sVModel)
+Sub GetChecked(C As VueComponent) As List
+	Dim selitems As List = C.GetData(sVModel)
 	Return selitems
 End Sub
 
@@ -704,4 +706,20 @@ End Sub
 
 Sub VisibleOnlyOnXL
 	AddClass("d-none d-xl-flex")
+End Sub
+
+Sub Hide
+	UpdateVisible(VC, False)
+End Sub
+
+Sub Show
+	UpdateVisible(VC, True)
+End Sub
+
+Sub Enable
+	UpdateDisabled(VC, False)
+End Sub
+
+Sub Disable
+	UpdateDisabled(VC, True)
 End Sub

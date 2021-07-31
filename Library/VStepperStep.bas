@@ -50,6 +50,7 @@ Private sStepValue As String
   Private xEditable As String
   Private bRequired As Boolean
   Private sRequired As String
+	Private VC As VueComponent						'ignore
 End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -156,13 +157,13 @@ Sub RemoveAttr(p As String) As VStepperStep
 	Return Me 
 End Sub
 
-Sub UpdateEditable(VC As VueComponent, b As Boolean) As VStepperStep 
-	VC.SetData(xEditable, b) 
+Sub UpdateEditable(C As VueComponent, b As Boolean) As VStepperStep 
+	C.SetData(xEditable, b) 
 	Return Me 
 End Sub
 
-Sub UpdateComplete(VC As VueComponent, b As Boolean) As VStepperStep 
-	VC.SetData(xComplete, b) 
+Sub UpdateComplete(C As VueComponent, b As Boolean) As VStepperStep 
+	C.SetData(xComplete, b) 
 	Return Me 
 End Sub
 
@@ -183,7 +184,8 @@ Sub AddRule(methodName As String)
 End Sub
 
 
-Sub BindState(VC As VueComponent)
+Sub BindState(C As VueComponent)
+	vc = c
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control
@@ -192,13 +194,13 @@ Sub BindState(VC As VueComponent)
 		Select Case k
 		Case "key"
 		Case Else
-			VC.SetData(k, v)
+			C.SetData(k, v)
 		End Select
 	Next
 	'apply the events
 	For Each k As String In mmethods.Keys
 		Dim cb As BANanoObject = mmethods.Get(k)
-		VC.SetCallBack(k, cb)
+		C.SetCallBack(k, cb)
 	Next
 End Sub
 

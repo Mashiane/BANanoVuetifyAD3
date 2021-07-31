@@ -89,6 +89,7 @@ Private sVModel As String
 Private bHidden As Boolean
 Private sWidth As String
 Private sDisabled As String
+Private VC As VueComponent
 End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -236,9 +237,9 @@ Sub RemoveAttr(p As String) As VDialog0
 	Return Me 
 End Sub
 
-Sub UpdateVisible(VC As VueComponent, b As Boolean) As VDialog0 
-	VC.SetData(sVIf, b) 
-	VC.SetData(sVModel, b) 
+Sub UpdateVisible(C As VueComponent, b As Boolean) As VDialog0 
+	C.SetData(sVIf, b) 
+	C.SetData(sVModel, b) 
 	Return Me 
 End Sub
 
@@ -251,12 +252,13 @@ Sub getHere As String
 End Sub
 
 'Update Disabled
-Sub UpdateDisabled(VC As VueComponent, vDisabled As Object)
-	VC.SetData(sDisabled, vDisabled)
+Sub UpdateDisabled(C As VueComponent, vDisabled As Object)
+	C.SetData(sDisabled, vDisabled)
 End Sub
 
 
-Sub BindState(VC As VueComponent)
+Sub BindState(C As VueComponent)
+	vc = c
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control
@@ -265,13 +267,13 @@ Sub BindState(VC As VueComponent)
 		Select Case k
 		Case "key"
 		Case Else
-			VC.SetData(k, v)
+			C.SetData(k, v)
 		End Select
 	Next
 	'apply the events
 	For Each k As String In mmethods.Keys
 		Dim cb As BANanoObject = mmethods.Get(k)
-		VC.SetCallBack(k, cb)
+		C.SetCallBack(k, cb)
 	Next
 	WatchVisibility(VC)
 End Sub
@@ -384,6 +386,22 @@ Sub VisibleOnlyOnXL
 	AddClass("d-none d-xl-flex")
 End Sub
 
-private Sub WatchVisibility(VC As VueComponent)
-	VC.SetWatch(sVModel, True, True, mCallBack, $"${mName}_visible"$, Null)
+private Sub WatchVisibility(C As VueComponent)
+	C.SetWatch(sVModel, True, True, mCallBack, $"${mName}_visible"$, Null)
+End Sub
+
+Sub Hide
+	UpdateVisible(VC, False)
+End Sub
+
+Sub Show
+	UpdateVisible(VC, True)
+End Sub
+
+Sub Enable
+	UpdateDisabled(VC, False)
+End Sub
+
+Sub Disable
+	UpdateDisabled(VC, True)
 End Sub

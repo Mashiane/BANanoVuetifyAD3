@@ -68,6 +68,7 @@ Sub Class_Globals
 	Private sItemColors As String
 	Private sVModel As String
 	Private sOnHover As String
+	Private VC As VueComponent							'ignore
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -262,9 +263,9 @@ Sub RemoveAttr(p As String) As VSpeedDial
 	Return Me
 End Sub
 
-Sub UpdateVisible(VC As VueComponent, b As Boolean)
-	VC.SetData(mVIf, b)
-	VC.SetData(sVModel, b)
+Sub UpdateVisible(C As VueComponent, b As Boolean)
+	C.SetData(mVIf, b)
+	C.SetData(sVModel, b)
 End Sub
 
 
@@ -277,7 +278,8 @@ Sub getHere As String
 	Return $"#${mName}"$
 End Sub
 
-Sub BindState(VC As VueComponent)
+Sub BindState(C As VueComponent)
+	vc = c
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control
@@ -286,13 +288,13 @@ Sub BindState(VC As VueComponent)
 		Select Case k
 		Case "key"
 		Case Else
-			VC.SetData(k, v)
+			C.SetData(k, v)
 		End Select
 	Next
 	'apply the events
 	For Each k As String In mmethods.Keys
 		Dim cb As BANanoObject = mmethods.Get(k)
-		VC.SetCallBack(k, cb)
+		C.SetCallBack(k, cb)
 	Next
 End Sub
 

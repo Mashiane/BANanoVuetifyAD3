@@ -73,6 +73,7 @@ Sub Class_Globals
 	Private sWidth As String
 	Private xValues As List
 	Private xLabels As List
+	Private VC As VueComponent						'ignore
 End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -214,9 +215,9 @@ Sub RemoveAttr(p As String) As VSparkline
 	Return Me 
 End Sub
 
-Sub UpdateVisible(VC As VueComponent, b As Boolean) As VSparkline 
-	VC.SetData(sVIf, b) 
-	'VC.SetData(sVShow, b) 
+Sub UpdateVisible(C As VueComponent, b As Boolean) As VSparkline 
+	C.SetData(sVIf, b) 
+	'C.SetData(sVShow, b) 
 	Return Me 
 End Sub
 
@@ -228,27 +229,27 @@ Sub getHere As String
 	Return $"#${mName}"$ 
 End Sub
 
-Sub UpdateValues(VC As VueComponent, lst As List) As VSparkline 
-	VC.SetData(sVModel, lst) 
+Sub UpdateValues(C As VueComponent, lst As List) As VSparkline 
+	C.SetData(sVModel, lst) 
 	Return Me 
 End Sub
 
-Sub UpdateLabels(VC As VueComponent, lst As List) As VSparkline 
-	VC.SetData(sLabels, lst) 
+Sub UpdateLabels(C As VueComponent, lst As List) As VSparkline 
+	C.SetData(sLabels, lst) 
 	Return Me 
 End Sub
 
-Sub UpdateGradient(VC As VueComponent, lst As List) As VSparkline 
-	VC.SetData(sGradient, lst) 
+Sub UpdateGradient(C As VueComponent, lst As List) As VSparkline 
+	C.SetData(sGradient, lst) 
 	Return Me 
 End Sub
 
-Sub Clear(VC As VueComponent)
+Sub Clear(C As VueComponent)
 	xValues.Initialize 
 	xLabels.Initialize
 	'
-	VC.SetData(sVModel, xValues)
-	VC.SetData(sLabels, xValues)
+	C.SetData(sVModel, xValues)
+	C.SetData(sLabels, xValues)
 End Sub
 
 Sub AddXY(x As String, y As String)
@@ -256,13 +257,14 @@ Sub AddXY(x As String, y As String)
 	xValues.Add(y)
 End Sub
 
-Sub Refresh(VC As VueComponent)
-	VC.SetData(sVModel, xValues)
-	VC.SetData(sLabels, xLabels)
+Sub Refresh(C As VueComponent)
+	C.SetData(sVModel, xValues)
+	C.SetData(sLabels, xLabels)
 End Sub
 
 
-Sub BindState(VC As VueComponent)
+Sub BindState(C As VueComponent)
+	vc = c
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control
@@ -271,13 +273,13 @@ Sub BindState(VC As VueComponent)
 		Select Case k
 		Case "key"
 		Case Else
-			VC.SetData(k, v)
+			C.SetData(k, v)
 		End Select
 	Next
 	'apply the events
 	For Each k As String In mmethods.Keys
 		Dim cb As BANanoObject = mmethods.Get(k)
-		VC.SetCallBack(k, cb)
+		C.SetCallBack(k, cb)
 	Next
 End Sub
 

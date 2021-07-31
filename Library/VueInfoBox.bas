@@ -62,6 +62,7 @@ Sub Class_Globals
 	Private mSuffix As String
 	Private startID As String
 	Private endID As String
+	Private VC As VueComponent					'ignore
 End Sub
 
 
@@ -408,36 +409,36 @@ Sub getHTML As String
 End Sub
 
 'update start value at run time
-Sub UpdateStartValue(VC As VueComponent, s As String)
-	VC.SetData(startID, s)
+Sub UpdateStartValue(C As VueComponent, s As String)
+	C.SetData(startID, s)
 End Sub
 
 'update end value at run time
-Sub UpdateEndValue(VC As VueComponent, s As String)
-	VC.SetData(endID, s)
+Sub UpdateEndValue(C As VueComponent, s As String)
+	C.SetData(endID, s)
 End Sub
 
 'start the count
-Sub start(VC As VueComponent)
-	Dim refs As BANanoObject = VC.refs
+Sub start(C As VueComponent)
+	Dim refs As BANanoObject = C.refs
 	refs.GetField(numberID).RunMethod("start", Null)
 End Sub
 
 'pause the count
-Sub pause(VC As VueComponent)
-	Dim refs As BANanoObject = VC.refs
+Sub pause(C As VueComponent)
+	Dim refs As BANanoObject = C.refs
 	refs.GetField(numberID).RunMethod("pause", Null)
 End Sub
 
 'pause the count
-Sub pauseResume(VC As VueComponent)
-	Dim refs As BANanoObject = VC.refs
+Sub pauseResume(C As VueComponent)
+	Dim refs As BANanoObject = C.refs
 	refs.GetField(numberID).RunMethod("pauseResume", Null)
 End Sub
 
 'reset the count
-Sub reset(VC As VueComponent)
-	Dim refs As BANanoObject = VC.refs
+Sub reset(C As VueComponent)
+	Dim refs As BANanoObject = C.refs
 	refs.GetField(numberID).RunMethod("reset", Null)
 End Sub
 
@@ -596,7 +597,8 @@ Sub RemoveCodeBindings(b As List)
 End Sub
 
 
-Sub BindState(Vs As VueComponent)
+Sub BindState(c As VueComponent)
+	VC = c
 	Dim mbindings As Map = bindings
 	Dim mmethods As Map = methods
 	'apply the binding for the control
@@ -605,13 +607,13 @@ Sub BindState(Vs As VueComponent)
 		Select Case k
 		Case "key"
 		Case Else
-			Vs.SetData(k, v)
+			C.SetData(k, v)
 		End Select
 	Next
 	'apply the events
 	For Each k As String In mmethods.Keys
 		Dim cb As BANanoObject = mmethods.Get(k)
-		Vs.SetCallBack(k, cb)
+		C.SetCallBack(k, cb)
 	Next
 End Sub
 

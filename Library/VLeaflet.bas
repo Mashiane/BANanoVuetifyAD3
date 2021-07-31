@@ -299,6 +299,7 @@ Sub Class_Globals
 '	Private pgpp As String
 '	Private rtt As String
 '	Private rpp As String
+	Private VC As VueComponent
 End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -891,7 +892,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 End Sub
 
 'build the rectangles
-private Sub BuildRectangles(VC As VueComponent)
+private Sub BuildRectangles(C As VueComponent)
 	Dim rectList As List
 	rectList.Initialize 
 	'
@@ -925,12 +926,12 @@ private Sub BuildRectangles(VC As VueComponent)
 		
 		rectList.Add(nm)
 	Next
-	VC.SetData(xrectangles, rectList)
+	C.SetData(xrectangles, rectList)
 End Sub
 
 
 'build the polygon
-private Sub BuildPolygons(VC As VueComponent)
+private Sub BuildPolygons(C As VueComponent)
 	Dim polygonList As List
 	polygonList.Initialize 
 	'
@@ -957,12 +958,12 @@ private Sub BuildPolygons(VC As VueComponent)
 		End If
 		polygonList.Add(nm)
 	Next
-	VC.SetData(xpolygons, polygonList)
+	C.SetData(xpolygons, polygonList)
 End Sub
 
 
 'build the polylines
-private Sub BuildPolyLines(VC As VueComponent)
+private Sub BuildPolyLines(C As VueComponent)
 	Dim polylineList As List
 	polylineList.Initialize 
 	'
@@ -989,12 +990,12 @@ private Sub BuildPolyLines(VC As VueComponent)
 		End If
 		polylineList.Add(nm)
 	Next
-	VC.SetData(xpolyLines, polylineList)
+	C.SetData(xpolyLines, polylineList)
 End Sub
 
 
 'build the geo-json
-private Sub BuildGeoJSON(VC As VueComponent)
+private Sub BuildGeoJSON(C As VueComponent)
 	Dim geoList As List
 	geoList.Initialize 
 	'
@@ -1014,11 +1015,11 @@ private Sub BuildGeoJSON(VC As VueComponent)
 		BANanoShared.PutRecursive(nm, "geojson", geojson)
 		geoList.Add(nm)
 	Next
-	VC.SetData(xgeojsons, geoList)
+	C.SetData(xgeojsons, geoList)
 End Sub
 
 'build the circles
-private Sub BuildCircles(VC As VueComponent)
+private Sub BuildCircles(C As VueComponent)
 	Dim circleList As List
 	circleList.Initialize 
 	'
@@ -1048,11 +1049,11 @@ private Sub BuildCircles(VC As VueComponent)
 		End If
 		circleList.Add(nm)
 	Next
-	VC.SetData(xcircles, circleList)
+	C.SetData(xcircles, circleList)
 End Sub
 
 'build the markers for the map
-private Sub BuildMarkers(VC As VueComponent)
+private Sub BuildMarkers(C As VueComponent)
 	Dim markerList As List
 	markerList.Initialize 
 	'
@@ -1114,14 +1115,14 @@ private Sub BuildMarkers(VC As VueComponent)
 		
 		markerList.Add(nm)
 	Next
-	VC.SetData(xmarkers, markerList)
+	C.SetData(xmarkers, markerList)
 End Sub
 
 'native method - pan to a particular point
-Sub PanTo(VC As VueComponent, Lat As Double, Lng As Double)
+Sub PanTo(C As VueComponent, Lat As Double, Lng As Double)
 	Try
 		Dim obj As BANanoObject = latLng(Lat, Lng)
-		GetMapObject(VC)
+		GetMapObject(C)
 		mapObject.RunMethod("panTo", obj)
 	Catch
 		Log(LastException)
@@ -1129,13 +1130,13 @@ Sub PanTo(VC As VueComponent, Lat As Double, Lng As Double)
 End Sub
 
 'native method move the view to this point
-Sub SetView(VC As VueComponent, Lat As Double, Lng As Double, Zoom As Int)
+Sub SetView(C As VueComponent, Lat As Double, Lng As Double, Zoom As Int)
 	Zoom = BANano.parseInt(Zoom)
 	iZoom = Zoom
-	VC.SetData(xzoom, Zoom)
+	C.SetData(xzoom, Zoom)
 	Try
 		Dim obj As BANanoObject = latLng(Lat, Lng)
-		GetMapObject(VC)
+		GetMapObject(C)
 		mapObject.RunMethod("setView", Array(obj, Zoom))
 	Catch
 		Log(LastException)
@@ -1143,43 +1144,43 @@ Sub SetView(VC As VueComponent, Lat As Double, Lng As Double, Zoom As Int)
 End Sub
 
 'clear the markers
-Sub ClearMarkers(VC As VueComponent)
+Sub ClearMarkers(C As VueComponent)
 	markers.Initialize 
-	VC.SetData(xmarkers, markers)
+	C.SetData(xmarkers, markers)
 End Sub
 
-Sub ClearCircles(VC As VueComponent)
+Sub ClearCircles(C As VueComponent)
 	circles.Initialize 
-	VC.SetData(xcircles, circles)
+	C.SetData(xcircles, circles)
 End Sub
 
 'Clear the polygons
-Sub ClearPolygons(VC As VueComponent)
+Sub ClearPolygons(C As VueComponent)
 	polygons.Initialize 
-	VC.SetData(xpolygons, polygons)
+	C.SetData(xpolygons, polygons)
 End Sub
 
 'Clear the rectangles
-Sub ClearRectangles(VC As VueComponent)
+Sub ClearRectangles(C As VueComponent)
 	rectangles.Initialize 
-	VC.SetData(xrectangles, rectangles)
+	C.SetData(xrectangles, rectangles)
 End Sub
 
 'refresh markers
-Sub Refresh(VC As VueComponent)
+Sub Refresh(C As VueComponent)
 	'build the markers
-	BuildMarkers(VC)
+	BuildMarkers(C)
 	'build the circles
-	BuildCircles(VC)
+	BuildCircles(C)
 	'build the polygons
-	BuildPolygons(VC)
+	BuildPolygons(C)
 	'build the polylines
-	BuildPolyLines(VC)	
+	BuildPolyLines(C)	
 	'build the rectangles
-	BuildRectangles(VC)
+	BuildRectangles(C)
 	'build grojson
-	BuildGeoJSON(VC)
-	VC.SetData(sKey, DateTime.Now)
+	BuildGeoJSON(C)
+	C.SetData(sKey, DateTime.Now)
 End Sub
 
 public Sub AddToParent(targetID As String) 
@@ -1213,9 +1214,9 @@ Sub RemoveAttr(p As String) As VLeaflet
 	Return Me 
 End Sub
 
-Sub UpdateVisible(VC As VueComponent, b As Boolean) As VLeaflet 
-	VC.SetData(sVIf, b) 
-	VC.SetData(sVShow, b) 
+Sub UpdateVisible(C As VueComponent, b As Boolean) As VLeaflet 
+	C.SetData(sVIf, b) 
+	C.SetData(sVShow, b) 
 	Return Me 
 End Sub
 
@@ -1228,18 +1229,18 @@ Sub getHere As String
 End Sub
 
 'native method get the map object after ready
-private Sub GetMapObject(VC As VueComponent)
+private Sub GetMapObject(C As VueComponent)
 	Try
-		mapObject = VC.refs.GetField(mName).GetField("mapObject")
+		mapObject = C.refs.GetField(mName).GetField("mapObject")
 	Catch
 		Log(LastException)
 	End Try	
 End Sub
 
 'native  stopLocate
-Sub stopLocate(VC As VueComponent)
+Sub stopLocate(C As VueComponent)
 	Try
-		GetMapObject(VC)
+		GetMapObject(C)
 		mapObject.RunMethod("stopLocate", Null)
 	Catch
 		Log(LastException)
@@ -1247,15 +1248,15 @@ Sub stopLocate(VC As VueComponent)
 End Sub
 
 'native locate
-Sub locate(VC As VueComponent, bWatch As Boolean, bSetView As Boolean, maxZoom As Int, timeOut As Int, maximumAge As Int, enableHighAccuracy As Boolean)   'ignore
+Sub locate(C As VueComponent, bWatch As Boolean, bSetView As Boolean, maxZoom As Int, timeOut As Int, maximumAge As Int, enableHighAccuracy As Boolean)   'ignore
 	
 	
 End Sub
 
 'native method - resize the map
-Sub Resize(VC As VueComponent)
+Sub Resize(C As VueComponent)
 	Try
-		GetMapObject(VC)
+		GetMapObject(c)
 		'map.RunMethod("_onResize", Null)
 		mapObject.RunMethod("invalidateSize", Null)
 	Catch
@@ -1280,24 +1281,24 @@ private Sub latLng(lat As Double, lng As Double) As BANanoObject
 End Sub
 
 'update the center
-Sub UpdateCenter(VC As VueComponent, lat As Double, lng As Double) As VLeaflet
+Sub UpdateCenter(C As VueComponent, lat As Double, lng As Double) As VLeaflet
 	Dim cobj As BANanoObject = latLng(lat, lng)
-	VC.SetData(xcenter, cobj)
+	C.SetData(xcenter, cobj)
 	Return Me
 End Sub
 
 'update the zoom
-Sub UpdateZoom(VC As VueComponent, dZoom As Double) As VLeaflet
-	VC.SetData(xzoom, dZoom)
+Sub UpdateZoom(C As VueComponent, dZoom As Double) As VLeaflet
+	C.SetData(xzoom, dZoom)
 	iZoom = dZoom
-	SetZoom(VC, iZoom)
+	SetZoom(c, iZoom)
 	Return Me
 End Sub
 
 'native method setZoom
-private Sub SetZoom(VC As VueComponent, Zoom As Int)
+private Sub SetZoom(C As VueComponent, Zoom As Int)
 	Try
-		GetMapObject(VC)
+		GetMapObject(c)
 		mapObject.RunMethod("setZoom", Zoom)
 	Catch
 		Log(LastException)
@@ -1306,17 +1307,18 @@ End Sub
 
 '
 'Update Disabled
-Sub UpdateDisabled(vC As VueComponent, vDisabled As Object)
-vC.SetData(xDisabled, vDisabled)
+Sub UpdateDisabled(C As VueComponent, vDisabled As Object)
+C.SetData(xDisabled, vDisabled)
 End Sub
 '
 'Update Title
-Sub UpdateTitle(VC As VueComponent, vTitle As Object)
-	VC.SetData(xTitle, vTitle)
+Sub UpdateTitle(C As VueComponent, vTitle As Object)
+	C.SetData(xTitle, vTitle)
 End Sub
 
 'bind the states for the component
 Sub BindState(VS As VueComponent)
+	VC = VS
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	
@@ -1757,15 +1759,15 @@ Sub RemovePopUp(markerID As String)
 End Sub
 
 'set center pos
-Sub SetCenterOnLastPos(VC As VueComponent)
+Sub SetCenterOnLastPos(C As VueComponent)
 	Try
 		'get the last point and center on it
 		Dim ps As Int = markers.Size - 1
 		If ps = -1 Then Return
-		iZoom = VC.GetData(xzoom)
+		iZoom = C.GetData(xzoom)
 		Dim mt As VMarkerType = markers.GetValueAt(ps)
-		UpdateCenter(VC, mt.MarkerLatitude, mt.MarkerLongitude)
-		SetView(VC, mt.MarkerLatitude, mt.MarkerLongitude, iZoom)
+		UpdateCenter(c, mt.MarkerLatitude, mt.MarkerLongitude)
+		SetView(c, mt.MarkerLatitude, mt.MarkerLongitude, iZoom)
 	Catch
 		Log(LastException)
 	End Try		
@@ -1877,4 +1879,20 @@ End Sub
 
 Sub VisibleOnlyOnXL
 	AddClass("d-none d-xl-flex")
+End Sub
+
+Sub Hide
+	UpdateVisible(VC, False)
+End Sub
+
+Sub Show
+	UpdateVisible(VC, True)
+End Sub
+
+Sub Enable
+	UpdateDisabled(VC, False)
+End Sub
+
+Sub Disable
+	UpdateDisabled(VC, True)
 End Sub

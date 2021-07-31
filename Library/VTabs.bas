@@ -119,6 +119,7 @@ Sub Class_Globals
 	Private vlist1 As List
 	Private sElevation As String
 	Private bUsesCard As Boolean
+	Private VC As VueComponent						'ignore
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -331,10 +332,10 @@ Sub Refresh
 End Sub
 
 'update the active item
-Sub UpdateActive(VC As VueComponent, itm As String)
+Sub UpdateActive(C As VueComponent, itm As String)
 	Dim tabID As String = $"${mName}${itm}"$
 	Dim tabItem As String = $"${tabID}item"$
-	VC.SetData(sVModel, tabItem)
+	C.SetData(sVModel, tabItem)
 End Sub
 
 'update the active item
@@ -425,9 +426,9 @@ Sub GetIcon(sID As String) As VueElement
 	Return elx
 End Sub
 
-Sub UpdateBadge(VC As VueComponent, key As String, value As Int)
+Sub UpdateBadge(C As VueComponent, key As String, value As Int)
 	Dim sitem As String = $"${mName}${key}badgecontent"$
-	VC.SetData(sitem, value)
+	C.SetData(sitem, value)
 End Sub
 
 Sub UpdateBadgeOnApp(V As VuetifyApp, key As String, value As Int)
@@ -435,9 +436,9 @@ Sub UpdateBadgeOnApp(V As VuetifyApp, key As String, value As Int)
 	V.SetData(sitem, value)
 End Sub
 
-Sub UpdateBadgeColor(VC As VueComponent, key As String, value As Int)
+Sub UpdateBadgeColor(C As VueComponent, key As String, value As Int)
 	Dim sitem As String = $"${mName}${key}badgecolor"$
-	VC.SetData(sitem, value)
+	C.SetData(sitem, value)
 End Sub
 
 Sub UpdateBadgeColorOnApp(V As VuetifyApp, key As String, value As Int)
@@ -504,9 +505,9 @@ Sub RemoveAttr(p As String) As VTabs
 	Return Me
 End Sub
 
-Sub UpdateVisible(VC As VueComponent, b As Boolean) As VTabs
-	VC.SetData(sVIf, b)
-	VC.SetData(sVShow, b)
+Sub UpdateVisible(C As VueComponent, b As Boolean) As VTabs
+	C.SetData(sVIf, b)
+	C.SetData(sVShow, b)
 	Return Me
 End Sub
 
@@ -527,7 +528,8 @@ Sub getHere As String
 End Sub
 
 
-Sub BindState(VC As VueComponent)
+Sub BindState(C As VueComponent)
+	vc = c
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control
@@ -536,13 +538,13 @@ Sub BindState(VC As VueComponent)
 		Select Case k
 		Case "key"
 		Case Else
-			VC.SetData(k, v)
+			C.SetData(k, v)
 		End Select
 	Next
 	'apply the events
 	For Each k As String In mmethods.Keys
 		Dim cb As BANanoObject = mmethods.Get(k)
-		VC.SetCallBack(k, cb)
+		C.SetCallBack(k, cb)
 	Next
 End Sub
 

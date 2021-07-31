@@ -59,7 +59,8 @@ Private bHidden As Boolean
 Private bLoading As Boolean
 Private xSkeletonType As String
 Private sOwnTypes As String
-	End Sub
+	Private VC As VueComponent			'ignore
+End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	mName = Name.tolowercase
@@ -210,15 +211,15 @@ xitems.Add("heading")
 Return Me
 End Sub
 
-Sub Clear(VC As VueComponent)
+Sub Clear(C As VueComponent)
 	xitems.Initialize
 	Dim sItems As String = BANanoShared.Join(", ", xitems)
-	VC.SetData(xSkeletonType, sItems) 
+	C.SetData(xSkeletonType, sItems) 
 End Sub
 
-Sub Refresh(VC As VueComponent)
+Sub Refresh(C As VueComponent)
 	Dim sItems As String = BANanoShared.Join(", ", xitems)
-	VC.SetData(xSkeletonType, sItems)
+	C.SetData(xSkeletonType, sItems)
 End Sub
 
 public Sub AddToParent(targetID As String)
@@ -251,9 +252,9 @@ Sub RemoveAttr(p As String) As VSkeletonLoader
 	Return Me
 End Sub
 
-Sub UpdateVisible(VC As VueComponent, b As Boolean) As VSkeletonLoader
-	VC.SetData(sVIf, b)
-	VC.SetData(sVShow, b)
+Sub UpdateVisible(C As VueComponent, b As Boolean) As VSkeletonLoader
+	C.SetData(sVIf, b)
+	C.SetData(sVShow, b)
 	Return Me
 End Sub
 
@@ -263,8 +264,8 @@ Sub UpdateVisibleOnApp(V As VuetifyApp, b As Boolean) As VSkeletonLoader
 	Return Me
 End Sub
 
-Sub UpdateLoading(VC As VueComponent, b As Boolean) As VSkeletonLoader
-	VC.SetData(sLoading, b)
+Sub UpdateLoading(C As VueComponent, b As Boolean) As VSkeletonLoader
+	C.SetData(sLoading, b)
 	Return Me
 End Sub
 
@@ -362,7 +363,8 @@ Sub getHere As String
 End Sub
 
 
-Sub BindState(VC As VueComponent)
+Sub BindState(C As VueComponent)
+	vc = c
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control
@@ -371,13 +373,13 @@ Sub BindState(VC As VueComponent)
 		Select Case k
 		Case "key"
 		Case Else
-			VC.SetData(k, v)
+			C.SetData(k, v)
 		End Select
 	Next
 	'apply the events
 	For Each k As String In mmethods.Keys
 		Dim cb As BANanoObject = mmethods.Get(k)
-		VC.SetCallBack(k, cb)
+		C.SetCallBack(k, cb)
 	Next
 End Sub
 

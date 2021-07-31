@@ -44,6 +44,7 @@ Sub Class_Globals
 	Public CODE_HTML As String = "html"
 	Public CODE_VB As String = "vb"
 	Public CODE_OTHER As String = ""
+	Private VC As VueComponent				'ignore
 End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -155,8 +156,8 @@ bInline = BANanoShared.parseBool(bInline)
 End Sub
 
 'download code to a file
-Sub Download(VC As VueComponent)
-	Dim strCode As String = VC.GetData(xCode)
+Sub Download(C As VueComponent)
+	Dim strCode As String = C.GetData(xCode)
 	Dim fc As List
 	fc.Initialize
 	fc.Add(strCode)
@@ -195,8 +196,8 @@ Sub RemoveAttr(p As String) As VPrism
 	Return Me 
 End Sub
 
-Sub UpdateVisible(VC As VueComponent, b As Boolean) As VPrism 
-	VC.SetData(sVShow, b) 
+Sub UpdateVisible(C As VueComponent, b As Boolean) As VPrism 
+	C.SetData(sVShow, b) 
 	Return Me 
 End Sub
 
@@ -217,24 +218,24 @@ Sub getHere As String
 End Sub
 
 'Update Title
-Sub UpdateCode(VC As VueComponent, vCode As String)
+Sub UpdateCode(C As VueComponent, vCode As String)
 	sCode = vCode
 	Select sLanguage
 	Case "js", "css", "html"
 		Dim sformat As String = BeautifySourceCode(sLanguage, vCode)
 		sCode = sformat
 	End Select
-	VC.SetData(xCode, sCode)
+	C.SetData(xCode, sCode)
 End Sub
 
 'Update Inline
-Sub UpdateInline(VC As VueComponent, vInline As Object)
-	VC.SetData(xinline, vInline)
+Sub UpdateInline(C As VueComponent, vInline As Object)
+	C.SetData(xinline, vInline)
 End Sub
 
 'Update Language
-Sub UpdateLanguage(VC As VueComponent, vLanguage As Object)
-	VC.SetData(xlanguage, vLanguage)
+Sub UpdateLanguage(C As VueComponent, vLanguage As Object)
+	C.SetData(xlanguage, vLanguage)
 End Sub
 
 private Sub BeautifySourceCode(slang As String, sc As String) As String
@@ -250,7 +251,8 @@ private Sub BeautifySourceCode(slang As String, sc As String) As String
 End Sub
 
 
-Sub BindState(VC As VueComponent)
+Sub BindState(C As VueComponent)
+	vc = c
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control
@@ -259,13 +261,13 @@ Sub BindState(VC As VueComponent)
 		Select Case k
 		Case "key"
 		Case Else
-			VC.SetData(k, v)
+			C.SetData(k, v)
 		End Select
 	Next
 	'apply the events
 	For Each k As String In mmethods.Keys
 		Dim cb As BANanoObject = mmethods.Get(k)
-		VC.SetCallBack(k, cb)
+		C.SetCallBack(k, cb)
 	Next
 End Sub
 

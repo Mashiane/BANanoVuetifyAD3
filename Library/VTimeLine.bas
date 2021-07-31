@@ -65,6 +65,7 @@ Private sItemSize As String
 Private xitems As List
 Private sitems As String
 Private bHasItems As Boolean
+	Private VC As VueComponent						'ignore
 	End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -230,9 +231,9 @@ Sub RemoveAttr(p As String) As VTimeLine
 	Return Me
 End Sub
 
-Sub UpdateVisible(VC As VueComponent, b As Boolean) As VTimeLine
-	VC.SetData(sVIf, b)
-	'VC.SetData(sVShow, b)
+Sub UpdateVisible(C As VueComponent, b As Boolean) As VTimeLine
+	C.SetData(sVIf, b)
+	'C.SetData(sVShow, b)
 	Return Me
 End Sub
 
@@ -247,14 +248,14 @@ Sub getHere As String
 End Sub
 
 'clear the items
-Sub Clear(VC As VueComponent)
+Sub Clear(C As VueComponent)
 	xitems.Initialize 
-	VC.SetData(sitems, xitems)
+	C.SetData(sitems, xitems)
 End Sub
 
 'refresh the items
-Sub Refresh(VC As VueComponent)
-	VC.SetData(sitems, xitems)
+Sub Refresh(C As VueComponent)
+	C.SetData(sitems, xitems)
 End Sub
 
 'get the item
@@ -266,7 +267,8 @@ Sub Item As VueElement
 End Sub
 
 
-Sub BindState(VC As VueComponent)
+Sub BindState(C As VueComponent)
+	vc = c
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control
@@ -275,13 +277,13 @@ Sub BindState(VC As VueComponent)
 		Select Case k
 		Case "key"
 		Case Else
-			VC.SetData(k, v)
+			C.SetData(k, v)
 		End Select
 	Next
 	'apply the events
 	For Each k As String In mmethods.Keys
 		Dim cb As BANanoObject = mmethods.Get(k)
-		VC.SetCallBack(k, cb)
+		C.SetCallBack(k, cb)
 	Next
 End Sub
 

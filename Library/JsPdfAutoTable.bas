@@ -204,9 +204,9 @@ Sub getHere As String
 End Sub
 
 'clear the rows
-Sub Clear(VC As VueComponent)
+Sub Clear(C As VueComponent)
 	Rows.Initialize
-	VC.SetData(sDataSource, Rows) 
+	C.SetData(sDataSource, Rows) 
 End Sub
 
 'add a new row
@@ -231,17 +231,17 @@ End Sub
 
 
 'add a new row at the end of the items in realtime
-Sub AddRow1(VC As VueComponent, rowdata As Map)
-	VC.SetDataPush(sDataSource, rowdata)
+Sub AddRow1(C As VueComponent, rowdata As Map)
+	C.SetDataPush(sDataSource, rowdata)
 End Sub
 
 'refresh the rows
-Sub Refresh(VC As VueComponent)
-	VC.SetData(sDataSource, Rows) 
+Sub Refresh(C As VueComponent)
+	C.SetData(sDataSource, Rows) 
 End Sub
 
 'set data
-Sub UpdateDataSource(VC As VueComponent, source As List)
-	VC.SetData(sDataSource, source)
-	Rows = VC.GetData(sDataSource) 
+Sub UpdateDataSource(C As VueComponent, source As List)
+	C.SetData(sDataSource, source)
+	Rows = C.GetData(sDataSource) 
 End Sub

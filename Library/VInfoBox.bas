@@ -47,6 +47,7 @@ Sub Class_Globals
 	Private mIcon As String
 	Private numberID As String
 	Public VElement As VueElement
+	Private VC As VueComponent					'ignore
 End Sub
 
 'initialize to the component you want to load to
@@ -139,36 +140,36 @@ public Sub getID() As String
 End Sub
 
 'update start value at run time
-Sub UpdateStartValue(VC As VueComponent, s As String)
-	VC.SetData(startID, s)
+Sub UpdateStartValue(C As VueComponent, s As String)
+	C.SetData(startID, s)
 End Sub
 
 'update end value at run time
-Sub UpdateEndValue(VC As VueComponent, s As String)
-	VC.SetData(endID, s)
+Sub UpdateEndValue(C As VueComponent, s As String)
+	C.SetData(endID, s)
 End Sub
 
 'start the count
-Sub start(VC As VueComponent)
-	Dim refs As BANanoObject = VC.refs
+Sub start(C As VueComponent)
+	Dim refs As BANanoObject = C.refs
 	refs.GetField(numberID).RunMethod("start", Null)
 End Sub
 
 'pause the count
-Sub pause(VC As VueComponent)
-	Dim refs As BANanoObject = VC.refs
+Sub pause(C As VueComponent)
+	Dim refs As BANanoObject = C.refs
 	refs.GetField(numberID).RunMethod("pause", Null)
 End Sub
 
 'pause the count
-Sub pauseResume(VC As VueComponent)
-	Dim refs As BANanoObject = VC.refs
+Sub pauseResume(C As VueComponent)
+	Dim refs As BANanoObject = C.refs
 	refs.GetField(numberID).RunMethod("pauseResume", Null)
 End Sub
 
 'reset the count
-Sub reset(VC As VueComponent)
-	Dim refs As BANanoObject = VC.refs
+Sub reset(C As VueComponent)
+	Dim refs As BANanoObject = C.refs
 	refs.GetField(numberID).RunMethod("reset", Null)
 End Sub
 
@@ -183,7 +184,8 @@ Sub getHere As String
 End Sub
 
 
-Sub BindState(VC As VueComponent)
+Sub BindState(C As VueComponent)
+	VC = c
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control
@@ -192,13 +194,13 @@ Sub BindState(VC As VueComponent)
 		Select Case k
 		Case "key"
 		Case Else
-			VC.SetData(k, v)
+			C.SetData(k, v)
 		End Select
 	Next
 	'apply the events
 	For Each k As String In mmethods.Keys
 		Dim cb As BANanoObject = mmethods.Get(k)
-		VC.SetCallBack(k, cb)
+		C.SetCallBack(k, cb)
 	Next
 End Sub
 

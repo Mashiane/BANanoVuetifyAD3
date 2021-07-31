@@ -139,6 +139,7 @@ Sub Class_Globals
 	Public Integers As List
 	Public Blobs As List
 	Public TinyInts As List
+	Private VC As VueComponent		'ignore
 End Sub
 
 'initialize the custom view
@@ -401,48 +402,48 @@ Sub GetStructure As Map
 End Sub
 
 'refresh that content of the builder
-Sub Refresh(VC As VueComponent)
+Sub Refresh(C As VueComponent)
 	schema.Put("type", "object")
 	schema.Put("properties", properties)
 	schema.Put("required", required)
 	
-	VC.SetData(modelname, model)
-	VC.SetData(schemaname, schema)
-	VC.SetData(optionsname, options)
+	c.SetData(modelname, model)
+	c.SetData(schemaname, schema)
+	c.SetData(optionsname, options)
 	
 	'turn off global setting
 	textareaProps.Put("filled", False)
 	'
-	VC.SetData(sSectionsTitlesClasses, sectionsTitlesClasses)
-	VC.SetData(sFieldProps, FieldProps)
-	VC.SetData(sArrayItemsTitlesClasses, ArrayItemsTitlesClasses)
-	VC.SetData(sFieldColProps, fieldColProps)
-	VC.SetData(sReadOnlyFieldProps, readOnlyFieldProps)
-	VC.SetData(sTextFieldProps, textFieldProps)
-	VC.SetData(sTextareaProps, textareaProps)
-	VC.SetData(sNumberProps, numberProps)
-	VC.SetData(sSliderProps, sliderProps)
-	VC.SetData(sCheckboxProps, checkboxProps)
-	VC.SetData(sSwitchProps, switchProps)
-	VC.SetData(sComboboxProps, comboboxProps)
-	VC.SetData(sSelectProps, selectProps)
-	VC.SetData(sFileInputProps, FileInputProps)
-	VC.SetData(sRadioGroupProps, radioGroupProps)
-	VC.SetData(sRadioItemProps, radioItemProps)
-	VC.SetData(sTabsProps, tabsProps)
-	VC.SetData(sexpansionPanelsProps, expansionPanelsProps)
-	VC.SetData(sDialogProps, dialogProps)
-	VC.SetData(sDialogCardProps, dialogCardProps)
-	VC.SetData(sColorPickerProps, colorPickerProps)
-	VC.SetData(sTimePickerProps, timePickerProps)
-	VC.SetData(sDatePickerProps, datePickerProps)
-	VC.SetData(sArrayItemCardProps, arrayItemCardProps)
-	VC.SetData(sArrayItemColProps, arrayItemColProps)
-	VC.SetData(sStepperProps, stepperProps)
-	VC.SetData(sVerticalStepperProps, verticalStepperProps)
-	VC.SetData(sTooltipProps, tooltipProps)
-	VC.SetData(sArrayOperations, arrayOperations)
-	VC.SetData(sHttpOptions, httpOptions)
+	c.SetData(sSectionsTitlesClasses, sectionsTitlesClasses)
+	c.SetData(sFieldProps, FieldProps)
+	C.SetData(sArrayItemsTitlesClasses, ArrayItemsTitlesClasses)
+	C.SetData(sFieldColProps, fieldColProps)
+	C.SetData(sReadOnlyFieldProps, readOnlyFieldProps)
+	C.SetData(sTextFieldProps, textFieldProps)
+	C.SetData(sTextareaProps, textareaProps)
+	C.SetData(sNumberProps, numberProps)
+	C.SetData(sSliderProps, sliderProps)
+	C.SetData(sCheckboxProps, checkboxProps)
+	C.SetData(sSwitchProps, switchProps)
+	C.SetData(sComboboxProps, comboboxProps)
+	C.SetData(sSelectProps, selectProps)
+	C.SetData(sFileInputProps, FileInputProps)
+	C.SetData(sRadioGroupProps, radioGroupProps)
+	C.SetData(sRadioItemProps, radioItemProps)
+	C.SetData(sTabsProps, tabsProps)
+	C.SetData(sexpansionPanelsProps, expansionPanelsProps)
+	C.SetData(sDialogProps, dialogProps)
+	C.SetData(sDialogCardProps, dialogCardProps)
+	C.SetData(sColorPickerProps, colorPickerProps)
+	C.SetData(sTimePickerProps, timePickerProps)
+	C.SetData(sDatePickerProps, datePickerProps)
+	C.SetData(sArrayItemCardProps, arrayItemCardProps)
+	C.SetData(sArrayItemColProps, arrayItemColProps)
+	C.SetData(sStepperProps, stepperProps)
+	C.SetData(sVerticalStepperProps, verticalStepperProps)
+	C.SetData(sTooltipProps, tooltipProps)
+	C.SetData(sArrayOperations, arrayOperations)
+	C.SetData(sHttpOptions, httpOptions)
 End Sub
 
 'clear the contents of the builder
@@ -1440,7 +1441,8 @@ Sub SetRequired(vModel As String) As BVAD3Form
 End Sub
 
 'bind the state
-Sub BindState(VC As VueComponent)
+Sub BindState(C As VueComponent)
+	VC = c
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control
@@ -1449,25 +1451,25 @@ Sub BindState(VC As VueComponent)
 		Select Case k
 		Case "key"
 		Case Else
-			VC.SetData(k, v)
+			C.SetData(k, v)
 		End Select
 	Next
 	'apply the events
 	For Each k As String In mmethods.Keys
 		Dim cb As BANanoObject = mmethods.Get(k)
-		VC.SetCallBack(k, cb)
+		C.SetCallBack(k, cb)
 	Next
 End Sub
 
 'get the form data
-Sub GetFormData(VC As VueComponent) As Map
-	Dim formData As Map = VC.GetData(modelname)
+Sub GetFormData(C As VueComponent) As Map
+	Dim formData As Map = C.GetData(modelname)
 	Return formData
 End Sub
 
 'update the form data
-Sub SetFormData(VC As VueComponent, mx As Map)
-	VC.SetData(modelname, mx)
+Sub SetFormData(C As VueComponent, mx As Map)
+	C.SetData(modelname, mx)
 End Sub
 
 'reset the contents and apply designer contents
@@ -1489,7 +1491,7 @@ Sub Reset
 End Sub
 
 'build a table from the table description
-Sub BuildFromTableDescription(VC As VueComponent, TD As TableDescription, ShowPrimaryKey As Boolean, ShowBlobs As Boolean)
+Sub BuildFromTableDescription(C As VueComponent, TD As TableDescription, ShowPrimaryKey As Boolean, ShowBlobs As Boolean)
 	'reset the table
 	Reset
 	'update the table title
@@ -1555,5 +1557,5 @@ Sub BuildFromTableDescription(VC As VueComponent, TD As TableDescription, ShowPr
 			End If
 		End If
 	Next
-	Refresh(VC)
+	Refresh(C)
 End Sub

@@ -186,6 +186,7 @@ Private bRequired As Boolean
 Private sRequired As String
 Private sReadonly As String
 Private bShrink As Boolean
+Private VC As VueComponent
 	End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -488,76 +489,76 @@ Sub RemoveAttr(p As String) As VFileInput
 	Return Me 
 End Sub
 
-Sub UpdateVisible(VC As VueComponent, b As Boolean) As VFileInput 
-	VC.SetData(sVIf, b) 
-	VC.SetData(sVShow, b) 
+Sub UpdateVisible(C As VueComponent, b As Boolean) As VFileInput 
+	C.SetData(sVIf, b) 
+	C.SetData(sVShow, b) 
 	Return Me 
 End Sub
 
 
 'Update Disabled
-Sub UpdateDisabled(VC As VueComponent, vDisabled As Object)
-VC.SetData(sDisabled, vDisabled)
+Sub UpdateDisabled(C As VueComponent, vDisabled As Object)
+C.SetData(sDisabled, vDisabled)
 End Sub
 
 ''Update Error
-'Sub UpdateError(VC As VueComponent, vError As Object)
-'VC.SetData(sError, vError)
+'Sub UpdateError(C As VueComponent, vError As Object)
+'C.SetData(sError, vError)
 'End Sub
 '
 ''Update ErrorMessages
-'Sub UpdateErrorMessages(VC As VueComponent, vErrorMessages As Object)
-'VC.SetData(sErrorMessages, vErrorMessages)
+'Sub UpdateErrorMessages(C As VueComponent, vErrorMessages As Object)
+'C.SetData(sErrorMessages, vErrorMessages)
 'End Sub
 '
 ''Clear ErrorMessages
-'Sub ClearErrorMessages(VC As VueComponent)
-'VC.SetData(sErrorMessages, VC.NewList)
+'Sub ClearErrorMessages(C As VueComponent)
+'C.SetData(sErrorMessages, C.NewList)
 'End Sub
 
 'Update Indeterminate
-Sub UpdateIndeterminate(VC As VueComponent, vIndeterminate As Object)
-VC.SetData(sIndeterminate, vIndeterminate)
+Sub UpdateIndeterminate(C As VueComponent, vIndeterminate As Object)
+C.SetData(sIndeterminate, vIndeterminate)
 End Sub
 
 'Update Loading
-Sub UpdateLoading(VC As VueComponent, vLoading As Object)
-VC.SetData(sLoading, vLoading)
+Sub UpdateLoading(C As VueComponent, vLoading As Object)
+C.SetData(sLoading, vLoading)
 End Sub
 
 'Update Messages
-Sub UpdateMessages(VC As VueComponent, vMessages As Object)
-VC.SetData(sMessages, vMessages)
+Sub UpdateMessages(C As VueComponent, vMessages As Object)
+C.SetData(sMessages, vMessages)
 End Sub
 
 'Clear Messages
-Sub ClearMessages(VC As VueComponent)
-VC.SetData(sMessages, VC.NewList)
+Sub ClearMessages(C As VueComponent)
+C.SetData(sMessages, C.NewList)
 End Sub
 
 'Clear Rules
-Sub ClearRules(VC As VueComponent)
-VC.SetData(sRules, VC.NewList)
+Sub ClearRules(C As VueComponent)
+C.SetData(sRules, C.NewList)
 End Sub
 
 ''Update Success
-'Sub UpdateSuccess(VC As VueComponent, vSuccess As Object)
-'VC.SetData(sSuccess, vSuccess)
+'Sub UpdateSuccess(C As VueComponent, vSuccess As Object)
+'C.SetData(sSuccess, vSuccess)
 'End Sub
 '
 ''Update SuccessMessages
-'Sub UpdateSuccessMessages(VC As VueComponent, vSuccessMessages As Object)
-'VC.SetData(sSuccessMessages, vSuccessMessages)
+'Sub UpdateSuccessMessages(C As VueComponent, vSuccessMessages As Object)
+'C.SetData(sSuccessMessages, vSuccessMessages)
 'End Sub
 '
 ''Clear SuccessMessages
-'Sub ClearSuccessMessages(VC As VueComponent)
-'VC.SetData(sSuccessMessages, VC.NewList)
+'Sub ClearSuccessMessages(C As VueComponent)
+'C.SetData(sSuccessMessages, C.NewList)
 'End Sub
 
 'get value
-Sub GetValue(VC As VueComponent) As Object
-	Dim res As Object = VC.GetData(sVModel)
+Sub GetValue(C As VueComponent) As Object
+	Dim res As Object = C.GetData(sVModel)
 	Return res
 End Sub
 
@@ -615,14 +616,14 @@ End Sub
 'End Select
 'Dim fp As String = fileDet.FullPath
 ''update state of some element like an image
-''VC.SetData("vmodel", fp)
+''C.SetData("vmodel", fp)
 'fil1.UpdateLoading(VC, False)
 'End Sub
 ''****for multiple files
 'Sub fi1_change(fileList As List)
 'If banano.IsNull(fileList) Or banano.IsUndefined(fileList) Then Return
 'fil1.UpdateLoading(VC, True)
-'Dim uploads As List = vc.NewList
+'Dim uploads As List = C.NewList
 'for each fileObj As Map in fileList
 ''get file details
 'Dim fileDet As FileObject
@@ -648,8 +649,8 @@ Sub OnChangeUpload
 End Sub
 
 'click by reference
-Sub Click(VC As VueComponent)
-	Dim fileRefs As BANanoObject = VC.refs.GetField(mName)
+Sub Click(C As VueComponent)
+	Dim fileRefs As BANanoObject = C.refs.GetField(mName)
 	'get refs
 	Dim xref As String = "$refs"
 	Dim fr As BANanoObject = fileRefs.GetField(xref)
@@ -659,9 +660,9 @@ Sub Click(VC As VueComponent)
 End Sub
 
 'clear
-Sub Clear(VC As VueComponent)
-	VC.SetData(sVModel, "")
-	Dim fileRefs As BANanoObject = VC.refs.GetField(mName)
+Sub Clear(C As VueComponent)
+	C.SetData(sVModel, "")
+	Dim fileRefs As BANanoObject = C.refs.GetField(mName)
 	'get refs
 	Dim xref As String = "$refs"
 	Dim fr As BANanoObject = fileRefs.GetField(xref)
@@ -669,7 +670,8 @@ Sub Clear(VC As VueComponent)
 	input.SetField("value", "")
 End Sub
 
-Sub BindState(VC As VueComponent)
+Sub BindState(C As VueComponent)
+	vc = c
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control
@@ -678,13 +680,13 @@ Sub BindState(VC As VueComponent)
 		Select Case k
 		Case "key"
 		Case Else
-			VC.SetData(k, v)
+			C.SetData(k, v)
 		End Select
 	Next
 	'apply the events
 	For Each k As String In mmethods.Keys
 		Dim cb As BANanoObject = mmethods.Get(k)
-		VC.SetCallBack(k, cb)
+		C.SetCallBack(k, cb)
 	Next
 End Sub
 
@@ -794,4 +796,20 @@ End Sub
 
 Sub VisibleOnlyOnXL
 	AddClass("d-none d-xl-flex")
+End Sub
+
+Sub Hide
+	UpdateVisible(VC, False)
+End Sub
+
+Sub Show
+	UpdateVisible(VC, True)
+End Sub
+
+Sub Enable
+	UpdateDisabled(VC, False)
+End Sub
+
+Sub Disable
+	UpdateDisabled(VC, True)
 End Sub

@@ -36,7 +36,6 @@ Sub Class_Globals
 	Private BANano As BANano 'ignore
 	Private mTarget As BANanoElement 'ignore
 	Private mElement As BANanoElement 'ignore
-	Public VC As VueComponent	
 	Private nodes As List
 	Private nodesName As String
 	Private mHasBeforeAdd As Boolean
@@ -60,6 +59,7 @@ Sub Class_Globals
 	Private bFillHeight As Boolean
 	Private bFitScreen As Boolean
 	Private sKey As String
+	Private VC As VueComponent
 End Sub
 
 'initialize to the component you want to load to
@@ -231,8 +231,8 @@ public Sub Remove()
 End Sub
 
 'set the parent component
-Sub setParentComponent(PVC As VueComponent)
-	VC = PVC
+Sub setParentComponent(PC As VueComponent)
+	VC = PC
 End Sub
 
 'use -1 for the parent node
@@ -371,8 +371,8 @@ Sub VisibleOnlyOnXL
 End Sub
 
 
-Sub BindState(VS As VueComponent)
-	VC = VS
+Sub BindState(c As VueComponent)
+	VC = c
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control
@@ -381,13 +381,13 @@ Sub BindState(VS As VueComponent)
 		Select Case k
 		Case "key"
 		Case Else
-			VC.SetData(k, v)
+			C.SetData(k, v)
 		End Select
 	Next
 	'apply the events
 	For Each k As String In mmethods.Keys
 		Dim cb As BANanoObject = mmethods.Get(k)
-		VC.SetCallBack(k, cb)
+		C.SetCallBack(k, cb)
 	Next
 End Sub
 

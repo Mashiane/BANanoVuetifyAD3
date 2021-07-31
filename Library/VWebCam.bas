@@ -63,6 +63,7 @@ Sub Class_Globals
 	'Private strVideoSource As String
 	Private sDeviceId As String
 	Private bSelectFirstDevice As Boolean
+	Private VC As VueComponent						'ignore
 End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -159,50 +160,50 @@ public Sub AddToParent(targetID As String)
 End Sub
 
 'start the camera getRefs first
-Sub StartCamera(VC As VueComponent)
-	Dim refs As BANanoObject = VC.refs
+Sub StartCamera(C As VueComponent)
+	Dim refs As BANanoObject = C.refs
 	refs.GetField(mName).runmethod("start", Null)
 End Sub
 
 'stop the camera getRefs first
-Sub StopCamera(VC As VueComponent)
-	Dim refs As BANanoObject = VC.refs
+Sub StopCamera(C As VueComponent)
+	Dim refs As BANanoObject = C.refs
 	refs.GetField(mName).runmethod("stop", Null)
 End Sub
 
 'capture the camera getRefs first set to image
-Sub TakePicture(VC As VueComponent) As Object
-	Dim refs As BANanoObject = VC.refs
+Sub TakePicture(C As VueComponent) As Object
+	Dim refs As BANanoObject = C.refs
 	Dim obj As Object = refs.GetField(mName).runmethod("capture", Null).Result
 	Return obj
 End Sub
 
 'change the camera
-Sub ChangeCamera(VC As VueComponent, deviceID As String)
-	Dim refs As BANanoObject = VC.refs
+Sub ChangeCamera(C As VueComponent, deviceID As String)
+	Dim refs As BANanoObject = C.refs
 	refs.GetField(mName).runmethod("changeCamera", Array(deviceID))
 End Sub
 
 'loadCameras
-Sub LoadCameras(VC As VueComponent)
-	Dim refs As BANanoObject = VC.refs
+Sub LoadCameras(C As VueComponent)
+	Dim refs As BANanoObject = C.refs
 	refs.GetField(mName).runmethod("loadCameras", Null)
 End Sub
 
-Sub SetupMedia(VC As VueComponent)
-	Dim refs As BANanoObject = VC.refs
+Sub SetupMedia(C As VueComponent)
+	Dim refs As BANanoObject = C.refs
 	refs.GetField(mName).runmethod("setupMedia", Null)
 End Sub
 
 'pause of the camera
-Sub Pause(VC As VueComponent)
-	Dim refs As BANanoObject = VC.refs
+Sub Pause(C As VueComponent)
+	Dim refs As BANanoObject = C.refs
 	refs.GetField(mName).runmethod("pause", Null)
 End Sub
 
 'resume the camera
-Sub Resume(VC As VueComponent)
-	Dim refs As BANanoObject = VC.refs
+Sub Resume(C As VueComponent)
+	Dim refs As BANanoObject = C.refs
 	refs.GetField(mName).runmethod("resume", Null)
 End Sub
 
@@ -228,9 +229,9 @@ Sub RemoveAttr(p As String)
 	VElement.RemoveAttr(p) 
 End Sub
 
-Sub UpdateVisible(VC As VueComponent, b As Boolean) 
-	VC.SetData(sVIf, b) 
-	VC.SetData(svShow, b) 
+Sub UpdateVisible(C As VueComponent, b As Boolean) 
+	C.SetData(sVIf, b) 
+	C.SetData(svShow, b) 
 End Sub
 
 Sub getID As String 
@@ -242,7 +243,8 @@ Sub getHere As String
 End Sub
 
 
-Sub BindState(VC As VueComponent)
+Sub BindState(C As VueComponent)
+	VC = c
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control
@@ -251,13 +253,13 @@ Sub BindState(VC As VueComponent)
 		Select Case k
 		Case "key"
 		Case Else
-			VC.SetData(k, v)
+			C.SetData(k, v)
 		End Select
 	Next
 	'apply the events
 	For Each k As String In mmethods.Keys
 		Dim cb As BANanoObject = mmethods.Get(k)
-		VC.SetCallBack(k, cb)
+		C.SetCallBack(k, cb)
 	Next
 End Sub
 

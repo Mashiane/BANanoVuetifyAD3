@@ -36,6 +36,7 @@ Sub Class_Globals
 	Private mColorIntensity As String = ""
 	Private mText As String = ""
 	Private xCaption As String = ""
+	Private VC As VueComponent						'ignore
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -91,9 +92,9 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	'VElement.SetData(mVShow, True)
 End Sub
 
-Sub UpdateTitle(VC As VueComponent, sText As String)
+Sub UpdateTitle(C As VueComponent, sText As String)
 	mText = sText
-	VC.setdata(xCaption, mText)
+	C.setdata(xCaption, mText)
 End Sub
 
 public Sub AddToParent(targetID As String)
@@ -137,7 +138,8 @@ Sub getHere As String
 End Sub
 
 
-Sub BindState(VC As VueComponent)
+Sub BindState(C As VueComponent)
+	vc = c
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control
@@ -146,13 +148,13 @@ Sub BindState(VC As VueComponent)
 		Select Case k
 		Case "key"
 		Case Else
-			VC.SetData(k, v)
+			C.SetData(k, v)
 		End Select
 	Next
 	'apply the events
 	For Each k As String In mmethods.Keys
 		Dim cb As BANanoObject = mmethods.Get(k)
-		VC.SetCallBack(k, cb)
+		C.SetCallBack(k, cb)
 	Next
 End Sub
 

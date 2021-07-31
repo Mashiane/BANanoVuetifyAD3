@@ -107,7 +107,8 @@ Sub Class_Globals
 	Private xTemplate As String
 	Private bHidden As Boolean
 	Private svshow As String
-	private sVIf as string
+	Private sVIf As String
+	Private VC As VueComponent					'ignore
 End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -295,9 +296,9 @@ Sub RemoveAttr(p As String) As VVirtualScroll
 	Return Me 
 End Sub
 
-Sub UpdateVisible(VC As VueComponent, b As Boolean) As VVirtualScroll 
-	VC.SetData(sVIf, b) 
-	VC.SetData(svshow, b) 
+Sub UpdateVisible(C As VueComponent, b As Boolean) As VVirtualScroll 
+	C.SetData(sVIf, b) 
+	C.SetData(svshow, b) 
 	Return Me 
 End Sub
 

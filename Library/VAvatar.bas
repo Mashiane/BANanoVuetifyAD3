@@ -107,6 +107,7 @@ Private sAvatarType As String
 'Private xImage As String
 Private xColor As String
 Private sSrcBind As String
+Private VC As VueComponent
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -330,29 +331,29 @@ Sub RemoveAttr(p As String) As VAvatar
 	Return Me
 End Sub
 
-Sub UpdateVisible(VC As VueComponent, b As Boolean)
-	VC.SetData(mVIf, b)
-	'VC.SetData(mVShow, b)
+Sub UpdateVisible(C As VueComponent, b As Boolean)
+	C.SetData(mVIf, b)
+	'C.SetData(mVShow, b)
 End Sub
 
-Sub UpdateSrc(VC As VueComponent, s As String)
-	VC.SetData(sSrcBind, S)
+Sub UpdateSrc(C As VueComponent, s As String)
+	C.SetData(sSrcBind, S)
 End Sub
 
-'Sub UpdateText(VC As VueComponent, s As String)
-'	'VC.SetData(xText, S)
+'Sub UpdateText(C As VueComponent, s As String)
+'	'C.SetData(xText, S)
 'End Sub
 '
-'Sub UpdateImage(VC As VueComponent, s As String)
-'	'VC.SetData(xImage, S)
+'Sub UpdateImage(C As VueComponent, s As String)
+'	'C.SetData(xImage, S)
 'End Sub
 '
-'Sub UpdateIcon(VC As VueComponent, s As String)
-'	'VC.SetData(xIcon, S)
+'Sub UpdateIcon(C As VueComponent, s As String)
+'	'C.SetData(xIcon, S)
 'End Sub
 
-Sub UpdateColor(VC As VueComponent, s As String)
-	VC.SetData(xColor, S)
+Sub UpdateColor(C As VueComponent, s As String)
+	C.SetData(xColor, S)
 End Sub
 
 Sub getID As String
@@ -364,7 +365,8 @@ Sub getHere As String
 End Sub
 
 
-Sub BindState(VC As VueComponent)
+Sub BindState(C As VueComponent)
+	VC = c
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control
@@ -373,13 +375,13 @@ Sub BindState(VC As VueComponent)
 		Select Case k
 		Case "key"
 		Case Else
-			VC.SetData(k, v)
+			C.SetData(k, v)
 		End Select
 	Next
 	'apply the events
 	For Each k As String In mmethods.Keys
 		Dim cb As BANanoObject = mmethods.Get(k)
-		VC.SetCallBack(k, cb)
+		C.SetCallBack(k, cb)
 	Next
 End Sub
 
@@ -494,4 +496,12 @@ End Sub
 
 Sub VisibleOnlyOnXL
 	AddClass("d-none d-xl-flex")
+End Sub
+
+Sub Hide
+	UpdateVisible(VC, False)
+End Sub
+
+Sub Show
+	UpdateVisible(VC, True)
 End Sub

@@ -130,6 +130,7 @@ Private sPX As String
 Private sPY As String
 Private sIconSize As String
 Private sIconColor As String
+Private VC As VueComponent
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -356,39 +357,39 @@ Sub getHTML As String
 End Sub
 
 'update the label of the button
-Sub UpdateLabel(VC As VueComponent, s As String)
-	VC.SetData(xCaption, S)
+Sub UpdateLabel(C As VueComponent, s As String)
+	C.SetData(xCaption, S)
 End Sub
 
-Sub UpdateLabelOnApp(VC As VuetifyApp, s As String)
-	VC.SetData(xCaption, S)
+Sub UpdateLabelOnApp(C As VuetifyApp, s As String)
+	C.SetData(xCaption, S)
 End Sub
 
 'update the color of the button
-Sub UpdateColor(VC As VueComponent, s As String)
-	VC.SetData(xColor, S)
+Sub UpdateColor(C As VueComponent, s As String)
+	C.SetData(xColor, S)
 End Sub
 
-Sub UpdateColorOnApp(VC As VuetifyApp, s As String)
-	VC.SetData(xColor, S)
+Sub UpdateColorOnApp(C As VuetifyApp, s As String)
+	C.SetData(xColor, S)
 End Sub
 
 'update the loading state of the button
-Sub UpdateLoading(VC As VueComponent, b As Boolean)
-	VC.SetData(xLoading, b)
+Sub UpdateLoading(C As VueComponent, b As Boolean)
+	C.SetData(xLoading, b)
 End Sub
 
-Sub UpdateLoadingOnApp(VC As VuetifyApp, b As Boolean)
-	VC.SetData(xLoading, b)
+Sub UpdateLoadingOnApp(C As VuetifyApp, b As Boolean)
+	C.SetData(xLoading, b)
 End Sub
 
 'update the disabled state of the button
-Sub UpdateDisabled(VC As VueComponent, b As Boolean)
-	VC.SetData(xDisabled, b)
+Sub UpdateDisabled(C As VueComponent, b As Boolean)
+	C.SetData(xDisabled, b)
 End Sub
 
-Sub UpdateDisabledOnApp(VC As VuetifyApp, b As Boolean)
-	VC.SetData(xDisabled, b)
+Sub UpdateDisabledOnApp(C As VuetifyApp, b As Boolean)
+	C.SetData(xDisabled, b)
 End Sub
 
 'add to parent
@@ -428,14 +429,14 @@ Sub RemoveAttr(p As String) As VBtn
 End Sub
 
 'change visibility of the button
-Sub UpdateVisible(VC As VueComponent, b As Boolean)
-	VC.SetData(mVIf, b)
-	VC.SetData(mVShow, b)
+Sub UpdateVisible(C As VueComponent, b As Boolean)
+	C.SetData(mVIf, b)
+	C.SetData(mVShow, b)
 End Sub
 
-Sub UpdateVisibleOnApp(VC As VuetifyApp, b As Boolean)
-	VC.SetData(mVIf, b)
-	VC.SetData(mVShow, b)
+Sub UpdateVisibleOnApp(C As VuetifyApp, b As Boolean)
+	C.SetData(mVIf, b)
+	C.SetData(mVShow, b)
 End Sub
 
 'get the id of the button
@@ -448,7 +449,8 @@ Sub getHere As String
 	Return $"#${mName}"$
 End Sub
 
-Sub BindState(VC As VueComponent)
+Sub BindState(C As VueComponent)
+	VC = c
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control
@@ -457,13 +459,13 @@ Sub BindState(VC As VueComponent)
 		Select Case k
 		Case "key"
 		Case Else
-			VC.SetData(k, v)
+			C.SetData(k, v)
 		End Select
 	Next
 	'apply the events
 	For Each k As String In mmethods.Keys
 		Dim cb As BANanoObject = mmethods.Get(k)
-		VC.SetCallBack(k, cb)
+		C.SetCallBack(k, cb)
 	Next
 End Sub
 
@@ -578,4 +580,20 @@ End Sub
 
 Sub VisibleOnlyOnXL
 	AddClass("d-none d-xl-flex")
+End Sub
+
+Sub Hide
+	UpdateVisible(VC, False)
+End Sub
+
+Sub Show
+	UpdateVisible(VC, True)
+End Sub
+
+Sub Enable
+	UpdateDisabled(VC, False)
+End Sub
+
+Sub Disable
+	UpdateDisabled(VC, True)
 End Sub

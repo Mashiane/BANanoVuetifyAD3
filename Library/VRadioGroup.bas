@@ -120,7 +120,8 @@ Private bValidateOnBlur As Boolean
  Private sValue As String
  Private sRequired As String
  Private bRequired As Boolean
- 	End Sub
+	Private VC As VueComponent				''ignore
+End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
 	mName = Name.tolowercase 
@@ -317,13 +318,13 @@ End Sub
 
 
 'Update selected value
-Sub SetValue(VC As VueComponent, vVModel As Object)
-VC.SetData(sVModel, vVModel)
+Sub SetValue(C As VueComponent, vVModel As Object)
+C.SetData(sVModel, vVModel)
 End Sub
 
 'get select value
-Sub GetValue(VC As VueComponent) As Object
-	Dim res As Object = VC.GetData(sVModel)
+Sub GetValue(C As VueComponent) As Object
+	Dim res As Object = C.GetData(sVModel)
 	Return res
 End Sub
 
@@ -342,15 +343,15 @@ End Sub
 
 
 'refresh the select
-Sub Refresh(VC As VueComponent)
-	VC.SetData(sItems, xitems)
+Sub Refresh(C As VueComponent)
+	C.SetData(sItems, xitems)
 End Sub
 
 
 'Clear Items
-Sub Clear(VC As VueComponent)
+Sub Clear(C As VueComponent)
 xitems.Initialize 
-VC.SetData(sItems, VC.NewList)
+C.SetData(sItems, C.NewList)
 End Sub
 
 public Sub Remove() 
@@ -378,25 +379,25 @@ Sub RemoveAttr(p As String) As VRadioGroup
 	Return Me 
 End Sub
 
-Sub UpdateVisible(VC As VueComponent, b As Boolean) As VRadioGroup 
-	VC.SetData(sVIf, b) 
-	VC.SetData(sVShow, b) 
+Sub UpdateVisible(C As VueComponent, b As Boolean) As VRadioGroup 
+	C.SetData(sVIf, b) 
+	C.SetData(sVShow, b) 
 	Return Me 
 End Sub
 
 'Update Disabled
-Sub UpdateDisabled(VC As VueComponent, vDisabled As Object)
-VC.SetData(sDisabled, vDisabled)
+Sub UpdateDisabled(C As VueComponent, vDisabled As Object)
+C.SetData(sDisabled, vDisabled)
 End Sub
 
 'Update Readonly
-Sub UpdateReadonly(VC As VueComponent, vReadonly As Object)
-VC.SetData(sReadOnly, vReadonly)
+Sub UpdateReadonly(C As VueComponent, vReadonly As Object)
+C.SetData(sReadOnly, vReadonly)
 End Sub
 
 'Update Value
-Sub UpdateValue(VC As VueComponent, vValue As Object)
-VC.SetData(sVModel, vValue)
+Sub UpdateValue(C As VueComponent, vValue As Object)
+C.SetData(sVModel, vValue)
 End Sub
 
 'add items
@@ -425,22 +426,23 @@ Sub AddObject(nm As Map)
 End Sub
 
 'Update Items
-Sub Reload(VC As VueComponent, vItems As Object)
-	VC.SetData(sItems, vItems)
+Sub Reload(C As VueComponent, vItems As Object)
+	C.SetData(sItems, vItems)
 End Sub
 
 'Update Items
-Sub UpdateItems(VC As VueComponent, vItems As Object)
-	VC.SetData(sItems, vItems)
+Sub UpdateItems(C As VueComponent, vItems As Object)
+	C.SetData(sItems, vItems)
 End Sub
 
 'convert a normal list to key value pairs
-Sub UpdateItems1(VC As VueComponent, lst As List)
+Sub UpdateItems1(C As VueComponent, lst As List)
 	Dim nl As List = BANanoShared.ListToDataSource(sItemValue, sItemText, lst)
-	VC.SetData(sItems, nl)
+	C.SetData(sItems, nl)
 End Sub
 
-Sub BindState(VC As VueComponent)
+Sub BindState(C As VueComponent)
+	vc = c
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control
@@ -449,13 +451,13 @@ Sub BindState(VC As VueComponent)
 		Select Case k
 		Case "key"
 		Case Else
-			VC.SetData(k, v)
+			C.SetData(k, v)
 		End Select
 	Next
 	'apply the events
 	For Each k As String In mmethods.Keys
 		Dim cb As BANanoObject = mmethods.Get(k)
-		VC.SetCallBack(k, cb)
+		C.SetCallBack(k, cb)
 	Next
 End Sub
 
