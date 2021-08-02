@@ -101,6 +101,7 @@ Sub Class_Globals
 	Private Blobs As List
 	Private Doubles As List
 	Private ParentComponent As VueComponent
+	Private AppComponent As VuetifyApp
 	Private schemaOrderBy As List
 	Private schemaSelectFields As List
 	Private dsKey As String
@@ -149,6 +150,7 @@ Sub Class_Globals
 	Type TableDescription(tableName As String, PrimaryKey As String, AutoIncrement As String, Fields As List, _
 	Strings As List, Booleans As List, Doubles As List, Blobs As List, Integers As List, TinyInts As List, Sorts As List, FieldNames As List)
 	Public TD As TableDescription
+	Public UsesApp As Boolean
 End Sub
 
 'initialize the BANanoDS
@@ -159,6 +161,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	Mode = "" 
 	IsBound = False
 	mPayload.Initialize 
+	UsesApp = False
 End Sub
 
 'set the jrdc command
@@ -167,6 +170,9 @@ Sub setJRDCCommand(p As String)
 		BANano.Throw($"BANanoDataSource.${mName}.JRDCCommand has not been bound to the component!"$)
 	End If
 	sjrdcCommand = p
+	If bShowLog Then
+		Log($"BANanoDataSource.${mName}.JRDCCommand - '${p}'"$)
+	End If
 End Sub
 
 'get the jrdc command
@@ -230,6 +236,9 @@ Sub setUserName(p As String)
 		BANano.Throw($"BANanoDataSource.${mName}.UserName has not been bound to the component!"$)
 	End If
 	sUserName = p
+	If bShowLog Then
+		Log($"BANanoDataSource.${mName}.UserName - '${p}'"$)
+	End If
 End Sub
 
 Sub getUserName As String
@@ -243,6 +252,9 @@ Sub setDynamic(b As Boolean)
 	End If
 	b = BANanoShared.parsebool(b)
 	bDynamic = b
+	If bShowLog Then
+		Log($"BANanoDataSource.${mName}.Dynamic - '${b}'"$)
+	End If
 End Sub
 
 'set the primary key
@@ -252,6 +264,9 @@ Sub setPrimaryKey(p As String)
 	End If
 	sPrimaryKey = p
 	dsKey = $"${sRecordSource}.${sPrimaryKey}"$
+	If bShowLog Then
+		Log($"BANanoDataSource.${mName}.PrimaryKey - '${p}'"$)
+	End If
 End Sub
 
 'set sAutoIncrement
@@ -260,6 +275,9 @@ Sub setAutoIncrement(p As String)
 		BANano.Throw($"BANanoDataSource.${mName}.AutoIncrement has not been bound to the component!"$)
 	End If
 	sAutoIncrement = p
+	If bShowLog Then
+		Log($"BANanoDataSource.${mName}.AutoIncremenent - '${p}'"$)
+	End If
 End Sub
 
 'return the primary key field bame
@@ -276,6 +294,9 @@ Sub setSingular(p As String)
 		BANano.Throw($"BANanoDataSource.${mName}.Singular has not been bound to the component!"$)
 	End If
 	sSingular = p
+	If bShowLog Then
+		Log($"BANanoDataSource.${mName}.Singular - '${p}'"$)
+	End If
 End Sub
 
 'return the singular name of these records, this is used for deletes
@@ -292,6 +313,9 @@ Sub setPlural(p As String)
 		BANano.Throw($"BANanoDataSource.${mName}.Plural has not been bound to the component!"$)
 	End If
 	sPlural = p
+	If bShowLog Then
+		Log($"BANanoDataSource.${mName}.Plural - '${p}'"$)
+	End If
 End Sub
 
 'return the plural name of these records
@@ -308,6 +332,7 @@ Sub getDisplayField As String
 		BANano.Throw($"BANanoDataSource.${mName}.DisplayField has not been bound to the component!"$)
 	End If
 	Return sDisplayField
+	
 End Sub
 
 'set display field
@@ -316,6 +341,9 @@ Sub setDisplayField(p As String)
 		BANano.Throw($"BANanoDataSource.${mName}.DisplayField has not been bound to the component!"$)
 	End If
 	sDisplayField = p
+	If bShowLog Then
+		Log($"BANanoDataSource.${mName}.DisplayField - '${p}'"$)
+	End If
 End Sub
 
 'return the display value, this is used for deletes
@@ -324,7 +352,11 @@ Sub getDisplayValue As String
 		BANano.Throw($"BANanoDataSource.${mName}.DisplayValue has not been bound to the component!"$)
 	End If
 	'get the record
-	Record = ParentComponent.GetData(sRecordSource)
+	If UsesApp = False Then
+		Record = ParentComponent.GetData(sRecordSource)
+	Else
+		Record = AppComponent.GetData(sRecordSource)
+	End If	
 	'get the display field
 	Dim sDisplayValue As String = Record.GetDefault(sDisplayField, "")
 	sPrimaryKeyValue = Record.GetDefault(sPrimaryKey, "")
@@ -337,6 +369,9 @@ Sub setCustomQuery(p As String)
 		BANano.Throw($"BANanoDataSource.${mName}.CustomQuery has not been bound to the component!"$)
 	End If
 	sCustomQuery = p
+	If bShowLog Then
+		Log($"BANanoDataSource.${mName}.CustomQuery - '${p}'"$)
+	End If
 End Sub
 
 'set password
@@ -345,6 +380,9 @@ Sub setPassword(p As String)
 		BANano.Throw($"BANanoDataSource.${mName}.Password has not been bound to the component!"$)
 	End If
 	sPassword = p
+	If bShowLog Then
+		Log($"BANanoDataSource.${mName}.Password - '${p}'"$)
+	End If
 End Sub
 
 'set hostname
@@ -353,6 +391,9 @@ Sub setHostName(p As String)
 		BANano.Throw($"BANanoDataSource.${mName}.HostName has not been bound to the component!"$)
 	End If
 	sHostName = p
+	If bShowLog Then
+		Log($"BANanoDataSource.${mName}.HostName - '${p}'"$)
+	End If
 End Sub
 
 Sub getHostName As String
@@ -365,6 +406,9 @@ Sub setDatabaseName(p As String)
 		BANano.Throw($"BANanoDataSource.${mName}.DatabaseName has not been bound to the component!"$)
 	End If
 	sDatabaseName = p
+	If bShowLog Then
+		Log($"BANanoDataSource.${mName}.DataBase - '${p}'"$)
+	End If
 End Sub
 
 Sub getDatabaseName As String
@@ -377,6 +421,9 @@ Sub setTableName(p As String)
 		BANano.Throw($"BANanoDataSource.${mName}.TableName has not been bound to the component!"$)
 	End If
 	sTableName = p
+	If bShowLog Then
+		Log($"BANanoDataSource.${mName}.TableName - '${p}'"$)
+	End If
 End Sub
 
 Sub getTableName As String
@@ -390,6 +437,9 @@ Sub setRecordSource(p As String)
 	End If
 	sRecordSource = p
 	dsKey = $"${sRecordSource}.${sPrimaryKey}"$
+	If bShowLog Then
+		Log($"BANanoDataSource.${mName}.RecordSource - '${p}'"$)
+	End If
 End Sub
 
 Sub getRecordSource As String
@@ -402,6 +452,9 @@ Sub setDatabaseType(dt As String)
 		BANano.Throw($"BANanoDataSource.${mName}.DatabaseType has not been bound to the component!"$)
 	End If
 	sDatabaseType = dt
+	If bShowLog Then
+		Log($"BANanoDataSource.${mName}.DatabaseType - '${dt}'"$)
+	End If
 End Sub
 
 
@@ -461,6 +514,9 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 End Sub
 
 Sub SchemaBuild
+	If bShowLog Then
+		Log($"BANanoDataSource.${mName}.SchemaBuild"$)
+	End If
 	Strings.Initialize 
 	Doubles.Initialize 
 	Blobs.Initialize 
@@ -529,6 +585,9 @@ Sub SchemaReset As BananoDataSource
 	If IsBound = False Then
 		BANano.Throw($"BANanoDataSource.${mName}.SchemaReset has not been bound to the component!"$)
 	End If
+	If bShowLog Then
+		Log($"BANanoDataSource.${mName}.SchemaReset"$)
+	End If
 	Tag = ""
 	Strings.Initialize 
 	Doubles.Initialize 
@@ -543,12 +602,13 @@ Sub SchemaReset As BananoDataSource
 	Return Me
 End Sub
 
+'set the default values for fields
 Sub AddDefault(fld As String, value As Object) As BananoDataSource
 	If IsBound = False Then
 		BANano.Throw($"BANanoDataSource.${mName}.AddDefault has not been bound to the component!"$)
 	End If
 	If bShowLog Then
-		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.AddDefault"$)
+		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.AddDefault(${fld},${value})"$)
 	End If
 	schemaDefaultsM.Put(fld, value)
 	Return Me
@@ -560,6 +620,9 @@ Sub SchemaSetFields(flds As List)
 		BANano.Throw($"BANanoDataSource.${mName}.SchemaSetFields has not been bound to the component!"$)
 	End If
 	schemaFields = flds
+	If bShowLog Then
+		Log($"BANanoDataSource.${mName}.SchemaSetFields(${BANano.ToJson(flds)})"$)
+	End If
 End Sub
 
 'set integers
@@ -568,6 +631,9 @@ Sub SchemaSetIntegers(flds As List)
 		BANano.Throw($"BANanoDataSource.${mName}.SchemaSetIntegers has not been bound to the component!"$)
 	End If
 	Integers = flds
+	If bShowLog Then
+		Log($"BANanoDataSource.${mName}.SchemaSetIntegers(${BANano.ToJson(flds)})"$)
+	End If
 End Sub
 
 'set strings
@@ -576,6 +642,9 @@ Sub SchemaSetStrings(flds As List)
 		BANano.Throw($"BANanoDataSource.${mName}.SchemaSetStrings has not been bound to the component!"$)
 	End If
 	Strings = flds
+	If bShowLog Then
+		Log($"BANanoDataSource.${mName}.SchemaSetStrings(${BANano.ToJson(flds)})"$)
+	End If
 End Sub
 
 'set defaults
@@ -588,6 +657,9 @@ Sub SchemaSetDefaults(dm As Map)
 		Dim v As Object = dm.Get(k)
 		AddDefault(k, v)
 	Next
+	If bShowLog Then
+		Log($"BANanoDataSource.${mName}.SchemaSetDefaults(${BANano.ToJson(dm)})"$)
+	End If
 End Sub
 
 'set doubles
@@ -596,6 +668,9 @@ Sub SchemaSetDoubles(flds As List)
 		BANano.Throw($"BANanoDataSource.${mName}.SchemaSetDoubles has not been bound to the component!"$)
 	End If
 	Doubles = flds
+	If bShowLog Then
+		Log($"BANanoDataSource.${mName}.SchemaSetDoubles(${BANano.ToJson(flds)})"$)
+	End If
 End Sub
 
 'set blobs
@@ -604,6 +679,9 @@ Sub SchemaSetBlobs(flds As List)
 		BANano.Throw($"BANanoDataSource.${mName}.SchemaSetBlobs has not been bound to the component!"$)
 	End If
 	Blobs = flds
+	If bShowLog Then
+		Log($"BANanoDataSource.${mName}.SchemaSetBlobs(${BANano.ToJson(flds)})"$)
+	End If
 End Sub
 
 'set order by
@@ -612,6 +690,9 @@ Sub SchemaSetOrderBy(flds As List)
 		BANano.Throw($"BANanoDataSource.${mName}.SchemaSetOrderBy has not been bound to the component!"$)
 	End If
 	schemaOrderBy = flds
+	If bShowLog Then
+		Log($"BANanoDataSource.${mName}.SchemaSetOrderBy(${BANano.ToJson(flds)})"$)
+	End If
 End Sub
 
 'set select fields
@@ -620,6 +701,9 @@ Sub SchemaSetSelectFields(flds As List)
 		BANano.Throw($"BANanoDataSource.${mName}.SchemaSetSelectFields has not been bound to the component!"$)
 	End If
 	schemaSelectFields = flds
+	If bShowLog Then
+		Log($"BANanoDataSource.${mName}.SchemaSetSelectFields(${BANano.ToJson(flds)})"$)
+	End If
 End Sub
 
 'bind to this DS to this component
@@ -627,10 +711,24 @@ Sub BindState(VC As VueComponent)
 	If bShowLog Then
 		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.BindState"$)
 	End If
+	UsesApp = False
 	ParentComponent = VC
 	'initialize a blank record
 	Dim nr As Map = CreateMap()
 	ParentComponent.SetData(sRecordSource, nr)
+	IsBound = True
+End Sub
+
+'bind to this DS to this component
+Sub BindStateOnApp(C As VuetifyApp)
+	If bShowLog Then
+		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.BindStateOnApp"$)
+	End If
+	UsesApp = True
+	AppComponent = C
+	'initialize a blank record
+	Dim nr As Map = CreateMap()
+	AppComponent.SetData(sRecordSource, nr)
 	IsBound = True
 End Sub
 
@@ -659,7 +757,11 @@ Sub DEFAULTS
 		Next
 	End If
 	CorrectDataTypes(Record)
-	ParentComponent.SetData(sRecordSource, Record)
+	If UsesApp = False Then
+		ParentComponent.SetData(sRecordSource, Record)
+	Else
+		AppComponent.SetData(sRecordSource, Record)
+	End If	
 End Sub
 
 'create or update based on the mode
@@ -717,7 +819,11 @@ Sub RESET
 		Record.Put(k, "")
 	Next
 	CorrectDataTypes(Record)
-	ParentComponent.SetData(sRecordSource, Record)
+	If UsesApp = False Then
+		ParentComponent.SetData(sRecordSource, Record)
+	Else
+		AppComponent.SetData(sRecordSource, Record)
+	End If	
 End Sub
 
 'get the form contents
@@ -728,7 +834,11 @@ Sub FORM As Map
 	If bShowLog Then
 		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.FORM"$)
 	End If
-	Record = ParentComponent.GetData(sRecordSource)
+	If UsesApp = False Then
+		Record = ParentComponent.GetData(sRecordSource)
+	Else
+		Record = AppComponent.GetData(sRecordSource)
+	End If	
 	Return Record
 End Sub
 
@@ -913,6 +1023,18 @@ Sub SELECTFORCOMBO
 End Sub
 
 'select all based on fields and order by
+Sub SELECTFORCOMBOCUSTOM(MyAction As String)
+	If IsBound = False Then
+		BANano.Throw($"BANanoDataSource.${mName}.SELECTFORCOMBOCUSTOM has not been bound to the component!"$)
+	End If
+	If bShowLog Then
+		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.SELECTFORCOMBOCUSTOM"$)
+	End If
+	Tag = MyAction
+	Execute(ACTION_SELECTFORCOMBO)
+End Sub
+
+'select all based on fields and order by
 Sub SELECTALL
 	If IsBound = False Then
 		BANano.Throw($"BANanoDataSource.${mName}.SELECTALL has not been bound to the component!"$)
@@ -933,6 +1055,18 @@ Sub SELECTWHERE
 		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.SELECTWHERE"$)
 	End If
 	Tag = ACTION_SELECTWHERE
+	Execute(ACTION_SELECTWHERE)
+End Sub
+
+'select all based on fields and order by
+Sub SELECTWHERECUSTOM(MyAction As String)
+	If IsBound = False Then
+		BANano.Throw($"BANanoDataSource.${mName}.SELECTWHERECUSTOM has not been bound to the component!"$)
+	End If
+	If bShowLog Then
+		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.SELECTWHERECUSTOM"$)
+	End If
+	Tag = MyAction
 	Execute(ACTION_SELECTWHERE)
 End Sub
 
@@ -1024,21 +1158,21 @@ private Sub Execute(nAction As String)
 			BANano.CallSub(mCallBack, $"${mName}_done"$, Array(Tag, OK, Response, Error, affectedRows, Result))
 		End If
 	Case "sqlite"
-		Dim bpRun As BANanoPromise
-		bpRun.CallSub(Me, "SQLiteExecute", Null)
-		BANano.Await(bpRun)
-		'
-		'priorize the exact query, if not execute done
-		Dim subKey As String = $"${mName}_${Tag}"$
-		If SubExists(mCallBack, subKey) Then
-			BANano.CallSub(mCallBack, subKey, Array(OK, Response, Error, affectedRows, Result))
-			Return
-		End If
-		'
-		'if we have done defined, call it
-		If SubExists(mCallBack, $"${mName}_done"$) Then
-			BANano.CallSub(mCallBack, $"${mName}_done"$, Array(Tag, OK, Response, Error, affectedRows, Result))
-		End If
+'		Dim bpRun As BANanoPromise
+'		bpRun.CallSub(Me, "SQLiteExecute", Null)
+'		BANano.Await(bpRun)
+'		'
+'		'priorize the exact query, if not execute done
+'		Dim subKey As String = $"${mName}_${Tag}"$
+'		If SubExists(mCallBack, subKey) Then
+'			BANano.CallSub(mCallBack, subKey, Array(OK, Response, Error, affectedRows, Result))
+'			Return
+'		End If
+'		'
+'		'if we have done defined, call it
+'		If SubExists(mCallBack, $"${mName}_done"$) Then
+'			BANano.CallSub(mCallBack, $"${mName}_done"$, Array(Tag, OK, Response, Error, affectedRows, Result))
+'		End If
 	Case "jrdc"
 		JRDCExecute
 		'we are using jrdc
@@ -1133,7 +1267,11 @@ private Sub MySQLExecute As Boolean    'ignore
 		MySQL.SchemaCreateTable
 	Case ACTION_CREATE
 		'remove auto-increment
-		Record = ParentComponent.GetData(sRecordSource)
+		If UsesApp = False Then
+			Record = ParentComponent.GetData(sRecordSource)
+		Else
+			Record = AppComponent.GetData(sRecordSource)
+		End If	
 		Dim nr As Map = CreateMap()
 		For Each fld As String In schemaFields
 			Dim value As String = Record.GetDefault(fld, "")
@@ -1150,7 +1288,11 @@ private Sub MySQLExecute As Boolean    'ignore
 	Case ACTION_READ
 		bRead = True
 		'get the key for the record
-		Dim pkValue As String = ParentComponent.GetData(dsKey)
+		If UsesApp = False Then
+			Dim pkValue As String = ParentComponent.GetData(dsKey)
+		Else
+			Dim pkValue As String = AppComponent.GetData(dsKey)
+		End If	
 		'there is no key, return a blank data-source
 		If pkValue = "" Then
 			Dim nr As Map = CreateMap()
@@ -1159,7 +1301,11 @@ private Sub MySQLExecute As Boolean    'ignore
 				Record.Put(k, "")
 			Next
 			CorrectDataTypes(nr)
-			ParentComponent.SetData(sRecordSource, nr) 
+			If UsesApp = False Then
+				ParentComponent.SetData(sRecordSource, nr) 
+			Else
+				AppComponent.SetData(sRecordSource, nr)
+			End If	
 			BANano.ReturnThen(True)
 		End If
 		Log($"Read: ${pkValue}"$)
@@ -1167,12 +1313,20 @@ private Sub MySQLExecute As Boolean    'ignore
 		MySQL.Read(pkValue)
 	Case ACTION_UPDATE, ACTION_UNDO
 		'get the key for the record
-		Dim pkValue As String = ParentComponent.GetData(dsKey)
+		If UsesApp = False Then
+			Dim pkValue As String = ParentComponent.GetData(dsKey)
+		Else
+			Dim pkValue As String = AppComponent.GetData(dsKey)
+		End If	
 		If pkValue = "" Then
 			BANano.ReturnThen(True)
 		End If
 		'read the record to update
-		Record = ParentComponent.GetData(sRecordSource)
+		If UsesApp = False Then
+			Record = ParentComponent.GetData(sRecordSource)
+		Else
+			Record = AppComponent.GetData(sRecordSource)
+		End If	
 		Dim nr As Map = CreateMap()
 		For Each fld As String In schemaFields
 			Dim value As String = Record.GetDefault(fld, "")
@@ -1186,12 +1340,20 @@ private Sub MySQLExecute As Boolean    'ignore
 		MySQL.Update1(Record, pkValue)
 	Case ACTION_DELETE
 		'get the key for the record
-		Dim pkValue As String = ParentComponent.GetData(dsKey)
+		If UsesApp = False Then
+			Dim pkValue As String = ParentComponent.GetData(dsKey)
+		Else
+			Dim pkValue As String = AppComponent.GetData(dsKey)
+		End If	
 		If pkValue = "" Then
 			BANano.ReturnThen(True)
 		End If
 		'read the record to update
-		Record = ParentComponent.GetData(sRecordSource)
+		If UsesApp = False Then
+			Record = ParentComponent.GetData(sRecordSource)
+		Else
+			Record = AppComponent.GetData(sRecordSource)
+		End If	
 		Dim nr As Map = CreateMap()
 		For Each fld As String In schemaFields
 			Dim value As String = Record.GetDefault(fld, "")
@@ -1237,10 +1399,12 @@ private Sub MySQLExecute As Boolean    'ignore
 	
 	'we are using mysqlphp.config
 	If bDynamic = False Then 
-		MySQL.JSON = BANano.CallInlinePHPWait(MySQL.MethodName, MySQL.Build) 
+		mPayload = MySQL.Build
+		MySQL.JSON = BANano.CallInlinePHPWait(MySQL.MethodName, mPayload) 
 	Else
 		'we are using dynamic
-		MySQL.JSON = BANano.CallInlinePHPWait(MySQL.MethodNameDynamic, MySQL.BuildDynamic(True))
+		mPayload = MySQL.BuildDynamic(True)
+		MySQL.JSON = BANano.CallInlinePHPWait(MySQL.MethodNameDynamic, mPayload)
 	End If	
 	'get the result
 	MySQL.FromJSON
@@ -1385,7 +1549,11 @@ private Sub MySQLExecute As Boolean    'ignore
 			If Result.Size >= 0 Then
 				Record = Result.Get(0)
 				CorrectDataTypes(Record)
-				ParentComponent.SetData(sRecordSource, Record)
+				If UsesApp = False Then
+					ParentComponent.SetData(sRecordSource, Record)
+				Else
+					AppComponent.SetData(sRecordSource, Record)
+				End If	
 			Else
 				'record is not found
 				Record = CreateMap()
@@ -1394,7 +1562,11 @@ private Sub MySQLExecute As Boolean    'ignore
 					Record.Put(k, "")
 				Next
 				CorrectDataTypes(Record)
-				ParentComponent.SetData(sRecordSource, Record)
+				If UsesApp = False Then
+					ParentComponent.SetData(sRecordSource, Record)
+				Else
+					AppComponent.SetData(sRecordSource, Record)
+				End If	
 				affectedRows = -1
 			End If
 		End If
@@ -1424,7 +1596,11 @@ Sub SetKey(keyValue As String)
 	If bShowLog Then
 		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.SetKey.${keyValue}"$)
 	End If
-	ParentComponent.SetData(dsKey, keyValue)
+	If UsesApp = False Then
+		ParentComponent.SetData(dsKey, keyValue)
+	Else
+		AppComponent.SetData(dsKey, keyValue)
+	End If	
 End Sub
 
 'set the record to update
@@ -1435,7 +1611,11 @@ Sub SetRecord(rec As Map)
 	If bShowLog Then
 		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.SetRecord.${BANano.ToJson(rec)}"$)
 	End If
-	ParentComponent.SetData(sRecordSource, rec)
+	If UsesApp = False Then
+		ParentComponent.SetData(sRecordSource, rec)
+	Else
+		AppComponent.SetData(sRecordSource,rec)
+	End If	
 End Sub
 
 private Sub CorrectDataTypes(rec As Map)
@@ -1466,6 +1646,20 @@ private Sub JRDCExecute
 	End If
 	If bShowLog Then
 		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.JRDCExecute"$)
+		Log($"Table Name: ${sTableName}"$)
+		Log($"Primary Key: ${sPrimaryKey}"$)
+		Log($"AutoIncrement: ${sAutoIncrement}"$)
+		Log($"RecordSource: ${sRecordSource}"$)
+		Log($"Singular: ${sSingular}"$)
+		Log($"Plural: ${sPlural}"$)
+		Log($"Display Field: ${sDisplayField}"$)
+		Log($"Fields: ${BANano.ToJson(schemaFields)}"$)
+		Log($"Select Fields: ${BANano.ToJson(schemaSelectFields)}"$)
+		Log($"Sort By: ${BANano.ToJson(schemaOrderBy)}"$)
+		Log($"Integers: ${BANano.ToJson(Integers)}"$)
+		Log($"Doubles: ${BANano.ToJson(Doubles)}"$)
+		Log($"Blobs: ${BANano.ToJson(Blobs)}"$)
+		Log($"Defaults: ${BANano.ToJson(schemaDefaultsM)}"$)		
 	End If
 	Dim MySQL As BANanoMySQLE
 	MySQL.Initialize(sDatabaseName, sTableName, sPrimaryKey, sAutoIncrement) 
@@ -1479,127 +1673,16 @@ private Sub JRDCExecute
 	MySQL.SchemaAddDouble(Doubles)
 	MySQL.SchemaAddInt(Integers)
 	MySQL.SchemaAddText(Strings)
-	Tag = sAction
-	Select Case sAction
-	Case ACTION_CREATE_TABLE
-		MySQL.SchemaCreateTable
-		mPayload = MySQL.Build
-	Case ACTION_CREATE
-		'remove auto-increment
-		Record = ParentComponent.GetData(sRecordSource)
-		Dim nr As Map = CreateMap()
-		For Each fld As String In schemaFields
-			Dim value As String = Record.GetDefault(fld, "")
-			nr.Put(fld, value)
-		Next
-		Record = nr
-		CorrectDataTypes(Record)
-		If sAutoIncrement <> "" Then
-			Record.Remove(sAutoIncrement)
-		End If
-		Log($"Create: ${BANano.ToJson(Record)}"$)
-		'insert a record
-		MySQL.Insert1(Record)
-		mPayload = MySQL.Build
-	Case ACTION_READ
-		'get the key for the record
-		Dim pkValue As String = ParentComponent.GetData(dsKey)
-		Log($"Read: ${pkValue}"$)
-		'execute the read
-		MySQL.Read(pkValue)
-		mPayload = MySQL.Build
-	Case ACTION_UPDATE, ACTION_UNDO
-		'get the key for the record
-		Dim pkValue As String = ParentComponent.GetData(dsKey)
-		'read the record to update
-		Record = ParentComponent.GetData(sRecordSource)
-		Dim nr As Map = CreateMap()
-		For Each fld As String In schemaFields
-			Dim value As String = Record.GetDefault(fld, "")
-			nr.Put(fld, value)
-		Next
-		Record = nr
-		CorrectDataTypes(Record)
-		'we need to remove the auto-increment key from the record
-		Record.Remove(sPrimaryKey)
-		Log($"Update: ${BANano.ToJson(Record)}"$)
-		MySQL.Update1(Record, pkValue)
-		mPayload = MySQL.Build
-	Case ACTION_DELETE
-		'get the key for the record
-		Dim pkValue As String = ParentComponent.GetData(dsKey)
-		'read the record to update
-		Record = ParentComponent.GetData(sRecordSource)
-		Dim nr As Map = CreateMap()
-		For Each fld As String In schemaFields
-			Dim value As String = Record.GetDefault(fld, "")
-			nr.Put(fld, value)
-		Next
-		Record = nr
-		CorrectDataTypes(Record)
-		Log($"Delete: ${pkValue}"$)
-		MySQL.Delete(pkValue)
-		mPayload = MySQL.Build
-	Case ACTION_SELECTALL, ACTION_PDF, ACTION_REPORT, ACTION_EXCEL, ACTION_SELECTFORCOMBO, ACTION_CHART
-		MySQL.SelectAll(schemaSelectFields, schemaOrderBy)
-		mPayload = MySQL.Build
-	Case ACTION_SELECTWHERE, ACTION_EXISTS
-		MySQL.SelectWhere(schemaSelectFields, cw, ops, schemaOrderBy) 
-		mPayload = MySQL.Build
-	Case ACTION_TABLENAMES
-		MySQL.GetTableNames
-		mPayload = MySQL.build
-	Case ACTION_DESCRIBETABLE
-		MySQL.DescribeTable
-		mPayload = MySQL.build
-	Case ACTION_COUNT
-		MySQL.GetCount
-		mPayload = MySQL.Build
-	Case ACTION_GETMAX
-		MySQL.GetMax
-		mPayload = MySQL.Build
-	Case ACTION_GETMIN
-		MySQL.GetMin
-		mPayload = MySQL.Build
-	Case ACTION_SUMOF
-		MySQL.GetSUM
-		mPayload = MySQL.Build
-	Case ACTION_CUSTOM
-		MySQL.Execute(sCustomQuery)
-		mPayload = MySQL.Build
-	End Select
-	If bShowLog Then
-		Log(MySQL.query)
-		Log(MySQL.args)
-	End If
-	mPayload.Put("jrdccommand", sjrdcCommand)		
-End Sub
-
-private Sub SQLiteExecute As Boolean    'ignore
-	If IsBound = False Then
-		BANano.Throw($"BANanoDataSource.${mName}.SQLiteExecute has not been bound to the component!"$)
-	End If
-	If bShowLog Then
-		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.SQLiteExecute"$)
-	End If
-	Dim MySQL As BANanoSQLiteE
-	MySQL.Initialize(sDatabaseName, sTableName, sPrimaryKey, sAutoIncrement) 
-	'clear the schema
-	MySQL.SchemaClear
-	'add the schema to the dbclass
-	MySQL.SchemaAddBlob(Blobs)
-	MySQL.SchemaAddDouble(Doubles)
-	MySQL.SchemaAddInt(Integers)
-	MySQL.SchemaAddText(Strings)
-	Dim bRead As Boolean = False
-	Dim bSelect As Boolean = False  'ignore
-	Dim bCount As Boolean = False
 	Select Case sAction
 	Case ACTION_CREATE_TABLE
 		MySQL.SchemaCreateTable
 	Case ACTION_CREATE
 		'remove auto-increment
-		Record = ParentComponent.GetData(sRecordSource)
+		If UsesApp = False Then
+			Record = ParentComponent.GetData(sRecordSource)
+		Else
+			Record = AppComponent.GetData(sRecordSource)
+		End If	
 		Dim nr As Map = CreateMap()
 		For Each fld As String In schemaFields
 			Dim value As String = Record.GetDefault(fld, "")
@@ -1614,9 +1697,12 @@ private Sub SQLiteExecute As Boolean    'ignore
 		'insert a record
 		MySQL.Insert1(Record)
 	Case ACTION_READ
-		bRead = True
 		'get the key for the record
-		Dim pkValue As String = ParentComponent.GetData(dsKey)
+		If UsesApp = False Then
+			Dim pkValue As String = ParentComponent.GetData(dsKey)
+		Else
+			Dim pkValue As String = AppComponent.GetData(dsKey)
+		End If	
 		'there is no key, return a blank data-source
 		If pkValue = "" Then
 			Dim nr As Map = CreateMap()
@@ -1625,7 +1711,11 @@ private Sub SQLiteExecute As Boolean    'ignore
 				Record.Put(k, "")
 			Next
 			CorrectDataTypes(nr)
-			ParentComponent.SetData(sRecordSource, nr) 
+			If UsesApp = False Then
+				ParentComponent.SetData(sRecordSource, nr) 
+			Else
+				AppComponent.SetData(sRecordSource, nr)
+			End If	
 			BANano.ReturnThen(True)
 		End If
 		Log($"Read: ${pkValue}"$)
@@ -1633,12 +1723,20 @@ private Sub SQLiteExecute As Boolean    'ignore
 		MySQL.Read(pkValue)
 	Case ACTION_UPDATE, ACTION_UNDO
 		'get the key for the record
-		Dim pkValue As String = ParentComponent.GetData(dsKey)
+		If UsesApp = False Then
+			Dim pkValue As String = ParentComponent.GetData(dsKey)
+		Else
+			Dim pkValue As String = AppComponent.GetData(dsKey)
+		End If	
 		If pkValue = "" Then
 			BANano.ReturnThen(True)
 		End If
 		'read the record to update
-		Record = ParentComponent.GetData(sRecordSource)
+		If UsesApp = False Then
+			Record = ParentComponent.GetData(sRecordSource)
+		Else
+			Record = AppComponent.GetData(sRecordSource)
+		End If	
 		Dim nr As Map = CreateMap()
 		For Each fld As String In schemaFields
 			Dim value As String = Record.GetDefault(fld, "")
@@ -1652,12 +1750,20 @@ private Sub SQLiteExecute As Boolean    'ignore
 		MySQL.Update1(Record, pkValue)
 	Case ACTION_DELETE
 		'get the key for the record
-		Dim pkValue As String = ParentComponent.GetData(dsKey)
+		If UsesApp = False Then
+			Dim pkValue As String = ParentComponent.GetData(dsKey)
+		Else
+			Dim pkValue As String = AppComponent.GetData(dsKey)
+		End If	
 		If pkValue = "" Then
 			BANano.ReturnThen(True)
 		End If
 		'read the record to update
-		Record = ParentComponent.GetData(sRecordSource)
+		If UsesApp = False Then
+			Record = ParentComponent.GetData(sRecordSource)
+		Else
+			Record = AppComponent.GetData(sRecordSource)
+		End If	
 		Dim nr As Map = CreateMap()
 		For Each fld As String In schemaFields
 			Dim value As String = Record.GetDefault(fld, "")
@@ -1668,197 +1774,34 @@ private Sub SQLiteExecute As Boolean    'ignore
 		Log($"Delete: ${pkValue}"$)
 		MySQL.Delete(pkValue)
 	Case ACTION_SELECTALL, ACTION_PDF, ACTION_REPORT, ACTION_EXCEL, ACTION_SELECTFORCOMBO, ACTION_CHART
-		bSelect = True
 		MySQL.SelectAll(schemaSelectFields, schemaOrderBy)
 	Case ACTION_SELECTWHERE, ACTION_EXISTS
-		bSelect = True
 		MySQL.SelectWhere(schemaSelectFields, cw, ops, schemaOrderBy) 
 	Case ACTION_TABLENAMES
-		bSelect = True
 		MySQL.GetTableNames
 	Case ACTION_DESCRIBETABLE
-		bSelect = True
 		MySQL.DescribeTable
 	Case ACTION_COUNT
-		bCount = True
-		bSelect = True
 		MySQL.GetCount
 	Case ACTION_GETMAX
-		bSelect = True
 		MySQL.GetMax
 	Case ACTION_GETMIN
-		bSelect = True
 		MySQL.GetMin
 	Case ACTION_SUMOF
-		bSelect = True
 		MySQL.GetSum	
 	Case ACTION_CUSTOM
-		bSelect = True
 		MySQL.Execute(sCustomQuery)
 	End Select
 	If bShowLog Then
 		Log(MySQL.query)
 		Log(MySQL.args)
-	End If
-	
+	End If	
 	'we are using mysqlphp.config
-	MySQL.JSON = BANano.CallInlinePHPWait(MySQL.MethodName, MySQL.Build) 
-	'get the result
-	MySQL.FromJSON
-	Select Case sAction
-	Case ACTION_TABLENAMES
-		'convert to a list
-		Dim tblNames As List
-		tblNames.Initialize 
-		For Each rec As Map In MySQL.result
-			Dim stable_name As String = rec.GetDefault("name", "")
-			stable_name = stable_name.Trim
-			If stable_name <> "" Then
-				tblNames.Add(stable_name)
-			End If 
-		Next
-		MySQL.result = tblNames
-		MySQL.affectedRows = tblNames.Size
-	Case ACTION_DESCRIBETABLE
-		'just prepare the information we need
-		TD.Initialize 
-		TD.tableName = sTableName
-		TD.PrimaryKey = ""
-		TD.AutoIncrement = ""
-		TD.Booleans.Initialize 
-		TD.Strings.Initialize 
-		TD.Doubles.Initialize  
-		TD.Blobs.Initialize 
-		TD.Integers.Initialize 
-		TD.TinyInts.Initialize 
-		TD.Fields.Initialize 
-		TD.Sorts.Initialize 
-		TD.FieldNames.Initialize
-		
-		'will have the auto & primary keys
-		Dim fldnames As List
-		fldnames.Initialize 
-		Dim sauto As String = ""
-		Dim spri As String = ""
-		'loop through each field
-		For Each fldm As Map In MySQL.result
-			'create a new field
-			Dim newfld As Map = CreateMap()
-			Dim sDefault As String = fldm.getdefault("Default","")
-			Dim sExtra As String = fldm.getdefault("Extra", "")
-			Dim sField As String = fldm.getdefault("Field", "")
-			Dim sKey As String = fldm.getdefault("Key", "")
-			Dim sNull As String = fldm.getdefault("Null", "")
-			Dim sType As String = fldm.getdefault("Type", "")	
-			If sNull = "NO" Then sNull = "No"
-			If sNull = "YES" Then sNull = "Yes"
-		'	
-			'update field names
-			TD.FieldNames.Add(sField.tolowercase)
-			'
-			sDefault = BANanoShared.CStr(sDefault)
-			sField = BANanoShared.CStr(sField)
-			sKey = BANanoShared.CStr(sKey)
-			sNull = BANanoShared.CStr(sNull)
-			sType = BANanoShared.CStr(sType)
-			sExtra = BANanoShared.CStr(sExtra)
-			'we have found the auto increment
-			If sExtra.EqualsIgnoreCase("auto_increment") Then 
-				sauto = sField
-				TD.AutoIncrement = sauto
-			End If
-			'we have found the primary key
-			If sKey.EqualsIgnoreCase("pri") Then 
-				spri = sField
-				TD.PrimaryKey = spri
-			End If
-		
-			'get the fld len
-			Dim fldLen As String = BANanoShared.val(sType)
-			'get the fld type
-			Dim fldType As String = BANanoShared.alpha(sType)
-		
-			newfld.Put("defaultvalue", sDefault)
-			newfld.Put("fieldname", sField)
-			newfld.Put("fieldtype", fldType)
-			newfld.Put("fieldlen", fldLen)
-			newfld.Put("acceptnull", sNull)
-			'
-			newfld.Put("title", sField)
-			newfld.Put("ontable", "Yes")
-			newfld.Put("onpdf", "Yes")
-			newfld.Put("onxls", "Yes")
-						
-			If spri.EqualsIgnoreCase(sField) Then
-				newfld.Put("pri", "Yes")
-				newfld.Put("sortdb", "Yes")
-				'sorts
-				TD.Sorts.Add(sField.tolowercase)
-			Else
-				newfld.Put("pri", "No")	
-			End If
-			'
-			If sauto.EqualsIgnoreCase(sField) Then
-				newfld.Put("ai", "Yes")
-			Else
-				newfld.Put("ai", "No")	
-			End If
-			newfld.Put("fieldkey", $"${sTableName}.${sField}"$)
-			'add to collection
-			fldnames.Add(newfld)
-			TD.Fields.Add(newfld)
-			'
-			'define the field types
-			Select Case fldType
-			Case "blob"
-				TD.Blobs.Add(sField.tolowercase)
-			Case "varchar", "date", "longtext"
-				TD.Strings.Add(sField.ToLowerCase)
-			Case "bigint", "int"
-				TD.Integers.Add(sField.tolowercase)
-			Case "tinyint"
-				TD.Integers.Add(sField.tolowercase)
-				TD.TinyInts.Add(sField.ToLowerCase)
-			Case Else
-				TD.Strings.Add(sField.ToLowerCase)
-			End Select
-		Next
-		MySQL.result = fldnames
-		MySQL.affectedRows = fldnames.Size
-	End Select
-	Response = MySQL.response
-	Error = MySQL.error
-	affectedRows = MySQL.affectedRows
-	Result = MySQL.result
-	OK = MySQL.OK
-	'we are counting records
-	If bCount Then
-		If Result.Size >= 0 Then
-			Record = Result.Get(0)
-			Dim srecord As String = Record.GetDefault("records", 0)
-			affectedRows = BANano.parseInt(srecord)
-		Else
-			affectedRows = 0
-		End If
+	If bDynamic = False Then 
+		mPayload = MySQL.Build
 	Else
-		If bRead Then
-			'record is found
-			If Result.Size >= 0 Then
-				Record = Result.Get(0)
-				CorrectDataTypes(Record)
-				ParentComponent.SetData(sRecordSource, Record)
-			Else
-				'record is not found
-				Record = CreateMap()
-				'copy the fields
-				For Each k As String In schemaFields
-					Record.Put(k, "")
-				Next
-				CorrectDataTypes(Record)
-				ParentComponent.SetData(sRecordSource, Record)
-				affectedRows = -1
-			End If
-		End If
+		'we are using dynamic
+		mPayload = MySQL.BuildDynamic(True)
 	End If
-	BANano.ReturnThen(True)
+	mPayload.Put("jrdccommand", sjrdcCommand)	
 End Sub

@@ -182,7 +182,8 @@ Sub Class_Globals
 	Private bDateTimePicker As Boolean
 	Private dateModel As String
 	Private timeModel As String
-	Private VC As VueComponent						'ignore
+	Private VC As VueComponent				'ignore
+	Private AC As VuetifyApp				'ignore
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -772,7 +773,27 @@ End Sub
 
 
 Sub BindState(C As VueComponent)
-	vc = c
+	VC = c
+	Dim mbindings As Map = VElement.bindings
+	Dim mmethods As Map = VElement.methods
+	'apply the binding for the control
+	For Each k As String In mbindings.Keys
+		Dim v As Object = mbindings.Get(k)
+		Select Case k
+		Case "key"
+		Case Else
+			C.SetData(k, v)
+		End Select
+	Next
+	'apply the events
+	For Each k As String In mmethods.Keys
+		Dim cb As BANanoObject = mmethods.Get(k)
+		C.SetCallBack(k, cb)
+	Next
+End Sub
+
+Sub BindStateOnApp(C As VuetifyApp)
+	AC = c
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control

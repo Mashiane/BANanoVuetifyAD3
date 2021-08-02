@@ -2322,6 +2322,18 @@ Sub RunMethodOnActive(compName As String)
 	End Try	
 End Sub
 
+Sub RunMethodOnApp(compName As String)
+	compName = compName.tolowercase
+	Try
+		'get the router view
+		Dim rKey As String = "$refs"
+		refs = Vue.GetField(rKey)
+		refs.RunMethod(compName, Null)
+	Catch
+		Log(LastException)
+	End Try	
+End Sub
+
 'get the active component refs
 Sub GetRefs As BANanoObject
 	'get the router view
@@ -2331,6 +2343,76 @@ Sub GetRefs As BANanoObject
 	Dim rKey As String = "$refs"
 	Dim refsx As BANanoObject = RouterView.GetField(rKey)
 	Return refsx
+End Sub
+
+Sub FormValidateOnComponentOnApp(componentName As String, formName As String) As Boolean
+	Try
+		'refresh the refs
+		GetRefs
+		componentName = componentName.tolowercase
+		formName = formName.tolowercase
+		Dim boObject As BANanoObject = refs.GetField(componentName)
+		Dim comprefs As BANanoObject = boObject.GetField("$refs")
+		Dim b As Boolean = comprefs.GetField(formName).runmethod("validate", Null).Result
+		Return b
+	Catch
+		Log(LastException)
+		Return False
+	End Try	
+End Sub
+
+Sub FormResetOnComponentOnApp(componentName As String, formName As String)
+	Try
+		'refresh the refs
+		GetRefs
+		componentName = componentName.tolowercase
+		formName = formName.tolowercase
+		Dim boObject As BANanoObject = refs.GetField(componentName)
+		Dim comprefs As BANanoObject = boObject.GetField("$refs")
+		comprefs.GetField(formName).runmethod("reset", Null)
+	Catch
+		Log(LastException)
+	End Try	
+End Sub
+
+Sub FormResetValidationOnComponentOnApp(componentName As String, formName As String)
+	Try
+		'refresh the refs
+		GetRefs
+		componentName = componentName.tolowercase
+		formName = formName.tolowercase
+		Dim boObject As BANanoObject = refs.GetField(componentName)
+		Dim comprefs As BANanoObject = boObject.GetField("$refs")
+		comprefs.GetField(formName).runmethod("resetValidation", Null)
+	Catch
+		Log(LastException)
+	End Try	
+End Sub
+
+'run a method that is on a component from pgIndex
+Sub RunMethodOnComponentOnApp(componentName As String, methodName As String)
+	Try
+		'refresh the refs
+		GetRefs
+		componentName = componentName.tolowercase
+		Dim boObject As BANanoObject = refs.GetField(componentName)
+		boObject.RunMethod(methodName, Null)
+	Catch
+		Log(LastException)
+	End Try	
+End Sub
+
+'run a method that is on a component from the current page
+Sub RunMethodOnComponent(componentName As String, methodName As String)
+	Try
+		'refresh the refs
+		Dim xrefs As BANanoObject = GetRefs
+		componentName = componentName.tolowercase
+		Dim boObject As BANanoObject = xrefs.GetField(componentName)
+		boObject.RunMethod(methodName, Null)
+	Catch
+		Log(LastException)
+	End Try	
 End Sub
 
 'get the active component slots

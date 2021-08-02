@@ -433,6 +433,6 @@ ModuleClosedNodes96=
 ModuleClosedNodes97=
 ModuleClosedNodes98=
 ModuleClosedNodes99=
-NavigationStack=VuetifyApp,ImportVueComponent,616,0,VuetifyApp,Import,603,0,VuetifyApp,GetVueElement,591,0,VuetifyApp,FindProgressLoaderOn1,428,0,VuetifyApp,FindProgressLoaderOn,423,0,VuetifyApp,Class_Globals,422,0,VueComponent,Class_Globals,48,0,VueComponent,FindProgressLoaderOn,58,0,VueComponent,PageResume,66,0,Main,Process_Globals,12,0
+NavigationStack=VSimpleTable,BuildBody,366,0,VForm,Class_Globals,88,0,VForm,CreateForm,269,0,VForm,BEToVueElement,853,6,VForm,LinkDataSource,383,0,VForm,BEForGrid,455,0,VForm,LinkDataTable,432,0,VueTable,setColumnDateTimeProp,4992,0,VueTable,setColumnFileSizeProp,4997,0,VueTable,setColumnFieldsProp,4995,0
 SelectedBuild=0
 VisibleModules=

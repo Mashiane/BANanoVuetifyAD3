@@ -11,6 +11,7 @@ Version=7
 #Event: SubmitPrevent (e As BANanoEvent)
 
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
+#DesignerProperty: Key: Guide, DisplayName: Provide Guide, FieldType: Boolean, DefaultValue: False, Description: Show Guidance notes in console
 #DesignerProperty: Key: AutoComplete, DisplayName: Auto Complete, FieldType: Boolean, DefaultValue: False, Description: AutoComplete
 #DesignerProperty: Key: ParentID, DisplayName: ParentID, FieldType: String, DefaultValue: , Description: ParentID
 #DesignerProperty: Key: LazyValidation, DisplayName: LazyValidation, FieldType: Boolean, DefaultValue: True, Description: LazyValidation
@@ -93,38 +94,53 @@ Sub Class_Globals
 	Public OnXLS As List
 	Public OnTable As List
 	'
-	Public DTNormal As List
-	Public DTTextArea As List
-	Public DTTextField As List
-	Public DTIconView As List
-	Public DTChip As List
-	Public DTSwitch As List
-	Public DTAction As List
-	Public DTImage As List
-	Public DTCheckBox As List
-	Public DTTime As List
-	Public DTMoney As List
-	Public DTAvatarImg As List
-	Public DTRating As List
-	Public DTProgressCircular As List
-	Public DTProgressLinear As List
-	Public DTDateColumn As List
-	Public DTDateTimeColumn As List
-	Public DTNumberColumn As List
-	Public DTButtonColumn As List
-	Public DTLinkColumn As List
-	Public DTComboBox As List
-	Public DTAutoComplete As List
-	Public DTSelect As List
-	Public DTColumnPositions As Map
-	'
+	Private DTNormal As List
+	Private DTTextArea As List
+	Private DTTextField As List
+	Private DTIcon As List
+	Private DTChip As List
+	Private DTSwitch As List
+	Private DTAction As List
+	Private DTImage As List
+	Private DTCheckBox As List
+	Private DTTime As List
+	Private DTMoney As List
+	Private DTAvatar As List
+	Private DTRating As List
+	Private DTProgressCircular As List
+	Private DTProgressLinear As List
+	Private DTDate As List
+	Private DTDateTime As List
+	Private DTNumber As List
+	Private DTButton As List
+	Private DTLink As List
+	Private DTEmail As List
+	Private DTComboBox As List
+	Private DTAutoComplete As List
+	Private DTSelect As List
+	Private DTColumnPositions As Map
+	Private DTAvatarText As List
+	Private DTAvatarIcon As List
+	Private DTTotals As List
+	Private DTTitles As List
+	Private DTFileSize As List
+	Private DTWidths As List
+	Private DTPreDisplay As List
+	Private DTConditionalClass As List
+	Private DTConditionalStyle As List
+	Private DTConditionalColor As List
+		'
 	Private matrix As List
 	Private matrixMap As Map
 	Private bShowGridDesign As Boolean
 	Private sParentID As String
-	Private VC As VueComponent
 	Public IsCreated As Boolean
 	Private sTableName As String
+	Private rules As Map
+	Private bGuide As Boolean
+	Private help As StringBuilder
+	Public Relationships As List
+	Public DataSources As List
 End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -144,11 +160,17 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	sVModel = $"${mName}vmodel"$
 	sVShow = $"${mName}show"$
 	IsCreated = False
+	rules.Initialize 
+	help.Initialize 
+	Relationships.Initialize 
+	DataSources.Initialize 
 End Sub
 
 Sub DesignerCreateView (Target As BANanoElement, Props As Map) 
 	mTarget = Target 
 	If Props <> Null Then 
+		bGuide = Props.GetDefault("Guide",False)
+		bGuide = BANanoShared.parseBool(bGuide)
 		sTableName = Props.GetDefault("TableName", "")
 		bDisabled = Props.GetDefault("Disabled",False)
 		bReadonly = Props.GetDefault("Readonly",False)
@@ -234,7 +256,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 End Sub
 
 'create the form
-Sub CreateForm(C As VueComponent)
+Sub CreateForm
 	IsCreated = True
 	'build the from from child fields
 	Dim be As BANanoElement
@@ -252,11 +274,20 @@ Sub CreateForm(C As VueComponent)
 	OnPDF.Initialize 
 	OnXLS.Initialize 
 	OnTable.Initialize
+	DTTotals.Initialize 
+	DTTitles.Initialize 
+	DTFileSize.initialize
+	DTWidths.Initialize 
+	DTPreDisplay.Initialize 
+	DTConditionalClass.Initialize 
+	DTConditionalStyle.Initialize 
+	DTConditionalColor.Initialize
+	
 	'
 	DTNormal.Initialize
 	DTTextArea.Initialize
 	DTTextField.Initialize
-	DTIconView.Initialize
+	DTIcon.Initialize
 	DTChip.Initialize
 	DTSwitch.Initialize
 	DTAction.Initialize
@@ -264,15 +295,18 @@ Sub CreateForm(C As VueComponent)
 	DTCheckBox.Initialize
 	DTTime.Initialize
 	DTMoney.Initialize
-	DTAvatarImg.Initialize
+	DTAvatar.Initialize
+	DTAvatarIcon.Initialize
+	DTAvatarText.Initialize 
 	DTRating.Initialize
 	DTProgressCircular.Initialize
 	DTProgressLinear.Initialize
-	DTDateColumn.Initialize
-	DTDateTimeColumn.Initialize
-	DTNumberColumn.Initialize
-	DTButtonColumn.Initialize
-	DTLinkColumn.Initialize
+	DTDate.Initialize
+	DTDateTime.Initialize
+	DTNumber.Initialize
+	DTButton.Initialize
+	DTLink.Initialize
+	DTEmail.Initialize 
 	DTComboBox.Initialize
 	DTAutoComplete.Initialize
 	DTSelect.Initialize
@@ -315,16 +349,17 @@ Sub CreateForm(C As VueComponent)
 		'
 		BEToVueElement(child)
 	Next
-	BindState(C)
+	If bGuide Then
+		Log(help.ToString)
+	End If
 End Sub
 
 'link form after CreateForm
-Sub LinkDataSource(C As VueComponent, ds As BananoDataSource)
+Sub LinkDataSource(ds As BananoDataSource)
 	If IsCreated = False Then
 		BANano.Throw($"${mName}.LinkDataSource - the form needs to be created first. Call .CreateForm first."$)
 		Return
 	End If
-	ds.BindState(C)
 	ds.SchemaReset	
 	ds.setTableName(sTableName)
 	ds.setRecordSource(sRecordSource)
@@ -343,15 +378,79 @@ Sub LinkDataSource(C As VueComponent, ds As BananoDataSource)
 	ds.SchemaSetOrderBy(DBSort)
 End Sub
 
+'add a rule
+'<code>
+'Sub AddRule(v As String) As Object	'ignoredeadcode
+'If v = "" Then
+'return "This is required!"
+'Else
+'Return True
+'End If
+'End Sub
+'</code>
+Sub AddRule(fieldName As String, methodName As String)
+	fieldName = fieldName.ToLowerCase
+	methodName = methodName.tolowercase
+	Dim fldRules As Map = CreateMap()
+	If rules.ContainsKey(fieldName) Then
+		fldRules = rules.Get(fieldName)
+	End If	
+	fldRules.Put(methodName, methodName)
+	rules.Put(fieldName, fldRules)
+End Sub
+
 'link to the data table
-Sub LinkDataTable(c As VueComponent, dt As VueTable)
+Sub LinkDataTable(dt As VueTable)
 	If IsCreated = False Then
 		BANano.Throw($"${mName}.LinkDataTable - the form needs to be created first. Call .CreateForm first."$)
+		Return
+	End If
+	'the form should be manual
+	Dim bManual As Boolean = dt.Manual
+	If bManual = False Then
+		BANano.Throw($"LinkDataTable.${mName} - the data-table '${dt.ID}' to link to should should be set to 'Manual'."$)
 		Return
 	End If
 	dt.PrimaryKey = sPrimaryKey
 	dt.setTitle(sPlural)
 	
+	dt.ColumnTextareaProp = BANanoShared.Join(";", DTTextArea)
+	dt.ColumnTextfieldProp = BANanoShared.Join(";", DTTextField)
+	dt.ColumnChipProp = BANanoShared.Join(";", DTChip)
+	dt.ColumnSwitchProp = BANanoShared.Join(";", DTSwitch)
+	dt.ColumnCheckboxProp = BANanoShared.Join(";", DTCheckBox)
+	dt.ColumnTimeProp = BANanoShared.Join(";", DTTime)
+	dt.ColumnMoneyProp = BANanoShared.Join(";", DTMoney)
+	dt.ColumnAvatarProp = BANanoShared.Join(";", DTAvatar)
+	dt.ColumnImageProp = BANanoShared.Join(";", DTImage)
+	dt.ColumnRatingProp = BANanoShared.Join(";", DTRating)
+	dt.ColumnCircularProgressProp = BANanoShared.Join(";", DTProgressCircular)
+	dt.ColumnLinearProgressProp = BANanoShared.Join(";", DTProgressLinear)
+	dt.ColumnDateProp = BANanoShared.Join(";", DTDate)
+	dt.ColumnDateTimeProp = BANanoShared.Join(";", DTDateTime)
+	dt.ColumnButtonProp = BANanoShared.Join(";", DTButton)
+	dt.ColumnComboboxProp = BANanoShared.Join(";", DTComboBox)
+	dt.ColumnAutoCompleteProp = BANanoShared.Join(";", DTAutoComplete)
+	dt.ColumnLinkProp = BANanoShared.Join(";", DTLink)
+	dt.ColumnEmailProp = BANanoShared.Join(";", DTEmail)
+	dt.ColumnSelectProp = BANanoShared.Join(";", DTSelect)
+	dt.ColumnAvatarTextProp = BANanoShared.Join(";", DTAvatarText)
+	dt.ColumnAvatarIconProp = BANanoShared.Join(";", DTAvatarIcon)
+	dt.ColumnFieldsProp = BANanoShared.Join(";", OnTable)
+	dt.ColumIconsProp = BANanoShared.Join(";", DTIcon)
+	dt.ColumnSortableProp = BANanoShared.Join(";", Sortable)
+	dt.ColumnFilterableProp = BANanoShared.join(";", Filterable)
+	dt.ColumnTotalsProp = BANanoShared.Join(";", DTTotals)
+	dt.ColumnTitlesProp = BANanoShared.Join(";", DTTitles)
+	dt.ColumnFileSizeProp = BANanoShared.Join(";", DTFileSize)
+	dt.ColumnWidthsProp = BANanoShared.Join(";", DTWidths)
+	dt.ColumnPreDisplayProp = BANanoShared.Join(";", DTPreDisplay)
+	dt.ColumnConditionalClassProp = BANanoShared.Join(";", DTConditionalClass)
+	dt.ColumnConditionalColorProp = BANanoShared.Join(";", DTConditionalColor)
+	dt.ColumnConditionalStyleProp = BANanoShared.Join(";", DTConditionalStyle)
+	
+	'build the schema of the table
+	dt.BuildSchema
 End Sub
 
 
@@ -443,62 +542,150 @@ private Sub BuildGrid
 	thisForm.BuildGrid
 End Sub
 
+private Sub HelpComment(sComment As String)
+	help.Append($"***** ${sComment} "*****"$)
+	help.append(CRLF)
+End Sub
+
+private Sub HelpCode(sComment As String)
+	help.Append($"${sComment}"$)
+	help.append(CRLF)
+End Sub
 
 Sub BEToVueElement(be As BANanoElement)
 	Dim fBinding As Map = CreateMap()
 	Dim fData As Map = CreateMap()
 	
-	Dim bActive As String = be.GetData("active")
-	bActive = BANanoShared.parseBool(bActive)
-	If bActive = False Then Return
+	Dim sName As String = be.GetData("name")
+	sName = BANanoShared.parseNull(sName)
 	'
+	HelpComment(sName)
+	'
+	Dim bOnTable As String = be.GetData("ontable")
+	bOnTable = BANanoShared.parseBool(bOnTable)
+	
 	Dim sComponentType As String = be.GetData("componenttype")
-	If BANano.IsNull(sComponentType) Then sComponentType = ""
+	sComponentType = BANanoShared.parseNull(sComponentType)
+	
+	If sComponentType <> "" Then
+		HelpCode($"This component type is set as '${sComponentType}'."$)
+	End If
 	'
 	Dim ssVModel As String = be.GetData("vmodel")
-	If BANano.IsNull(ssVModel) Then ssVModel = ""
+	ssVModel = BANanoShared.parseNull(ssVModel)
+
 	If ssVModel <> "" Then
 		ssVModel = $"${sRecordSource}.${ssVModel}"$
+		fBinding.Put("VModel", ssVModel)
+		HelpCode($"The data binding for this control is '${ssVModel}'"$)
 	End If
-	fBinding.Put("VModel", ssVModel)
-	'
-	Dim sName As String = be.GetData("name")
-	If BANano.IsNull(sName) Then sName = ""
 	
 	'get the field name
 	Dim sFieldName As String = be.GetData("fieldname")
-	If BANano.IsNull(sFieldName) Then sFieldName = ""
+	sFieldName = BANanoShared.parseNull(sFieldName)
+	If sFieldName <> "" Then
+		HelpCode($"This component is linked to a database table field named '${sFieldName}'"$)
+	End If
+	
+		
+	Dim sTitle As String = be.GetData("title")
+	sTitle = BANanoShared.parseNull(sTitle)
+	If sTitle <> "" Then
+		fBinding.Put("Label", sTitle)
+		HelpCode($"This component 'Label' / 'Caption' property (if available) is set to '${sTitle}'"$)
+	End If
 	
 	Dim sAlt As String = be.GetData("alt")
-	If BANano.IsNull(sAlt) Then sAlt = ""
-	If sAlt <> "" Then fBinding.Put("alt", sAlt)
+	sAlt = BANanoShared.parseNull(sAlt)
+	If sAlt <> "" Then 
+		fBinding.Put("alt", sAlt)
+		HelpCode($"This component 'Alt' property is set to '${sAlt}'."$)
+	End If
 
 	Dim bAutoFocus As String = be.GetData("autofocus")
 	bAutoFocus = BANanoShared.parseBool(bAutoFocus)
 	If bAutoFocus Then 
 		fBinding.Put("Autofocus", True)
 		setFocusOn(sName)
+		HelpCode($"This component 'AutoFocus' property is set to 'True'."$)
 	End If
 		
 	Dim bAutoIncrement As String = be.GetData("autoincrement")
 	bAutoIncrement = BANanoShared.parseBool(bAutoIncrement)
 	If bAutoIncrement Then 
 		setAutoIncrement(sFieldName)
+		HelpCode($"This fieldname '${sFieldName}' is the auto-increment column in the table."$)
+	End If
+	
+	Dim ssize As String = be.GetData("size")
+	ssize = BANanoShared.parseNull(ssize)
+	If ssize <> "" Then
+		HelpCode($"This component 'Size' property (if available) is set to '${ssize}'"$)
 	End If
 	
 	Dim sownsize As String = be.GetData("ownsize")
-	If BANano.IsNull(sownsize) Then sownsize = ""
-
+	sownsize = BANanoShared.parseNull(sownsize)
+	If sownsize <> "" Then
+		HelpCode($"This component 'Own Size' property is set to '${sownsize}'."$)
+	End If
+		
+	Dim iRowPos As String = be.GetData("rowpos")
+	iRowPos = BANanoShared.parseNull(iRowPos)
+	If iRowPos <> "" Then
+		HelpCode($"This component 'Row Pos' property is set to '${iRowPos}'."$)
+	End If
+	
 	Dim iColPos As String = be.GetData("colpos")
-	If BANano.IsNull(iColPos) Then iColPos = ""
-
+	iColPos = BANanoShared.parseNull(iColPos)
+	If iColPos <> "" Then
+		HelpCode($"This component 'Column Pos' property is set to '${iColPos}'."$)
+	End If
+	'
+	Dim bTotals As Boolean = be.GetData("totals")
+	bTotals = BANanoShared.parseBool(bTotals)
+	If bTotals And sFieldName <> "" And bOnTable Then
+		DTTotals.Add(sFieldName)
+		HelpCode($"This component 'Totals' property is set to '${True}', the column will show totals at the bottom."$)
+	End If
+	'
+	Dim sValueMethod As String = be.GetData("valuemethod")
+	sValueMethod = BANanoShared.parseNull(sValueMethod)
+	'
+	Dim sClassMethod As String = be.GetData("classmethod")
+	sClassMethod = BANanoShared.parsenull(sClassMethod)
+	
+	'
+	Dim sStyleMethod As String = be.GetData("stylemethod")
+	sStyleMethod = BANanoShared.parsenull(sStyleMethod)
+	'
+	Dim sColorMethod As String = be.GetData("colormethod")
+	sColorMethod = BANanoShared.parseNull(sColorMethod)
+	
 	Dim sColumnType As String = be.GetData("columntype")
-	If BANano.IsNull(sColumnType) Then sColumnType = ""
-	If sFieldName <> "" Then
+	sColumnType = BANanoShared.parseNull(sColumnType)
+	If bOnTable And sFieldName <> "" Then
+		BANanoShared.ListAddIfNotBlank(OnTable, sFieldName)
+		DTTitles.Add(sTitle)
+
+		HelpCode($"This fieldname '${sFieldName}' will be shown on the data-table."$)
+	
+		If sValueMethod <> "" Then 
+			DTPreDisplay.Add($"${sFieldName}:${sValueMethod}"$)
+		End If
+		If sClassMethod <> "" Then 
+			DTConditionalClass.Add($"${sFieldName}:${sClassMethod}"$)
+		End If
+		If sStyleMethod <> "" Then 
+			DTConditionalStyle.Add($"${sFieldName}:${sStyleMethod}"$)
+		End If
+		If sColorMethod <> "" Then 
+			DTConditionalColor.Add($"${sFieldName}:${sColorMethod}"$)
+		End If
+		
 		If sColumnType = "Normal" Then DTNormal.Add(sFieldName)
 		If sColumnType = "TextArea" Then DTTextArea.Add(sFieldName)
 		If sColumnType = "TextField" Then DTTextField.Add(sFieldName)
-		If sColumnType = "IconView" Then DTIconView.Add(sFieldName)
+		If sColumnType = "Icon" Then DTIcon.Add(sFieldName)
 		If sColumnType = "Chip" Then DTChip.Add(sFieldName)
 		If sColumnType = "Switch" Then DTSwitch.Add(sFieldName)
 		If sColumnType = "Action" Then DTAction.Add(sFieldName)
@@ -506,329 +693,448 @@ Sub BEToVueElement(be As BANanoElement)
 		If sColumnType = "CheckBox" Then DTCheckBox.Add(sFieldName)
 		If sColumnType = "Time" Then DTTime.Add(sFieldName)
 		If sColumnType = "Money" Then DTMoney.Add(sFieldName)
-		If sColumnType = "AvatarImg" Then DTAvatarImg.Add(sFieldName)
+		If sColumnType = "Avatar" Then DTAvatar.Add(sFieldName)
+		If sColumnType = "AvatarIcon" Then DTAvatarIcon.Add(sFieldName)
+		If sColumnType = "AvatarText" Then DTAvatarText.Add(sFieldName)
 		If sColumnType = "Rating" Then DTRating.Add(sFieldName)
 		If sColumnType = "ProgressCircular" Then DTProgressCircular.Add(sFieldName)
 		If sColumnType = "ProgressLinear" Then DTProgressLinear.Add(sFieldName)
-		If sColumnType = "DateColumn" Then DTDateColumn.Add(sFieldName)
-		If sColumnType = "DateTimeColumn" Then DTDateTimeColumn.Add(sFieldName)
-		If sColumnType = "NumberColumn" Then DTNumberColumn.Add(sFieldName)
-		If sColumnType = "ButtonColumn" Then DTButtonColumn.Add(sFieldName)
-		If sColumnType = "LinkColumn" Then DTLinkColumn.Add(sFieldName)
+		If sColumnType = "Date" Then DTDate.Add(sFieldName)
+		If sColumnType = "DateTime" Then DTDateTime.Add(sFieldName)
+		If sColumnType = "Number" Then DTNumber.Add(sFieldName)
+		If sColumnType = "Button" Then DTButton.Add(sFieldName)
+		If sColumnType = "Link" Then DTLink.Add(sFieldName)
+		If sColumnType = "Email" Then DTEmail.Add(sFieldName)
 		If sColumnType = "ComboBox" Then DTComboBox.Add(sFieldName)
 		If sColumnType = "AutoComplete" Then DTAutoComplete.Add(sFieldName)
 		If sColumnType = "Select" Then DTSelect.Add(sFieldName)
+		If sColumnType <> "" Then
+			HelpCode($"This fieldname '${sFieldName}' contents will be shown as '${sColumnType}' on the data-table."$)
+		End If
 	End If
 	
 	
 	Dim sDataKey As String = be.GetData("datakey")
-	If BANano.IsNull(sDataKey) Then sDataKey = ""
+	sDataKey = BANanoShared.parseNull(sDataKey)
 	
 	Dim sDataSource As String = be.GetData("datasource")
-	If BANano.IsNull(sDataSource) Then sDataSource = ""
+	sDataSource = BANanoShared.parseNull(sDataSource)
 	'If sDataSource <> "" Then 
 	'	fBinding.Put("Items", sDataSource)
 	'	fData.Put(sDataSource, VElement.NewList)
 	'End If
 	
 	Dim sDataType As String = be.GetData("datatype")
-	If BANano.IsNull(sDataType) Then sDataType = ""
+	sDataType = BANanoShared.parseNull(sDataType)
+	If sDataType <> "none" And sFieldName <> "" Then
+		HelpCode($"This fieldname '${sFieldName}' data type will be treated as '${sDataType}' on the data-base."$)
+		Select Case sDataType
+		Case "integer"
+			Integers.Add(sFieldName)
+		Case "double"
+			Doubles.Add(sFieldName)
+		Case "blob"
+			Blobs.Add(sFieldName)
+		Case "string"
+			Strings.Add(sFieldName)
+		End Select
+	End If
 
 	Dim sDataValue As String = be.GetData("datavalue")
-	If BANano.IsNull(sDataValue) Then sDataValue = ""
+	sDataValue = BANanoShared.parseNull(sDataValue)
 	'
 	Dim sItemValue As String = be.getdata("itemvalue")
-	If BANano.IsNull(sItemValue) Then sItemValue = ""
+	sItemValue = BANanoShared.parseNull(sItemValue)
 	If sItemValue <> "" Then
 		fBinding.Put("ItemValue", sItemValue)	
+		HelpCode($"The 'item-value' is '${sItemValue}' from the array object data source."$)
 	End If
 	'
 	Dim sItemText As String = be.GetData("itemtext")
-	If BANano.IsNull(sItemText) Then sItemText = ""
+	sItemText = BANanoShared.parseNull(sItemText)
 	If sItemText <> "" Then
 		fBinding.Put("ItemText", sItemText)	
+		HelpCode($"The 'item-text' is '${sItemText}' from the array object data source."$)
 	End If
 		
 	Dim bDbSort As String = be.GetData("dbsort")
 	bDbSort = BANanoShared.parseBool(bDbSort)
-	If bDbSort Then 
+	If bDbSort And sFieldName <> "" Then 
 		BANanoShared.ListAddIfNotBlank(DBSort, sFieldName)
+		HelpCode($"This '${sFieldName}' will be used for sorting in the database when executing queries."$)
 	End If
 	
 	Dim sDefaultValue As String = be.GetData("defaultvalue")
-	If BANano.IsNull(sDefaultValue) Then sDefaultValue = ""
+	sDefaultValue = BANanoShared.parseNull(sDefaultValue)
 	fData.Put(sVModel, sDefaultValue)
-
+	If sDefaultValue <> "" Then
+		HelpCode($"The default value for this component is '${sDefaultValue}'."$)
+	End If
+		
 	Dim ssDisabled As String = be.GetData("disabled")
 	ssDisabled = BANanoShared.parseBool(ssDisabled)
-	fBinding.Put("Disabled", ssDisabled)	
+	If ssDisabled Then
+		fBinding.Put("Disabled", ssDisabled)
+		HelpCode($"This component 'Disabled' property (if available) is set to '${ssDisabled}'."$)	
+	End If
+	
 	
 	Dim sFalseValue As String = be.GetData("falsevalue")
-	If BANano.IsNull(sFalseValue) Then sFalseValue = ""
+	sFalseValue = BANanoShared.parseNull(sFalseValue)
 	If sFalseValue <> "" Then
 		fBinding.Put("FalseValue", sFalseValue)
-	End If
-	'
-	Dim bFilterable As String = be.GetData("filterable")
-	bFilterable = BANanoShared.parseBool(bFilterable)
-	If bFilterable Then 
-		BANanoShared.ListAddIfNotBlank(Filterable, sFieldName)
+		HelpCode($"The 'False-Value' of this component is to be set as '${sFalseValue}'."$)	
 	End If
 	
 	Dim sHeight As String = be.GetData("height")
-	If BANano.IsNull(sHeight) Then sHeight = ""
+	sHeight = BANanoShared.parseNull(sHeight)
 	If sHeight <> "" Then 
 		fBinding.Put("Height", sHeight)
+		HelpCode($"The component 'Height' property (if applicable) is set to '${sHeight}'."$)	
 	End If
 
 	Dim bInset As String = be.GetData("inset")
 	bInset = BANanoShared.parseBool(bInset)
 	If bInset Then 
 		fBinding.Put("Inset", True)
+		HelpCode($"This component 'Inset' property (if applicable) is set to '${bInset}'"$)
 	End If
 	
 	Dim sItemKeys As String = be.GetData("itemkeys")
-	If BANano.IsNull(sItemKeys) Then sItemKeys = ""
+	sItemKeys = BANanoShared.parseNull(sItemKeys)
+	If sItemKeys <> "" Then
+		HelpCode($"This component 'Item Keys' property (if applicable) is set to '${sItemKeys}'"$)
+	End If
 
 	Dim sItemValues As String = be.GetData("itemvalues")
-	If BANano.IsNull(sItemValues) Then sItemValues = ""
+	sItemValues = BANanoShared.parseNull(sItemValues)
+	If sItemValues <> "" Then
+		HelpCode($"This component 'Item Values' property (if applicable) is set to '${sItemValues}'"$)
+	End If
 
 	Dim sLazySrc As String = be.GetData("lazysrc")
-	If BANano.IsNull(sLazySrc) Then sLazySrc = ""
+	sLazySrc = BANanoShared.parseNull(sLazySrc)
+	If sLazySrc <> "" Then
+		HelpCode($"This component 'Lazy Src' property is set to '${sLazySrc}'"$)
+	End If
 	
 	Dim sListItemType As String = be.GetData("listitemtype")
-	If BANano.IsNull(sListItemType) Then sListItemType = ""
-
+	sListItemType = BANanoShared.parseNull(sListItemType)
 	Dim iMaxLen As String = be.GetData("maxlen")
 	If BANano.IsNull(iMaxLen) Then iMaxLen = ""
 	If iMaxLen <> "0" Then
 		iMaxLen = BANano.parseInt(iMaxLen)
 		fBinding.Put("Counter", iMaxLen)
+		HelpCode($"This component 'Counter/MaxLen' property is set to '${iMaxLen}'."$)
 	End If
 
 	Dim bMultiple As String = be.GetData("multiple")
 	bMultiple = BANanoShared.parseBool(bMultiple)
 	If bMultiple Then
 		fBinding.Put("Multiple", True)
+		HelpCode($"This component has applied a 'Multiple' property, meaning multiple items can be selected."$)
 	End If
 	
 	Dim bOnDb As String = be.GetData("ondb")
 	bOnDb = BANanoShared.parseBool(bOnDb)
-	If bOnDb Then
+	If bOnDb And sFieldName <> "" Then
 		BANanoShared.ListAddIfNotBlank(Fields, sFieldName)
+		HelpCode($"This fieldname '${sFieldName}' will be used for CRUD functions in the database."$)
 	End If
 	
 	Dim bOnPdf As String = be.GetData("onpdf")
 	bOnPdf = BANanoShared.parseBool(bOnPdf)
-	If bOnPdf Then
+	If bOnPdf And sFieldName <> "" Then
 		BANanoShared.ListAddIfNotBlank(OnPDF, sFieldName)
+		HelpCode($"This fieldname '${sFieldName}' will be used on the PDF report."$)
 	End If
 	'
 	Dim sColumnPosition As String = be.GetData("columnposition")
-	If BANano.IsNull(sColumnPosition) Then sColumnPosition = ""
-	
-	Dim bOnTable As String = be.GetData("ontable")
-	bOnTable = BANanoShared.parseBool(bOnTable)
-	If bOnTable Then
-		BANanoShared.ListAddIfNotBlank(OnTable, sFieldName)
+	sColumnPosition = BANanoShared.parseNull(sColumnPosition)
+	If bOnTable And sFieldName <> "" Then
 		If sColumnPosition <> "" And sFieldName <> "" Then
 			DTColumnPositions.Put(sFieldName, sColumnPosition)
+			HelpCode($"This fieldname '${sFieldName}' will be placed on column position '${sColumnPosition}' on the data-table."$)
 		End If
 	End If
+		
+	Dim bFilterable As String = be.GetData("filterable")
+	bFilterable = BANanoShared.parseBool(bFilterable)
+	If bFilterable And bOnTable And sFieldName <> "" Then 
+		BANanoShared.ListAddIfNotBlank(Filterable, sFieldName)
+		HelpCode($"This fieldname '${sFieldName}' will be filterable on the data-table."$)
+	End If	
 	
+	
+	Dim bSortable As String = be.GetData("sortable")
+	bSortable = BANanoShared.parseBool(bSortable)
+	If bSortable And bOnTable And sFieldName <> "" Then
+		BANanoShared.ListAddIfNotBlank(Sortable, sFieldName)
+		HelpCode($"This fieldname '${sFieldName}' will be sortable on the data-table."$)
+	End If
 	
 	Dim bOnXls As String = be.GetData("onxls")
 	bOnXls = BANanoShared.parseBool(bOnXls)
-	If bOnXls Then
+	If bOnXls And sFieldName <> "" Then
 		BANanoShared.ListAddIfNotBlank(OnXLS, sFieldName)
+		HelpCode($"This fieldname '${sFieldName}' will be used on the XLS report."$)
 	End If
 	
 	Dim bPrimaryKey As String = be.GetData("primarykey")
 	bPrimaryKey = BANanoShared.parseBool(bPrimaryKey)
-	If bPrimaryKey Then
+	If bPrimaryKey And sFieldName <> "" Then
 		setPrimaryKey(sFieldName)
+		HelpCode($"This fieldname '${sFieldName}' is the primary key of the database table."$)
 	End If
 	
 	Dim ssReadonly As String = be.GetData("readonly")
 	ssReadonly = BANanoShared.parseBool(ssReadonly)
-	fBinding.Put("Readonly", ssReadonly)
+	If ssReadonly Then
+		fBinding.Put("Readonly", ssReadonly)
+		HelpCode($"This component 'ReadOnly' property (if available) is set to '${ssReadonly}'"$)
+	End If
 	
 	Dim bRequired As String = be.GetData("required")
 	bRequired = BANanoShared.parseBool(bRequired)
-	fBinding.Put("Required", bRequired)
+	If bRequired Then
+		fBinding.Put("Required", bRequired)
+		HelpCode($"This component 'Required' property (if available) is set to '${bRequired}'"$)
+		HelpCode("You might need to execute .AddRule as 'Required' is true.")
+	End If
 	
 	Dim bReturnObject As String = be.GetData("returnobject")
 	bReturnObject = BANanoShared.parseBool(bReturnObject)
 	fBinding.Put("ReturnObject", bReturnObject)
+	HelpCode($"This component 'Return Object' property (if available) is set to '${bReturnObject}'"$)
 	
 	Dim bRowDisplay As String = be.GetData("rowdisplay")
 	bRowDisplay = BANanoShared.parseBool(bRowDisplay)
 	If bRowDisplay Then
 		fBinding.Put("Alignment", "row")
+		HelpCode($"This component 'Alignment' property (if available) is set to 'row'"$)
 	End If
 	
-	Dim iRowPos As String = be.GetData("rowpos")
-	If BANano.IsNull(iRowPos) Then iRowPos = ""
-
-	Dim bSortable As String = be.GetData("sortable")
-	bSortable = BANanoShared.parseBool(bSortable)
-	If bSortable Then
-		BANanoShared.ListAddIfNotBlank(Sortable, sFieldName)
-	End If
-	
-	Dim sTitle As String = be.GetData("title")
-	If BANano.IsNull(sTitle) Then sTitle = ""
-	If sTitle <> "" Then
-		fBinding.Put("Label", sTitle)
-	End If
 
 	Dim sTrueValue As String = be.GetData("truevalue")
-	If BANano.IsNull(sTrueValue) Then sTrueValue = ""
+	sTrueValue = BANanoShared.parseNull(sTrueValue)
+		
 	If sTrueValue <> "" Then
 		fBinding.Put("TrueValue", sTrueValue)
+		HelpCode($"This component 'True-Value' property (if available) is set to '${sTrueValue}'"$)
 	End If
 
 	Dim bUseItems As String = be.GetData("useitems")
 	bUseItems = BANanoShared.parseBool(bUseItems)
 	'
 	Dim sSrc As String = be.GetData("src")
-	If BANano.IsNull(sSrc) Then sSrc = ""
+	sSrc = BANanoShared.parseNull(sSrc)
+	If sSrc <> "" Then
+		HelpCode($"This component 'Src' property (if available) is set to '${sSrc}'"$)
+	End If
 	
 	
 	Dim sWidth As String = be.GetData("width")
-	If BANano.IsNull(sWidth) Then sWidth = ""
+	sWidth = BANanoShared.parseNull(sWidth)
 	If sWidth <> "" Then
 		fBinding.Put("Width", sWidth)
+		HelpCode($"This component 'Width' property (if available) is set to '${sWidth}'"$)
 	End If
 	'
 	Dim sVisible As String = be.GetData("visible")
 	sVisible = BANanoShared.parseBool(sVisible)
 	fBinding.Put("Hidden", Not(sVisible))
+	HelpCode($"This component 'Hidden' property (if available) is set to '${sVisible}'"$)
 	'
 	Dim splaceholder As String = be.GetData("placeholder")
-	If BANano.IsNull(splaceholder) Then splaceholder = ""
+	splaceholder = BANanoShared.parseNull(splaceholder)
 	If splaceholder <> "" Then
 		fBinding.Put("Placeholder", splaceholder)
+		HelpCode($"This component 'PlaceHolder' property (if available) is set to '${splaceholder}'"$)
 	End If
 	
 	Dim shint As String = be.GetData("hint")
-	If BANano.IsNull(shint) Then shint = ""
+	shint = BANanoShared.parseNull(shint)
 	If shint <> "" Then
 		fBinding.Put("Hint", shint)
+		HelpCode($"This component 'Hint' property (if available) is set to '${shint}'"$)
 	End If
 	'
 	Dim bLoremIpsum As Boolean = be.GetData("loremipsum")
 	bLoremIpsum = BANanoShared.parseBool(bLoremIpsum)
 	If bLoremIpsum Then
 		fBinding.put("LoremIpsum", True)
+		HelpCode($"This component 'Lorem Ipsum' property (if available) is set to 'True'"$)
 	End If
 	'
 	Dim sMaxValue As String = be.GetData("maxvalue")
-	If BANano.IsNull(sMaxValue) Then sMaxValue = ""
+	sMaxValue = BANanoShared.parseNull(sMaxValue)
+	If sMaxValue <> "" Then
+		HelpCode($"This component 'Max Value' property (if available) is set to '${sMaxValue}'"$)
+	End If
 	
 	Dim sMinValue As String = be.GetData("minvalue")
-	If BANano.IsNull(sMinValue) Then sMinValue = ""
+	sMinValue = BANanoShared.parseNull(sMinValue)
+	If sMinValue <> "" Then
+		HelpCode($"This component 'Min Value' property (if available) is set to '${sMinValue}'"$)
+	End If
 	
 	Dim bChips As Boolean = be.GetData("chips")
 	If BANano.IsNull(bChips) Then bChips = False
+	If bChips Then
+		HelpCode($"This component 'Chips' property (if available) is set to '${bChips}'"$)
+	End If
 	
-	Dim ssize As String = be.GetData("size")
-	If BANano.IsNull(ssize) Then ssize = ""
-	'
-	Dim mparent As BANanoElement
-	mparent.Initialize($"#${mName}r${iRowPos}c${iColPos}"$)
 	'
 	Dim sIconName As String = be.GetData("iconname")
-	If BANano.IsNull(sIconName) Then sIconName = ""
+	sIconName = BANanoShared.parseNull(sIconName)
+	If sIconName <> "" Then
+		HelpCode($"This component 'Icon Name' property (if available) is set to '${sIconName}'"$)
+	End If
+	'
+	Dim	fColor As String = be.GetData("color")
+	fColor = BANanoShared.parseNull(fColor)
+	If fColor <> "" Then
+		fBinding.Put("Color", fColor)
+		HelpCode($"This component 'Color' property (if available) is set to '${fColor}'"$)
+	End If
 	'
 	Dim fColorIntensity As String = be.GetData("colorintensity")
-	If BANano.IsNull(fColorIntensity) Then fColorIntensity = ""
+	fColor = BANanoShared.parseNull(fColor)
 	If fColorIntensity <> "" Then
 		fBinding.Put("ColorIntensity", fColorIntensity)
+		HelpCode($"This component 'Color Intensity' property (if available) is set to '${fColorIntensity}'"$)
 	End If
 	
 	Dim	fTextColor As String = be.GetData("textcolor")
-	If BANano.IsNull(fTextColor) Then fTextColor = ""
+	fTextColor = BANanoShared.parseNull(fTextColor)
 	If fTextColor <> "" Then
 		fBinding.Put("TextColor", fTextColor)
+		HelpCode($"This component 'Text Color' property (if available) is set to '${fTextColor}'"$)
 	End If
 	
 	Dim fTextColorIntensity As String = be.GetData("textcolorintensity")
-	If BANano.IsNull(fTextColorIntensity) Then fTextColorIntensity = ""
+	fTextColorIntensity = BANanoShared.parseNull(fTextColorIntensity)
 	If fTextColorIntensity <> "" Then
 		fBinding.Put("TextColorIntensity", fTextColorIntensity)
+		HelpCode($"This component 'Text Color Intensity' property (if available) is set to '${fTextColorIntensity}'"$)
 	End If
 		
-	Dim	fColor As String = be.GetData("color")
-	If BANano.IsNull(fColor) Then fColor = ""
-	If fColor <> "" Then
-		fBinding.Put("Color", fColor)
-	End If
-	
+		
 	Dim fClasses As String = be.GetData("classes") 
-	If BANano.IsNull(fClasses) Then fClasses = ""
+	fClasses = BANanoShared.parseNull(fClasses)
 	If fClasses <> "" Then
 		fBinding.Put("Classes", fClasses)
+		HelpCode($"This component 'Classes' property (if available) is set to '${fClasses}'"$)
 	End If
 	
 	Dim fStyles As String = be.GetData("styles") 
-	If BANano.IsNull(fStyles) Then fStyles = ""
+	fStyles = BANanoShared.parseNull(fStyles)
 	If fStyles <> "" Then
 		fBinding.Put("Styles", fStyles)
+		HelpCode($"This component 'Styles' property (if available) is set to '${fStyles}'"$)
 	End If
 	
 	Dim fAttributes As String = be.GetData("attributes") 
-	If BANano.IsNull(fAttributes) Then fAttributes = ""
+	fAttributes = BANanoShared.parseNull(fAttributes)
 	If fAttributes <> "" Then
 		fBinding.Put("Attributes", fAttributes)
+		HelpCode($"This component 'Attributes' property (if available) is set to '${fAttributes}'"$)
 	End If
 	'
 	Dim sButtonType As String = be.GetData("buttontype")
-	If BANano.isnull(sButtonType) Then sButtonType = ""
+	sButtonType = BANanoShared.parseNull(sButtonType)
+	If sButtonType <> "" Then
+		HelpCode($"This component 'Button Type' property (if available) is set to '${sButtonType}'"$)
+	End If
 	'
 	Dim sButtonPosition As String = be.GetData("buttonposition")
-	If BANano.IsNull(sButtonPosition) Then sButtonPosition = ""
+	sButtonPosition = BANanoShared.parseNull(sButtonPosition)
+	If sButtonPosition <> "" Then
+		HelpCode($"This component 'Button Position' property (if available) is set to '${sButtonPosition}'"$)
+	End If
 	'
 	Dim sShrink As Boolean = be.GetData("shrink")
-	If BANano.IsNull(sShrink) Then sShrink = False
-	fBinding.Put("Shrink", sShrink)
+	sShrink = BANanoShared.parseBool(sShrink)
+	If sShrink Then
+		fBinding.Put("Shrink", sShrink)
+		HelpCode($"This component 'Shrink' property (if available) is set to '${sShrink}'"$)
+	End If
 	'
 	Dim sBackgroundColor As String = be.GetData("backgroundcolor")
-	If BANano.IsNull(sBackgroundColor) Then sBackgroundColor = ""
+	sBackgroundColor = BANanoShared.parseBool(sBackgroundColor)
 	If sBackgroundColor <> "" Then
 		fBinding.Put("BackgroundColor", sBackgroundColor)
+		HelpCode($"This component 'Background Color' property (if available) is set to '${sBackgroundColor}'"$)
 	End If
 	
 	Dim sBackgroundColorIntensity As String = be.GetData("backgroundcolorintensity")
-	If BANano.IsNull(sBackgroundColorIntensity) Then sBackgroundColorIntensity = ""
+	sBackgroundColorIntensity = BANanoShared.parseBool(sBackgroundColorIntensity)
 	If sBackgroundColorIntensity <> "" Then
 		fBinding.Put("BackgroundColorIntensity", sBackgroundColorIntensity)
+		HelpCode($"This component 'Background Color Intensity' property (if available) is set to '${sBackgroundColorIntensity}'"$)
 	End If
-		
+	'
+	Dim bPersistentHint As Boolean = be.GetData("persistenthint")
+	bPersistentHint = BANanoShared.parseBool(bPersistentHint)
+	If bPersistentHint Then
+		fBinding.Put("PersistentHint", True)
+		HelpCode($"This component 'Persistent Hint' property (if available) is set to '${bPersistentHint}'"$)
+	End If
+	
+	Dim bButtonRaised As Boolean = be.GetData("raised")
+	bButtonRaised = BANanoShared.parseBool(bButtonRaised)
+	If bButtonRaised Then
+		fBinding.Put("Raised", bButtonRaised)
+		HelpCode($"This component 'Raised' property (if available) is set to '${bButtonRaised}'"$)
+	End If
+	'
+	Dim bButtonOutlined As Boolean = be.GetData("buttonoutlined")
+	bButtonOutlined = BANanoShared.parseBool(bButtonOutlined)
+	If bButtonOutlined Then
+		HelpCode($"This component 'Button Outlined' property (if available) is set to '${bButtonOutlined}'"$)
+	End If
+			
 	If bFilled Then
 		fBinding.Put("Filled", True)
+		HelpCode($"The 'Filled' property (if available) is set to '${bFilled}'"$)
 	End If
 	If bDense Then
 		fBinding.Put("Dense", True)
+		HelpCode($"The 'Dense' property (if available) is set to '${bDense}'"$)
 	End If
 	If bClearable Then
 		fBinding.Put("Clearable", True)
+		HelpCode($"The 'Clearable' property (if available) is set to '${bClearable}'"$)
 	End If
 	If bHideDetails Then
 		fBinding.Put("HideDetails", True)
+		HelpCode($"The 'Hide Details' property (if available) is set to '${bHideDetails}'"$)
 	End If
 	If bOutlined Then
 		fBinding.Put("Outlined", True)
+		HelpCode($"The 'Outlined' property (if available) is set to '${bOutlined}'"$)
 	End If
 	If bRounded Then
 		fBinding.Put("Rounded", True)
+		HelpCode($"The 'Rounded' property (if available) is set to '${bRounded}'"$)
 	End If
 	If bShaped Then
 		fBinding.Put("Shaped", True)
+		HelpCode($"The 'Shaped' property (if available) is set to '${bShaped}'"$)
 	End If
 	'
+	Dim fldRules As Map = CreateMap()
+	If rules.ContainsKey(sFieldName) Then
+		fldRules = rules.Get(sFieldName)
+	End If
+	'
+	Dim mparent As BANanoElement
+	mparent.Initialize($"#${mName}r${iRowPos}c${iColPos}"$)
 	'process the component type
 	Select Case sComponentType
+	Case "AvatarIcon"
+	Case "AvatarText"
+		
 	Case "ColorSelect"
 		fBinding.Remove("ItemKeys")
 		fBinding.Remove("ItemTitles")
@@ -837,10 +1143,17 @@ Sub BEToVueElement(be As BANanoElement)
 		Dim cl As VAutoComplete
 		cl.Initialize(mCallBack, sName, sName)
 		cl.DesignerCreateView(mparent, fBinding)
+		For Each k As String In fldRules.Keys
+			Dim v As String = fldRules.Get(k)
+			cl.AddRule(v)
+		Next
 		VElement.BindVueElement(cl.VElement)
 	Case "ColorTextField"
-			
 	Case "Icon"
+		HelpCode($"Additional Notes...."$)
+		HelpCode("The 'Size / Own Size' properties are used to set the icon size.")
+		HelpCode("The 'IconName' property determines the icon to show.")
+		
 		fBinding.Remove("Outlined")
 		fBinding.Remove("Rounded")
 		fBinding.Remove("Height")
@@ -858,11 +1171,19 @@ Sub BEToVueElement(be As BANanoElement)
 		icn.DesignerCreateView(mparent, fBinding)
 		VElement.BindVueElement(icn.VElement)
 	Case "Button"
+		HelpCode($"Additional Notes...."$)
+		HelpCode("The 'Size / Own Size' properties are used to set the button size.")
+		HelpCode("The 'Icon Name' property determines the icon to show.")
+		HelpCode("The 'Title' property is used as the label of the button.")
+		HelpCode("The 'Button Type' property is used to determine the kind of button that will show.")
+		HelpCode("The 'Button Position' property is used to determine the placement of the button.")
+		HelpCode("The 'Button Raised' property when off will make the button background transparent.")
+		HelpCode("The 'Button Outlined' property ensures the button is outlined.")
+		
 		fBinding.Remove("Outlined")
 		fBinding.Remove("Rounded")
 		fBinding.Remove("Height")
 		fBinding.remove("Width")
-		fBinding.Put("Raised", True)
 		fBinding.Put("Size", ssize)
 		fBinding.Put("IconName", sIconName)
 		fBinding.Put("Label", sTitle)
@@ -871,11 +1192,19 @@ Sub BEToVueElement(be As BANanoElement)
 			fBinding.Put("FAB", True)
 		End If
 		fBinding.Put("Position", sButtonPosition)
+		fBinding.Put("Outlined", bButtonOutlined)
 		Dim btn As VBtnIcon
 		btn.Initialize(mCallBack, sName, sName)
 		btn.DesignerCreateView(mparent, fBinding)
 		VElement.BindVueElement(btn.VElement)
 	Case "FAB"
+		HelpCode($"Additional Notes...."$)
+		HelpCode("The 'Size / Own Size' properties are used to set the fab size.")
+		HelpCode("The 'Icon Name' property determines the icon to show.")
+		HelpCode("The 'Button Position' property is used to determine the placement of the fab.")
+		HelpCode("The 'Button Raised' property when off will make the button background transparent.")
+		HelpCode("The 'Button Outlined' property ensured the button is outlined.")
+		
 		fBinding.Remove("Outlined")
 		fBinding.Remove("Rounded")
 		fBinding.Remove("Height")
@@ -883,21 +1212,32 @@ Sub BEToVueElement(be As BANanoElement)
 		fBinding.Remove("ReturnObject")
 		fBinding.Put("Size", ssize)
 		fBinding.Put("IconName", sIconName)
-		fBinding.Put("Position", "normal")
+		fBinding.Put("Position", sButtonPosition)
 		If sownsize <> "" Then
 			fBinding.Put("Size", sownsize)
 		End If
+		fBinding.Put("Outlined", bButtonOutlined)
 		Dim fab As VFAB
 		fab.Initialize(mCallBack, sName, sName)
 		fab.DesignerCreateView(mparent, fBinding)
 		VElement.BindVueElement(fab.VElement)
 	Case "Chip"
+		HelpCode($"Additional Notes...."$)
+		HelpCode("The 'Title' property will show the content of the chip label.")
+		HelpCode("The 'Size / Own Size' properties are used to set the chip size.")
+		HelpCode("The 'Src' properties is used to set the avatar image of the chip.")
+		HelpCode("The default placement of the avatar is on the left.")
+		HelpCode("By selecting 'Use Items' with 'Item Values' and 'Item Texts', you can create multiple TEXT chips.")
+		
 		fBinding.Remove("Outlined")
 		fBinding.Remove("Rounded")
 		fBinding.Remove("Label")
 		fBinding.Put("Text", sTitle)
 		fBinding.Put("Value", "")
 		fBinding.Put("Size", ssize)
+		If sownsize <> "" Then
+			fBinding.Put("Size", sownsize)
+		End If
 		If sSrc <> "" Then
 			fBinding.Put("Avatar", sSrc)
 			fBinding.Put("ItemType", "avatar-left")
@@ -917,6 +1257,10 @@ Sub BEToVueElement(be As BANanoElement)
 		chp.DesignerCreateView(mparent, fBinding)
 		VElement.BindVueElement(chp.VElement)	
 	Case "P", "H6", "H1", "H2", "H3", "H4", "H5", "span", "div"
+		HelpCode($"Additional Notes...."$)
+		HelpCode("The 'Title' property will show the text of the element.")
+		HelpCode("The 'Lorem Ipsum' property will generate random text when chosen.")
+		
 		fBinding.Put("Caption", sTitle)
 		fBinding.Put("Size", sComponentType.tolowercase)
 		fBinding.Remove("ReturnObject") 
@@ -925,14 +1269,25 @@ Sub BEToVueElement(be As BANanoElement)
 		lbl.DesignerCreateView(mparent, fBinding)
 		VElement.BindVueElement(lbl.VElement)
 	Case "TextField"
+		HelpCode($"Additional Notes...."$)
+		HelpCode("The Normal Text Field properties are applied based on your options.")
+		
 		fBinding.Put("TypeOf", "text")
 		fBinding.Remove("ReturnObject")
 		fBinding.Put("AutoComplete", "off")
 		Dim txtField As VTextField
 		txtField.Initialize(mCallBack, sName, sName)
 		txtField.DesignerCreateView(mparent, fBinding)
+		For Each k As String In fldRules.Keys
+			Dim v As String = fldRules.Get(k)
+			txtField.AddRule(v)
+		Next
 		VElement.BindVueElement(txtField.VElement)
 	Case "TextArea"
+		HelpCode($"Additional Notes...."$)
+		HelpCode("The Normal Text Area properties are applied based on your options.")
+		HelpCode("The Text Area is set to 'AutoGrow'.")
+		'
 		fBinding.Put("TypeOf", "text")
 		fBinding.Put("TextArea", True)
 		fBinding.Put("AutoGrow", True)
@@ -941,30 +1296,57 @@ Sub BEToVueElement(be As BANanoElement)
 		Dim txtFieldA As VTextField
 		txtFieldA.Initialize(mCallBack, sName, sName)
 		txtFieldA.DesignerCreateView(mparent, fBinding)
+		For Each k As String In fldRules.Keys
+			Dim v As String = fldRules.Get(k)
+			txtFieldA.AddRule(v)
+		Next
 		VElement.BindVueElement(txtFieldA.VElement)
 	Case "TimePicker"
+		HelpCode($"Additional Notes...."$)
+		HelpCode("The Normal Text Field properties are applied based on your options.")
 		fBinding.Put("TimePicker", True)
 		fBinding.Remove("ReturnObject")
 		Dim txtTP As VTextField
 		txtTP.Initialize(mCallBack, sName, sName)
 		txtTP.DesignerCreateView(mparent, fBinding)
+		For Each k As String In fldRules.Keys
+			Dim v As String = fldRules.Get(k)
+			txtTP.AddRule(v)
+		Next
 		VElement.BindVueElement(txtTP.VElement)
 	Case "DatePicker"
+		HelpCode($"Additional Notes...."$)
+		HelpCode("The Normal Text Field properties are applied based on your options.")
+		HelpCode("A 'watcher' is needed for this element to format the output date.")
 		fBinding.Put("DatePicker", True)
 		fBinding.Remove("ReturnObject")
 		Dim txtD As VTextField
 		txtD.Initialize(mCallBack, sName, sName)
 		txtD.DesignerCreateView(mparent, fBinding)
+		For Each k As String In fldRules.Keys
+			Dim v As String = fldRules.Get(k)
+			txtD.AddRule(v)
+		Next
 		VElement.BindVueElement(txtD.VElement)
 	Case "FileInput"
+		HelpCode($"Additional Notes...."$)
+		HelpCode("The Normal File Input properties are applied based on your options.")
+		HelpCode("A 'Change' event is needed to process the file selection.")
+		HelpCode("The 'Chips' property will be applied if checked for the selected files.")
 		fBinding.Remove("ReturnObject")
 		fBinding.Put("TypeOf", "file")
 		fBinding.Put("Chips", bChips)
 		Dim fi As VFileInput
 		fi.Initialize(mCallBack, sName, sName)
 		fi.DesignerCreateView(mparent, fBinding)
+		For Each k As String In fldRules.Keys
+			Dim v As String = fldRules.Get(k)
+			fi.AddRule(v)
+		Next
 		VElement.BindVueElement(fi.VElement)
 	Case "FileInputImage"
+		HelpCode($"Additional Notes...."$)
+		HelpCode("A change event is needed to process the file selection.")
 		fBinding.Remove("ReturnObject")
 		fBinding.Put("IsGoogle", True)
 		fData.Put($"${sName}filehidden"$, False)
@@ -972,8 +1354,16 @@ Sub BEToVueElement(be As BANanoElement)
 		Dim gfi As VFileInput
 		gfi.Initialize(mCallBack, sName, sName)
 		gfi.DesignerCreateView(mparent, fBinding)
+		For Each k As String In fldRules.Keys
+			Dim v As String = fldRules.Get(k)
+			gfi.AddRule(v)
+		Next
 		VElement.BindVueElement(gfi.VElement)
 	Case "Password"
+		HelpCode($"Additional Notes...."$)
+		HelpCode("The Normal Text Field properties are applied based on your options.")
+		HelpCode("A 'ClickAppend' event is needed to toggle the password eyes.")
+		'
 		fBinding.Put("TypeOf", "password")
 		fBinding.Put("ShowEyes", True)
 		fBinding.Remove("ReturnObject")
@@ -981,8 +1371,18 @@ Sub BEToVueElement(be As BANanoElement)
 		Dim txtP As VTextField
 		txtP.Initialize(mCallBack, sName, sName)
 		txtP.DesignerCreateView(mparent, fBinding)
+		For Each k As String In fldRules.Keys
+			Dim v As String = fldRules.Get(k)
+			txtP.AddRule(v)
+		Next
 		VElement.BindVueElement(txtP.VElement)
 	Case "ComboBox"
+		HelpCode($"Additional Notes...."$)
+		HelpCode("The Normal Combo Box properties are applied based on your options.")
+		HelpCode("By selecting 'Use Items' with 'Item Values' and 'Item Texts', combo values are generated from those items.")
+		HelpCode("The 'Chips' property will be applied if checked for the selected items.")
+		HelpCode("The 'Deletable Chips' will be applied if 'Chips' is used.")
+		
 		If bUseItems Then
 			fBinding.Put("ItemKeys", sItemKeys)
 			fBinding.Put("ItemTitles", sItemValues)
@@ -994,8 +1394,18 @@ Sub BEToVueElement(be As BANanoElement)
 		Dim cbo As VComboBox
 		cbo.Initialize(mCallBack, sName, sName)
 		cbo.DesignerCreateView(mparent, fBinding)
+		For Each k As String In fldRules.Keys
+			Dim v As String = fldRules.Get(k)
+			cbo.AddRule(v)
+		Next
 		VElement.BindVueElement(cbo.VElement)
 	Case "AutoComplete"
+		HelpCode($"Additional Notes...."$)
+		HelpCode("The Normal Auto Complete properties are applied based on your options.")
+		HelpCode("By selecting 'Use Items' with 'Item Values' and 'Item Texts', auto complete items are generated from those items.")
+		HelpCode("The 'Chips' property will be applied if checked for the selected items.")
+		HelpCode("The 'Deletable Chips' will be applied if 'Chips' is used.")
+		
 		If bUseItems Then
 			fBinding.Put("ItemKeys", sItemKeys)
 			fBinding.Put("ItemTitles", sItemValues)
@@ -1007,8 +1417,18 @@ Sub BEToVueElement(be As BANanoElement)
 		Dim ac As VAutoComplete
 		ac.Initialize(mCallBack, sName, sName)
 		ac.DesignerCreateView(mparent, fBinding)
+		For Each k As String In fldRules.Keys
+			Dim v As String = fldRules.Get(k)
+			ac.AddRule(v)
+		Next
 		VElement.BindVueElement(ac.VElement)
 	Case "Select"
+		HelpCode($"Additional Notes...."$)
+		HelpCode("The Normal Select properties are applied based on your options.")
+		HelpCode("By selecting 'Use Items' with 'Item Values' and 'Item Texts', select items are generated from those items.")
+		HelpCode("The 'Chips' property will be applied if checked for the selected items.")
+		HelpCode("The 'Deletable Chips' will be applied if 'Chips' is used.")
+		
 		If bUseItems Then
 			fBinding.Put("ItemKeys", sItemKeys)
 			fBinding.Put("ItemTitles", sItemValues)
@@ -1020,8 +1440,17 @@ Sub BEToVueElement(be As BANanoElement)
 		Dim selx As VSelect
 		selx.Initialize(mCallBack, sName, sName)
 		selx.DesignerCreateView(mparent, fBinding)
+		For Each k As String In fldRules.Keys
+			Dim v As String = fldRules.Get(k)
+			selx.AddRule(v)
+		Next
 		VElement.BindVueElement(selx.VElement)
 	Case "Avatar"
+		HelpCode($"Additional Notes...."$)
+		HelpCode("The 'Own Size' property is used to set the avatar size.")
+		HelpCode("The 'Src' property is used to set the avatar image.")
+		HelpCode("The 'Src Bind' property is used to set the avatar image from v-model.")
+		
 		fBinding.Remove("Outlined")
 		fBinding.Remove("Rounded")
 		fBinding.Remove("ReturnObject")
@@ -1040,18 +1469,33 @@ Sub BEToVueElement(be As BANanoElement)
 		avt.DesignerCreateView(mparent, fBinding)
 		VElement.BindVueElement(avt.VElement)
 	Case "CheckBox"
+		HelpCode($"Additional Notes...."$)
+		HelpCode("The Normal CheckBox properties are applied based on your options.")
 		fBinding.Remove("ReturnObject")
 		Dim chk As VCheckBox
 		chk.Initialize(mCallBack, sName, sName)
 		chk.DesignerCreateView(mparent, fBinding)
+		For Each k As String In fldRules.Keys
+			Dim v As String = fldRules.Get(k)
+			chk.AddRule(v)
+		Next
 		VElement.BindVueElement(chk.VElement)
 	Case "Switch"
+		HelpCode("The Normal Switch properties are applied based on your options.")
 		fBinding.Remove("ReturnObject")
 		Dim swt As VSwitch
 		swt.Initialize(mCallBack, sName, sName)
 		swt.DesignerCreateView(mparent, fBinding)
+		For Each k As String In fldRules.Keys
+			Dim v As String = fldRules.Get(k)
+			swt.AddRule(v)
+		Next
 		VElement.BindVueElement(swt.VElement)
 	Case "RadioGroup"
+		HelpCode($"Additional Notes...."$)
+		HelpCode("The Normal Radio Group properties are applied based on your options.")
+		HelpCode("By selecting 'Use Items' with 'Item Values' and 'Item Texts', radio items are generated from those items.")
+		
 		fBinding.Remove("ReturnObject")
 		If bUseItems Then
 			fBinding.Put("ItemKeys", sItemKeys)
@@ -1060,8 +1504,22 @@ Sub BEToVueElement(be As BANanoElement)
 		Dim rg As VRadioGroup
 		rg.Initialize(mCallBack, sName, sName)
 		rg.DesignerCreateView(mparent, fBinding)
+		For Each k As String In fldRules.Keys
+			Dim v As String = fldRules.Get(k)
+			rg.AddRule(v)
+		Next
 		VElement.BindVueElement(rg.VElement)
 	Case "Image"
+		HelpCode($"Additional Notes...."$)
+		HelpCode("The Normal Image properties are applied based on your options.")
+		HelpCode("The 'Width' property will be used to set the width of the image.")
+		HelpCode("The 'Height' property will be used to set the height of the image.")
+		HelpCode("The 'Min Width' property will be used to set the width of the image.")
+		HelpCode("The 'Min Height' property will be used to set the height of the image.")
+		HelpCode("The 'Src' property will be used to set the image.")
+		HelpCode("The 'Src Bind' property will be used to set the image from the v-model")
+		
+		
 		fBinding.Remove("Outlined")
 		fBinding.Remove("Rounded")
 		fBinding.Remove("ReturnObject")
@@ -1081,20 +1539,43 @@ Sub BEToVueElement(be As BANanoElement)
 		img.DesignerCreateView(mparent, fBinding)
 		VElement.BindVueElement(img.VElement)
 	Case "Telephone" , "Money", "Thousands"
+		HelpCode($"Additional Notes...."$)
+		HelpCode("The Normal Text Field properties are applied based on your options.")
+		
 		fBinding.Put("TypeOf", "tel")
 		fBinding.Remove("ReturnObject")
 		Dim txtT As VTextField
 		txtT.Initialize(mCallBack, sName, sName)
 		txtT.DesignerCreateView(mparent, fBinding)
+		For Each k As String In fldRules.Keys
+			Dim v As String = fldRules.Get(k)
+			txtT.AddRule(v)
+		Next
 		VElement.BindVueElement(txtT.VElement)
 	Case "Email"
+		HelpCode($"Additional Notes...."$)
+		HelpCode("The Normal Text Field properties are applied based on your options.")
+		
 		fBinding.Put("TypeOf", "email")
 		fBinding.Remove("ReturnObject")
 		Dim txtE As VTextField
 		txtE.Initialize(mCallBack, sName, sName)
 		txtE.DesignerCreateView(mparent, fBinding)
+		For Each k As String In fldRules.Keys
+			Dim v As String = fldRules.Get(k)
+			txtE.AddRule(v)
+		Next
 		VElement.BindVueElement(txtE.VElement)
 	Case "Slider"
+		HelpCode($"Additional Notes...."$)
+		HelpCode("The Normal Slider properties are applied based on your options.")
+		HelpCode("The 'Min Value' will be applied to set the minimum value of the slider.")
+		HelpCode("The 'Max Value' will be applied to set the maximum value of the slider.")
+		HelpCode("The 'Max Value' will be applied to set the maximum value of the slider.")
+		HelpCode("The 'Value' will be set from the specified Default value.")
+		HelpCode("The 'Thumb Label' is set to show when a user drags the slider value.")
+		
+		
 		fBinding.Remove("ReturnObject")
 		If sMinValue <> "" Then
 			fBinding.put("MinValue", sMinValue)
@@ -1109,15 +1590,31 @@ Sub BEToVueElement(be As BANanoElement)
 		Dim sld As VSlider
 		sld.Initialize(mCallBack, sName, sName)
 		sld.DesignerCreateView(mparent, fBinding)
+		For Each k As String In fldRules.Keys
+			Dim v As String = fldRules.Get(k)
+			sld.AddRule(v)
+		Next
 		VElement.BindVueElement(sld.VElement)
 	Case "Website"
+		HelpCode($"Additional Notes...."$)
+		HelpCode("The Normal Text Field properties are applied based on your options.")
+		
 		fBinding.Put("TypeOf", "url")
 		fBinding.Remove("ReturnObject")
 		Dim txtW As VTextField
 		txtW.Initialize(mCallBack, sName, sName)
 		txtW.DesignerCreateView(mparent, fBinding)
+		For Each k As String In fldRules.Keys
+			Dim v As String = fldRules.Get(k)
+			txtW.AddRule(v)
+		Next
 		VElement.BindVueElement(txtW.VElement)
 	Case "Rating"
+		HelpCode($"Additional Notes...."$)
+		HelpCode("The Normal Rating properties are applied based on your options.")
+		HelpCode("The 'Counter/Length' property is used to set the length of the ratings.")
+		HelpCode("The 'Size / Own Size' properties are used to set the rating size.")
+		
 		fBinding.Remove("Outlined")
 		fBinding.Remove("Rounded")
 		fBinding.Remove("ReturnObject")
@@ -1131,6 +1628,14 @@ Sub BEToVueElement(be As BANanoElement)
 		rat.DesignerCreateView(mparent, fBinding)
 		VElement.BindVueElement(rat.VElement)
 	Case "ProgressCircular"
+		HelpCode($"Additional Notes...."$)
+		HelpCode("The Normal circular progress properties are applied based on your options.")
+		HelpCode("The Caption of the progress is based on the v-model.")
+		HelpCode("The 'Default Value' is used to set the value of the progress.")
+		HelpCode("The 'Own Size' property is used to set the progress size.")
+		HelpCode("The 'Src' property is used to set the avatar image inside the progress.")
+		HelpCode("The 'Width' property is used to set the width of the progress.")
+		
 		fBinding.Remove("Outlined")
 		fBinding.Remove("Rounded")
 		fBinding.Remove("ReturnObject")
@@ -1155,6 +1660,12 @@ Sub BEToVueElement(be As BANanoElement)
 		prgc.DesignerCreateView(mparent, fBinding)
 		VElement.BindVueElement(prgc.VElement)
 	Case "ProgressLinear"
+		HelpCode($"Additional Notes...."$)
+		HelpCode("The Normal Rating properties are applied based on your options.")
+		HelpCode("The 'Height' property is used to set the height of the progress.")
+		HelpCode("The Caption of the progress is based on the v-model.")
+		HelpCode("The 'Default Value' is used to set the value of the progress.")
+		
 		fBinding.Remove("Outlined")
 		fBinding.Remove("Rounded")
 		fBinding.Remove("ReturnObject")
@@ -1173,8 +1684,8 @@ Sub BEToVueElement(be As BANanoElement)
 	End Select	
 	'eastablish bindings
 	For Each k As String In fData.Keys
-		Dim v As Object = fData.Get(k)
-		VElement.SetData(k, v)
+		Dim vx As Object = fData.Get(k)
+		VElement.SetData(k, vx)
 	Next
 	'remove the element
 	be.Remove
@@ -1226,8 +1737,18 @@ Sub UpdateDisabled(C As VueComponent, vDisabled As Object)
 C.SetData(sDisabled, vDisabled)
 End Sub
 
+'Update Disabled
+Sub UpdateDisabledOnApp(C As VuetifyApp, vDisabled As Object)
+C.SetData(sDisabled, vDisabled)
+End Sub
+
 'Update Readonly
 Sub UpdateReadonly(C As VueComponent, vReadonly As Object)
+C.SetData(sReadonly, vReadonly)
+End Sub
+
+'Update Readonly
+Sub UpdateReadonlyOnApp(C As VuetifyApp, vReadonly As Object)
 C.SetData(sReadonly, vReadonly)
 End Sub
 
@@ -1236,8 +1757,19 @@ Sub UpdateVisible(C As VueComponent, b As Boolean)
 	C.SetData(sVShow, b)
 End Sub
 
+'Update Visible
+Sub UpdateVisibleOnApp(C As VuetifyApp, b As Boolean)
+	C.SetData(sVShow, b)
+End Sub
+
 'Update VModel
 Sub SetValue(C As VueComponent, vVModel As Object)
+C.SetData(sVModel, vVModel)
+End Sub
+
+
+'Update VModel
+Sub SetValueOnApp(C As VuetifyApp, vVModel As Object)
 C.SetData(sVModel, vVModel)
 End Sub
 
@@ -1247,6 +1779,11 @@ Sub GetValue(C As VueComponent) As Object
 	Return res
 End Sub
 
+'get value
+Sub GetValueOnApp(C As VuetifyApp) As Object
+	Dim res As Object = C.GetData(sVModel)
+	Return res
+End Sub
 
 Sub getID As String
 	Return mName
@@ -1264,14 +1801,38 @@ Sub Reset(C As VueComponent)
 	refs.GetField(mName).runmethod("reset", Null)
 End Sub
 
+'reset the form
+Sub ResetOnApp(C As VuetifyApp)
+	SetValueOnApp(C, True)
+	C.GetRefs
+	Dim refs As BANanoObject = C.refs
+	refs.GetField(mName).runmethod("reset", Null)
+End Sub
+
 'reset validation not state
 Sub ResetValidation(C As VueComponent)
 	Dim refs As BANanoObject = C.refs
 	refs.GetField(mName).runmethod("resetValidation", Null)
 End Sub
 
+
+'reset validation not state
+Sub ResetValidationOnApp(C As VuetifyApp)
+	C.GetRefs
+	Dim refs As BANanoObject = C.refs
+	refs.GetField(mName).runmethod("resetValidation", Null)
+End Sub
+
 'validate the form
 Sub Validate(C As VueComponent) As Boolean
+	Dim refs As BANanoObject = C.refs
+	Dim res As Boolean = refs.GetField(mName).runmethod("validate", Null).Result
+	Return res
+End Sub
+
+'validate the form
+Sub ValidateOnApp(C As VuetifyApp) As Boolean
+	C.GetRefs
 	Dim refs As BANanoObject = C.refs
 	Dim res As Boolean = refs.GetField(mName).runmethod("validate", Null).Result
 	Return res
@@ -1309,6 +1870,17 @@ Sub GetData(C As VueComponent) As Map
 	Return m
 End Sub
 
+'get the data of the form
+Sub GetDataOnApp(C As VuetifyApp) As Map
+	Dim m As Map = CreateMap()
+	If sRecordSource = "" Then
+		BANano.Throw($"VForm.${mName} - the RecordSource has not been specified!"$)
+		Return m
+	End If
+	m = C.GetData(sRecordSource)
+	Return m
+End Sub
+
 'set the data of the form
 Sub SetData(C As VueComponent, rec As Map)
 	If sRecordSource = "" Then
@@ -1318,8 +1890,36 @@ Sub SetData(C As VueComponent, rec As Map)
 	C.SetData(sRecordSource, rec)
 End Sub
 
+
+'set the data of the form
+Sub SetDataOnApp(C As VuetifyApp, rec As Map)
+	If sRecordSource = "" Then
+		BANano.Throw($"VForm.${mName} - the RecordSource has not been specified!"$)
+		Return
+	End If
+	C.SetData(sRecordSource, rec)
+End Sub
+
 Sub BindState(C As VueComponent)
-	VC = c
+	Dim mbindings As Map = VElement.bindings
+	Dim mmethods As Map = VElement.methods
+	'apply the binding for the control
+	For Each k As String In mbindings.Keys
+		Dim v As Object = mbindings.Get(k)
+		Select Case k
+		Case "key"
+		Case Else
+			C.SetData(k, v)
+		End Select
+	Next
+	'apply the events
+	For Each k As String In mmethods.Keys
+		Dim cb As BANanoObject = mmethods.Get(k)
+		C.SetCallBack(k, cb)
+	Next
+End Sub
+
+Sub BindStateOnApp(C As VueComponent)
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control
@@ -1589,18 +2189,36 @@ If BANano.IsNull(vSingular) Or BANano.IsUndefined(vSingular) Then Return
 sSingular  = vSingular
 End Sub
 
-Sub Hide
-	UpdateVisible(VC, False)
+Sub AddRelationship(key As String, value As String, datasource As String, vmodel As String)
+	key = key.Trim
+	value = value.Trim
+	datasource = datasource.Trim
+	'
+	If value = "" Or key = "" Then Return
+	Dim rel As DBRelationship
+	rel.Initialize
+	rel.key = key
+	rel.value = value
+	rel.source = datasource
+	rel.vmodel = vmodel
+	rel.keys = ""
+	rel.values = ""
+	Relationships.Add(rel)
 End Sub
 
-Sub Show
-	UpdateVisible(VC, True)
-End Sub
-
-Sub Enable
-	UpdateDisabled(VC, False)
-End Sub
-
-Sub Disable
-	UpdateDisabled(VC, True)
+Sub AddDataSource(key As String, value As String, datasource As String, vmodel As String, keys As String, values As String)
+	key = key.Trim
+	value = value.Trim
+	datasource = datasource.Trim
+	'
+	If keys = "" Or values = "" Then Return
+	Dim rel As DBRelationship
+	rel.Initialize
+	rel.key = key
+	rel.value = value
+	rel.source = datasource
+	rel.vmodel = vmodel
+	rel.keys = keys
+	rel.values = values
+	datasources.Add(rel)
 End Sub

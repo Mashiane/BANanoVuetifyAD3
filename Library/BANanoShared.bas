@@ -58,6 +58,16 @@ Sub GetListItem(lst As List, pos As Int) As String
 	Return obj
 End Sub
 
+Sub parseNull(v As Object) As String
+	If BANano.IsNull(v) Or BANano.IsUndefined(v) Then 
+		Return ""
+	End If
+	v = CStr(v)
+	If v = "null" Then Return ""
+	If v = "undefined" Then Return ""
+	Return v	
+End Sub
+
 'parseBool
 Sub parseBool(v As Object) As Boolean
 	If BANano.IsNull(v) Or BANano.IsUndefined(v) Then

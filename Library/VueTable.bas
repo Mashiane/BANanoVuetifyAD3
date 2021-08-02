@@ -46,6 +46,7 @@ Version=8.5
 
 #DesignerProperty: Key: AutoID, DisplayName: Auto ID/Name, FieldType: Boolean, DefaultValue: False, Description: Overrides the ID/Name with a random string.
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue:  False, Description: Hidden
+#DesignerProperty: Key: Guide, DisplayName: Provide Guide, FieldType: Boolean, DefaultValue: False, Description: Guide
 #DesignerProperty: Key: ShowInsideCard, DisplayName: ShowInsideCard, FieldType: Boolean, DefaultValue:  True, Description: Show table inside the v-card
 #DesignerProperty: Key: HideToolBarOnSM, DisplayName: HideToolBarOnSM, FieldType: Boolean, DefaultValue:  True, Description: Hide toolbar on SM
 #DesignerProperty: Key: Title, DisplayName: Title, FieldType: String, DefaultValue:  Table, Description: The title on the table
@@ -107,7 +108,6 @@ Version=8.5
 #DesignerProperty: Key: ConditionalStyle, DisplayName: Conditional Style (JSON), FieldType: String, DefaultValue: , Description: For each column specified apply the style from the callback
 
 #DesignerProperty: Key: ColumIcons, DisplayName: ColumIcons (;), FieldType: String, DefaultValue: , Description: These fields will show icons
-#DesignerProperty: Key: ColumnAutoComplete, DisplayName: ColumnAutoComplete (;), FieldType: String, DefaultValue: , Description: These fields will show auto complete for inline edit
 #DesignerProperty: Key: ColumnAvatar, DisplayName: ColumnAvatar (;), FieldType: String, DefaultValue: , Description: These fields will show an avatar image
 #DesignerProperty: Key: ColumnAvatarText, DisplayName: ColumnAvatarText (;), FieldType: String, DefaultValue: , Description: These fields will show avatar text
 #DesignerProperty: Key: ColumnAvatarIcon, DisplayName: ColumnAvatarIcon (;), FieldType: String, DefaultValue: , Description: These fields will show avatar icons
@@ -115,7 +115,9 @@ Version=8.5
 #DesignerProperty: Key: ColumnCheckbox, DisplayName: ColumnCheckbox (;), FieldType: String, DefaultValue: , Description: These fields will show checkboxes
 #DesignerProperty: Key: ColumnChip, DisplayName: ColumnChip (;), FieldType: String, DefaultValue: , Description: These fields will show chips
 #DesignerProperty: Key: ColumnCircularProgress, DisplayName: ColumnCircularProgress (;), FieldType: String, DefaultValue: , Description: These fields will show circular progress
+#DesignerProperty: Key: ColumnAutoComplete, DisplayName: ColumnAutoComplete (;), FieldType: String, DefaultValue: , Description: These fields will show auto complete for inline edit
 #DesignerProperty: Key: ColumnCombobox, DisplayName: ColumnCombobox (;), FieldType: String, DefaultValue: , Description: These fields will show comboboxes
+#DesignerProperty: Key: ColumnSelect, DisplayName: ColumnSelect (;), FieldType: String, DefaultValue: , Description: These fields will show selects
 #DesignerProperty: Key: ColumnDate, DisplayName: ColumnDate (;), FieldType: String, DefaultValue: , Description: These fields will show dates
 #DesignerProperty: Key: ColumnDateTime, DisplayName: ColumnDateTime (;), FieldType: String, DefaultValue: , Description: These fields will show date-time
 #DesignerProperty: Key: ColumnFileSize, DisplayName: ColumnFileSize (;), FieldType: String, DefaultValue: , Description: FileSize Fields
@@ -135,7 +137,7 @@ Version=8.5
 #DesignerProperty: Key: ItemIcons, DisplayName: Action Icons (;), FieldType: String, DefaultValue:  , Description: Additional Action Icons
 #DesignerProperty: Key: ItemColors, DisplayName: Action Colors (;), FieldType: String, DefaultValue:  , Description: Additional Action Colors
 
-#DesignerProperty: Key: FixedHeader, DisplayName: Fixed Header, FieldType: Boolean, DefaultValue:  True, Description: The header should be fixed works with height
+#DesignerProperty: Key: FixedHeader, DisplayName: Fixed Header, FieldType: Boolean, DefaultValue:  False, Description: The header should be fixed works with height
 #DesignerProperty: Key: HideDefaultHeader, DisplayName: Hide Default Header, FieldType: Boolean, DefaultValue:  False, Description: Hide the default header
 #DesignerProperty: Key: HideDefaultFooter, DisplayName: Hide Default Footer, FieldType: Boolean, DefaultValue:  False, Description: Hide the default footer
 #DesignerProperty: Key: ShowExpand, DisplayName: ShowExpand, FieldType: Boolean, DefaultValue:  False, Description: Show the expansion slot
@@ -297,6 +299,7 @@ Private sColumnCheckbox As String
 Private sColumnChip As String
 Private sColumnCircularProgress As String
 Private sColumnCombobox As String
+Private sColumnSelect As String
 Private sColumnDate As String
 Private sColumnDateTime As String
 Private sColumnFields As String
@@ -344,6 +347,8 @@ Private bShowInsideCard As Boolean
 Private bHidden As Boolean
 Private bHideToolBarOnSM As Boolean
 Private toolbarID As String
+Private bGuide As Boolean
+Private help As StringBuilder
 End Sub
 
 'initialize the custom view
@@ -388,6 +393,7 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	stVShow = $"${mName}show"$
 	sCurrentItems = $"${mName}currentitems"$
 	toolbarID = $"${mName}toolbar"$
+	help.Initialize 
 End Sub
 
 'Create view in the designer
@@ -444,6 +450,8 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sMenuColor = Props.GetDefault("MenuColor", "indigo")
 		sPrintColor = Props.GetDefault("PrintColor", "blue")
 		sSaveColor = Props.GetDefault("SaveColor", "blue-grey")	
+		bGuide = Props.getdefault("Guide", False)
+		bGuide = BANanoShared.parseBool(bGuide)
 		'
 		sColumIcons = Props.GetDefault("ColumIcons", "")
 		sColumnAutoComplete = Props.GetDefault("ColumnAutoComplete", "")
@@ -453,6 +461,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sColumnChip = Props.GetDefault("ColumnChip", "")
 		sColumnCircularProgress = Props.GetDefault("ColumnCircularProgress", "")
 		sColumnCombobox = Props.GetDefault("ColumnCombobox", "")
+		sColumnSelect = Props.GetDefault("ColumnSelect", "")
 		sColumnDate = Props.GetDefault("ColumnDate", "")
 		sColumnDateTime = Props.GetDefault("ColumnDateTime", "")
 		sColumnFields = Props.GetDefault("ColumnFields", "")
@@ -667,55 +676,63 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		'VElement.GetVueElement($"${mName}separator"$).HiddenSMAndUp
 	End If
 	
-	
-	If bManual = False Then
+	If bManual Then Return	
+	BuildSchema
+End Sub
+
+Sub BuildSchema
+	HelpCode($"****** DATA-TABLE: ${mName} *****"$)
+	If bShowInsideCard Then
+		HelpCode($"This data-table is build inside a v-card."$)
+	Else
+		HelpCode($"This data-table does not have a hosting v-card."$)
+	End If
 	If mHasSearch And bShowInsideCard Then
 		'GetToolBar.Append($"<v-spacer id="${mName}spacer1"></v-spacer>"$)
 		'VElement.GetVueElement($"${mName}spacer1"$).HiddenXSOnly
 		AddSpacer
 		AddSearch
+		HelpCode($"This data-table has a search text field to seatch its contents, fiels should be marked filterable for that to work."$)
 		'
 		'GetToolBar.Append($"<v-divider vertical class="mx-2" id="${mName}divider1"></v-divider>"$)
 		'VElement.GetVueElement($"${mName}divider1"$).HiddenXSOnly
-		AddDivider
 	End If
 	'
 	
 	If bHasAddnew And bShowInsideCard Then
 		AddNew
-		AddDivider
+		HelpCode($"AddNew is on, you need to generate the ${mName}_Add_Click event."$)
 	End If
 	
 	If bHasClearSort And bShowInsideCard Then
 		AddClearSort
-		AddDivider
+		HelpCode($"AddClearSort is on, you need to generate the ${mName}_ClearSort_Click event."$)
 	End If
 	
 	If bHasFilter And bShowInsideCard Then
 		AddFilter("primary--text")
-		AddDivider
 		AddClearFilter
-		AddDivider
+		HelpCode($"AddClearFilter is on, you need to generate the ${mName}_ClearFilter_Click event."$)
 	End If
 	
 	If bHasPdf And bShowInsideCard Then
 		AddPDF
-		AddDivider
+		HelpCode($"AddPDF is on, you need to generate the ${mName}_PDF_Click event."$)
 	End If
 	'
 	If bHasExcel And bShowInsideCard Then
 		AddExcel
-		AddDivider
+		HelpCode($"AddExcel is on, you need to generate the ${mName}_Excel_Click event."$)
 	End If
 	
 	If bHasRefresh And bShowInsideCard Then
 		AddRefresh
-		AddDivider
+		HelpCode($"AddRefresh is on, you need to generate the ${mName}_Refresh_Click event."$)
 	End If
 	
 	If bHasBack And bShowInsideCard Then
 		AddBack
-		AddDivider
+		HelpCode($"AddBack is on, you need to generate the ${mName}_Back_Click event."$)
 	End If
 	'
 	
@@ -740,6 +757,9 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	'
 	Dim lsColumnCombobox As List = BANanoShared.StrParseComma(";", sColumnCombobox)
 	lsColumnCombobox = BANanoShared.ListTrimItems(lsColumnCombobox)
+	'
+	Dim lsColumnSelect As List = BANanoShared.StrParseComma(";", sColumnSelect)
+	lsColumnSelect = BANanoShared.ListTrimItems(lsColumnSelect)
 	'
 	Dim lsColumnDate As List = BANanoShared.StrParseComma(";", sColumnDate)
 	lsColumnDate = BANanoShared.ListTrimItems(lsColumnDate)
@@ -821,30 +841,38 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	Dim colCnt As Int
 	Dim f As String = ""
 	Dim h As String = ""
+	Dim w As String = ""
 	
 	'add columns
 	For colCnt = 0 To colTot
-		'
-		f = lsColumnFields.Get(colCnt)
-		h = lsColumnTitles.Get(colCnt)
+		f = BANanoShared.GetListItem(lsColumnFields, colCnt)
+		h = BANanoShared.GetListItem(lsColumnTitles, colCnt)
+		w = BANanoShared.GetListItem(lsColumnWidths, colCnt)
 		'
 		f = f.trim
 		h = h.trim
-		'
-		lsColumnFields.Set(colCnt, f)
-		lsColumnTitles.Set(colCnt, h)
+		w = w.Trim
 		
 		AddColumn(f, h)
+		SetColumnWidth(f, w)
 	Next
 	'
 	'pre-display progress
 	colTot = lstPreDisplay.Size - 1
 	For colCnt = 0 To colTot
 		Dim fc As String = lstPreDisplay.Get(colCnt)
+		Log(fc)
+		'
 		Dim c As String = BANanoShared.mvfield(fc, 1, ":")
 		Dim m As String = BANanoShared.MvField(fc, 2, ":")
 		If lsColumnFields.IndexOf(c) >= 0 Then
+			
+			Log("****")
+			Log(c)
+			Log(m)
+			
 			SetColumnPreDisplay(c, m)
+			HelpCode($"${c}.${m} PRE_DISPLAY"$)
 		Else
 			Log($"DataTable Error: ${mName}.${f} pre-display column not found on column fields!"$)
 		End If
@@ -857,6 +885,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		Dim m As String = BANanoShared.MvField(fc, 2, ":")
 		If lsColumnFields.IndexOf(c) >= 0 Then
 			SetColumnClassOnCondition(c, m)
+			HelpCode($"${c}.${m} CONDITIONAL CLASS"$)
 		Else
 			Log($"DataTable Error: ${mName}.${f} conditional-class column not found on column fields!"$)
 		End If
@@ -869,6 +898,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		Dim m As String = BANanoShared.MvField(fc, 2, ":")
 		If lsColumnFields.IndexOf(c) >= 0 Then
 			SetColumnColorOnCondition(c, m)
+			HelpCode($"${c}.${m} CONDITIONAL COLOR"$)
 		Else
 			Log($"DataTable Error: ${mName}.${f} conditional-color column not found on column fields!"$)
 		End If
@@ -881,6 +911,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		Dim m As String = BANanoShared.MvField(fc, 2, ":")
 		If lsColumnFields.IndexOf(c) >= 0 Then
 			SetColumnStyleOnCondition(c, m)
+			HelpCode($"${c}.${m} CONDITIONAL STYLE"$)
 		Else
 			Log($"DataTable Error: ${mName}.${f} conditional-style column not found on column fields!"$)
 		End If
@@ -893,6 +924,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		f = f.trim
 		If lsColumnFields.IndexOf(f) >= 0 Then
 			SetColumnType(f, COLUMN_PROGRESS_CIRCULAR)
+			HelpCode($"${f} PROGRESS CIRCULAR"$)
 		Else
 			Log($"DataTable Error: ${mName}.${f} progress-circular column not found on column fields!"$)
 		End If
@@ -904,6 +936,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		f = f.trim
 		If lsColumnFields.IndexOf(f) >= 0 Then
 			SetColumnType(f, COLUMN_PROGRESS_LINEAR)
+			HelpCode($"${f} PROGRESS LINEAR"$)
 		Else
 			Log($"DataTable Error: ${mName}.${f} progress-linear column not found on column fields!"$)
 		End If
@@ -915,6 +948,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		f = f.trim
 		If lsColumnFields.IndexOf(f) >= 0 Then
 			SetColumnType(f, COLUMN_AUTOCOMPLETE)
+			HelpCode($"${f} AUTO COMPLETE (Editable)"$)
 		Else
 			Log($"DataTable Error: ${mName}.${f} auto-complete column not found on column fields!"$)
 		End If
@@ -927,6 +961,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		If lsColumnFields.IndexOf(f) >= 0 Then
 			SetColumnType(f, COLUMN_LINK)
 			SetColumnTarget(f, "_blank")
+			HelpCode($"${f} LINK _BLANK"$)
 		Else
 			Log($"DataTable Error: ${mName}.${f} link column not found on column fields!"$)
 		End If
@@ -940,6 +975,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 			SetColumnType(f, COLUMN_LINK)
 			SetColumnTarget(f, "_blank")
 			SetColumnPrefix(f, "mailto:")
+			HelpCode($"${f} MAIL TO _BLANK"$)
 		Else
 			Log($"DataTable Error: ${mName}.${f} email column not found on column fields!"$)
 		End If
@@ -951,10 +987,24 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		f = f.trim
 		If lsColumnFields.IndexOf(f) >= 0 Then
 			SetColumnType(f, COLUMN_COMBOBOX)
+			HelpCode($"${f} COMBOBOX (Editable)"$)
 		Else
 			Log($"DataTable Error: ${mName}.${f} combo-box column not found on column fields!"$)
 		End If
 	Next
+	'select
+	colTot = lsColumnSelect.Size - 1
+	For colCnt = 0 To colTot
+		f = lsColumnSelect.Get(colCnt)
+		f = f.trim
+		If lsColumnFields.IndexOf(f) >= 0 Then
+			SetColumnType(f, COLUMN_SELECT)
+			HelpCode($"${f} SELECT (Editable)"$)
+		Else
+			Log($"DataTable Error: ${mName}.${f} select column not found on column fields!"$)
+		End If
+	Next
+	
 	'time
 	colTot = lsColumnTime.Size - 1
 	For colCnt = 0 To colTot
@@ -962,6 +1012,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		f = f.trim
 		If lsColumnFields.IndexOf(f) >= 0 Then
 			SetColumnType(f, COLUMN_TIME)
+			HelpCode($"${f} TIME"$)
 		Else
 			Log($"DataTable Error: ${mName}.${f} text-field column not found on column fields!"$)
 		End If
@@ -973,6 +1024,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		f = f.trim
 		If lsColumnFields.IndexOf(f) >= 0 Then
 			SetTextField(f, False)
+			HelpCode($"${f} TEXT FIELD (Editable)"$)
 		Else
 			Log($"DataTable Error: ${mName}.${f} text-field column not found on column fields!"$)
 		End If
@@ -984,6 +1036,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		f = f.trim
 		If lsColumnFields.IndexOf(f) >= 0 Then
 			SetTextArea(f, True)
+			HelpCode($"${f} TEXT AREA (Editable)"$)
 		Else
 			Log($"DataTable Error: ${mName}.${f} text-area column not found on column fields!"$)
 		End If
@@ -995,6 +1048,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		f = f.trim
 		If lsColumnFields.IndexOf(f) >= 0 Then
 			SetColumnType(f, COLUMN_SWITCH)
+			HelpCode($"${f} SWITCH (Editable)"$)
 		Else
 			Log($"DataTable Error: ${mName}.${f} switch column not found on column fields!"$)
 		End If
@@ -1006,6 +1060,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		f = f.trim
 		If lsColumnFields.IndexOf(f) >= 0 Then
 			SetColumnType(f, COLUMN_RATING)
+			HelpCode($"${f} RATING (Editable)"$)
 		Else
 			Log($"DataTable Error: ${mName}.${f} rating column not found on column fields!"$)
 		End If
@@ -1017,6 +1072,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		f = f.trim
 		If lsColumnFields.IndexOf(f) >= 0 Then
 			SetColumnType(f, COLUMN_IMAGE)
+			HelpCode($"${f} IMAGE"$)
 		Else
 			Log($"DataTable Error: ${mName}.${f} image column not found on column fields!"$)
 		End If
@@ -1028,6 +1084,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		f = f.trim
 		If lsColumnFields.IndexOf(f) >= 0 Then
 			SetColumnType(f, COLUMN_CHIP)
+			HelpCode($"${f} CHIP"$)
 		Else
 			Log($"DataTable Error: ${mName}.${f} chip column not found on column fields!"$)
 		End If
@@ -1039,6 +1096,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		f = f.trim
 		If lsColumnFields.IndexOf(f) >= 0 Then
 			SetColumnType(f, COLUMN_CHECKBOX)
+			HelpCode($"${f} CHECKBOX (Editable)"$)
 		Else
 			Log($"DataTable Error: ${mName}.${f} check-box column not found on column fields!"$)
 		End If
@@ -1050,6 +1108,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		f = f.trim
 		If lsColumnFields.IndexOf(f) >= 0 Then
 			SetColumnType(f, COLUMN_AVATARIMG)
+			HelpCode($"${f} AVATAR IMAGE"$)
 		Else
 			Log($"DataTable Error: ${mName}.${f} avatar column not found on column fields!"$)
 		End If
@@ -1061,6 +1120,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		f = f.trim
 		If lsColumnFields.IndexOf(f) >= 0 Then
 			SetColumnType(f, COLUMN_AVATARTXT)
+			HelpCode($"${f} AVATAR TEXT"$)
 		Else
 			Log($"DataTable Error: ${mName}.${f} avatar text column not found on column fields!"$)
 		End If
@@ -1072,6 +1132,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		f = f.trim
 		If lsColumnFields.IndexOf(f) >= 0 Then
 			SetColumnType(f, COLUMN_AVATARICON)
+			HelpCode($"${f} AVATAR ICON"$)
 		Else
 			Log($"DataTable Error: ${mName}.${f} avatar icon column not found on column fields!"$)
 		End If
@@ -1083,6 +1144,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		f = f.trim
 		If lsColumnFields.IndexOf(f) >= 0 Then
 			SetColumnType(f, COLUMN_BUTTON)
+			HelpCode($"${f} BUTTON"$)
 		Else
 			Log($"DataTable Error: ${mName}.${f} button column not found on column fields!"$)
 		End If
@@ -1094,6 +1156,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		f = f.trim
 		If lsColumnFields.IndexOf(f) >= 0 Then
 			SetColumnType(f, COLUMN_MONEY)
+			HelpCode($"${f} MONEY"$)
 		Else
 			Log($"DataTable Error: ${mName}.${f} money column not found on column fields!"$)
 		End If
@@ -1105,6 +1168,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		f = f.trim
 		If lsColumnFields.IndexOf(f) >= 0 Then
 			SetColumnType(f, COLUMN_FILESIZE)
+			HelpCode($"${f} FILE SIZE"$)
 		Else
 			Log($"DataTable Error: ${mName}.${f} file size column not found on column fields!"$)
 		End If
@@ -1116,6 +1180,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		f = f.trim
 		If lsColumnFields.IndexOf(f) >= 0 Then
 			SetColumnType(f, COLUMN_DATETIME)
+			HelpCode($"${f} DATE TIME"$)
 		Else
 			Log($"DataTable Error: ${mName}.${f} date-time column not found on column fields!"$)
 		End If
@@ -1127,6 +1192,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		f = f.trim
 		If lsColumnFields.IndexOf(f) >= 0 Then
 			SetColumnType(f, COLUMN_DATE)
+			HelpCode($"${f} DATE"$)
 		Else
 			Log($"DataTable Error: ${mName}.${f} date column not found on column fields!"$)
 		End If
@@ -1138,6 +1204,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		f = f.trim
 		If lsColumnFields.IndexOf(f) >= 0 Then
 			SetColumnSortable(f, True)
+			HelpCode($"${f} SORTABLE"$)
 		Else
 			Log($"DataTable Error: ${mName}.${f} sortable column not found on column fields!"$)
 		End If	
@@ -1149,6 +1216,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		f = f.trim
 		If lsColumnFields.IndexOf(f) >= 0 Then
 			SetColumnFilterable(f, True) 
+			HelpCode($"${f} FILTERABLE"$)
 		Else
 			Log($"DataTable Error: ${mName}.${f} filterable column not found on column fields!"$)
 		End If
@@ -1161,6 +1229,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		Dim m As String = BANanoShared.MvField(f, 2, ":")
 		If lsColumnFields.IndexOf(f) >= 0 Then
 			SetColumnTotal(c, m) 
+			HelpCode($"${f} TOTAL"$)
 		Else
 			Log($"DataTable Error: ${mName}.${c} has total column not found on column fields!"$)
 		End If
@@ -1169,34 +1238,42 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	
 	If bHasEdit Then
 		AddEdit
+		HelpCode($"AddEdit is on, you need to generate '${mName}_edit (item As Map)' event"$)
 	End If
 	
 	If bHasDelete Then
 		AddDelete
+		HelpCode($"AddDelete is on, you need to generate '${mName}_delete (item As Map)' event"$)
 	End If
 	
 	If bHasClone Then
 		AddClone
+		HelpCode($"AddClone is on, you need to generate '${mName}_clone (item As Map)' event"$)
 	End If
 	
 	If bHasPrint Then
 		AddPrint
+		HelpCode($"AddPrint is on, you need to generate '${mName}_print (item As Map)' event"$)
 	End If
 	
 	If bHasSave Then
 		AddSave
+		HelpCode($"AddSave is on, you need to generate '${mName}_save (item As Map)' event"$)
 	End If
 	
 	If bHasCancel Then
 		AddCancel
+		HelpCode($"AddCancel is on, you need to generate '${mName}_cancel (item As Map)' event"$)
 	End If
 	
 	If bHasDownload Then
 		AddDownload
+		HelpCode($"AddDownload is on, you need to generate '${mName}_download (item As Map)' event"$)
 	End If
 	
 	If bHasMenu Then
 		AddMenuV
+		HelpCode($"AddMenuV is on, you need to generate '${mName}_menu (item As Map)' event"$)
 	End If
 	'
 	'add the additional actions
@@ -1221,6 +1298,9 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		Dim iTit As String = xtitles.Get(itemCnt)
 		'
 		AddAction1(iKey, iTit, iIco, "", iCol)
+		If iKey <> "" Then
+			HelpCode($"Action '${iKey}' is added, you need to generate '${mName}_${iKey} (item As Map)' event"$)
+		End If
 	Next	
 	
 	'
@@ -1255,9 +1335,15 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	If bHasMenu Then
 		SetIconDimensions("menu", "", sMenuColor)
 	End If
-	End If	
+	If bGuide Then
+		Log(help.ToString)
+	End If
 End Sub
 
+private Sub HelpCode(sComment As String)
+	help.Append($"${sComment}"$)
+	help.append(CRLF)
+End Sub
 
 'get the original columns
 Sub GetColumns As List
@@ -1633,7 +1719,7 @@ Sub AddTitleIcon(elID As String, eIcon As String, btnColor As String)
 	ct.Initialize($"#${toolbarID}"$)
 	elID = elID.ToLowerCase
 	Dim siconright As String = $"${elID}icon"$
-	ct.Append($"<v-btn icon id="${elID}"><v-icon id="${elID}icon"></v-icon></v-btn>"$)
+	ct.Append($"<v-btn icon id="${elID}" class="mr-2"><v-icon id="${elID}icon"></v-icon></v-btn>"$)
 	Dim vbtnright As VueElement
 	vbtnright.Initialize(mCallBack, elID, elID)
 	vbtnright.Fab = True
@@ -1701,7 +1787,7 @@ End Sub
 Sub AddSearch
 	If bShowInsideCard = False Then Return
 	'
-	Dim str As String = $"<v-text-field id="${searchID}" @keydown.native.escape="${search}=''" v-model="${search}" append-icon="mdi-magnify" label="Search" single-line hide-details clearable class="shrink"></v-text-field>"$
+	Dim str As String = $"<v-text-field id="${searchID}" @keydown.native.escape="${search}=''" v-model="${search}" append-icon="mdi-magnify" label="Search" single-line hide-details clearable class="shrink mr-2"></v-text-field>"$
 	Dim ct As BANanoElement
 	ct.Initialize($"#${toolbarID}"$)
 	ct.Append(str)
@@ -4865,4 +4951,149 @@ Sub GetItem(other As Map) As Map
 		i = other.Get("item")
 	End If
 	Return i
+End Sub
+
+Sub getManual As Boolean
+	Return bManual
+End Sub
+
+Sub setManual(b As Boolean)
+	bManual = b
+End Sub
+
+Sub setColumnAutoCompleteProp(t As String)
+sColumnAutoComplete = t
+End Sub
+
+Sub setColumnAvatarProp(t As String)
+sColumnAvatar = t
+End Sub
+
+Sub setColumnButtonProp(t As String)
+sColumnButton = t
+End Sub
+
+Sub setColumnCheckboxProp(t As String)
+sColumnCheckbox = t
+End Sub
+
+Sub setColumnChipProp(t As String)
+sColumnChip = t
+End Sub
+
+Sub setColumnCircularProgressProp(t As String)
+sColumnCircularProgress = t
+End Sub
+
+Sub setColumnComboboxProp(t As String)
+sColumnCombobox = t
+End Sub
+
+Sub setColumnDateProp(t As String)
+sColumnDate = t
+End Sub
+
+Sub setColumnDateTimeProp(t As String)
+sColumnDateTime = t
+End Sub
+
+Sub setColumnFieldsProp(t As String)
+	sColumnFields = t
+End Sub
+
+Sub setColumnFileSizeProp(t As String)
+sColumnFileSize = t
+End Sub
+
+Sub setColumnImageProp(t As String)
+sColumnImage = t
+End Sub
+
+Sub setColumnLinearProgressProp(t As String)
+sColumnLinearProgress = t
+End Sub
+
+Sub setColumnLinkProp(t As String)
+sColumnLink = t
+End Sub
+
+Sub setColumnEmailProp(t As String)
+sColumnEmail = t
+End Sub
+
+Sub setColumnMoneyProp(t As String)
+sColumnMoney = t
+End Sub
+
+Sub setColumnRatingProp(t As String)
+sColumnRating = t
+End Sub
+
+Sub setColumnSortableProp(t As String)
+sColumnSortable = t
+End Sub
+
+Sub setColumnSwitchProp(t As String)
+sColumnSwitch = t
+End Sub
+
+Sub setColumnTextareaProp(t As String)
+sColumnTextarea = t
+End Sub
+
+Sub setColumnTextfieldProp(t As String)
+sColumnTextfield = t
+End Sub
+
+Sub setColumnTimeProp(t As String)
+sColumnTime = t
+End Sub
+
+Sub setColumnTitlesProp(t As String)
+sColumnTitles = t
+End Sub
+
+Sub setColumnWidthsProp(t As String)
+sColumnWidths = t
+End Sub
+
+Sub setColumnFilterableProp(t As String)
+sColumnFilterable = t
+End Sub
+
+Sub setColumnTotalsProp(t As String)
+sColumnTotals = t
+End Sub
+
+Sub setColumnAvatarTextProp(t As String)
+sColumnAvatarText = t
+End Sub
+
+Sub setColumnAvatarIconProp(t As String)
+sColumnAvatarIcon = t
+End Sub
+
+Sub setColumnPreDisplayProp(t As String)
+sPreDisplay = t
+End Sub
+
+Sub setColumnConditionalClassProp(t As String)
+sConditionalClass = t
+End Sub
+
+Sub setColumnConditionalColorProp(t As String)
+sConditionalColor = t
+End Sub
+
+Sub setColumnConditionalStyleProp(t As String)
+sConditionalStyle = t
+End Sub
+
+
+Sub setColumnSelectProp(t As String)
+sColumnSelect = t
+End Sub
+
+Sub setColumIconsProp(t As String)
+	sColumIcons = t
 End Sub

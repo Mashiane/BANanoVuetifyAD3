@@ -25,78 +25,84 @@ Version=7
 #Event: KeyUpEnterPrevent (e As BANanoEvent)
 #Event: Button_Click (e As BANanoEvent)
 
-#DesignerProperty: Key: FieldName, DisplayName: Field Name*, FieldType: String, DefaultValue: , Description: FieldName
+#DesignerProperty: Key: FieldName, DisplayName: Field Name*, FieldType: String, DefaultValue: , Description: Field Name on the database table
+#DesignerProperty: Key: VModel, DisplayName: V-Model, FieldType: String, DefaultValue: , Description: V-Model for data binding
+#DesignerProperty: Key: ComponentType, DisplayName: Component Type*, FieldType: String, DefaultValue: TextField, Description: Component Type, List: P|H6|H1|H2|H3|H4|H5|div|span|TextField|TextArea|TimePicker|DatePicker|FileInput|FileInputImage|Money|Thousands|Password|ComboBox|AutoComplete|Select|Avatar|AvatarIcon|AvatarText|CheckBox|Switch|RadioGroup|Image|Telephone|Email|Website|Slider|Chip|Rating|ProgressCircular|ProgressLinear|Icon|Button|FAB|ColorSelect|ColorTextField
+#DesignerProperty: Key: ColumnType, DisplayName: DT Column Type, FieldType: String, DefaultValue: Normal, Description: Data Table Column Type, List: Normal|TextArea|TextField|Icon|Chip|Switch|Action|Image|CheckBox|Time|Money|Avatar|AvatarIcon|AvatarText|Rating|ProgressCircular|ProgressLinear|Date|DateTime|Number|Button|Link|ComboBox|AutoComplete|Select|Email|FileSize
+#DesignerProperty: Key: ListItemType, DisplayName: List Item Type, FieldType: String, DefaultValue: , Description: List View Item Type
 #DesignerProperty: Key: DataType, DisplayName: Data Type, FieldType: String, DefaultValue: string, Description: Data Type, List: integer|double|blob|string|none
-#DesignerProperty: Key: VModel, DisplayName: V-Model, FieldType: String, DefaultValue: , Description: V-Model
-#DesignerProperty: Key: Title, DisplayName: Title, FieldType: String, DefaultValue: , Description: Title
-#DesignerProperty: Key: PrimaryKey, DisplayName: Primary Key, FieldType: Boolean, DefaultValue: False, Description: Primary Key
+#DesignerProperty: Key: MaxLen, DisplayName: Counter/Length, FieldType: Int, DefaultValue: 0, Description: Counter / Length
+#DesignerProperty: Key: Title, DisplayName: Title, FieldType: String, DefaultValue: , Description: Title / Label
+#DesignerProperty: Key: PrimaryKey, DisplayName: Primary Key, FieldType: Boolean, DefaultValue: False, Description: Primary Key on database table
 #DesignerProperty: Key: DefaultValue, DisplayName: Default Value, FieldType: String, DefaultValue: , Description: Default Value
-#DesignerProperty: Key: AutoIncrement, DisplayName: Auto Increment, FieldType: Boolean, DefaultValue: False, Description: Auto Increment
-#DesignerProperty: Key: RowPos, DisplayName: Row Pos, FieldType: Int, DefaultValue: 1, Description: RowPos
-#DesignerProperty: Key: ColPos, DisplayName: Col Pos, FieldType: Int, DefaultValue: 1, Description: ColPos
-#DesignerProperty: Key: Active, DisplayName: Active, FieldType: Boolean, DefaultValue: True, Description: Active
-#DesignerProperty: Key: Visible, DisplayName: Visible On Form, FieldType: Boolean, DefaultValue: True, Description: Visible On Form
-#DesignerProperty: Key: OnDb, DisplayName: CRUD Use, FieldType: Boolean, DefaultValue: True, Description: Use for CRUD and Select Fields
-#DesignerProperty: Key: DbSort, DisplayName: Db Sort, FieldType: Boolean, DefaultValue: True, Description: Sort on DB
+#DesignerProperty: Key: AutoIncrement, DisplayName: Auto Increment, FieldType: Boolean, DefaultValue: False, Description: Auto Increment on database table
+#DesignerProperty: Key: RowPos, DisplayName: Row Pos, FieldType: Int, DefaultValue: 1, Description: Row Position on Grid
+#DesignerProperty: Key: ColPos, DisplayName: Col Pos, FieldType: Int, DefaultValue: 1, Description: Column Position on Grid
+#DesignerProperty: Key: Visible, DisplayName: Visible On Form, FieldType: Boolean, DefaultValue: True, Description: Visibility On Form
+#DesignerProperty: Key: OnDb, DisplayName: CRUD Use, FieldType: Boolean, DefaultValue: True, Description: Use in CRUD actions
+#DesignerProperty: Key: DbSort, DisplayName: Db Sort, FieldType: Boolean, DefaultValue: True, Description: Sort By on DB
 
-#DesignerProperty: Key: OnTable, DisplayName: On DT Table, FieldType: Boolean, DefaultValue: True, Description: On Data Table
+#DesignerProperty: Key: OnTable, DisplayName: On DT Table, FieldType: Boolean, DefaultValue: True, Description: Shows on Data Table
 #DesignerProperty: Key: ColumnPosition, DisplayName: DT Column Pos, FieldType: Int, DefaultValue: 0, Description: Data Table Column Position
-#DesignerProperty: Key: Filterable, DisplayName: DT Filterable, FieldType: Boolean, DefaultValue: True, Description: DT Filterable
-#DesignerProperty: Key: Sortable, DisplayName: DT Sortable, FieldType: Boolean, DefaultValue: True, Description: DT Sortable
-
-#DesignerProperty: Key: ComponentType, DisplayName: Component Type*, FieldType: String, DefaultValue: TextField, Description: Component Type, List: P|H6|H1|H2|H3|H4|H5|div|span|TextField|TextArea|TimePicker|DatePicker|FileInput|FileInputImage|Money|Thousands|Password|ComboBox|AutoComplete|Select|Avatar|CheckBox|Switch|RadioGroup|Image|Telephone|Email|Website|Slider|Chip|Rating|ProgressCircular|ProgressLinear|Icon|Button|FAB|ColorSelect|ColorTextField
-#DesignerProperty: Key: MaxLen, DisplayName: Counter/Length, FieldType: Int, DefaultValue: 0, Description: Counter/Length
-
-#DesignerProperty: Key: ColumnType, DisplayName: DT Column Type, FieldType: String, DefaultValue: Normal, Description: DT Column Type, List: Normal|TextArea|TextField|IconView|Chip|Switch|Action|Image|CheckBox|Time|Money|AvatarImg|Rating|ProgressCircular|ProgressLinear|DateColumn|DateTimeColumn|NumberColumn|ButtonColumn|LinkColumn|ComboBox|AutoComplete|Select
-#DesignerProperty: Key: ListItemType, DisplayName: List Item Type, FieldType: String, DefaultValue: , Description: List Item Type
+#DesignerProperty: Key: Filterable, DisplayName: DT Filterable, FieldType: Boolean, DefaultValue: True, Description: Is Filterable on Data Table
+#DesignerProperty: Key: Sortable, DisplayName: DT Sortable, FieldType: Boolean, DefaultValue: True, Description: Is Sortable on Data Table
+#DesignerProperty: Key: Totals, DisplayName: DT Totals, FieldType: Boolean, DefaultValue: False, Description: Column should have totals
+#DesignerProperty: Key: ValueMethod, DisplayName: Value Compute, FieldType: String, DefaultValue: , Description: Method to run before displaying the value
+#DesignerProperty: Key: ClassMethod, DisplayName: Class Compute, FieldType: String, DefaultValue: , Method to run on the class
+#DesignerProperty: Key: StyleMethod, DisplayName: Style Compute, FieldType: String, DefaultValue: , Description: Method to run on the style
+#DesignerProperty: Key: ColorMethod, DisplayName: Color Compute, FieldType: String, DefaultValue: , Description: Method to run on the color
 
 #DesignerProperty: Key: IconName, DisplayName: Icon Name, FieldType: String, DefaultValue: , Description: Icon Name
-#DesignerProperty: Key: LoremIpsum, DisplayName:LoremIpsum, FieldType: Boolean, DefaultValue: False, Description: LoremIpsum
-#DesignerProperty: Key: Placeholder, DisplayName: Place Holder, FieldType: String, DefaultValue: , Description: Placeholder
+#DesignerProperty: Key: LoremIpsum, DisplayName:LoremIpsum, FieldType: Boolean, DefaultValue: False, Description: Show Lorem Ipsum
+#DesignerProperty: Key: Placeholder, DisplayName: Place Holder, FieldType: String, DefaultValue: , Description: Place holder
 #DesignerProperty: Key: Hint, DisplayName: Hint, FieldType: String, DefaultValue: , Description: Hint
+#DesignerProperty: Key: PersistentHint, DisplayName: Persistent Hint, FieldType: Boolean, DefaultValue: False, Description: Persistent Hint
 #DesignerProperty: Key: Required, DisplayName: Required, FieldType: Boolean, DefaultValue: False, Description: Required
 #DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: Boolean, DefaultValue: False, Description: Disabled
-#DesignerProperty: Key: ReadOnly, DisplayName: ReadOnly, FieldType: Boolean, DefaultValue: False, Description: ReadOnly
+#DesignerProperty: Key: ReadOnly, DisplayName: ReadOnly, FieldType: Boolean, DefaultValue: False, Description: Read  Only
 #DesignerProperty: Key: AutoFocus, DisplayName: Auto Focus, FieldType: Boolean, DefaultValue: False, Description: Auto Focus
-#DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue:  primary, Description: , List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
-#DesignerProperty: Key: ColorIntensity, DisplayName: Color Intensity, FieldType: String, DefaultValue:  normal, Description: , List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
-#DesignerProperty: Key: TextColor, DisplayName: Text Color, FieldType: String, DefaultValue:  white, Description: , List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
-#DesignerProperty: Key: TextColorIntensity, DisplayName: Text Color Intensity, FieldType: String, DefaultValue:  normal, Description: , List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
-#DesignerProperty: Key: BackgroundColor, DisplayName: BackgroundColor, FieldType: String, DefaultValue: none, Description: BackgroundColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
-#DesignerProperty: Key: BackgroundColorIntensity, DisplayName: Backgroundcolorintensity, FieldType: String, DefaultValue: none, Description: Backgroundcolorintensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
-#DesignerProperty: Key: Shrink, DisplayName: Shrink, FieldType: Boolean, DefaultValue: False, Description: Shrink
-#DesignerProperty: Key: MinValue, DisplayName: Min Value, FieldType: Int, DefaultValue: 0, Description: MaxValue
-#DesignerProperty: Key: MaxValue, DisplayName: Max Value, FieldType: Int, DefaultValue: 100, Description: MaxValue
+#DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue:  none, Description: Color, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
+#DesignerProperty: Key: ColorIntensity, DisplayName: Color Intensity, FieldType: String, DefaultValue:  normal, Description: Color Intensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
+#DesignerProperty: Key: TextColor, DisplayName: Text Color, FieldType: String, DefaultValue:  none, Description: Text Color, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
+#DesignerProperty: Key: TextColorIntensity, DisplayName: Text Color Intensity, FieldType: String, DefaultValue:  normal, Description: Text Color Intensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
+#DesignerProperty: Key: BackgroundColor, DisplayName: BackgroundColor, FieldType: String, DefaultValue: none, Description: Background Color, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
+#DesignerProperty: Key: BackgroundColorIntensity, DisplayName: Backgroundcolorintensity, FieldType: String, DefaultValue: none, Description: Background Color Intensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
+#DesignerProperty: Key: Shrink, DisplayName: Shrink, FieldType: Boolean, DefaultValue: False, Description: Shrink Content
+#DesignerProperty: Key: MinValue, DisplayName: Min Value, FieldType: Int, DefaultValue: 0, Description: Min Value e.g. Slider
+#DesignerProperty: Key: MaxValue, DisplayName: Max Value, FieldType: Int, DefaultValue: 100, Description: Max Value e.g. Slider
 #DesignerProperty: Key: Size, DisplayName: Size, FieldType: String, DefaultValue: regular, Description: Size, List: x-small|small|regular|large|x-large
 #DesignerProperty: Key: OwnSize, DisplayName: Own Size, FieldType: String, DefaultValue: , Description: Own Size
-#DesignerProperty: Key: OnPdf, DisplayName: On Pdf, FieldType: Boolean, DefaultValue: True, Description: On Pdf
-#DesignerProperty: Key: OnXls, DisplayName: On Xls, FieldType: Boolean, DefaultValue: True, Description: On Xls
-#DesignerProperty: Key: Src, DisplayName: Src, FieldType: String, DefaultValue: , Description: Img Src
+#DesignerProperty: Key: OnPdf, DisplayName: On Pdf, FieldType: Boolean, DefaultValue: True, Description: Show On Pdf
+#DesignerProperty: Key: OnXls, DisplayName: On Xls, FieldType: Boolean, DefaultValue: True, Description: Show On Xls
+#DesignerProperty: Key: Src, DisplayName: Src, FieldType: String, DefaultValue: , Description: Img / Avatar Src
 #DesignerProperty: Key: LazySrc, DisplayName: LazySrc, FieldType: String, DefaultValue: , Description: Img Lazy Src
-#DesignerProperty: Key: Height, DisplayName: Height, FieldType: String, DefaultValue: , Description: Img Height
-#DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: , Description: Img Width
+#DesignerProperty: Key: Height, DisplayName: Height, FieldType: String, DefaultValue: , Description: Height
+#DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: , Description: Width
 #DesignerProperty: Key: Alt, DisplayName: Alt, FieldType: String, DefaultValue: , Description: Img Alt
 #DesignerProperty: Key: TrueValue, DisplayName: True Value C/S, FieldType: String, DefaultValue: , Description: Checkbox & Switch True Value
 #DesignerProperty: Key: FalseValue, DisplayName: False Value C/S, FieldType: String, DefaultValue: , Description: Checkbox & Switch False Value
-#DesignerProperty: Key: DataSource, DisplayName: Foreign Table, FieldType: String, DefaultValue: , Description: Foreign Table
+#DesignerProperty: Key: DataSource, DisplayName: Foreign Table, FieldType: String, DefaultValue: , Description: Foreign Table to relate field to
 #DesignerProperty: Key: DataKey, DisplayName: Foreign Key Field, FieldType: String, DefaultValue: , Description: Foreign Key Field
 #DesignerProperty: Key: DataValue, DisplayName: Foreign Value Field, FieldType: String, DefaultValue: , Description: Foreign Value Field
-#DesignerProperty: Key: ItemValue, DisplayName: Item Value, FieldType: String, DefaultValue: id, Description: Item Value
-#DesignerProperty: Key: ItemText, DisplayName: Item Text, FieldType: String, DefaultValue: text, Description: Item Text
-#DesignerProperty: Key: Multiple, DisplayName: Multiple, FieldType: Boolean, DefaultValue: False, Description: Multiple
-#DesignerProperty: Key: UseItems, DisplayName: Use These Items, FieldType: Boolean, DefaultValue: False, Description: Use These Items
-#DesignerProperty: Key: ItemKeys, DisplayName: Item Values (;), FieldType: String, DefaultValue: , Description: Item Values
-#DesignerProperty: Key: ItemValues, DisplayName: Item Texts (;), FieldType: String, DefaultValue: , Description: Item Texts
-#DesignerProperty: Key: Chips, DisplayName: Chips (Drop Downs), FieldType: Boolean, DefaultValue: False, Description: Chips
+#DesignerProperty: Key: ItemValue, DisplayName: Item Value, FieldType: String, DefaultValue: id, Description: Item Value for Drop Downs
+#DesignerProperty: Key: ItemText, DisplayName: Item Text, FieldType: String, DefaultValue: text, Description: Item Text for Drop Downs
+#DesignerProperty: Key: Multiple, DisplayName: Multiple, FieldType: Boolean, DefaultValue: False, Description: Multiple selection
 
-#DesignerProperty: Key: ButtonType, DisplayName: Button Type, FieldType: String, DefaultValue:  none, Description: Item Type, List: button|fab|icon-right|icon-left|none
+#DesignerProperty: Key: UseItems, DisplayName: Use These Items, FieldType: Boolean, DefaultValue: False, Description: Use These Items
+#DesignerProperty: Key: ItemKeys, DisplayName: Item Values (;), FieldType: String, DefaultValue: , Description: Item Values to use
+#DesignerProperty: Key: ItemValues, DisplayName: Item Texts (;), FieldType: String, DefaultValue: , Description: Item Texts to use
+#DesignerProperty: Key: Chips, DisplayName: Chips (Drop Downs), FieldType: Boolean, DefaultValue: False, Description: Show items as Chips
+
+#DesignerProperty: Key: ButtonType, DisplayName: Button Type, FieldType: String, DefaultValue:  none, Description: Button Type, List: button|fab|icon-right|icon-left|none
 #DesignerProperty: Key: ButtonPosition, DisplayName: Button Position, FieldType: String, DefaultValue: normal, Description: Button Position, List: normal|top-left|top-right|bottom-left|bottom-right
+#DesignerProperty: Key: ButtonRaised, DisplayName: Button Raised, FieldType: Boolean, DefaultValue:  False, Description: The button is raised
+#DesignerProperty: Key: ButtonOutlined, DisplayName: Button Outlined, FieldType: Boolean, DefaultValue:  False, Description: The button is outlined
 #DesignerProperty: Key: Inset, DisplayName: Switch Inset, FieldType: Boolean, DefaultValue: False, Description: Switch Inset
 #DesignerProperty: Key: ReturnObject, DisplayName: Select ReturnObject, FieldType: Boolean, DefaultValue: False, Description: Select Return Object
 #DesignerProperty: Key: RowDisplay, DisplayName: Radio Row Display, FieldType: Boolean, DefaultValue: False, Description: Radio Row Display
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag. 
-#DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use = 
-#DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
+#DesignerProperty: Key: Styles, DisplayName: Styles (JSON), FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use = 
+#DesignerProperty: Key: Attributes, DisplayName: Attributes (JSON), FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
 
 
 Sub Class_Globals 
@@ -174,6 +180,14 @@ Sub Class_Globals
 	Private sBackgroundColor As String
 	Private sBackgroundColorIntensity As String
 	Private sColumnPosition As String
+	Private bPersistentHint As Boolean
+	Private bButtonRaised As Boolean
+	Private bButtonOutlined As Boolean
+	Private bTotals As Boolean
+	Private sValueMethod As String
+	Private sClassMethod As String
+	Private sStyleMethod As String
+	Private sColorMethod As String
 End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -193,6 +207,18 @@ End Sub
 Sub DesignerCreateView (Target As BANanoElement, Props As Map) 
 	mTarget = Target 
 	If Props <> Null Then 
+		sValueMethod = Props.GetDefault("ValueMethod", "")
+		sValueMethod = BANanoShared.parseNull(sValueMethod)
+		'
+		sClassMethod = Props.GetDefault("ClassMethod", "")
+		sClassMethod = BANanoShared.parseNull(sClassMethod)
+		
+		sStyleMethod = Props.GetDefault("StyleMethod", "")
+		sStyleMethod = BANanoShared.parseNull(sStyleMethod)
+		
+		sColorMethod = Props.GetDefault("ColorMethod", "")
+		sColorMethod = BANanoShared.parseNull(sColorMethod)
+		
 		sBackgroundColor = Props.Get("BackgroundColor")
 		sBackgroundColorIntensity = Props.Get("BackgroundColorIntensity")
 		sButtonPosition = Props.GetDefault("ButtonPosition","")
@@ -283,6 +309,14 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sShrink = Props.GetDefault("Shrink", False)
 		sShrink = BANanoShared.parsebool(sShrink)
 		sColumnPosition = Props.GetDefault("ColumnPosition", "0")
+		bPersistentHint = Props.GetDefault("PersistentHint", False)
+		bPersistentHint = BANanoShared.parseBool(bPersistentHint)
+		bButtonRaised = Props.GetDefault("ButtonRaised", False)
+		bButtonRaised = BANanoShared.parseBool(bButtonRaised)
+		bButtonOutlined = Props.getdefault("ButtonOutlined", False)
+		bButtonOutlined = BANanoShared.parsebool(bButtonOutlined)
+		bTotals = Props.getdefault("Totals", False)
+		bTotals = BANanoShared.parsebool(bTotals)
 	End If 
 	' 
 	'build and get the element 
@@ -294,6 +328,14 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	' 
 	VElement.Initialize(mCallBack, mName & "fld", mName & "fld") 
 	VElement.TagName = "div"
+	VElement.AddAttr("data-valuemethod", sValueMethod)
+	VElement.AddAttr("data-classmethod", sClassMethod)
+	VElement.AddAttr("data-stylemethod", sStyleMethod)
+	VElement.AddAttr("data-colormethod", sColorMethod)
+	VElement.AddAttr("data-totals", bTotals)
+	VElement.addattr("data-buttonoutlined", bButtonOutlined)
+	VElement.AddAttr("data-raised", bButtonRaised)
+	VElement.AddAttr("data-persistenthint", bPersistentHint)
 	VElement.AddAttr("data-columnposition", sColumnPosition)
 	VElement.AddAttr("data-backgroundcolor", sBackgroundColor)
 	VElement.AddAttr("data-backgroundcolorintensity", sBackgroundColorIntensity)

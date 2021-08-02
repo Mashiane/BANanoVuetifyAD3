@@ -11,6 +11,7 @@ Version=8.9
 #DesignerProperty: Key: AutoID, DisplayName: Auto ID/Name, FieldType: Boolean, DefaultValue: False, Description: Overrides the ID/Name with a random string.
 #DesignerProperty: Key: Settings, DisplayName: Settings, FieldType: Boolean, DefaultValue: False, Description: Settings.
 #DesignerProperty: Key: IconName, DisplayName: Icon Name, FieldType: String, DefaultValue: , Description: Icon Name
+#DesignerProperty: Key: Raised, DisplayName: Raised/Text, FieldType: Boolean, DefaultValue: True, Description: Transparent Background Off
 #DesignerProperty: Key: IconDark, DisplayName: Icon Dark, FieldType: Boolean, DefaultValue: False, Description: Icon Dark
 #DesignerProperty: Key: Size, DisplayName: Size, FieldType: String, DefaultValue: large, Description: Size, List: x-small|small|normal|large|x-large
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: true, Description: Dark
@@ -73,6 +74,7 @@ Sub Class_Globals
 	Private bSettings As Boolean
 	Private bFlat As Boolean
 	Private VC As VueComponent
+	Private bRaised As Boolean
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -121,6 +123,8 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bFixed = Props.GetDefault("Fixed", False)
 		bSettings = Props.GetDefault("Settings", False)
 		bFlat = Props.GetDefault("Flat", False)
+		bRaised = Props.GetDefault("Raised", True)
+		bRaised = BANanoShared.parsebool(bRaised)
 	End If
 	'
 	bFlat = BANanoShared.parseBool(bFlat)
@@ -197,6 +201,7 @@ bLoading = BANanoShared.parseBool(bLoading)
 	VElement.Target = sTarget
 	VElement.To = sTo
 	VElement.Absolute = bAbsolute
+	VElement.Raised = bRaised
 	Select Case sPosition
 	Case "normal"
 	Case "top-left"
