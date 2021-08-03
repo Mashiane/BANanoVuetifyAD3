@@ -60,6 +60,7 @@ Version=8.5
 #DesignerProperty: Key: MultiSort, DisplayName: Multi Sort, FieldType: Boolean, DefaultValue:  True, Description: Can multi sort
 #DesignerProperty: Key: MustSort, DisplayName: Must Sort, FieldType: Boolean, DefaultValue:  True, Description: Records must be sortable
 #DesignerProperty: Key: Loading, DisplayName: Loading, FieldType: Boolean, DefaultValue:  False, Description: Show progress loading
+#DesignerProperty: Key: IsTree, DisplayName: Is Tree, FieldType: Boolean, DefaultValue:  False, Description: Is Tree Data
 #DesignerProperty: Key: ExternalPagination, DisplayName: ExternalPagination, FieldType: Boolean, DefaultValue:  True, Description: Use External Pagination
 #DesignerProperty: Key: MaxPages, DisplayName: Total Visible, FieldType: String, DefaultValue:  5, Description: Total Visible Pages
 #DesignerProperty: Key: PageLength, DisplayName: Pager Length, FieldType: String, DefaultValue:  5, Description: Page Length
@@ -188,6 +189,7 @@ Sub Class_Globals
 	Private bLoading As Boolean
 	Private sPageLength As String    'ignore
 	Private bManual As Boolean
+	Private bIsTree As Boolean
 	'
 	Public Items As List
 	Private hdr As List
@@ -426,6 +428,8 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bLoading = Props.GetDefault("Loading",False)
 		bDark = Props.Get("Dark")
 		bManual = Props.GetDefault("Manual", False)
+		bIsTree = Props.GetDefault("IsTree", False)
+		bIsTree = BANanoShared.parseBool(bIsTree)
 		'
 		sCancelColor = Props.GetDefault("CancelColor", "brown")
 		sCloneColor = Props.GetDefault("CloneColor", "amber")
@@ -542,6 +546,10 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	bExternalPagination = BANanoShared.parseBool(bExternalPagination)
 	bHideDefaultFooter = BANanoShared.parseBool(bHideDefaultFooter)
 
+	Dim normalTag As String = "v-data-table"
+	If bIsTree Then
+		normalTag = "v-tree-data-table"
+	End If
 	'		
 	Dim sb As StringBuilder
 	sb.Initialize 
@@ -554,7 +562,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	sb.Append($"<v-divider v-show="${filtershow}"></v-divider>"$)
 	sb.Append($"<v-card-text id="${mName}cardtext" v-show="${filtershow}"><p>Choose Filter Columns</p><div id="${mName}filter"></div></v-card-text>"$)
 	sb.Append($"<v-divider v-show="${filtershow}"></v-divider>"$)
-	sb.Append($"<v-data-table ref="${mName}" id="${mName}"></v-data-table>"$)
+	sb.Append($"<${normalTag} ref="${mName}" id="${mName}"></${normalTag}>"$)
 	sb.Append($"<v-divider v-show="${showpagination}"></v-divider>"$)
 	sb.Append($"<div class="text-center pa-2" v-show="${showpagination}"><v-pagination id="${mName}pagination" circle></v-pagination></div>"$)
 	sb.Append($"</v-card>"$)
@@ -562,7 +570,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	If bShowInsideCard Then
 		mElement = mTarget.Append(sb.tostring).Get("#" & mName)
 	Else
-		mElement = mTarget.Append($"<v-data-table ref="${mName}" id="${mName}"></v-data-table>"$).Get("#" & mName)
+		mElement = mTarget.Append($"<${normalTag} ref="${mName}" id="${mName}"></${normalTag}>"$).Get("#" & mName)
 	End If	
 	
 	VElement.Initialize(mCallBack, mName, mName)
@@ -2307,6 +2315,28 @@ Sub ApplyFilter1(fltrs As List)
 	ApplyFilter
 End Sub
 
+Sub AddTreeItem(parentID As String, key As String, text As String, depth As Int, leaf As Boolean)
+	parentID = parentID.tolowercase
+	key = key.tolowercase
+	If key = "" Then Return
+	Dim mitem As Map = CreateMap()
+	mitem.Put("id", key)
+	mitem.Put("name", text)
+	mitem.Put("parentid", parentID)
+	mitem.Put("depth", depth)
+	If leaf = True Then
+		mitem.Put("leaf", leaf)
+	End If
+	Items.Add(mitem)
+End Sub
+
+Sub RefreshTree(C As VueComponent)
+	'unflatten the data
+	Dim unflat As List = BANanoShared.Unflatten(Items, "children")
+	Log(unflat)
+	C.SetData(itemsname, unflat)
+End Sub
+
 
 'clear the rows
 Sub Clear
@@ -2977,6 +3007,10 @@ Sub ResetColumns
 	'VC.SetData(keyID, DateTime.Now)
 End Sub
 
+Sub ClearHeaders
+	ResetColumns
+End Sub
+
 Sub UpdateHeaders
 	hdr.Initialize
 	filterList.Initialize 
@@ -2993,6 +3027,9 @@ Sub UpdateHeaders
 	VC.SetData(filters, filterList)
 End Sub
 
+Sub RefreshHeaders
+	UpdateHeaders
+End Sub
 
 'set column filterable
 Sub SetColumnFilterable(colName As String, colFilter As Boolean)
@@ -4786,6 +4823,26 @@ Sub BindState(VS As VueComponent)
 	For Each k As String In mmethods.Keys
 		Dim cb As BANanoObject = mmethods.Get(k)
 		VC.SetCallBack(k, cb)
+	Next
+End Sub
+
+Sub BindStateOnApp(c As VuetifyApp)
+	Refresh
+	Dim mbindings As Map = VElement.bindings
+	Dim mmethods As Map = VElement.methods
+	'apply the binding for the control
+	For Each k As String In mbindings.Keys
+		Dim v As Object = mbindings.Get(k)
+		Select Case k
+		Case "key"
+		Case Else
+			C.SetData(k, v)
+		End Select
+	Next
+	'apply the events
+	For Each k As String In mmethods.Keys
+		Dim cb As BANanoObject = mmethods.Get(k)
+		C.SetCallBack(k, cb)
 	Next
 End Sub
 

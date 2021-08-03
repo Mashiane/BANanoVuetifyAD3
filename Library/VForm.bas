@@ -455,10 +455,6 @@ End Sub
 
 
 private Sub BEForGrid(bc As BANanoElement)
-	Dim bActive As String = bc.GetData("active")
-	bActive = BANanoShared.parseBool(bActive)
-	If bActive = False Then Return
-	'
 	Dim iRowPos As String = bc.GetData("rowpos")
 	If BANano.IsNull(iRowPos) Then iRowPos = ""
 
@@ -1919,7 +1915,7 @@ Sub BindState(C As VueComponent)
 	Next
 End Sub
 
-Sub BindStateOnApp(C As VueComponent)
+Sub BindStateOnApp(c As VuetifyApp)
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control

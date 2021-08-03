@@ -590,6 +590,54 @@ Sub BindState(C As VueComponent)
 	Next
 End Sub
 
+Sub BindStateOnApp(C As VuetifyApp)
+	'if we have pre-fefined buttons, we add thense
+	'add items to the menu
+	Dim lstsItemKeys As List = BANanoShared.StrParseComma(";", sItemKeys)
+	Dim lstsItemIcons As List = BANanoShared.StrParseComma(";", sItemIcons)
+	Dim lstsItemColors As List = BANanoShared.StrParseComma(";", sItemColors)
+	Dim lstsItemTexts As List = BANanoShared.StrParseComma(";", sItemTexts)
+	Dim lstsItemTo As List = BANanoShared.StrParseComma(";", sItemTo)
+	'
+	lstsItemKeys = BANanoShared.ListTrimItems(lstsItemKeys)
+	lstsItemIcons = BANanoShared.ListTrimItems(lstsItemIcons)
+	lstsItemColors = BANanoShared.ListTrimItems(lstsItemColors)
+	lstsItemTexts = BANanoShared.ListTrimItems(lstsItemTexts)
+	lstsItemTo = BANanoShared.ListTrimItems(lstsItemTo)
+		
+	Dim tItems As Int = lstsItemKeys.Size - 1
+	Dim cItems As Int
+	If tItems >= 0 Then
+		MenuItems.ClearOnAPp(C)
+		For cItems = 0 To tItems
+			Dim iKey As String = BANanoShared.GetListItem(lstsItemKeys, cItems)
+			Dim iIcon As String = BANanoShared.getlistitem(lstsItemIcons, cItems)
+			Dim icolor As String = BANanoShared.GetListItem(lstsItemColors, cItems)
+			Dim itxt As String = BANanoShared.GetListItem(lstsItemTexts, cItems)
+			Dim ito As String = BANanoShared.GetListItem(lstsItemTo, cItems)
+			'
+			MenuItems.AddItem("", iKey, iIcon, icolor, itxt, ito)
+		Next
+	End If
+
+	Dim mbindings As Map = VElement.bindings
+	Dim mmethods As Map = VElement.methods
+	'apply the binding for the control
+	For Each k As String In mbindings.Keys
+		Dim v As Object = mbindings.Get(k)
+		Select Case k
+		Case "key"
+		Case Else
+			C.SetData(k, v)
+		End Select
+	Next
+	'apply the events
+	For Each k As String In mmethods.Keys
+		Dim cb As BANanoObject = mmethods.Get(k)
+		C.SetCallBack(k, cb)
+	Next
+End Sub
+
 Sub HiddenXSOnly
 	AddClass("hidden-xs-only")
 End Sub

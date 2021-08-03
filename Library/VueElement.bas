@@ -3678,6 +3678,24 @@ Sub SetOnEvent(eventHandler As Object, event As String, args As String)
 	methods.Put(methodName, cb)
 End Sub
 
+Sub SetOnEventCallBack(eventHandler As Object, event As String, args As List)
+	event = event.ToLowerCase
+	'
+	Dim attrName As String = event
+	attrName = attrName.tolowercase
+	attrName = attrName.Replace(":","")
+	attrName = attrName.Replace(".","")
+	attrName = attrName.Replace("-","")
+	'
+	Dim methodName As String = $"${mName}_${attrName}"$
+	'
+	If SubExists(eventHandler, methodName) = False Then Return
+	AddAttr($"v-on:${event}"$, methodName)
+	Dim cb As BANanoObject = BANano.CallBack(eventHandler, methodName, Array(args))
+	methods.Put(methodName, cb)
+End Sub
+
+
 Sub SetOnEventOwn(eventHandler As Object, methodName As String, event As String, args As String)
 	event = event.ToLowerCase
 	methodName = methodName.tolowercase
@@ -8121,17 +8139,17 @@ Sub AddChipGroupWithIcon(elID As String, DataSource As String, Key As String, Va
 	Dim chipicon As String = $"${elID}icon"$
 	
 	'get the text field, there is only 1 element on the layout
-	Dim vchipgroup As VueElement = AddVueElement2(parentID, elID, "v-chip-group", Null)
+	Dim vchipgroupx As VueElement = AddVueElement2(parentID, elID, "v-chip-group", Null)
 	
 	Dim sTemplate As String = $"<v-chip id="${chipid}"><v-icon id="${chipicon}" left>{{ child.${Icon} }}</v-icon>{{ child.${Value} }}</v-chip>"$
-	vchipgroup.Append(sTemplate)
+	vchipgroupx.Append(sTemplate)
 	'
 	Dim achip As VueElement = GetVueElement(chipid)
 	achip.VFor = $"child in ${DataSource}"$
 	achip.BindKey($"child.${Key}"$)
 	achip.AddAttr(":value", $"child.${Key}"$)
-	vchipgroup.BindVueElement(achip)
-	Return vchipgroup
+	vchipgroupx.BindVueElement(achip)
+	Return vchipgroupx
 End Sub
 
 Sub AddChipGroup(elID As String, vModel As String,  activeClass As String, bMultiple As Boolean, bShowArrows As Boolean, bFilter As Boolean, DataSource As String, Key As String, Value As String, chipgroupprops As Map, chipprops As Map) As VueElement
@@ -8142,20 +8160,20 @@ Sub AddChipGroup(elID As String, vModel As String,  activeClass As String, bMult
 	Dim chipid As String = $"${elID}chip"$
 	
 	'get the text field, there is only 1 element on the layout
-	Dim vchipgroup As VueElement = AddVueElement2(parentID, elID, "v-chip-group", Null)
-	vchipgroup.Bind("show-arrows", bShowArrows)
-	vchipgroup.VModel = vModel
-	vchipgroup.Multiple = bMultiple
-	vchipgroup.AddAttr("active-class", activeClass)
-	vchipgroup.AssignProps(chipgroupprops)
-	vchipgroup.BindAllEvents
+	Dim vchipgroupx As VueElement = AddVueElement2(parentID, elID, "v-chip-group", Null)
+	vchipgroupx.Bind("show-arrows", bShowArrows)
+	vchipgroupx.VModel = vModel
+	vchipgroupx.Multiple = bMultiple
+	vchipgroupx.AddAttr("active-class", activeClass)
+	vchipgroupx.AssignProps(chipgroupprops)
+	vchipgroupx.BindAllEvents
 	
 	If bMultiple Then
-		vchipgroup.SetData(vModel, NewList)
+		vchipgroupx.SetData(vModel, NewList)
 	Else
-		vchipgroup.SetData(vModel, "")
+		vchipgroupx.SetData(vModel, "")
 	End If
-	vchipgroup.SetData(DataSource, NewList)
+	vchipgroupx.SetData(DataSource, NewList)
 	'
 	'get the text field, there is only 1 element on the layout
 	Dim vchipx As VueElement = AddVueElement2(elID, chipid, "v-chip", Null)
@@ -8167,8 +8185,8 @@ Sub AddChipGroup(elID As String, vModel As String,  activeClass As String, bMult
 	vchipx.Outlined = True
 	vchipx.AssignProps(chipprops)
 	
-	vchipgroup.BindVueElement(vchipx)
-	Return vchipgroup
+	vchipgroupx.BindVueElement(vchipx)
+	Return vchipgroupx
 End Sub
 
 Sub AddComboBox1(fldName As String, vmodel As String, Title As String, DataSource As String, Key As String, Value As String, bMultiple As Boolean, ReturnObject As Boolean) As VueElement
@@ -12072,3 +12090,21 @@ Sub BindState(C As VueComponent)
 	Next
 End Sub
 
+Sub BindStateOnApp(c As VuetifyApp)
+	Dim mbindings As Map = bindings
+	Dim mmethods As Map = methods
+	'apply the binding for the control
+	For Each k As String In mbindings.Keys
+		Dim v As Object = mbindings.Get(k)
+		Select Case k
+		Case "key"
+		Case Else
+			C.SetData(k, v)
+		End Select
+	Next
+	'apply the events
+	For Each k As String In mmethods.Keys
+		Dim cb As BANanoObject = mmethods.Get(k)
+		C.SetCallBack(k, cb)
+	Next
+End Sub

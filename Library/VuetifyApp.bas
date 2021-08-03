@@ -3476,21 +3476,21 @@ Sub AddChipGroup(Module As Object, parentID As String, elID As String, vModel As
 	Dim chipid As String = $"${elID}chip"$
 	
 	'get the text field, there is only 1 element on the layout
-	Dim vchipgroup As VueElement
-	vchipgroup.Initialize(Module, elID, elID) 
-	vchipgroup.Bind("show-arrows", bShowArrows)
-	vchipgroup.VModel = vModel
-	vchipgroup.Multiple = bMultiple
-	vchipgroup.AddAttr("active-class", activeClass)
-	vchipgroup.AssignProps(chipgroupprops)
-	vchipgroup.BindAllEvents
+	Dim vchipgroupx As VueElement
+	vchipgroupx.Initialize(Module, elID, elID) 
+	vchipgroupx.Bind("show-arrows", bShowArrows)
+	vchipgroupx.VModel = vModel
+	vchipgroupx.Multiple = bMultiple
+	vchipgroupx.AddAttr("active-class", activeClass)
+	vchipgroupx.AssignProps(chipgroupprops)
+	vchipgroupx.BindAllEvents
 	
 	If bMultiple Then
-		vchipgroup.SetData(vModel, NewList)
+		vchipgroupx.SetData(vModel, NewList)
 	Else
-		vchipgroup.SetData(vModel, "")
+		vchipgroupx.SetData(vModel, "")
 	End If
-	vchipgroup.SetData(DataSource, NewList)
+	vchipgroupx.SetData(DataSource, NewList)
 	'
 	'get the text field, there is only 1 element on the layout
 	Dim vchipx As VueElement
@@ -3503,8 +3503,8 @@ Sub AddChipGroup(Module As Object, parentID As String, elID As String, vModel As
 	vchipx.Outlined = True
 	vchipx.AssignProps(chipprops)
 	
-	vchipgroup.BindVueElement(vchipx)
-	Return vchipgroup
+	vchipgroupx.BindVueElement(vchipx)
+	Return vchipgroupx
 End Sub
 
 Sub AddComboBox1(Module As Object, parentID As String, fldName As String, vmodel As String, Title As String, DataSource As String, Key As String, Value As String, bMultiple As Boolean, ReturnObject As Boolean) As VueElement

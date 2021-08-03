@@ -113,7 +113,6 @@ Sub Class_Globals
 	Private mTarget As BANanoElement 'ignore 
 	Private mElement As BANanoElement 'ignore 
 	Public VElement As VueElement 
-	Private bActive As Boolean
 	Private bVisible As Boolean
 	Private sAlt As String
 	Private bAutoFocus As Boolean
@@ -230,10 +229,8 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sOwnSize = Props.GetDefault("OwnSize", "")
 		sMaxValue = Props.GetDefault("MaxValue", 0)
 		sMinValue = Props.GetDefault("MinValue", 0)
-		bActive = Props.GetDefault("Active", False)
 		bVisible = Props.getdefault("Visible", False)
 		bVisible = BANanoShared.parseBool(bVisible)
-		bActive = BANanoShared.parseBool(bActive)
 		sAlt = Props.GetDefault("Alt", "")
 		bAutoFocus = Props.GetDefault("AutoFocus", False)
 		bAutoFocus = BANanoShared.parseBool(bAutoFocus)
@@ -356,7 +353,6 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.AddAttr("data-chips", bChips)
 	VElement.AddAttr("data-size", sSize)	
 	VElement.AddAttr("data-name", mName) 
-	VElement.AddAttr("data-active", bActive)
 	VElement.AddAttr("data-alt", sAlt)
 	VElement.AddAttr("data-autofocus", bAutoFocus)
 	VElement.AddAttr("data-autoincrement", bAutoIncrement)

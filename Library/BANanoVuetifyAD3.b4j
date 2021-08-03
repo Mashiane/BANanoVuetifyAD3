@@ -2,18 +2,22 @@
 Build1=Default,b4j.example
 File1=1.png
 File10=beautify-html.min.js
-File100=vue-count-to.min.js
-File101=vue-form-wizard.js
-File102=vue-form-wizard.min.css
-File103=vue-prism-component.min.js
-File104=vue-router.min.js
-File105=vue-session.js
-File106=vuetify.min.css
-File107=vuetify.min.js
-File108=vue-tippy.min.js
-File109=vuewebcam.js
+File100=vue2-editor.umd.min.js
+File101=vue2-leaflet.min.js
+File102=vue2-leaflet-movingmarker.umd.min.js
+File103=vue-clipboard.min.js
+File104=vue-count-to.min.js
+File105=vue-form-wizard.js
+File106=vue-form-wizard.min.css
+File107=vue-prism-component.min.js
+File108=vue-router.min.js
+File109=vue-session.js
 File11=bvad31.png
-File110=xlsx.full.min.js
+File110=vuetify.min.css
+File111=vuetify.min.js
+File112=vue-tippy.min.js
+File113=vuewebcam.js
+File114=xlsx.full.min.js
 File12=chart.js
 File13=Chart.min.css
 File14=chartjs-adapter-date-fns.bundle.min.js
@@ -87,29 +91,29 @@ File75=oxml.min.js
 File76=prism.min.css
 File77=prism.min.js
 File78=qrcode.min.js
-File79=red.png
+File79=quill.min.js
 File8=beautify.min.js
-File80=roboto.min.css
-File81=Roboto100.ttf
-File82=Roboto300.ttf
-File83=Roboto400.ttf
-File84=Roboto500.ttf
-File85=Roboto700.ttf
-File86=Roboto900.ttf
-File87=sadface.png
-File88=sponge.png
-File89=sponget.png
+File80=quill.snow.css
+File81=red.png
+File82=roboto.min.css
+File83=Roboto100.ttf
+File84=Roboto300.ttf
+File85=Roboto400.ttf
+File86=Roboto500.ttf
+File87=Roboto700.ttf
+File88=Roboto900.ttf
+File89=sadface.png
 File9=beautify-css.min.js
-File90=sweetalert2.all.min.js
-File91=tippygoogle.css
-File92=upload.php
-File93=v-blur.min.js
-File94=vjsf.css
-File95=vjsf.js
-File96=vue.min.js
-File97=vue2-leaflet.min.js
-File98=vue2-leaflet-movingmarker.umd.min.js
-File99=vue-clipboard.min.js
+File90=sponge.png
+File91=sponget.png
+File92=sweetalert2.all.min.js
+File93=tippygoogle.css
+File94=upload.php
+File95=v-blur.min.js
+File96=vjsf.css
+File97=vjsf.js
+File98=vue.min.js
+File99=vue2-editor.css
 FileGroup1=Default Group
 FileGroup10=Default Group
 FileGroup100=Default Group
@@ -124,6 +128,10 @@ FileGroup108=Default Group
 FileGroup109=Default Group
 FileGroup11=Default Group
 FileGroup110=Default Group
+FileGroup111=Default Group
+FileGroup112=Default Group
+FileGroup113=Default Group
+FileGroup114=Default Group
 FileGroup12=Default Group
 FileGroup13=Default Group
 FileGroup14=Default Group
@@ -227,55 +235,57 @@ Library3=jcore
 Library4=jfx
 Module1=BANanoALASQLE
 Module10=BANanoMySQLE
-Module100=VPrism
-Module101=VProgressCircular
-Module102=VProgressLinear
-Module103=VQCode
-Module104=VRadio
-Module105=VRadioGroup
-Module106=VRangeSlider
-Module107=VRating
-Module108=VRow
-Module109=VSelect
+Module100=VParallax
+Module101=VPrism
+Module102=VProgressCircular
+Module103=VProgressLinear
+Module104=VQCode
+Module105=VRadio
+Module106=VRadioGroup
+Module107=VRangeSlider
+Module108=VRating
+Module109=VRow
 Module11=BANanoOXML
-Module110=VSheet
-Module111=VSimpleTable
-Module112=VSkeletonLoader
-Module113=VSlider
-Module114=VSnackBar
-Module115=VSparkline
-Module116=VSpeedDial
-Module117=VStepper
-Module118=VStepperContent
-Module119=VStepperStep
+Module110=VSelect
+Module111=VSheet
+Module112=VSimpleTable
+Module113=VSkeletonLoader
+Module114=VSlider
+Module115=VSnackBar
+Module116=VSparkline
+Module117=VSpeedDial
+Module118=VStepper
+Module119=VStepperContent
 Module12=|absolute|C:\CodingWorld\B4XShared\B4J\BANanoShared
-Module120=VSwitch
-Module121=VTab
-Module122=VTabItem
-Module123=VTabs
-Module124=VTemplate
-Module125=VTextField
-Module126=VTimeLine
-Module127=VTimelineItem
-Module128=VTimePicker
-Module129=VToolBar
+Module120=VStepperStep
+Module121=VSwitch
+Module122=VTab
+Module123=VTabItem
+Module124=VTabs
+Module125=VTemplate
+Module126=VTextField
+Module127=VTimeLine
+Module128=VTimelineItem
+Module129=VTimePicker
 Module13=BANanoSQLiteE
-Module130=VToolBarTitle
-Module131=VToolTip
-Module132=VTransition
-Module133=VTreeView
-Module134=VueComponent
-Module135=VueElement
-Module136=VueFlowy
-Module137=VueGMap
-Module138=VueInfoBox
-Module139=VueSwal
+Module130=VToolBar
+Module131=VToolBarTitle
+Module132=VToolTip
+Module133=VTransition
+Module134=VTreeView
+Module135=VueComponent
+Module136=VueEditor
+Module137=VueElement
+Module138=VueFlowy
+Module139=VueGMap
 Module14=BVAD3FBAuth
-Module140=VueTable
-Module141=VuetifyApp
-Module142=VueVJSF
-Module143=VVirtualScroll
-Module144=VWebCam
+Module140=VueInfoBox
+Module141=VueSwal
+Module142=VueTable
+Module143=VuetifyApp
+Module144=VueVJSF
+Module145=VVirtualScroll
+Module146=VWebCam
 Module15=BVAD3FBCollection
 Module16=BVAD3FBDocument
 Module17=BVAD3FBRecordSet
@@ -329,49 +339,49 @@ Module6=BananoDatasourceRelationship
 Module60=VChartKick
 Module61=VCheckBox
 Module62=VChip
-Module63=VCol
-Module64=VColorPicker
-Module65=VComboBox
-Module66=VContainer
-Module67=VDatePicker
-Module68=VDialog
-Module69=VDialog0
+Module63=VChipGroup
+Module64=VCol
+Module65=VColorPicker
+Module66=VComboBox
+Module67=VContainer
+Module68=VDatePicker
+Module69=VDialog
 Module7=BANanoJSPDF
-Module70=VExpansionPanel
-Module71=VExpansionPanelContent
-Module72=VExpansionPanelHeader
-Module73=VExpansionPanels
-Module74=VFAB
-Module75=VField
-Module76=VFileInput
-Module77=VFooter
-Module78=VForm
-Module79=VHover
+Module70=VDialog0
+Module71=VExpansionPanel
+Module72=VExpansionPanelContent
+Module73=VExpansionPanelHeader
+Module74=VExpansionPanels
+Module75=VFAB
+Module76=VField
+Module77=VFileInput
+Module78=VFooter
+Module79=VForm
 Module8=BANanoJSPDFTable
-Module80=VIcon
-Module81=VImg
-Module82=VInfoBox
-Module83=VLabel
-Module84=VLazy
-Module85=VLeaflet
-Module86=VList
-Module87=VListGroup
-Module88=VListItem
-Module89=VListItemAvatar
+Module80=VHover
+Module81=VIcon
+Module82=VImg
+Module83=VInfoBox
+Module84=VLabel
+Module85=VLazy
+Module86=VLeaflet
+Module87=VList
+Module88=VListGroup
+Module89=VListItem
 Module9=BANanoMSSQLE
-Module90=VListItemGroup
-Module91=VListOptions
-Module92=VListSlot
-Module93=VMenu
-Module94=VMsgBox
-Module95=VNavigationDrawer
-Module96=VOverlay
-Module97=VPagination
-Module98=VPanelItem
-Module99=VParallax
-NumberOfFiles=110
+Module90=VListItemAvatar
+Module91=VListItemGroup
+Module92=VListOptions
+Module93=VListSlot
+Module94=VMenu
+Module95=VMsgBox
+Module96=VNavigationDrawer
+Module97=VOverlay
+Module98=VPagination
+Module99=VPanelItem
+NumberOfFiles=114
 NumberOfLibraries=4
-NumberOfModules=144
+NumberOfModules=146
 Version=9.1
 @EndOfDesignText@
 #Region Project Attributes 
@@ -386,7 +396,7 @@ Version=9.1
 
 Sub Process_Globals
 	Private BANano As BANano 'ignore
-	Public Version As String = "5.82"
+	Public Version As String = "5.84"
 	Public AppName As String = "BANanoVuetifyAD3"
 End Sub
 
@@ -509,15 +519,15 @@ Sub AppStart (Form1 As Form, Args() As String)
 	BANano.Header.AddJavascriptFile("vue2-leaflet-movingmarker.umd.min.js")
 	'
 	'FIREBASE
-	BANano.Header.AddJavaScriptfile("https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js")
-	BANano.header.AddJavaScriptfile("https://www.gstatic.com/firebasejs/8.6.8/firebase-analytics.js")
-	BANano.header.AddJavaScriptfile("https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js")
-	BANano.header.AddJavaScriptfile("https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js")
-	BANano.header.AddJavaScriptfile("https://www.gstatic.com/firebasejs/8.6.8/firebase-messaging.js")
-	BANano.header.AddJavaScriptfile("https://www.gstatic.com/firebasejs/8.6.8/firebase-storage.js")
-	BANano.header.AddJavaScriptfile("https://www.gstatic.com/firebasejs/8.6.8/firebase-performance.js")
-	BANano.header.AddJavaScriptfile("https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js")
-	BANano.header.AddJavaScriptfile("https://www.gstatic.com/firebasejs/8.6.8/firebase-functions.js")
+	BANano.Header.AddJavaScriptfile("https://www.gstatic.com/firebasejs/8.8.1/firebase-app.js")
+	BANano.header.AddJavaScriptfile("https://www.gstatic.com/firebasejs/8.8.1/firebase-analytics.js")
+	BANano.header.AddJavaScriptfile("https://www.gstatic.com/firebasejs/8.8.1/firebase-auth.js")
+	BANano.header.AddJavaScriptfile("https://www.gstatic.com/firebasejs/8.8.1/firebase-firestore.js")
+	BANano.header.AddJavaScriptfile("https://www.gstatic.com/firebasejs/8.8.1/firebase-messaging.js")
+	BANano.header.AddJavaScriptfile("https://www.gstatic.com/firebasejs/8.8.1/firebase-storage.js")
+	BANano.header.AddJavaScriptfile("https://www.gstatic.com/firebasejs/8.8.1/firebase-performance.js")
+	BANano.header.AddJavaScriptfile("https://www.gstatic.com/firebasejs/8.8.1/firebase-database.js")
+	BANano.header.AddJavaScriptfile("https://www.gstatic.com/firebasejs/8.8.1/firebase-functions.js")
 	BANano.Header.AddJavascriptFile("firesql.umd.js")
 	'
 	'TIPPY
@@ -528,6 +538,11 @@ Sub AppStart (Form1 As Form, Args() As String)
 		'
 	BANano.Header.AddJavascriptFile("md5.min.js")
 	BANano.Header.AddJavascriptFile("vuewebcam.js")
+	'
+	BANano.Header.AddCSSFile("quill.snow.css")
+	BANano.Header.AddJavascriptFile("quill.min.js")
+	BANano.Header.AddCSSFile("vue2-editor.css")
+	BANano.Header.AddJavascriptFile("vue2-editor.umd.min.js")
 	
 	' start the build
 	#if release

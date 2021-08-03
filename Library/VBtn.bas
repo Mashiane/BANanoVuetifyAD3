@@ -9,6 +9,8 @@ Version=8.9
 'Custom BANano View class
 #Event: Click (e As BANanoEvent)
 #Event: ClickPrevent (e As BANanoEvent)
+#Event: ClickStop (e As BANanoEvent)
+
 
 ' Properties that will be show in the ABStract Designer.  They will be passed in the props map in DesignerCreateView (Case Sensitive!)
 #DesignerProperty: Key: AutoID, DisplayName: Auto ID/Name, FieldType: Boolean, DefaultValue: False, Description: Overrides the ID/Name with a random string.
@@ -451,6 +453,25 @@ End Sub
 
 Sub BindState(C As VueComponent)
 	VC = c
+	Dim mbindings As Map = VElement.bindings
+	Dim mmethods As Map = VElement.methods
+	'apply the binding for the control
+	For Each k As String In mbindings.Keys
+		Dim v As Object = mbindings.Get(k)
+		Select Case k
+		Case "key"
+		Case Else
+			C.SetData(k, v)
+		End Select
+	Next
+	'apply the events
+	For Each k As String In mmethods.Keys
+		Dim cb As BANanoObject = mmethods.Get(k)
+		C.SetCallBack(k, cb)
+	Next
+End Sub
+
+Sub BindStateOnApp(c As VuetifyApp)
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control

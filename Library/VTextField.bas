@@ -792,6 +792,7 @@ Sub BindState(C As VueComponent)
 	Next
 End Sub
 
+
 Sub BindStateOnApp(C As VuetifyApp)
 	AC = c
 	Dim mbindings As Map = VElement.bindings

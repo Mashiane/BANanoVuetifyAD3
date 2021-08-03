@@ -258,7 +258,7 @@ End Sub
 
 
 Sub BindState(C As VueComponent)
-	vc = c
+	VC = c
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control
@@ -277,6 +277,31 @@ Sub BindState(C As VueComponent)
 	Next
 	WatchVisibility(VC)
 End Sub
+
+Sub BindStateOnApp(c As VuetifyApp)
+	Dim mbindings As Map = VElement.bindings
+	Dim mmethods As Map = VElement.methods
+	'apply the binding for the control
+	For Each k As String In mbindings.Keys
+		Dim v As Object = mbindings.Get(k)
+		Select Case k
+		Case "key"
+		Case Else
+			C.SetData(k, v)
+		End Select
+	Next
+	'apply the events
+	For Each k As String In mmethods.Keys
+		Dim cb As BANanoObject = mmethods.Get(k)
+		C.SetCallBack(k, cb)
+	Next
+	WatchVisibilityOnApp(c)
+End Sub
+
+private Sub WatchVisibilityOnApp(C As VuetifyApp)
+	C.SetWatch(sVModel, True, True, $"${mName}_visible"$, Null)
+End Sub
+
 
 Sub HiddenXSOnly
 	AddClass("hidden-xs-only")
