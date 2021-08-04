@@ -37,6 +37,11 @@ Version=7
 #DesignerProperty: Key: Singular, DisplayName: Singular*, FieldType: String, DefaultValue: , Description: Singular
 #DesignerProperty: Key: Plural, DisplayName: Plural*, FieldType: String, DefaultValue: , Description: Plural
 #DesignerProperty: Key: DisplayField, DisplayName: DisplayField*, FieldType: String, DefaultValue: , Description: DisplayField
+#DesignerProperty: Key: JRDCInsert, DisplayName: JRDC Insert Command, FieldType: String, DefaultValue: , Description: JRDC Insert Command
+#DesignerProperty: Key: JRDCUpdate, DisplayName: JRDC Update Command, FieldType: String, DefaultValue: , Description: JRDC Update Command
+#DesignerProperty: Key: JRDCDelete, DisplayName: JRDC Delete Command, FieldType: String, DefaultValue: , Description: JRDC Delete Command
+#DesignerProperty: Key: JRDCSelect, DisplayName: JRDC Select Command, FieldType: String, DefaultValue: , Description: JRDC Select Command
+
 #DesignerProperty: Key: Fields, DisplayName: Fields (;)*, FieldType: String, DefaultValue: , Description: Fields
 #DesignerProperty: Key: Defaults , DisplayName: Defaults JSON;, FieldType: String, DefaultValue: , Description: Defaults
 #DesignerProperty: Key: Integers, DisplayName: Integers (;), FieldType: String, DefaultValue: , Description: Integers
@@ -52,6 +57,10 @@ Version=7
 
 
 Sub Class_Globals 
+	Private sJRDCInsert As String
+	Private sJRDCUpdate As String
+	Private sJRDCDelete As String
+	Private sJRDCSelect As String
 	Public Relationships As List
     Private BANano As BANano 'ignore 
 	Private mName As String 'ignore 
@@ -488,6 +497,18 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sDisplayField = sDisplayField.tolowercase
 		bShowLog = Props.GetDefault("ShowLog", False)
 		bShowLog = BANanoShared.parseBool(bShowLog)
+		'
+		sJRDCInsert = Props.GetDefault("JRDCInsert", "")
+		sJRDCInsert = BANanoShared.parseNull(sJRDCInsert)
+		'
+		sJRDCUpdate = Props.getdefault("JRDCUpdate", "")
+		sJRDCUpdate = BANanoShared.parseNull(sJRDCUpdate)
+		'
+		sJRDCDelete = Props.getdefault("JRDCDelete", "")
+		sJRDCDelete = BANanoShared.parseNull(sJRDCDelete)
+		'
+		sJRDCSelect = Props.getdefault("JRDCSelect", "")
+		sJRDCSelect = BANanoShared.parseNull(sJRDCSelect)
 	End If
 	'
 	'build and get the element
@@ -785,6 +806,35 @@ Sub CREATE_OR_UPDATE
 	End Select
 End Sub
 
+'create or update based on the mode
+Sub CREATE_OR_UPDATE_JRDC(VA As VuetifyApp)
+	If IsBound = False Then
+		BANano.Throw($"BANanoDataSource.${mName}.CREATE_OR_UPDATE_JRDC has not been bound to the component!"$)
+	End If
+	If bShowLog Then
+		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.CREATE_OR_UPDATE_JRDC"$)
+	End If
+	If sJRDCInsert = "" Then
+		BANano.Throw($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.CREATE_OR_UPDATE_JRDC.JRDC Insert Command not specified."$)
+	End If
+	If sJRDCUpdate = "" Then
+		BANano.Throw($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.CREATE_OR_UPDATE_JRDC.JRDC Update Command not specified."$)
+	End If
+	'
+	Select Case Mode
+	Case MODE_CREATE
+		'we will build the insert
+		setJRDCCommand(sJRDCInsert)
+	Case MODE_UPDATE
+		'we will build the update
+		setJRDCCommand(sJRDCUpdate)
+	End Select
+	CREATE_OR_UPDATE
+	Dim payload As Map = GetJRDCPayload
+	VA.RunMethod("JRDCOnBrowser", payload)
+End Sub
+
+
 'set a Create mode
 Sub CREATE_MODE
 	Mode = MODE_CREATE
@@ -1044,6 +1094,24 @@ Sub SELECTALL
 	End If
 	Tag = ACTION_SELECTALL
 	Execute(ACTION_SELECTALL)
+End Sub
+
+'create or update based on the mode
+Sub SELECTALL_JRDC(VA As VuetifyApp)
+	If IsBound = False Then
+		BANano.Throw($"BANanoDataSource.${mName}.SELECTALL_JRDC has not been bound to the component!"$)
+	End If
+	If bShowLog Then
+		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.SELECTALL_JRDC"$)
+	End If
+	If sJRDCSelect = "" Then
+		BANano.Throw($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.SELECTALL_JRDC.JRDC Select Command not specified."$)
+	End If
+	'we will build the select
+	setJRDCCommand(sJRDCSelect)
+	SELECTALL
+	Dim payload As Map = GetJRDCPayload
+	VA.RunMethod("JRDCOnBrowser", payload)
 End Sub
 
 'select all based on fields and order by

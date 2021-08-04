@@ -12,6 +12,7 @@ Version=7
 
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: Guide, DisplayName: Provide Guide, FieldType: Boolean, DefaultValue: False, Description: Show Guidance notes in console
+#DesignerProperty: Key: ShowLogs, DisplayName: Show Logs, FieldType: Boolean, DefaultValue: False, Description: Log each event
 #DesignerProperty: Key: AutoComplete, DisplayName: Auto Complete, FieldType: Boolean, DefaultValue: False, Description: AutoComplete
 #DesignerProperty: Key: ParentID, DisplayName: ParentID, FieldType: String, DefaultValue: , Description: ParentID
 #DesignerProperty: Key: LazyValidation, DisplayName: LazyValidation, FieldType: Boolean, DefaultValue: True, Description: LazyValidation
@@ -141,6 +142,8 @@ Sub Class_Globals
 	Private help As StringBuilder
 	Public Relationships As List
 	Public DataSources As List
+	Private computations As Map
+	Private bShowLogs As Boolean
 End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -164,6 +167,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	help.Initialize 
 	Relationships.Initialize 
 	DataSources.Initialize 
+	computations.Initialize 
 End Sub
 
 Sub DesignerCreateView (Target As BANanoElement, Props As Map) 
@@ -209,6 +213,8 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bShowGridDesign = Props.GetDefault("ShowGridDesign", False)
 		bShowGridDesign = BANanoShared.parseBool(bShowGridDesign)
 		sParentID = Props.GetDefault("ParentID", "")
+		bShowLogs = Props.GetDefault("ShowLogs", False)
+		bShowLogs = BANanoShared.parseBool(bShowLogs)
 		If BANano.IsNull(sParentID) Or BANano.IsUndefined(sParentID) Then
 			sParentID = ""
 		End If
@@ -257,6 +263,9 @@ End Sub
 
 'create the form
 Sub CreateForm
+	If bShowLogs Then
+		Log($"${mName}.CreateForm"$)
+	End If
 	IsCreated = True
 	'build the from from child fields
 	Dim be As BANanoElement
@@ -282,7 +291,7 @@ Sub CreateForm
 	DTConditionalClass.Initialize 
 	DTConditionalStyle.Initialize 
 	DTConditionalColor.Initialize
-	
+	computations.Initialize 
 	'
 	DTNormal.Initialize
 	DTTextArea.Initialize
@@ -360,6 +369,9 @@ Sub LinkDataSource(ds As BananoDataSource)
 		BANano.Throw($"${mName}.LinkDataSource - the form needs to be created first. Call .CreateForm first."$)
 		Return
 	End If
+	If bShowLogs Then
+		Log($"${mName}.LinkDataSource(${ds.ID})"$)
+	End If
 	ds.SchemaReset	
 	ds.setTableName(sTableName)
 	ds.setRecordSource(sRecordSource)
@@ -389,6 +401,9 @@ End Sub
 'End Sub
 '</code>
 Sub AddRule(fieldName As String, methodName As String)
+	If bShowLogs Then
+		Log($"${mName}.AddRule(${fieldName}, ${methodName})"$)
+	End If
 	fieldName = fieldName.ToLowerCase
 	methodName = methodName.tolowercase
 	Dim fldRules As Map = CreateMap()
@@ -410,6 +425,9 @@ Sub LinkDataTable(dt As VueTable)
 	If bManual = False Then
 		BANano.Throw($"LinkDataTable.${mName} - the data-table '${dt.ID}' to link to should should be set to 'Manual'."$)
 		Return
+	End If
+	If bShowLogs Then
+		Log($"${mName}.LinkDataTable(${dt.ID})"$)
 	End If
 	dt.PrimaryKey = sPrimaryKey
 	dt.setTitle(sPlural)
@@ -455,13 +473,28 @@ End Sub
 
 
 private Sub BEForGrid(bc As BANanoElement)
+	If bShowLogs Then
+		Log($"${mName}.BEForGrid(${bc.name})"$)
+	End If
+	'ignore if we have parent id
+	Dim ssParentID As String = bc.GetData("parentid")
+	ssParentID = BANanoShared.parseNull(ssParentID)
+	If ssParentID <> "" Then Return
+	'
 	Dim iRowPos As String = bc.GetData("rowpos")
 	If BANano.IsNull(iRowPos) Then iRowPos = ""
 
 	Dim iColPos As String = bc.GetData("colpos")
 	If BANano.IsNull(iColPos) Then iColPos = ""
 	'
-	UpdateMatrix(iRowPos, iColPos)
+	iRowPos = BANano.parseInt(iRowPos)
+	iColPos = BANano.parseInt(iColPos)
+	'
+	If iRowPos >= 1 Then
+		If iColPos >= 1 Then
+			UpdateMatrix(iRowPos, iColPos)
+		End If
+	End If	
 End Sub
 
 'update the grid matrix
@@ -474,6 +507,9 @@ End Sub
 
 'build the grid
 private Sub BuildGrid
+	If bShowLogs Then
+		Log($"${mName}.BuildGrid"$)
+	End If
 	'initialize the form
 	Dim thisForm As VueElement
 	thisForm.Initialize(mCallBack, mName, mName)
@@ -482,6 +518,7 @@ private Sub BuildGrid
 	matrixMap.Initialize 
 	'sort the matrix
 	matrix.Sort(True)
+	
 	For Each entryx As String In matrix
 		Dim srow As String = BANanoShared.MvField(entryx, 1, ".")
 		Dim scol As String = BANanoShared.MvField(entryx, 2, ".")
@@ -549,6 +586,9 @@ private Sub HelpCode(sComment As String)
 End Sub
 
 Sub BEToVueElement(be As BANanoElement)
+	If bShowLogs Then
+		Log($"${mName}.BEToVueElement(${be.Name})"$)
+	End If
 	Dim fBinding As Map = CreateMap()
 	Dim fData As Map = CreateMap()
 	
@@ -773,8 +813,7 @@ Sub BEToVueElement(be As BANanoElement)
 		fBinding.Put("Disabled", ssDisabled)
 		HelpCode($"This component 'Disabled' property (if available) is set to '${ssDisabled}'."$)	
 	End If
-	
-	
+		
 	Dim sFalseValue As String = be.GetData("falsevalue")
 	sFalseValue = BANanoShared.parseNull(sFalseValue)
 	If sFalseValue <> "" Then
@@ -1089,7 +1128,38 @@ Sub BEToVueElement(be As BANanoElement)
 	If bButtonOutlined Then
 		HelpCode($"This component 'Button Outlined' property (if available) is set to '${bButtonOutlined}'"$)
 	End If
-			
+	
+	Dim bButtonAbsolute As Boolean = be.GetData("absolute")
+	bButtonAbsolute = BANanoShared.parseBool(bButtonAbsolute)
+	If bButtonAbsolute Then
+		fBinding.Put("Absolute", bButtonAbsolute)
+		HelpCode($"This component 'Absolute' property (if available) is set to '${bButtonAbsolute}'"$)
+	End If
+	'
+	Dim bButtonApp As Boolean = be.GetData("app")
+	bButtonApp = BANanoShared.parsebool(bButtonApp)
+	If bButtonApp Then
+		fBinding.Put("App", True)
+		HelpCode($"This component 'App' property (if available) is set to '${bButtonApp}'"$)
+	End If
+	'
+	Dim ssParentID As String = be.GetData("parentid")
+	ssParentID = BANanoShared.parseNull(ssParentID)
+	'
+	Dim bFullWidth As Boolean = be.GetData("fullwidth")
+	bFullWidth = BANanoShared.parseBool(bFullWidth)
+	If bFullWidth Then
+		fBinding.Put("FullWidth", bFullWidth)
+		fBinding.Put("Block", bFullWidth)
+		HelpCode($"This component 'FullWidth' / 'Block' property (if available) is set to '${bFullWidth}'"$)
+	End If
+	'
+	Dim sSaveMethod As String = be.GetData("savemethod")
+	sSaveMethod = BANanoShared.parseNull(sSaveMethod)
+	If sSaveMethod <> "" Then
+		computations.Put(sSaveMethod, sSaveMethod)
+	End If
+	
 	If bFilled Then
 		fBinding.Put("Filled", True)
 		HelpCode($"The 'Filled' property (if available) is set to '${bFilled}'"$)
@@ -1118,14 +1188,33 @@ Sub BEToVueElement(be As BANanoElement)
 		fBinding.Put("Shaped", True)
 		HelpCode($"The 'Shaped' property (if available) is set to '${bShaped}'"$)
 	End If
+	
 	'
 	Dim fldRules As Map = CreateMap()
 	If rules.ContainsKey(sFieldName) Then
 		fldRules = rules.Get(sFieldName)
 	End If
 	'
+	'define key of parent
+	Dim pkey As String = $"#${mName}r${iRowPos}c${iColPos}"$
 	Dim mparent As BANanoElement
-	mparent.Initialize($"#${mName}r${iRowPos}c${iColPos}"$)
+	If BANano.Exists(pkey) Then
+		'add on row column
+		mparent.Initialize(pkey)
+	Else
+		'add exactly on parent
+		mparent.Initialize($"#${mName}"$)
+	End If
+	'we have parent id
+	If ssParentID <> "" Then
+		If BANano.Exists($"#${ssParentID}"$) Then
+			'add on row column
+			mparent.Initialize($"#${ssParentID}"$)
+		Else
+			BANano.Throw($"The specified '${ssParentID}' does not exist!"$)
+		End If
+	End If
+		
 	'process the component type
 	Select Case sComponentType
 	Case "AvatarIcon"
@@ -1863,6 +1952,9 @@ Sub GetData(C As VueComponent) As Map
 		Return m
 	End If
 	m = C.GetData(sRecordSource)
+	If bGuide Then
+		Log($"${mName}.GetData: ${BANano.ToJson(m)}"$)
+	End If
 	Return m
 End Sub
 
@@ -1874,6 +1966,9 @@ Sub GetDataOnApp(C As VuetifyApp) As Map
 		Return m
 	End If
 	m = C.GetData(sRecordSource)
+	If bGuide Then
+		Log($"${mName}.GetDataOnApp: ${BANano.ToJson(m)}"$)
+	End If
 	Return m
 End Sub
 
@@ -1882,6 +1977,9 @@ Sub SetData(C As VueComponent, rec As Map)
 	If sRecordSource = "" Then
 		BANano.Throw($"VForm.${mName} - the RecordSource has not been specified!"$)
 		Return
+	End If
+	If bGuide Then
+		Log($"${mName}.SetData: ${BANano.ToJson(rec)}"$)
 	End If
 	C.SetData(sRecordSource, rec)
 End Sub
@@ -1892,6 +1990,9 @@ Sub SetDataOnApp(C As VuetifyApp, rec As Map)
 	If sRecordSource = "" Then
 		BANano.Throw($"VForm.${mName} - the RecordSource has not been specified!"$)
 		Return
+	End If
+	If bGuide Then
+		Log($"${mName}.SetDataOnApp: ${BANano.ToJson(rec)}"$)
 	End If
 	C.SetData(sRecordSource, rec)
 End Sub
@@ -2216,5 +2317,19 @@ Sub AddDataSource(key As String, value As String, datasource As String, vmodel A
 	rel.vmodel = vmodel
 	rel.keys = keys
 	rel.values = values
-	datasources.Add(rel)
+	DataSources.Add(rel)
+End Sub
+
+'execute computations
+Sub Compute(C As VueComponent)
+	For Each k As String In computations.keys
+		If SubExists(mCallBack, k) Then
+			If bGuide Then
+				Log($"${mName}.${k} compute..."$)
+			End If
+			C.RunMethod(k, Null)
+		Else
+			BANano.Throw($"The computation sub '${mName}.${k}' does not exist.!"$)
+		End If	
+	Next
 End Sub

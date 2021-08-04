@@ -14,6 +14,7 @@ Version=9.1
 ' Properties that will be show in the ABStract Designer.  They will be passed in the props map in DesignerCreateView (Case Sensitive!)
 #DesignerProperty: Key: AutoID, DisplayName: Auto ID/Name, FieldType: Boolean, DefaultValue: False, Description: Overrides the ID/Name with a random string.
 #DesignerProperty: Key: Raised, DisplayName: Raised/Text, FieldType: Boolean, DefaultValue: True, Description: Transparent Background Off
+#DesignerProperty: Key: FullWidth, DisplayName: FullWidth, FieldType: Boolean, DefaultValue: False, Description: Full Width
 #DesignerProperty: Key: Label, DisplayName: Label, FieldType: String, DefaultValue: , Description: Label
 #DesignerProperty: Key: Size, DisplayName: Size, FieldType: String, DefaultValue: small, Description: Size, List: x-small|small|normal|large|x-large
 #DesignerProperty: Key: FAB, DisplayName: FAB, FieldType: Boolean, DefaultValue: False, Description: FAB
@@ -100,6 +101,7 @@ Sub Class_Globals
 	Private bHasButtons As Boolean
 	Private sLabel As String
 	Private VC As VueComponent
+	Private bFullWidth As Boolean
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -164,6 +166,8 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sItemType = Props.GetDefault("ItemType", "none")
 		sItemTexts = Props.GetDefault("ItemTexts", "")
 		sLabel = Props.GetDefault("Label", "")
+		bFullWidth = Props.GetDefault("FullWidth", False)
+		bFullWidth = BANanoShared.parseBool(bFullWidth)
 	End If
 	'
 	bDark = BANanoShared.parseBool(bDark)
@@ -298,6 +302,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.Tile = bTile
 	VElement.To = sTo
 	VElement.Absolute = bAbsolute
+	VElement.FullWidth = bFullWidth
 	Select Case sPosition
 	Case "normal"
 	Case "top-left"

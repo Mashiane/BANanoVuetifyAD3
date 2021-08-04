@@ -25,6 +25,7 @@ Version=7
 #Event: KeyUpEnterPrevent (e As BANanoEvent)
 #Event: Button_Click (e As BANanoEvent)
 
+#DesignerProperty: Key: ParentID, DisplayName: Parent ID, FieldType: String, DefaultValue: , Description: The parent id if not placing on RC
 #DesignerProperty: Key: FieldName, DisplayName: Field Name*, FieldType: String, DefaultValue: , Description: Field Name on the database table
 #DesignerProperty: Key: VModel, DisplayName: V-Model, FieldType: String, DefaultValue: , Description: V-Model for data binding
 #DesignerProperty: Key: ComponentType, DisplayName: Component Type*, FieldType: String, DefaultValue: TextField, Description: Component Type, List: P|H6|H1|H2|H3|H4|H5|div|span|TextField|TextArea|TimePicker|DatePicker|FileInput|FileInputImage|Money|Thousands|Password|ComboBox|AutoComplete|Select|Avatar|AvatarIcon|AvatarText|CheckBox|Switch|RadioGroup|Image|Telephone|Email|Website|Slider|Chip|Rating|ProgressCircular|ProgressLinear|Icon|Button|FAB|ColorSelect|ColorTextField
@@ -47,11 +48,12 @@ Version=7
 #DesignerProperty: Key: Filterable, DisplayName: DT Filterable, FieldType: Boolean, DefaultValue: True, Description: Is Filterable on Data Table
 #DesignerProperty: Key: Sortable, DisplayName: DT Sortable, FieldType: Boolean, DefaultValue: True, Description: Is Sortable on Data Table
 #DesignerProperty: Key: Totals, DisplayName: DT Totals, FieldType: Boolean, DefaultValue: False, Description: Column should have totals
-#DesignerProperty: Key: ValueMethod, DisplayName: Value Compute, FieldType: String, DefaultValue: , Description: Method to run before displaying the value
-#DesignerProperty: Key: ClassMethod, DisplayName: Class Compute, FieldType: String, DefaultValue: , Method to run on the class
-#DesignerProperty: Key: StyleMethod, DisplayName: Style Compute, FieldType: String, DefaultValue: , Description: Method to run on the style
-#DesignerProperty: Key: ColorMethod, DisplayName: Color Compute, FieldType: String, DefaultValue: , Description: Method to run on the color
-
+#DesignerProperty: Key: ValueMethod, DisplayName: DT Value Compute, FieldType: String, DefaultValue: , Description: Method to run before displaying the value
+#DesignerProperty: Key: ClassMethod, DisplayName: DT Class Compute, FieldType: String, DefaultValue: , Method to run on the class
+#DesignerProperty: Key: StyleMethod, DisplayName: DT Style Compute, FieldType: String, DefaultValue: , Description: Method to run on the style
+#DesignerProperty: Key: ColorMethod, DisplayName: DT Color Compute, FieldType: String, DefaultValue: , Description: Method to run on the color
+#DesignerProperty: Key: SaveMethod, DisplayName: Compute B4 Save, FieldType: String, DefaultValue: , Description: Compute before saving
+'
 #DesignerProperty: Key: IconName, DisplayName: Icon Name, FieldType: String, DefaultValue: , Description: Icon Name
 #DesignerProperty: Key: LoremIpsum, DisplayName:LoremIpsum, FieldType: Boolean, DefaultValue: False, Description: Show Lorem Ipsum
 #DesignerProperty: Key: Placeholder, DisplayName: Place Holder, FieldType: String, DefaultValue: , Description: Place holder
@@ -98,6 +100,9 @@ Version=7
 #DesignerProperty: Key: ButtonRaised, DisplayName: Button Raised, FieldType: Boolean, DefaultValue:  False, Description: The button is raised
 #DesignerProperty: Key: ButtonOutlined, DisplayName: Button Outlined, FieldType: Boolean, DefaultValue:  False, Description: The button is outlined
 #DesignerProperty: Key: Inset, DisplayName: Switch Inset, FieldType: Boolean, DefaultValue: False, Description: Switch Inset
+#DesignerProperty: Key: ButtonAbsolute, DisplayName: Absolute, FieldType: Boolean, DefaultValue:  False, Description: The is placed absolute
+#DesignerProperty: Key: ButtonApp, DisplayName: App, FieldType: Boolean, DefaultValue:  False, Description: Should align for app
+#DesignerProperty: Key: FullWidth, DisplayName: FullWidth, FieldType: Boolean, DefaultValue:  False, Description: Should fill full width
 #DesignerProperty: Key: ReturnObject, DisplayName: Select ReturnObject, FieldType: Boolean, DefaultValue: False, Description: Select Return Object
 #DesignerProperty: Key: RowDisplay, DisplayName: Radio Row Display, FieldType: Boolean, DefaultValue: False, Description: Radio Row Display
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag. 
@@ -187,6 +192,11 @@ Sub Class_Globals
 	Private sClassMethod As String
 	Private sStyleMethod As String
 	Private sColorMethod As String
+	Private bButtonAbsolute As Boolean
+	Private sParentID As String
+	Private bButtonApp As Boolean
+	Private bFullWidth As Boolean
+	Private sSaveMethod As String
 End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -314,6 +324,14 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bButtonOutlined = BANanoShared.parsebool(bButtonOutlined)
 		bTotals = Props.getdefault("Totals", False)
 		bTotals = BANanoShared.parsebool(bTotals)
+		bButtonAbsolute = Props.GetDefault("ButtonAbsolute", False)
+		bButtonAbsolute = BANanoShared.parseBool(bButtonAbsolute)
+		sParentID = Props.getdefault("ParentID", "")
+		bButtonApp = Props.getdefault("ButtonApp", False)
+		bButtonApp = BANanoShared.parsebool(bButtonApp)
+		bFullWidth = Props.GetDefault("FullWidth", False)
+		bFullWidth = BANanoShared.parseBool(bFullWidth)
+		sSaveMethod = Props.GetDefault("SaveMethod", "")
 	End If 
 	' 
 	'build and get the element 
@@ -325,6 +343,11 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	' 
 	VElement.Initialize(mCallBack, mName & "fld", mName & "fld") 
 	VElement.TagName = "div"
+	VElement.AddAttr("data-savemethod", sSaveMethod)
+	VElement.AddAttr("data-fullwidth", bFullWidth)
+	VElement.AddAttr("data-app", bButtonApp)
+	VElement.AddAttr("data-parentid", sParentID)
+	VElement.AddAttr("data-absolute", bButtonAbsolute)
 	VElement.AddAttr("data-valuemethod", sValueMethod)
 	VElement.AddAttr("data-classmethod", sClassMethod)
 	VElement.AddAttr("data-stylemethod", sStyleMethod)

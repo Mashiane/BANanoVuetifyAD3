@@ -10,7 +10,7 @@ Version=8.9
 #Event: ClickStop (e As BANanoEvent)
 
 ' Properties that will be show in the ABStract Designer.  They will be passed in the props map in DesignerCreateView (Case Sensitive!)
-#DesignerProperty: Key: Hidden, DisplayName: Classes, FieldType: Boolean, DefaultValue: False, Description
+#DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
 #DesignerProperty: Key: IconName, DisplayName: IconName, FieldType: String, DefaultValue: , Description: IconName
 #DesignerProperty: Key: AutoID, DisplayName: Auto ID/Name, FieldType: Boolean, DefaultValue: False, Description: Overrides the ID/Name with a random string.
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue:  , Description: , List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
@@ -36,9 +36,8 @@ Sub Class_Globals
 	Private mColorIntensity As String = ""
 	Private mTextColor As String = ""
 	Private mTextColorIntensity As String = ""
-	'Private mVShow As String = ""
 	Private mVIf As String = ""
-	'Private svshow As String 
+	Private svshow As String 
 	Private bHidden As Boolean
 	Private sIconName As String
 	Private VC As VueComponent
@@ -56,7 +55,7 @@ Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
 			mElement = BANano.GetElement(fKey)
 		End If
 	End If
-	'svshow = $"${mName}show"$
+	svshow = $"${mName}show"$
 End Sub
 
 ' this is the place where you create the view in html and run initialize javascript
@@ -97,8 +96,8 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.TextColor = mTextColor
 	VElement.TextColorIntensity = mTextColorIntensity
 	VElement.VIf = mVIf
-	'VElement.VShow = mVShow
-	'VElement.SetData(mVShow, Not(bHidden))
+	VElement.VShow = svshow
+	VElement.SetData(svshow, Not(bHidden))
 	VElement.BindAllEvents	
 End Sub
 
@@ -134,7 +133,7 @@ End Sub
 
 Sub UpdateVisible(C As VueComponent, b As Boolean) As VAppBarNavIcon
 	C.SetData(mVIf, b)
-	'C.SetData(mVShow, b)
+	C.SetData(svshow, b)
 	Return Me
 End Sub
 

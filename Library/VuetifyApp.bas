@@ -2055,13 +2055,22 @@ End Sub
 
 
 Sub RunMethod(methodName As String, params As Object) As BANanoObject
-	methodName = methodName.tolowercase
-	Return Vue.RunMethod(methodName, params)
+	Try
+		methodName = methodName.tolowercase
+		Return Vue.RunMethod(methodName, params)
+	Catch
+		Log(LastException)
+		Return Null
+	End Try		
 End Sub
 
 Sub CallMethod(methodName As String)
-	methodName = methodName.tolowercase
-	Vue.RunMethod(methodName, Null)
+	Try
+		methodName = methodName.tolowercase
+		Vue.RunMethod(methodName, Null)
+	Catch
+		Log(LastException)
+	End Try		
 End Sub
 
 'set direct method
@@ -5753,11 +5762,15 @@ Sub ClickFile(refID As String)
 	input.RunMethod("click", Null)
 End Sub
 
-Sub SetNextTick(Module As Object, methodName As String) 
-	methodName = methodName.ToLowerCase
-	Dim e As BANanoEvent
-	Dim cb As BANanoObject = BANano.CallBack(Module, methodName, Array(e))
-	Vue.RunMethod("$nextTick", cb)
+Sub SetNextTick(Module As Object, methodName As String)
+	Try 
+		methodName = methodName.ToLowerCase
+		Dim e As BANanoEvent
+		Dim cb As BANanoObject = BANano.CallBack(Module, methodName, Array(e))
+		Vue.RunMethod("$nextTick", cb)
+	Catch
+		Log(LastException)
+	End Try		
 End Sub
 
 'return the theme color

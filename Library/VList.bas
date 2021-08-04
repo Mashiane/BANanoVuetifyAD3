@@ -39,6 +39,7 @@ Version=8.95
 
 #DesignerProperty: Key: Tile, DisplayName: Tile, FieldType: Boolean, DefaultValue: false, Description: Tile
 '
+#DesignerProperty: Key: UsesVisible, DisplayName: UsesVisible, FieldType: Boolean, DefaultValue: False, Description: UsesVisible
 #DesignerProperty: Key: UseLeftAction, DisplayName: UseLeftAction, FieldType: Boolean, DefaultValue: True, Description: UseLeftAction
 #DesignerProperty: Key: UseLeftActionButton, DisplayName: UseLeftActionButton, FieldType: Boolean, DefaultValue: True, Description: UseLeftActionButton
 #DesignerProperty: Key: UseLeftActionCheckBox, DisplayName: UseLeftActionCheckBox, FieldType: Boolean, DefaultValue: True, Description: UseLeftActionCheckBox
@@ -136,6 +137,7 @@ Private bUseLeftAction As Boolean
 Private bUseLeftActionButton As Boolean
 Private bUseLeftActionCheckBox As Boolean
 Private bUseLeftActionSwitch As Boolean
+private bUsesVisible as boolean
 Private bUseLeftAvatar As Boolean
 Private bUseLeftAvatarIcon As Boolean
 Private bUseLeftAvatarImage As Boolean
@@ -247,6 +249,8 @@ sWidth = Props.Get("Width")
 bPlaceAtBottom = Props.GetDefault("PlaceAtBottom", False)
 		bUseIcon = Props.GetDefault("UseIcon", True)
 bUseIcon = BANanoShared.parseBool(bUseIcon)
+bUsesVisible = Props.GetDefault("UsesVisible", False)
+bUsesVisible = BANanoShared.parseBool(bUsesVisible)
 bUseLeftAction = Props.GetDefault("UseLeftAction", True)
 bUseLeftAction = BANanoShared.parseBool(bUseLeftAction)
 bUseLeftActionButton = Props.GetDefault("UseLeftActionButton", True)
@@ -1224,6 +1228,10 @@ End Sub
 
 private Sub CleanUp
 	
+If bUsesVisible = False Then
+	ListItem.RemoveAttr("v-show")		
+End If
+
 If bUseIcon = False Then
 		ListItemIcon1.Remove
 End If
@@ -2146,6 +2154,12 @@ End Sub
 Sub GetItems(C As VueComponent) As List
 	Dim res As List = C.GetData(DataSource)
 	Return res
+End Sub
+
+'set the items
+Sub SetItems(C As VueComponent, lst As List)
+	Records = lst
+	C.SetData(DataSource, lst)
 End Sub
 
 Sub Hide
