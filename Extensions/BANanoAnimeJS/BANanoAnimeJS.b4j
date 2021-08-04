@@ -3,17 +3,16 @@ Build1=Default,b4j.example
 File1=anime.min.js
 FileGroup1=Default Group
 Group=Default Group
-Library1=jcore
-Library2=jfx
-Library3=jxui
-Library4=banano
+Library1=banano
+Library2=jcore
+Library3=jfx
 Module1=BANanoAnimeJS
 Module2=BANanoAnimeJSItem
 Module3=BANanoAnimeJSTimeLine
 NumberOfFiles=1
-NumberOfLibraries=4
+NumberOfLibraries=3
 NumberOfModules=3
-Version=8.9
+Version=9.1
 @EndOfDesignText@
 '
 #IgnoreWarnings: 12, 15
@@ -27,7 +26,7 @@ Version=8.9
 Sub Process_Globals
 	Public BANano As BANano 'ignore
 	Public AppName As String = "BANanoAnimeJS"
-	Public Version As String = "1.02"
+	Public Version As String = "1.03"
 End Sub
 
 Sub AppStart (Form1 As Form, Args() As String)
