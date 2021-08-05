@@ -41,6 +41,11 @@ Version=7
 #DesignerProperty: Key: JRDCUpdate, DisplayName: JRDC Update Command, FieldType: String, DefaultValue: , Description: JRDC Update Command
 #DesignerProperty: Key: JRDCDelete, DisplayName: JRDC Delete Command, FieldType: String, DefaultValue: , Description: JRDC Delete Command
 #DesignerProperty: Key: JRDCSelect, DisplayName: JRDC Select Command, FieldType: String, DefaultValue: , Description: JRDC Select Command
+#DesignerProperty: Key: JRDCSelectWhere, DisplayName: JRDC Select Where Command, FieldType: String, DefaultValue: , Description: JRDC Select Where Command
+#DesignerProperty: Key: JRDCSelectWhereCustom, DisplayName: JRDC Select Where Custom Command, FieldType: String, DefaultValue: , Description: JRDC Select Where Custom Command
+#DesignerProperty: Key: JRDCExists, DisplayName: JRDC Exists Command, FieldType: String, DefaultValue: , Description: JRDC Exists Command
+#DesignerProperty: Key: JRDCRead, DisplayName: JRDC Read Command, FieldType: String, DefaultValue: , Description: JRDC Read Command
+
 
 #DesignerProperty: Key: Fields, DisplayName: Fields (;)*, FieldType: String, DefaultValue: , Description: Fields
 #DesignerProperty: Key: Defaults , DisplayName: Defaults JSON;, FieldType: String, DefaultValue: , Description: Defaults
@@ -57,6 +62,7 @@ Version=7
 
 
 Sub Class_Globals 
+	Private sJRDCRead As String
 	Private sJRDCInsert As String
 	Private sJRDCUpdate As String
 	Private sJRDCDelete As String
@@ -146,7 +152,11 @@ Sub Class_Globals
 	Public const MODE_UPDATE As String = "U"
 	Public const MODE_READ As String = "R"
 	Public const MODE_DELETE As String = "D"
-	
+	'
+	Private sJRDCSelectWhere As String
+	Private sJRDCExists As String
+	Private sJRDCSelectWhereCustom As String
+		
 	Private cw As Map = CreateMap()
 	Private ops As List
 	Public Mode As String 
@@ -509,6 +519,18 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		'
 		sJRDCSelect = Props.getdefault("JRDCSelect", "")
 		sJRDCSelect = BANanoShared.parseNull(sJRDCSelect)
+		'
+		sJRDCRead = Props.GetDefault("JRDCRead", "")
+		sJRDCRead = BANanoShared.parseNull(sJRDCRead)
+		'
+		sJRDCSelectWhere = Props.GetDefault("JRDCSelectWhere", "")
+		sJRDCSelectWhere = BANanoShared.parseNull(sJRDCSelectWhere)
+		'
+		sJRDCExists = Props.GetDefault("JRDCExists", "")
+		sJRDCExists = BANanoShared.parsenull(sJRDCExists)
+		'
+		sJRDCSelectWhereCustom = Props.GetDefault("JRDCSelectWhereCustom", "")
+		sJRDCSelectWhereCustom = BANanoShared.parseNull(sJRDCSelectWhereCustom)
 	End If
 	'
 	'build and get the element
@@ -834,6 +856,21 @@ Sub CREATE_OR_UPDATE_JRDC(VA As VuetifyApp)
 	VA.RunMethod("JRDCOnBrowser", payload)
 End Sub
 
+Sub DELETE_JRDC(V As VuetifyApp)
+	If IsBound = False Then
+		BANano.Throw($"BANanoDataSource.${mName}.DELETE_JRDC has not been bound to the component!"$)
+	End If
+	If bShowLog Then
+		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.DELETE_JRDC"$)
+	End If
+	If sJRDCDelete = "" Then
+		BANano.Throw($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.DELETE_JRDC.JRDC Delete Command not specified."$)
+	End If
+	setJRDCCommand(sJRDCDelete)
+	DELETE
+	Dim payload As Map = GetJRDCPayload
+	V.RunMethod("JRDCOnBrowser", payload)
+End Sub
 
 'set a Create mode
 Sub CREATE_MODE
@@ -876,6 +913,26 @@ Sub RESET
 	End If	
 End Sub
 
+'move to the first record
+Sub MOVEFIRST(recs As List)
+	If IsBound = False Then
+		BANano.Throw($"BANanoDataSource.${mName}.MOVEFIRST has not been bound to the component!"$)
+	End If
+	If bShowLog Then
+		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.MOVEFIRST"$)
+	End If
+	Dim rec As Map = CreateMap()
+	If recs.Size >= 1 Then
+		rec = recs.Get(0)
+	End If
+	Record = rec
+	If UsesApp = False Then
+		ParentComponent.SetData(sRecordSource, rec)
+	Else
+		AppComponent.SetData(sRecordSource, rec)
+	End If
+End Sub
+
 'get the form contents
 Sub FORM As Map
 	If IsBound = False Then
@@ -903,6 +960,24 @@ Sub READ
 	Record = ParentComponent.GetData(sRecordSource)
 	READ1(Record)	
 End Sub
+
+Sub READ_JRDC(V As VuetifyApp)
+	If IsBound = False Then
+		BANano.Throw($"BANanoDataSource.${mName}.READ_JRDC has not been bound to the component!"$)
+	End If
+	If bShowLog Then
+		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.READ_JRDC"$)
+	End If
+	If sJRDCRead = "" Then
+		BANano.Throw($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.READ_JRDC.JRDC Read Command not specified."$)
+	End If
+	UPDATE_MODE
+	setJRDCCommand(sJRDCRead)
+	READ
+	Dim payload As Map = GetJRDCPayload
+	V.RunMethod("JRDCOnBrowser", payload)
+End Sub
+
 
 'read a record using outside record map
 Sub READ1(rec As Map)
@@ -958,6 +1033,8 @@ Sub DELETE
 	Tag = ACTION_DELETE
 	Execute(ACTION_DELETE)
 End Sub
+
+
 
 'delete a record from outside map
 Sub DELETE1(rec As Map)
@@ -1114,6 +1191,27 @@ Sub SELECTALL_JRDC(VA As VuetifyApp)
 	VA.RunMethod("JRDCOnBrowser", payload)
 End Sub
 
+'run your own query command
+Sub CUSTOM_JRDC(VA As VuetifyApp, command As String, args As List)
+	If IsBound = False Then
+		BANano.Throw($"BANanoDataSource.${mName}.CUSTOM_JRDC has not been bound to the component!"$)
+	End If
+	If bShowLog Then
+		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.CUSTOM_JRDC"$)
+	End If
+	'we will build the select
+	setJRDCCommand(command)
+	mPayload.Initialize 
+	Dim largs As List
+	largs = BANano.IIf(args.Size=0, Null, args)
+	mPayload.Put("command", command)
+	mPayload.Put("query", command)
+	mPayload.Put("args", largs)
+	mPayload.Put("types", Null)
+	mPayload.Put("jrdccommand", command)
+	VA.RunMethod("JRDCOnBrowser", mPayload)
+End Sub
+
 'select all based on fields and order by
 Sub SELECTWHERE
 	If IsBound = False Then
@@ -1125,6 +1223,23 @@ Sub SELECTWHERE
 	Tag = ACTION_SELECTWHERE
 	Execute(ACTION_SELECTWHERE)
 End Sub
+
+Sub SELECTWHERE_JRDC(V As VuetifyApp)
+	If IsBound = False Then
+		BANano.Throw($"BANanoDataSource.${mName}.SELECTWHERE_JRDC has not been bound to the component!"$)
+	End If
+	If bShowLog Then
+		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.SELECTWHERE_JRDC"$)
+	End If
+	If sJRDCSelectWhere = "" Then
+		BANano.Throw($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.SELECTWHERE_JRDC.JRDC Select Where Command not specified."$)
+	End If
+	setJRDCCommand(sJRDCSelectWhere)
+	SELECTWHERE
+	Dim payload As Map = GetJRDCPayload
+	V.RunMethod("JRDCOnBrowser", payload)
+End Sub
+
 
 'select all based on fields and order by
 Sub SELECTWHERECUSTOM(MyAction As String)
@@ -1138,6 +1253,22 @@ Sub SELECTWHERECUSTOM(MyAction As String)
 	Execute(ACTION_SELECTWHERE)
 End Sub
 
+Sub SELECTWHERECUSTOM_JRDC(V As VuetifyApp, MyAction As String)
+	If IsBound = False Then
+		BANano.Throw($"BANanoDataSource.${mName}.SELECTWHERECUSTOM_JRDC has not been bound to the component!"$)
+	End If
+	If bShowLog Then
+		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.SELECTWHERECUSTOM_JRDC"$)
+	End If
+	If sJRDCSelectWhereCustom = "" Then
+		BANano.Throw($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.SELECTWHERECUSTOM_JRDC.JRDC Select Where Custom Command not specified."$)
+	End If
+	setJRDCCommand(sJRDCSelectWhereCustom)
+	SELECTWHERECUSTOM(MyAction)
+	Dim payload As Map = GetJRDCPayload
+	V.RunMethod("JRDCOnBrowser", payload)
+End Sub
+
 'select all based on fields and order by
 Sub EXISTS
 	If IsBound = False Then
@@ -1149,6 +1280,24 @@ Sub EXISTS
 	Tag = ACTION_EXISTS
 	Execute(ACTION_EXISTS)
 End Sub
+
+Sub EXISTS_JRDC(V As VuetifyApp)
+	If IsBound = False Then
+		BANano.Throw($"BANanoDataSource.${mName}.EXISTS_JRDC has not been bound to the component!"$)
+	End If
+	If bShowLog Then
+		Log($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.EXISTS_JRDC"$)
+	End If
+	If sJRDCExists = "" Then
+		BANano.Throw($"BANanoDataSource.${sDatabaseType}.${sDatabaseName}.${sTableName}.EXISTS_JRDC.JRDC Exists Command not specified."$)
+	End If
+	setJRDCCommand(sJRDCExists)
+	EXISTS
+	Dim payload As Map = GetJRDCPayload
+	V.RunMethod("JRDCOnBrowser", payload)
+End Sub
+
+
 
 'select all based on fields and order by for PDF
 Sub PDF

@@ -3645,6 +3645,8 @@ Sub RemoveEvent(event As String)
 	RemoveAttr($"v-on:${event}"$)
 End Sub
 
+
+
 Sub SetOnEvent(eventHandler As Object, event As String, args As String)
 	event = event.ToLowerCase
 	'
@@ -3693,6 +3695,13 @@ Sub SetOnEventCallBack(eventHandler As Object, event As String, args As List)
 	AddAttr($"v-on:${event}"$, methodName)
 	Dim cb As BANanoObject = BANano.CallBack(eventHandler, methodName, Array(args))
 	methods.Put(methodName, cb)
+End Sub
+
+Sub AddPointerOnClick
+	Dim methodName As String = $"${mName}_click"$
+	If SubExists(mCallBack, methodName) Then
+		CursorPointer			
+	End If
 End Sub
 
 

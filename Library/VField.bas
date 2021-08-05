@@ -99,6 +99,7 @@ Version=7
 #DesignerProperty: Key: ButtonPosition, DisplayName: Button Position, FieldType: String, DefaultValue: normal, Description: Button Position, List: normal|top-left|top-right|bottom-left|bottom-right
 #DesignerProperty: Key: ButtonRaised, DisplayName: Button Raised, FieldType: Boolean, DefaultValue:  False, Description: The button is raised
 #DesignerProperty: Key: ButtonOutlined, DisplayName: Button Outlined, FieldType: Boolean, DefaultValue:  False, Description: The button is outlined
+#DesignerProperty: Key: ButtonRounded, DisplayName: Button Rounded, FieldType: Boolean, DefaultValue:  False, Description: The button is rounded
 #DesignerProperty: Key: Inset, DisplayName: Switch Inset, FieldType: Boolean, DefaultValue: False, Description: Switch Inset
 #DesignerProperty: Key: ButtonAbsolute, DisplayName: Absolute, FieldType: Boolean, DefaultValue:  False, Description: The is placed absolute
 #DesignerProperty: Key: ButtonApp, DisplayName: App, FieldType: Boolean, DefaultValue:  False, Description: Should align for app
@@ -120,6 +121,7 @@ Sub Class_Globals
 	Public VElement As VueElement 
 	Private bVisible As Boolean
 	Private sAlt As String
+	Private bButtonRounded As Boolean
 	Private bAutoFocus As Boolean
 	Private bAutoIncrement As Boolean
 	Private iColPos As Int
@@ -332,6 +334,8 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bFullWidth = Props.GetDefault("FullWidth", False)
 		bFullWidth = BANanoShared.parseBool(bFullWidth)
 		sSaveMethod = Props.GetDefault("SaveMethod", "")
+		bButtonRounded = Props.GetDefault("ButtonRounded", False)
+		bButtonRounded = BANanoShared.parseBool(bButtonRounded)
 	End If 
 	' 
 	'build and get the element 
@@ -343,6 +347,7 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	' 
 	VElement.Initialize(mCallBack, mName & "fld", mName & "fld") 
 	VElement.TagName = "div"
+	VElement.AddAttr("data-rounded", bButtonRounded)
 	VElement.AddAttr("data-savemethod", sSaveMethod)
 	VElement.AddAttr("data-fullwidth", bFullWidth)
 	VElement.AddAttr("data-app", bButtonApp)

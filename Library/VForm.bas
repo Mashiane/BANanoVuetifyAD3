@@ -1159,6 +1159,9 @@ Sub BEToVueElement(be As BANanoElement)
 	If sSaveMethod <> "" Then
 		computations.Put(sSaveMethod, sSaveMethod)
 	End If
+	'
+	Dim bButtonRounded As Boolean = be.GetData("rounded")
+	bButtonRounded = BANanoShared.parseBool(bButtonRounded)
 	
 	If bFilled Then
 		fBinding.Put("Filled", True)
@@ -1188,6 +1191,7 @@ Sub BEToVueElement(be As BANanoElement)
 		fBinding.Put("Shaped", True)
 		HelpCode($"The 'Shaped' property (if available) is set to '${bShaped}'"$)
 	End If
+	'
 	
 	'
 	Dim fldRules As Map = CreateMap()
@@ -1278,6 +1282,13 @@ Sub BEToVueElement(be As BANanoElement)
 		End If
 		fBinding.Put("Position", sButtonPosition)
 		fBinding.Put("Outlined", bButtonOutlined)
+		If bButtonRounded Then
+			fBinding.Put("Rounded", bButtonRounded)
+		End If
+		If bFullWidth Then
+			fBinding.Put("FullWidth", True)
+			
+		End If
 		Dim btn As VBtnIcon
 		btn.Initialize(mCallBack, sName, sName)
 		btn.DesignerCreateView(mparent, fBinding)

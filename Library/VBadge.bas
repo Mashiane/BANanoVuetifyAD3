@@ -8,20 +8,10 @@ Version=8.9
 
 #Event: Click (e As BANanoEvent)
 
-#DesignerProperty: Key: BadgeType, DisplayName: Badge Type, FieldType: String, DefaultValue: icon, Description: BadgeType, List: icon|avatar
+#DesignerProperty: Key: BadgeType, DisplayName: Badge Type, FieldType: String, DefaultValue: icon, Description: The badge shows an icon, or counter, List: icon|avatar|button
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
-#DesignerProperty: Key: Value, DisplayName: Badge Value, FieldType: String, DefaultValue: 10, Description: Value
-#DesignerProperty: Key: Icon, DisplayName: Badge Icon, FieldType: String, DefaultValue: , Description: The badge shows this icon 
-
-#DesignerProperty: Key: IconName, DisplayName: IconName, FieldType: String, DefaultValue: , Description: IconName
-#DesignerProperty: Key: IconColor, DisplayName: IconColor, FieldType: String, DefaultValue: , Description: IconColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
-#DesignerProperty: Key: IconColorIntensity, DisplayName: IconColorIntensity, FieldType: String, DefaultValue: , Description: ColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
-#DesignerProperty: Key: IconSize, DisplayName: IconSize, FieldType: String, DefaultValue: , Description: IconSize, List: none|large|small|x-large|x-small
-
-#DesignerProperty: Key: AvatarImg, DisplayName: AvatarImg, FieldType: String, DefaultValue: , Description: AvatarImg
-#DesignerProperty: Key: AvatarIcon, DisplayName: AvatarIcon, FieldType: String, DefaultValue: , Description: AvatarIcon
-#DesignerProperty: Key: AvatarSize, DisplayName: AvatarSize, FieldType: String, DefaultValue: 48, Description: AvatarSize
-'
+#DesignerProperty: Key: Value, DisplayName: Badge Value, FieldType: String, DefaultValue: 10, Description: The badge shows this value
+#DesignerProperty: Key: Icon, DisplayName: Badge Icon, FieldType: String, DefaultValue: , Description: The badge is this icon
 #DesignerProperty: Key: Bordered, DisplayName: Bordered, FieldType: Boolean, DefaultValue: false, Description: Bordered
 #DesignerProperty: Key: Color, DisplayName: Badge Color*, FieldType: String, DefaultValue:  blue, Description: , List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: ColorIntensity, DisplayName: Badge Color Intensity*, FieldType: String, DefaultValue:  normal, Description: , List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
@@ -35,13 +25,53 @@ Version=8.9
 #DesignerProperty: Key: OffsetY, DisplayName: OffsetY, FieldType: String, DefaultValue: , Description: OffsetY
 #DesignerProperty: Key: Overlap, DisplayName: Overlap, FieldType: Boolean, DefaultValue: false, Description: Overlap
 #DesignerProperty: Key: Tile, DisplayName: Tile, FieldType: Boolean, DefaultValue: false, Description: Tile
-#DesignerProperty: Key: Transition, DisplayName: Transition, FieldType: String, DefaultValue: , Description: Transition, List: none|fab-transition|fade-transition|expand-transition|scale-transition|scroll-x-transition|scroll-x-reverse-transition|scroll-y-transition|scroll-y-reverse-transition|slide-x-transition|slide-x-reverse-transition|slide-y-transition|slide-y-reverse-transition
-#DesignerProperty: Key: VIf, DisplayName: V-If, FieldType: String, DefaultValue:  , Description: 
+#DesignerProperty: Key: Transition, DisplayName: Transition, FieldType: String, DefaultValue: , Description: Transition, List: none|fab-transition|fade-transition|expand-transition|scale-transition|scroll-x-transition|scroll-x-reverse-transition|scroll-y-transition|scroll-y-reverse-transition|slide-x-transition|slide-x-reverse-transition|slide-y-transition|slide-y-reverse-transition 
+
+#DesignerProperty: Key: IconName, DisplayName: IconName, FieldType: String, DefaultValue: , Description: Icon Name
+#DesignerProperty: Key: IconSize, DisplayName: IconSize, FieldType: String, DefaultValue: , Description: Icon Size, List: none|large|small|x-large|x-small
+
+#DesignerProperty: Key: AvatarImg, DisplayName: AvatarImg, FieldType: String, DefaultValue: , Description: AvatarImg
+#DesignerProperty: Key: AvatarSize, DisplayName: AvatarSize, FieldType: String, DefaultValue: 48, Description: AvatarSize
+'
+#DesignerProperty: Key: ButtonText, DisplayName: Button Text, FieldType: String, DefaultValue: , Description: Button Text
+#DesignerProperty: Key: ButtonRaised, DisplayName: Button Raised/Text, FieldType: Boolean, DefaultValue: True, Description: Button Transparent Background Off
+#DesignerProperty: Key: ButtonBlock, DisplayName: Button Block, FieldType: Boolean, DefaultValue: False, Description: Button Block
+#DesignerProperty: Key: ButtonSize, DisplayName: Button Size, FieldType: String, DefaultValue: normal, Description: Button Size, List: x-small|small|normal|large|x-large
+#DesignerProperty: Key: ButtonDepressed, DisplayName: Button Depressed, FieldType: Boolean, DefaultValue: False, Description: Button Depressed
+#DesignerProperty: Key: ButtonOutlined, DisplayName: Button Outlined, FieldType: Boolean, DefaultValue: False, Description: Button Outlined
+#DesignerProperty: Key: ButtonRounded, DisplayName: Button Rounded, FieldType: Boolean, DefaultValue: False, Description: Button Rounded, 
+#DesignerProperty: Key: ButtonFab, DisplayName: Button Fab, FieldType: Boolean, DefaultValue: False, Description: Button Fab
+
+#DesignerProperty: Key: HostColor, DisplayName: Host Color, FieldType: String, DefaultValue:  none, Description: The color of the badge nost, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
+#DesignerProperty: Key: HostColorIntensity, DisplayName: Host Color Intensity, FieldType: String, DefaultValue:  normal, Description: The color intensity of the badge host, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
+#DesignerProperty: Key: HostTextColor, DisplayName: Host Text Color, FieldType: String, DefaultValue:  none, Description: The text color of the badge host, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
+#DesignerProperty: Key: HostTextColorIntensity, DisplayName: Host Text Color Intensity, FieldType: String, DefaultValue:  normal, Description:The text color intensity of the badge host, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
+
+#DesignerProperty: Key: VIf, DisplayName: V-If, FieldType: String, DefaultValue:  , Description: VIf
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
 
+
+'Badges allow one to show badges on icons, buttons and avatars.
+'One needs to select the badge type e.g. icon, button or avatar and then set up the respective properties
+'The host colors are the colors of the hosting icon/avatar/button icon
+'An avatar has a click event
+
 Sub Class_Globals
+	Private sButtonText As String
+Private bButtonRaised As Boolean
+Private bButtonBlock As Boolean
+Private sButtonSize As String
+Private bButtonDepressed As Boolean
+Private bButtonOutlined As Boolean
+Private bButtonRounded As Boolean
+Private bButtonFab As Boolean
+Private sHostColor As String
+Private sHostColorIntensity As String
+Private sHostTextColor As String
+Private sHostTextColorIntensity As String
+	
 	Private BANano As BANano 'ignore
 	Private bAvatar As Boolean
 	Private bBordered As Boolean
@@ -77,16 +107,15 @@ Sub Class_Globals
 	Private sValue As String
 	Private xHidden As String 
 	Private sAvatarIcon As String    'ignore
-	Private bUseIcon As Boolean
 	Private sIconName As String
-	Private sIconColor As String
 	Private sIconSize As String
-	Private sIconColorIntensity As String
 	Private sIconSize As String
 	Private xiconcolor As String
 	Private xbadgecolor As String
 	Private sBadgeType As String
 	Private VC As VueComponent
+	Private mColor As String
+	Private mTextColor As String
 End Sub
 
 Public Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -112,9 +141,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	mTarget = Target
 	If Props <> Null Then
 		sIconName = Props.GetDefault("IconName", "")
-		sIconColor = Props.GetDefault("IconColor", "")
 		sIconSize = Props.GetDefault("IconSize", "")
-		sIconColorIntensity = Props.GetDefault("IconColorIntensity", "")
 		mClasses = Props.Get("Classes")
 		mStyles = Props.Get("Styles")
 		mAttributes = Props.Get("Attributes")
@@ -141,18 +168,28 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bHidden = BANanoShared.parseBool(bHidden)
 		sAvatarIcon = Props.GetDefault("AvatarIcon", "")
 		sIconSize = Props.GetDefault("IconSize", "")
-		sBadgeType = Props.GetDefault("BadgeType", "icon")
+		sBadgeType = Props.GetDefault("BadgeType", "counter")
+		'
+		sButtonText = Props.GetDefault("ButtonText", "Button")
+		bButtonRaised = Props.GetDefault("ButtonRaised", True)
+		bButtonRaised = BANanoShared.parseBool(bButtonRaised)
+		bButtonBlock = Props.GetDefault("ButtonBlock", False)
+		bButtonBlock = BANanoShared.parseBool(bButtonBlock)
+		sButtonSize = Props.GetDefault("ButtonSize", "normal")
+		bButtonDepressed = Props.GetDefault("ButtonDepressed", False)
+		bButtonDepressed = BANanoShared.parseBool(bButtonDepressed)
+		bButtonOutlined = Props.GetDefault("ButtonOutlined", False)
+		bButtonOutlined = BANanoShared.parseBool(bButtonOutlined)
+		bButtonRounded = Props.GetDefault("ButtonRounded", False)
+		bButtonRounded = BANanoShared.parseBool(bButtonRounded)
+		bButtonFab = Props.GetDefault("ButtonFab", False)
+		bButtonFab = BANanoShared.parseBool(bButtonFab)
+		sHostColor = Props.GetDefault("HostColor", "blue")
+		sHostColorIntensity = Props.GetDefault("HostColorIntensity", "normal")
+		sHostTextColor = Props.GetDefault("HostTextColor", "blue")
+		sHostTextColorIntensity = Props.GetDefault("HostTextColorIntensity", "normal")
 	End If
 	'
-	Select Case sBadgeType
-	Case "icon"
-		bUseIcon = True
-		bAvatar = False
-	Case "avatar"
-		bUseIcon  = False
-		bAvatar = True
-	End Select
-	
 	bBordered = BANanoShared.parseBool(bBordered)
 	bDark = BANanoShared.parseBool(bDark)
 	bDot = BANanoShared.parseBool(bDot)
@@ -170,65 +207,67 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	End If
 	'
 	VElement.Initialize(mCallBack, mName, mName)
-	'add the badge slot
-	VElement.Append($"<v-template id="${mName}tmp" v-slot:badge></v-template>"$)
+	VElement.TagName = "v-badge"
 	'
-	Dim tmp As VueElement = VElement.GetVueElement($"#${mName}tmp"$)
-	'add the badge icon
-	If sIcon <> "" Then
-		tmp.Append($"<v-icon id="${mName}icon">${sIcon}</v-icon>"$)
-		VElement.GetIcon.Dark = True
-		VElement.GetIcon.Small = True
-	Else
-		'add the badge value
-		If sValue <> "" Then
-			tmp.Append($"<span id="${mName}span">{{ ${svModel} }}</span>"$)
-		End If
-	End If
+	mColor = VElement.BuildColor(sHostColor, sHostColorIntensity)
 		
-	VElement.SetData(svModel, sValue)
-	'
-	'we are using an icon
-	If bUseIcon Then
-		If sIconName = "" Then
-			BANano.Throw($"VBadge.${mName} icon has not been specified!"$)
-		End If
-		VElement.Append($"<v-icon id="${mName}icon1">${sIconName}</v-icon>"$)
-		VElement.GetIcon1.Bind("color", xiconcolor)
-		sIconColor = VElement.BuildColor(sIconColor, sIconColorIntensity)
-		VElement.SetData(xiconcolor, sIconColor)
+	Select Case sBadgeType
+	Case "icon"
+		VElement.Append($"<v-icon id="${mName}icon">${sIconName}</v-icon>"$)
+		Dim icn As VueElement = VElement.GetIcon
+		icn.Bind("color", xiconcolor)
+		icn.SetData(xiconcolor, mColor)
+		icn.TextColor = sHostTextColor
+		icn.TextColorintensity = sHostTextColorIntensity
 		Select Case sIconSize
 		Case "none"	
 		Case "large"
-			VElement.GetIcon1.AddAttr(":large", True)
+			icn.AddAttr(":large", True)
 		Case "small"
-			VElement.GetIcon1.AddAttr(":small", True)
+			icn.AddAttr(":small", True)
 		Case "x-large"
-			VElement.GetIcon1.AddAttr(":x-large", True)
+			icn.AddAttr(":x-large", True)
 		Case "x-small"
-			VElement.GetIcon1.AddAttr(":x-small", True)
+			icn.AddAttr(":x-small", True)
 		End Select
-	End If
+		icn.bindallevents
+		icn.SetOnEventOwn(mCallBack, $"${mName}_click"$, "click", Null)
+		VElement.BindVueElement(icn)
+	Case "avatar"
+		VElement.Append($"<v-avatar id="${mName}avatar"><v-img id="${mName}image" alt=""></v-img></v-avatar>"$)
+		Dim avt As VueElement = VElement.GetAvatar
+		avt.Size = sAvatarSize
+		avt.Bind("color", xiconcolor)
+		avt.SetData(xiconcolor, mColor)
+		avt.TextColor = sHostTextColor
+		avt.TextColorintensity = sHostTextColorIntensity
+		VElement.GetImage.Src = sAvatarImg 
+				
+		avt.bindallevents
+		avt.SetOnEventOwn(mCallBack, $"${mName}_click"$, "click", Null)
+		
+		VElement.BindVueElement(avt)
+	Case "button"
+		VElement.Append($"<v-btn id="${mName}button">${sButtonText}</v-btn>"$)
+		Dim btn As VueElement = VElement.GetButton
+		btn.Raised = bButtonRaised
+		btn.Block = bButtonBlock
+		btn.Size = sButtonSize
+		btn.Depressed = bButtonDepressed
+		btn.Outlined = bButtonOutlined
+		btn.Rounded = bButtonRounded
+		btn.Fab = bButtonFab
+		btn.Bind("color", xiconcolor)
+		btn.SetData(xiconcolor, mColor)
+		btn.TextColor = sHostTextColor
+		btn.TextColorintensity = sHostTextColorIntensity
+		btn.BindAllEvents
+		btn.SetOnEventOwn(mCallBack, $"${mName}_click"$, "click", Null)
+		VElement.BindVueElement(btn)		
+	End Select
+	'update value of the badge	
+	VElement.SetData(svModel, sValue)
 	
-	If BANano.IsNull(sAvatarImg) Or BANano.IsUndefined(sAvatarImg) Then
-		sAvatarImg = ""
-	End If
-	
-'	If sAvatarImg <> "" Then
-'		'add slot
-'		VElement.Append($"<v-avatar id="${mName}avatar"><img id="${mName}image" alt=""></img></v-avatar>"$)
-'		VElement.GetAvatar.Size = sAvatarSize
-'		VElement.GetImage.Src = sAvatarImg
-'	End If
-'	If sAvatarIcon <> "" Then
-'		'add slot
-'		VElement.Append($"<v-avatar id="${mName}avatar"><v-icon id="${mName}icon"></v-icon></v-avatar>"$)
-'		VElement.GetAvatar.Size = sAvatarSize
-'		VElement.GetImage.Src = sAvatarImg
-'	End If
-	
-	
-	VElement.TagName = "v-badge"
 	VElement.setAvatar(bAvatar)
 	VElement.Bordered = bBordered
 	VElement.Bind("color", xbadgecolor)
@@ -236,7 +275,12 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.SetData(xbadgecolor, sColor)
 	VElement.Dark = bDark
 	VElement.Dot = bDot
-	VElement.SetAttr("icon", sIcon)
+	If sIcon <> "" Then
+		VElement.SetAttr("icon", sIcon)
+	Else
+		VElement.Bind("content", svModel)
+		VElement.Bind("value", svModel)
+	End If
 	VElement.SetAttr(":inline", bInline)
 	VElement.Mode = sMode
 	VElement.OffsetX = sOffsetX
@@ -244,8 +288,7 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.Overlap = bOverlap
 	VElement.Tile = bTile
 	VElement.Transition = sTransition
-	'VElement.Bind("content", svModel)
-	'VElement.SetData(svModel, sValue)
+	VElement.SetData(svModel, sValue)
 	VElement.VIf = mVIf
 	VElement.Classes = mClasses
 	VElement.Styles = mStyles
@@ -255,27 +298,38 @@ Public Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	'hidden / visible
 	VElement.VShow = xHidden
 	VElement.SetData(xHidden, Not(bHidden))
+	VElement.AddPointerOnClick
+	If bDot Then
+		VElement.RemoveAttr(":value")
+		VElement.RemoveAttr(":content")
+		VElement.RemoveAttr("icon")
+		VElement.RemoveAttr(":icon")
+	End If
 	VElement.BindAllEvents
 End Sub	
 
-Sub UpdateIconColor(C As VueComponent, color As String, intensity As String)
-	sIconColor = VElement.BuildColor(color, intensity)
-	C.SetData(xiconcolor, sIconColor)
-End Sub
-
-Sub UpdateIconColorOnApp(C As VuetifyApp, color As String, intensity As String)
-	sIconColor = VElement.BuildColor(color, intensity)
-	C.SetData(xiconcolor, sIconColor)
-End Sub
-
+'update the color of the badge
 Sub UpdateColor(C As VueComponent, color As String, intensity As String)
-	sIconColor = VElement.BuildColor(color, intensity)
-	C.SetData(xbadgecolor, sIconColor)
+	sColor = VElement.BuildColor(color, intensity)
+	C.SetData(xbadgecolor, sColor)
 End Sub
 
+'update the color of the badge on pgIndex
 Sub UpdateColorOnApp(C As VuetifyApp, color As String, intensity As String)
-	sIconColor = VElement.BuildColor(color, intensity)
-	C.SetData(xbadgecolor, sIconColor)
+	sColor = VElement.BuildColor(color, intensity)
+	C.SetData(xbadgecolor, sColor)
+End Sub
+
+'update the host color 
+Sub UpdateHostColor(C As VueComponent, color As String, intensity As String)
+	mColor = VElement.BuildColor(color, intensity)
+	C.SetData(xiconcolor, mColor)
+End Sub
+
+'update the host color on pgIndex
+Sub UpdateHostColorOnApp(C As VuetifyApp, color As String, intensity As String)
+	mColor = VElement.BuildColor(color, intensity)
+	C.SetData(xiconcolor, mColor)
 End Sub
 
 public Sub AddToParent(targetID As String)
@@ -288,49 +342,59 @@ public Sub Remove()
 	BANano.SetMeToNull
 End Sub
 
+'update visibility of the badge
 Sub UpdateVisible(C As VueComponent, b As Boolean)
 	C.SetData(xHidden, b)
 	C.SetData(mVIf, b)
 End Sub
 
+'update visibility on pgIndex
 Sub UpdateVisibleOnApp(C As VuetifyApp, b As Boolean)
 	C.SetData(xHidden, b)
 	C.SetData(mVIf, b)
 End Sub
 
+'update the badge value
 Sub UpdateValue(C As VueComponent, sv As String)
 	C.SetData(svModel, sv)
 End Sub
 
+'update the value of the badge on pgIndex
 Sub UpdateValueOnApp(C As VuetifyApp, sv As String)
 	C.SetData(svModel, sv)
 End Sub
 
+'increment the badge value
 Sub Increment(C As VueComponent)
 	C.Increment(svModel)
 End Sub
 
+'incremenent badge value on pgindex
 Sub IncrementOnApp(C As VuetifyApp)
 	C.Increment(svModel, 1)
 End Sub
 
+'decrement the badge value
 Sub Decrement(C As VueComponent)
 	C.Decrement(svModel)
 End Sub
 
+'decrement the badge value on app
 Sub DecrementOnApp(C As VuetifyApp)
 	C.Decrement(svModel, 1)
 End Sub
 
+'get the element name of the badge
 Sub getID As String
 	Return mName
 End Sub
 
+'get the element id with #
 Sub getHere As String
 	Return $"#${mName}"$
 End Sub
 
-
+'bind the state of the badge
 Sub BindState(C As VueComponent)
 	VC = c
 	Dim mbindings As Map = VElement.bindings
@@ -351,6 +415,7 @@ Sub BindState(C As VueComponent)
 	Next
 End Sub
 
+'bind the state of the badge on pgIndex
 Sub BindStateOnApp(c As VuetifyApp)
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
@@ -489,12 +554,4 @@ End Sub
 
 Sub AddStyle(p As String, v As String)
 	VElement.AddStyle(p, v)
-End Sub
-
-Sub Hide
-	UpdateVisible(VC, False)
-End Sub
-
-Sub Show
-	UpdateVisible(VC, True)
 End Sub

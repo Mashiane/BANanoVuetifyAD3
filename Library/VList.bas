@@ -2177,3 +2177,17 @@ End Sub
 Sub Disable
 	UpdateDisabled(VC, True)
 End Sub
+
+'add right icons on each item of the list, before setting the list items
+Sub AddRightIcon(recs As List, iconName As String, iconColor As String) As List
+	'add delete icon to each item
+	Dim ctot As Int = recs.Size - 1
+	Dim cCnt As Int
+	For cCnt = 0 To ctot
+		Dim obj As Map = recs.Get(cCnt)
+		obj.Put("righticon", iconName)
+		obj.Put("righticoncolor", iconColor)
+		recs.Set(cCnt, obj)
+	Next
+	Return recs
+End Sub

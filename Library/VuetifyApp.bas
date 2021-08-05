@@ -2404,6 +2404,7 @@ Sub RunMethodOnComponentOnApp(componentName As String, methodName As String)
 		'refresh the refs
 		GetRefs
 		componentName = componentName.tolowercase
+		methodName = methodName.tolowercase
 		Dim boObject As BANanoObject = refs.GetField(componentName)
 		boObject.RunMethod(methodName, Null)
 	Catch
@@ -2417,6 +2418,7 @@ Sub RunMethodOnComponent(componentName As String, methodName As String)
 		'refresh the refs
 		Dim xrefs As BANanoObject = GetRefs
 		componentName = componentName.tolowercase
+		methodName = methodName.tolowercase
 		Dim boObject As BANanoObject = xrefs.GetField(componentName)
 		boObject.RunMethod(methodName, Null)
 	Catch
