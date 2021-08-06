@@ -1249,6 +1249,30 @@ Sub AddCheckBox(vModel As String, sLabel As String, bChecked As Boolean, sColor 
 	properties.Put(vModel, fld)
 End Sub
 
+'add a checkbox
+Sub AddCheckBox1(vModel As String, sLabel As String, bChecked As Object, sColor As String, oTrueValue As Object, oFalseValue As Object)
+	vModel = vModel.tolowercase
+	'
+	Dim fld As Map = CreateMap()
+	Dim xoptions As Map = CreateMap()
+	'
+	fld.Put("default", bChecked)
+	fld.Put("type", "boolean")
+	fld.Put("title", sLabel)
+	fld.Put("x-display", "checkbox")
+	'fld.Put("x-class", "mb-3")
+	'
+	xoptions.Put("dense", bDense)
+	xoptions.Put("hideDetails", bHideDetails)
+	xoptions.Put("color", sColor)
+	xoptions.Put("trueValue", oTrueValue)
+	xoptions.Put("falseValue", oFalseValue)
+	fld.Put("x-props", xoptions)	
+
+	model.Put(vModel, bChecked)
+	properties.Put(vModel, fld)
+End Sub
+
 'add a switch
 Sub AddSwitch(vModel As String, sLabel As String, bChecked As Boolean, sColor As String, bInset As Boolean)
 	vModel = vModel.tolowercase
@@ -1266,13 +1290,37 @@ Sub AddSwitch(vModel As String, sLabel As String, bChecked As Boolean, sColor As
 	xoptions.Put("inset", bInset)
 	xoptions.Put("color", sColor)
 	xoptions.Put("hideDetails", bHideDetails)
+	
 	fld.Put("x-props", xoptions)	
 
 	model.Put(vModel, bChecked)
 	properties.Put(vModel, fld)
 End Sub
 
+'add a switch
+Sub AddSwitch1(vModel As String, sLabel As String, bChecked As Object, sColor As String, bInset As Boolean, oTrueValue As Object, oFalseValue As Object)
+	vModel = vModel.tolowercase
+	'
+	Dim fld As Map = CreateMap()
+	Dim xoptions As Map = CreateMap()
+	
+	fld.Put("default", bChecked)
+	fld.Put("type", "boolean")
+	fld.Put("title", sLabel)
+	fld.Put("x-display", "switch")
+	'fld.Put("x-class", "mb-3")
+	
+	xoptions.Put("dense", bDense)
+	xoptions.Put("inset", bInset)
+	xoptions.Put("color", sColor)
+	xoptions.Put("hideDetails", bHideDetails)
+	xoptions.Put("trueValue", oTrueValue)
+	xoptions.Put("falseValue", oFalseValue)
+	fld.Put("x-props", xoptions)	
 
+	model.Put(vModel, bChecked)
+	properties.Put(vModel, fld)
+End Sub
 
 
 'add a slider
@@ -1544,7 +1592,7 @@ Sub BuildFromTableDescription(C As VueComponent, TD As TableDescription, ShowPri
 		Case "tinyint"
 			Integers.Add(sfieldname.ToLowerCase)
 			TinyInts.Add(sfieldname.ToLowerCase)
-			AddCheckBox(sfieldname.tolowercase, sfieldname, False, "green")
+			AddSwitch(sfieldname.tolowercase, sfieldname, False, "green", False)
 		Case Else
 			Strings.Add(sfieldname.ToLowerCase)
 			AddTextField(sfieldname.tolowercase, sfieldname, sdefaultvalue, sfieldlen)
@@ -1558,4 +1606,33 @@ Sub BuildFromTableDescription(C As VueComponent, TD As TableDescription, ShowPri
 		End If
 	Next
 	Refresh(C)
+End Sub
+
+
+'make tinyints true / false for 1 and 0
+Sub OconvTinyInts(rec As Map)
+	For Each tir As String In TinyInts
+		Dim tiv As Int = rec.Get(tir)
+		tiv = BANano.parseint(tiv)
+		Select Case tiv
+		Case 1
+			rec.Put(tir, True)
+		Case 0		
+			rec.Put(tir, False)
+		End Select
+	Next
+End Sub
+
+'make tinyints 1/0 from true / false
+Sub IconvTinyInts(rec As Map)
+	For Each tir As String In TinyInts
+		Dim tiv As Boolean = rec.Get(tir)
+		tiv = BANanoShared.parseBool(tiv)
+		Select Case tiv
+		Case True
+			rec.Put(tir, 1)
+		Case False		
+			rec.Put(tir, 0)
+		End Select
+	Next
 End Sub

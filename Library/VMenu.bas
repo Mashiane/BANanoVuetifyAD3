@@ -46,7 +46,7 @@ Version=7
 #DesignerProperty: Key: MaxHeight, DisplayName: MaxHeight, FieldType: String, DefaultValue: , Description: MaxHeight
 #DesignerProperty: Key: MaxWidth, DisplayName: MaxWidth, FieldType: String, DefaultValue: , Description: MaxWidth
 #DesignerProperty: Key: MinHeight, DisplayName: MinHeight, FieldType: String, DefaultValue: , Description: MinHeight
-#DesignerProperty: Key: MinWidth, DisplayName: MinWidth, FieldType: String, DefaultValue: , Description: MinWidth
+#DesignerProperty: Key: MinWidth, DisplayName: MinWidth, FieldType: String, DefaultValue: 290px, Description: MinWidth
 #DesignerProperty: Key: NudgeBottom, DisplayName: NudgeBottom, FieldType: String, DefaultValue: , Description: NudgeBottom
 #DesignerProperty: Key: NudgeLeft, DisplayName: NudgeLeft, FieldType: String, DefaultValue: , Description: NudgeLeft
 #DesignerProperty: Key: NudgeRight, DisplayName: NudgeRight, FieldType: String, DefaultValue: , Description: NudgeRight
@@ -55,6 +55,7 @@ Version=7
 #DesignerProperty: Key: OffsetX, DisplayName: OffsetX, FieldType: Boolean, DefaultValue: False, Description: OffsetX
 #DesignerProperty: Key: OffsetY, DisplayName: OffsetY, FieldType: Boolean, DefaultValue: True, Description: OffsetY
 #DesignerProperty: Key: OpenDelay, DisplayName: OpenDelay, FieldType: String, DefaultValue: , Description: OpenDelay
+#DesignerProperty: Key: FullWidth, DisplayName: Full Width, FieldType: Boolean, DefaultValue: False, Description: Full Width
 #DesignerProperty: Key: OpenOnClick, DisplayName: OpenOnClick, FieldType: Boolean, DefaultValue: False, Description: OpenOnClick
 #DesignerProperty: Key: OpenOnFocus, DisplayName: OpenOnFocus, FieldType: Boolean, DefaultValue: False, Description: OpenOnFocus
 #DesignerProperty: Key: OpenOnHover, DisplayName: OpenOnHover, FieldType: Boolean, DefaultValue: False, Description: OpenOnHover
@@ -159,6 +160,7 @@ Public MenuItems As VList
 Private bDisabled As Boolean
 Private bDense As Boolean
 Private VC As VueComponent
+Private bFullWidth As Boolean
 End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -245,6 +247,8 @@ sItemIcons = Props.GetDefault("ItemIcons", "")
 sItemColors = Props.GetDefault("ItemColors", "")
 sItemTexts = Props.GetDefault("ItemTexts", "")
 sItemTo = Props.GetDefault("ItemTo", "")
+bFullWidth = Props.getdefault("FullWidth", False)
+bFullWidth = BANanoShared.parseBool(bFullWidth)
 End If 
 	'
 	bAbsolute = BANanoShared.parseBool(bAbsolute)
@@ -341,6 +345,7 @@ VElement.AddAttr(":dark", bDark)
 VElement.AddAttr(":disable-keys", bDisableKeys)
 VElement.AddAttr(":disabled", sDisabled)
 VElement.SetData(sDisabled, bDisabled)
+VElement.Addattr(":full-width", bFullWidth)
 
 VElement.AddAttr(":eager", bEager)
 VElement.AddAttr(":fixed", bFixed)

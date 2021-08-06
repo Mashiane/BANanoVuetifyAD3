@@ -28,7 +28,7 @@ Version=7
 #DesignerProperty: Key: ParentID, DisplayName: Parent ID, FieldType: String, DefaultValue: , Description: The parent id if not placing on RC
 #DesignerProperty: Key: FieldName, DisplayName: Field Name*, FieldType: String, DefaultValue: , Description: Field Name on the database table
 #DesignerProperty: Key: VModel, DisplayName: V-Model, FieldType: String, DefaultValue: , Description: V-Model for data binding
-#DesignerProperty: Key: ComponentType, DisplayName: Component Type*, FieldType: String, DefaultValue: TextField, Description: Component Type, List: P|H6|H1|H2|H3|H4|H5|div|span|TextField|TextArea|TimePicker|DatePicker|FileInput|FileInputImage|Money|Thousands|Password|ComboBox|AutoComplete|Select|Avatar|AvatarIcon|AvatarText|CheckBox|Switch|RadioGroup|Image|Telephone|Email|Website|Slider|Chip|Rating|ProgressCircular|ProgressLinear|Icon|Button|FAB|ColorSelect|ColorTextField
+#DesignerProperty: Key: ComponentType, DisplayName: Component Type*, FieldType: String, DefaultValue: TextField, Description: Component Type, List: P|H6|H1|H2|H3|H4|H5|div|span|TextField|TextArea|TimePicker|DatePicker|DateTimePicker|FileInput|FileInputImage|Money|Thousands|Password|ComboBox|AutoComplete|Select|Avatar|AvatarIcon|AvatarText|CheckBox|Switch|RadioGroup|Image|Telephone|Email|Website|Slider|Chip|Rating|ProgressCircular|ProgressLinear|Icon|Button|FAB|ColorSelect|ColorTextField
 #DesignerProperty: Key: ColumnType, DisplayName: DT Column Type, FieldType: String, DefaultValue: Normal, Description: Data Table Column Type, List: Normal|TextArea|TextField|Icon|Chip|Switch|Action|Image|CheckBox|Time|Money|Avatar|AvatarIcon|AvatarText|Rating|ProgressCircular|ProgressLinear|Date|DateTime|Number|Button|Link|ComboBox|AutoComplete|Select|Email|FileSize
 #DesignerProperty: Key: ListItemType, DisplayName: List Item Type, FieldType: String, DefaultValue: , Description: List View Item Type
 #DesignerProperty: Key: DataType, DisplayName: Data Type, FieldType: String, DefaultValue: string, Description: Data Type, List: integer|double|blob|string|none
@@ -63,6 +63,12 @@ Version=7
 #DesignerProperty: Key: Disabled, DisplayName: Disabled, FieldType: Boolean, DefaultValue: False, Description: Disabled
 #DesignerProperty: Key: ReadOnly, DisplayName: ReadOnly, FieldType: Boolean, DefaultValue: False, Description: Read  Only
 #DesignerProperty: Key: AutoFocus, DisplayName: Auto Focus, FieldType: Boolean, DefaultValue: False, Description: Auto Focus
+
+#DesignerProperty: Key: PrependIcon, DisplayName: PrependIcon, FieldType: String, DefaultValue: , Description: Prepend Icon
+#DesignerProperty: Key: PrependInnerIcon, DisplayName: PrependInnerIcon, FieldType: String, DefaultValue: , Description: Prepend Inner Icon
+#DesignerProperty: Key: AppendIcon, DisplayName: AppendIcon, FieldType: String, DefaultValue: , Description: Append Icon
+#DesignerProperty: Key: AppendOuterIcon, DisplayName: AppendOuterIcon, FieldType: String, DefaultValue: , Description: Append Outer Icon
+
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue:  none, Description: Color, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: ColorIntensity, DisplayName: Color Intensity, FieldType: String, DefaultValue:  normal, Description: Color Intensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: TextColor, DisplayName: Text Color, FieldType: String, DefaultValue:  none, Description: Text Color, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
@@ -199,6 +205,10 @@ Sub Class_Globals
 	Private bButtonApp As Boolean
 	Private bFullWidth As Boolean
 	Private sSaveMethod As String
+	Private sPrependIcon As String
+Private sPrependInnerIcon As String
+Private sAppendIcon As String
+Private sAppendOuterIcon As String
 End Sub
 
 Sub Initialize (CallBack As Object, Name As String, EventName As String) 
@@ -336,6 +346,11 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sSaveMethod = Props.GetDefault("SaveMethod", "")
 		bButtonRounded = Props.GetDefault("ButtonRounded", False)
 		bButtonRounded = BANanoShared.parseBool(bButtonRounded)
+		'
+		sPrependIcon = Props.GetDefault("PrependIcon", "")
+		sPrependInnerIcon = Props.GetDefault("PrependInnerIcon", "")
+		sAppendIcon = Props.GetDefault("AppendIcon", "")
+		sAppendOuterIcon = Props.GetDefault("AppendOuterIcon", "")
 	End If 
 	' 
 	'build and get the element 
@@ -347,6 +362,10 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	' 
 	VElement.Initialize(mCallBack, mName & "fld", mName & "fld") 
 	VElement.TagName = "div"
+	VElement.AddAttr("data-prependicon", sPrependIcon)
+	VElement.AddAttr("data-prependinnericon", sPrependInnerIcon)
+	VElement.AddAttr("data-appendicon", sAppendIcon)
+	VElement.AddAttr("data-appendoutericon", sAppendOuterIcon)
 	VElement.AddAttr("data-rounded", bButtonRounded)
 	VElement.AddAttr("data-savemethod", sSaveMethod)
 	VElement.AddAttr("data-fullwidth", bFullWidth)

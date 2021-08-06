@@ -1162,7 +1162,27 @@ Sub BEToVueElement(be As BANanoElement)
 	'
 	Dim bButtonRounded As Boolean = be.GetData("rounded")
 	bButtonRounded = BANanoShared.parseBool(bButtonRounded)
-	
+	'
+	Dim sPrependIcon As String
+	sPrependIcon = be.GetData("prependicon")
+	sPrependIcon = BANanoShared.parseNull(sPrependIcon)
+	fBinding.put("PrependIcon", sPrependIcon)
+	'
+	Dim sPrependInnerIcon As String
+	sPrependInnerIcon = be.GetData("prependinnericon")
+	sPrependInnerIcon = BANanoShared.parseNull(sPrependInnerIcon)
+	fBinding.put("PrependInnerIcon", sPrependInnerIcon)
+	'
+	Dim sAppendIcon As String
+	sAppendIcon = be.GetData("appendicon")
+	sAppendIcon = BANanoShared.parseNull(sAppendIcon)
+	fBinding.put("AppendIcon", sAppendIcon)
+	'
+	Dim sAppendOuterIcon As String
+	sAppendOuterIcon = be.GetData("appendoutericon")
+	sAppendOuterIcon = BANanoShared.parseNull(sAppendOuterIcon)
+	fBinding.put("AppendOuterIcon", sAppendOuterIcon)
+	'
 	If bFilled Then
 		fBinding.Put("Filled", True)
 		HelpCode($"The 'Filled' property (if available) is set to '${bFilled}'"$)
@@ -1222,7 +1242,41 @@ Sub BEToVueElement(be As BANanoElement)
 	'process the component type
 	Select Case sComponentType
 	Case "AvatarIcon"
+		HelpCode($"Additional Notes...."$)
+		HelpCode("The 'Own Size' property is used to set the avatar size.")
+		
+		fBinding.Remove("Outlined")
+		fBinding.Remove("Rounded")
+		fBinding.Remove("ReturnObject")
+		If sownsize <> "" Then
+			fBinding.Put("Size", sownsize)
+		End If
+		fBinding.put("AvatarType", "icon")
+		fBinding.Put("Icon", sIconName)
+		fBinding.Put("Position", "normal")
+		Dim avt1 As VAvatar
+		avt1.Initialize(mCallBack, sName, sName)
+		avt1.DesignerCreateView(mparent, fBinding)
+		VElement.BindVueElement(avt1.VElement)
+		'
 	Case "AvatarText"
+		HelpCode($"Additional Notes...."$)
+		HelpCode("The 'Size / Own Size' properties are used to set the icon size.")
+		'
+		fBinding.Remove("Outlined")
+		fBinding.Remove("Rounded")
+		fBinding.Remove("ReturnObject")
+		If sownsize <> "" Then
+			fBinding.Put("Size", sownsize)
+		End If
+		fBinding.put("AvatarType", "text")
+		fBinding.Put("Text", sTitle)
+		fBinding.Put("Position", "normal")
+		Dim avt2 As VAvatar
+		avt2.Initialize(mCallBack, sName, sName)
+		avt2.DesignerCreateView(mparent, fBinding)
+		VElement.BindVueElement(avt2.VElement)
+		
 		
 	Case "ColorSelect"
 		fBinding.Remove("ItemKeys")
@@ -1237,7 +1291,41 @@ Sub BEToVueElement(be As BANanoElement)
 			cl.AddRule(v)
 		Next
 		VElement.BindVueElement(cl.VElement)
+		'
+	Case "DateTimePicker"
+		HelpCode($"Additional Notes...."$)
+		HelpCode("The Normal Text Field properties are applied based on your options.")
+		
+		fBinding.Put("TypeOf", "text")
+		fBinding.Remove("ReturnObject")
+		fBinding.Put("AutoComplete", "off")
+		fBinding.Put("DateTimePicker", True)
+		Dim txtFieldc As VTextField
+		txtFieldc.Initialize(mCallBack, sName, sName)
+		txtFieldc.DesignerCreateView(mparent, fBinding)
+		For Each k As String In fldRules.Keys
+			Dim v As String = fldRules.Get(k)
+			txtFieldc.AddRule(v)
+		Next
+		VElement.BindVueElement(txtFieldc.VElement)
+		
 	Case "ColorTextField"
+		HelpCode($"Additional Notes...."$)
+		HelpCode("The Normal Text Field properties are applied based on your options.")
+		
+		fBinding.Put("TypeOf", "text")
+		fBinding.Remove("ReturnObject")
+		fBinding.Put("AutoComplete", "off")
+		fBinding.Put("ColorPicker", True)
+		Dim txtFieldc As VTextField
+		txtFieldc.Initialize(mCallBack, sName, sName)
+		txtFieldc.DesignerCreateView(mparent, fBinding)
+		For Each k As String In fldRules.Keys
+			Dim v As String = fldRules.Get(k)
+			txtFieldc.AddRule(v)
+		Next
+		VElement.BindVueElement(txtFieldc.VElement)
+		
 	Case "Icon"
 		HelpCode($"Additional Notes...."$)
 		HelpCode("The 'Size / Own Size' properties are used to set the icon size.")
