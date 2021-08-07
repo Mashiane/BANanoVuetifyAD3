@@ -60,7 +60,7 @@ Version=8.5
 #DesignerProperty: Key: MultiSort, DisplayName: Multi Sort, FieldType: Boolean, DefaultValue:  True, Description: Can multi sort
 #DesignerProperty: Key: MustSort, DisplayName: Must Sort, FieldType: Boolean, DefaultValue:  True, Description: Records must be sortable
 #DesignerProperty: Key: Loading, DisplayName: Loading, FieldType: Boolean, DefaultValue:  False, Description: Show progress loading
-#DesignerProperty: Key: IsTree, DisplayName: Is Tree, FieldType: Boolean, DefaultValue:  False, Description: Is Tree Data
+'#DesignerProperty: Key: IsTree, DisplayName: Is Tree, FieldType: Boolean, DefaultValue:  False, Description: Is Tree Data
 #DesignerProperty: Key: ExternalPagination, DisplayName: ExternalPagination, FieldType: Boolean, DefaultValue:  True, Description: Use External Pagination
 #DesignerProperty: Key: MaxPages, DisplayName: Total Visible, FieldType: String, DefaultValue:  5, Description: Total Visible Pages
 #DesignerProperty: Key: PageLength, DisplayName: Pager Length, FieldType: String, DefaultValue:  5, Description: Page Length
@@ -2333,7 +2333,6 @@ End Sub
 Sub RefreshTree(C As VueComponent)
 	'unflatten the data
 	Dim unflat As List = BANanoShared.Unflatten(Items, "children")
-	Log(unflat)
 	C.SetData(itemsname, unflat)
 End Sub
 

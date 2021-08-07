@@ -5,6 +5,9 @@ Type=Class
 Version=7
 @EndOfDesignText@
 #IgnoreWarnings:12
+#Event: Connect (Success As Boolean, Response As String, Error As String)
+#Event: ShowDataBases (Success As Boolean, Response As String, Error As String, affectedRows As Int, Result As List)
+
 #Event: Done (Action As String, Success As Boolean, Response As String, Error As String, affectedRows As Int, Result As List)
 #Event: Create (Success As Boolean, Response As String, Error As String, affectedRows As Int, Result As List)
 #Event: Update (Success As Boolean, Response As String, Error As String, affectedRows As Int, Result As List)
@@ -147,6 +150,8 @@ Sub Class_Globals
 	Public const ACTION_TABLENAMES As String = "TableNames"
 	Public const ACTION_DESCRIBETABLE As String = "DescribeTable"
 	Public const ACTION_UNDO As String = "Undo"
+	Public const ACTION_CONNECT As String = "Connect"
+	Public const ACTION_SHOWDATABASES As String = "ShowDataBases"
 	'
 	Public const MODE_CREATE As String = "C"
 	Public const MODE_UPDATE As String = "U"
@@ -170,6 +175,8 @@ Sub Class_Globals
 	Strings As List, Booleans As List, Doubles As List, Blobs As List, Integers As List, TinyInts As List, Sorts As List, FieldNames As List)
 	Public TD As TableDescription
 	Public UsesApp As Boolean
+	Public const RESULT_SUCCESS As String = "Success"
+	Public const RESULT_ERROR As String = "Error"
 End Sub
 
 'initialize the BANanoDS
@@ -1090,6 +1097,33 @@ Sub UNDO
 	Execute(ACTION_UNDO)
 End Sub
 
+'connect to the database
+
+'ACTION_CONNECT
+'update existing record from existing recordsource, use setRecord first
+Sub CONNECT
+	If IsBound = False Then
+		BANano.Throw($"BANanoDataSource.${mName}.CONNECT has not been bound to the component!"$)
+	End If
+	If bShowLog Then
+		Log($"BANanoDataSource.CONNECT"$)
+	End If
+	Tag = ACTION_CONNECT
+	Execute(ACTION_CONNECT)
+End Sub
+
+'update existing record from existing recordsource, use setRecord first
+Sub SHOWDATABASES
+	If IsBound = False Then
+		BANano.Throw($"BANanoDataSource.${mName}.SHOWDATABASES has not been bound to the component!"$)
+	End If
+	If bShowLog Then
+		Log($"BANanoDataSource.SHOWDATABASES"$)
+	End If
+	Tag = ACTION_SHOWDATABASES
+	Execute(ACTION_SHOWDATABASES)
+End Sub
+
 'run your own query
 Sub CUSTOM(ActionName As String)
 	If IsBound = False Then
@@ -1480,6 +1514,10 @@ private Sub MySQLExecute As Boolean    'ignore
 	Dim bSelect As Boolean = False  'ignore
 	Dim bCount As Boolean = False
 	Select Case sAction
+	Case ACTION_SHOWDATABASES
+		MySQL.GetDatabases
+	Case ACTION_CONNECT
+		MySQL.Connection
 	Case ACTION_CREATE_TABLE
 		MySQL.SchemaCreateTable
 	Case ACTION_CREATE
@@ -1622,10 +1660,25 @@ private Sub MySQLExecute As Boolean    'ignore
 		'we are using dynamic
 		mPayload = MySQL.BuildDynamic(True)
 		MySQL.JSON = BANano.CallInlinePHPWait(MySQL.MethodNameDynamic, mPayload)
+	End If
+	If bShowLog Then
+		Log("Payload...")
+		Log(mPayload)
 	End If	
 	'get the result
 	MySQL.FromJSON
 	Select Case sAction
+	Case ACTION_SHOWDATABASES
+		Dim dbList As List
+		dbList.Initialize 
+		For Each rec As Map In MySQL.result
+			Dim sDatabase As String = rec.GetDefault("Database", "")
+			If sDatabase <> "" Then
+				dbList.Add(sDatabase)
+			End If
+		Next
+		MySQL.result = dbList
+		MySQL.affectedRows = dbList.size
 	Case ACTION_TABLENAMES
 		'convert to a list
 		Dim tblNames As List

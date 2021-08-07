@@ -299,7 +299,7 @@ End Sub
 '</code>
 Sub GetDatabases As BANanoMySQLE
 	query = $"SHOW DATABASES"$
-	command = "select"
+	command = "databases"
 	Return Me
 End Sub
 

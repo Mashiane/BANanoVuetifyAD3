@@ -6,17 +6,25 @@ Version=8.9
 @EndOfDesignText@
 #IgnoreWarnings:12
 'checked
-#Event: Input (items As List)
+#Event: Checked (items As List)
+#Event: Clicked (items As List)
+#Event: Opened (items As List)
+
 'clicked
+#Event: Input (items As List)
 #Event: UpdateActive (items As List)
 #Event: UpdateOpen (items As List)
 #Event: Delete (item As Map)
 
 
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
-#DesignerProperty: Key: Activatable, DisplayName: Activatable, FieldType: Boolean, DefaultValue: True, Description: Activatable
-#DesignerProperty: Key: MultipleActive, DisplayName: Multiple Active, FieldType: Boolean, DefaultValue: false, Description: MultipleActive
-#DesignerProperty: Key: ActiveClass, DisplayName: ActiveClass, FieldType: String, DefaultValue: , Description: ActiveClass
+#DesignerProperty: Key: Selectable, DisplayName: CheckBox / Selectable, FieldType: Boolean, DefaultValue: false, Description: Selectable/CheckBox
+#DesignerProperty: Key: SelectedColor, DisplayName: Checkbox / Selected Color, FieldType: String, DefaultValue: accent, Description: SelectedColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
+#DesignerProperty: Key: SelectionType, DisplayName: SelectionType, FieldType: String, DefaultValue: leaf, Description: SelectionType, List: independent|leaf
+#DesignerProperty: Key: Activatable, DisplayName: Clickable / Activatable, FieldType: Boolean, DefaultValue: True, Description: Activatable
+#DesignerProperty: Key: MultipleActive, DisplayName: Multiple, FieldType: Boolean, DefaultValue: false, Description: MultipleActive
+#DesignerProperty: Key: ActiveClass, DisplayName: Active Class, FieldType: String, DefaultValue: , Description: ActiveClass
+#DesignerProperty: Key: Deletable, DisplayName: Deletable, FieldType: Boolean, DefaultValue: false, Description: Deletable
 #DesignerProperty: Key: Color, DisplayName: Color, FieldType: String, DefaultValue: primary, Description: Color, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: ColorIntensity, DisplayName: ColorIntensity, FieldType: String, DefaultValue: , Description: ColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
 #DesignerProperty: Key: Dark, DisplayName: Dark, FieldType: Boolean, DefaultValue: false, Description: Dark
@@ -38,12 +46,8 @@ Version=8.9
 #DesignerProperty: Key: ReturnObject, DisplayName: ReturnObject, FieldType: Boolean, DefaultValue: false, Description: ReturnObject
 #DesignerProperty: Key: Rounded, DisplayName: Rounded, FieldType: Boolean, DefaultValue: false, Description: Rounded, 
 #DesignerProperty: Key: Search, DisplayName: Search, FieldType: String, DefaultValue: , Description: Search
-#DesignerProperty: Key: Selectable, DisplayName: Selectable/CheckBox, FieldType: Boolean, DefaultValue: false, Description: Selectable/CheckBox
-#DesignerProperty: Key: SelectedColor, DisplayName: SelectedColor, FieldType: String, DefaultValue: accent, Description: SelectedColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
-#DesignerProperty: Key: SelectionType, DisplayName: SelectionType, FieldType: String, DefaultValue: leaf, Description: SelectionType, List: independent|leaf
 #DesignerProperty: Key: Shaped, DisplayName: Shaped, FieldType: Boolean, DefaultValue: false, Description: Shaped
 #DesignerProperty: Key: Transition, DisplayName: Transition, FieldType: Boolean, DefaultValue: false, Description: Transition
-#DesignerProperty: Key: Deletable, DisplayName: Deletable, FieldType: Boolean, DefaultValue: false, Description: Deletable
 #DesignerProperty: Key: VIf, DisplayName: VIf, FieldType: String, DefaultValue: , Description: VIf
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
@@ -63,47 +67,47 @@ Sub Class_Globals
 	Private mAttributes As String = ""
 	Public VElement As VueElement
 	Private bActivatable As Boolean
-Private sActive As String
-Private sActiveClass As String
-Private sColor As String
-Private sColorIntensity As String
-Private bDark As Boolean
-Private bDense As Boolean
-Private sExpandIcon As String
-Private bHoverable As Boolean
-Private sIndeterminateIcon As String
-Private sItemChildren As String
-Private sItemDisabled As String
-Private sItemKey As String
-Private sItemText As String
-Private sItems As String
-Private bLight As Boolean
-Private sLoadingIcon As String
-Private bMultipleActive As Boolean
-Private sOffIcon As String
-Private sOnIcon As String
-Private sOpen As String
-Private bOpenAll As Boolean
-Private bOpenOnClick As Boolean
-Private bReturnObject As Boolean
-Private bRounded As Boolean
-Private sSearch As String
-Private bSelectable As Boolean
-Private sSelectedColor As String
-Private sSelectionType As String
-Private bShaped As Boolean
-Private bTransition As Boolean
-Private sVIf As String
-'Private sVShow As String
-Private sValue As String
-Private xitems As List
-Private extm As Map
-Private xReturnObject As String
-Private bHidden As Boolean
-Private xactive As List
-Private xopen As List
-Private xvalue As List
-Private bDeletable As Boolean
+	Private sActive As String
+	Private sActiveClass As String
+	Private sColor As String
+	Private sColorIntensity As String
+	Private bDark As Boolean
+	Private bDense As Boolean
+	Private sExpandIcon As String
+	Private bHoverable As Boolean
+	Private sIndeterminateIcon As String
+	Private sItemChildren As String
+	Private sItemDisabled As String
+	Private sItemKey As String
+	Private sItemText As String
+	Private sItems As String
+	Private bLight As Boolean
+	Private sLoadingIcon As String
+	Private bMultipleActive As Boolean
+	Private sOffIcon As String
+	Private sOnIcon As String
+	Private sOpen As String
+	Private bOpenAll As Boolean
+	Private bOpenOnClick As Boolean
+	Private bReturnObject As Boolean
+	Private bRounded As Boolean
+	Private sSearch As String
+	Private bSelectable As Boolean
+	Private sSelectedColor As String
+	Private sSelectionType As String
+	Private bShaped As Boolean
+	Private bTransition As Boolean
+	Private sVIf As String
+	Private sVShow As String
+	Private sValue As String
+	Private xitems As List
+	Private extm As Map
+	Private xReturnObject As String
+	Private bHidden As Boolean
+	Private xactive As List
+	Private xopen As List
+	Private xvalue As List
+	Private bDeletable As Boolean
 	Private VC As VueComponent				'ignore
 End Sub
 	
@@ -149,9 +153,8 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	sItems = $"${mName}items"$
 	xactive.Initialize 
 	xopen.Initialize 
-	xvalue.Initialize 
-	xitems.Initialize 
-	'sVShow = $"${mName}show"$
+	xvalue.Initialize
+	sVShow = $"${mName}show"$
 End Sub
 	
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
@@ -273,9 +276,12 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 	VElement.AddAttr(":shaped", bShaped)
 	VElement.AddAttr(":transition", bTransition)
 	VElement.AddAttr("v-if", sVIf)
-	'VElement.AddAttr("v-show", sVShow)
-	'VElement.SetData(sVShow, Not(bHidden))
+	VElement.AddAttr("v-show", sVShow)
+	VElement.SetData(sVShow, Not(bHidden))
 	VElement.BindAllEvents
+	VElement.SetOnEventOwn(mCallBack, $"${mName}_checked"$, "input", Null)
+	VElement.SetOnEventOwn(mCallBack, $"${mName}_clicked"$, "update:active", Null)
+	VElement.SetOnEventOwn(mCallBack, $"${mName}_opened"$, "update:open", Null)
 End Sub
 
 public Sub AddToParent(targetID As String)
@@ -304,12 +310,6 @@ Sub AddStyle(p As String, v As String) As VTreeView
 	Return Me
 End Sub
 
-
-Sub UpdateReturnObject(C As VueComponent, b As Boolean) 
-	C.SetData(xReturnObject, b)
-End Sub
-
-
 Sub RemoveAttr(p As String) As VTreeView
 	VElement.RemoveAttr(p)
 	Return Me
@@ -317,36 +317,163 @@ End Sub
 
 Sub UpdateVisible(C As VueComponent, b As Boolean) As VTreeView
 	C.SetData(sVIf, b)
-	'C.SetData(sVShow, b)
+	C.SetData(sVShow, b)
+	Return Me
+End Sub
+
+Sub UpdateVisibleOnApp(C As VuetifyApp, b As Boolean) As VTreeView
+	C.SetData(sVIf, b)
+	C.SetData(sVShow, b)
 	Return Me
 End Sub
 
 'list of keys of active items
 Sub UpdateActive(C As VueComponent, lactive As List)
+	xactive = lactive
+	C.SetData(sActive, lactive)	
+End Sub
+
+'list of keys of active items
+Sub UpdateActiveOnApp(C As VuetifyApp, lactive As List)
+	xactive = lactive
 	C.SetData(sActive, lactive)	
 End Sub
 
 'list of keys of open items
 Sub UpdateOpen(C As VueComponent, lopen As List)
+	xopen = lopen
+	C.SetData(sOpen, lopen)	
+End Sub
+
+'list of keys of open items
+Sub UpdateOpenOnApp(C As VuetifyApp, lopen As List)
+	xopen = lopen
 	C.SetData(sOpen, lopen)	
 End Sub
 
 'list of keys of selected items
 Sub UpdateSelected(C As VueComponent, lvalue As List)
+	xvalue = lvalue
 	C.SetData(sValue, lvalue)
 End Sub
 
+'list of keys of selected items
+Sub UpdateSelectedOnApp(C As VuetifyApp, lvalue As List)
+	xvalue = lvalue
+	C.SetData(sValue, lvalue)
+End Sub
+
+'set checked items
+Sub SetChecked(C As VueComponent, lvalue As List)
+	xvalue = lvalue
+	C.SetData(sValue, lvalue)
+End Sub
+
+'set checked items
+Sub SetCheckedOnApp(C As VuetifyApp, lvalue As List)
+	xvalue = lvalue
+	C.SetData(sValue, lvalue)
+End Sub
+
+'get checked items
+Sub GetChecked(C As VueComponent) As List
+	Dim lst As List = C.getData(sValue)
+	xvalue = lst
+	Return lst
+End Sub
+
+'get checked items
+Sub GetCheckedOnApp(C As VuetifyApp) As List
+	Dim lst As List = C.getData(sValue)
+	xvalue = lst
+	Return lst
+End Sub
+
+Sub SetClicked(C As VueComponent, lvalue As List)
+	xactive = lvalue
+	C.SetData(sActive, lvalue)
+End Sub
+
+Sub SetClickedOnApp(C As VuetifyApp, lvalue As List)
+	xactive = lvalue
+	C.SetData(sActive, lvalue)
+End Sub
+
+Sub GetClicked(C As VueComponent) As List
+	Dim lst As List = C.getData(sActive)
+	xactive = lst
+	Return lst
+End Sub
+
+Sub GetClickedOnApp(C As VuetifyApp) As List
+	Dim lst As List = C.getData(sActive)
+	xactive = lst
+	Return lst
+End Sub
+
+Sub SetOpened(C As VueComponent, lvalue As List)
+	xopen = lvalue
+	C.SetData(sOpen, lvalue)
+End Sub
+
+Sub SetOpenedOnApp(C As VuetifyApp, lvalue As List)
+	C.SetData(sOpen, lvalue)
+	xopen = lvalue
+End Sub
+
+Sub GetOpened(C As VueComponent) As List
+	Dim lst As List = C.getData(sOpen)
+	xopen = lst
+	Return lst
+End Sub
+
+Sub GetOpenedOnApp(C As VuetifyApp) As List
+	Dim lst As List = C.getData(sOpen)
+	xopen = lst
+	Return lst
+End Sub
+
+
 Sub UpdateItems(C As VueComponent, litems As List)
+	xitems = litems
+	C.SetData(sItems, litems)
+End Sub
+
+Sub UpdateItemsOnApp(C As VuetifyApp, litems As List)
+	xitems = litems
 	C.SetData(sItems, litems)
 End Sub
 
 'Update Items
-Sub Reload(C As VueComponent, vItems As Object)
+Sub Reload(C As VueComponent, vItems As List)
+	xitems = vItems
+	C.SetData(sItems, vItems)
+End Sub
+
+'Update Items
+Sub ReloadOnApp(C As VuetifyApp, vItems As List)
+	xitems = vItems
 	C.SetData(sItems, vItems)
 End Sub
 
 'clear active, open, selected
 Sub Clear(C As VueComponent)
+	xactive.Initialize 
+	xopen.Initialize 
+	xvalue.Initialize
+	xitems.Initialize 
+	C.SetData(sActive, C.NewList)
+	C.SetData(sOpen, C.NewList)
+	C.SetData(sValue, C.NewList)
+	C.SetData(sItems, C.NewList)
+End Sub
+
+'clear active, open, selected
+Sub ClearOnApp(C As VuetifyApp)
+	xactive.Initialize 
+	xopen.Initialize 
+	xvalue.Initialize
+	xitems.Initialize 
 	C.SetData(sActive, C.NewList)
 	C.SetData(sOpen, C.NewList)
 	C.SetData(sValue, C.NewList)
@@ -379,6 +506,13 @@ Sub AddItem(parentID As String, key As String, text As String, mhref As String, 
 End Sub
 
 Sub Refresh(C As VueComponent)
+	'unflatten the data
+	If sItemChildren = "" Then sItemChildren = "children"
+	Dim unflat As List = BANanoShared.Unflatten(xitems, sItemChildren)
+	C.SetData(sItems, unflat)
+End Sub
+
+Sub RefreshOnApp(C As VuetifyApp)
 	'unflatten the data
 	If sItemChildren = "" Then sItemChildren = "children"
 	Dim unflat As List = BANanoShared.Unflatten(xitems, sItemChildren)
