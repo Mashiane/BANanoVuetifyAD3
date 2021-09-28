@@ -47,6 +47,27 @@ Sub Initialize(VA As VuetifyApp, parentID As String, elID As String)
 	Element.AddAttr(":options", optionsname)
 End Sub
 
+
+
+'bind the states for the component
+Sub BindState(VS As VueComponent)
+	If VS.ComponentExists("v-jsf") = False Then
+		Dim VJsf As BANanoObject
+		VJsf.Initialize("VJsf")
+		Dim boVJsf As BANanoObject = VJsf.GetField("default")
+		VS.ImportBO("v-jsf", boVJsf)
+	End If	
+End Sub
+
+Sub BindStateOnApp(c As VuetifyApp)
+	If c.ComponentExists("v-jsf") = False Then
+		Dim VJsf As BANanoObject
+		VJsf.Initialize("VJsf")
+		Dim boVJsf As BANanoObject = VJsf.GetField("default")
+		c.ImportBO("v-jsf", boVJsf)
+	End If	
+End Sub
+
 'clear the schema
 Sub Clear
 	properties.Initialize
@@ -63,86 +84,12 @@ Sub Build()
 	mVA.SetData(optionsname, options)
 End Sub
 
-Sub AddTextField(elID As String, vModel As String, sLabel As String, defValue As String) As VueVJSF
-	vModel = vModel.tolowercase
-	elID = elID.tolowercase
-	'
-	Dim fld As Map = CreateMap()
-	fld.Put("type", "string")
-	fld.Put("title", sLabel)
-	model.Put(vModel, defValue)
-	properties.Put(vModel, fld)
-	Return Me
-End Sub
-
-Sub AddTextArea(elID As String, vModel As String, sLabel As String, defValue As String) As VueVJSF
-	vModel = vModel.tolowercase
-	elID = elID.tolowercase
-	'
-	Dim fld As Map = CreateMap()
-	fld.Put("type", "string")
-	fld.Put("title", sLabel)
-	fld.Put("x-display", "textarea")
-	model.Put(vModel, defValue)
-	properties.Put(vModel, fld)
-	Return Me
-End Sub
-
-Sub AddCheckBox(elID As String, vModel As String, sLabel As String) As VueVJSF
-	vModel = vModel.tolowercase
-	elID = elID.tolowercase
-	'
-	Dim fld As Map = CreateMap()
-	fld.Put("type", "boolean")
-	fld.Put("title", sLabel)
-	model.Put(vModel, False)
-	properties.Put(vModel, fld)
-	Return Me
-End Sub
-
-Sub AddSwitch(elID As String, vModel As String, sLabel As String) As VueVJSF
-	vModel = vModel.tolowercase
-	elID = elID.tolowercase
-	'
-	Dim fld As Map = CreateMap()
-	fld.Put("type", "boolean")
-	fld.Put("title", sLabel)
-	fld.Put("x-display", "switch")
-	model.Put(vModel, False)
-	properties.Put(vModel, fld)
-	Return Me
-End Sub
-
-Sub AddSlider(elID As String, vModel As String, sLabel As String,MinValue As String, MaxValue As String) As VueVJSF
-	vModel = vModel.tolowercase
-	elID = elID.tolowercase
-	'
-	Dim fld As Map = CreateMap()
-	fld.Put("type", "integer")
-	fld.Put("title", sLabel)
-	fld.Put("x-display", "slider")
-	fld.put("minimum", MinValue)
-	fld.Put("maximum", MaxValue) 
-	model.Put(vModel, 0)
-	properties.Put(vModel, fld)
-	Return Me
-End Sub
-
 Sub SetData(fldName As String, fldValue As Object) As VueVJSF
 	fldName = fldName.tolowercase
 	model.Put(fldName, fldValue)
 	Return Me
 End Sub
 
-Sub SetDescription(vModel As String, fldDescription As String) As VueVJSF
-	vModel = vModel.ToLowerCase
-	If properties.ContainsKey(vModel) Then
-		Dim fld As Map = properties.Get(vModel)
-		fld.Put("description", fldDescription)
-		properties.Put(vModel, fld)
-	End If
-	Return Me
-End Sub
 
 Sub HiddenXSOnly
 	AddClass("hidden-xs-only")

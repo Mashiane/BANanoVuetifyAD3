@@ -1302,6 +1302,13 @@ Sub BuildDynamic As Map
 	Return b
 End Sub
 
+'return string for test connection operation
+Sub Connection As BANanoMSSQLE
+	command = "connection"
+	Return Me
+End Sub
+
+
 'return a sql to update records of table where one exists
 '<code>
 ''update where using map...
@@ -1359,6 +1366,27 @@ Sub UpdateWhere(tblfields As Map, tblWhere As Map, operators As List) As BANanoM
 	args = listOfValues
 	types = listOfTypes
 	command = "update"
+	Return Me
+End Sub
+
+'select sum(receiptamount) as amount from receipts
+'get a sum of all records
+'<code>
+'dbConnect.GetSum
+'dbConnect.JSON = BANano.CallInlinePHPWait(dbConnect.MethodName, dbConnect.Build)
+'dbConnect.FromJSON
+'Select Case dbConnect.OK
+'Case False
+'Dim strError As String = dbConnect.Error
+'Log(strError)
+'End Select
+'for each rec As Map in dbConnect.Result
+'log(rec)
+'next
+'</code>
+Sub GetSum As BANanoMSSQLE
+	query = $"select SUM(${PrimaryKey}) as ${PrimaryKey} from ${TableName}"$
+	command = "select"
 	Return Me
 End Sub
 
@@ -1466,7 +1494,25 @@ Sub SelectAllAscDesc(tblfields As List, orderBy As List, AscDesc As List)
 	affectedRows = 0
 End Sub
 
-
+'get databases
+'<code>
+'dbConnect.GetDatabases
+'dbConnect.JSON = BANano.CallInlinePHPWait(dbConnect.MethodName, dbConnect.Build)
+'dbConnect.FromJSON
+'Select Case dbConnect.OK
+'Case False
+'Dim strError As String = dbConnect.Error
+'Log(strError)
+'End Select
+'for each rec As Map in dbConnect.Result
+'log(rec)
+'next
+'</code>
+Sub GetDatabases As BANanoMSSQLE
+	query = $"SHOW DATABASES"$
+	command = "databases"
+	Return Me
+End Sub
 
 
 #if php

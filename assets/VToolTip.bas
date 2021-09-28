@@ -6,6 +6,7 @@ Version=8.9
 @EndOfDesignText@
 #IgnoreWarnings:12
 
+#DesignerProperty: Key: ParentID, DisplayName: ParentID, FieldType: String, DefaultValue: , Description: The id of the element to place this into
 #DesignerProperty: Key: Caption, DisplayName: Caption, FieldType: String, DefaultValue: , Description: Caption
 #DesignerProperty: Key: Absolute, DisplayName: Absolute, FieldType: Boolean, DefaultValue: false, Description: Absolute
 #DesignerProperty: Key: Activator, DisplayName: Activator, FieldType: String, DefaultValue: , Description: Activator
@@ -88,7 +89,8 @@ Private sTransition As String
 'Private sVModel As String
 Private sZIndex As String
 Private sCaption As String
-	Private VC As VueComponent						'ignore
+	Private VC As VueComponent	'ignore
+	Private sParentID As String
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -144,7 +146,9 @@ sTextColor = Props.Get("TextColor")
 sTextColorIntensity = Props.Get("TextColorIntensity")
 sTransition = Props.Get("Transition")
 sZIndex = Props.Get("ZIndex")
-sCaption = Props.Get("Caption")
+		sCaption = Props.Get("Caption")
+		sParentID = Props.GetDefault("ParentID", "")
+		sParentID = BANanoShared.parseNull(sParentID)
 	End If
 	'
 	bAbsolute = BANanoShared.parseBool(bAbsolute)
@@ -159,6 +163,10 @@ bOpenOnFocus = BANanoShared.parseBool(bOpenOnFocus)
 bOpenOnHover = BANanoShared.parseBool(bOpenOnHover)
 
 	'
+	If sParentID <> "" Then
+		sParentID = sParentID.ToLowerCase
+		mTarget.Initialize($"#${sParentID}"$)
+	End If
 	'build and get the element
 	If BANano.Exists($"#${mName}"$) Then
 		mElement = BANano.GetElement($"#${mName}"$)
