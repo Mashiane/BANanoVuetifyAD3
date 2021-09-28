@@ -1,0 +1,746 @@
+﻿AppType=JavaFX
+Build1=Default,b4j.example
+File1=1.jpg
+File10=android-chrome-512x512.png
+File100=md5.min.js
+File101=moment.min.js
+File102=neutralface.png
+File103=numeral.min.js
+File104=office.jpg
+File105=onemonth.png
+File106=onemonthplus.png
+File107=oneweek.png
+File108=ontime.png
+File109=orange.png
+File11=angry.png
+File110=oxml.min.js
+File111=parallax1.jpg
+File112=parallax2.jpg
+File113=planet.jpg
+File114=pricing.jpg
+File115=prism.min.css
+File116=prism.min.js
+File117=profile10.jpg
+File118=profile11.jpg
+File119=profile12.jpg
+File12=anime.min.js
+File120=profile13.jpeg
+File121=qrcode.min.js
+File122=quill.min.js
+File123=quill.snow.css
+File124=red.png
+File125=register.jpg
+File126=roboto.min.css
+File127=Roboto100.ttf
+File128=Roboto300.ttf
+File129=Roboto400.ttf
+File13=apple-touch-icon.png
+File130=Roboto500.ttf
+File131=Roboto700.ttf
+File132=Roboto900.ttf
+File133=sad.png
+File134=sadface.png
+File135=sample-1.jpg
+File136=server-room.jpg
+File137=sky.jpg
+File138=sponge.png
+File139=sponget.png
+File14=avatar.png
+File140=squirrel.jpg
+File141=sweetalert2.all.min.js
+File142=threeweeks.png
+File143=tippygoogle.css
+File144=upload.php
+File145=v-blur.min.js
+File146=vjsf.css
+File147=vjsf.js
+File148=vue.js
+File149=vue.min.js
+File15=axios.min.js
+File150=vue2-editor.css
+File151=vue2-editor.umd.min.js
+File152=vue2-leaflet.min.js
+File153=vue2-leaflet-movingmarker.umd.min.js
+File154=vue-clipboard.min.js
+File155=vue-count-to.min.js
+File156=vue-form-wizard.js
+File157=vue-form-wizard.min.css
+File158=vue-prism-component.min.js
+File159=VueQrcodeReader.umd.min.js
+File16=beautify.min.js
+File160=vue-router.min.js
+File161=vue-session.js
+File162=vuetify.min.css
+File163=vuetify.min.js
+File164=vue-tippy.min.js
+File165=vuewebcam.js
+File166=wow.png
+File167=xlsx.full.min.js
+File17=beautify-css.min.js
+File18=beautify-html.min.js
+File19=bug.png
+File2=1.png
+File20=bvad31.png
+File21=chart.js
+File22=Chart.min.css
+File23=chartjs-adapter-date-fns.bundle.min.js
+File24=chartkick.min.js
+File25=clint-mckoy.jpg
+File26=collect.min.js
+File27=cooking.png
+File28=country_state.json
+File29=dark-beach.jpg
+File3=2.jpg
+File30=dayjs.min.js
+File31=favicon.ico
+File32=favicon-16x16.png
+File33=favicon-32x32.png
+File34=female.png
+File35=fileSaver.min.js
+File36=firesql.umd.js
+File37=flower.jpeg
+File38=flowy-vue.css
+File39=flowy-vue.umd.min.js
+File4=2.png
+File40=gmap-vue.min.js
+File41=gray.png
+File42=green.png
+File43=haha.png
+File44=happyface.png
+File45=helpers.min.css
+File46=html2canvas.min.js
+File47=img1.png
+File48=img2.png
+File49=img3.png
+File5=3.jpg
+File50=img4.png
+File51=img5.png
+File52=img6.png
+File53=img7.png
+File54=img8.png
+File55=img9.png
+File56=info-box.min.css
+File57=jspdf.plugin.autotable.min.js
+File58=jspdf.umd.min.js
+File59=jszip.min.js
+File6=4.jpg
+File60=kitchen.png
+File61=layers.png
+File62=layers-2x.png
+File63=leaflet.css
+File64=leaflet.js
+File65=like.png
+File66=lock.jpg
+File67=lodash.min.js
+File68=login.jpg
+File69=love.png
+File7=5.jpg
+File70=male.png
+File71=marcus.jpg
+File72=markerclustererplus.min.js
+File73=marker-icon.png
+File74=marker-icon-2x.png
+File75=marker-icon-2x-black.png
+File76=marker-icon-2x-blue.png
+File77=marker-icon-2x-gold.png
+File78=marker-icon-2x-green.png
+File79=marker-icon-2x-grey.png
+File8=alasql.min.js
+File80=marker-icon-2x-orange.png
+File81=marker-icon-2x-red.png
+File82=marker-icon-2x-violet.png
+File83=marker-icon-2x-yellow.png
+File84=marker-icon-black.png
+File85=marker-icon-blue.png
+File86=marker-icon-gold.png
+File87=marker-icon-green.png
+File88=marker-icon-grey.png
+File89=marker-icon-orange.png
+File9=android-chrome-192x192.png
+File90=marker-icon-red.png
+File91=marker-icon-violet.png
+File92=marker-icon-yellow.png
+File93=marker-shadow.png
+File94=materialdesignicons.min.css
+File95=materialdesignicons-webfont.eot
+File96=materialdesignicons-webfont.ttf
+File97=materialdesignicons-webfont.woff
+File98=materialdesignicons-webfont.woff2
+File99=material-ui.min.css
+FileGroup1=Default Group
+FileGroup10=Default Group
+FileGroup100=Default Group
+FileGroup101=Default Group
+FileGroup102=Default Group
+FileGroup103=Default Group
+FileGroup104=Default Group
+FileGroup105=Default Group
+FileGroup106=Default Group
+FileGroup107=Default Group
+FileGroup108=Default Group
+FileGroup109=Default Group
+FileGroup11=Default Group
+FileGroup110=Default Group
+FileGroup111=Default Group
+FileGroup112=Default Group
+FileGroup113=Default Group
+FileGroup114=Default Group
+FileGroup115=Default Group
+FileGroup116=Default Group
+FileGroup117=Default Group
+FileGroup118=Default Group
+FileGroup119=Default Group
+FileGroup12=Default Group
+FileGroup120=Default Group
+FileGroup121=Default Group
+FileGroup122=Default Group
+FileGroup123=Default Group
+FileGroup124=Default Group
+FileGroup125=Default Group
+FileGroup126=Default Group
+FileGroup127=Default Group
+FileGroup128=Default Group
+FileGroup129=Default Group
+FileGroup13=Default Group
+FileGroup130=Default Group
+FileGroup131=Default Group
+FileGroup132=Default Group
+FileGroup133=Default Group
+FileGroup134=Default Group
+FileGroup135=Default Group
+FileGroup136=Default Group
+FileGroup137=Default Group
+FileGroup138=Default Group
+FileGroup139=Default Group
+FileGroup14=Default Group
+FileGroup140=Default Group
+FileGroup141=Default Group
+FileGroup142=Default Group
+FileGroup143=Default Group
+FileGroup144=Default Group
+FileGroup145=Default Group
+FileGroup146=Default Group
+FileGroup147=Default Group
+FileGroup148=Default Group
+FileGroup149=Default Group
+FileGroup15=Default Group
+FileGroup150=Default Group
+FileGroup151=Default Group
+FileGroup152=Default Group
+FileGroup153=Default Group
+FileGroup154=Default Group
+FileGroup155=Default Group
+FileGroup156=Default Group
+FileGroup157=Default Group
+FileGroup158=Default Group
+FileGroup159=Default Group
+FileGroup16=Default Group
+FileGroup160=Default Group
+FileGroup161=Default Group
+FileGroup162=Default Group
+FileGroup163=Default Group
+FileGroup164=Default Group
+FileGroup165=Default Group
+FileGroup166=Default Group
+FileGroup167=Default Group
+FileGroup17=Default Group
+FileGroup18=Default Group
+FileGroup19=Default Group
+FileGroup2=Default Group
+FileGroup20=Default Group
+FileGroup21=Default Group
+FileGroup22=Default Group
+FileGroup23=Default Group
+FileGroup24=Default Group
+FileGroup25=Default Group
+FileGroup26=Default Group
+FileGroup27=Default Group
+FileGroup28=Default Group
+FileGroup29=Default Group
+FileGroup3=Default Group
+FileGroup30=Default Group
+FileGroup31=Default Group
+FileGroup32=Default Group
+FileGroup33=Default Group
+FileGroup34=Default Group
+FileGroup35=Default Group
+FileGroup36=Default Group
+FileGroup37=Default Group
+FileGroup38=Default Group
+FileGroup39=Default Group
+FileGroup4=Default Group
+FileGroup40=Default Group
+FileGroup41=Default Group
+FileGroup42=Default Group
+FileGroup43=Default Group
+FileGroup44=Default Group
+FileGroup45=Default Group
+FileGroup46=Default Group
+FileGroup47=Default Group
+FileGroup48=Default Group
+FileGroup49=Default Group
+FileGroup5=Default Group
+FileGroup50=Default Group
+FileGroup51=Default Group
+FileGroup52=Default Group
+FileGroup53=Default Group
+FileGroup54=Default Group
+FileGroup55=Default Group
+FileGroup56=Default Group
+FileGroup57=Default Group
+FileGroup58=Default Group
+FileGroup59=Default Group
+FileGroup6=Default Group
+FileGroup60=Default Group
+FileGroup61=Default Group
+FileGroup62=Default Group
+FileGroup63=Default Group
+FileGroup64=Default Group
+FileGroup65=Default Group
+FileGroup66=Default Group
+FileGroup67=Default Group
+FileGroup68=Default Group
+FileGroup69=Default Group
+FileGroup7=Default Group
+FileGroup70=Default Group
+FileGroup71=Default Group
+FileGroup72=Default Group
+FileGroup73=Default Group
+FileGroup74=Default Group
+FileGroup75=Default Group
+FileGroup76=Default Group
+FileGroup77=Default Group
+FileGroup78=Default Group
+FileGroup79=Default Group
+FileGroup8=Default Group
+FileGroup80=Default Group
+FileGroup81=Default Group
+FileGroup82=Default Group
+FileGroup83=Default Group
+FileGroup84=Default Group
+FileGroup85=Default Group
+FileGroup86=Default Group
+FileGroup87=Default Group
+FileGroup88=Default Group
+FileGroup89=Default Group
+FileGroup9=Default Group
+FileGroup90=Default Group
+FileGroup91=Default Group
+FileGroup92=Default Group
+FileGroup93=Default Group
+FileGroup94=Default Group
+FileGroup95=Default Group
+FileGroup96=Default Group
+FileGroup97=Default Group
+FileGroup98=Default Group
+FileGroup99=Default Group
+Group=Default Group
+Library1=banano
+Library2=jcore
+Library3=jfx
+Module1=BANanoALASQLE
+Module10=BananoDatasourceRelationship
+Module100=VListItemGroup
+Module101=VListOptions
+Module102=VListSlot
+Module103=VMain
+Module104=VMenu
+Module105=VMsgBox
+Module106=VNavigationDrawer
+Module107=VOverlay
+Module108=VPagination
+Module109=VPanelItem
+Module11=BANanoFakeIT
+Module110=VParallax
+Module111=VPrism
+Module112=VProgressCircular
+Module113=VProgressLinear
+Module114=VRadio
+Module115=VRadioGroup
+Module116=VRangeSlider
+Module117=VRating
+Module118=VRow
+Module119=VSelect
+Module12=BANanoJSPDF
+Module120=VSheet
+Module121=VSimpleTable
+Module122=VSkeletonLoader
+Module123=VSlider
+Module124=VSnackBar
+Module125=VSpacer
+Module126=VSparkline
+Module127=VSpeedDial
+Module128=VStepper
+Module129=VStepperContent
+Module13=BANanoJSPDFTable
+Module130=VStepperStep
+Module131=VSwitch
+Module132=VTab
+Module133=VTabItem
+Module134=VTabs
+Module135=VTemplate
+Module136=VTextField
+Module137=VTimeLine
+Module138=VTimelineItem
+Module139=VTimePicker
+Module14=BANanoMSSQLE
+Module140=VToolBar
+Module141=VToolBarTitle
+Module142=VToolTip
+Module143=VTransition
+Module144=VTreeView
+Module145=VueComponent
+Module146=VueEditor
+Module147=VueElement
+Module148=VueFlowy
+Module149=VueGMap
+Module15=BANanoMySQLE
+Module150=VueInfoBox
+Module151=VueSwal
+Module152=VueTable
+Module153=VuetifyApp
+Module154=VueVJSF
+Module155=VWebCam
+Module16=BANanoOXML
+Module17=BANanoPHP
+Module18=BANanoShared
+Module19=BANanoSQLiteE
+Module2=BANanoAnimeJS
+Module20=BVAD3FBAuth
+Module21=BVAD3FBCollection
+Module22=BVAD3FBDocument
+Module23=BVAD3FBRecordSet
+Module24=BVAD3FBStorage
+Module25=BVAD3Form
+Module26=BVAD3ListItem
+Module27=DirectoryHandle
+Module28=FileHandle
+Module29=JsPdfAnnotation
+Module3=BANanoAnimeJSItem
+Module30=JsPdfAutoTable
+Module31=JsPdfCircle
+Module32=JsPdfCurveTo
+Module33=JsPdfDoc
+Module34=JsPdfEllipse
+Module35=JsPdfImage
+Module36=JsPdfLine
+Module37=JsPdfLink
+Module38=JsPdfPage
+Module39=JsPdfRect
+Module4=BANanoAnimeJSTimeLine
+Module40=JsPdfRoundedRect
+Module41=JsPdfStyle
+Module42=JsPdfText
+Module43=JsPdfTriangle
+Module44=jsPdfView
+Module45=MySQLCRUD
+Module46=VAlert
+Module47=VApp
+Module48=VAppBar
+Module49=VAppBarNavIcon
+Module5=BANanoAxios
+Module50=VAppBarTitle
+Module51=VAutoComplete
+Module52=VAvatar
+Module53=VBadge
+Module54=VBottomNavigation
+Module55=VBottomSheet
+Module56=VBreadCrumbs
+Module57=VBtn
+Module58=VBtnIcon
+Module59=VCalendar
+Module6=BANanoCodeHandler
+Module60=VCard
+Module61=VCard0
+Module62=VCardActions
+Module63=VCardSubTitle
+Module64=VCardText
+Module65=VCardTitle
+Module66=VCarousel
+Module67=VCarouselItem
+Module68=VChartKick
+Module69=VCheckBox
+Module7=BANanoCollectJS
+Module70=VChip
+Module71=VChipGroup
+Module72=VCol
+Module73=VColorPicker
+Module74=VComboBox
+Module75=VContainer
+Module76=VDatePicker
+Module77=VDialog
+Module78=VDialog0
+Module79=VDivider
+Module8=BananoDataSource
+Module80=VExpansionPanel
+Module81=VExpansionPanelContent
+Module82=VExpansionPanelHeader
+Module83=VExpansionPanels
+Module84=VFAB
+Module85=VField
+Module86=VFileInput
+Module87=VFooter
+Module88=VForm
+Module89=VHover
+Module9=BANanoDataSourceFireBase
+Module90=VIcon
+Module91=VImg
+Module92=VInfoBox
+Module93=VLabel
+Module94=VLazy
+Module95=VLeaflet
+Module96=VList
+Module97=VListGroup
+Module98=VListItem
+Module99=VListItemAvatar
+NumberOfFiles=167
+NumberOfLibraries=3
+NumberOfModules=155
+Version=9.1
+@EndOfDesignText@
+#Region Project Attributes 
+	#MainFormWidth: 600
+	#MainFormHeight: 600 
+	#LibraryAuthor: Anele Mbanga (Mashiane)
+	#IgnoreWarnings:15
+	#IgnoreWarnings:12
+	#IgnoreWarnings:9
+	#VirtualMachineArgs: -Xms1024m -Xmx1024m
+#End Region
+
+
+Sub Process_Globals
+	Private BANano As BANano 'ignore
+	Public Version As String = "6.05"
+	Public AppName As String = "BANanoVuetifyAD3"
+End Sub
+
+Sub AppStart (Form1 As Form, Args() As String)	
+	' you can change some output params here
+	BANano.Initialize("BANano", AppName,DateTime.now)
+'	BANano.Header.AddCSSFile("https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900")
+'	BANano.Header.AddCSSFile("https://cdn.jsdelivr.net/npm/@mdi/font@latest/css/materialdesignicons.min.css")
+'	BANano.Header.AddCSSFile("https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css")
+'	BANano.Header.AddJavascriptFile("https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.min.js")
+'	BANano.Header.AddJavascriptFile("https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.js")
+'	BANano.Header.AddJavascriptFile("https://cdn.jsdelivr.net/npm/vue-router@3.x/dist/vue-router.min.js")
+'	BANano.Header.AddJavascriptFile("https://cdn.jsdelivr.net/npm/dayjs@1.10.3/dayjs.min.js")
+'	BANano.Header.AddJavascriptFile("https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js")
+'	BANano.Header.AddJavascriptFile("https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.20/lodash.min.js")
+'	BANano.Header.AddJavascriptFile("https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js")
+	'BANano.Header.AddCSSFile("https://unpkg.com/vue-form-wizard/dist/vue-form-wizard.min.css")
+	'BANano.Header.AddJavascriptFile("https://unpkg.com/vue-form-wizard/dist/vue-form-wizard.js")
+	
+	BANano.Header.AddJavascriptFile("alasql.min.js")
+	BANano.Header.AddCSSFile("materialdesignicons.min.css")
+	BANano.Header.AddCSSFile("roboto.min.css")
+	BANano.Header.AddCSSFile("info-box.min.css")
+	BANano.Header.AddCSSFile("flowy-vue.css")
+	BANano.Header.AddCSSFile("helpers.min.css")
+	BANano.Header.AddCSSFile("vue-form-wizard.min.css")
+	BANano.Header.AddCSSFile("vjsf.css")
+	'BANano.Header.AddCSSFile("xspreadsheet.css")
+	'BANano.Header.AddCSSFile("sweetalert2.min.css")
+	BANano.Header.AddCSSFile("material-ui.min.css")
+	'
+	BANano.Header.AddCSSFile("vuetify.min.css")
+	'BANano.Header.AddJavascriptFile("vue.js")
+	BANano.Header.AddJavascriptFile("vue.min.js")
+	BANano.Header.AddJavascriptFile("vuetify.min.js")
+	BANano.Header.AddJavascriptFile("vue-router.min.js")
+	BANano.Header.AddJavascriptFile("dayjs.min.js")
+	BANano.Header.AddJavascriptFile("numeral.min.js")
+	'
+	'INFO BOX
+	BANano.Header.AddJavascriptFile("vue-count-to.min.js")
+	'
+	'BANano.Header.AddJavascriptFile("vuedraggable.umd.min.js")
+	'
+	'FLOWY
+	BANano.Header.AddJavascriptFile("flowy-vue.umd.min.js")
+	'
+	'PRISM
+	BANano.Header.AddCSSFile("prism.min.css")		
+	BANano.Header.AddJavascriptFile("prism.min.js")
+	BANano.Header.AddJavascriptFile("vue-prism-component.min.js")
+	BANano.Header.AddJavascriptFile("beautify.min.js")
+	BANano.Header.AddJavascriptFile("beautify-css.min.js")
+	BANano.Header.AddJavascriptFile("beautify-html.min.js")
+	BANano.Header.AddJavascriptFile("vue-clipboard.min.js")
+		
+	BANano.Header.AddJavascriptFile("lodash.min.js")
+	'BANano.Header.AddJavascriptFile("vue-focus-loop.min.js")
+	'BANano.Header.AddJavascriptFile("vue-social-chat.min.js")
+	
+	'GOOGLE MAPS
+	'BANano.Header.AddJavascriptFile("vue-google-maps.js")
+	BANano.Header.AddJavascriptFile("markerclustererplus.min.js")
+	BANano.Header.AddJavascriptFile("gmap-vue.min.js")
+	
+	'BANano.Header.AddJavascriptFile("Sortable.min.js")
+	
+	'BVAD3
+	BANano.Header.AddJavascriptFile("v-blur.min.js")
+	BANano.Header.AddJavascriptFile("sweetalert2.all.min.js")
+	
+	'BANano.Header.AddJavascriptFile("vue-google-charts.browser.js")
+	
+	'JSPDF
+	BANano.Header.AddJavascriptFile("jspdf.umd.min.js")
+	BANano.Header.AddJavascriptFile("jspdf.plugin.autotable.min.js")	
+	BANano.Header.AddJavascriptFile("html2canvas.min.js")
+	'
+	BANano.Header.AddJavascriptFile("qrcode.min.js")
+	'
+	'AXIOS
+	BANano.Header.AddJavascriptFile("axios.min.js")
+	'
+	'BANano.Header.AddJavascriptFile("carousel-3d.umd.min.js")
+	'BANano.Header.AddJavascriptFile("v-tooltip.js")
+	BANano.Header.AddJavascriptFile("vue-form-wizard.js")
+	
+	'
+	'VJSF
+	BANano.Header.AddJavascriptFile("vjsf.js")
+	'BANano.Header.AddJavascriptFile("third-party.js")
+	'BANano.Header.AddJavascriptFile("vuetify-form-base.js")
+	'BANano.Header.AddJavascriptFile("v-mask.min.js")
+	'BANano.Header.AddJavaScriptfile("VueTheMask.umd.js")
+	'
+	'EXCEL/OXML
+	BANano.Header.AddJavascriptFile("fileSaver.min.js")
+	BANano.Header.AddJavascriptFile("jszip.min.js")
+	BANano.Header.AddJavascriptFile("oxml.min.js")
+	BANano.Header.AddJavascriptFile("xlsx.full.min.js")
+	
+	'BANano.Header.AddJavascriptFile("xspreadsheet.js")
+	'BANano.Header.AddJavascriptFile("vuetify-simple-wizard.min.js")
+	'BANano.Header.AddJavascriptFile("nedb.min.js")
+	
+	
+	'BANano.Header.AddJavascriptFile("arcCounter.umd.min.js")
+	'BANano.Header.AddJavascriptFile("tiptap-vuetify.js")
+	BANano.Header.AddJavascriptFile("moment.min.js")
+	
+	'CHARTKICK
+	BANano.Header.AddCSSFile("Chart.min.css")
+	BANano.Header.AddJavascriptFile("chart.js")
+	BANano.Header.AddJavascriptFile("chartjs-adapter-date-fns.bundle.min.js")
+	BANano.Header.AddJavascriptFile("chartkick.min.js")
+	
+	'LEAFLET
+	BANano.Header.AddCSSFile("leaflet.css")
+	BANano.Header.AddJavascriptFile("leaflet.js")
+	BANano.Header.AddJavascriptfile("vue2-leaflet.min.js")
+	BANano.Header.AddJavascriptFile("vue2-leaflet-movingmarker.umd.min.js")
+	'
+	'FIREBASE
+	BANano.Header.AddJavaScriptfile("https://www.gstatic.com/firebasejs/8.9.1/firebase-app.js")
+	BANano.header.AddJavaScriptfile("https://www.gstatic.com/firebasejs/8.9.1/firebase-analytics.js")
+	BANano.header.AddJavaScriptfile("https://www.gstatic.com/firebasejs/8.9.1/firebase-auth.js")
+	BANano.header.AddJavaScriptfile("https://www.gstatic.com/firebasejs/8.9.1/firebase-firestore.js")
+	BANano.header.AddJavaScriptfile("https://www.gstatic.com/firebasejs/8.9.1/firebase-messaging.js")
+	BANano.header.AddJavaScriptfile("https://www.gstatic.com/firebasejs/8.9.1/firebase-storage.js")
+	BANano.header.AddJavaScriptfile("https://www.gstatic.com/firebasejs/8.9.1/firebase-performance.js")
+	BANano.header.AddJavaScriptfile("https://www.gstatic.com/firebasejs/8.9.1/firebase-database.js")
+	BANano.header.AddJavaScriptfile("https://www.gstatic.com/firebasejs/8.9.1/firebase-functions.js")
+	
+	BANano.Header.AddJavascriptFile("firesql.umd.js")
+	'
+	'TIPPY
+	BANano.Header.AddJavascriptFile("vue-tippy.min.js")
+	BANano.Header.AddCSSFile("tippygoogle.css")
+	BANano.Header.AddJavascriptFile("vue-session.js")
+	BANano.Header.AddJavascriptFile("collect.min.js")
+		'
+	BANano.Header.AddJavascriptFile("md5.min.js")
+	BANano.Header.AddJavascriptFile("vuewebcam.js")
+	'
+	BANano.Header.AddCSSFile("quill.snow.css")
+	BANano.Header.AddJavascriptFile("quill.min.js")
+	BANano.Header.AddCSSFile("vue2-editor.css")
+	BANano.Header.AddJavascriptFile("vue2-editor.umd.min.js")
+	'
+	'qrcode
+	BANano.Header.AddJavascriptFile("VueQrcodeReader.umd.min.js")
+	
+	'animation
+	BANano.Header.AddJavascriptFile("anime.min.js")
+	
+	' start the build
+	#if release
+		BANano.BuildAsB4Xlib(Version)
+	#else
+		BANano.Build(File.DirApp)
+	#end if
+	ExitApplication
+End Sub
+
+'Return true to allow the default exceptions handler to handle the uncaught exception.
+Sub Application_Error (Error As Exception, StackTrace As String) As Boolean
+	Return True
+End Sub
+
+
+#if css
+.pulse {
+    box-shadow: 0 0 0 rgba(88, 120, 243, 0.4);
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(88, 120, 243, 0.4);
+    }
+    50% {
+        box-shadow: 0 0 0 10px rgba(88, 120, 243, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(88, 120, 243, 0);
+    }
+}
+
+.light::-webkit-scrollbar {
+  width: 15px;
+}
+
+.light::-webkit-scrollbar-track {
+  background: #e6e6e6;
+  border-left: 1px solid #dadada;
+}
+
+.light::-webkit-scrollbar-thumb {
+  background: #b0b0b0;
+  border: solid 3px #e6e6e6;
+  border-radius: 7px;
+}
+
+.light::-webkit-scrollbar-thumb:hover {
+  background: black;
+}
+
+.dark::-webkit-scrollbar {
+  width: 15px;
+}
+
+.dark::-webkit-scrollbar-track {
+  background: #202020;
+  border-left: 1px solid #2c2c2c;
+}
+
+.dark::-webkit-scrollbar-thumb {
+  background: #3e3e3e;
+  border: solid 3px #202020;
+  border-radius: 7px;
+}
+
+.dark::-webkit-scrollbar-thumb:hover {
+  background: white;
+}
+
+#End If
+
+' HERE STARTS YOUR APP
+Sub BANano_Ready()
+	
+End Sub

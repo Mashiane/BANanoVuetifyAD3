@@ -5,12 +5,11 @@ Type=Class
 Version=8.95
 @EndOfDesignText@
 #IgnoreWarnings:12
-
 #Event: Click (item As Map)
 #Event: RightClick (item As Map)
 #Event: LeftClick (item As Map)
-
 #DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Hidden
+#DesignerProperty: Key: ParentID, DisplayName: ParentID, FieldType: String, DefaultValue: , Description: The id of the element to place this into
 #DesignerProperty: Key: Bench, DisplayName: Bench, FieldType: String, DefaultValue: , Description: Bench
 #DesignerProperty: Key: PlaceAtBottom, DisplayName: PlaceAtBottom, FieldType: Boolean, DefaultValue: False, Description: Place List At Bottom
 #DesignerProperty: Key: VirtualScroll, DisplayName: VirtualScroll, FieldType: Boolean, DefaultValue: False, Description: Virtual Scroll
@@ -26,7 +25,6 @@ Version=8.95
 #DesignerProperty: Key: Flat, DisplayName: Flat, FieldType: Boolean, DefaultValue: false, Description: Flat
 #DesignerProperty: Key: Height, DisplayName: Height, FieldType: String, DefaultValue: , Description: Height
 #DesignerProperty: Key: Width, DisplayName: Width, FieldType: String, DefaultValue: , Description: Width
-
 #DesignerProperty: Key: ItemHeight, DisplayName: ItemHeight, FieldType: String, DefaultValue: , Description: ItemHeight
 #DesignerProperty: Key: Key, DisplayName: Key, FieldType: String, DefaultValue: , Description: Key
 #DesignerProperty: Key: Light, DisplayName: Light, FieldType: Boolean, DefaultValue: false, Description: Light
@@ -41,7 +39,6 @@ Version=8.95
 #DesignerProperty: Key: Subheader, DisplayName: Subheader, FieldType: Boolean, DefaultValue: false, Description: Subheader
 #DesignerProperty: Key: TextColor, DisplayName: TextColor, FieldType: String, DefaultValue: , Description: TextColor, List: amber|black|blue|blue-grey|brown|cyan|deep-orange|deep-purple|green|grey|indigo|light-blue|light-green|lime|orange|pink|purple|red|teal|transparent|white|yellow|primary|secondary|accent|error|info|success|warning|none
 #DesignerProperty: Key: TextColorIntensity, DisplayName: TextColorIntensity, FieldType: String, DefaultValue: , Description: TextColorIntensity, List: normal|lighten-5|lighten-4|lighten-3|lighten-2|lighten-1|darken-1|darken-2|darken-3|darken-4|accent-1|accent-2|accent-3|accent-4
-
 #DesignerProperty: Key: Tile, DisplayName: Tile, FieldType: Boolean, DefaultValue: false, Description: Tile
 #DesignerProperty: Key: VBind, DisplayName: VBind, FieldType: String, DefaultValue: , Description: VBind
 #DesignerProperty: Key: VFor, DisplayName: VFor, FieldType: String, DefaultValue: , Description: VFor
@@ -50,127 +47,192 @@ Version=8.95
 #DesignerProperty: Key: Classes, DisplayName: Classes, FieldType: String, DefaultValue: , Description: Classes added to the HTML tag.
 #DesignerProperty: Key: Styles, DisplayName: Styles, FieldType: String, DefaultValue: , Description: Styles added to the HTML tag. Must be a json String, use =
 #DesignerProperty: Key: Attributes, DisplayName: Attributes, FieldType: String, DefaultValue: , Description: Attributes added to the HTML tag. Must be a json String, use =
-
+#DesignerProperty: Key: GradientActive, DisplayName: GradientActive, FieldType: Boolean, DefaultValue: false, Description: Gradient should be set
+#DesignerProperty: Key: Gradient, DisplayName: Gradient, FieldType: String, DefaultValue: , Description: Gradient, List: top_bottom|right_left|bottom_top|left_right|tl_br|bl_tr|tr_bl|br_tl
+#DesignerProperty: Key: GradientColor1, DisplayName: GradientColor1, FieldType: Color, DefaultValue: 0xFFCFDCDC, Gradient Color 1.
+#DesignerProperty: Key: GradientColor2, DisplayName: GradientColor2, FieldType: Color, DefaultValue: 0xFFCFDCDC, Gradient Color 2.
+#DesignerProperty: Key: States, DisplayName: States, FieldType: String, DefaultValue: , Description: Initial Binding States. Must be a json String.
+#DesignerProperty: Key: Absolute, DisplayName: Absolute, FieldType: Boolean, DefaultValue: False, Description: Absolute
+#DesignerProperty: Key: Hover, DisplayName: Hover, FieldType: Boolean, DefaultValue: false, Description: Hover
+#DesignerProperty: Key: MarginAXYTBLR, DisplayName: Margins AXYTBLR, FieldType: String, DefaultValue: a=?; x=?; y=?; t=?; b=?; l=?; r=? , Description: Margins A-X-Y-S-M-L-X
+#DesignerProperty: Key: PaddingAXYTBLR, DisplayName: Paddings AXYTBLR, FieldType: String, DefaultValue: a=?; x=?; y=?; t=?; b=?; l=?; r=? , Description: Padding A-X-Y-S-M-L-X
+#DesignerProperty: Key: Transition, DisplayName: Transition, FieldType: String, DefaultValue: , Description: Transition, List: none|fab-transition|fade-transition|expand-transition|scale-transition|scroll-x-transition|scroll-x-reverse-transition|scroll-y-transition|scroll-y-reverse-transition|slide-x-transition|slide-x-reverse-transition|slide-y-transition|slide-y-reverse-transition
+#DesignerProperty: Key: Shrink, DisplayName: Shrink, FieldType: Boolean, DefaultValue: False, Description: Shrink
+#DesignerProperty: Key: Grow, DisplayName: Grow, FieldType: Boolean, DefaultValue: false, Description: Grow
+'Definition of variables used in this VList component.
+'Definition of variables used in this VList component.
 Sub Class_Globals
-    Private BANano As BANano 'ignore
-	Private mName As String 'ignore
-	Private mEventName As String 'ignore
-	Private mCallBack As Object 'ignore
-	Private mTarget As BANanoElement 'ignore
-	Private mElement As BANanoElement 'ignore
-	Private mClasses As String = ""
-	Private mStyles As String = ""
-	Private mAttributes As String = ""
-	Public VElement As VueElement
-	Private sColor As String
-	Private sColorIntensity As String
-	Private bDark As Boolean
-	Private bDense As Boolean
-	Private sDisabled As String
-	Private sElevation As String
-	Private bExpand As Boolean
-	Private bFlat As Boolean
-	Private sHeight As String
-	Private sKey As String
-	Private bLight As Boolean
-	Private sMaxHeight As String
-	Private sMaxWidth As String
-	Private sMinHeight As String
-	Private sMinWidth As String
-	Private bNav As Boolean
-	Private bOutlined As Boolean
-	Private bRounded As Boolean
-	Private bShaped As Boolean
-	Private bSubheader As Boolean
-	Private sTextColor As String
-	Private sTextColorIntensity As String
-	Private bThreeLine As Boolean
-	Private bTile As Boolean
-	Private bTwoLine As Boolean
-	Private sVBind As String
-	Private sVFor As String
-	Private sVIf As String
-	Private sVOn As String
-	Private sVShow As String
-	Private sWidth As String
-	Public Records As List
-	Public DataSource As String
-	Private numLines As Int
-	Private xTemplate As String
-	Private bDisabled As Boolean
-	Private bHidden As Boolean
-	Private bPlaceAtBottom As Boolean
-	Private VC As VueComponent
-	Private Options As ListViewItemOptions
-	Private bVirtualScroll As Boolean
-	Private sBench As String
-	Private sItemHeight As String
+Private BANano As BANano 'ignore
+Private mName As String 'ignore
+Private mEventName As String 'ignore
+Private mCallBack As Object 'ignore
+Private mTarget As BANanoElement 'ignore
+Private mElement As BANanoElement 'ignore
+Private mClasses As String = ""
+Private mStyles As String = ""
+Private mAttributes As String = ""
+Public VElement As VueElement
+Private sColor As String
+Private sParentID As String
+Private sColorIntensity As String
+Private bDark As Boolean
+Private bDense As Boolean
+Private sDisabled As String
+Private sElevation As String
+Private bExpand As Boolean
+Private bFlat As Boolean
+Private sHeight As String
+Private sKey As String
+Private bLight As Boolean
+Private sMaxHeight As String
+Private sMaxWidth As String
+Private sMinHeight As String
+Private sMinWidth As String
+Private bNav As Boolean
+Private bOutlined As Boolean
+Private bRounded As Boolean
+Private bShaped As Boolean
+Private bSubheader As Boolean
+Private sTextColor As String
+Private sTextColorIntensity As String
+Private bThreeLine As Boolean
+Private bTile As Boolean
+Private bTwoLine As Boolean
+Private sVBind As String
+Private sVFor As String
+Private sVIf As String
+Private sVOn As String
+Private sVShow As String
+Private sWidth As String
+Public Records As List
+Public DataSource As String
+Private numLines As Int
+Private xTemplate As String
+Private bDisabled As Boolean
+Private bHidden As Boolean
+Private bPlaceAtBottom As Boolean
+Private VC As VueComponent
+Private Options As ListViewItemOptions
+Private bVirtualScroll As Boolean
+Private sBench As String
+Private sItemHeight As String
+Private bGradientActive As String
+Private sGradient As String
+Private sGradientColor1 As String
+Private sGradientColor2 As String
+Private sStates As String
+Private bAbsolute As Boolean
+Private bHover As Boolean
+Private sMarginAXYTBLR As String
+Private sPaddingAXYTBLR As String
+Private sTransition As String
+Private sRounded As String
+Private bShrink As Boolean
+Private bGrow As Boolean
 End Sub
-	
+'Initializes the VList component.
+'Initializes the VList component.
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
-	mName = Name.tolowercase
-	mEventName = EventName.ToLowerCase
-	mCallBack = CallBack	
-	mName = mName.Replace("#","")
-	mEventName = mEventName.Replace("#","")
-	If mName <> "" Then
-		Dim fKey As String = $"#${mName}"$
-		If BANano.Exists(fKey) Then 
-			mElement = BANano.GetElement(fKey)
-		End If
-	End If
-	Records.Initialize 
-	DataSource = ""
-	numLines = 0
-	sDisabled = $"${mName}disabled"$
-	sVShow = $"${mName}show"$
+mName = Name.tolowercase
+mEventName = EventName.ToLowerCase
+mCallBack = CallBack
+mName = mName.Replace("#","")
+mEventName = mEventName.Replace("#","")
+If mName <> "" Then
+Dim fKey As String = $"#${mName}"$
+If BANano.Exists(fKey) Then
+mElement = BANano.GetElement(fKey)
+End If
+End If
+Records.Initialize
+DataSource = ""
+numLines = 0
+sDisabled = $"${mName}disabled"$
+sVShow = $"${mName}show"$
+'sDisabled = $"${mName}disabled"$
 End Sub
-	
+'This builds the HTML tree based on defined properties for VList
+'This builds the HTML tree based on defined properties for VList
 Sub DesignerCreateView (Target As BANanoElement, Props As Map)
-	mTarget = Target
-	If Props <> Null Then
-		mClasses = Props.Get("Classes")
-		mStyles = Props.Get("Styles")
-		mAttributes = Props.Get("Attributes")
-		sColor = Props.Get("Color")
-		sColorIntensity = Props.Get("ColorIntensity")
-		bDark = Props.Get("Dark")
-		bDense = Props.Get("Dense")
-		bDisabled = Props.GetDefault("Disabled",False)
-		sElevation = Props.Get("Elevation")
-		bExpand = Props.Get("Expand")
-		bFlat = Props.Get("Flat")
-		sHeight = Props.Get("Height")
-		sKey = Props.Get("Key")
-		bLight = Props.Get("Light")
-		sMaxHeight = Props.Get("MaxHeight")
-		sMaxWidth = Props.Get("MaxWidth")
-		sMinHeight = Props.Get("MinHeight")
-		sMinWidth = Props.Get("MinWidth")
-		bNav = Props.Get("Nav")
-		bOutlined = Props.Get("Outlined")
-		bRounded = Props.Get("Rounded")
-		bShaped = Props.Get("Shaped")
-		bSubheader = Props.Get("Subheader")
-		sTextColor = Props.Get("TextColor")
-		sTextColorIntensity = Props.Get("TextColorIntensity")
-		bThreeLine = Props.Get("ThreeLine")
-		bTile = Props.Get("Tile")
-		bTwoLine = Props.Get("TwoLine")
-		sVBind = Props.Get("VBind")
-		sVFor = Props.Get("VFor")
-		sVIf = Props.Get("VIf")
-		sVOn = Props.Get("VOn")
-		bHidden = Props.GetDefault("Hidden", False)
-		sWidth = Props.Get("Width")
-		bPlaceAtBottom = Props.GetDefault("PlaceAtBottom", False)
-		sItemHeight = Props.GetDefault("ItemHeight", "")
-		bVirtualScroll = Props.GetDefault("VirtualScroll", False)
-		bVirtualScroll = BANanoShared.parseBool(bVirtualScroll)
-		sBench = Props.GetDefault("Bench", "")
-	End If
-	'
-	bDark = BANanoShared.parseBool(bDark)
+mTarget = Target
+If Props <> Null Then
+mClasses = Props.Get("Classes")
+mStyles = Props.Get("Styles")
+mAttributes = Props.Get("Attributes")
+sColor = Props.Get("Color")
+sColorIntensity = Props.Get("ColorIntensity")
+bDark = Props.Get("Dark")
+bDense = Props.Get("Dense")
+bDisabled = Props.GetDefault("Disabled",False)
+sElevation = Props.Get("Elevation")
+bExpand = Props.Get("Expand")
+bFlat = Props.Get("Flat")
+sHeight = Props.Get("Height")
+sKey = Props.Get("Key")
+bLight = Props.Get("Light")
+sMaxHeight = Props.Get("MaxHeight")
+sMaxWidth = Props.Get("MaxWidth")
+sMinHeight = Props.Get("MinHeight")
+sMinWidth = Props.Get("MinWidth")
+bNav = Props.Get("Nav")
+bOutlined = Props.Get("Outlined")
+bRounded = Props.Get("Rounded")
+bShaped = Props.Get("Shaped")
+bSubheader = Props.Get("Subheader")
+sTextColor = Props.Get("TextColor")
+sTextColorIntensity = Props.Get("TextColorIntensity")
+bThreeLine = Props.Get("ThreeLine")
+bTile = Props.Get("Tile")
+bTwoLine = Props.Get("TwoLine")
+sVBind = Props.Get("VBind")
+sVFor = Props.Get("VFor")
+sVIf = Props.Get("VIf")
+sVOn = Props.Get("VOn")
+bHidden = Props.GetDefault("Hidden", False)
+sWidth = Props.Get("Width")
+bPlaceAtBottom = Props.GetDefault("PlaceAtBottom", False)
+sItemHeight = Props.GetDefault("ItemHeight", "")
+bVirtualScroll = Props.GetDefault("VirtualScroll", False)
+bVirtualScroll = BANanoShared.parseBool(bVirtualScroll)
+sBench = Props.GetDefault("Bench", "")
+sParentID = Props.GetDefault("ParentID", "")
+sParentID = BANanoShared.parseNull(sParentID)
+bGradientActive = Props.GetDefault("GradientActive", False)
+bGradientActive = BANanoShared.parseBool(bGradientActive)
+sGradient = Props.GetDefault("Gradient", "")
+sGradientColor1 = Props.GetDefault("GradientColor1", "")
+sGradientColor2 = Props.GetDefault("GradientColor2", "")
+sStates = BANanoShared.GetProp(Props, "States", "")
+bDisabled = BANanoShared.parseBool(bDisabled)
+bAbsolute = Props.GetDefault("Absolute", False)
+bHover = Props.GetDefault("Hover", False)
+sMarginAXYTBLR = BANanoShared.GetProp(Props, "MarginAXYTBLR","a=?; x=?; y=?; t=?; b=?; l=?; r=?")
+sPaddingAXYTBLR = BANanoShared.GetProp(Props, "PaddingAXYTBLR","a=?; x=?; y=?; t=?; b=?; l=?; r=?")
+mAttributes = Props.GetDefault("Attributes", "")
+mClasses = Props.GetDefault("Classes", "")
+mStyles = Props.GetDefault("Styles", "")
+sTransition = Props.GetDefault("Transition", "")
+sElevation = Props.GetDefault("Elevation", "")
+sHeight = Props.GetDefault("Height", "")
+sMinHeight = Props.GetDefault("MinHeight", "")
+sMaxHeight = Props.GetDefault("MaxHeight", "")
+sWidth = Props.GetDefault("Width", "")
+sMinWidth = Props.GetDefault("MinWidth", "")
+sMaxWidth = Props.GetDefault("MaxWidth", "")
+sRounded = Props.GetDefault("Rounded", "")
+bTile = Props.GetDefault("Tile", False)
+bTile = BANanoShared.parseBool(bTile)
+bShrink = Props.GetDefault("Shrink", False)
+bShrink = BANanoShared.parseBool(bShrink)
+bGrow = Props.GetDefault("Grow", False)
+bGrow = BANanoShared.parseBool(bGrow)
+bFlat = Props.GetDefault("Flat", False)
+bFlat = BANanoShared.parseBool(bFlat)
+bDense = Props.GetDefault("Dense", False)
+bDense = BANanoShared.parseBool(bDense)
+End If
+'
+bDark = BANanoShared.parseBool(bDark)
 bDense = BANanoShared.parseBool(bDense)
 bDisabled = BANanoShared.parseBool(bDisabled)
 bExpand = BANanoShared.parseBool(bExpand)
@@ -187,30 +249,33 @@ bTwoLine = BANanoShared.parseBool(bTwoLine)
 bHidden = BANanoShared.parseBool(bHidden)
 bPlaceAtBottom = BANanoShared.parseBool(bPlaceAtBottom)
 bDisabled = BANanoShared.parseBool(bDisabled)
-
-	Dim xtag As String = "v-list"
-	If bVirtualScroll Then
-		xtag = "v-virtual-scroll"
-	End If
-	'build and get the element
-	If BANano.Exists($"#${mName}"$) Then
-		mElement = BANano.GetElement($"#${mName}"$)
-	Else	
-		mElement = mTarget.Append($"<${xtag} ref="${mName}" id="${mName}"></${xtag}>"$).Get("#" & mName)
-	End If
-		
-	VElement.Initialize(mCallBack, mName, mName)
-	VElement.TagName = "v-list"
-	If bVirtualScroll Then
-		VElement.TagName = "v-virtual-scroll"
-		VElement.Append($"<v-template id="${mName}template" v-slot:default="{ item }"></v-template>"$)
-		VElement.AddAttr("bench", sBench)
-		VElement.AddAttr("item-height", sItemHeight)
-	End If
-	VElement.Classes = mClasses
-	VElement.Styles = mStyles
-	VElement.Attributes = mAttributes
-	VElement.Color = VElement.BuildColor(sColor, sColorIntensity)
+'the parent has been specified
+If sParentID <> "" Then
+sParentID = sParentID.tolowercase
+mTarget.Initialize($"#${sParentID}"$)
+End If
+Dim xtag As String = "v-list"
+If bVirtualScroll Then
+xtag = "v-virtual-scroll"
+End If
+'build and get the element
+If BANano.Exists($"#${mName}"$) Then
+mElement = BANano.GetElement($"#${mName}"$)
+Else
+mElement = mTarget.Append($"<${xtag} ref="${mName}" id="${mName}"></${xtag}>"$).Get("#" & mName)
+End If
+VElement.Initialize(mCallBack, mName, mName)
+VElement.TagName = "v-list"
+If bVirtualScroll Then
+VElement.TagName = "v-virtual-scroll"
+VElement.Append($"<v-template id="${mName}template" v-slot:default="{ item }"></v-template>"$)
+VElement.AddAttr("bench", sBench)
+VElement.AddAttr("item-height", sItemHeight)
+End If
+VElement.Classes = mClasses
+VElement.Styles = mStyles
+VElement.Attributes = mAttributes
+VElement.Color = VElement.BuildColor(sColor, sColorIntensity)
 VElement.AddAttr(":dark", bDark)
 VElement.AddAttr(":dense", bDense)
 VElement.AddAttr(":disabled", sDisabled)
@@ -240,263 +305,287 @@ VElement.AddAttr("v-for", sVFor)
 VElement.AddAttr("v-if", sVIf)
 VElement.AddAttr("v-on", sVOn)
 If bHidden Then
-	VElement.AddAttr("v-show", sVShow)
-	VElement.SetData(sVShow, Not(bHidden))
+VElement.AddAttr("v-show", sVShow)
+VElement.SetData(sVShow, Not(bHidden))
 End If
 VElement.AddAttr("width", sWidth)
 numLines = 0
 If bThreeLine Then numLines = 3
 If bTwoLine Then numLines = 2
 If bPlaceAtBottom Then
-	VElement.AddStyle("position", "absolute")
-	VElement.AddStyle("bottom", "0")
-	VElement.AddClass("ml-3")
+VElement.AddStyle("position", "absolute")
+VElement.AddStyle("bottom", "0")
+VElement.AddClass("ml-3")
 End If
+VElement.States = sStates
+VElement.Disabled = sDisabled
+VElement.Absolute = bAbsolute
+VElement.Hover = bHover
+VElement.setMarginAXYTBLR(sMarginAXYTBLR)
+VElement.setPaddingAXYTBLR(sPaddingAXYTBLR)
+VElement.Transition = sTransition
+VElement.Elevation = sElevation
+VElement.Height = sHeight
+VElement.MinHeight = sMinHeight
+VElement.MaxHeight = sMaxHeight
+VElement.Width = sWidth
+VElement.MinWidth = sMinWidth
+VElement.MaxWidth = sMaxWidth
+VElement.AddClass(sRounded)
+VElement.Tile = bTile
+VElement.AddClassOnCondition("shrink", bShrink, True)
+VElement.AddAttr(":grow", bGrow)
+If bGradientActive Then
+Dim agradient As String = VElement.GetActualGradient(sGradient)
+VElement.setLinearGradient(agradient, sGradientColor1, sGradientColor2)
+End if
 VElement.BindAllEvents
 End Sub
-
 'set options from definition before bindstate and create the structure of each list item
 Sub SetOptions(opt As VListOptions)
-	Options = opt.Options
-	xTemplate = opt.Template
-	Select Case xTemplate
-	Case "none"
-	Case "list"
-		AddListViewTemplate(Options)
-	Case "list-item-group"
-		AddListItemGroupTemplate(Options)
-	Case "tree"
-		AddListViewGroupTemplate(Options)
-	End Select
-	VElement.setdata(opt.dataSource, VElement.NewList)
+Options = opt.Options
+xTemplate = opt.Template
+Select Case xTemplate
+Case "none"
+Case "list"
+AddListViewTemplate(Options)
+Case "list-item-group"
+AddListItemGroupTemplate(Options)
+Case "tree"
+AddListViewGroupTemplate(Options)
+End Select
+VElement.setdata(opt.dataSource, VElement.NewList)
 End Sub
-
+'Add this component to a parent component. You need to execute this after BANano.LoadLayout on Initialize
+'Add this component to a parent component. You need to execute this after BANano.LoadLayout on Initialize
 Sub AddToParent(targetID As String)
-	mTarget = BANano.GetElement("#" & targetID.ToLowerCase)
-	DesignerCreateView(mTarget, Null)
+mTarget = BANano.GetElement("#" & targetID.ToLowerCase)
+DesignerCreateView(mTarget, Null)
 End Sub
-
+'Remove the component, this is a design time call on Initialize
+'Remove the component, this is a design time call on Initialize
 Sub Remove()
-	mElement.Remove
-	BANano.SetMeToNull
+mElement.Remove
+BANano.SetMeToNull
 End Sub
-
 Sub AddClass(s As String) As VList
-	VElement.AddClass(s)
-	Return Me
+VElement.AddClass(s)
+Return Me
 End Sub
-
 Sub AddAttr(p As String, v As Object) As VList
-	VElement.SetAttr(p, v)
-	Return Me
+VElement.SetAttr(p, v)
+Return Me
 End Sub
-
 Sub AddStyle(p As String, v As String) As VList
-	VElement.AddStyle(p, v)
-	Return Me
+VElement.AddStyle(p, v)
+Return Me
 End Sub
-
 Sub RemoveAttr(p As String) As VList
-	VElement.RemoveAttr(p)
-	Return Me
+VElement.RemoveAttr(p)
+Return Me
 End Sub
-
+'Hide the component at runtime, needs BindState
+'Hide the component at runtime, needs BindState
+Sub Hide
+VC.SetData(sVIf, False)
+VC.SetData(sVShow, False)
+End Sub
+'Show the component at runtime, needs BindState
+'Show the component at runtime, needs BindState
+Sub Show
+VC.SetData(sVIf, True)
+VC.SetData(sVShow, True)
+End Sub
 Sub UpdateVisible(C As VueComponent, b As Boolean) As VList
-	C.SetData(sVIf, b)
-	C.SetData(sVShow, b)
-	Return Me
+C.SetData(sVIf, b)
+C.SetData(sVShow, b)
+Return Me
 End Sub
-
 Sub UpdateDisabled(C As VueComponent, b As Boolean)
-	bDisabled = b
-	C.SetData(sDisabled, b)
+bDisabled = b
+C.SetData(sDisabled, b)
 End Sub
-
 Sub UpdateVisibleOnApp(C As VuetifyApp, b As Boolean) As VList
-	C.SetData(sVIf, b)
-	C.SetData(sVShow, b)
-	Return Me
+C.SetData(sVIf, b)
+C.SetData(sVShow, b)
+Return Me
 End Sub
-
 Sub UpdateDisabledOnApp(C As VuetifyApp, b As Boolean)
-	bDisabled = b
-	C.SetData(sDisabled, b)
+bDisabled = b
+C.SetData(sDisabled, b)
 End Sub
-
+'Returns the name of the component with # infront for use with BANano.LoadLayout
+'Returns the name of the component with # infront for use with BANano.LoadLayout
 Sub getHere As String
-	Return $"#${mName}"$
+Return $"#${mName}"$
 End Sub
-
+'Returns the name of the component. This is what you typed on the name property in b4j
+'Returns the name of the component. This is what you typed on the name property in b4j
 Sub getID As String
-	Return mName
+Return mName
 End Sub
-
+'clears, refresh after adding records
 Sub Clear(C As VueComponent)
-	Records.Initialize
-	C.SetData(DataSource, Records)
+Records.Initialize
+C.SetData(DataSource, Records)
 End Sub
-
+'clears, refresh after adding records
 Sub ClearOnApp(app As VuetifyApp)
-	Records.Initialize 
-	app.SetData(DataSource, Records)
+Records.Initialize
+app.SetData(DataSource, Records)
 End Sub
-
 Sub Refresh(C As VueComponent)
-	Select Case xTemplate
-	Case "tree"
-		Dim recs As List = BANanoShared.Unflatten(Records, "items")
-		C.SetData(DataSource, recs)	
-	Case Else
-		C.setdata(DataSource, Records)
-	End Select
+Select Case xTemplate
+Case "tree"
+Dim recs As List = BANanoShared.Unflatten(Records, "items")
+C.SetData(DataSource, recs)
+Case Else
+C.setdata(DataSource, Records)
+End Select
 End Sub
-
 Sub RefreshOnApp(app As VuetifyApp)
-	Select Case xTemplate
-	Case "tree"
-		Dim recs As List = BANanoShared.Unflatten(Records, "items")
-		app.SetData(DataSource, recs)	
-	Case Else
-		app.setdata(DataSource, Records)
-	End Select
+Select Case xTemplate
+Case "tree"
+Dim recs As List = BANanoShared.Unflatten(Records, "items")
+app.SetData(DataSource, recs)
+Case Else
+app.setdata(DataSource, Records)
+End Select
 End Sub
-
-
 'add a header to the list
 Sub AddHeader(txt As String)
-	Dim rec As Map = CreateMap()
-	rec.Put("header", txt)
-	Records.Add(rec)
+Dim rec As Map = CreateMap()
+rec.Put("header", txt)
+Records.Add(rec)
 End Sub
-
 'add a divider
 Sub AddDivider(binset As Boolean)
-	Dim rec As Map = CreateMap()
-	rec.Put("divider", True)
-	If binset Then 
-		rec.Put("inset", binset)
-	End If
-	Records.Add(rec)
+Dim rec As Map = CreateMap()
+rec.Put("divider", True)
+If binset Then
+rec.Put("inset", binset)
+End If
+Records.Add(rec)
 End Sub
-
-
 private Sub CleanID(v As String) As String
-	v = v.Replace("#","")
-	v = $"#${v}"$
-	v = v.tolowercase
-	Return v
+v = v.Replace("#","")
+v = $"#${v}"$
+v = v.tolowercase
+Return v
 End Sub
-
 'add a list item template to draw item
 Sub AddListItemGroupTemplate(props As ListViewItemOptions)
-	Dim elID As String = mName.ToLowerCase
-	Dim parentID As String = CleanID(mName)
-	'
-	Dim templateID As String = $"${elID}template"$
-	'Dim headerID As String = $"${elID}header"$
-	'Dim dividerID As String = $"${elID}divider"$
-	Dim listitemID As String = $"${elID}listitem"$
-	Dim leftactionID As String = $"${elID}leftaction"$
-	Dim leftactionBtnID As String = $"${elID}leftactionbtn"$
-	Dim leftactionIconID As String = $"${elID}leftactionicon"$
-	Dim leftcheckboxID As String = $"${elID}leftcheckbox"$
-	Dim rightcheckboxID As String = $"${elID}rightcheckbox"$
-	Dim avatarID As String = $"${elID}avatar"$
-	Dim avatarImgID As String = $"${elID}avatarimage"$
-	Dim avatarIconID As String = $"${elID}avataricon"$
-	Dim itemiconID As String = $"${elID}itemicon"$
-	Dim iconID As String = $"${elID}icon"$
-	Dim contentID As String = $"${elID}content"$
-	Dim titleID As String = $"${elID}title"$
-	Dim subtitleID As String = $"${elID}subtitle"$
-	Dim subtitle1ID As String = $"${elID}subtitle1"$
-	Dim subtitle2ID As String = $"${elID}subtitle2"$
-	Dim subtitle3ID As String = $"${elID}subtitle3"$
-	Dim subtitle4ID As String = $"${elID}subtitle4"$
-	Dim rightactionID As String = $"${elID}rightaction"$
-	Dim rightactiontextID As String = $"${elID}rightactiontext"$
-	Dim rightactionBtnID As String = $"${elID}rightactionbtn"$
-	Dim rightactionIconID As String = $"${elID}rightactionicon"$
-	Dim rightratingID As String = $"${elID}rightrating"$
-	Dim leftswitchID As String = $"${elID}leftswitch"$
-	Dim rightswitchID As String = $"${elID}rightswitch"$
-	Dim rightchipID As String = $"${elID}rightchip"$
-	'
-	Dim rightavatarID As String = $"${elID}rightavatar"$
-	Dim rightavatarImgID As String = $"${elID}rightavatarimage"$
-	Dim rightavatarIconID As String = $"${elID}rightavataricon"$
-	Dim rightavatarTextID As String = $"${elID}rightavatartext"$
-	Dim avatarTextID As String = $"${elID}avatartext"$
-	
-	'in case the pointers are changed
-	Dim xurl As String = props.url
-	Dim xlefticon As String = props.lefticon
-	Dim xlefticoncolor As String = props.lefticoncolor
-	Dim xlefticonclass As String = props.lefticonclass
-	'
-	Dim xavatar As String = props.avatar
-	Dim xavatarclass As String = props.avatarclass
-	
-	Dim xavataricon As String = props.avataricon
-	Dim xavatariconcolor As String = props.avatariconcolor
-	Dim xavatariconclass As String = props.avatariconclass
-	
-	Dim xicon As String = props.icon
-	Dim xiconclass As String = props.iconclass
-	Dim xiconcolor As String = props.iconcolor
-	
-	Dim xtitle As String = props.title
-	Dim xsubtitle As String = props.subtitle
-	Dim xsubtitle1 As String = props.subtitle1
-	Dim xsubtitle2 As String = props.subtitle2
-	Dim xsubtitle3 As String = props.subtitle3
-	Dim xsubtitle4 As String = props.subtitle4
-	'
-	Dim xrighticon As String = props.righticon
-	Dim xrighticonclass As String = props.righticonclass
-	Dim xrighttext As String = props.righttext
-	Dim xrighticoncolor As String = props.righticoncolor
-	DataSource = props.dataSource
-	DataSource = DataSource.ToLowerCase
-	Dim key As String = props.key
-	key = key.ToLowerCase
-	
-	Dim xactiveclass As String = props.activeclass
-	Dim xleftcheckbox As String = props.leftcheckbox
-	Dim xrightcheckbox As String = props.rightcheckbox
-	Dim xshowleftcheckboxes As Boolean = props.showleftcheckboxes
-	Dim xshowrightcheckboxes As Boolean = props.showrightcheckboxes
-	Dim xshowrightrating As Boolean = props.showrightrating
-	Dim xrightrating As String = props.rightrating
-	'
-	Dim xleftswitch As String = props.leftswitch
-	Dim xshowleftswitch As Boolean = props.showleftswitches
-	Dim xrightswitch As String = props.rightswitch
-	Dim xshowrightswitch As Boolean = props.showrightswitches
-	Dim xswitchinset As Boolean = props.switchinset
-	Dim xitemavatarclass As String = props.itemavatarclass
-	'
-	Dim xrightchip As String = props.rightchip
-	Dim xrightchipcolor As String = props.rightchipcolor
-	Dim xhref As String = props.href
-	Dim xtarget As String = props.target
-	Dim xvisible As String = props.visible
-	'
-	If xhref = "" Then xhref = "href"
-	If xtarget = "" Then xtarget = "target"
-	If xvisible = "" Then xvisible = "visible"
-	
-	Dim xrightitemavatarclass As String = props.rightitemavatarclass
-	
-	Dim sTemplate As String = $"<v-list-item-group id="${templateID}" active-class="${xactiveclass}">
-	<v-template v-for="(item, index) in ${DataSource}">
+Dim elID As String = mName.ToLowerCase
+Dim parentID As String = CleanID(mName)
+'
+Dim templateID As String = $"${elID}template"$
+'Dim headerID As String = $"${elID}header"$
+'Dim dividerID As String = $"${elID}divider"$
+Dim listitemID As String = $"${elID}listitem"$
+Dim leftactionID As String = $"${elID}leftaction"$
+Dim leftactionBtnID As String = $"${elID}leftactionbtn"$
+Dim leftactionIconID As String = $"${elID}leftactionicon"$
+Dim leftcheckboxID As String = $"${elID}leftcheckbox"$
+Dim rightcheckboxID As String = $"${elID}rightcheckbox"$
+Dim leftimageID As String = $"${elID}leftimage"$
+Dim rightimageID As String = $"${elID}rightimage"$
+Dim avatarID As String = $"${elID}avatar"$
+Dim avatarImgID As String = $"${elID}avatarimage"$
+Dim avatarIconID As String = $"${elID}avataricon"$
+Dim itemiconID As String = $"${elID}itemicon"$
+Dim iconID As String = $"${elID}icon"$
+Dim contentID As String = $"${elID}content"$
+Dim titleID As String = $"${elID}title"$
+Dim subtitleID As String = $"${elID}subtitle"$
+Dim subtitle1ID As String = $"${elID}subtitle1"$
+Dim subtitle2ID As String = $"${elID}subtitle2"$
+Dim subtitle3ID As String = $"${elID}subtitle3"$
+Dim subtitle4ID As String = $"${elID}subtitle4"$
+Dim rightactionID As String = $"${elID}rightaction"$
+Dim rightactiontextID As String = $"${elID}rightactiontext"$
+Dim rightactionBtnID As String = $"${elID}rightactionbtn"$
+Dim rightactionIconID As String = $"${elID}rightactionicon"$
+Dim rightratingID As String = $"${elID}rightrating"$
+Dim leftswitchID As String = $"${elID}leftswitch"$
+Dim rightswitchID As String = $"${elID}rightswitch"$
+Dim rightchipID As String = $"${elID}rightchip"$
+'
+Dim rightavatarID As String = $"${elID}rightavatar"$
+Dim rightavatarImgID As String = $"${elID}rightavatarimage"$
+Dim rightavatarIconID As String = $"${elID}rightavataricon"$
+Dim rightavatarTextID As String = $"${elID}rightavatartext"$
+Dim avatarTextID As String = $"${elID}avatartext"$
+'in case the pointers are changed
+Dim xurl As String = props.url
+Dim xlefticon As String = props.lefticon
+Dim xlefticoncolor As String = props.lefticoncolor
+Dim xlefticonclass As String = props.lefticonclass
+'
+Dim xavatar As String = props.avatar
+Dim xavatarclass As String = props.avatarclass
+Dim xavataricon As String = props.avataricon
+Dim xavatariconcolor As String = props.avatariconcolor
+Dim xavatariconclass As String = props.avatariconclass
+Dim xicon As String = props.icon
+Dim xiconclass As String = props.iconclass
+Dim xiconcolor As String = props.iconcolor
+Dim xtitle As String = props.title
+Dim xsubtitle As String = props.subtitle
+Dim xsubtitle1 As String = props.subtitle1
+Dim xsubtitle2 As String = props.subtitle2
+Dim xsubtitle3 As String = props.subtitle3
+Dim xsubtitle4 As String = props.subtitle4
+'
+Dim xrighticon As String = props.righticon
+Dim xrighticonclass As String = props.righticonclass
+Dim xrighttext As String = props.righttext
+Dim xrighticoncolor As String = props.righticoncolor
+DataSource = props.dataSource
+DataSource = DataSource.ToLowerCase
+Dim key As String = props.key
+key = key.ToLowerCase
+Dim xactiveclass As String = props.activeclass
+Dim xleftcheckbox As String = props.leftcheckbox
+Dim xrightcheckbox As String = props.rightcheckbox
+Dim xshowleftcheckboxes As Boolean = props.showleftcheckboxes
+Dim xshowrightcheckboxes As Boolean = props.showrightcheckboxes
+Dim xshowrightrating As Boolean = props.showrightrating
+Dim xrightrating As String = props.rightrating
+'
+Dim xleftswitch As String = props.leftswitch
+Dim xshowleftswitch As Boolean = props.showleftswitches
+Dim xrightswitch As String = props.rightswitch
+Dim xshowrightswitch As Boolean = props.showrightswitches
+Dim xswitchinset As Boolean = props.switchinset
+Dim xitemavatarclass As String = props.itemavatarclass
+'
+Dim xrightchip As String = props.rightchip
+Dim xrightchipcolor As String = props.rightchipcolor
+Dim xhref As String = props.href
+Dim xtarget As String = props.target
+Dim xvisible As String = props.visible
+'
+If xhref = "" Then xhref = "href"
+If xtarget = "" Then xtarget = "target"
+If xvisible = "" Then xvisible = "visible"
+Dim xleftimage As String = props.leftimage
+Dim xrightimage As String = props.rightimage
+Dim xLeftCheckBoxColor As String = props.LeftCheckBoxColor
+Dim xLeftSwitchColor As String = props.LeftSwitchColor
+Dim xRightCheckBoxColor As String = props.RightCheckBoxColor
+Dim xRightSwitchColor As String = props.RightSwitchColor
+Dim xRightRatingColor As String = props.RightRatingColor
+Dim xrightitemavatarclass As String = props.rightitemavatarclass
+Dim sTemplate As String = $"<v-list-item-group id="${templateID}" active-class="${xactiveclass}">
+<v-template v-for="(item, index) in ${DataSource}">
 <v-list-item id="${listitemID}" :key="item.${key}" :to="item.${xurl}" v-show="item.${xvisible}" :href="item.${xhref}" :target="item.${xtarget}">
+<v-img id="${leftimageID}" class="ml-4" v-if="item.${xleftimage}" max-width="64" min-width="64" :src="item.${xleftimage}"></v-img>
 <v-list-item-action id="${leftactionID}" v-if="item.${xlefticon} || ${xshowleftcheckboxes} || ${xshowleftswitch}">
 <v-btn id="${leftactionBtnID}" :icon="true" v-if="item.${xlefticon}">
 <v-icon id="${leftactionIconID}" ${props.lefticonattr} :color="item.${xlefticoncolor}" v-html="item.${xlefticon}" class="${xlefticonclass}"></v-icon>
 </v-btn>
-<v-checkbox id="${leftcheckboxID}" ${props.leftcheckboxattr} v-if="${xshowleftcheckboxes}" :item="item" v-model="item.${xleftcheckbox}" :input-value="item.${xleftcheckbox}"></v-checkbox>
-<v-switch id="${leftswitchID}" ${props.leftswitchattr} v-if="${xshowleftswitch}" :inset="${xswitchinset}" :item="item" v-model="item.${xleftswitch}" :input-value="item.${xleftswitch}"></v-switch>
+<v-checkbox id="${leftcheckboxID}" :color="item.${xLeftCheckBoxColor}" ${props.leftcheckboxattr} v-if="${xshowleftcheckboxes}" :item="item" v-model="item.${xleftcheckbox}" :input-value="item.${xleftcheckbox}"></v-checkbox>
+<v-switch id="${leftswitchID}" :color="item.${xLeftSwitchColor}" ${props.leftswitchattr} v-if="${xshowleftswitch}" :inset="${xswitchinset}" :item="item" v-model="item.${xleftswitch}" :input-value="item.${xleftswitch}"></v-switch>
 </v-list-item-action>
 <v-list-item-avatar id="${avatarID}" class="${xitemavatarclass}" v-if="item.${xavatar} || item.${xavataricon} || item.${props.avatartext}">
 <v-img id="${avatarImgID}" ${props.avatarattr} :src="item.${xavatar}" class="${xavatarclass}" v-if="item.${xavatar}"></v-img>
@@ -519,211 +608,210 @@ Sub AddListItemGroupTemplate(props As ListViewItemOptions)
 <v-icon id="${rightavatarIconID}" ${props.rightavatariconattr} v-if="item.${props.rightavataricon}" :color="item.${props.rightavatariconcolor}" class="${props.rightavatariconclass}" v-html="item.${props.rightavataricon}"></v-icon>
 <span id="${rightavatarTextID}" v-if="item.${props.rightavatartext}" :color="item.${props.rightavatartextcolor}" class="${props.rightavatartextclass}" v-html="item.${props.rightavatartext}"></span>
 </v-list-item-avatar>
+<v-img id="${rightimageID}" class="ml-4" v-if="item.${xrightimage}" max-width="64" min-width="64" :src="item.${xrightimage}"></v-img>
 <v-list-item-action id="${rightactionID}" v-if="item.${xrighticon} || item.${xrighttext} || ${xshowrightcheckboxes} || ${xshowrightrating} || ${xshowrightswitch} || item.${xrightchip}">
 <v-list-item-action-text ${props.righttextattr} id="${rightactiontextID}" v-if="item.${xrighttext}" v-html="item.${xrighttext}"></v-list-item-action-text>
 <v-chip id="${rightchipID}" ${props.rightchipattr} v-if="item.${xrightchip}" :color="item.${xrightchipcolor}" dark small v-html="item.${xrightchip}"></v-chip>
 <v-btn id="${rightactionBtnID}" :icon="true" v-if="item.${xrighticon}">
 <v-icon id="${rightactionIconID}" ${props.righticonattr} v-html="item.${xrighticon}" class="${xrighticonclass}" :color="item.${xrighticoncolor}"></v-icon>
 </v-btn>
-<v-checkbox id="${rightcheckboxID}" ${props.rightcheckboxattr} v-if="${xshowrightcheckboxes}" :item="item" v-model="item.${xrightcheckbox}" :input-value="item.${xrightcheckbox}"></v-checkbox>
-<v-rating id="${rightratingID}" ${props.rightratingattr} length="1" v-if="${xshowrightrating}" v-model="item.${xrightrating}" :value="item.${xrightrating}"></v-rating>
-<v-switch id="${rightswitchID}" ${props.rightswitchattr} v-if="${xshowrightswitch}" :inset="${xswitchinset}" :item="item" v-model="item.${xrightswitch}" :input-value="item.${xrightswitch}"></v-switch>
+<v-checkbox id="${rightcheckboxID}" :color="item.${xRightCheckBoxColor}" ${props.rightcheckboxattr} v-if="${xshowrightcheckboxes}" :item="item" v-model="item.${xrightcheckbox}" :input-value="item.${xrightcheckbox}"></v-checkbox>
+<v-rating id="${rightratingID}" :color="item.${xRightRatingColor}" ${props.rightratingattr} length="1" v-if="${xshowrightrating}" v-model="item.${xrightrating}" :value="item.${xrightrating}"></v-rating>
+<v-switch id="${rightswitchID}" :color="item.${xRightSwitchColor}" ${props.rightswitchattr} v-if="${xshowrightswitch}" :inset="${xswitchinset}" :item="item" v-model="item.${xrightswitch}" :input-value="item.${xrightswitch}"></v-switch>
 </v-list-item-action>
 </v-list-item>
 <v-divider v-if="${props.hasdivider}" :inset="${props.insetdivider}"></v-divider>
 </v-template>
 </v-list-item-group>"$
-	
-	'
-	sTemplate = sTemplate.Replace("~","$")
-	
-	BANano.GetElement(parentID).Append(sTemplate)
-	'
-	Dim vlistitemx As VueElement
-	vlistitemx.Initialize(mCallBack, listitemID, listitemID)
-	Select Case numLines
-	Case 2
-		vlistitemx.AddAttr(":two-line", True)
-	Case 3
-		vlistitemx.AddAttr(":three-line", True)
-	End Select
-	vlistitemx.SetOnEventOwn(mCallBack, $"${elID}_click"$, "click", "item")
-	'left action
-	'
+'
+sTemplate = sTemplate.Replace("~","$")
+BANano.GetElement(parentID).Append(sTemplate)
+'
+Dim vlistitemx As VueElement
+vlistitemx.Initialize(mCallBack, listitemID, listitemID)
+Select Case numLines
+Case 2
+vlistitemx.AddAttr(":two-line", True)
+Case 3
+vlistitemx.AddAttr(":three-line", True)
+End Select
+vlistitemx.SetOnEventOwn(mCallBack, $"${elID}_click"$, "click", "item")
+'left action
+'
 '	Dim vleftcheckbox As VueElement
 '	vleftcheckbox.Initialize(mCallBack, leftcheckboxID, leftcheckboxID)
 '	If xshowleftcheckboxes Then
 '		vleftcheckbox.SetOnEventOwn(mCallBack, $"${elID}_leftclick"$, "click.stop", "item")
 '	End If
-	'
+'
 '	Dim vrightcheckbox As VueElement
 '	vrightcheckbox.Initialize(mCallBack, rightcheckboxID, rightcheckboxID)
 '	If xshowrightcheckboxes Then
 '		vrightcheckbox.SetOnEventOwn(mCallBack, $"${elID}_rightclick"$, "click.stop", "item")
 '	End If
-	
-	Dim vleftlistitemaction As VueElement
-	vleftlistitemaction.Initialize(mCallBack, leftactionID, leftactionID)
-	'If xshowleftcheckboxes = False And xshowleftswitch = False Then
-		vleftlistitemaction.SetOnEventOwn(mCallBack, $"${elID}_leftclick"$, "click.stop", "item")
-	'End If
-	'
-	Dim vrightlistitemaction As VueElement
-	vrightlistitemaction.Initialize(mCallBack, rightactionID, rightactionID)
-	'If xshowrightcheckboxes = False And xshowrightswitch = False Then
-		vrightlistitemaction.SetOnEventOwn(mCallBack, $"${elID}_rightclick"$, "click.stop", "item")
-	'End If
-	'
+Dim vleftlistitemaction As VueElement
+vleftlistitemaction.Initialize(mCallBack, leftactionID, leftactionID)
+'If xshowleftcheckboxes = False And xshowleftswitch = False Then
+vleftlistitemaction.SetOnEventOwn(mCallBack, $"${elID}_leftclick"$, "click.stop", "item")
+'End If
+'
+Dim vrightlistitemaction As VueElement
+vrightlistitemaction.Initialize(mCallBack, rightactionID, rightactionID)
+'If xshowrightcheckboxes = False And xshowrightswitch = False Then
+vrightlistitemaction.SetOnEventOwn(mCallBack, $"${elID}_rightclick"$, "click.stop", "item")
+'End If
+'
 '	Dim vleftswitch As VueElement
 '	vleftswitch.Initialize(mCallBack, leftswitchID, leftswitchID)
-'	'If xshowleftswitch Then 
-	'	vleftswitch.SetOnEventOwn(mCallBack, $"${elID}_leftclick"$, "change.stop", "item")
-	'End If
-	'
+'	'If xshowleftswitch Then
+'	vleftswitch.SetOnEventOwn(mCallBack, $"${elID}_leftclick"$, "change.stop", "item")
+'End If
+'
 '	Dim vrightswitch As VueElement
 '	vrightswitch.Initialize(mCallBack, rightswitchID, rightswitchID)
-	'If xshowrightswitch Then
-	'	vrightswitch.SetOnEventOwn(mCallBack, $"${elID}_rightclick"$, "change.stop", "item")
-	'End If
-	
-	VElement.SetData(DataSource, VElement.NewList)
-	VElement.BindVueElement(vlistitemx)
-	VElement.BindVueElement(vleftlistitemaction)
-	VElement.BindVueElement(vrightlistitemaction)
+'If xshowrightswitch Then
+'	vrightswitch.SetOnEventOwn(mCallBack, $"${elID}_rightclick"$, "change.stop", "item")
+'End If
+VElement.SetData(DataSource, VElement.NewList)
+VElement.BindVueElement(vlistitemx)
+VElement.BindVueElement(vleftlistitemaction)
+VElement.BindVueElement(vrightlistitemaction)
 '	vlistitem.BindVueElement(vleftcheckbox)
 '	vlistitem.BindVueElement(vrightcheckbox)
 '	vlistitem.BindVueElement(vrightswitch)
 '	vlistitem.BindVueElement(vleftswitch)
-	CleanUp
+CleanUp
 End Sub
-
 'add a list item template to draw item
 Sub AddListViewGroupTemplate(props As ListViewItemOptions)
-	Dim elID As String = mName.ToLowerCase
-	Dim parentID As String = CleanID(mName)
-	'
-	'Dim templateID As String = $"${elID}template"$
-	'Dim headerID As String = $"${elID}header"$
-	'Dim dividerID As String = $"${elID}divider"$
-	Dim listitemID As String = $"${elID}listitem"$
-	Dim leftactionID As String = $"${elID}leftaction"$
-	Dim leftactionBtnID As String = $"${elID}leftactionbtn"$
-	Dim leftactionIconID As String = $"${elID}leftactionicon"$
-	Dim leftcheckboxID As String = $"${elID}leftcheckbox"$
-	Dim rightcheckboxID As String = $"${elID}rightcheckbox"$
-	Dim avatarID As String = $"${elID}avatar"$
-	Dim avatarImgID As String = $"${elID}avatarimg"$
-	Dim avatarIconID As String = $"${elID}avataricon"$
-	Dim itemiconID As String = $"${elID}itemicon"$
-	Dim iconID As String = $"${elID}icon"$
-	Dim contentID As String = $"${elID}content"$
-	Dim titleID As String = $"${elID}title"$
-	Dim subtitleID As String = $"${elID}subtitle"$
-	Dim subtitle1ID As String = $"${elID}subtitle1"$
-	Dim subtitle2ID As String = $"${elID}subtitle2"$
-	Dim subtitle3ID As String = $"${elID}subtitle3"$
-	Dim subtitle4ID As String = $"${elID}subtitle4"$
-	Dim rightactionID As String = $"${elID}rightaction"$
-	Dim rightactiontextID As String = $"${elID}rightactiontext"$
-	Dim rightactionBtnID As String = $"${elID}rightactionbtn"$
-	Dim rightactionIconID As String = $"${elID}rightactionicon"$
-	Dim rightratingID As String = $"${elID}rightrating"$
-	Dim leftswitchID As String = $"${elID}leftswitch"$
-	Dim rightswitchID As String = $"${elID}rightswitch"$
-	Dim rightchipID As String = $"${elID}rightchip"$
-	Dim rightavatarTextID As String = $"${elID}rightavatartext"$
-	Dim avatarTextID As String = $"${elID}avatartext"$
-	'
-	Dim rightavatarID As String = $"${elID}rightavatar"$
-	Dim rightavatarImgID As String = $"${elID}rightavatarimage"$
-	Dim rightavatarIconID As String = $"${elID}rightavataricon"$
-	
-	'
-	'in case the pointers are changed
-	Dim xurl As String = props.url
-	Dim xlefticon As String = props.lefticon
-	Dim xlefticoncolor As String = props.lefticoncolor
-	Dim xlefticonclass As String = props.lefticonclass
-	'
-	Dim xavatar As String = props.avatar
-	Dim xavatarclass As String = props.avatarclass
-	
-	Dim xavataricon As String = props.avataricon
-	Dim xavatariconcolor As String = props.avatariconcolor
-	Dim xavatariconclass As String = props.avatariconclass
-	
-	Dim xicon As String = props.icon
-	Dim xiconclass As String = props.iconclass
-	Dim xiconcolor As String = props.iconcolor
-	
-	Dim xtitle As String = props.title
-	Dim xsubtitle As String = props.subtitle
-	Dim xsubtitle1 As String = props.subtitle1
-	Dim xsubtitle2 As String = props.subtitle2
-	Dim xsubtitle3 As String = props.subtitle3
-	Dim xsubtitle4 As String = props.subtitle4
-
-	'
-	Dim xrighticon As String = props.righticon
-	Dim xrighticonclass As String = props.righticonclass
-	Dim xrighttext As String = props.righttext
-	Dim xrighticoncolor As String = props.righticoncolor
-	DataSource = props.dataSource
-	Dim key As String = props.key
-	
-	Dim xactiveclass As String = props.activeclass
-	Dim xleftcheckbox As String = props.leftcheckbox
-	Dim xrightcheckbox As String = props.rightcheckbox
-	Dim xshowleftcheckboxes As Boolean = props.showleftcheckboxes
-	Dim xshowrightcheckboxes As Boolean = props.showrightcheckboxes
-	Dim xshowrightrating As Boolean = props.showrightrating
-	Dim xrightrating As String = props.rightrating
-	'
-	Dim xleftswitch As String = props.leftswitch
-	Dim xshowleftswitch As Boolean = props.showleftswitches
-	Dim xrightswitch As String = props.rightswitch
-	Dim xshowrightswitch As Boolean = props.showrightswitches
-	Dim xswitchinset As Boolean = props.switchinset
-	Dim xitemavatarclass As String = props.itemavatarclass
-	'
-	Dim xrightchip As String = props.rightchip
-	Dim xrightchipcolor As String = props.rightchipcolor
-	Dim xhref As String = props.href
-	Dim xtarget As String = props.target
-	Dim xvisible As String = props.visible
-	'
-	If xhref = "" Then xhref = "href"
-	If xtarget = "" Then xtarget = "target"
-	If xvisible = "" Then xvisible = "visible"
-	
-	DataSource = DataSource.ToLowerCase
-	key = key.ToLowerCase
-		'
-	Dim sTemplate As StringBuilder
-	sTemplate.Initialize
-	sTemplate.Append($"<v-template v-for="item in ${DataSource}">"$)
-	sTemplate.Append($"<v-list-group v-if="item.items" :key="item.${key}" v-show="item.${xvisible}" v-model="item.model" no-action active-class="${xactiveclass}">"$)
-	sTemplate.Append($"<v-icon id="${iconID}" slot="prependIcon" ${props.iconattr} :color="item.${xiconcolor}" v-html="item.${xicon}"></v-icon>"$)
-	'
-	sTemplate.Append($"<v-template v-slot:activator>"$)
-	sTemplate.Append($"<v-list-item-content id="${contentID}">"$)
-	sTemplate.Append($"<v-list-item-title id="${titleID}" v-html="item.${xtitle}"></v-list-item-title>"$)
-	sTemplate.Append($"</v-list-item-content>"$)
-	sTemplate.Append($"</v-template>"$)
-
-	sTemplate.Append($"<v-template v-for="child in item.items">"$)
+Dim elID As String = mName.ToLowerCase
+Dim parentID As String = CleanID(mName)
+'
+'Dim templateID As String = $"${elID}template"$
+'Dim headerID As String = $"${elID}header"$
+'Dim dividerID As String = $"${elID}divider"$
+Dim listitemID As String = $"${elID}listitem"$
+Dim leftactionID As String = $"${elID}leftaction"$
+Dim leftactionBtnID As String = $"${elID}leftactionbtn"$
+Dim leftactionIconID As String = $"${elID}leftactionicon"$
+Dim leftcheckboxID As String = $"${elID}leftcheckbox"$
+Dim rightcheckboxID As String = $"${elID}rightcheckbox"$
+Dim avatarID As String = $"${elID}avatar"$
+Dim avatarImgID As String = $"${elID}avatarimg"$
+Dim avatarIconID As String = $"${elID}avataricon"$
+Dim itemiconID As String = $"${elID}itemicon"$
+Dim iconID As String = $"${elID}icon"$
+Dim contentID As String = $"${elID}content"$
+Dim titleID As String = $"${elID}title"$
+Dim subtitleID As String = $"${elID}subtitle"$
+Dim subtitle1ID As String = $"${elID}subtitle1"$
+Dim subtitle2ID As String = $"${elID}subtitle2"$
+Dim subtitle3ID As String = $"${elID}subtitle3"$
+Dim subtitle4ID As String = $"${elID}subtitle4"$
+Dim rightactionID As String = $"${elID}rightaction"$
+Dim rightactiontextID As String = $"${elID}rightactiontext"$
+Dim rightactionBtnID As String = $"${elID}rightactionbtn"$
+Dim rightactionIconID As String = $"${elID}rightactionicon"$
+Dim rightratingID As String = $"${elID}rightrating"$
+Dim leftswitchID As String = $"${elID}leftswitch"$
+Dim rightswitchID As String = $"${elID}rightswitch"$
+Dim rightchipID As String = $"${elID}rightchip"$
+Dim rightavatarTextID As String = $"${elID}rightavatartext"$
+Dim avatarTextID As String = $"${elID}avatartext"$
+'
+Dim rightavatarID As String = $"${elID}rightavatar"$
+Dim rightavatarImgID As String = $"${elID}rightavatarimage"$
+Dim rightavatarIconID As String = $"${elID}rightavataricon"$
+'
+Dim leftimageID As String = $"${elID}leftimage"$
+Dim rightimageID As String = $"${elID}rightimage"$
+'
+'in case the pointers are changed
+Dim xurl As String = props.url
+Dim xlefticon As String = props.lefticon
+Dim xlefticoncolor As String = props.lefticoncolor
+Dim xlefticonclass As String = props.lefticonclass
+'
+Dim xavatar As String = props.avatar
+Dim xavatarclass As String = props.avatarclass
+Dim xavataricon As String = props.avataricon
+Dim xavatariconcolor As String = props.avatariconcolor
+Dim xavatariconclass As String = props.avatariconclass
+Dim xicon As String = props.icon
+Dim xiconclass As String = props.iconclass
+Dim xiconcolor As String = props.iconcolor
+Dim xtitle As String = props.title
+Dim xsubtitle As String = props.subtitle
+Dim xsubtitle1 As String = props.subtitle1
+Dim xsubtitle2 As String = props.subtitle2
+Dim xsubtitle3 As String = props.subtitle3
+Dim xsubtitle4 As String = props.subtitle4
+'
+Dim xrighticon As String = props.righticon
+Dim xrighticonclass As String = props.righticonclass
+Dim xrighttext As String = props.righttext
+Dim xrighticoncolor As String = props.righticoncolor
+DataSource = props.dataSource
+Dim key As String = props.key
+Dim xactiveclass As String = props.activeclass
+Dim xleftcheckbox As String = props.leftcheckbox
+Dim xrightcheckbox As String = props.rightcheckbox
+Dim xshowleftcheckboxes As Boolean = props.showleftcheckboxes
+Dim xshowrightcheckboxes As Boolean = props.showrightcheckboxes
+Dim xshowrightrating As Boolean = props.showrightrating
+Dim xrightrating As String = props.rightrating
+'
+Dim xleftswitch As String = props.leftswitch
+Dim xshowleftswitch As Boolean = props.showleftswitches
+Dim xrightswitch As String = props.rightswitch
+Dim xshowrightswitch As Boolean = props.showrightswitches
+Dim xswitchinset As Boolean = props.switchinset
+Dim xitemavatarclass As String = props.itemavatarclass
+'
+Dim xrightchip As String = props.rightchip
+Dim xrightchipcolor As String = props.rightchipcolor
+Dim xhref As String = props.href
+Dim xtarget As String = props.target
+Dim xvisible As String = props.visible
+'
+If xhref = "" Then xhref = "href"
+If xtarget = "" Then xtarget = "target"
+If xvisible = "" Then xvisible = "visible"
+Dim xleftimage As String = props.leftimage
+Dim xrightimage As String = props.rightimage
+Dim xLeftCheckBoxColor As String = props.LeftCheckBoxColor
+Dim xLeftSwitchColor As String = props.LeftSwitchColor
+Dim xRightCheckBoxColor As String = props.RightCheckBoxColor
+Dim xRightSwitchColor As String = props.RightSwitchColor
+Dim xRightRatingColor As String = props.RightRatingColor
+DataSource = DataSource.ToLowerCase
+key = key.ToLowerCase
+'
+Dim sTemplate As StringBuilder
+sTemplate.Initialize
+sTemplate.Append($"<v-template v-for="item in ${DataSource}">"$)
+sTemplate.Append($"<v-list-group v-if="item.items" :key="item.${key}" v-show="item.${xvisible}" v-model="item.model" no-action active-class="${xactiveclass}">"$)
+sTemplate.Append($"<v-icon id="${iconID}" slot="prependIcon" ${props.iconattr} :color="item.${xiconcolor}" v-html="item.${xicon}"></v-icon>"$)
+'
+sTemplate.Append($"<v-template v-slot:activator>"$)
+sTemplate.Append($"<v-list-item-content id="${contentID}">"$)
+sTemplate.Append($"<v-list-item-title id="${titleID}" v-html="item.${xtitle}"></v-list-item-title>"$)
+sTemplate.Append($"</v-list-item-content>"$)
+sTemplate.Append($"</v-template>"$)
+sTemplate.Append($"<v-template v-for="child in item.items">"$)
 sTemplate.Append($"<v-list-item id="${listitemID}" :key="child.${key}" :to="child.${xurl}" v-show="child.${xvisible}" active-class="${xactiveclass}" :href="child.${xhref}" :target="child.${xtarget}">
+<v-img id="${leftimageID}" class="ml-4" v-if="child.${xleftimage}" max-width="64" min-width="64" :src="child.${xleftimage}"></v-img>
 <v-list-item-action id="${leftactionID}" v-if="child.${xlefticon} || ${xshowleftcheckboxes} || ${xshowleftswitch}">
 <v-btn id="${leftactionBtnID}" :icon="true" v-if="child.${xlefticon}">
 <v-icon id="${leftactionIconID}" ${props.lefticonattr} :color="child.${xlefticoncolor}" v-html="child.${xlefticon}" class="${xlefticonclass}"></v-icon>
 </v-btn>
-<v-checkbox id="${leftcheckboxID}" ${props.leftcheckboxattr} v-if="${xshowleftcheckboxes}" :item="child" v-model="child.${xleftcheckbox}" :input-value="child.${xleftcheckbox}"></v-checkbox>
-<v-switch id="${leftswitchID}" ${props.leftswitchattr} v-if="${xshowleftswitch}" :inset="${xswitchinset}" :item="child" v-model="child.${xleftswitch}" :input-value="child.${xleftswitch}"></v-switch>
+<v-checkbox id="${leftcheckboxID}" ${props.leftcheckboxattr} :color="child.${xLeftCheckBoxColor}" v-if="${xshowleftcheckboxes}" :item="child" v-model="child.${xleftcheckbox}" :input-value="child.${xleftcheckbox}"></v-checkbox>
+<v-switch id="${leftswitchID}" ${props.leftswitchattr} :color="child.${xLeftSwitchColor}" v-if="${xshowleftswitch}" :inset="${xswitchinset}" :item="child" v-model="child.${xleftswitch}" :input-value="child.${xleftswitch}"></v-switch>
 </v-list-item-action>
-<v-list-item-avatar id="${avatarID}" class="${xitemavatarclass}" v-if="child.${xavatar} || child.${xavataricon}">
+<v-list-item-avatar id="${avatarID}" class="${xitemavatarclass}" v-if="child.${xavatar} || child.${xavataricon} || child.${props.avatartext}">
 <v-img id="${avatarImgID}" ${props.avatarattr} :src="child.${xavatar}" class="${xavatarclass}" v-if="child.${xavatar}"></v-img>
 <v-icon id="${avatarIconID}" ${props.avatariconattr} v-if="child.${xavataricon}" :color="child.${xavatariconcolor}" class="${xavatariconclass}" v-html="child.${xavataricon}"></v-icon>
-<span id="${avatarTextID}" v-if="item.${props.avatartext}" :color="child.${props.avatartextcolor}" class="${props.avatartextclass}" v-html="child.${props.avatartext}"></span>
+<span id="${avatarTextID}" v-if="child.${props.avatartext}" :color="child.${props.avatartextcolor}" class="${props.avatartextclass}" v-html="child.${props.avatartext}"></span>
 </v-list-item-avatar>
 <v-list-item-icon id="${itemiconID}" v-if="child.${xicon}">
 <v-icon id="${iconID}" ${props.iconattr} :color="child.${xiconcolor}" class="${xiconclass}" v-html="child.${xicon}"></v-icon>
@@ -741,15 +829,16 @@ sTemplate.Append($"<v-list-item id="${listitemID}" :key="child.${key}" :to="chil
 <v-icon id="${rightavatarIconID}" ${props.rightavatariconattr} v-if="child.${props.rightavataricon}" :color="child.${props.rightavatariconcolor}" class="${props.rightavatariconclass}" v-html="child.${props.rightavataricon}"></v-icon>
 <span id="${rightavatarTextID}" v-if="child.${props.rightavatartext}" :color="child.${props.rightavatartextcolor}" class="${props.rightavatartextclass}" v-html="child.${props.rightavatartext}"></span>
 </v-list-item-avatar>
+<v-img id="${rightimageID}" class="ml-4" v-if="child.${xrightimage}" max-width="64" min-width="64" :src="child.${xrightimage}"></v-img>
 <v-list-item-action id="${rightactionID}" v-if="child.${xrighticon} || child.${xrighttext} || ${xshowrightcheckboxes} || ${xshowrightrating} || ${xshowrightswitch} || item.${xrightchip}">
 <v-list-item-action-text ${props.righttextattr} id="${rightactiontextID}" v-if="child.${xrighttext}" v-html="child.${xrighttext}"></v-list-item-action-text>
 <v-chip id="${rightchipID}" ${props.rightchipattr} v-if="child.${xrightchip}" :color="child.${xrightchipcolor}" dark small v-html="child.${xrightchip}"></v-chip>
 <v-btn id="${rightactionBtnID}" :icon="true" v-if="child.${xrighticon}">
 <v-icon id="${rightactionIconID}" ${props.righticonattr} v-html="child.${xrighticon}" class="${xrighticonclass}" :color="child.${xrighticoncolor}"></v-icon>
 </v-btn>
-<v-checkbox id="${rightcheckboxID}" ${props.rightcheckboxattr} v-if="${xshowrightcheckboxes}" :item="child" v-model="child.${xrightcheckbox}" :input-value="child.${xrightcheckbox}"></v-checkbox>
-<v-rating id="${rightratingID}" ${props.rightratingattr} length="1" v-if="${xshowrightrating}" v-model="child.${xrightrating}" :value="child.${xrightrating}"></v-rating>
-<v-switch id="${rightswitchID}" ${props.rightswitchattr} v-if="${xshowrightswitch}" :inset="${xswitchinset}" :item="child" v-model="child.${xrightswitch}" :input-value="child.${xrightswitch}"></v-switch>
+<v-checkbox id="${rightcheckboxID}" :color="child.${xRightCheckBoxColor}" ${props.rightcheckboxattr} v-if="${xshowrightcheckboxes}" :item="child" v-model="child.${xrightcheckbox}" :input-value="child.${xrightcheckbox}"></v-checkbox>
+<v-rating id="${rightratingID}" :color="child.${xRightRatingColor}" ${props.rightratingattr} length="1" v-if="${xshowrightrating}" v-model="child.${xrightrating}" :value="child.${xrightrating}"></v-rating>
+<v-switch id="${rightswitchID}" :color="child.${xRightSwitchColor}" ${props.rightswitchattr} v-if="${xshowrightswitch}" :inset="${xswitchinset}" :item="child" v-model="child.${xrightswitch}" :input-value="child.${xrightswitch}"></v-switch>
 </v-list-item-action>
 </v-list-item>
 <v-divider v-if="${props.hasdivider}" :inset="${props.insetdivider}"></v-divider>
@@ -757,14 +846,15 @@ sTemplate.Append($"<v-list-item id="${listitemID}" :key="child.${key}" :to="chil
 </v-list-group>"$)
 '
 sTemplate.Append($"<v-list-item v-else id="${listitemID}" :key="item.${key}" v-show="item.${xvisible}" :to="item.${xurl}" active-class="${xactiveclass}" :href="item.${xhref}" :target="item.${xtarget}">
+<v-img id="${leftimageID}" class="ml-4" v-if="item.${xleftimage}" max-width="64" min-width="64" :src="item.${xleftimage}"></v-img>
 <v-list-item-action id="${leftactionID}" v-if="item.${xlefticon} || ${xshowleftcheckboxes} || ${xshowleftswitch}">
 <v-btn id="${leftactionBtnID}" :icon="true" v-if="item.${xlefticon}">
 <v-icon id="${leftactionIconID}" ${props.lefticonattr} :color="item.${xlefticoncolor}" v-html="item.${xlefticon}" class="${xlefticonclass}"></v-icon>
 </v-btn>
-<v-checkbox id="${leftcheckboxID}" ${props.leftcheckboxattr} v-if="${xshowleftcheckboxes}" :item="item" v-model="item.${xleftcheckbox}" :input-value="item.${xleftcheckbox}"></v-checkbox>
-<v-switch id="${leftswitchID}" ${props.leftswitchattr} v-if="${xshowleftswitch}" :inset="${xswitchinset}" :item="item" v-model="item.${xleftswitch}" :input-value="item.${xleftswitch}"></v-switch>
+<v-checkbox id="${leftcheckboxID}" :color="item.${props.leftcheckboxcolor}" ${props.leftcheckboxattr} v-if="${xshowleftcheckboxes}" :item="item" v-model="item.${xleftcheckbox}" :input-value="item.${xleftcheckbox}"></v-checkbox>
+<v-switch id="${leftswitchID}" :color="item.${props.leftswitchcolor}" ${props.leftswitchattr} v-if="${xshowleftswitch}" :inset="${xswitchinset}" :item="item" v-model="item.${xleftswitch}" :input-value="item.${xleftswitch}"></v-switch>
 </v-list-item-action>
-<v-list-item-avatar id="${avatarID}" class="${xitemavatarclass}" v-if="item.${xavatar} || item.${xavataricon}">
+<v-list-item-avatar id="${avatarID}" class="${xitemavatarclass}" v-if="item.${xavatar} || item.${xavataricon} || item.${props.avatartext}">
 <v-img id="${avatarImgID}" ${props.avatarattr} :src="item.${xavatar}" class="${xavatarclass}" v-if="item.${xavatar}"></v-img>
 <v-icon id="${avatarIconID}" ${props.avatariconattr} v-if="item.${xavataricon}" :color="item.${xavatariconcolor}" class="${xavatariconclass}" v-html="item.${xavataricon}"></v-icon>
 <span id="${avatarTextID}" v-if="item.${props.avatartext}" :color="item.${props.avatartextcolor}" class="${props.avatartextclass}" v-html="item.${props.avatartext}"></span>
@@ -785,149 +875,153 @@ sTemplate.Append($"<v-list-item v-else id="${listitemID}" :key="item.${key}" v-s
 <v-icon id="${rightavatarIconID}" ${props.rightavatariconattr} v-if="item.${props.rightavataricon}" :color="item.${props.rightavatariconcolor}" class="${props.rightavatariconclass}" v-html="item.${props.rightavataricon}"></v-icon>
 <span id="${rightavatarTextID}" v-if="item.${props.rightavatartext}" :color="item.${props.rightavatartextcolor}" class="${props.rightavatartextclass}" v-html="item.${props.rightavatartext}"></span>
 </v-list-item-avatar>
+<v-img id="${rightimageID}" class="ml-4" v-if="item.${xrightimage}" max-width="64" min-width="64" :src="item.${xrightimage}"></v-img>
 <v-list-item-action id="${rightactionID}" v-if="item.${xrighticon} || item.${xrighttext} || ${xshowrightcheckboxes} || ${xshowrightrating} || ${xshowrightswitch} || item.${xrightchip}">
 <v-list-item-action-text ${props.righttextattr} id="${rightactiontextID}" v-if="item.${xrighttext}" v-html="item.${xrighttext}"></v-list-item-action-text>
 <v-chip id="${rightchipID}" ${props.rightchipattr} v-if="item.${xrightchip}" :color="item.${xrightchipcolor}" dark small v-html="item.${xrightchip}"></v-chip>
 <v-btn id="${rightactionBtnID}" :icon="true" v-if="item.${xrighticon}">
 <v-icon id="${rightactionIconID}" ${props.righticonattr} v-html="item.${xrighticon}" class="${xrighticonclass}" :color="item.${xrighticoncolor}"></v-icon>
 </v-btn>
-<v-checkbox id="${rightcheckboxID}" ${props.rightcheckboxattr} v-if="${xshowrightcheckboxes}" :item="item" v-model="item.${xrightcheckbox}" :input-value="item.${xrightcheckbox}"></v-checkbox>
-<v-rating id="${rightratingID}" ${props.rightratingattr} length="1" v-if="${xshowrightrating}" v-model="item.${xrightrating}" :value="item.${xrightrating}"></v-rating>
-<v-switch id="${rightswitchID}" ${props.rightswitchattr} v-if="${xshowrightswitch}" :inset="${xswitchinset}" :item="item" v-model="item.${xrightswitch}" :input-value="item.${xrightswitch}"></v-switch>
+<v-checkbox id="${rightcheckboxID}" :color="item.${xRightCheckBoxColor}" ${props.rightcheckboxattr} v-if="${xshowrightcheckboxes}" :item="item" v-model="item.${xrightcheckbox}" :input-value="item.${xrightcheckbox}"></v-checkbox>
+<v-rating id="${rightratingID}" :color="item.${xRightRatingColor}" ${props.rightratingattr} length="1" v-if="${xshowrightrating}" v-model="item.${xrightrating}" :value="item.${xrightrating}"></v-rating>
+<v-switch id="${rightswitchID}" :color="item.${xRightSwitchColor}" ${props.rightswitchattr} v-if="${xshowrightswitch}" :inset="${xswitchinset}" :item="item" v-model="item.${xrightswitch}" :input-value="item.${xrightswitch}"></v-switch>
 </v-list-item-action>
 </v-list-item>"$)
 sTemplate.Append("</v-template>")
-	'
-	BANano.GetElement(parentID).Append(sTemplate.tostring)
-	'
-	Dim vlistitemx As VueElement
-	vlistitemx.Initialize(mCallBack, listitemID, listitemID)
-	Select Case numLines
-	Case 2
-		vlistitemx.AddAttr(":two-line", True)
-	Case 3
-		vlistitemx.AddAttr(":three-line", True)
-	End Select
-	vlistitemx.SetOnEventOwn(mCallBack, $"${elID}_click"$, "click", "child")
-	'left action
-	'
-	VElement.SetData("child" , Null)
-	VElement.SetData(DataSource, VElement.NewList)
-	VElement.BindVueElement(vlistitemx)
-	CleanUp
+'
+BANano.GetElement(parentID).Append(sTemplate.tostring)
+'
+Dim vlistitemx As VueElement
+vlistitemx.Initialize(mCallBack, listitemID, listitemID)
+Select Case numLines
+Case 2
+vlistitemx.AddAttr(":two-line", True)
+Case 3
+vlistitemx.AddAttr(":three-line", True)
+End Select
+vlistitemx.SetOnEventOwn(mCallBack, $"${elID}_click"$, "click", "child")
+'left action
+'
+VElement.SetData("child" , Null)
+VElement.SetData(DataSource, VElement.NewList)
+VElement.BindVueElement(vlistitemx)
+CleanUp
 End Sub
-
 'add a list item template to draw item
-Sub AddListViewTemplate(props As ListViewItemOptions) 
-	Dim elID As String = mName.ToLowerCase
-	Dim parentID As String = CleanID(mName)
-	'
-	Dim templateID As String = $"${elID}template"$
-	Dim headerID As String = $"${elID}header"$
-	Dim dividerID As String = $"${elID}divider"$
-	Dim listitemID As String = $"${elID}listitem"$
-	Dim leftactionID As String = $"${elID}leftaction"$
-	Dim leftactionBtnID As String = $"${elID}leftactionbtn"$
-	Dim leftactionIconID As String = $"${elID}leftactionicon"$
-	Dim leftcheckboxID As String = $"${elID}leftcheckbox"$
-	Dim rightcheckboxID As String = $"${elID}rightcheckbox"$
-	Dim avatarID As String = $"${elID}avatar"$
-	Dim avatarImgID As String = $"${elID}avatarimage"$
-	Dim avatarIconID As String = $"${elID}avataricon"$
-	Dim itemiconID As String = $"${elID}itemicon"$
-	Dim iconID As String = $"${elID}icon"$
-	Dim contentID As String = $"${elID}content"$
-	Dim titleID As String = $"${elID}title"$
-	Dim subtitleID As String = $"${elID}subtitle"$
-	Dim subtitle1ID As String = $"${elID}subtitle1"$
-	Dim subtitle2ID As String = $"${elID}subtitle2"$
-	Dim subtitle3ID As String = $"${elID}subtitle3"$
-	Dim subtitle4ID As String = $"${elID}subtitle4"$
-	Dim rightactionID As String = $"${elID}rightaction"$
-	Dim rightactiontextID As String = $"${elID}rightactiontext"$
-	Dim rightactionBtnID As String = $"${elID}rightactionbtn"$
-	Dim rightactionIconID As String = $"${elID}rightactionicon"$
-	Dim rightratingID As String = $"${elID}rightrating"$
-	Dim leftswitchID As String = $"${elID}leftswitch"$
-	Dim rightswitchID As String = $"${elID}rightswitch"$
-	Dim rightchipID As String = $"${elID}rightchip"$
-	'
-	Dim rightavatarID As String = $"${elID}rightavatar"$
-	Dim rightavatarImgID As String = $"${elID}rightavatarimage"$
-	Dim rightavatarIconID As String = $"${elID}rightavataricon"$
-	Dim rightavatarTextID As String = $"${elID}rightavatartext"$
-	Dim avatarTextID As String = $"${elID}avatartext"$
-	
-	'in case the pointers are changed
-	Dim xurl As String = props.url
-	Dim xlefticon As String = props.lefticon
-	Dim xlefticoncolor As String = props.lefticoncolor
-	Dim xlefticonclass As String = props.lefticonclass
-	'
-	Dim xavatar As String = props.avatar
-	Dim xavatarclass As String = props.avatarclass
-	
-	Dim xavataricon As String = props.avataricon
-	Dim xavatariconcolor As String = props.avatariconcolor
-	Dim xavatariconclass As String = props.avatariconclass
-	
-	Dim xicon As String = props.icon
-	Dim xiconclass As String = props.iconclass
-	Dim xiconcolor As String = props.iconcolor
-	
-	Dim xtitle As String = props.title
-	Dim xsubtitle As String = props.subtitle
-	Dim xsubtitle1 As String = props.subtitle1
-	Dim xsubtitle2 As String = props.subtitle2
-	Dim xsubtitle3 As String = props.subtitle3
-	Dim xsubtitle4 As String = props.subtitle4
-
-	'
-	Dim xrighticon As String = props.righticon
-	Dim xrighticonclass As String = props.righticonclass
-	Dim xrighttext As String = props.righttext
-	Dim xrighticoncolor As String = props.righticoncolor
-	DataSource = props.dataSource
-	Dim key As String = props.key
-	
-	Dim xactiveclass As String = props.activeclass
-	Dim xleftcheckbox As String = props.leftcheckbox
-	Dim xrightcheckbox As String = props.rightcheckbox
-	Dim xshowleftcheckboxes As Boolean = props.showleftcheckboxes
-	Dim xshowrightcheckboxes As Boolean = props.showrightcheckboxes
-	Dim xshowrightrating As Boolean = props.showrightrating
-	Dim xrightrating As String = props.rightrating
-	'
-	Dim xleftswitch As String = props.leftswitch
-	Dim xshowleftswitch As Boolean = props.showleftswitches
-	Dim xrightswitch As String = props.rightswitch
-	Dim xshowrightswitch As Boolean = props.showrightswitches
-	Dim xswitchinset As Boolean = props.switchinset
-	Dim xitemavatarclass As String = props.itemavatarclass
-	'
-	Dim xrightchip As String = props.rightchip
-	Dim xrightchipcolor As String = props.rightchipcolor
-	Dim xvisible As String = props.visible
-	'
-	DataSource = DataSource.ToLowerCase
-	key = key.ToLowerCase
-	Dim xrightitemavatarclass As String = props.rightitemavatarclass
-	Dim xhref As String = props.href
-	Dim xtarget As String = props.target
-	If xhref = "" Then xhref = "href"
-	If xtarget = "" Then xtarget = "target"
-	If xvisible = "" Then xvisible = "visible"
-	'
-	Dim sTemplate As String = $"<v-template id="${templateID}" v-for="(item, index) in ${DataSource}">
+Sub AddListViewTemplate(props As ListViewItemOptions)
+Dim elID As String = mName.ToLowerCase
+Dim parentID As String = CleanID(mName)
+'
+Dim templateID As String = $"${elID}template"$
+Dim headerID As String = $"${elID}header"$
+Dim dividerID As String = $"${elID}divider"$
+Dim listitemID As String = $"${elID}listitem"$
+Dim leftactionID As String = $"${elID}leftaction"$
+Dim leftactionBtnID As String = $"${elID}leftactionbtn"$
+Dim leftactionIconID As String = $"${elID}leftactionicon"$
+Dim leftcheckboxID As String = $"${elID}leftcheckbox"$
+Dim rightcheckboxID As String = $"${elID}rightcheckbox"$
+Dim avatarID As String = $"${elID}avatar"$
+Dim avatarImgID As String = $"${elID}avatarimage"$
+Dim avatarIconID As String = $"${elID}avataricon"$
+Dim itemiconID As String = $"${elID}itemicon"$
+Dim iconID As String = $"${elID}icon"$
+Dim contentID As String = $"${elID}content"$
+Dim titleID As String = $"${elID}title"$
+Dim subtitleID As String = $"${elID}subtitle"$
+Dim subtitle1ID As String = $"${elID}subtitle1"$
+Dim subtitle2ID As String = $"${elID}subtitle2"$
+Dim subtitle3ID As String = $"${elID}subtitle3"$
+Dim subtitle4ID As String = $"${elID}subtitle4"$
+Dim rightactionID As String = $"${elID}rightaction"$
+Dim rightactiontextID As String = $"${elID}rightactiontext"$
+Dim rightactionBtnID As String = $"${elID}rightactionbtn"$
+Dim rightactionIconID As String = $"${elID}rightactionicon"$
+Dim rightratingID As String = $"${elID}rightrating"$
+Dim leftswitchID As String = $"${elID}leftswitch"$
+Dim rightswitchID As String = $"${elID}rightswitch"$
+Dim rightchipID As String = $"${elID}rightchip"$
+'
+Dim rightavatarID As String = $"${elID}rightavatar"$
+Dim rightavatarImgID As String = $"${elID}rightavatarimage"$
+Dim rightavatarIconID As String = $"${elID}rightavataricon"$
+Dim rightavatarTextID As String = $"${elID}rightavatartext"$
+Dim avatarTextID As String = $"${elID}avatartext"$
+Dim leftimageID As String = $"${elID}leftimage"$
+Dim rightimageID As String = $"${elID}rightimage"$
+'in case the pointers are changed
+Dim xurl As String = props.url
+Dim xlefticon As String = props.lefticon
+Dim xlefticoncolor As String = props.lefticoncolor
+Dim xlefticonclass As String = props.lefticonclass
+'
+Dim xavatar As String = props.avatar
+Dim xavatarclass As String = props.avatarclass
+Dim xavataricon As String = props.avataricon
+Dim xavatariconcolor As String = props.avatariconcolor
+Dim xavatariconclass As String = props.avatariconclass
+Dim xicon As String = props.icon
+Dim xiconclass As String = props.iconclass
+Dim xiconcolor As String = props.iconcolor
+Dim xtitle As String = props.title
+Dim xsubtitle As String = props.subtitle
+Dim xsubtitle1 As String = props.subtitle1
+Dim xsubtitle2 As String = props.subtitle2
+Dim xsubtitle3 As String = props.subtitle3
+Dim xsubtitle4 As String = props.subtitle4
+'
+Dim xrighticon As String = props.righticon
+Dim xrighticonclass As String = props.righticonclass
+Dim xrighttext As String = props.righttext
+Dim xrighticoncolor As String = props.righticoncolor
+DataSource = props.dataSource
+Dim key As String = props.key
+Dim xactiveclass As String = props.activeclass
+Dim xleftcheckbox As String = props.leftcheckbox
+Dim xrightcheckbox As String = props.rightcheckbox
+Dim xshowleftcheckboxes As Boolean = props.showleftcheckboxes
+Dim xshowrightcheckboxes As Boolean = props.showrightcheckboxes
+Dim xshowrightrating As Boolean = props.showrightrating
+Dim xrightrating As String = props.rightrating
+'
+Dim xleftswitch As String = props.leftswitch
+Dim xshowleftswitch As Boolean = props.showleftswitches
+Dim xrightswitch As String = props.rightswitch
+Dim xshowrightswitch As Boolean = props.showrightswitches
+Dim xswitchinset As Boolean = props.switchinset
+Dim xitemavatarclass As String = props.itemavatarclass
+'
+Dim xrightchip As String = props.rightchip
+Dim xrightchipcolor As String = props.rightchipcolor
+Dim xvisible As String = props.visible
+Dim xleftimage As String = props.leftimage
+Dim xrightimage As String = props.rightimage
+Dim xLeftCheckBoxColor As String = props.LeftCheckBoxColor
+Dim xLeftSwitchColor As String = props.LeftSwitchColor
+Dim xRightCheckBoxColor As String = props.RightCheckBoxColor
+Dim xrightratingcolor As String = props.rightratingcolor
+Dim xrightswitchcolor As String = props.rightswitchcolor
+'
+DataSource = DataSource.ToLowerCase
+key = key.ToLowerCase
+Dim xrightitemavatarclass As String = props.rightitemavatarclass
+Dim xhref As String = props.href
+Dim xtarget As String = props.target
+If xhref = "" Then xhref = "href"
+If xtarget = "" Then xtarget = "target"
+If xvisible = "" Then xvisible = "visible"
+'
+Dim sTemplate As String = $"<v-template id="${templateID}" v-for="(item, index) in ${DataSource}">
 <v-subheader id="${headerID}" v-if="item.header">{{ item.header }}</v-subheader>
 <v-divider id="${dividerID}" v-else-if="item.divider" :inset="item.inset"></v-divider>
 <v-list-item id="${listitemID}" v-else="true" :key="item.${key}" :to="item.${xurl}" v-show="item.${xvisible}" :href="item.${xhref}" :target="item.${xtarget}"  active-class="${xactiveclass}">
+<v-img id="${leftimageID}" class="mr-4" v-if="item.${xleftimage}" max-width="64" min-width="64" :src="item.${xleftimage}"></v-img>
 <v-list-item-action id="${leftactionID}" v-if="item.${xlefticon} || ${xshowleftcheckboxes} || ${xshowleftswitch}">
 <v-btn id="${leftactionBtnID}" :icon="true" v-if="item.${xlefticon}">
 <v-icon id="${leftactionIconID}" ${props.lefticonattr} :color="item.${xlefticoncolor}" v-html="item.${xlefticon}" class="${xlefticonclass}"></v-icon>
 </v-btn>
-<v-checkbox id="${leftcheckboxID}" ${props.leftcheckboxattr} v-if="${xshowleftcheckboxes}" :item="item" v-model="item.${xleftcheckbox}" :input-value="item.${xleftcheckbox}"></v-checkbox>
-<v-switch id="${leftswitchID}" ${props.leftswitchattr} v-if="${xshowleftswitch}" :inset="${xswitchinset}" :item="item" v-model="item.${xleftswitch}" :input-value="item.${xleftswitch}"></v-switch>
+<v-checkbox id="${leftcheckboxID}" ${props.leftcheckboxattr} :color="item.${xLeftCheckBoxColor}" v-if="${xshowleftcheckboxes}" :item="item" v-model="item.${xleftcheckbox}" :input-value="item.${xleftcheckbox}"></v-checkbox>
+<v-switch id="${leftswitchID}" ${props.leftswitchattr} v-if="${xshowleftswitch}" :color="item.${xLeftSwitchColor}" :inset="${xswitchinset}" :item="item" v-model="item.${xleftswitch}" :input-value="item.${xleftswitch}"></v-switch>
 </v-list-item-action>
 <v-list-item-avatar id="${avatarID}" class="${xitemavatarclass}" v-if="item.${xavatar} || item.${xavataricon} || item.${props.avatartext}">
 <v-img id="${avatarImgID}" ${props.avatarattr} :src="item.${xavatar}" class="${xavatarclass}" v-if="item.${xavatar}"></v-img>
@@ -950,1070 +1044,1300 @@ Sub AddListViewTemplate(props As ListViewItemOptions)
 <v-icon id="${rightavatarIconID}" ${props.rightavatariconattr} v-if="item.${props.rightavataricon}" :color="item.${props.rightavatariconcolor}" class="${props.rightavatariconclass}" v-html="item.${props.rightavataricon}"></v-icon>
 <span id="${rightavatarTextID}" v-if="item.${props.rightavatartext}" :color="item.${props.rightavatartextcolor}" class="${props.rightavatartextclass}" v-html="item.${props.rightavatartext}"></span>
 </v-list-item-avatar>
+<v-img id="${rightimageID}" class="ml-4" v-if="item.${xrightimage}" max-width="64" min-width="64" :src="item.${xrightimage}"></v-img>
 <v-list-item-action id="${rightactionID}" v-if="item.${xrighticon} || item.${xrighttext} || ${xshowrightcheckboxes} || ${xshowrightrating} || ${xshowrightswitch} || item.${xrightchip}">
 <v-list-item-action-text ${props.righttextattr} id="${rightactiontextID}" v-if="item.${xrighttext}" v-html="item.${xrighttext}"></v-list-item-action-text>
 <v-chip id="${rightchipID}" ${props.rightchipattr} v-if="item.${xrightchip}" :color="item.${xrightchipcolor}" dark small v-html="item.${xrightchip}"></v-chip>
 <v-btn id="${rightactionBtnID}" :icon="true" v-if="item.${xrighticon}">
 <v-icon id="${rightactionIconID}" ${props.righticonattr} v-html="item.${xrighticon}" class="${xrighticonclass}" :color="item.${xrighticoncolor}"></v-icon>
 </v-btn>
-<v-checkbox id="${rightcheckboxID}" ${props.rightcheckboxattr} v-if="${xshowrightcheckboxes}" :item="item" v-model="item.${xrightcheckbox}" :input-value="item.${xrightcheckbox}"></v-checkbox>
-<v-rating id="${rightratingID}" ${props.rightratingattr} length="1" v-if="${xshowrightrating}" v-model="item.${xrightrating}" :value="item.${xrightrating}"></v-rating>
-<v-switch id="${rightswitchID}" ${props.rightswitchattr} v-if="${xshowrightswitch}" :inset="${xswitchinset}" :item="item" v-model="item.${xrightswitch}" :input-value="item.${xrightswitch}"></v-switch>
+<v-checkbox id="${rightcheckboxID}" :color="item.${xRightCheckBoxColor}" ${props.rightcheckboxattr} v-if="${xshowrightcheckboxes}" :item="item" v-model="item.${xrightcheckbox}" :input-value="item.${xrightcheckbox}"></v-checkbox>
+<v-rating id="${rightratingID}" :color="item.${xrightratingcolor}" ${props.rightratingattr} length="1" v-if="${xshowrightrating}" v-model="item.${xrightrating}" :value="item.${xrightrating}"></v-rating>
+<v-switch id="${rightswitchID}" :color="item.${xrightswitchcolor}" ${props.rightswitchattr} v-if="${xshowrightswitch}" :inset="${xswitchinset}" :item="item" v-model="item.${xrightswitch}" :input-value="item.${xrightswitch}"></v-switch>
 </v-list-item-action>
 </v-list-item>
 <v-divider v-if="${props.hasdivider}" :inset="${props.insetdivider}"></v-divider>
 </v-template>"$
-	
-	'
-	sTemplate = sTemplate.Replace("~","$")
-	
-	BANano.GetElement(parentID).Append(sTemplate)
-	'
-	Dim vlistitemx As VueElement
-	vlistitemx.Initialize(mCallBack, listitemID, listitemID)
-	Select Case numLines
-	Case 2
-		vlistitemx.AddAttr(":two-line", True)
-	Case 3
-		vlistitemx.AddAttr(":three-line", True)
-	End Select
-	vlistitemx.SetOnEventOwn(mCallBack, $"${elID}_click"$, "click", "item")
-	'left action
-	'
+'
+sTemplate = sTemplate.Replace("~","$")
+BANano.GetElement(parentID).Append(sTemplate)
+'
+Dim vlistitemx As VueElement
+vlistitemx.Initialize(mCallBack, listitemID, listitemID)
+Select Case numLines
+Case 2
+vlistitemx.AddAttr(":two-line", True)
+Case 3
+vlistitemx.AddAttr(":three-line", True)
+End Select
+vlistitemx.SetOnEventOwn(mCallBack, $"${elID}_click"$, "click", "item")
+'left action
+'
 '	Dim vleftcheckbox As VueElement
 '	vleftcheckbox.Initialize(mCallBack, leftcheckboxID, leftcheckboxID)
 '	If xshowleftcheckboxes Then
 '		vleftcheckbox.SetOnEventOwn(mCallBack, $"${elID}_leftclick"$, "click.stop", "item")
 '	End If
-	'
+'
 '	Dim vrightcheckbox As VueElement
 '	vrightcheckbox.Initialize(mCallBack, rightcheckboxID, rightcheckboxID)
 '	If xshowrightcheckboxes Then
 '		vrightcheckbox.SetOnEventOwn(mCallBack, $"${elID}_rightclick"$, "click.stop", "item")
 '	End If
-	
-	Dim vleftlistitemaction As VueElement
-	vleftlistitemaction.Initialize(mCallBack, leftactionID, leftactionID)
-	'If xshowleftcheckboxes = False And xshowleftswitch = False Then
-		vleftlistitemaction.SetOnEventOwn(mCallBack, $"${elID}_leftclick"$, "click.stop", "item")
-	'End If
-	'
-	Dim vrightlistitemaction As VueElement
-	vrightlistitemaction.Initialize(mCallBack, rightactionID, rightactionID)
-	'If xshowrightcheckboxes = False And xshowrightswitch = False Then
-		vrightlistitemaction.SetOnEventOwn(mCallBack, $"${elID}_rightclick"$, "click.stop", "item")
-	'End If
-	'
+Dim vleftlistitemaction As VueElement
+vleftlistitemaction.Initialize(mCallBack, leftactionID, leftactionID)
+'If xshowleftcheckboxes = False And xshowleftswitch = False Then
+vleftlistitemaction.SetOnEventOwn(mCallBack, $"${elID}_leftclick"$, "click.stop", "item")
+'End If
+'
+Dim vrightlistitemaction As VueElement
+vrightlistitemaction.Initialize(mCallBack, rightactionID, rightactionID)
+'If xshowrightcheckboxes = False And xshowrightswitch = False Then
+vrightlistitemaction.SetOnEventOwn(mCallBack, $"${elID}_rightclick"$, "click.stop", "item")
+'End If
+'
 '	Dim vleftswitch As VueElement
 '	vleftswitch.Initialize(mCallBack, leftswitchID, leftswitchID)
-'	'If xshowleftswitch Then 
-	'	vleftswitch.SetOnEventOwn(mCallBack, $"${elID}_leftclick"$, "change.stop", "item")
-	'End If
-	'
+'	'If xshowleftswitch Then
+'	vleftswitch.SetOnEventOwn(mCallBack, $"${elID}_leftclick"$, "change.stop", "item")
+'End If
+'
 '	Dim vrightswitch As VueElement
 '	vrightswitch.Initialize(mCallBack, rightswitchID, rightswitchID)
-	'If xshowrightswitch Then
-	'	vrightswitch.SetOnEventOwn(mCallBack, $"${elID}_rightclick"$, "change.stop", "item")
-	'End If
-	
-	VElement.SetData(DataSource, VElement.NewList)
-	VElement.BindVueElement(vlistitemx)
-	VElement.BindVueElement(vleftlistitemaction)
-	VElement.BindVueElement(vrightlistitemaction)
+'If xshowrightswitch Then
+'	vrightswitch.SetOnEventOwn(mCallBack, $"${elID}_rightclick"$, "change.stop", "item")
+'End If
+VElement.SetData(DataSource, VElement.NewList)
+VElement.BindVueElement(vlistitemx)
+VElement.BindVueElement(vleftlistitemaction)
+VElement.BindVueElement(vrightlistitemaction)
 '	vlistitem.BindVueElement(vleftcheckbox)
 '	vlistitem.BindVueElement(vrightcheckbox)
 '	vlistitem.BindVueElement(vrightswitch)
 '	vlistitem.BindVueElement(vleftswitch)
-	CleanUp
+CleanUp
 End Sub
-
 private Sub CleanUp
-	
 If Options.UsesVisible = False Then
-	ListItem.RemoveAttr("v-show")		
+ListItem.RemoveAttr("v-show")
 End If
-
 If Options.UseIcon = False Then
-		ListItemIcon1.Remove
+ListItemIcon1.Remove
 End If
-
 If Options.UseLeftAction = False Then
-		ListItemLeftAction.Remove
+ListItemLeftAction.Remove
 Else
-	If  Options.UseLeftActionButton = False Then
-		ListItemLeftButton.Remove
-	End If
-	If  Options.UseLeftActionCheckBox = False Then
-		ListItemLeftCheckBox.Remove
-	End If
-	If  Options.UseLeftActionSwitch = False Then
-		ListItemLeftSwitch.Remove
-	End If
+If  Options.UseLeftActionButton = False Then
+ListItemLeftButton.Remove
 End If
-
+If  Options.UseLeftActionCheckBox = False Then
+ListItemLeftCheckBox.Remove
+End If
+If  Options.UseLeftActionSwitch = False Then
+ListItemLeftSwitch.Remove
+End If
+End If
 If  Options.UseLeftAvatar = False Then
-	ListItemAvatar.Remove
+ListItemAvatar.Remove
 Else
-	If  Options.UseLeftAvatarIcon = False Then
-		ListItemAvatarIcon.Remove
-	End If
-	If  Options.UseLeftAvatarImage = False Then
-		ListItemAvatarImage.Remove	
-	End If
-	If  Options.UseLeftAvatarText = False Then
-		ListItemAvatarText.Remove
-	End If
+If  Options.UseLeftAvatarIcon = False Then
+ListItemAvatarIcon.Remove
 End If
-
+If  Options.UseLeftAvatarImage = False Then
+ListItemAvatarImage.Remove
+End If
+If  Options.UseLeftAvatarText = False Then
+ListItemAvatarText.Remove
+End If
+End If
 If  Options.UseRightAction = False Then
-	ListItemRightAction.Remove
+ListItemRightAction.Remove
 Else
-	If  Options.UseRightActionButton = False Then
-		ListItemRightButton.Remove
-	End If
-	If  Options.UseRightActionCheckBox = False Then
-		ListItemRightCheckBox.Remove
-	End If
-	If  Options.UseRightActionRating = False Then
-		ListItemRightRating.Remove
-	End If
-	If  Options.UseRightActionSwitch = False Then
-		ListItemRightSwitch.Remove
-	End If	
-	If  Options.UseRightActionText = False Then
-		ListItemRightText.Remove
-	End If
-	If  Options.UseRightChip = False Then
-		ListItemRightChip.Remove
-	End If
+If  Options.UseRightActionButton = False Then
+ListItemRightButton.Remove
 End If
-
+If  Options.UseRightActionCheckBox = False Then
+ListItemRightCheckBox.Remove
+End If
+If  Options.UseRightActionRating = False Then
+ListItemRightRating.Remove
+End If
+If  Options.UseRightActionSwitch = False Then
+ListItemRightSwitch.Remove
+End If
+If  Options.UseRightActionText = False Then
+ListItemRightText.Remove
+End If
+If  Options.UseRightChip = False Then
+ListItemRightChip.Remove
+End If
+End If
 If  Options.UseRightAvatar = False Then
-	ListItemRightAvatar.Remove
+ListItemRightAvatar.Remove
 Else
-	If  Options.UseRightAvatarIcon = False Then
-		ListItemRightAvatarIcon.remove
-	End If
-	If  Options.UseRightAvatarImage = False Then
-		ListItemRightAvatarImage.Remove
-	End If
-	If  Options.UseRightAvatarText = False Then
-		ListItemRightAvatarText.Remove
-	End If
+If  Options.UseRightAvatarIcon = False Then
+ListItemRightAvatarIcon.remove
+End If
+If  Options.UseRightAvatarImage = False Then
+ListItemRightAvatarImage.Remove
+End If
+If  Options.UseRightAvatarText = False Then
+ListItemRightAvatarText.Remove
+End If
 End If
 If Options.UseSubTitle = False Then
-	ListItemSubTitle.Remove
+ListItemSubTitle.Remove
 End If
 If Options.UseSubTitle1 = False Then
-	ListItemSubTitle1.Remove
+ListItemSubTitle1.Remove
 End If
 If Options.UseSubTitle2 = False Then
-	ListItemSubTitle2.remove
+ListItemSubTitle2.remove
 End If
 If Options.UseSubTitle3 = False Then
-	ListItemSubTitle3.remove
+ListItemSubTitle3.remove
 End If
 If Options.UseSubTitle4 = False Then
-	ListItemSubTitle4.remove
+ListItemSubTitle4.remove
 End If
 If Options.UseTitle = False Then
-	ListItemTitle.Remove
+ListItemTitle.Remove
+End If
+If Options.UseLeftImage = False Then
+ListItemLeftImage.Remove
+End If
+If Options.UseRightImage = False Then
+ListItemRightImage.Remove
 End If
 End Sub
-
 'get the item title to change attributes and styles
 Sub ListItemTitle As VueElement
-	Return VElement.GetVueElement($"${mName}title"$)
+Return VElement.GetVueElement($"${mName}title"$)
 End Sub
-
+Sub ListItemLeftImage As VueElement
+Return VElement.GetVueElement($"${mName}leftimage"$)
+End Sub
+Sub ListItemRightImage As VueElement
+Return VElement.GetVueElement($"${mName}rightimage"$)
+End Sub
 'get the item subtitle to change attributes, styles and classes
 Sub ListItemSubTitle As VueElement
-	Return VElement.GetVueElement($"${mName}subtitle"$)
+Return VElement.GetVueElement($"${mName}subtitle"$)
 End Sub
-
 'get the sub title 1 to change attributes, styles and classes
 Sub ListItemSubTitle1 As VueElement
-	Return VElement.GetVueElement($"${mName}subtitle1"$)
+Return VElement.GetVueElement($"${mName}subtitle1"$)
 End Sub
-
 'get the sub title 2 to change attributes, styles and classes
 Sub ListItemSubTitle2 As VueElement
-	Return VElement.GetVueElement($"${mName}subtitle2"$)
+Return VElement.GetVueElement($"${mName}subtitle2"$)
 End Sub
-
 'get the sub title 3 to change attributes, styles and classes
 Sub ListItemSubTitle3 As VueElement
-	Return VElement.GetVueElement($"${mName}subtitle3"$)
+Return VElement.GetVueElement($"${mName}subtitle3"$)
 End Sub
-
 'get the sub title 4 to change attributes, styles and classes
 Sub ListItemSubTitle4 As VueElement
-	Return VElement.GetVueElement($"${mName}subtitle4"$)
+Return VElement.GetVueElement($"${mName}subtitle4"$)
 End Sub
-
 'get the right chip to change attributes, styles and classes
 Sub ListItemRightChip As VueElement
-	Return VElement.GetVueElement($"${mName}rightchip"$)
+Return VElement.GetVueElement($"${mName}rightchip"$)
 End Sub
-
 'get the right rating to change attributes, styles and classes
 Sub ListItemRightRating As VueElement
-	Return VElement.GetVueElement($"${mName}rightrating"$)
+Return VElement.GetVueElement($"${mName}rightrating"$)
 End Sub
-
-
 'get the right text to change attributes, styles and classes
 Sub ListItemRightText As VueElement
-	Return VElement.GetVueElement($"${mName}rightactiontext"$)
+Return VElement.GetVueElement($"${mName}rightactiontext"$)
 End Sub
-
 'get the left item action icon to change attributes, styles and classes
 Sub ListItemLeftIcon As VueElement
-	Return VElement.GetVueElement($"${mName}leftactionicon"$)
+Return VElement.GetVueElement($"${mName}leftactionicon"$)
 End Sub
-
 'get the left check box to change attributes, styles and classes
 Sub ListItemLeftCheckBox As VueElement
-	Return VElement.GetVueElement($"${mName}leftcheckbox"$)
+Return VElement.GetVueElement($"${mName}leftcheckbox"$)
 End Sub
-
 'get the right check box to change attributes, styles and classes
 Sub ListItemRightCheckBox As VueElement
-	Return VElement.GetVueElement($"${mName}rightcheckbox"$)
+Return VElement.GetVueElement($"${mName}rightcheckbox"$)
 End Sub
-
 'get the left v-icon to change attributes, styles and classes
 Sub ListItemIcon As VueElement
-	Return VElement.GetVueElement($"${mName}icon"$)
+Return VElement.GetVueElement($"${mName}icon"$)
 End Sub
-
 'get the list item icon to change attributes, styles and classes
 Sub ListItemIcon1 As VueElement
-	Return VElement.GetVueElement($"${mName}itemicon"$)
+Return VElement.GetVueElement($"${mName}itemicon"$)
 End Sub
-
 'get the right icon to change attributes, styles and classes
 Sub ListItemRightIcon As VueElement
-	Return VElement.GetVueElement($"${mName}rightactionicon"$)
+Return VElement.GetVueElement($"${mName}rightactionicon"$)
 End Sub
-
 'get the left switch to change attributes, styles and classes
 Sub ListItemLeftSwitch As VueElement
-	Return VElement.GetVueElement($"${mName}leftswitch"$)
+Return VElement.GetVueElement($"${mName}leftswitch"$)
 End Sub
-
 'get the right switch to change attributes, styles and classes
 Sub ListItemRightSwitch As VueElement
-	Return VElement.GetVueElement($"${mName}rightswitch"$)
+Return VElement.GetVueElement($"${mName}rightswitch"$)
 End Sub
-
 'get the list item to change attributes, styles and classes
 Sub ListItem As VueElement
-	Return VElement.GetVueElement($"${mName}listitem"$)
+Return VElement.GetVueElement($"${mName}listitem"$)
 End Sub
-
 'get the list left action to change attributes, styles and classes
 Sub ListItemLeftAction As VueElement
-	Return VElement.GetVueElement($"${mName}leftaction"$)
+Return VElement.GetVueElement($"${mName}leftaction"$)
 End Sub
-
 'get the right action to change attributes, styles and classes
 Sub ListItemRightAction As VueElement
-	Return VElement.GetVueElement($"${mName}rightaction"$)
+Return VElement.GetVueElement($"${mName}rightaction"$)
 End Sub
-
 'get the item avatar to change attributes, styles and classes
 Sub ListItemAvatar As VueElement
-	Return VElement.GetVueElement($"${mName}avatar"$)
+Return VElement.GetVueElement($"${mName}avatar"$)
 End Sub
-
 Sub ListItemAvatarImage As VueElement
-	Return VElement.GetVueElement($"${mName}avatarimage"$)
+Return VElement.GetVueElement($"${mName}avatarimage"$)
 End Sub
-
 'get the avatar icon to change attributes, styles and classes
 Sub ListItemAvatarIcon As VueElement
-	Return VElement.GetVueElement($"${mName}avataricon"$)
+Return VElement.GetVueElement($"${mName}avataricon"$)
 End Sub
-
 'get the item content to change attributes, styles and classes
 Sub ListItemContent As VueElement
-	Return VElement.GetVueElement($"${mName}content"$)
+Return VElement.GetVueElement($"${mName}content"$)
 End Sub
-
 'get right avatar to change attributes, styles and classes
 Sub ListItemRightAvatar As VueElement
-	Return VElement.GetVueElement($"${mName}rightavatar"$)
+Return VElement.GetVueElement($"${mName}rightavatar"$)
 End Sub
-
 'get the right avatar image to change attributes, styles and classes
 Sub ListItemRightAvatarImage As VueElement
-	Return VElement.GetVueElement($"${mName}rightavatarimage"$)
+Return VElement.GetVueElement($"${mName}rightavatarimage"$)
 End Sub
-
 'get right avatar icon to change attributes, styles and classes
 Sub ListItemRightAvatarIcon As VueElement
-	Return VElement.GetVueElement($"${mName}rightavataricon"$)
+Return VElement.GetVueElement($"${mName}rightavataricon"$)
 End Sub
-
 'get avatar text to change attributes, styles and classes
 Sub ListItemAvatarText As VueElement
-	Return VElement.GetVueElement($"${mName}avatartext"$)
+Return VElement.GetVueElement($"${mName}avatartext"$)
 End Sub
-
 'get right avatar text to change attributes, styles and classes
 Sub ListItemRightAvatarText As VueElement
-	Return VElement.GetVueElement($"${mName}rightavatartext"$)
+Return VElement.GetVueElement($"${mName}rightavatartext"$)
 End Sub
-
 'get left button to change attributes, styles and classes
 Sub ListItemLeftButton As VueElement
-	Return VElement.GetVueElement($"${mName}leftactionbtn"$)
+Return VElement.GetVueElement($"${mName}leftactionbtn"$)
 End Sub
-
 'get right button to change attributes, styles and classes
 Sub ListItemRightButton As VueElement
-	Return VElement.GetVueElement($"${mName}rightactionbtn"$)
+Return VElement.GetVueElement($"${mName}rightactionbtn"$)
 End Sub
-
-
 'add a list view item
 Sub AddItem(parent As String, key As String, iconName As String, iconColor As String, title As String, url As String) As VList
-	parent = parent.ToLowerCase
-	key = key.ToLowerCase
-	'
-	Dim nitem As Map = CreateMap()
-	nitem.Put("id", key)
-	If iconName <> "" Then nitem.Put("icon", iconName)
-	If iconColor <> "" Then nitem.Put("iconcolor", iconColor)
-	If title <> "" Then nitem.Put("title", title)
-	If url <> "" Then nitem.Put("to", url)
-	nitem.Put("parentid", parent)
-	nitem.Put("visible", True)
-	Records.Add(nitem)
-	Return Me
+parent = parent.ToLowerCase
+key = key.ToLowerCase
+'
+Dim nitem As Map = CreateMap()
+nitem.Put("id", key)
+If iconName <> "" Then nitem.Put("icon", iconName)
+If iconColor <> "" Then nitem.Put("iconcolor", iconColor)
+If title <> "" Then nitem.Put("title", title)
+If url <> "" Then nitem.Put("to", url)
+nitem.Put("parentid", parent)
+nitem.Put("visible", True)
+Records.Add(nitem)
+Return Me
 End Sub
-
 'add a list view item
 Sub AddAvatar(parent As String, key As String, avatarImg As String, title As String, url As String) As VList
-	parent = parent.ToLowerCase
-	key = key.ToLowerCase
-	'
-	Dim nitem As Map = CreateMap()
-	nitem.Put("id", key)
-	If avatarImg <> "" Then nitem.Put("avatar", avatarImg)
-	If title <> "" Then nitem.Put("title", title)
-	If url <> "" Then nitem.Put("to", url)
-	nitem.Put("parentid", parent)
-	nitem.Put("visible", True)
-	Records.Add(nitem)
-	Return Me
+parent = parent.ToLowerCase
+key = key.ToLowerCase
+'
+Dim nitem As Map = CreateMap()
+nitem.Put("id", key)
+If avatarImg <> "" Then nitem.Put("avatar", avatarImg)
+If title <> "" Then nitem.Put("title", title)
+If url <> "" Then nitem.Put("to", url)
+nitem.Put("parentid", parent)
+nitem.Put("visible", True)
+Records.Add(nitem)
+Return Me
 End Sub
-
+'add a list view item with image
+Sub AddImage(parent As String, key As String, Img As String, title As String, url As String) As VList
+parent = parent.ToLowerCase
+key = key.ToLowerCase
+'
+Dim nitem As Map = CreateMap()
+nitem.Put("id", key)
+If Img <> "" Then nitem.Put("leftimage", Img)
+If title <> "" Then nitem.Put("title", title)
+If url <> "" Then nitem.Put("to", url)
+nitem.Put("parentid", parent)
+nitem.Put("visible", True)
+Records.Add(nitem)
+Return Me
+End Sub
 'the url should be replaced
 Sub SetItemVisible(itemID As String, bVisible As Boolean) As VList
-	Dim m As Map = CreateMap()
-	m.Put("visible", bVisible)
-	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
-	Return Me
+Dim m As Map = CreateMap()
+m.Put("visible", bVisible)
+BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+Return Me
 End Sub
-
 'the url should be replaced
 Sub SetItemReplace(itemID As String) As VList
-	Dim m As Map = CreateMap()
-	m.Put("replace", True)
-	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
-	Return Me
+Dim m As Map = CreateMap()
+m.Put("replace", True)
+BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+Return Me
 End Sub
-
 'the url should be appended
 Sub SetItemAppend(itemID As String) As VList
-	Dim m As Map = CreateMap()
-	m.Put("append", True)
-	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
-	Return Me
+Dim m As Map = CreateMap()
+m.Put("append", True)
+BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+Return Me
 End Sub
-
 'update an icon in the list
 Sub SetItemIcon(itemID As String, sIcon As String) As VList
-	Dim m As Map = CreateMap()
-	m.Put("icon", sIcon)
-	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
-	Return Me
+Dim m As Map = CreateMap()
+m.Put("icon", sIcon)
+BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+Return Me
 End Sub
-
+'update an image in the list
+Sub SetItemImage(itemID As String, sImage As String) As VList
+Dim m As Map = CreateMap()
+m.Put("leftimage", sImage)
+BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+Return Me
+End Sub
+'update an image in the list
+Sub SetItemRightImage(itemID As String, sImage As String) As VList
+Dim m As Map = CreateMap()
+m.Put("rightimage", sImage)
+BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+Return Me
+End Sub
 'update an iconcolor in the list
 Sub SetItemIconColor(itemID As String, sIcon As String) As VList
-	Dim m As Map = CreateMap()
-	m.Put("iconcolor", sIcon)
-	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
-	Return Me
+Dim m As Map = CreateMap()
+m.Put("iconcolor", sIcon)
+BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+Return Me
 End Sub
-
 'add a header to the lust
 Sub AddItemHeader(txt As String)
-	Dim rec As Map = CreateMap()
-	rec.Put("header", txt)
-	Records.Add(rec)
+Dim rec As Map = CreateMap()
+rec.Put("header", txt)
+Records.Add(rec)
 End Sub
-
 'add a divider
 Sub AddItemDivider(binset As Boolean)
-	Dim rec As Map = CreateMap()
-	rec.Put("divider", True)
-	If binset Then 
-		rec.Put("inset", binset)
-	End If
-	Records.Add(rec)
+Dim rec As Map = CreateMap()
+rec.Put("divider", True)
+If binset Then
+rec.Put("inset", binset)
+End If
+Records.Add(rec)
 End Sub
-
 Sub SetItemRightChip(itemID As String, sValue As String) As VList
-	Dim m As Map = CreateMap()
-	m.Put("rightchip", sValue)
-	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
-	Return Me
+Dim m As Map = CreateMap()
+m.Put("rightchip", sValue)
+BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+Return Me
 End Sub
-
-Sub SetItemRightChipColor(itemID As String, xColor As String) As VList
-	Dim m As Map = CreateMap()
-	m.Put("rightchipcolor", xColor)
-	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
-	Return Me
+Sub SetItemRightChipColor(itemID As String, bColor As String) As VList
+Dim m As Map = CreateMap()
+m.Put("rightchipcolor", bColor)
+BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+Return Me
 End Sub
-
 Sub SetItemAvatar(itemID As String, sIcon As String) As VList
-	Dim m As Map = CreateMap()
-	m.Put("avatar", sIcon)
-	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
-	Return Me
+Dim m As Map = CreateMap()
+m.Put("avatar", sIcon)
+BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+Return Me
 End Sub
-
 Sub SetItemTitle(itemID As String, sIcon As String) As VList
-	Dim m As Map = CreateMap()
-	m.Put("title", sIcon)
-	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
-	Return Me
+Dim m As Map = CreateMap()
+m.Put("title", sIcon)
+BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+Return Me
 End Sub
-
 Sub SetItemSubTitle(itemID As String, sIcon As String) As VList
-	Dim m As Map = CreateMap()
-	m.Put("subtitle", sIcon)
-	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
-	Return Me
+Dim m As Map = CreateMap()
+m.Put("subtitle", sIcon)
+BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+Return Me
 End Sub
-
 Sub SetItemHREF(itemID As String, sHREF As String) As VList
-	Dim m As Map = CreateMap()
-	m.Put("href", sHREF)
-	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
-	Return Me
+Dim m As Map = CreateMap()
+m.Put("href", sHREF)
+BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+Return Me
 End Sub
-
 Sub SetItemTarget(itemID As String, sTarget As String) As VList
-	Dim m As Map = CreateMap()
-	m.Put("target", sTarget)
-	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
-	Return Me
+Dim m As Map = CreateMap()
+m.Put("target", sTarget)
+BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+Return Me
 End Sub
-
 Sub SetItemSubTitle1(itemID As String, sIcon As String) As VList
-	Dim m As Map = CreateMap()
-	m.Put("subtitle1", sIcon)
-	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
-	Return Me
+Dim m As Map = CreateMap()
+m.Put("subtitle1", sIcon)
+BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+Return Me
 End Sub
-
 Sub SetItemRightIcon(itemID As String, sIcon As String) As VList
-	Dim m As Map = CreateMap()
-	m.Put("righticon", sIcon)
-	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
-	Return Me
+Dim m As Map = CreateMap()
+m.Put("righticon", sIcon)
+BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+Return Me
 End Sub
-
 Sub SetItemRightText(itemID As String, sIcon As String) As VList
-	Dim m As Map = CreateMap()
-	m.Put("righttext", sIcon)
-	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
-	Return Me
+Dim m As Map = CreateMap()
+m.Put("righttext", sIcon)
+BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+Return Me
 End Sub
-
 Sub SetItemRightIconColor(itemID As String, sIcon As String) As VList
-	Dim m As Map = CreateMap()
-	m.Put("righticoncolor", sIcon)
-	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
-	Return Me
+Dim m As Map = CreateMap()
+m.Put("righticoncolor", sIcon)
+BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+Return Me
 End Sub
-
 Sub SetItemRightRating(itemID As String, sIcon As String) As VList
-	Dim m As Map = CreateMap()
-	m.Put("rightrating", sIcon)
-	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
-	Return Me
+Dim m As Map = CreateMap()
+m.Put("rightrating", sIcon)
+BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+Return Me
 End Sub
-
 Sub SetItemTo(itemID As String, sTo As String) As VList
-	Dim m As Map = CreateMap()
-	m.Put("to", sTo)
-	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
-	Return Me
+Dim m As Map = CreateMap()
+m.Put("to", sTo)
+BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+Return Me
 End Sub
-
 Sub SetItemLeftIcon(itemID As String, sIcon As String) As VList
-	Dim m As Map = CreateMap()
-	m.Put("lefticon", sIcon)
-	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
-	Return Me
+Dim m As Map = CreateMap()
+m.Put("lefticon", sIcon)
+BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+Return Me
 End Sub
-
 Sub SetItemLeftIconColor(itemID As String, sIcon As String) As VList
-	Dim m As Map = CreateMap()
-	m.Put("lefticoncolor", sIcon)
-	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
-	Return Me
+Dim m As Map = CreateMap()
+m.Put("lefticoncolor", sIcon)
+BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+Return Me
 End Sub
-
 Sub SetItemLeftCheckBox(itemID As String, bChecked As Boolean) As VList
-	Dim m As Map = CreateMap()
-	m.Put("leftcheckbox", bChecked)
-	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
-	Return Me
+Dim m As Map = CreateMap()
+m.Put("leftcheckbox", bChecked)
+BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+Return Me
 End Sub
-
 Sub SetItemLeftSwitch(itemID As String, bChecked As Boolean) As VList
-	Dim m As Map = CreateMap()
-	m.Put("leftswitch", bChecked)
-	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
-	Return Me
+Dim m As Map = CreateMap()
+m.Put("leftswitch", bChecked)
+BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+Return Me
 End Sub
-
 Sub SetItemRightSwitch(itemID As String, bChecked As Boolean) As VList
-	Dim m As Map = CreateMap()
-	m.Put("rightswitch", bChecked)
-	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
-	Return Me
+Dim m As Map = CreateMap()
+m.Put("rightswitch", bChecked)
+BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+Return Me
 End Sub
-
 Sub SetItemRightCheckBox(itemID As String, bChecked As Boolean) As VList
-	Dim m As Map = CreateMap()
-	m.Put("rightcheckbox", bChecked)
-	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
-	Return Me
+Dim m As Map = CreateMap()
+m.Put("rightcheckbox", bChecked)
+BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+Return Me
 End Sub
-
 Sub AddItemLeftCheckBox(id As String, bChecked As Boolean, title As String, subtitle As String, subtitle1 As String)
-	Dim rec As Map = CreateMap()
-	rec.Put("id", id)
-	rec.Put("leftcheckbox", bChecked)
-	If title <> "" Then rec.Put("title", title)
-	If subtitle <> "" Then rec.Put("subtitle", subtitle)
-	If subtitle1 <> "" Then rec.Put("subtitle1", subtitle1)
-	rec.Put("visible", True)
-	Records.Add(rec)
+Dim rec As Map = CreateMap()
+rec.Put("id", id)
+rec.Put("leftcheckbox", bChecked)
+If title <> "" Then rec.Put("title", title)
+If subtitle <> "" Then rec.Put("subtitle", subtitle)
+If subtitle1 <> "" Then rec.Put("subtitle1", subtitle1)
+rec.Put("visible", True)
+Records.Add(rec)
 End Sub
-
 Sub AddItemLeftSwitch(id As String, bChecked As Boolean, title As String, subtitle As String, subtitle1 As String)
-	Dim rec As Map = CreateMap()
-	rec.Put("id", id)
-	rec.Put("leftswitch", bChecked)
-	If title <> "" Then rec.Put("title", title)
-	If subtitle <> "" Then rec.Put("subtitle", subtitle)
-	If subtitle1 <> "" Then rec.Put("subtitle1", subtitle1)
-	rec.Put("visible", True)
-	Records.Add(rec)
+Dim rec As Map = CreateMap()
+rec.Put("id", id)
+rec.Put("leftswitch", bChecked)
+If title <> "" Then rec.Put("title", title)
+If subtitle <> "" Then rec.Put("subtitle", subtitle)
+If subtitle1 <> "" Then rec.Put("subtitle1", subtitle1)
+rec.Put("visible", True)
+Records.Add(rec)
 End Sub
-
 Sub AddItemRightSwitch(id As String, bChecked As Boolean, title As String, subtitle As String, subtitle1 As String)
-	Dim rec As Map = CreateMap()
-	rec.Put("id", id)
-	rec.Put("rightswitch", bChecked)
-	If title <> "" Then rec.Put("title", title)
-	If subtitle <> "" Then rec.Put("subtitle", subtitle)
-	If subtitle1 <> "" Then rec.Put("subtitle1", subtitle1)
-	rec.Put("visible", True)
-	Records.Add(rec)
+Dim rec As Map = CreateMap()
+rec.Put("id", id)
+rec.Put("rightswitch", bChecked)
+If title <> "" Then rec.Put("title", title)
+If subtitle <> "" Then rec.Put("subtitle", subtitle)
+If subtitle1 <> "" Then rec.Put("subtitle1", subtitle1)
+rec.Put("visible", True)
+Records.Add(rec)
 End Sub
-
 Sub AddItemRightCheckBox(id As String, bChecked As Boolean, title As String, subtitle As String, subtitle1 As String)
-	Dim rec As Map = CreateMap()
-	rec.Put("id", id)
-	rec.Put("rightcheckbox", bChecked)
-	If title <> "" Then rec.Put("title", title)
-	If subtitle <> "" Then rec.Put("subtitle", subtitle)
-	If subtitle1 <> "" Then rec.Put("subtitle1", subtitle1)
-	rec.Put("visible", True)
-	Records.Add(rec)
+Dim rec As Map = CreateMap()
+rec.Put("id", id)
+rec.Put("rightcheckbox", bChecked)
+If title <> "" Then rec.Put("title", title)
+If subtitle <> "" Then rec.Put("subtitle", subtitle)
+If subtitle1 <> "" Then rec.Put("subtitle1", subtitle1)
+rec.Put("visible", True)
+Records.Add(rec)
 End Sub
-
 'get checked / unchecked preferences
 Sub GetPreferencesChecked(C As VueComponent, bShouldBe As Boolean) As List
-	Dim nl As List
-	nl.Initialize 
-	Dim ds As String = DataSource
-	Dim rs1 As List = C.GetData(ds)
-	For Each rsm As Map In rs1
-		Dim sid As String = rsm.Get("id")
-		Dim brs As Boolean = False
-		If rsm.ContainsKey("leftcheckbox") Then
-			brs = rsm.Get("leftcheckbox")
-			If brs = bShouldBe Then nl.Add(sid)
-		End If
-		If rsm.ContainsKey("rightcheckbox") Then
-			brs = rsm.Get("rightcheckbox")
-			If brs = bShouldBe Then nl.Add(sid)
-		End If
-		If rsm.ContainsKey("rightswitch") Then
-			brs = rsm.Get("rightswitch")
-			If brs = bShouldBe Then nl.Add(sid)
-		End If
-		If rsm.ContainsKey("leftswitch") Then
-			brs = rsm.Get("leftswitch")
-			If brs = bShouldBe Then nl.Add(sid)
-		End If
-	Next
-	Return nl
+Dim nl As List
+nl.Initialize
+Dim ds As String = DataSource
+Dim rs1 As List = C.GetData(ds)
+For Each rsm As Map In rs1
+Dim sid As String = rsm.Get("id")
+Dim brs As Boolean = False
+If rsm.ContainsKey("leftcheckbox") Then
+brs = rsm.Get("leftcheckbox")
+If brs = bShouldBe Then nl.Add(sid)
+End If
+If rsm.ContainsKey("rightcheckbox") Then
+brs = rsm.Get("rightcheckbox")
+If brs = bShouldBe Then nl.Add(sid)
+End If
+If rsm.ContainsKey("rightswitch") Then
+brs = rsm.Get("rightswitch")
+If brs = bShouldBe Then nl.Add(sid)
+End If
+If rsm.ContainsKey("leftswitch") Then
+brs = rsm.Get("leftswitch")
+If brs = bShouldBe Then nl.Add(sid)
+End If
+Next
+Return nl
 End Sub
-
 'Check/Uncheck preferences
 Sub SetPreferencesChecked(C As VueComponent, bShouldBe As Boolean)
-	Dim ds As String = DataSource
-	Dim rs1 As List = C.GetData(ds)
-	Dim rsTot As Int = rs1.Size - 1
-	Dim rsCnt As Int
-	For rsCnt = 0 To rsTot
-		Dim rsm As Map = rs1.Get(rsCnt)
-		If rsm.ContainsKey("leftcheckbox") Then
-			rsm.put("leftcheckbox", bShouldBe)
-		End If
-		If rsm.ContainsKey("rightcheckbox") Then
-			rsm.put("rightcheckbox", bShouldBe)
-		End If
-		If rsm.ContainsKey("rightswitch") Then
-			rsm.put("rightswitch", bShouldBe)
-		End If
-		If rsm.ContainsKey("leftswitch") Then
-			rsm.put("leftswitch", bShouldBe)
-		End If
-		rs1.Set(rsCnt, rsm)
-	Next
-	C.SetData(ds, rs1)
+Dim ds As String = DataSource
+Dim rs1 As List = C.GetData(ds)
+Dim rsTot As Int = rs1.Size - 1
+Dim rsCnt As Int
+For rsCnt = 0 To rsTot
+Dim rsm As Map = rs1.Get(rsCnt)
+If rsm.ContainsKey("leftcheckbox") Then
+rsm.put("leftcheckbox", bShouldBe)
+End If
+If rsm.ContainsKey("rightcheckbox") Then
+rsm.put("rightcheckbox", bShouldBe)
+End If
+If rsm.ContainsKey("rightswitch") Then
+rsm.put("rightswitch", bShouldBe)
+End If
+If rsm.ContainsKey("leftswitch") Then
+rsm.put("leftswitch", bShouldBe)
+End If
+rs1.Set(rsCnt, rsm)
+Next
+C.SetData(ds, rs1)
 End Sub
-
 Sub GetPreferences(C As VueComponent) As Map
-	Dim nm As Map = CreateMap()
-	Dim ds As String = DataSource
-	Dim rs1 As List = C.GetData(ds)
-	For Each rsm As Map In rs1
-		Dim sid As String = rsm.Get("id")
-		Dim brs As Boolean = False
-		If rsm.ContainsKey("leftcheckbox") Then
-			brs = rsm.Get("leftcheckbox")
-			nm.Put(sid, brs)
-		End If
-		If rsm.ContainsKey("rightcheckbox") Then
-			brs = rsm.Get("rightcheckbox")
-			nm.Put(sid, brs)
-		End If
-		If rsm.ContainsKey("rightswitch") Then
-			brs = rsm.Get("rightswitch")
-			nm.Put(sid, brs)
-		End If
-		If rsm.ContainsKey("leftswitch") Then
-			brs = rsm.Get("leftswitch")
-			nm.Put(sid, brs)
-		End If
-	Next
-	Return nm
+Dim nm As Map = CreateMap()
+Dim ds As String = DataSource
+Dim rs1 As List = C.GetData(ds)
+For Each rsm As Map In rs1
+Dim sid As String = rsm.Get("id")
+Dim brs As Boolean = False
+If rsm.ContainsKey("leftcheckbox") Then
+brs = rsm.Get("leftcheckbox")
+nm.Put(sid, brs)
+End If
+If rsm.ContainsKey("rightcheckbox") Then
+brs = rsm.Get("rightcheckbox")
+nm.Put(sid, brs)
+End If
+If rsm.ContainsKey("rightswitch") Then
+brs = rsm.Get("rightswitch")
+nm.Put(sid, brs)
+End If
+If rsm.ContainsKey("leftswitch") Then
+brs = rsm.Get("leftswitch")
+nm.Put(sid, brs)
+End If
+Next
+Return nm
 End Sub
-
 Sub SetPreferences(C As VueComponent, prefM As Map)
-	Dim ds As String = DataSource
-	Dim rs1 As List = C.GetData(ds)
-	Dim rsTot As Int = rs1.Size - 1
-	Dim rsCnt As Int
-	For rsCnt = 0 To rsTot
-		Dim rsm As Map = rs1.Get(rsCnt)
-		Dim sid As String = rsm.Get("id")
-		Dim brs As Boolean = False
-		If prefM.ContainsKey(sid) Then
-			brs = prefM.Get(sid)
-			If rsm.ContainsKey("leftcheckbox") Then 
-				rsm.Put("leftcheckbox", brs)
-			End If	
-			If rsm.ContainsKey("rightcheckbox") Then 
-				rsm.Put("rightcheckbox", brs)
-			End If
-			If rsm.ContainsKey("rightswitch") Then 
-				rsm.Put("rightswitch", brs)
-			End If
-			If rsm.ContainsKey("leftswitch") Then
-				rsm.Put("leftswitch", brs)
-			End If
-			rs1.Set(rsCnt, rsm)
-		End If
-	Next
-	C.SetData(ds, rs1)
+Dim ds As String = DataSource
+Dim rs1 As List = C.GetData(ds)
+Dim rsTot As Int = rs1.Size - 1
+Dim rsCnt As Int
+For rsCnt = 0 To rsTot
+Dim rsm As Map = rs1.Get(rsCnt)
+Dim sid As String = rsm.Get("id")
+Dim brs As Boolean = False
+If prefM.ContainsKey(sid) Then
+brs = prefM.Get(sid)
+If rsm.ContainsKey("leftcheckbox") Then
+rsm.Put("leftcheckbox", brs)
+End If
+If rsm.ContainsKey("rightcheckbox") Then
+rsm.Put("rightcheckbox", brs)
+End If
+If rsm.ContainsKey("rightswitch") Then
+rsm.Put("rightswitch", brs)
+End If
+If rsm.ContainsKey("leftswitch") Then
+rsm.Put("leftswitch", brs)
+End If
+rs1.Set(rsCnt, rsm)
+End If
+Next
+C.SetData(ds, rs1)
 End Sub
-
 Sub SetItemAvatarIcon(itemID As String, bChecked As Boolean) As VList
-	Dim m As Map = CreateMap()
-	m.Put("avataricon", bChecked)
-	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
-	Return Me
+Dim m As Map = CreateMap()
+m.Put("avataricon", bChecked)
+BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+Return Me
 End Sub
-
 Sub SetItemAvatarIconColor(itemID As String, bChecked As Boolean) As VList
-	Dim m As Map = CreateMap()
-	m.Put("avatariconcolor", bChecked)
-	BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
-	Return Me
+Dim m As Map = CreateMap()
+m.Put("avatariconcolor", bChecked)
+BANanoShared.ListOfMapsUpdateRecord(Records, "id", itemID,  m)
+Return Me
 End Sub
-
 'create a BVAD3ListItem
 Sub CreateListItem(id As String) As BVAD3ListItem
-	Dim item As BVAD3ListItem
-	item.Initialize(id)
-	Return item
+Dim item As BVAD3ListItem
+item.Initialize(id)
+Return item
 End Sub
-
 'add an item to the listview usin BVAD3ListItem
 Sub AddItem1(item As BVAD3ListItem) As VList
-	Dim rec As Map = item.Item
-	Records.Add(rec)
-	Return Me
+Dim rec As Map = item.Item
+Records.Add(rec)
+Return Me
 End Sub
-
 'add an item using a map
 Sub AddItem2(rec As Map) As VList
-	Records.Add(rec)
-	Return Me
+Records.Add(rec)
+Return Me
 End Sub
-
 Sub BindVueElement(VE As VueElement)
-	VElement.BindVueElement(VE)
+VElement.BindVueElement(VE)
 End Sub
-
 'add an item at realtime
 Sub AddItem3(C As VueComponent, rowData As Map)
-	rowData.Put("visible", True)
-	C.SetDataPush(DataSource, rowData)
+rowData.Put("visible", True)
+C.SetDataPush(DataSource, rowData)
 End Sub
-
 'add a new row at the end of the items in realtime
 Sub RealTimeAddItem(V As VueComponent, rowdata As Map)
-	V.SetDataPush(DataSource, rowdata)
+V.SetDataPush(DataSource, rowdata)
 End Sub
-
 'add a new row at the end of the items in realtime
 Sub RealTimeAddItemOnApp(V As VuetifyApp, rowdata As Map)
-	V.SetDataPush(DataSource, rowdata)
+V.SetDataPush(DataSource, rowdata)
 End Sub
-
 'add a row at the top of the list
 Sub RealTimeAddItemOnTop(V As VueComponent, rowdata As Map)
-	V.SetDataUnshift(DataSource, rowdata)
+V.SetDataUnshift(DataSource, rowdata)
 End Sub
-
 Sub RealTimeAddItemOnTopOnApp(V As VuetifyApp, rowdata As Map)
-	V.SetDataUnshift(DataSource, rowdata)
+V.SetDataUnshift(DataSource, rowdata)
 End Sub
-
 'remove item at position
 Sub RealTimeRemoveItemAtPosition(C As VueComponent, pos As Int)
-	C.RealTimeRemoveItemAtPosition(DataSource, pos)
+C.RealTimeRemoveItemAtPosition(DataSource, pos)
 End Sub
-
 'remove item at position
 Sub RealTimeRemoveItemAtPositionOnApp(C As VuetifyApp, pos As Int)
-	C.RealTimeRemoveItemAtPosition(DataSource, pos)
+C.RealTimeRemoveItemAtPosition(DataSource, pos)
 End Sub
-
 'remove an item where
 Sub RealTimeRemoveItem(C As VueComponent, prop As String, value As String)
-	C.RealTimeRemoveItem(DataSource, prop, value)
+C.RealTimeRemoveItem(DataSource, prop, value)
 End Sub
-
 Sub RealTimeRemoveItemOnApp(C As VuetifyApp, prop As String, value As String)
-	C.RealTimeRemoveItem(DataSource, prop, value)
+C.RealTimeRemoveItem(DataSource, prop, value)
 End Sub
-
 'update item where
 Sub RealTimeUpdateItem(C As VueComponent, prop As String, value As String, item As Map)
-	C.RealTimeUpdateItem(DataSource, prop, value, item)
+C.RealTimeUpdateItem(DataSource, prop, value, item)
 End Sub
-
 Sub RealTimeUpdateItemOnApp(C As VuetifyApp, prop As String, value As String, item As Map)
-	C.RealTimeUpdateItem(DataSource, prop, value, item)
+C.RealTimeUpdateItem(DataSource, prop, value, item)
 End Sub
-
 'update item where
 Sub RealTimeUpdateItemAtPosition(C As VueComponent, pos As Int, item As Map)
-	C.RealTimeUpdateItemAtPosition(DataSource, pos, item)
+C.RealTimeUpdateItemAtPosition(DataSource, pos, item)
 End Sub
-
 Sub RealTimeUpdateItemAtPositionOnApp(C As VuetifyApp, pos As Int, item As Map)
-	C.RealTimeUpdateItemAtPosition(DataSource, pos, item)
+C.RealTimeUpdateItemAtPosition(DataSource, pos, item)
 End Sub
-
 'get data where
 Sub RealTimeFindItem(C As VueComponent, whereMap As Map) As Map
-	Return C.RealTimeFindItem(DataSource, whereMap)
+Return C.RealTimeFindItem(DataSource, whereMap)
 End Sub
-
 Sub RealTimeFindItemOnApp(C As VuetifyApp, whereMap As Map) As Map
-	Return C.RealTimeFindItem(DataSource, whereMap)
+Return C.RealTimeFindItem(DataSource, whereMap)
 End Sub
-
 'find item at position
 Sub RealTimeFindItemAtPosition(C As VueComponent, pos As Int) As Map
-	Return C.RealTimeFindItemAtPosition(DataSource, pos)
+Return C.RealTimeFindItemAtPosition(DataSource, pos)
 End Sub
-
-
 Sub RealTimeFindItemAtPositionOnApp(C As VuetifyApp, pos As Int) As Map
-	Return C.RealTimeFindItemAtPosition(DataSource, pos)
+Return C.RealTimeFindItemAtPosition(DataSource, pos)
 End Sub
-
-
 'find item position
 Sub RealTimeFindItemPosition(C As VueComponent, whereMap As Map) As Int
-	Return C.RealTimeFindItemPosition(DataSource, whereMap)
+Return C.RealTimeFindItemPosition(DataSource, whereMap)
 End Sub
-
 Sub RealTimeFindItemPositionOnApp(C As VuetifyApp, whereMap As Map) As Int
-	Return C.RealTimeFindItemPosition(DataSource, whereMap)
+Return C.RealTimeFindItemPosition(DataSource, whereMap)
 End Sub
-
 'read an item where
 Sub RealTimeReadItem(V As VueComponent, prop As String, value As String) As Map
-	Return V.RealTimeReadItem(DataSource, prop, value)
+Return V.RealTimeReadItem(DataSource, prop, value)
 End Sub
-
 Sub RealTimeReadItemOnApp(V As VuetifyApp, prop As String, value As String) As Map
-	Return V.RealTimeReadItem(DataSource, prop, value)
+Return V.RealTimeReadItem(DataSource, prop, value)
 End Sub
-
-
 Sub BindState(C As VueComponent)
-	VC = c
-	Dim mbindings As Map = VElement.bindings
-	Dim mmethods As Map = VElement.methods
-	'apply the binding for the control
-	For Each k As String In mbindings.Keys
-		Dim v As Object = mbindings.Get(k)
-		Select Case k
-		Case "key"
-		Case Else
-			C.SetData(k, v)
-		End Select
-	Next
-	'apply the events
-	For Each k As String In mmethods.Keys
-		Dim cb As BANanoObject = mmethods.Get(k)
-		C.SetCallBack(k, cb)
-	Next
+VC = c
+Dim mbindings As Map = VElement.bindings
+Dim mmethods As Map = VElement.methods
+'apply the binding for the control
+For Each k As String In mbindings.Keys
+Dim v As Object = mbindings.Get(k)
+Select Case k
+Case "key"
+Case Else
+C.SetData(k, v)
+End Select
+Next
+'apply the events
+For Each k As String In mmethods.Keys
+Dim cb As BANanoObject = mmethods.Get(k)
+C.SetCallBack(k, cb)
+Next
 End Sub
-
+'COMPUSORY: This should be executed after BANano.Loadlayout when used on pgIndex
+'COMPUSORY: This should be executed after BANano.Loadlayout when used on pgIndex
 Sub BindStateOnApp(c As VuetifyApp)
-	Dim mbindings As Map = VElement.bindings
-	Dim mmethods As Map = VElement.methods
-	'apply the binding for the control
-	For Each k As String In mbindings.Keys
-		Dim v As Object = mbindings.Get(k)
-		Select Case k
-		Case "key"
-		Case Else
-			C.SetData(k, v)
-		End Select
-	Next
-	'apply the events
-	For Each k As String In mmethods.Keys
-		Dim cb As BANanoObject = mmethods.Get(k)
-		C.SetCallBack(k, cb)
-	Next
+Dim mbindings As Map = VElement.bindings
+Dim mmethods As Map = VElement.methods
+'apply the binding for the control
+For Each k As String In mbindings.Keys
+Dim v As Object = mbindings.Get(k)
+Select Case k
+Case "key"
+Case Else
+C.SetData(k, v)
+End Select
+Next
+'apply the events
+For Each k As String In mmethods.Keys
+Dim cb As BANanoObject = mmethods.Get(k)
+C.SetCallBack(k, cb)
+Next
 End Sub
-
+'Hidden on xtra small devices only. You need to execute this after BANano.LoadLayout on Initialize ONLY
+'Hidden on xtra small devices only. You need to execute this after BANano.LoadLayout on Initialize ONLY
 Sub HiddenXSOnly
-	AddClass("hidden-xs-only")
+AddClass("hidden-xs-only")
 End Sub
-
+'Hidden on small devices only. You need to execute this after BANano.LoadLayout on Initialize ONLY
+'Hidden on small devices only. You need to execute this after BANano.LoadLayout on Initialize ONLY
 Sub HiddenSMOnly
-	AddClass("d-sm-none d-md-flex")
+AddClass("d-sm-none d-md-flex")
 End Sub
-	
+'Hidden on medium devices only. You need to execute this after BANano.LoadLayout on Initialize ONLY
+'Hidden on medium devices only. You need to execute this after BANano.LoadLayout on Initialize ONLY
 Sub HiddenMDOnly
-	AddClass("d-md-none d-lg-flex")
+AddClass("d-md-none d-lg-flex")
 End Sub
-	
+'Hidden on large devices only. You need to execute this after BANano.LoadLayout on Initialize ONLY
+'Hidden on large devices only. You need to execute this after BANano.LoadLayout on Initialize ONLY
 Sub HiddenLGOnly
-	AddClass("d-lg-none d-xl-flex")
+AddClass("d-lg-none d-xl-flex")
 End Sub
-	
+'Hidden on xtra large devices only. You need to execute this after BANano.LoadLayout on Initialize ONLY
+'Hidden on xtra large devices only. You need to execute this after BANano.LoadLayout on Initialize ONLY
 Sub HiddenXLOnly
-	AddClass("d-xl-none")
+AddClass("d-xl-none")
 End Sub
 '
 'Sub HiddenXSAndDown
-	
 'End Sub
-
+'Hidden on small and down devices. You need to execute this after BANano.LoadLayout on Initialize ONLY
+'Hidden on small and down devices. You need to execute this after BANano.LoadLayout on Initialize ONLY
 Sub HiddenSMAndDown
-	AddClass("hidden-sm-and-down")
+AddClass("hidden-sm-and-down")
 End Sub
-	
+'Hidden on medium and down devices. You need to execute this after BANano.LoadLayout on Initialize ONLY
+'Hidden on medium and down devices. You need to execute this after BANano.LoadLayout on Initialize ONLY
 Sub HiddenMDAndDown
-	AddClass("hidden-md-and-down")
+AddClass("hidden-md-and-down")
 End Sub
-	
+'Hidden on large and down devices. You need to execute this after BANano.LoadLayout on Initialize ONLY
+'Hidden on large and down devices. You need to execute this after BANano.LoadLayout on Initialize ONLY
 Sub HiddenLGAndDown
-	AddClass("hidden-lg-and-down")
+AddClass("hidden-lg-and-down")
 End Sub
-	
 'Sub HiddenXLAndDown
-	
 'End Sub
 '
 'Sub HiddenXSAndUp
-	
 'End Sub
-
+'Hidden on small and up devices. You need to execute this after BANano.LoadLayout on Initialize ONLY
+'Hidden on small and up devices. You need to execute this after BANano.LoadLayout on Initialize ONLY
 Sub HiddenSMAndUp
-	AddClass("hidden-sm-and-up")
+AddClass("hidden-sm-and-up")
 End Sub
-	
+'Hidden on medium and up devices. You need to execute this after BANano.LoadLayout on Initialize ONLY
+'Hidden on medium and up devices. You need to execute this after BANano.LoadLayout on Initialize ONLY
 Sub HiddenMDAndUp
-	AddClass("hidden-md-and-up")
+AddClass("hidden-md-and-up")
 End Sub
-	
+'Hidden on large and up devices. You need to execute this after BANano.LoadLayout on Initialize ONLY
+'Hidden on large and up devices. You need to execute this after BANano.LoadLayout on Initialize ONLY
 Sub HiddenLGAndUp
-	AddClass("hidden-lg-and-up")
+AddClass("hidden-lg-and-up")
 End Sub
-	
 'Sub HiddenXLAndUp
-	
-'End Sub	
-
+'End Sub
+'Hidden on all devics. You need to execute this after BANano.LoadLayout on Initialize ONLY
+'Hidden on all devics. You need to execute this after BANano.LoadLayout on Initialize ONLY
 Sub HiddenOnAll
-	AddClass("d-none")
+AddClass("d-none")
 End Sub
-
+'Hide only on xtra small devices. You need to execute this after BANano.LoadLayout on Initialize ONLY
+'Hide only on xtra small devices. You need to execute this after BANano.LoadLayout on Initialize ONLY
 Sub HideOnlyOnXS
-	AddClass("hidden-xs-only")
+AddClass("hidden-xs-only")
 End Sub
-
+'Hide only on small devices. You need to execute this after BANano.LoadLayout on Initialize ONLY
+'Hide only on small devices. You need to execute this after BANano.LoadLayout on Initialize ONLY
 Sub HideOnlyOnSM
-	AddClass("d-sm-none d-md-flex")
+AddClass("d-sm-none d-md-flex")
 End Sub
-
+'Hide only on medium devices. You need to execute this after BANano.LoadLayout on Initialize ONLY
+'Hide only on medium devices. You need to execute this after BANano.LoadLayout on Initialize ONLY
 Sub HideOnlyOnMD
-	AddClass("d-md-none d-lg-flex")
+AddClass("d-md-none d-lg-flex")
 End Sub
-
+'Hide only on large devices. You need to execute this after BANano.LoadLayout on Initialize ONLY
+'Hide only on large devices. You need to execute this after BANano.LoadLayout on Initialize ONLY
 Sub HideOnlyOnLG
-	AddClass("d-lg-none d-xl-flex")
+AddClass("d-lg-none d-xl-flex")
 End Sub
-
+'Hide only on xtra large devices. You need to execute this after BANano.LoadLayout on Initialize ONLY
+'Hide only on xtra large devices. You need to execute this after BANano.LoadLayout on Initialize ONLY
 Sub HideOnlyOnXL
-	AddClass("d-xl-none")
+AddClass("d-xl-none")
 End Sub
-
+'Visible on all devices. You need to execute this after BANano.LoadLayout on Initialize ONLY
+'Visible on all devices. You need to execute this after BANano.LoadLayout on Initialize ONLY
 Sub VisibleOnAll
-	AddClass("d-flex")
+AddClass("d-flex")
 End Sub
-
+'Visible only on xtra small devices. You need to execute this after BANano.LoadLayout on Initialize ONLY
+'Visible only on xtra small devices. You need to execute this after BANano.LoadLayout on Initialize ONLY
 Sub VisibleOnlyOnXS
-	AddClass("d-flex d-sm-none")
+AddClass("d-flex d-sm-none")
 End Sub
-
+'Visible only on small devices. You need to execute this after BANano.LoadLayout on Initialize ONLY
+'Visible only on small devices. You need to execute this after BANano.LoadLayout on Initialize ONLY
 Sub VisibleOnlyOnSM
-	AddClass("d-none d-sm-flex d-md-none")
+AddClass("d-none d-sm-flex d-md-none")
 End Sub
-
+'Visible only on medium devices. You need to execute this after BANano.LoadLayout on Initialize ONLY
+'Visible only on medium devices. You need to execute this after BANano.LoadLayout on Initialize ONLY
 Sub VisibleOnlyOnMD
-	AddClass("d-none d-md-flex d-lg-none")
+AddClass("d-none d-md-flex d-lg-none")
 End Sub
-
+'Visible only on xtra large devices. You need to execute this after BANano.LoadLayout on Initialize ONLY
+'Visible only on xtra large devices. You need to execute this after BANano.LoadLayout on Initialize ONLY
 Sub VisibleOnlyOnLG
-	AddClass("d-none d-lg-flex d-xl-none")
+AddClass("d-none d-lg-flex d-xl-none")
 End Sub
-
+'Visible only on xtra large devices. You need to execute this after BANano.LoadLayout on Initialize ONLY
+'Visible only on xtra large devices. You need to execute this after BANano.LoadLayout on Initialize ONLY
 Sub VisibleOnlyOnXL
-	AddClass("d-none d-xl-flex")
+AddClass("d-none d-xl-flex")
 End Sub
-
 'get the items
 Sub GetItems(C As VueComponent) As List
-	Dim res As List = C.GetData(DataSource)
-	Return res
+Dim res As List = C.GetData(DataSource)
+Return res
 End Sub
-
 'get the items
 Sub GetItemsOnApp(C As VuetifyApp) As List
-	Dim res As List = C.GetData(DataSource)
-	Return res
+Dim res As List = C.GetData(DataSource)
+Return res
 End Sub
-
 'set the items
 Sub SetItems(C As VueComponent, lst As List)
-	Records = lst
-	C.SetData(DataSource, lst)
+Records = lst
+C.SetData(DataSource, lst)
 End Sub
-
 'set the items
 Sub SetItemsOnApp(C As VuetifyApp, lst As List)
-	Records = lst
-	C.SetData(DataSource, lst)
+Records = lst
+C.SetData(DataSource, lst)
 End Sub
-
 'set the items
 Sub UpdateItems(C As VueComponent, lst As List)
-	Records = lst
-	C.SetData(DataSource, lst)
+Records = lst
+C.SetData(DataSource, lst)
 End Sub
-
 'set the items
 Sub UpdateItemsOnApp(C As VuetifyApp, lst As List)
-	Records = lst
-	C.SetData(DataSource, lst)
+Records = lst
+C.SetData(DataSource, lst)
 End Sub
-
-Sub Hide
-	UpdateVisible(VC, False)
-End Sub
-
-Sub Show
-	UpdateVisible(VC, True)
-End Sub
-
 Sub Enable
-	UpdateDisabled(VC, False)
+UpdateDisabled(VC, False)
 End Sub
-
 Sub Disable
-	UpdateDisabled(VC, True)
+UpdateDisabled(VC, True)
 End Sub
-
 'add right icons on each item of the list, before setting the list items
 Sub AddRightIcon(recs As List, iconName As String, iconColor As String) As List
-	'add delete icon to each item
-	Dim ctot As Int = recs.Size - 1
-	Dim cCnt As Int
-	For cCnt = 0 To ctot
-		Dim obj As Map = recs.Get(cCnt)
-		obj.Put("righticon", iconName)
-		obj.Put("righticoncolor", iconColor)
-		recs.Set(cCnt, obj)
-	Next
-	Return recs
+'add delete icon to each item
+Dim ctot As Int = recs.Size - 1
+Dim cCnt As Int
+For cCnt = 0 To ctot
+Dim obj As Map = recs.Get(cCnt)
+obj.Put("righticon", iconName)
+obj.Put("righticoncolor", iconColor)
+recs.Set(cCnt, obj)
+Next
+Return recs
 End Sub
-
 'add an avatar to each item in the list
 Sub AddAvatar1(recs As List, avatar As String)
-	'add delete icon to each item
-	Dim ctot As Int = recs.Size - 1
-	Dim cCnt As Int
-	For cCnt = 0 To ctot
-		Dim obj As Map = recs.Get(cCnt)
-		obj.Put("avatar", avatar)
-		recs.Set(cCnt, obj)
-	Next
+'add delete icon to each item
+Dim ctot As Int = recs.Size - 1
+Dim cCnt As Int
+For cCnt = 0 To ctot
+Dim obj As Map = recs.Get(cCnt)
+obj.Put("avatar", avatar)
+recs.Set(cCnt, obj)
+Next
+End Sub
+Sub UpdateTextDecoration(s As String)
+VElement.UpdateTextDecoration(VC, s)
+End Sub
+Sub UpdateTextDecorationOnApp(A As VuetifyApp, s As String)
+VElement.UpdateTextDecorationOnApp(A, s)
+End Sub
+Sub UpdateTruncate(b As Boolean)
+Dim eClass As List = VC.GetData(VElement.bindClass)
+Select Case b
+Case True
+eClass = VElement.ListAddDistinctItem(eClass, "d-inline-block")
+eClass = VElement.ListAddDistinctItem(eClass, "text-truncate")
+Case False
+eClass = VElement.ListRemoveItem(eClass, "d-inline-block")
+eClass = VElement.ListRemoveItem(eClass, "text-truncate")
+End Select
+VC.SetData(VElement.bindClass, eClass)
+End Sub
+Sub UpdateTruncateOnApp(A As VuetifyApp, b As Boolean)
+Dim eClass As List = A.GetData(VElement.bindClass)
+Select Case b
+Case True
+eClass = VElement.ListAddDistinctItem(eClass, "d-inline-block")
+eClass = VElement.ListAddDistinctItem(eClass, "text-truncate")
+Case False
+eClass = VElement.ListRemoveItem(eClass, "d-inline-block")
+eClass = VElement.ListRemoveItem(eClass, "text-truncate")
+End Select
+A.SetData(VElement.bindClass, eClass)
+End Sub
+Sub UpdateLineThrough(b As Boolean)
+Dim eClass As List = VC.GetData(VElement.bindClass)
+Select Case b
+Case True
+eClass = VElement.ListAddDistinctItem(eClass, "text-decoration-line-through")
+Case False
+eClass = VElement.ListRemoveItem(eClass, "text-decoration-line-through")
+End Select
+VC.SetData(VElement.bindClass, eClass)
+End Sub
+Sub UpdateLineThroughOnApp(A As VuetifyApp, b As Boolean)
+Dim eClass As List = A.GetData(VElement.bindClass)
+Select Case b
+Case True
+eClass = VElement.ListAddDistinctItem(eClass, "text-decoration-line-through")
+Case False
+eClass = VElement.ListRemoveItem(eClass, "text-decoration-line-through")
+End Select
+A.SetData(VElement.bindClass, eClass)
+End Sub
+Sub UpdateFontThin(b As Boolean)
+Dim eClass As List = VC.GetData(VElement.bindClass)
+Select Case b
+Case True
+eClass = VElement.ListAddDistinctItem(eClass, "font-weight-thin")
+Case False
+eClass = VElement.ListRemoveItem(eClass, "font-weight-thin")
+End Select
+VC.SetData(VElement.bindClass, eClass)
+End Sub
+Sub UpdateFontThinOnApp(A As VuetifyApp, b As Boolean)
+Dim eClass As List = A.GetData(VElement.bindClass)
+Select Case b
+Case True
+eClass = VElement.ListAddDistinctItem(eClass, "font-weight-thin")
+Case False
+eClass = VElement.ListRemoveItem(eClass, "font-weight-thin")
+End Select
+A.SetData(VElement.bindClass, eClass)
+End Sub
+Sub UpdateFontLight(b As Boolean)
+Dim eClass As List = VC.GetData(VElement.bindClass)
+Select Case b
+Case True
+eClass = VElement.ListAddDistinctItem(eClass, "font-weight-light")
+Case False
+eClass = VElement.ListRemoveItem(eClass, "font-weight-light")
+End Select
+VC.SetData(VElement.bindClass, eClass)
+End Sub
+Sub UpdateFontLightOnApp(A As VuetifyApp, b As Boolean)
+Dim eClass As List = A.GetData(VElement.bindClass)
+Select Case b
+Case True
+eClass = VElement.ListAddDistinctItem(eClass, "font-weight-light")
+Case False
+eClass = VElement.ListRemoveItem(eClass, "font-weight-light")
+End Select
+A.SetData(VElement.bindClass, eClass)
+End Sub
+Sub UpdateUnderLine(b As Boolean)
+'get the current list of bound classes
+Dim eClass As List = VC.GetData(VElement.bindClass)
+Select Case b
+Case True
+'add the class
+eClass = VElement.ListAddDistinctItem(eClass, "text-decoration-underline")
+Case False
+'remove the class
+eClass = VElement.ListRemoveItem(eClass, "text-decoration-underline")
+End Select
+VC.SetData(VElement.bindClass, eClass)
+End Sub
+Sub UpdateUnderLineOnApp(A As VuetifyApp, b As Boolean)
+'get the current list of bound classes
+Dim eClass As List = A.GetData(VElement.bindClass)
+Select Case b
+Case True
+'add the class
+eClass = VElement.ListAddDistinctItem(eClass, "text-decoration-underline")
+Case False
+'remove the class
+eClass = VElement.ListRemoveItem(eClass, "text-decoration-underline")
+End Select
+a.SetData(VElement.bindClass, eClass)
+End Sub
+Sub UpdateOverline(b As Boolean)
+'get the current list of bound classes
+Dim eClass As List = VC.GetData(VElement.bindClass)
+Select Case b
+Case True
+'add the class
+eClass = VElement.ListAddDistinctItem(eClass, "text-decoration-overline")
+Case False
+'remove the class
+eClass = VElement.ListRemoveItem(eClass, "text-decoration-overline")
+End Select
+VC.SetData(VElement.bindClass, eClass)
+End Sub
+Sub UpdateOverlineOnApp(C As VuetifyApp, b As Boolean)
+'get the current list of bound classes
+Dim eClass As List = C.GetData(VElement.bindClass)
+Select Case b
+Case True
+'add the class
+eClass = VElement.ListAddDistinctItem(eClass, "text-decoration-overline")
+Case False
+'remove the class
+eClass = VElement.ListRemoveItem(eClass, "text-decoration-overline")
+End Select
+C.SetData(VElement.bindClass, eClass)
+End Sub
+Sub UpdateBold(b As Boolean)
+'get the current list of bound classes
+Dim eClass As List = VC.GetData(VElement.bindClass)
+Select Case b
+Case True
+'add the class
+eClass = VElement.ListAddDistinctItem(eClass, "font-weight-bold")
+Case False
+'remove the class
+eClass = VElement.ListRemoveItem(eClass, "font-weight-bold")
+End Select
+VC.SetData(VElement.bindClass, eClass)
+End Sub
+Sub UpdateBoldOnApp(C As VuetifyApp, b As Boolean)
+'get the current list of bound classes
+Dim eClass As List = C.GetData(VElement.bindClass)
+Select Case b
+Case True
+'add the class
+eClass = VElement.ListAddDistinctItem(eClass, "font-weight-bold")
+Case False
+'remove the class
+eClass = VElement.ListRemoveItem(eClass, "font-weight-bold")
+End Select
+C.SetData(VElement.bindClass, eClass)
+End Sub
+Sub UpdateFontWeightBlack(b As Boolean)
+'get the current list of bound classes
+Dim eClass As List = VC.GetData(VElement.bindClass)
+Select Case b
+Case True
+'add the class
+eClass = VElement.ListAddDistinctItem(eClass, "font-weight-black")
+Case False
+'remove the class
+eClass = VElement.ListRemoveItem(eClass, "font-weight-black")
+End Select
+VC.SetData(VElement.bindClass, eClass)
+End Sub
+Sub UpdateFontWeightBlackOnApp(C As VuetifyApp, b As Boolean)
+'get the current list of bound classes
+Dim eClass As List = C.GetData(VElement.bindClass)
+Select Case b
+Case True
+'add the class
+eClass = VElement.ListAddDistinctItem(eClass, "font-weight-black")
+Case False
+'remove the class
+eClass = VElement.ListRemoveItem(eClass, "font-weight-black")
+End Select
+C.SetData(VElement.bindClass, eClass)
+End Sub
+Sub UpdateItalic(b As Boolean)
+'get the current list of bound classes
+Dim eClass As List = VC.GetData(VElement.bindClass)
+Select Case b
+Case True
+'add the class
+eClass = VElement.ListAddDistinctItem(eClass, "font-italic")
+Case False
+'remove the class
+eClass = VElement.ListRemoveItem(eClass, "font-italic")
+End Select
+VC.SetData(VElement.bindClass, eClass)
+End Sub
+Sub UpdateItalicOnApp(C As VuetifyApp, b As Boolean)
+'get the current list of bound classes
+Dim eClass As List = C.GetData(VElement.bindClass)
+Select Case b
+Case True
+'add the class
+eClass = VElement.ListAddDistinctItem(eClass, "font-italic")
+Case False
+'remove the class
+eClass = VElement.ListRemoveItem(eClass, "font-italic")
+End Select
+C.SetData(VElement.bindClass, eClass)
+End Sub
+Sub UpdateTextColor(xColor As String, xIntensity As String)
+VElement.UpdateTextColor(VC, xColor, xIntensity)
+End Sub
+Sub UpdateTextColorOnApp(C As VuetifyApp, xColor As String, xIntensity As String)
+VElement.UpdateTextColorOnApp(c, xColor, xIntensity)
+End Sub
+Sub UpdateColor(xColor As String, xIntensity As String)
+VElement.UpdateColor(VC, xColor, xIntensity)
+End Sub
+Sub UpdateColorOnApp(C As VuetifyApp, xColor As String, xIntensity As String)
+VElement.UpdateColorOnApp(c, xColor, xIntensity)
+End Sub
+Sub UpdateTextAlign(talign As String)
+VElement.UpdateTextAlign(VC, talign)
+End Sub
+Sub UpdateTextAlignOnApp(C As VuetifyApp, talign As String)
+VElement.UpdateTextAlignOnApp(C, talign)
+End Sub
+'Toggle a class at runtime, needs BindState
+Sub ToggleClass(sClass As String)
+VElement.ToggleClassRuntime(VC, sClass)
+End Sub
+'Toggle a clas at runtime, neeeds BindState
+Sub ToggleClassOnApp(A As VuetifyApp, sClass As String)
+VElement.ToggleClassOnApp(A, sClass)
+End Sub
+'Add a class at runtime, needs BindState
+Sub AddClassRT(sClass As String)
+VElement.AddClassRuntime(VC, sClass)
+End Sub
+'Add a class at runtime, needs BindState
+Sub AddClassOnApp(A As VuetifyApp, sClass As String)
+VElement.AddClassRuntimeOnAPp(A, sClass)
+End Sub
+'Removes a class at runtime, needs BindState
+Sub RemoveClassRT(sClass As String)
+VElement.RemoveClassRuntime(VC, sClass)
+End Sub
+'Removes a class, You need to execute this after BANano.LoadLayout on Initialize ONLY
+Sub RemoveClass(sClass As String)
+VElement.RemoveClass(sClass)
+End Sub
+'Removes a class at runtime, needs BindState
+Sub RemoveClassOnApp(A As VuetifyApp, sClass As String)
+VElement.RemoveClassRuntimeOnApp(A, sClass)
+End Sub
+'Add style at runtime, needs BindState
+Sub AddStyleRT(prop As String, value As String)
+VElement.AddStyleRunTime(VC , prop, value)
+End Sub
+'Removes a style at runtime, needs BindState
+Sub RemoveStyleRT(prop As String)
+VElement.RemoveStyleRunTime(VC , prop)
+End Sub
+'Add a style at runtime. Use CamelCase, needs BindState
+Sub AddStyleOnApp(A As VuetifyApp, prop As String, value As String)
+VElement.AddStyleOnAPp(A , prop, value)
+End Sub
+'Removes a style at runtime. Use CamelCase, needs BindState
+Sub RemoveStyleOnApp(A As VuetifyApp, prop As String)
+VElement.RemoveStyleOnApp(A , prop)
+End Sub
+'Bind this attribute to this state name and specify a default value, needs BindState
+Sub BindDefault(prop As String, varName As String, def As Object)
+VElement.Bind(prop, varName)
+VElement.SetData(varName, def)
+End Sub
+'Bind this attribute to this state name, needs BindState
+Sub Bind(prop As String, varName As String)
+VElement.Bind(prop, varName)
+VElement.SetData(varName, Null)
+End Sub
+Sub getHTML As String
+If mElement <> Null Then
+Return mElement.GetHTML
+Else
+Return ""
+End If
 End Sub

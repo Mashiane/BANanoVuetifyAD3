@@ -5,30 +5,32 @@ Type=Class
 Version=7
 @EndOfDesignText@
 #IgnoreWarnings:12
-#DesignerProperty: Key: Outlined, DisplayName: Outlined, FieldType: Boolean, DefaultValue: False, Description: Outlined
-#DesignerProperty: Key: Rounded, DisplayName: Rounded, FieldType: Boolean, DefaultValue: False, Description: Rounded
-#DesignerProperty: Key: Filled, DisplayName: Filled, FieldType: Boolean, DefaultValue: False, Description: Filled
-#DesignerProperty: Key: Dense, DisplayName: Dense, FieldType: Boolean, DefaultValue: False, Description: Dense
-#DesignerProperty: Key: HideDetails, DisplayName: HideDetails, FieldType: Boolean, DefaultValue: False, Description: HideDetails
-#DesignerProperty: Key: Clearable, DisplayName: Clearable, FieldType: Boolean, DefaultValue: False, Description: Clearable
-#DesignerProperty: Key: Shaped, DisplayName: Shaped, FieldType: Boolean, DefaultValue: False, Description: Shaped
-#DesignerProperty: Key: ArrayOperations, DisplayName: ArrayOperations, FieldType: String, DefaultValue: , Description: ArrayOperations
-#DesignerProperty: Key: Autofocus, DisplayName: Autofocus, FieldType: Boolean, DefaultValue: False, Description: Autofocus
-#DesignerProperty: Key: ChildrenClass, DisplayName: ChildrenClass, FieldType: String, DefaultValue: , Description: ChildrenClass
-#DesignerProperty: Key: DeleteReadOnly, DisplayName: DeleteReadOnly, FieldType: Boolean, DefaultValue: False, Description: DeleteReadOnly
-#DesignerProperty: Key: DisableAll, DisplayName: DisableAll, FieldType: Boolean, DefaultValue: False, Description: DisableAll
-#DesignerProperty: Key: DisableSorting, DisplayName: DisableSorting, FieldType: Boolean, DefaultValue: False, Description: DisableSorting
-#DesignerProperty: Key: EditMode, DisplayName: EditMode, FieldType: String, DefaultValue: , Description: EditMode
-#DesignerProperty: Key: FilesAsDataUrl, DisplayName: FilesAsDataUrl, FieldType: Boolean, DefaultValue: False, Description: FilesAsDataUrl
-#DesignerProperty: Key: HideReadOnly, DisplayName: HideReadOnly, FieldType: Boolean, DefaultValue: False, Description: HideReadOnly
-#DesignerProperty: Key: HideTooltips, DisplayName: HideTooltips, FieldType: Boolean, DefaultValue: False, Description: HideTooltips
-#DesignerProperty: Key: IdPrefix, DisplayName: IdPrefix, FieldType: String, DefaultValue: , Description: IdPrefix
-#DesignerProperty: Key: ObjectContainerClass, DisplayName: ObjectContainerClass, FieldType: String, DefaultValue: , Description: ObjectContainerClass
-#DesignerProperty: Key: RemoveAdditionalProperties, DisplayName: RemoveAdditionalProperties, FieldType: Boolean, DefaultValue: False, Description: RemoveAdditionalProperties
-#DesignerProperty: Key: RootDisplay, DisplayName: RootDisplay, FieldType: String, DefaultValue: , Description: RootDisplay
-#DesignerProperty: Key: SectionsClass, DisplayName: SectionsClass, FieldType: String, DefaultValue: , Description: SectionsClass
+#DesignerProperty: Key: ParentID, DisplayName: ParentID, FieldType: String, DefaultValue: , Description: The id of the element to place this into
+#DesignerProperty: Key: Outlined, DisplayName: Outlined, FieldType: Boolean, DefaultValue: False, Description: Input components should be Outlined
+#DesignerProperty: Key: Rounded, DisplayName: Rounded, FieldType: Boolean, DefaultValue: False, Description: Input components should be Rounded
+#DesignerProperty: Key: Filled, DisplayName: Filled, FieldType: Boolean, DefaultValue: False, Description: Input components should be Filled
+#DesignerProperty: Key: Dense, DisplayName: Dense, FieldType: Boolean, DefaultValue: False, Description: Input components should be Dense
+#DesignerProperty: Key: HideDetails, DisplayName: HideDetails, FieldType: Boolean, DefaultValue: False, Description: Input components should Hide Details
+#DesignerProperty: Key: Clearable, DisplayName: Clearable, FieldType: Boolean, DefaultValue: False, Description: Input components should be Clearable
+#DesignerProperty: Key: Shaped, DisplayName: Shaped, FieldType: Boolean, DefaultValue: False, Description: Input components should be Shaped
+#DesignerProperty: Key: ArrayOperations, DisplayName: ArrayOperations, FieldType: String, DefaultValue: , Description: Array Operations
+#DesignerProperty: Key: Autofocus, DisplayName: Autofocus, FieldType: Boolean, DefaultValue: False, Description: Auto focus
+#DesignerProperty: Key: ChildrenClass, DisplayName: ChildrenClass, FieldType: String, DefaultValue: , Description: Children Class
+#DesignerProperty: Key: DeleteReadOnly, DisplayName: DeleteReadOnly, FieldType: Boolean, DefaultValue: False, Description: Delete ReadOnly
+#DesignerProperty: Key: DisableAll, DisplayName: DisableAll, FieldType: Boolean, DefaultValue: False, Description: Disable All
+#DesignerProperty: Key: DisableSorting, DisplayName: DisableSorting, FieldType: Boolean, DefaultValue: False, Description: Disable Sorting
+#DesignerProperty: Key: EditMode, DisplayName: EditMode, FieldType: String, DefaultValue: , Description: Edit Mode
+#DesignerProperty: Key: FilesAsDataUrl, DisplayName: FilesAsDataUrl, FieldType: Boolean, DefaultValue: False, Description: Files As DataUrl
+#DesignerProperty: Key: HideReadOnly, DisplayName: HideReadOnly, FieldType: Boolean, DefaultValue: False, Description: Hide Read Only
+#DesignerProperty: Key: HideTooltips, DisplayName: HideTooltips, FieldType: Boolean, DefaultValue: False, Description: Hide Tool tips
+#DesignerProperty: Key: IdPrefix, DisplayName: IdPrefix, FieldType: String, DefaultValue: , Description: Id Prefix
+#DesignerProperty: Key: ObjectContainerClass, DisplayName: ObjectContainerClass, FieldType: String, DefaultValue: , Description: Object Container Class
+#DesignerProperty: Key: RemoveAdditionalProperties, DisplayName: RemoveAdditionalProperties, FieldType: Boolean, DefaultValue: False, Description: Remove Additional Properties
+#DesignerProperty: Key: RootDisplay, DisplayName: RootDisplay, FieldType: String, DefaultValue: , Description: Root Display
+#DesignerProperty: Key: SectionsClass, DisplayName: SectionsClass, FieldType: String, DefaultValue: , Description: Sections Class
 
 Sub Class_Globals 
+	Private sParentID As String
     Private BANano As BANano 'ignore 
 	Private mName As String 'ignore 
 	Private mEventName As String 'ignore 
@@ -143,7 +145,7 @@ Sub Class_Globals
 End Sub
 
 'initialize the custom view
-Sub Initialize (CallBack As Object, Name As String, EventName As String) 
+Sub Initialize (CallBack As Object, Name As String, EventName As String) As BVAD3Form
 	BANano.DependsOnAsset("vjsf.js")
 	BANano.DependsOnAsset("vjsf.css")
 
@@ -232,6 +234,7 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	TableName = ""
 	PrimaryKey = ""
 	AutoIncrement = ""
+	Return Me
 End Sub
 
 'designer creation
@@ -274,8 +277,15 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bClearable = BANanoShared.parseBool(bClearable)
 		bShaped = Props.GetDefault("Shaped", False)
 		bShaped = BANanoShared.parseBool(bShaped)
+		sParentID = Props.GetDefault("ParentID", "")
+		sParentID = BANanoShared.parseNull(sParentID)
 	End If 
-	' 
+	'
+	If sParentID <> "" Then
+		sParentID = sParentID.ToLowerCase
+		mTarget.Initialize($"#${sParentID}"$)
+	End If
+	
 	'build and get the element 
 	If BANano.Exists($"#${mName}"$) Then 
 		mElement = BANano.GetElement($"#${mName}"$) 
@@ -372,13 +382,15 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 End Sub
 
 'add an attribute at design time
-Sub AddAttr(p As String, v As Object) 
+Sub AddAttr(p As String, v As Object) As BVAD3Form
 	VElement.SetAttr(p, v) 
+	Return Me
 End Sub
 
 'remove attribute at design time
-Sub RemoveAttr(p As String) 
+Sub RemoveAttr(p As String) As BVAD3Form
 	VElement.RemoveAttr(p) 
+	Return Me
 End Sub
 
 'get the id of the element
@@ -493,17 +505,20 @@ Sub Clear
 End Sub
 
 'add a text field
-Sub AddTextField(vModel As String, sLabel As String, defValue As String, iFldLen As Int) 
+Sub AddTextField(vModel As String, sLabel As String, defValue As String, iFldLen As Int) As BVAD3Form
 	vModel = vModel.tolowercase
 	
 	Dim fld As Map = CreateMap()
 	Dim xoptions As Map = CreateMap()
+	Dim xclass As List
+	xclass.Initialize
+	fld.Put("x-class", xclass)
 	
 	fld.Put("default", defValue)
 	fld.Put("type", "string")
 	fld.Put("title", sLabel)
-	'fld.Put("x-class", "mb-3")
 	
+		
 	If iFldLen > 0 Then
 		xoptions.Put("maxlength", iFldLen)
 		xoptions.Put("counter", iFldLen)
@@ -520,19 +535,24 @@ Sub AddTextField(vModel As String, sLabel As String, defValue As String, iFldLen
 	
 	model.Put(vModel, defValue)
 	properties.Put(vModel, fld)
+	Return Me
 End Sub
 
 'add file selector for images
-Sub AddFileImages(vModel As String, sLabel As String, bMulti As Boolean)
+Sub AddFileImages(vModel As String, sLabel As String, bMulti As Boolean) As BVAD3Form
 	AddFile(vModel, sLabel, "image/*", bMulti)
+	Return Me
 End Sub
 
 'add a file
-Sub AddFile(vModel As String, sLabel As String, mediaType As String, bMulti As Boolean) 
+Sub AddFile(vModel As String, sLabel As String, mediaType As String, bMulti As Boolean) As BVAD3Form
 	vModel = vModel.tolowercase
 	
 	Dim fld As Map = CreateMap()
 	Dim xoptions As Map = CreateMap()
+	Dim xclass As List
+	xclass.Initialize
+	fld.Put("x-class", xclass)
 	
 	fld.Put("type", "string")
 	If bMulti Then 
@@ -565,6 +585,7 @@ Sub AddFile(vModel As String, sLabel As String, mediaType As String, bMulti As B
 	
 	model.Put(vModel, Null)
 	properties.Put(vModel, fld)
+	Return Me
 End Sub
 
 'add an auto complete
@@ -655,7 +676,7 @@ End Sub
 'End Sub
 
 'add a switch multi
-Sub AddSwitchMulti(vModel As String, sLabel As String, sColor As String, bInset As Boolean, defValue As List)
+Sub AddSwitchMulti(vModel As String, sLabel As String, sColor As String, bInset As Boolean, defValue As List) As BVAD3Form
 	vModel = vModel.tolowercase
 	'
 	Dim fld As Map = CreateMap()
@@ -665,6 +686,9 @@ Sub AddSwitchMulti(vModel As String, sLabel As String, sColor As String, bInset 
 	fld.Put("type", "array")
 	fld.Put("title", sLabel)
 	fld.Put("x-display", "switch")
+	Dim xclass As List
+	xclass.Initialize
+	fld.Put("x-class", xclass)
 	'
 	Dim items As List
 	items.Initialize 
@@ -681,15 +705,19 @@ Sub AddSwitchMulti(vModel As String, sLabel As String, sColor As String, bInset 
 	'
 	model.Put(vModel, defValue)
 	properties.Put(vModel, fld)
+	Return Me
 End Sub
 '
 
 'add an auto complete
-Sub AddAutoComplete(vModel As String, sLabel As String, defValue As String) 
+Sub AddAutoComplete(vModel As String, sLabel As String, defValue As String) As BVAD3Form
 	vModel = vModel.tolowercase
 	
 	Dim fld As Map = CreateMap()
 	Dim xoptions As Map = CreateMap()
+	Dim xclass As List
+	xclass.Initialize
+	fld.Put("x-class", xclass)
 	
 	fld.Put("default", defValue)
 	fld.Put("type", "string")
@@ -715,14 +743,18 @@ Sub AddAutoComplete(vModel As String, sLabel As String, defValue As String)
 	
 	model.Put(vModel, defValue)
 	properties.Put(vModel, fld)
+	Return Me
 End Sub
 
 'add an auto complete
-Sub AddRadio(vModel As String, sLabel As String, defValue As String) 
+Sub AddRadio(vModel As String, sLabel As String, defValue As String) As BVAD3Form
 	vModel = vModel.tolowercase
 	
 	Dim fld As Map = CreateMap()
 	Dim xoptions As Map = CreateMap()
+	Dim xclass As List
+	xclass.Initialize
+	fld.Put("x-class", xclass)
 	
 	fld.Put("default", defValue)
 	fld.Put("type", "string")
@@ -743,17 +775,21 @@ Sub AddRadio(vModel As String, sLabel As String, defValue As String)
 	
 	model.Put(vModel, defValue)
 	properties.Put(vModel, fld)
+	Return Me
 End Sub
 
 
 
 'add a checkbox multi
-Sub AddCheckBoxMulti(vModel As String, sLabel As String, sColor As String, defValue As List)
+Sub AddCheckBoxMulti(vModel As String, sLabel As String, sColor As String, defValue As List) As BVAD3Form
 	vModel = vModel.tolowercase
 	'
 	Dim fld As Map = CreateMap()
 	Dim xoptions As Map = CreateMap()
-	'
+	Dim xclass As List
+	xclass.Initialize
+	fld.Put("x-class", xclass)
+	
 	fld.Put("default", defValue)
 	fld.Put("type", "array")
 	fld.Put("title", sLabel)
@@ -773,12 +809,13 @@ Sub AddCheckBoxMulti(vModel As String, sLabel As String, sColor As String, defVa
 	'
 	model.Put(vModel, defValue)
 	properties.Put(vModel, fld)
+	Return Me
 End Sub
 
 
 
 'add item
-Sub AddItemMulti(vmodel As String, key As String, value As String)
+Sub AddItemMulti(vmodel As String, key As String, value As String) As BVAD3Form
 	vmodel = vmodel.ToLowerCase
 	Dim skey As String = $"${vmodel}.items.oneOf"$
 	'get existing items
@@ -790,9 +827,10 @@ Sub AddItemMulti(vmodel As String, key As String, value As String)
 	items.Add(mitem)
 	'
 	BANanoShared.PutRecursive(properties, skey, items)
+	Return Me
 End Sub
 
-Sub AddItem(vmodel As String, key As String, value As String)
+Sub AddItem(vmodel As String, key As String, value As String) As BVAD3Form
 	vmodel = vmodel.ToLowerCase
 	Dim skey As String = $"${vmodel}.oneOf"$
 	'get existing items
@@ -804,12 +842,14 @@ Sub AddItem(vmodel As String, key As String, value As String)
 	items.Add(mitem)
 	'
 	BANanoShared.PutRecursive(properties, skey, items)
+	Return Me
 End Sub
 
-Sub HideItem(vmodel As String)
+Sub HideItem(vmodel As String) As BVAD3Form
 	vmodel = vmodel.ToLowerCase
 	Dim skey As String = $"${vmodel}.x-display"$
 	BANanoShared.PutRecursive(properties, skey, "hidden")
+	Return Me
 End Sub
 
 
@@ -855,11 +895,14 @@ End Sub
 'End Sub
 
 'add an auto complete
-Sub AddComboBox(vModel As String, sLabel As String, defValue As String) 
+Sub AddComboBox(vModel As String, sLabel As String, defValue As String) As BVAD3Form
 	vModel = vModel.tolowercase
 	
 	Dim fld As Map = CreateMap()
 	Dim xoptions As Map = CreateMap()
+	Dim xclass As List
+	xclass.Initialize
+	fld.Put("x-class", xclass)
 	
 	fld.Put("default", defValue)
 	fld.Put("type", "string")
@@ -885,6 +928,7 @@ Sub AddComboBox(vModel As String, sLabel As String, defValue As String)
 	
 	model.Put(vModel, defValue)
 	properties.Put(vModel, fld)
+	Return Me
 End Sub
 
 'add a select
@@ -929,11 +973,14 @@ End Sub
 'End Sub
 
 'add an auto complete
-Sub AddSelect(vModel As String, sLabel As String, defValue As String) 
+Sub AddSelect(vModel As String, sLabel As String, defValue As String) As BVAD3Form
 	vModel = vModel.tolowercase
 	
 	Dim fld As Map = CreateMap()
 	Dim xoptions As Map = CreateMap()
+	Dim xclass As List
+	xclass.Initialize
+	fld.Put("x-class", xclass)
 	
 	fld.Put("default", defValue)
 	fld.Put("type", "string")
@@ -959,15 +1006,19 @@ Sub AddSelect(vModel As String, sLabel As String, defValue As String)
 	
 	model.Put(vModel, defValue)
 	properties.Put(vModel, fld)
+	Return Me
 End Sub
 
 
 'add a multi text field with chips
-Sub AddTextFieldMulti(vModel As String, sLabel As String, defValue As List) 
+Sub AddTextFieldMulti(vModel As String, sLabel As String, defValue As List) As BVAD3Form
 	vModel = vModel.tolowercase
 	
 	Dim fld As Map = CreateMap()
 	Dim xoptions As Map = CreateMap()
+	Dim xclass As List
+	xclass.Initialize
+	fld.Put("x-class", xclass)
 	
 	fld.Put("default", defValue)
 	fld.Put("type", "array")
@@ -986,14 +1037,18 @@ Sub AddTextFieldMulti(vModel As String, sLabel As String, defValue As List)
 	
 	model.Put(vModel, defValue)
 	properties.Put(vModel, fld)
+	Return Me
 End Sub
 
 'add a multi number field with chips
-Sub AddNumberMulti(vModel As String, sLabel As String, defValue As List) 
+Sub AddNumberMulti(vModel As String, sLabel As String, defValue As List) As BVAD3Form
 	vModel = vModel.tolowercase
 	
 	Dim fld As Map = CreateMap()
 	Dim xoptions As Map = CreateMap()
+	Dim xclass As List
+	xclass.Initialize
+	fld.Put("x-class", xclass)
 	
 	fld.Put("default", defValue)
 	fld.Put("type", "array")
@@ -1013,14 +1068,18 @@ Sub AddNumberMulti(vModel As String, sLabel As String, defValue As List)
 	
 	model.Put(vModel, defValue)
 	properties.Put(vModel, fld)
+	Return Me
 End Sub
 
 'add a telephone
-Sub AddTelephone(vModel As String, sLabel As String, defValue As String) 
+Sub AddTelephone(vModel As String, sLabel As String, defValue As String) As BVAD3Form
 	vModel = vModel.tolowercase
 	
 	Dim fld As Map = CreateMap()
 	Dim xoptions As Map = CreateMap()
+	Dim xclass As List
+	xclass.Initialize
+	fld.Put("x-class", xclass)
 	
 	fld.Put("default", defValue)
 	fld.Put("type", "tel")
@@ -1039,14 +1098,18 @@ Sub AddTelephone(vModel As String, sLabel As String, defValue As String)
 	
 	model.Put(vModel, defValue)
 	properties.Put(vModel, fld)
+	Return Me
 End Sub
 
 'add a number, set -1 for max or min if not needed
-Sub AddNumber(vModel As String, sLabel As String, defValue As String, minValue As Int, maxValue As Int) 
+Sub AddNumber(vModel As String, sLabel As String, defValue As String, minValue As Int, maxValue As Int) As BVAD3Form
 	vModel = vModel.tolowercase
 	
 	Dim fld As Map = CreateMap()
 	Dim xoptions As Map = CreateMap()
+	Dim xclass As List
+	xclass.Initialize
+	fld.Put("x-class", xclass)
 	
 	fld.Put("default", defValue)
 	fld.Put("type", "number")
@@ -1071,14 +1134,19 @@ Sub AddNumber(vModel As String, sLabel As String, defValue As String, minValue A
 	
 	model.Put(vModel, defValue)
 	properties.Put(vModel, fld)
+	Return Me
 End Sub
 
 'add a date picker
-Sub AddDate(vModel As String, sLabel As String, defValue As String, sPrependIcon As String) 
+Sub AddDate(vModel As String, sLabel As String, defValue As String, sPrependIcon As String) As BVAD3Form
 	vModel = vModel.tolowercase
 	'
+	
 	Dim fld As Map = CreateMap()
 	Dim xoptions As Map = CreateMap()
+	Dim xclass As List
+	xclass.Initialize
+	fld.Put("x-class", xclass)
 	
 	fld.Put("default", defValue)
 	fld.Put("type", "string")
@@ -1100,6 +1168,7 @@ Sub AddDate(vModel As String, sLabel As String, defValue As String, sPrependIcon
 	
 	model.Put(vModel, defValue)
 	properties.Put(vModel, fld)
+	Return Me
 End Sub
 
 'set the chips
@@ -1115,11 +1184,14 @@ End Sub
 'End Sub
 
 'add a color picker that uses hex
-Sub AddColorPicker(vModel As String, sLabel As String, defValue As String) 
+Sub AddColorPicker(vModel As String, sLabel As String, defValue As String) As BVAD3Form
 	vModel = vModel.tolowercase
 	'
 	Dim fld As Map = CreateMap()
 	Dim xoptions As Map = CreateMap()
+	Dim xclass As List
+	xclass.Initialize
+	fld.Put("x-class", xclass)
 	
 	fld.Put("default", defValue)
 	fld.Put("type", "string")
@@ -1131,14 +1203,18 @@ Sub AddColorPicker(vModel As String, sLabel As String, defValue As String)
 	
 	model.Put(vModel, defValue)
 	properties.Put(vModel, fld)
+	Return Me
 End Sub
 
 'add a time picker
-Sub AddTime(vModel As String, sLabel As String, defValue As String, sPrependIcon As String) 
+Sub AddTime(vModel As String, sLabel As String, defValue As String, sPrependIcon As String) As BVAD3Form
 	vModel = vModel.tolowercase
 	'
 	Dim fld As Map = CreateMap()
 	Dim xoptions As Map = CreateMap()
+	Dim xclass As List
+	xclass.Initialize
+	fld.Put("x-class", xclass)
 	
 	fld.Put("default", defValue)
 	fld.Put("type", "string")
@@ -1160,14 +1236,18 @@ Sub AddTime(vModel As String, sLabel As String, defValue As String, sPrependIcon
 	
 	model.Put(vModel, defValue)
 	properties.Put(vModel, fld)
+	Return Me
 End Sub
 
 'add a date time picker
-Sub AddDateTime(vModel As String, sLabel As String, defValue As String, sPrependIcon As String) 
+Sub AddDateTime(vModel As String, sLabel As String, defValue As String, sPrependIcon As String) As BVAD3Form
 	vModel = vModel.tolowercase
 	'
 	Dim fld As Map = CreateMap()
 	Dim xoptions As Map = CreateMap()
+	Dim xclass As List
+	xclass.Initialize
+	fld.Put("x-class", xclass)
 	
 	fld.Put("default", defValue)
 	fld.Put("type", "string")
@@ -1189,15 +1269,19 @@ Sub AddDateTime(vModel As String, sLabel As String, defValue As String, sPrepend
 	
 	model.Put(vModel, defValue)
 	properties.Put(vModel, fld)
+	Return Me
 End Sub
 
 'add a text area
-Sub AddTextArea(vModel As String, sLabel As String, defValue As String, iFldLen As Int)
+Sub AddTextArea(vModel As String, sLabel As String, defValue As String, iFldLen As Int) As BVAD3Form
 	vModel = vModel.tolowercase
 	'
 	Dim fld As Map = CreateMap()
 	Dim xoptions As Map = CreateMap()
-	'
+	Dim xclass As List
+	xclass.Initialize
+	fld.Put("x-class", xclass)
+	
 	fld.Put("default", defValue)
 	fld.Put("type", "string")
 	fld.Put("title", sLabel)
@@ -1225,15 +1309,19 @@ Sub AddTextArea(vModel As String, sLabel As String, defValue As String, iFldLen 
 
 	model.Put(vModel, defValue)
 	properties.Put(vModel, fld)
+	Return Me
 End Sub
 
 'add a checkbox
-Sub AddCheckBox(vModel As String, sLabel As String, bChecked As Boolean, sColor As String)
+Sub AddCheckBox(vModel As String, sLabel As String, bChecked As Boolean, sColor As String) As BVAD3Form
 	vModel = vModel.tolowercase
 	'
 	Dim fld As Map = CreateMap()
 	Dim xoptions As Map = CreateMap()
-	'
+	Dim xclass As List
+	xclass.Initialize
+	fld.Put("x-class", xclass)
+	
 	fld.Put("default", bChecked)
 	fld.Put("type", "boolean")
 	fld.Put("title", sLabel)
@@ -1247,15 +1335,19 @@ Sub AddCheckBox(vModel As String, sLabel As String, bChecked As Boolean, sColor 
 
 	model.Put(vModel, bChecked)
 	properties.Put(vModel, fld)
+	Return Me
 End Sub
 
 'add a checkbox
-Sub AddCheckBox1(vModel As String, sLabel As String, bChecked As Object, sColor As String, oTrueValue As Object, oFalseValue As Object)
+Sub AddCheckBox1(vModel As String, sLabel As String, bChecked As Object, sColor As String, oTrueValue As Object, oFalseValue As Object) As BVAD3Form
 	vModel = vModel.tolowercase
 	'
 	Dim fld As Map = CreateMap()
 	Dim xoptions As Map = CreateMap()
-	'
+	Dim xclass As List
+	xclass.Initialize
+	fld.Put("x-class", xclass)
+	
 	fld.Put("default", bChecked)
 	fld.Put("type", "boolean")
 	fld.Put("title", sLabel)
@@ -1271,14 +1363,18 @@ Sub AddCheckBox1(vModel As String, sLabel As String, bChecked As Object, sColor 
 
 	model.Put(vModel, bChecked)
 	properties.Put(vModel, fld)
+	Return Me
 End Sub
 
 'add a switch
-Sub AddSwitch(vModel As String, sLabel As String, bChecked As Boolean, sColor As String, bInset As Boolean)
+Sub AddSwitch(vModel As String, sLabel As String, bChecked As Boolean, sColor As String, bInset As Boolean) As BVAD3Form
 	vModel = vModel.tolowercase
 	'
 	Dim fld As Map = CreateMap()
 	Dim xoptions As Map = CreateMap()
+	Dim xclass As List
+	xclass.Initialize
+	fld.Put("x-class", xclass)
 	
 	fld.Put("default", bChecked)
 	fld.Put("type", "boolean")
@@ -1295,14 +1391,18 @@ Sub AddSwitch(vModel As String, sLabel As String, bChecked As Boolean, sColor As
 
 	model.Put(vModel, bChecked)
 	properties.Put(vModel, fld)
+	Return Me
 End Sub
 
 'add a switch
-Sub AddSwitch1(vModel As String, sLabel As String, bChecked As Object, sColor As String, bInset As Boolean, oTrueValue As Object, oFalseValue As Object)
+Sub AddSwitch1(vModel As String, sLabel As String, bChecked As Object, sColor As String, bInset As Boolean, oTrueValue As Object, oFalseValue As Object) As BVAD3Form
 	vModel = vModel.tolowercase
 	'
 	Dim fld As Map = CreateMap()
 	Dim xoptions As Map = CreateMap()
+	Dim xclass As List
+	xclass.Initialize
+	fld.Put("x-class", xclass)
 	
 	fld.Put("default", bChecked)
 	fld.Put("type", "boolean")
@@ -1320,16 +1420,20 @@ Sub AddSwitch1(vModel As String, sLabel As String, bChecked As Object, sColor As
 
 	model.Put(vModel, bChecked)
 	properties.Put(vModel, fld)
+	Return Me
 End Sub
 
 
 'add a slider
-Sub AddSlider(vModel As String, sLabel As String, defValue As Int, MinValue As Int, MaxValue As Int, bShowThumb As Boolean, thumbSize As String)
+Sub AddSlider(vModel As String, sLabel As String, defValue As Int, MinValue As Int, MaxValue As Int, bShowThumb As Boolean, thumbSize As String) As BVAD3Form
 	vModel = vModel.tolowercase
 	'
 	Dim fld As Map = CreateMap()
 	Dim xoptions As Map = CreateMap()
-
+	Dim xclass As List
+	xclass.Initialize
+	fld.Put("x-class", xclass)
+	
 	fld.Put("default", defValue)
 	fld.Put("type", "integer")
 	fld.Put("title", sLabel)
@@ -1351,12 +1455,14 @@ Sub AddSlider(vModel As String, sLabel As String, defValue As Int, MinValue As I
 
 	model.Put(vModel, defValue)
 	properties.Put(vModel, fld)
+	Return Me
 End Sub
 
 'set the data of control
-Sub SetData(fldName As String, fldValue As Object)
+Sub SetData(fldName As String, fldValue As Object) As BVAD3Form
 	fldName = fldName.tolowercase
 	model.Put(fldName, fldValue)
+	Return Me
 End Sub
 
 'update the description
@@ -1438,6 +1544,15 @@ Sub SetReadOnly(vModel As String, b As Boolean) As BVAD3Form
 	Return Me
 End Sub
 
+
+'update dense for a field
+Sub SetDense(vModel As String, b As Boolean) As BVAD3Form
+	vModel = vModel.ToLowerCase
+	Dim skey As String = $"${vModel}.dense"$
+	BANanoShared.PutRecursive(properties, skey, b)
+	Return Me
+End Sub
+
 'update disableAll only
 Sub SetDisableAll(vModel As String, b As Boolean) As BVAD3Form
 	vModel = vModel.ToLowerCase
@@ -1446,10 +1561,51 @@ Sub SetDisableAll(vModel As String, b As Boolean) As BVAD3Form
 	Return Me
 End Sub
 
+'update disableAll only
+Sub SetCounter(vModel As String, i As Int) As BVAD3Form
+	vModel = vModel.ToLowerCase
+	Dim skey As String = $"${vModel}.counter"$
+	BANanoShared.PutRecursive(properties, skey, i)
+	Return Me
+End Sub
+
 'update min length
 Sub SetMinLength(vModel As String, i As Int) As BVAD3Form
 	vModel = vModel.ToLowerCase
 	Dim skey As String = $"${vModel}.minLength"$
+	BANanoShared.PutRecursive(properties, skey, i)
+	Return Me
+End Sub
+
+'update minimum
+Sub SetMinimum(vModel As String, i As Int) As BVAD3Form
+	vModel = vModel.ToLowerCase
+	Dim skey As String = $"${vModel}.minimum"$
+	BANanoShared.PutRecursive(properties, skey, i)
+	Return Me
+End Sub
+
+'update maximum
+Sub SetMaximum(vModel As String, i As Int) As BVAD3Form
+	vModel = vModel.ToLowerCase
+	Dim skey As String = $"${vModel}.maximum"$
+	BANanoShared.PutRecursive(properties, skey, i)
+	Return Me
+End Sub
+
+'update thumbSize
+Sub SetThumbSize(vModel As String, i As Int) As BVAD3Form
+	vModel = vModel.ToLowerCase
+	Dim skey As String = $"${vModel}.thumbSize"$
+	BANanoShared.PutRecursive(properties, skey, i)
+	Return Me
+End Sub
+
+
+'update thumbLabel
+Sub SetThumbLabel(vModel As String, i As Int) As BVAD3Form
+	vModel = vModel.ToLowerCase
+	Dim skey As String = $"${vModel}.thumbLabel"$
 	BANanoShared.PutRecursive(properties, skey, i)
 	Return Me
 End Sub
@@ -1470,18 +1626,21 @@ Sub SetPattern(vModel As String, p As String) As BVAD3Form
 	Return Me
 End Sub
 
-'update the pattern to accept letters only
-Sub SetPatternLettersOnly(vModel As String) As BVAD3Form
-	vModel = vModel.ToLowerCase
-	Dim skey As String = $"${vModel}.pattern"$
-	Dim svalue As String = "^[a-zA-Z]*$"
-	BANanoShared.PutRecursive(properties, skey, svalue)
-	Return Me
-End Sub
+''update the pattern to accept letters only
+'Sub SetPatternLettersOnly(vModel As String) As BVAD3Form
+'	vModel = vModel.ToLowerCase
+'	Dim skey As String = $"${vModel}.pattern"$
+'	Dim svalue As String = "^[a-zA-Z]*$"
+'	BANanoShared.PutRecursive(properties, skey, svalue)
+'	Return Me
+'End Sub
 
 'update required
 Sub SetRequired(vModel As String) As BVAD3Form
 	vModel = vModel.ToLowerCase
+	vModel = vModel.ToLowerCase
+	Dim skey As String = $"${vModel}.required"$
+	BANanoShared.PutRecursive(properties, skey, True)
 	If required.IndexOf(vModel) = -1 Then
 		required.add(vModel)
 	End If
@@ -1491,6 +1650,27 @@ End Sub
 'bind the state
 Sub BindState(C As VueComponent)
 	VC = c
+	VC.UseVJSF
+	Dim mbindings As Map = VElement.bindings
+	Dim mmethods As Map = VElement.methods
+	'apply the binding for the control
+	For Each k As String In mbindings.Keys
+		Dim v As Object = mbindings.Get(k)
+		Select Case k
+		Case "key"
+		Case Else
+			C.SetData(k, v)
+		End Select
+	Next
+	'apply the events
+	For Each k As String In mmethods.Keys
+		Dim cb As BANanoObject = mmethods.Get(k)
+		C.SetCallBack(k, cb)
+	Next
+End Sub
+
+Sub BindStateOnApp(C As VuetifyApp)
+	C.UseVJSF
 	Dim mbindings As Map = VElement.bindings
 	Dim mmethods As Map = VElement.methods
 	'apply the binding for the control
@@ -1629,10 +1809,145 @@ Sub IconvTinyInts(rec As Map)
 		Dim tiv As Boolean = rec.Get(tir)
 		tiv = BANanoShared.parseBool(tiv)
 		Select Case tiv
-		Case True
-			rec.Put(tir, 1)
-		Case False		
-			rec.Put(tir, 0)
+			Case True
+				rec.Put(tir, 1)
+			Case False
+				rec.Put(tir, 0)
 		End Select
 	Next
 End Sub
+
+'set hidden on component using v-model
+Sub SetHidden(vmodel As String) As BVAD3Form
+	vmodel = vmodel.ToLowerCase
+	Dim k As String = $"${vmodel}.x-display"$
+	BANanoShared.PutRecursive(properties, k, "hidden")
+	Return Me
+End Sub	
+
+'set outlined on component using v-model
+Sub SetOutlined(vModel As String, b As Boolean) As BVAD3Form
+	vModel = vModel.ToLowerCase
+	Dim k As String = $"${vModel}.x-props.outlined"$
+	BANanoShared.PutRecursive(properties, k, b)
+	Return Me
+End Sub
+
+'set rounded on component using v-model
+Sub SetRounded(vModel As String, b As Boolean) As BVAD3Form
+	vModel = vModel.ToLowerCase
+	Dim k As String = $"${vModel}.x-props.rounded"$
+	BANanoShared.PutRecursive(properties, k, b)
+	Return Me
+End Sub
+
+'set hide-details on component using v-model
+Sub SetHideDetails(vModel As String, b As Boolean) As BVAD3Form
+	vModel = vModel.ToLowerCase
+	Dim k As String = $"${vModel}.x-props.hide-details"$
+	BANanoShared.PutRecursive(properties, k, b)
+	Return Me
+End Sub
+
+'set filled on component using v-model
+Sub SetFilled(vModel As String, b As Boolean) As BVAD3Form
+	vModel = vModel.ToLowerCase
+	Dim k As String = $"${vModel}.x-props.filled"$
+	BANanoShared.PutRecursive(properties, k, b)
+	Return Me
+End Sub
+
+'set auto-grown on component using v-model
+Sub SetAutoGrow(vModel As String, b As Boolean) As BVAD3Form
+	vModel = vModel.ToLowerCase
+	Dim k As String = $"${vModel}.x-props.auto-grow"$
+	BANanoShared.PutRecursive(properties, k, b)
+	Return Me
+End Sub
+
+'set background color using v-model
+Sub SetBackgroundColor(vModel As String, c As String) As BVAD3Form
+	vModel = vModel.ToLowerCase
+	Dim k As String = $"${vModel}.x-props.backgroundColor"$
+	BANanoShared.PutRecursive(properties, k, c)
+	Return Me
+End Sub
+
+'set color using v-model
+Sub SetColor(vModel As String, c As String, i As String) As BVAD3Form
+	vModel = vModel.ToLowerCase
+	Dim xcolor As String = BuildColor(c, i) 
+	Dim k As String = $"${vModel}.x-props.color"$
+	BANanoShared.PutRecursive(properties, k, xcolor)
+	Return Me
+End Sub
+
+private Sub BuildColor(s As String, i As String) As String
+	If BANano.IsNull(s) Then s = ""
+	If BANano.IsNull(i) Then i = ""
+	If BANano.IsUndefined(s) Then s = ""
+	If BANano.IsUndefined(i) Then i = ""
+	'
+	s = s.Replace("none", "")
+	s = s.replace("normal", "")
+	'
+	i = i.replace("none", "")
+	i = i.replace("normal", "")
+	'
+	Dim x As String = $"${s} ${i}"$
+	x = x.Trim
+	Return x
+End Sub
+
+
+'set prependicon color using v-model
+Sub SetPrependIcon(vModel As String, c As String) As BVAD3Form
+	vModel = vModel.ToLowerCase
+	Dim k As String = $"${vModel}.x-props.prependIcon"$
+	BANanoShared.PutRecursive(properties, k, c)
+	Return Me
+End Sub
+
+'set prepend Inner icon
+Sub SetPrependInnerIcon(vModel As String, c As String) As BVAD3Form
+	vModel = vModel.ToLowerCase
+	Dim k As String = $"${vModel}.x-props.prependInnerIcon"$
+	BANanoShared.PutRecursive(properties, k, c)
+	Return Me
+End Sub
+
+'set true value
+Sub SetTrueValue(vModel As String, c As Object) As BVAD3Form
+	vModel = vModel.ToLowerCase
+	Dim k As String = $"${vModel}.x-props.trueValue"$
+	BANanoShared.PutRecursive(properties, k, c)
+	Return Me
+End Sub
+
+'set false value
+Sub SetFalseValue(vModel As String, c As Object) As BVAD3Form
+	vModel = vModel.ToLowerCase
+	Dim k As String = $"${vModel}.x-props.falseValue"$
+	BANanoShared.PutRecursive(properties, k, c)
+	Return Me
+End Sub
+
+'set append color using v-model
+Sub SetAppendIcon(vModel As String, c As String) As BVAD3Form
+	vModel = vModel.ToLowerCase
+	Dim k As String = $"${vModel}.x-props.appendIcon"$
+	BANanoShared.PutRecursive(properties, k, c)
+	Return Me
+End Sub
+
+'add a class using the v-model
+Sub SetClass(vModel As String, s As String) As BVAD3Form
+	vModel = vModel.ToLowerCase
+	Dim k As String = $"${vModel}.x-class"$
+	Dim lst As List = BANanoShared.GetRecursive(properties, k)
+	If lst.IndexOf(s) = -1 Then
+		lst.Add(s)
+		BANanoShared.PutRecursive(properties, k, lst)
+	End If
+	Return Me
+End Sub	

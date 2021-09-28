@@ -24,9 +24,199 @@ Sub Process_Globals
         "", "Thousand", "Million", "Billion", "Trillion", _
         "Quadrillion", "Pentillion", "Sexillion", "Septillion", "Octillion" _
     )
-	Type FileObject(FileName As String, FileDate As String, FileSize As Long, FileType As String, Status As String, FullPath As String, FileDateOnly As String)
+	Type FileObject(FileName As String, FileDate As String, FileSize As Long, FileType As String, Status As String, FullPath As String, FileDateOnly As String, FileOK As Boolean)
 	Private SourceCode As StringBuilder
 	Type sequencePair(value As Int, numTimes As Int)
+	Public Colors As List
+	Public TextColors As List
+	Public Intensities As List
+	Public TextColorIntensities As List
+	Public TextAlign As List
+	Public TextDecoration As List
+	Public Elevation As List
+	Public Rounded As List
+End Sub
+
+Sub Initialize
+	Rounded.Initialize 
+	Rounded.Add("rounded-0")
+	Rounded.Add("rounded-sm")
+	Rounded.Add("rounded-lg")
+	Rounded.Add("rounded-xl")
+	Rounded.Add("rounded-t-xl")
+	Rounded.Add("rounded-r-xl")
+	Rounded.Add("rounded-b-xl")
+	Rounded.Add("rounded-l-xl")
+	Rounded.Add("rounded-tl-xl")
+	Rounded.Add("rounded-tr-xl")
+	Rounded.Add("rounded-BR-xl")
+	Rounded.Add("rounded-bl-xl")
+	Rounded.Add("rounded-pill")
+	Rounded.Add("rounded-circle")
+	Elevation.Initialize
+	Dim ei As Int
+	For ei = 1 To 24 
+		Elevation.add($"elevation-${ei}"$)
+	Next
+	Colors.Initialize 
+	Colors.add("red")
+	Colors.add("pink")
+	Colors.add("purple")
+	Colors.add("deep-purple")
+	Colors.add("indigo")
+	Colors.add("blue")
+	Colors.add("light-blue")
+	Colors.add("cyan")
+	Colors.add("teal")
+	Colors.add("green")
+	Colors.add("light-green")
+	Colors.add("lime")
+	Colors.add("yellow")
+	Colors.add("amber")
+	Colors.add("orange")
+	Colors.add("deep-orange")
+	Colors.add("brown")
+	Colors.add("grey")
+	Colors.add("blue-grey")
+	Colors.add("black")
+	'
+	Intensities.Initialize
+	Intensities.Add("lighten-5")
+	Intensities.Add("lighten-4")
+	Intensities.Add("lighten-3")
+	Intensities.Add("lighten-2")
+	Intensities.Add("lighten-1")
+	Intensities.Add("darken-1")
+	Intensities.Add("darken-2")
+	Intensities.Add("darken-3")
+	Intensities.Add("darken-4")
+	Intensities.Add("accent-1")
+	Intensities.Add("accent-2")
+	Intensities.Add("accent-3")
+	Intensities.Add("accent-4")
+	
+	TextColors.Initialize 
+	For Each strcolor As String In Colors
+		TextColors.Add($"${strcolor}--text"$)
+	Next
+	'
+	TextColorIntensities.Initialize 
+	For Each strcolor As String In Intensities
+		TextColorIntensities.Add($"text--${strcolor}"$)
+	Next
+	TextAlign.Initialize 
+	TextAlign.Add("text-start")
+	TextAlign.Add("text-end")
+	TextAlign.Add("text-left")
+	TextAlign.Add("text-center")
+	TextAlign.Add("text-right")
+	TextAlign.Add("text-justify")
+	'
+	TextDecoration.Initialize 
+	TextDecoration.Add("text-decoration-none")
+	TextDecoration.Add("text-decoration-line-through")
+	TextDecoration.Add("text-decoration-overline")
+	TextDecoration.Add("text-decoration-underline")
+End Sub
+
+Sub ToolConvertToList(listName As String, source As String) As String
+	source = source.Replace(CRLF, "|")
+	source = source.Replace(";", "|")
+	source = source.Replace(",", "|")
+	Dim items As List = StrParse("|", source)
+	'
+	Dim sb As StringBuilder
+	sb.Initialize
+	sb.Append($"Public ${listName} As List"$).Append(CRLF)
+	sb.Append(CRLF)
+	sb.Append($"${listName}.Initialize"$).Append(CRLF) 
+	For Each item As String In items
+		Dim tmp As String = item.Trim
+		If tmp = "" Then Continue
+		sb.Append($"${listName}.Add("${item}")"$).Append(CRLF)
+	Next
+	Return sb.tostring	
+End Sub
+
+'convert stuff to constants
+Sub ToolConvertToConstants(source As String) As String
+	source = source.Replace(CRLF, "|")
+	source = source.Replace(";", "|")
+	source = source.Replace(",", "|")
+	Dim items As List = StrParse("|", source)
+	Dim sb As StringBuilder
+	sb.Initialize 
+	For Each item As String In items
+		Dim tmp As String = item.Trim
+		If tmp = "" Then Continue
+		tmp = tmp.Replace("-","_")
+		tmp = tmp.ToUpperCase
+		sb.Append($"Public const ${tmp} As String = "${item}""$).Append(CRLF)
+	Next
+	Return sb.tostring
+End Sub
+
+Sub NormalizeColor(s As String) As String
+	If BANano.IsNull(s) Or BANano.IsUndefined(s) Then s = ""
+	'
+	s = s.Replace("none", "")
+	s = s.replace("normal", "")
+	'
+	s = s.trim
+	Return s
+End Sub
+
+Sub NormalizeIntensity(s As String) As String
+	If BANano.IsNull(s) Or BANano.IsUndefined(s) Then s = ""
+	'
+	s = s.Replace("none", "")
+	s = s.replace("normal", "")
+	'
+	s = s.trim
+	Return s
+End Sub
+
+
+Sub NormalizeTextColor(s As String) As String
+	If BANano.IsNull(s) Or BANano.IsUndefined(s) Then s = ""
+	'
+	s = s.Replace("none", "")
+	s = s.replace("normal", "")
+	'
+	s = $"${s}--text"$
+	If s = "--text" Then s = ""
+	'
+	s = s.trim
+	Return s
+End Sub
+
+Sub NormalizeTextIntensity(i As String) As String
+	If BANano.IsNull(i) Or BANano.IsUndefined(i) Then i = ""
+	'
+	i = i.replace("none", "")
+	i = i.replace("normal", "")
+	'
+	i = $"text--${i}"$
+	If i= "text--" Then i = ""
+	'
+	i = i.trim
+	Return i
+End Sub
+
+'remove an item from a list
+Sub ListRemoveItem(lst As List, itm As String) As List
+	Dim idx As Int = lst.IndexOf(itm)
+	If idx <> -1 Then
+		lst.RemoveAt(idx)
+	End If
+	Return lst
+End Sub
+
+'add a distinct item to the list
+Sub ListAddDistinctItem(lst As List, itm As String) As List
+	lst = ListRemoveItem(lst, itm)
+	lst.Add(itm)
+	Return lst
 End Sub
 
 'convert named key values of maps inside a list to integers
@@ -43,6 +233,52 @@ Sub ListValues2Integers(lst As List, keys2process As List)
 		lst.Set(Cnt, m)
 	Next
 End Sub
+
+
+'Public Sub SplitWords(s As String) As String()
+'	Dim x As BANanoRegEx
+'	x.InitializePattern("\W+")
+'	Dim res() As String = x.ExecAll(s)
+'	Return res
+'End Sub
+
+'Sub TimeAgo(dt As String) As String
+'	If dt.IndexOf(" ") = -1 Then Return ""
+'	Dim diff As Period
+'	diff.Initialize
+'	DateTime.DateFormat="yyyy-MM-dd"
+'	DateTime.TimeFormat="HH:mm:ss"
+'	Dim mtime() As String = Regex.split(" ", dt)
+'	Dim dd As String = mtime(0)
+'	Dim tt As String = mtime(1)
+'	Dim pd As Long = DateTime.DateTimeParse(dd,tt)
+'	diff = DateUtils.PeriodBetween(pd,DateTime.now)
+'	Dim ta As String
+'	If diff.Years <> 0 Then
+'		ta = $"${diff.years} year(s) ago"$
+'		Return ta
+'	End If
+'	If diff.Months <> 0 Then
+'		ta = $"${diff.months} month(s) ago"$
+'		Return ta
+'	End If
+'	If diff.Days <> 0 Then
+'		ta = $"${diff.days} day(s) ago"$
+'		Return ta
+'	End If
+'	If diff.Hours <> 0 Then
+'		ta = $"${diff.hours} hour(s) ago"$
+'		Return ta
+'	End If
+'	If diff.Minutes <> 0 Then
+'		ta = $"${diff.minutes} minute(s) ago"$
+'		Return ta
+'	End If
+'	If diff.Seconds <> 0 Then
+'		ta = $"${diff.seconds} second(s) ago"$
+'		Return ta
+'	End If
+'End Sub
 
 
 'add an item to a list if the item is not blank
@@ -83,6 +319,22 @@ Sub parseNull(v As Object) As String
 	Return v	
 End Sub
 
+Sub GetProp(props As Map, Key As String, Default As Object) As Object
+	If props.ContainsKey(Key) Then
+		Dim o As Object = props.Get(Key)
+		If BANano.IsNull(o) Or BANano.IsUndefined(o) Then 
+			Return Default
+		End If
+		o = CStr(o)
+		If o = "null" Or o = "undefined" Or o = "" Then 
+			Return Default	
+		End If
+		Return o
+	Else
+		Return Default
+	End If
+End Sub
+
 'parseBool
 Sub parseBool(v As Object) As Boolean
 	If BANano.IsNull(v) Or BANano.IsUndefined(v) Then
@@ -113,6 +365,7 @@ Sub FormatDisplayDate(item As String, sFormat As String) As String			'ignoredead
 		If BANano.isnull(item) Or BANano.IsUndefined(item) Then Return ""
 		Dim bo As BANanoObject = BANano.RunJavascriptMethod("dayjs", Array(item))
 		Dim sDate As String = bo.RunMethod("format", Array(sFormat)).Result
+		If sDate = "Invalid Date" Then Return ""
 		Return sDate
 	Catch
 		Return ""
@@ -512,6 +765,13 @@ function EmailSend($from, $to, $cc, $subject, $msg) {
 
 'upload file to server and return success or error
 'server should have write permissions
+'<code>
+'Sub FileInput_Change (fo As Map)
+'dim fd as FileOK = BANano.Await(BANanoShared.UploadFileWait(fo))
+'if fd.FileOk = True Then
+'else
+'end if
+'</code>
 Sub UploadFileWait(fileO As Map) As FileObject
 	'get the file details
 	Dim fileDet As FileObject = GetFileDetails(fileO)
@@ -526,6 +786,11 @@ Sub UploadFileWait(fileO As Map) As FileObject
 	Dim result As Map = BANano.FromJson(Res)
 	Dim sstatus As String = result.Get("status")
 	fileDet.Status = sstatus
+	If sstatus = "success" Then
+		fileDet.FileOK = True
+	Else
+		fileDet.FileOK = False	
+	End If
 	fileDet.FullPath = $"./assets/${fn}"$
 	Return fileDet
 End Sub
@@ -1107,6 +1372,7 @@ End Sub
 Sub GetFileDetails(fileObj As Map) As FileObject
 	Dim ff As FileObject
 	ff.Initialize
+	ff.FileOK = False
 	
 	If BANano.IsNull(fileObj) Or BANano.IsUndefined(fileObj) Then Return ff
 	
@@ -1133,6 +1399,7 @@ Sub GetFileDetails(fileObj As Map) As FileObject
 	ff.FileDateOnly = $"${yyyy}-${mm}-${dd}"$
 	ff.FileSize = ssize
 	ff.FileType = stype
+	ff.FileOK = True
 	Return ff
 End Sub
 
@@ -2145,6 +2412,7 @@ function hexToRgba(hexCode, opacity) {
 
 'make px
 Sub MakePx(sValue As String) As String
+	sValue = CStr(sValue)
 	sValue = sValue.trim
 	If sValue.EndsWith("%") Then
 		Return sValue
@@ -2268,6 +2536,16 @@ Sub DateTimeNow() As String
 	Dim dt As String
 	lNow = DateTime.Now
 	DateTime.DateFormat = "yyyy-MM-dd HH:mm"
+	dt = DateTime.Date(lNow)
+	Return dt
+End Sub
+
+'date time now
+Sub DateTimeNowBackUp() As String
+	Dim lNow As Long
+	Dim dt As String
+	lNow = DateTime.Now
+	DateTime.DateFormat = "yyyy-MM-dd HH-mm"
 	dt = DateTime.Date(lNow)
 	Return dt
 End Sub
@@ -3703,36 +3981,36 @@ Sub BANanoMoveHTML(source As String, target As String)
 	BANano.GetElement($"#${target}"$).Append(ssource)
 End Sub
 
-'add html element
-Sub AddHTMLElement(Module As Object, parentID As String, elID As String, tag As String, props As Map, styleProps As Map, classNames As String, Text As String)
-	parentID = parentID.ToLowerCase
-	elID = elID.tolowercase
-	parentID = parentID.Replace("#","")
-	elID = elID.Replace("#","")
-	'
-	Dim elIT As VueElement
-	elIT.Initialize(Module, elID, tag)
-	elIT.Append(Text)
-	'
-	If props <> Null Then
-		For Each k As String In props.Keys
-			Dim v As String = props.Get(k)
-			elIT.SetAttr(k, v)
-		Next
-	End If
-	If styleProps <> Null Then
-		For Each k As String In styleProps.Keys
-			Dim v As String = styleProps.get(k)
-			elIT.SetAttr(k, v)
-		Next
-	End If
-	If classNames <> "" Then
-		elIT.AddClass(classNames)
-	End If
-	'add to the parent element
-	Dim sElement As String = elIT.tostring
-	BANano.GetElement($"#${parentID}"$).Append(sElement)
-End Sub
+''add html element
+'Sub AddHTMLElement(Module As Object, parentID As String, elID As String, tag As String, props As Map, styleProps As Map, classNames As String, Text As String)
+'	parentID = parentID.ToLowerCase
+'	elID = elID.tolowercase
+'	parentID = parentID.Replace("#","")
+'	elID = elID.Replace("#","")
+'	'
+'	Dim elIT As VueElement
+'	elIT.Initialize(Module, elID, tag)
+'	elIT.Append(Text)
+'	'
+'	If props <> Null Then
+'		For Each k As String In props.Keys
+'			Dim v As String = props.Get(k)
+'			elIT.SetAttr(k, v)
+'		Next
+'	End If
+'	If styleProps <> Null Then
+'		For Each k As String In styleProps.Keys
+'			Dim v As String = styleProps.get(k)
+'			elIT.SetAttr(k, v)
+'		Next
+'	End If
+'	If classNames <> "" Then
+'		elIT.AddClass(classNames)
+'	End If
+'	'add to the parent element
+'	Dim sElement As String = elIT.tostring
+'	BANano.GetElement($"#${parentID}"$).Append(sElement)
+'End Sub
 
 
 'build the map to send an email to use in callinlinephp
@@ -3864,6 +4142,24 @@ Sub BreakAtUpperCase(st As String) As String
 	Return newst
 End Sub
 
+Sub DeCamelCase(st As String) As String
+	If st.Length = 0 Then Return ""
+	Dim k As Int
+    Dim s As String
+    Dim newst As String = st.CharAt(0)
+    For i = 1 To st.Length - 1
+        s = st.CharAt(i)
+        k = Asc(s)
+        If k>64 And k < 91 And st.CharAt(i-1) <> " " Then
+            newst = newst & "-" & s
+        Else
+            newst = newst & s
+        End If
+    Next
+	newst = newst.tolowercase
+	Return newst
+End Sub
+
 'Returns the number of days that have passed between two dates.
 'Pass the dates as a String
 Sub DateNOD(CurrentDate As String, OtherDate As String) As Int
@@ -3945,12 +4241,6 @@ End Sub
 Sub MidS(Text As String, iStart As Int) As String
 	Dim x As String = Text.SubString(iStart - 1)
 	Return x
-End Sub
-
-'list remove item
-Sub ListRemoveItem(lst As List, item As String)
-	Dim lPos As Int = lst.IndexOf(item)
-	If lPos <> -1 Then lst.RemoveAt(lPos)
 End Sub
 
 'mv remove duplicates
@@ -4532,4 +4822,264 @@ Sub ListOfMapsToOptions(source As List, key As String, value As String) As List
 		xlist.Add(nr)
 	Next
 	Return xlist
+End Sub
+
+'get the file contents
+Sub readAsTextWait(fr As Map) As String
+	Try
+		Dim fd As Map = BANano.Await(readAsText(fr))
+		Dim sname As String = fd.Get("name")			'ignore
+		Dim sresult As String = fd.Get("result")
+		Return sresult
+	Catch
+		Return ""
+	End Try	
+End Sub
+
+'get the file contents
+Sub readAsBinaryStringWait(fr As Map) As String
+	Try
+		Dim fd As Map = BANano.Await(readAsBinaryString(fr))
+		Dim sname As String = fd.Get("name")			'ignore
+		Dim sresult As String = fd.Get("result")
+		Return sresult
+	Catch
+		Return ""
+	End Try	
+End Sub
+
+'get the file contents
+Sub readAsDataURLWait(fr As Map) As String
+	Try
+		Dim fd As Map = BANano.Await(readAsDataURL(fr))
+		Dim sname As String = fd.Get("name")			'ignore
+		Dim sresult As String = fd.Get("result")
+		Return sresult
+	Catch
+		Return ""
+	End Try	
+End Sub
+
+'get the file contents
+Sub readAsArrayBufferWait(fr As Map) As String
+	Try
+		Dim fd As Map = BANano.Await(readAsArrayBuffer(fr))
+		Dim sname As String = fd.Get("name")		'ignore
+		Dim sresult As String = fd.Get("result")
+		Return sresult
+	Catch
+		Return ""
+	End Try	
+End Sub
+
+'calculate the progress done
+Sub ProgressDone(currentCount As Long, totalCount As Long) As Int
+	Dim pd As Int = (currentCount / totalCount) * 100
+	pd = NumberFormat2(pd, 0,0, 0, False)
+	pd = CInt(pd)
+	Return pd
+End Sub
+
+
+'Sub Code_Format(dir As String, fil As String)
+'	Dim clsCM As clsCodeModule
+'	clsCM.Initialize(dir, fil)
+'	clsCM.Code_Beautify
+'	clsCM.save
+'End Sub
+
+'Sub CodeFormatter(strCode As String) As String
+'	Try
+'		File.WriteString(File.DirApp,"code.txt",strCode)
+'		Dim clsCM As clsCodeModule
+'		clsCM.Initialize(File.DirApp,"code.txt")
+'		clsCM.Code_Beautify
+'		clsCM.save
+'		Return File.ReadString(File.DirApp,"code.txt")
+'	Catch
+'		Return strCode
+'	End Try
+'End Sub
+
+Sub MvFieldsUntil(delim As String, strValue As String, endPos As Int) As String
+	Dim spValues As List = StrParse(delim,strValue)
+	Dim nList As List
+	Dim nCnt As Int = 0
+	nList.Initialize
+	For Each strKey As String In spValues
+		nList.Add(strKey)
+		nCnt = nCnt + 1
+		If nCnt > endPos Then 
+			Exit 
+		End If
+	Next
+	Dim sout As String = MvFromList(nList,delim)
+	Return sout
+End Sub
+
+Sub MvFromList(lst As List, Delim As String) As String
+	Dim lTot As Int
+	Dim lCnt As Int
+	Dim lStr As StringBuilder
+	lStr.Initialize 
+	lTot = lst.Size - 1
+	For lCnt = 0 To lTot
+		lStr.Append(lst.Get(lCnt))
+		If lCnt <> lTot Then 
+			lStr.Append(Delim)
+		End If
+	Next
+	Return lStr.tostring
+End Sub
+
+
+Sub ExtrasExtractProperty(sExtras As String, propName As String) As List
+	Dim outL As List
+	outL.Initialize
+	If sExtras.length = 0 Then
+		Return outL
+	Else
+		Dim propList As List = Json2List(sExtras)
+		For Each propMap As Map In propList
+			Dim propValue As String = propMap.GetDefault(propName.tolowercase,"")
+			If propValue.Length > 0 Then outL.add(propValue)
+		Next
+		Return outL
+	End If
+End Sub
+
+Sub ExtrasExtractProperty1(sExtras As String, propName As String, propName1 As String, propName1Of As String) As List
+	Dim outL As List
+	outL.Initialize
+	If sExtras.length = 0 Then
+		Return outL
+	Else
+		Dim propList As List = Json2List(sExtras)
+		For Each propMap As Map In propList
+			Dim propValue As String = propMap.GetDefault(propName.tolowercase,"")
+			Dim propValue1 As String = propMap.GetDefault(propName1.ToLowerCase,"")
+			If propValue1.EqualsIgnoreCase(propName1Of) = True Then
+				If propValue.Length > 0 Then 
+					outL.add(propValue)
+				End If
+			End If
+		Next
+		Return outL
+	End If
+End Sub
+
+
+Sub MvFromDelimitedString(Delim As String, Value As String, ValueDelim As String) As String
+	Dim sp As List
+	Dim sb As StringBuilder
+	Dim pCnt As Int
+	Dim pTot As Int
+	Dim strValue As String
+	sb.Initialize 
+	sp = StrParse(ValueDelim,Value)
+	pTot = sp.Size - 1 
+	For pCnt = 0 To pTot - 1
+		strValue = sp.get(pCnt)
+		sb.Append(strValue)
+		sb.Append(" & ")
+		sb.Append(InQuotes(Delim))
+		If pCnt <> (pTot - 1) Then
+			sb.Append(" & ")
+		End If
+	Next
+	strValue = sp.get(pTot)
+	sb.Append(" & ").Append(strValue)
+	Return sb.tostring
+End Sub
+
+Sub ToHTML(svalue As String, sFont As String) As String
+	Dim sb As StringBuilder
+	sb.Initialize 
+	sb.Append("<html>").Append(CRLF)
+	sb.append("<head>").Append(CRLF)
+	sb.Append("<style>.f{font-family:").Append(QUOTE).Append(sFont).Append(QUOTE).Append(";}</style>").Append(CRLF)
+	sb.Append("</head>").Append(CRLF)
+	sb.Append("<body>").Append(CRLF)
+	sb.Append("<p class=f>").Append(svalue).Append("</p>").Append(CRLF)
+	sb.Append("</body></html>")
+	Return sb.ToString
+End Sub
+
+Sub GetAlpha(value As String) As String
+	Dim strCnt As Int
+	Dim str As String
+	Dim sb As StringBuilder
+	sb.Initialize 
+	Dim master As String = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	For strCnt = 0 To value.Length - 1
+		str = value.CharAt(strCnt)
+		If master.IndexOf(str) >= 0 Then
+			sb.Append(str) 	 
+		End If
+	Next
+	Return sb.tostring
+End Sub
+
+public Sub NumberFormat2Fix(number As Double, minimumIntegers As Int, maximumFractions As Int, minimumFractions As Int, groupingUsed As Boolean) As Double
+    Return BANano.RunJavascriptMethod("NumberFormat2", Array(number, minimumIntegers, maximumFractions, minimumFractions, groupingUsed))
+End Sub
+
+#if JavaScript
+function BANano_r2fFIX(number, decimals, minf) {
+    var decimals2=minf;
+    if (decimals2<decimals) {decimals2=decimals}
+    if (decimals2>decimals) {decimals=decimals2}
+    let v = +(Math.round(number + "e+" + decimals) + "e-" + decimals2);   
+    var s = +v.toFixed(decimals2);
+    if (s.countDecimals()<=minf) {
+        return v.toFixed(minf);       
+    } else {
+        return v.toFixed(decimals2);       
+    }   
+};
+
+Number.prototype.countDecimals = function () {
+    if (Math.floor(this.valueOf()) === this.valueOf()) return 0;
+    var str = this.toString();
+    if (str.indexOf(".") !== -1 && str.indexOf("-") !== -1) {
+        return str.split("-")[1] || 0;
+    } else if (str.indexOf(".") !== -1) {
+        return str.split(".")[1].length || 0;
+    }
+    return str.split("-")[1] || 0;
+};
+
+function NumberFormat2(number, minimumIntegers, maximumFractions, minimumFractions,groupingUsed) {
+    return BANano_nf2(BANano_r2fFIX(number,maximumFractions,minimumFractions),minimumIntegers,groupingUsed);
+}
+#End If
+
+'returns a file object from GetData
+Sub FetchAsFile(path As String, name As String) As BANanoObject
+    Dim fetch As BANanoFetch
+    Dim fetchResponse As BANanoFetchResponse
+    Dim blob As BANanoObject
+  
+    Dim prom As BANanoPromise
+  
+    ' we are going to use a Promise Wrapper as we want to use Await() for it.
+    prom.NewStart
+        fetch.Initialize(path & "/" & name, Null)
+        fetch.Then(fetchResponse)
+            ' resolve the blob
+            Return fetchResponse.Blob
+        fetch.Then(blob) 'ignore
+            ' Use ReturnThen/ReturnElse for the final result in case of a Promise.NewStart/NewEnd wrapper
+            BANano.ReturnThen(blob)
+        fetch.End  
+    prom.NewEnd
+  
+    ' wait from the Promise
+    Dim result As BANanoObject = BANano.Await(prom)
+  
+    ' make a new File object
+    Dim f As BANanoObject
+    f.Initialize2("File",Array(Array(result), name, CreateMap("type": result.getfield("type"))))
+      
+    Return f
 End Sub

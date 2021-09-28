@@ -765,7 +765,9 @@ function SendEmail($from,$to,$cc,$subject,$msg) {
 	//define from header  
 	$headers = "From:" . $from . "\r\n";  
 	$headers .= "Cc: " . $cc . "\r\n";  
-	$headers .= "X-Mailer:PHP/" . phpversion();  
+	$headers .= "X-Mailer:PHP/" . phpversion(); 
+	$headers .= "MIME-Version: 1.0\r\n"; 
+	$headers .= "Content-type: text/html\r\n"; 
 	// send email  
 	$response = (mail($to,$subject,$msg,$headers)) ? "success" : "failure";  
     $output = json_encode(array("response" => $response));  

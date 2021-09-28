@@ -8,48 +8,47 @@ Version=7
 'Custom BANano View class
 
 #Event: Blur (e As BANanoEvent)
-#Event: DblClick (e As BANanoEvent)
-#Event: DblClickPrevent (e As BANanoEvent)
+#Event: Change (value As Object)
 #Event: Click (e As BANanoEvent)
-#Event: ClickStop (e As BANanoEvent)
-#Event: ClickPrevent (e As BANanoEvent)
 #Event: ClickAlt (e As BANanoEvent)
-#Event: ClickShift (e As BANanoEvent)
-#Event: ClickPrevent (e As BANanoEvent)
 #Event: ClickAppend (e As BANanoEvent)
 #Event: ClickAppendOuter (e As BANanoEvent)
-#Event: ClickPrepend (e As BANanoEvent)
-#Event: ClickPrependInner (e As BANanoEvent)
 #Event: ClickClear (e As BANanoEvent)
 #Event: ClickClose (e As BANanoEvent)
+#Event: ClickPrepend (e As BANanoEvent)
+#Event: ClickPrependInner (e As BANanoEvent)
+#Event: ClickPrevent (e As BANanoEvent)
+#Event: ClickShift (e As BANanoEvent)
+#Event: ClickStop (e As BANanoEvent)
+#Event: DblClick (e As BANanoEvent)
+#Event: DblClickPrevent (e As BANanoEvent)
+#Event: DragEnter (e As BANanoEvent)
+#Event: DragLeave (e As BANanoEvent)
+#Event: DragOver (e As BANanoEvent)
+#Event: Drop (e As BANanoEvent)
+#Event: End (e As BANanoEvent)
 #Event: Focus (e As BANanoEvent)
 #Event: Input (e As BANanoEvent)
-#Event: RightClick (item As Map)
-#Event: TouchStartStop (e As BANanoEvent)
-#Event: LeftClick (item As Map)
-#Event: Change (value As Object)
-#Event: MouseMove (e As BANanoEvent)
-#Event: MouseOut (e As BANanoEvent)
-#Event: MouseDown (e As BANanoEvent)
-#Event: MouseDownStop (e As BANanoEvent)
-#Event: MouseUp (e As BANanoEvent)
-#Event: MouseOver (event As BANanoEvent)
-#Event: MouseOut (event As BANanoEvent)
-#Event: KeyUp (e As BANanoEvent)
 #Event: KeyDown (e As BANanoEvent)
 #Event: KeyPress (e As BANanoEvent)
-#Event: Start (e As BANanoEvent)
-#Event: End (e As BANanoEvent)
-#Event: Submit (e As BANanoEvent)
+#Event: KeyUp (e As BANanoEvent)
 #Event: KeydownEnterPrevent (e As BANanoEvent)
 #Event: KeydownLeftPrevent (e As BANanoEvent)
 #Event: KeydownRightPrevent (e As BANanoEvent)
 #Event: KeydownSpacePrevent (e As BANanoEvent)
 #Event: KeyupEnter (e As BANanoEvent)
-#Event: Drop (e As BANanoEvent)
-#Event: DragOver (e As BANanoEvent)
-#Event: DragEnter (e As BANanoEvent)
-#Event: DragLeave (e As BANanoEvent)
+#Event: LeftClick (item As Map)
+#Event: MouseDown (e As BANanoEvent)
+#Event: MouseDownStop (e As BANanoEvent)
+#Event: MouseMove (e As BANanoEvent)
+#Event: MouseOut (e As BANanoEvent)
+#Event: MouseOut (event As BANanoEvent)
+#Event: MouseOver (event As BANanoEvent)
+#Event: MouseUp (e As BANanoEvent)
+#Event: RightClick (item As Map)
+#Event: Start (e As BANanoEvent)
+#Event: Submit (e As BANanoEvent)
+#Event: TouchStartStop (e As BANanoEvent)
 
 #DesignerProperty: Key: AutoID, DisplayName: Auto ID/Name, FieldType: Boolean, DefaultValue: False, Description: Overrides the ID/Name with a random string.
 #DesignerProperty: Key: App, DisplayName: App, FieldType: Boolean, DefaultValue: False, Description: 
@@ -369,6 +368,8 @@ Sub Class_Globals
 	Public Gradients As List
 	Private computed As Map
 	Public Here As String
+	Public bindClass As String
+	Public bindStyle As String
 End Sub
 
 'initialize the custom view
@@ -425,6 +426,326 @@ Sub Initialize (CallBack As Object, Name As String, EventName As String)
 	sbText.Initialize 
 	Here = $"#${mName}"$
 	NewListViewItemOptions
+	'
+	bindClass = $"${mName}class"$
+	bindStyle = $"${mName}style"$
+	'set the empty values
+	Dim nm As Map = CreateMap()
+	SetData(bindStyle, nm)
+	Dim nl As List
+	nl.Initialize 
+	SetData(bindClass, nl)
+End Sub
+
+'from property value to actual 
+Sub GetActualGradient(source As String) As String			'ignore
+	Select Case source
+	Case "top_bottom"
+		Return "to bottom"
+	Case "right_left"
+		Return "to left"
+	Case "bottom_top"
+		Return "to top"
+	Case "left_right"
+		Return "to right"
+	Case "tl_br"
+		Return "to bottom right"
+	Case "bl_tr"
+		Return "to top right"
+	Case "tr_bl"
+		Return "to bottom left"
+	Case "br_tl"
+		Return "to top left"
+	End Select
+End Sub
+
+'remove an item from a list
+Sub ListRemoveItem(lst As List, itm As String) As List
+	Dim idx As Int = lst.IndexOf(itm)
+	If idx <> -1 Then
+		lst.RemoveAt(idx)
+	End If
+	Return lst
+End Sub
+
+'add a distinct item to the list
+Sub ListAddDistinctItem(lst As List, itm As String) As List
+	lst = ListRemoveItem(lst, itm)
+	lst.Add(itm)
+	Return lst
+End Sub
+
+Sub AddStyleRunTime(VC As VueComponent, prop As String, value As String)
+	prop = BANanoShared.CamelCase(prop)
+	Dim items As Map = VC.GetData(bindStyle)
+	items.Put(prop, value)
+	VC.SetData(bindStyle, items)
+End Sub
+
+Sub AddStyleOnApp(A As VuetifyApp, prop As String, value As String)
+	prop = BANanoShared.CamelCase(prop)
+	Dim items As Map = A.GetData(bindStyle)
+	items.Put(prop, value)
+	A.SetData(bindStyle, items)
+End Sub
+
+Sub RemoveStyleRunTime(VC As VueComponent, prop As String)
+	prop = BANanoShared.CamelCase(prop)
+	Dim items As Map = VC.GetData(bindStyle)
+	items.Remove(prop)
+	VC.SetData(bindStyle, items)
+End Sub
+
+Sub RemoveStyleOnApp(A As VuetifyApp, prop As String)
+	prop = BANanoShared.CamelCase(prop)
+	Dim items As Map = A.GetData(bindStyle)
+	items.Remove(prop)
+	A.SetData(bindStyle, items)
+End Sub
+
+'update classes at runtime
+Sub AddClassRunTime(VC As VueComponent, sClass As String)
+	Dim items As List = VC.GetData(bindClass)
+	items = ListAddDistinctItem(items, sClass)
+	VC.SetData(bindClass, items)
+End Sub
+
+Sub AddClassBound(sClass As String)
+	If sClass = "text-" Then Return
+	If sClass = "text-decoration-" Then Return
+	Dim items As List = GetData(bindClass)
+	items = ListAddDistinctItem(items, sClass)
+	SetData(bindClass, items)
+End Sub
+
+Sub AddClassBoundOnConditionTrue(sClass As String, bCondition As Boolean)
+	If bCondition = False Then Return
+	Dim items As List = GetData(bindClass)
+	items = ListAddDistinctItem(items, sClass)
+	SetData(bindClass, items)
+End Sub
+
+'update classes at runtime
+Sub ToggleClassRunTime(VC As VueComponent, sClass As String)
+	Dim items As List = VC.GetData(bindClass)
+	Dim idxpos As Int = items.IndexOf(sClass)
+	If idxpos = -1 Then
+		items = ListAddDistinctItem(items, sClass)
+	Else
+		items = ListRemoveItem(items, sClass)
+	End If	
+	VC.SetData(bindClass, items)
+End Sub
+
+'update classes at runtime
+Sub ToggleClassOnApp(A As VuetifyApp, sClass As String)
+	Dim items As List = A.GetData(bindClass)
+	Dim idxpos As Int = items.IndexOf(sClass)
+	If idxpos = -1 Then
+		items = ListAddDistinctItem(items, sClass)
+	Else
+		items = ListRemoveItem(items, sClass)
+	End If	
+	A.SetData(bindClass, items)
+End Sub
+
+'update classes at runtime
+Sub AddClassRunTimeOnApp(A As VuetifyApp, sClass As String)
+	Dim items As List = A.GetData(bindClass)
+	items = ListAddDistinctItem(items, sClass)
+	A.SetData(bindClass, items)
+End Sub
+
+'remove classes at runtime
+Sub RemoveClassRunTime(VC As VueComponent, sClass As String)
+	Dim items As List = VC.GetData(bindClass)
+	items = ListRemoveItem(items, sClass)
+	VC.SetData(bindClass, items)
+End Sub
+
+'remove classes at runtime
+Sub RemoveClassRunTimeOnApp(A As VuetifyApp, sClass As String)
+	Dim items As List = A.GetData(bindClass)
+	items = ListRemoveItem(items, sClass)
+	A.SetData(bindClass, items)
+End Sub
+
+'update text alignment
+Sub UpdateTextAlign(VC As VueComponent, ta As String)
+	ta = ta.replace("none","")
+	Dim items As List = VC.GetData(bindClass)
+	For Each tax As String In BANanoShared.TextAlign
+		items = ListRemoveItem(items, tax)
+	Next
+	If ta <> "" Then
+		items.add(ta)
+	End If
+	VC.SetData(bindClass, items)
+End Sub
+
+Sub UpdateTextAlignOnApp(A As VuetifyApp, ta As String)
+	ta = ta.replace("none","")
+	Dim items As List = A.GetData(bindClass)
+	For Each tax As String In BANanoShared.TextAlign
+		items = ListRemoveItem(items, tax)
+	Next
+	If ta <> "" Then
+		items.add(ta)
+	End If
+	A.SetData(bindClass, items)
+End Sub
+
+Sub UpdateTextDecoration(VC As VueComponent, tc As String)
+	'the binding class
+	Dim items As List = VC.GetData(bindClass)
+	'remove existing text colors
+	For Each tc As String In BANanoShared.TextDecoration
+		items = ListRemoveItem(items, tc)
+	Next
+	items.Add(tc)
+	VC.SetData(bindClass, items)
+End Sub
+
+Sub UpdateTextDecorationOnApp(A As VuetifyApp, tc As String)
+	'the binding class
+	Dim items As List = A.GetData(bindClass)
+	'remove existing text colors
+	For Each tc As String In BANanoShared.TextDecoration
+		items = ListRemoveItem(items, tc)
+	Next
+	items.Add(tc)
+	A.SetData(bindClass, items)
+End Sub
+
+'update the text color of an item
+Sub UpdateTextColor(VC As VueComponent, sColor As String, sIntensity As String)
+	'the binding class
+	Dim items As List = VC.GetData(bindClass)
+	'remove existing text colors
+	For Each tc As String In BANanoShared.TextColors
+		items = ListRemoveItem(items, tc)
+	Next
+	'remove existing text intensities
+	For Each ti As String In BANanoShared.TextColorIntensities
+		items = ListRemoveItem(items, ti)
+	Next
+	'add the text color we want
+	Dim ntc As String = NormalizeTextColor(sColor)
+	If ntc <> "" Then items.add(ntc)
+	'add the intensity
+	Dim nti As String = NormalizeTextIntensity(sIntensity)
+	If nti <> "" Then items.add(nti)
+	VC.SetData(bindClass, items)
+End Sub
+
+'update the color of an item
+Sub UpdateColor(VC As VueComponent, sColor As String, sIntensity As String)
+	'the binding class
+	Dim items As List = VC.GetData(bindClass)
+	'remove existing colors
+	For Each tc As String In BANanoShared.Colors
+		items = ListRemoveItem(items, tc)
+	Next
+	'remove existing intensities
+	For Each ti As String In BANanoShared.Intensities
+		items = ListRemoveItem(items, ti)
+	Next
+	'add the text color we want
+	Dim ntc As String = NormalizeColor(sColor)
+	If ntc <> "" Then items.add(ntc)
+	'add the intensity
+	Dim nti As String = NormalizeIntensity(sIntensity)
+	If nti <> "" Then items.add(nti)
+	VC.SetData(bindClass, items)
+End Sub
+
+
+
+Sub UpdateColorOnApp(A As VuetifyApp, sColor As String, sIntensity As String)
+	'the binding class
+	Dim items As List = A.GetData(bindClass)
+	'remove existing colors
+	For Each tc As String In BANanoShared.Colors
+		items = ListRemoveItem(items, tc)
+	Next
+	'remove existing intensities
+	For Each ti As String In BANanoShared.Intensities
+		items = ListRemoveItem(items, ti)
+	Next
+	'add the text color we want
+	Dim ntc As String = NormalizeColor(sColor)
+	If ntc <> "" Then items.add(ntc)
+	'add the intensity
+	Dim nti As String = NormalizeIntensity(sIntensity)
+	If nti <> "" Then items.add(nti)
+	A.SetData(bindClass, items)
+End Sub
+
+Sub UpdateTextColorOnApp(A As VuetifyApp, sColor As String, sIntensity As String)
+	'the binding class
+	Dim items As List = A.GetData(bindClass)
+	'remove existing text colors
+	For Each tc As String In BANanoShared.TextColors
+		items = ListRemoveItem(items, tc)
+	Next
+	'remove existing text intensities
+	For Each ti As String In BANanoShared.TextColorIntensities
+		items = ListRemoveItem(items, ti)
+	Next
+	'add the text color we want
+	Dim ntc As String = NormalizeTextColor(sColor)
+	If ntc <> "" Then items.add(ntc)
+	'add the intensity
+	Dim nti As String = NormalizeTextIntensity(sIntensity)
+	If nti <> "" Then items.add(nti)
+	A.SetData(bindClass, items)
+End Sub
+
+Sub NormalizeColor(s As String) As String
+	If BANano.IsNull(s) Or BANano.IsUndefined(s) Then s = ""
+	'
+	s = s.Replace("none", "")
+	s = s.replace("normal", "")
+	'
+	s = s.trim
+	Return s
+End Sub
+
+Sub NormalizeIntensity(s As String) As String
+	If BANano.IsNull(s) Or BANano.IsUndefined(s) Then s = ""
+	'
+	s = s.Replace("none", "")
+	s = s.replace("normal", "")
+	'
+	s = s.trim
+	Return s
+End Sub
+
+
+Sub NormalizeTextColor(s As String) As String
+	If BANano.IsNull(s) Or BANano.IsUndefined(s) Then s = ""
+	'
+	s = s.Replace("none", "")
+	s = s.replace("normal", "")
+	'
+	s = $"${s}--text"$
+	If s = "--text" Then s = ""
+	'
+	s = s.trim
+	Return s
+End Sub
+
+Sub NormalizeTextIntensity(i As String) As String
+	If BANano.IsNull(i) Or BANano.IsUndefined(i) Then i = ""
+	'
+	i = i.replace("none", "")
+	i = i.replace("normal", "")
+	'
+	i = $"text--${i}"$
+	If i= "text--" Then i = ""
+	'
+	i = i.trim
+	Return i
 End Sub
 
 'set the master html for the app
@@ -1926,6 +2247,8 @@ Sub setStates(varBindings As String)
 	For Each mt As String In mxItems
 		Dim k As String = BANanoShared.MvField(mt,1,"=")
 		Dim v As String = BANanoShared.MvField(mt,2,"=")
+		k = k.Trim
+		v = v.trim
 		If v.EqualsIgnoreCase("false") Then
 			If k <> "" Then
 				bindings.Put(k, False)
@@ -2262,8 +2585,10 @@ End Sub
 
 'add an attribute
 Sub AddAttr(varProp As String, varValue As String)
+	Try
 	If BANano.IsUndefined(varValue) Or BANano.IsNull(varValue) Then Return
 	If BANano.IsNumber(varValue) Then varValue = BANanoShared.CStr(varValue)
+	
 	If varValue = "none" Then varValue = ""
 	If varValue = "" Then Return
 	If varProp = "align" And varValue.EqualsIgnoreCase("false") Then Return
@@ -2296,7 +2621,7 @@ Sub AddAttr(varProp As String, varValue As String)
 				xAttributes.Put(varProp, varValue)
 			End If
 		End If
-	Else
+	Else if BANano.IsString(varValue) Then
 		'varValue = varValue.Replace("~","=")
 		'varValue = varValue.Replace("#","$")
 		'we are adding a string
@@ -2339,7 +2664,9 @@ Sub AddAttr(varProp As String, varValue As String)
 		If bindings.ContainsKey("true") Then bindings.Remove("true")
 		If bindings.ContainsKey("false") Then bindings.Remove("false")
 	End If
-	Return
+Catch
+Log(LastException)
+End Try
 End Sub
 
 Sub RemoveCodeBindings(b As List)
@@ -2365,6 +2692,8 @@ Sub setAttributes(varAttributes As String)
 	For Each mt As String In mxItems
 		Dim k As String = BANanoShared.MvField(mt,1,"=")
 		Dim v As String = BANanoShared.MvField(mt,2,"=")
+		k = k.Trim
+		v = v.trim
 		AddAttr(k, v)
 	Next
 End Sub
@@ -2375,6 +2704,8 @@ Sub setStyles(varStyles As String)
 	For Each mt As String In mxItems
 		Dim k As String = BANanoShared.MvField(mt,1,"=")
 		Dim v As String = BANanoShared.MvField(mt,2,"=")
+		k = k.trim
+		v = v.trim
 		AddStyle(k, v)
 	Next
 End Sub
@@ -5383,6 +5714,7 @@ Sub FormatDisplayDate(item As String, sFormat As String) As String			'ignoredead
 		If BANano.isnull(item) Or BANano.IsUndefined(item) Then Return ""
 		Dim bo As BANanoObject = BANano.RunJavascriptMethod("dayjs", Array(item))
 		Dim sDate As String = bo.RunMethod("format", Array(sFormat)).Result
+		If sDate = "Invalid Date" Then Return ""
 		Return sDate
 	Catch
 		Return ""
@@ -8045,6 +8377,28 @@ Sub BindAllEvents
 	SetOnEvent(mCallBack, "contextmenu:time-category", "")
 	SetOnEvent(mCallBack, "moved", "")
 	SetOnEvent(mCallBack, "click:outside", "")
+End Sub
+
+
+'get the binding name from caption
+Sub GetCaptionName(aCaption As String, orName As String) As String
+	If aCaption.StartsWith("{{") Then
+		aCaption = aCaption.Replace("{","")
+		aCaption = aCaption.Replace("}", "")
+		aCaption = aCaption.Trim
+		aCaption = aCaption.tolowercase
+		Return aCaption
+	Else
+		Return orName
+	End If		
+End Sub
+
+Sub SetCaptionValue(dBinding As String, aCaption As String, defValue As String)
+	If aCaption.StartsWith("{{") Then
+		SetData(dBinding, defValue)
+	Else
+		SetData(dBinding, aCaption)
+	End If		
 End Sub
 
 'get the chip ref from the chip group
@@ -12044,10 +12398,16 @@ Sub NewListViewItemOptions
 	'
 	Options.avatar  = "avatar"
 	Options.avatarclass  = ""
+	Options.AvatarAttr = ""
 	
 	Options.avataricon  = "avataricon"
 	Options.avatariconcolor  = "avatariconcolor"
 	Options.avatariconclass  = ""
+	Options.AvatarIconAttr = ""
+
+	Options.AvatarText = "avatartext"
+	Options.AvatarTextClass = ""
+	Options.AvatarTextColor = ""
 	
 	Options.icon  = "icon"
 	Options.iconclass  = ""
@@ -12148,4 +12508,12 @@ Sub NewListViewItemOptions
 	Options.UseSubTitle3 = True
 	Options.UseSubTitle4 = True
 	Options.UseTitle = True
+End Sub
+
+Sub AddAttrBoolean(prop As String)
+	BANano.GetElement($"${mName}"$).SetField(prop, True)
+End Sub
+
+Sub RemoveAttrBoolean(prop As String)
+	BANano.GetElement($"${mName}"$).SetField(prop, False)
 End Sub

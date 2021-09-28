@@ -56,6 +56,85 @@ Sub Class_Globals
 	Public refs As BANanoObject
 	Public This As BANanoObject
 	Public ProgressLoaderName As String
+	Private vHeartBeat As Long
+End Sub
+
+'start a heartbeat to save the user session
+Sub StartHeartBeat(persist As Boolean, seconds As Long)
+	If persist Then
+		'request storage persistence
+		Log("Requesting persistent storage...")
+		Dim res As Boolean = BANano.Await(StoragePersistWait)		'ignore
+		'what is the quota left
+		Dim sq As StorageQuota = BANano.Await(StorageEstimateWait)
+		Log("Remaining Storage Size: " & FormatFileSize(sq.remaining))
+	End If
+	Dim cb As BANanoObject = BANano.CallBack(Me, "savesession", Null)
+	Dim resi As Int = BANano.Window.SetInterval(cb, seconds)
+	vHeartBeat = resi
+End Sub
+
+'delete the session data for the page
+Sub DeleteSession
+	BANano.EmptyLocalStorage(mName)
+End Sub
+
+'request persist of storage
+Sub StoragePersistWait As Boolean
+	Dim ispersisted As BANanoPromise = BANano.Navigator.GetField("storage").RunMethod("persist", Null)
+	Dim res As Boolean = BANano.Await(ispersisted)
+	Return res
+End Sub
+
+'check storage estimate
+Sub StorageEstimateWait As StorageQuota
+	Dim obj As BANanoPromise = BANano.Navigator.GetField("storage").RunMethod("estimate", Null)
+	Dim res As Map = BANano.Await(obj)
+	Dim q As StorageQuota = StorageToQuota(res)
+	Return q
+End Sub
+
+'get storage quota
+private Sub StorageToQuota(m As Map) As StorageQuota
+	Dim sq As StorageQuota
+	sq.Initialize
+	sq.quota = m.get("quota")
+	sq.usage = m.get("usage")
+	sq.percentUsed = (sq.usage / sq.quota) * 100
+	sq.remaining = sq.quota - sq.usage
+	Return sq
+End Sub
+
+
+'stop the heartbeat to save session state
+Sub StopHeartBeat
+	BANano.Window.ClearInterval(vHeartBeat)
+End Sub
+
+'save session data to cookie jar as long as the internet
+'is active
+Sub SaveSession
+	Dim bonline As Boolean = BANano.CheckInternetConnectionWait
+	If bonline Then
+		Dim jsonData As String = BANano.ToJson(data)
+		BANano.SetLocalStorage(mName, jsonData)
+	End If
+End Sub
+
+'load session data from cookie using component name
+Sub ReadSession
+	Dim cookiejar As String = BANano.GetLocalStorage(mName)
+	If BANano.IsNull(cookiejar) Then Return
+	Dim cookiem As Map = BANano.FromJson(cookiejar)
+	For Each k As String In cookiem.Keys
+		Dim v As Object = cookiem.Get(k)
+		SetData(k, v)
+	Next
+End Sub
+
+'set as the start page
+Sub StartPage
+	Path = "/"
 End Sub
 
 'link the progress loader to the app
@@ -306,38 +385,148 @@ Sub Initialize (CallBack As Object, Name As String) As VueComponent
 	getPlaceHolderNode.empty
 	getAppendHolderNode.empty
 	'
-	SetMethod(Me, "nicedate", Null)
-	SetMethod(Me, "nicetime", Null)
-	SetMethod(Me, "nicemoney", Null)
-	SetMethod(Me, "nicefilesize", Null)
-	SetMethod(Me, "thousands", Null)
-	SetMethod(Me, "nicemonth", Null)
-	SetMethod(Me, "niceyear", Null)
-	SetMethod(Me, "json2list", Null)
-	Dim x As Object, y As Object
+	Dim x As Object, y As Object, z As Object, a As Object
+	SetMethod(Me, "nicedate", Array(x))
+	SetMethod(Me, "nicetime", Array(x))
+	SetMethod(Me, "NiceTimeOnly", Array(x))
+	SetMethod(Me, "nicemoney", Array(x))
+	SetMethod(Me, "nicefilesize", Array(x))
+	SetMethod(Me, "thousands", Array(x))
+	SetMethod(Me, "nicemonth", Array(x))
+	SetMethod(Me, "niceyear", Array(x))
+	SetMethod(Me, "json2list", Array(x))
 	SetMethod(Me, "getdateformat", Array(x, y))
 	SetMethod(Me, "getmoneyformat", Array(x, y))
 	SetMethod(Me, "getfilesize", Array(x))
-	Dim x As Object
-	Dim y As Object
 	SetMethod(Me, "FormatDisplayDate", Array(x, y))
+	SetMethod(Me, "FormatDisplayNumber", Array(x, y))
+	SetMethod(Me, "FormatFileSize", Array(x))
+	SetMethod(Me, "RagSmiley", Array(x, y, z, a))
+	SetMethod(Me, "Reactions", Array(x))
+	SetMethod(Me, "RagCircles", Array(x))
+	SetMethod(Me, "GenderAvatar", Array(x))
+	SetMethod(Me, "UpDown", Array(x))
 	Return Me
 End Sub
 
+Sub OnComputed(k As String, methodName As String) 
+	SetComputed(k, mCallBack, methodName, Null)
+End Sub
+
+Sub OnWatch(k As String, bImmediate As Boolean, bDeep As Boolean, methodName As String) 
+	SetWatch(k, bImmediate, bDeep, mCallBack, methodName, Null) 
+End Sub
+
+'return an image path for a variance (up, down, same)
+Public Sub UpDown(variance As String) As String		'ignore
+	Select Case variance
+	Case 1
+		Return "./assets/up.png"
+	Case 2
+		Return "./assets/down.png"
+	End Select
+End Sub
+
+'for computation
+Sub RagSmiley(item As String) As String  'ignore
+	Select Case item
+	Case 1
+		Return "./assets/sadface.png"
+	Case 2
+		Return "./assets/neutralface.png"	
+	Case 3
+		Return "./assets/happyface.png"
+	End Select
+End Sub
+
+Sub Reactions(item As String) As String  'ignore
+	Select Case item
+	Case 1
+		Return "./assets/like.png"
+	Case 2
+		Return "./assets/love.png"	
+	Case 3
+		Return "./assets/haha.png"
+	Case 4
+		Return "./assets/wow.png"
+	Case 5
+		Return "./assets/sad.png"
+	Case 6
+		Return "./assets/angry.png"
+	End Select
+End Sub
+
+Public Sub RagCircles(dVariance As Int) As String   'ignore
+    Select Case dVariance
+    Case 1
+		Return "./assets/red.png"
+    Case 3
+         Return "./assets/green.png"
+    Case 2
+		Return "./assets/orange.png"
+    Case 4 
+		Return "./assets/gray.png"
+    End Select
+End Sub	
+
+Public Sub GenderAvatar(gender As String) As String		'ignore
+    Select Case gender
+    Case 1
+		Return "./assets/female.png"
+    Case 2
+		Return "./assets/male.png"
+    End Select
+End Sub
+
+Sub GetDefault(m As Map, prop As String, def As String) As String
+	prop = prop.tolowercase
+	Return m.getdefault(prop,def)
+End Sub
+
+Sub SetDefault(m As Map, prop As String, def As Object) As Map
+	prop = prop.tolowercase
+	m.put(prop,def)
+	Return m
+End Sub
+
+Public Sub ExpenditureRAG(dVariance As Double) As String
+    If dVariance > 0 Then
+        Return "./assets/green.png"
+    else if dVariance < 0 Then
+        Return "./assets/red.png"
+    else if dVariance = 0 Then
+        Return "./assets/orange.png"
+	Else 
+        Return "./assets/gray.png"
+    End If
+End Sub
+
+Public Sub ExpectedRAG(dValue As Double) As String
+    If dValue = 0 Then
+            Return "./assets/orange.png"
+    else if dValue > 0 Then
+            Return "./assets/red.png"
+    else if dValue < 0 Then
+            Return "/assets/green.png"
+    Else 
+            Return "./assets/red.png"
+    End If
+End Sub
+
 private Sub getdateformat(item As String, sFormat As String) As String		'ignoredeadcode
-	Dim svalue As String = FormatDisplayDate(item, sFormat)
-	Return svalue
+	Dim str As String = RunMethod("FormatDisplayDate", Array(item, sFormat)).Result
+	Return str
 End Sub
 
 
 private Sub getmoneyformat(item As String, sformat As String) As String		'ignoredeadcode
-	Dim svalue As String = FormatDisplayNumber(item, sformat)
-	Return svalue
+	Dim str As String = RunMethod("FormatDisplayNumber", Array(item, sformat)).Result
+	Return str
 End Sub
 
 private Sub getfilesize(item As String) As String							'ignoredeadcode
-	Dim svalue As String = FormatFileSize(item)
-	Return svalue
+	Dim str As String = RunMethod("FormatFileSize", Array(item)).Result
+	Return str
 End Sub
 
 Sub ComponentExists(compName As String) As Boolean
@@ -565,8 +754,10 @@ Sub FormatDisplayDate(item As String, sFormat As String) As String			'ignoredead
 		If BANano.isnull(item) Or BANano.IsUndefined(item) Then Return ""
 		Dim bo As BANanoObject = BANano.RunJavascriptMethod("dayjs", Array(item))
 		Dim sDate As String = bo.RunMethod("format", Array(sFormat)).Result
+		If sDate = "Invalid Date" Then Return ""
 		Return sDate
 	Catch
+		Log(LastException)
 		Return ""
 	End Try		
 End Sub
@@ -608,6 +799,9 @@ Sub NiceTime(stime As String) As String				'ignoredeadcode
 	Return FormatDisplayDate(stime, "ddd, DD MMM YYYY @ HH:mm:ss")
 End Sub
 
+Sub NiceTimeOnly(stime As String) As String				'ignoredeadcode
+	Return FormatDisplayDate(stime, "HH:mm")
+End Sub
 
 Sub NiceMoney(smoney As String) As String				'ignoredeadcode
 	Return FormatDisplayNumber(smoney, "0,0.00")
@@ -983,6 +1177,10 @@ Sub AddHTML(html As String)
 	Template.Append(html)
 End Sub
 
+Sub OnMounted(methodName As String, args As List)
+	SetMounted(mCallBack, methodName, args)
+End Sub
+
 'set mounted
 Sub SetMounted(Module As Object,methodName As String, args As List) As VueComponent
 	methodName = methodName.ToLowerCase
@@ -994,6 +1192,11 @@ Sub SetMounted(Module As Object,methodName As String, args As List) As VueCompon
 	opt.Put("mounted", mounted)
 	SetMethod(Module, methodName, args)
 	Return Me
+End Sub
+
+'set updated
+Sub OnUpdated(methodName As String, args As List)
+	SetUpdated(mCallBack, methodName, args)
 End Sub
 
 'set updated
@@ -1009,6 +1212,10 @@ Sub SetUpdated(Module As Object, methodName As String, args As List) As VueCompo
 	Return Me
 End Sub
 
+Sub OnBeforeMount(methodName As String, args As List)
+	SetBeforeMount(mCallBack, methodName, args)
+End Sub
+
 'set beforemount
 Sub SetBeforeMount(Module As Object, methodName As String, args As List) As VueComponent
 	methodName = methodName.ToLowerCase
@@ -1016,10 +1223,15 @@ Sub SetBeforeMount(Module As Object, methodName As String, args As List) As VueC
 		Log($"${mName}.SetBeforeMount: ${methodName} not found!"$)
 		Return Me
 	End If
-	Dim beforeMount As BANanoObject = BANano.CallBack(Module, methodName, args)
-	opt.Put("beforeMount", beforeMount)
+	Dim BeforeMount As BANanoObject = BANano.CallBack(Module, methodName, args)
+	opt.Put("beforeMount", BeforeMount)
 	SetMethod(Module, methodName, args)
 	Return Me
+End Sub
+
+'set beforeupdate
+Sub OnBeforeUpdate(methodName As String, args As List)
+	SetBeforeUpdate(mCallBack, methodName, args)
 End Sub
 
 'set beforeupdate
@@ -1036,6 +1248,11 @@ Sub SetBeforeUpdate(Module As Object, methodName As String, args As List) As Vue
 End Sub
 
 'set before destroy
+Sub OnBeforeDestroy(methodName As String, args As List)
+	SetBeforeDestroy(mCallBack, methodName, args)
+End Sub
+
+'set before destroy
 Sub SetBeforeDestroy(Module As Object, methodName As String, args As List) As VueComponent
 	methodName = methodName.ToLowerCase
 	If SubExists(Module, methodName) = False Then 
@@ -1048,6 +1265,9 @@ Sub SetBeforeDestroy(Module As Object, methodName As String, args As List) As Vu
 	Return Me
 End Sub
 
+Sub OnBeforeCreate(methodName As String, args As List)
+	SetBeforeCreate(mCallBack, methodName, args)
+End Sub
 
 'set before created
 Sub SetBeforeCreate(Module As Object, methodName As String, args As List) As VueComponent
@@ -1063,6 +1283,10 @@ Sub SetBeforeCreate(Module As Object, methodName As String, args As List) As Vue
 End Sub
 
 
+Sub OnCreated(methodName As String, args As List)
+	SetCreated(mCallBack, methodName, args)
+End Sub
+
 'set created
 Sub SetCreated(Module As Object, methodName As String, args As List) As VueComponent
 	methodName = methodName.ToLowerCase
@@ -1074,6 +1298,10 @@ Sub SetCreated(Module As Object, methodName As String, args As List) As VueCompo
 	opt.Put("created", created)
 	SetMethod(Module, methodName, args)
 	Return Me
+End Sub
+
+Sub OnDestroyed(methodName As String, args As List)
+	SetDestroyed(mCallBack, methodName, args)
 End Sub
 
 'set destroyed
@@ -1089,6 +1317,9 @@ Sub SetDestroyed(Module As Object, methodName As String, args As List) As VueCom
 	Return Me
 End Sub
 
+Sub OnActivated(methodName As String, args As List)
+	SetActivated(mCallBack, methodName, args)
+End Sub
 
 'set activated
 Sub SetActivated(Module As Object, methodName As String, args As List) As VueComponent
@@ -1133,6 +1364,10 @@ End Sub
 
 Sub AddRouteProperty(propName As String, propValue As String)
 	mprops.Put(propName, propValue)
+End Sub
+
+Sub OnDeActivated(methodName As String, args As List)
+	SetDeActivated(mCallBack, methodName, args)
 End Sub
 
 'set deactivated
@@ -1347,6 +1582,7 @@ Sub Component As Map
 	Dim sTemplate As String = Template.ToString
 	sTemplate = $"<span>${sTemplate}</span>"$
 	sTemplate = sTemplate.Replace("v-template", "template")
+	sTemplate = sTemplate.Replace("v-td", "td")
 	Dim cb As BANanoObject = BANano.CallBack(Me, "returndata", Null)
 	opt.Put("data", cb.Result)
 	opt.Put("methods", methods)
@@ -1419,6 +1655,10 @@ Sub AddProperties(propsList As List)
 	Next
 End Sub
 
+Sub AddFilter(methodName As String)
+	SetFilter(mCallBack, methodName)
+End Sub
+
 'set direct method
 Sub SetFilter(Module As Object, methodName As String)
 	methodName = methodName.ToLowerCase
@@ -1432,6 +1672,11 @@ Sub SetFilter(Module As Object, methodName As String)
 End Sub
 
 'set computed
+Sub AddComputed(k As String, methodName As String)
+	SetComputed(k, mCallBack, methodName, Null)
+End Sub
+
+'set computed
 Sub SetComputed(k As String, Module As Object, methodName As String, args As List)
 	k = k.tolowercase
 	methodName = methodName.ToLowerCase
@@ -1441,6 +1686,10 @@ Sub SetComputed(k As String, Module As Object, methodName As String, args As Lis
 		methods.Put(methodName, cb)
 		data.Remove(methodName)
 	End If
+End Sub
+
+Sub AddWatch(k As String, bImmediate As Boolean, bDeep As Boolean, methodName As String)
+	SetWatch(k, bImmediate, bDeep, mCallBack, methodName, Null)
 End Sub
 
 'set watches 
@@ -1457,6 +1706,10 @@ Sub SetWatch(k As String, bImmediate As Boolean, bDeep As Boolean, Module As Obj
 		methods.Put(methodName, cb)
 		data.Remove(methodName)
 	End If
+End Sub
+
+Sub AddMethod(methodName As String, args As List)
+	SetMethod(mCallBack, methodName, args)
 End Sub
 
 'set direct method
@@ -2256,4 +2509,821 @@ Sub RealTimeRemoveItemWhere(lstName As String, wm As Map)
 	If mpos >= 0 Then
 		SetDataSpliceRemove(lstName, mpos, 1)
 	End If
+End Sub
+
+Sub OnTimeOut(MethodName As String, ms As Int)
+	SetTimeOut(MethodName, ms)
+End Sub
+
+Sub OnInterval(MethodName As String, ms As Int) As Int
+	Return SetInterval(MethodName, ms, Null)
+End Sub
+
+'returns whether a map exists in a list based on a property
+Sub ListContains(listname As String, prop As String, value As String) As Boolean
+	Dim lst As List = GetData(listname)
+	Dim collection As BANanoCollectJS
+	collection.Initialize(lst)
+	Dim bExist As Boolean = collection.exists(prop, value)
+	Return bExist
+End Sub
+
+'returns the map based on a property
+Sub ListFind(listname As String, prop As String, value As String) As Map
+	Dim lst As List = GetData(listname)
+	Dim collection As BANanoCollectJS
+	collection.Initialize(lst)
+	Dim mExist As Map = collection.firstWhere(prop, value)
+	Return mExist
+End Sub
+
+'returns the index based on a property
+Sub ListIndexOf(listname As String, prop As String, value As String) As Long
+	Dim lst As List = GetData(listname)
+	Dim collection As BANanoCollectJS
+	collection.Initialize(lst)
+	Dim mExist As Map = collection.firstWhere(prop, value)
+	If BANano.IsNull(mExist) Or BANano.IsUndefined(mExist) Then Return -1
+	Dim pos As Object = collection.search(mExist)
+	If pos = False Then Return -1
+	Return pos
+End Sub
+
+'update field visibility
+Sub UpdateFieldVisibile(cName As String, b As Boolean)
+	Dim fKey As String = $"${cName}show"$
+	Dim iKey As String = $"${cName}vif"$
+	SetData(fKey, b)
+	SetData(iKey, b)
+End Sub
+
+'update read only
+Sub UpdateFieldReadOnly(cName As String, b As Boolean)
+	Dim fKey As String = $"${cName}readonly"$
+	SetData(fKey, b)
+End Sub
+
+'update required
+Sub UpdateFieldRequired(cName As String, b As Boolean)
+	Dim fKey As String = $"${cName}required"$
+	SetData(fKey, b)
+End Sub
+
+'update disabled
+Sub UpdateFieldDisabled(cName As String, b As Boolean)
+	Dim fKey As String = $"${cName}disabled"$
+	SetData(fKey, b)
+End Sub
+
+'update loading
+Sub UpdateFieldLoading(cName As String, b As Boolean)
+	Dim fKey As String = $"${cName}loading"$
+	SetData(fKey, b)
+End Sub
+
+'updating caption
+Sub UpdateFieldCaption(cName As String, s As String)
+	Dim fKey As String = $"${cName}caption"$
+	SetData(fKey, s)
+End Sub
+
+'update items using list of objects
+Sub UpdateFieldItems(cName As String, items As List)
+	Dim fKey As String = $"${cName}items"$
+	SetData(fKey, items)
+End Sub
+
+'clear the items in the list
+Sub UpdateFieldClearItems(cName As String)
+	Dim items As List
+	items.Initialize 
+	Dim fKey As String = $"${cName}items"$
+	SetData(fKey, items)
+End Sub
+
+'add items from a map to the autocomplete, combo or select
+Sub UpdateFieldAddItems(cName As String, items As Map)
+	Dim fKey As String = $"${cName}items"$
+	Dim itemvalue As String = GetData($"${cName}itemvalue"$)
+	Dim itemtext As String = GetData($"${cName}itemtext"$)
+	'get existing items
+	Dim oitems As List = GetData(fKey)
+	For Each ik As String In items.keys
+		Dim iv As String = items.Get(ik)	
+		Dim ni As Map = CreateMap()
+		ni.Put(itemvalue, ik)
+		ni.Put(itemtext, iv)
+		oitems.Add(ni)
+	Next
+	SetData(fKey, oitems)
+End Sub
+
+'add a map with colors you want
+Sub UpdateFieldAddColors(cName As String, items As Map)
+	Dim fKey As String = $"${cName}items"$
+	Dim itemvalue As String = GetData($"${cName}itemvalue"$)
+	Dim itemtext As String = GetData($"${cName}itemtext"$)
+	
+	'get existing items
+	Dim oitems As List = GetData(fKey)
+	For Each ik As String In items.keys
+		Dim iv As String = items.Get(ik)	
+		Dim ni As Map = CreateMap()
+		ni.Put(itemvalue, ik)
+		ni.Put(itemtext, iv)
+		oitems.Add(ni)
+	Next
+	SetData(fKey, oitems)
+End Sub
+
+'add a person
+Sub UpdateFieldAddPerson(cName As String, value As String, text As String, avatar As String)
+	Dim fKey As String = $"${cName}items"$
+	Dim itemvalue As String = GetData($"${cName}itemvalue"$)
+	Dim itemtext As String = GetData($"${cName}itemtext"$)
+	Dim itemavatar As String = GetData($"${cName}itemavatar"$)
+	
+	'get existing items
+	Dim oitems As List = GetData(fKey)
+	Dim ni As Map = CreateMap()
+	ni.Put(itemvalue, value)
+	ni.Put(itemtext, text)
+	ni.Put(itemavatar, avatar)
+	oitems.Add(ni)
+	SetData(fKey, oitems)
+End Sub
+
+'update the color
+Sub UpdateFieldColor(cName As String, cColor As String, cColorIntensity As String)
+	'the binding class
+	Dim xbindclass As String = $"${cName}class"$
+	Dim items As List = GetData(xbindclass)
+	'remove existing colors
+	For Each tc As String In BANanoShared.Colors
+		items = BANanoShared.ListRemoveItem(items, tc)
+	Next
+	'remove existing intensities
+	For Each ti As String In BANanoShared.Intensities
+		items = BANanoShared.ListRemoveItem(items, ti)
+	Next
+	'add the text color we want
+	Dim ntc As String = BANanoShared.NormalizeColor(cColor)
+	If ntc <> "" Then items.add(ntc)
+	'add the intensity
+	Dim nti As String = BANanoShared.NormalizeIntensity(cColorIntensity)
+	If nti <> "" Then items.add(nti)
+	SetData(xbindclass, items)
+End Sub
+
+'update the text color
+Sub UpdateFieldTextColor(cName As String, cColor As String, cColorIntensity As String)
+	'the binding class
+	Dim xbindclass As String = $"${cName}class"$
+	Dim items As List = GetData(xbindclass)
+	'remove existing text colors
+	For Each tc As String In BANanoShared.TextColors
+		items = BANanoShared.ListRemoveItem(items, tc)
+	Next
+	'remove existing text intensities
+	For Each ti As String In BANanoShared.TextColorIntensities
+		items = BANanoShared.ListRemoveItem(items, ti)
+	Next
+	'add the text color we want
+	Dim ntc As String = BANanoShared.NormalizeTextColor(cColor)
+	If ntc <> "" Then items.add(ntc)
+	'add the intensity
+	Dim nti As String = BANanoShared.NormalizeTextIntensity(cColorIntensity)
+	If nti <> "" Then items.add(nti)
+	SetData(xbindclass, items)
+End Sub
+
+'update an image source
+Sub UpdateFieldImage(cName As String, src As String)
+	Dim bsrc As String = GetData($"${cName}src"$)
+	SetData(bsrc, src)
+End Sub
+
+'update the lazy image src
+Sub UpdateFieldLazyImage(cName As String, src As String)
+	Dim bsrc As String = GetData($"${cName}lazysrc"$)
+	SetData(bsrc, src)
+End Sub
+
+'toggle the password eyes
+Sub UpdateFieldTogglePassword(elID As String)
+	Dim sShowEyes As String = $"${elID}eyes"$
+	Toggle(sShowEyes)
+End Sub
+
+Sub UpdateFieldRemoveClass(sitem As String, sClass As String)
+	Dim xbindclass As String = $"${sitem}class"$
+	Dim items As List = GetData(xbindclass)
+	items = BANanoShared.ListRemoveItem(items, sClass)
+	SetData(xbindclass, items)
+End Sub
+
+'set text alignment
+Sub UpdateFieldTextAlign(sitem As String, ta As String)
+	ta = ta.replace("none","")
+	Dim xbindclass As String = $"${sitem}class"$
+	Dim items As List = GetData(xbindclass)
+	For Each tax As String In BANanoShared.TextAlign
+		items = BANanoShared.ListRemoveItem(items, tax)
+	Next
+	If ta <> "" Then
+		items.add(ta)
+	End If
+	SetData(xbindclass, items)
+End Sub
+
+'update text decoration
+Sub UpdateFieldTextDecoration(sItem As String, s As String)
+	'the binding class
+	Dim xbindclass As String = $"${sItem}class"$
+	Dim items As List = GetData(xbindclass)
+	'remove existing text colors
+	For Each tc As String In BANanoShared.TextDecoration
+		items = BANanoShared.ListRemoveItem(items, tc)
+	Next
+	items.Add(s)
+	SetData(xbindclass, items)
+End Sub
+
+'truncate
+Sub UpdateFieldTruncate(sitem As String, b As Boolean)
+	Dim xbindclass As String = $"${sitem}class"$
+	Dim eClass As List = GetData(xbindclass)
+	Select Case b
+	Case True
+		eClass = BANanoShared.ListAddDistinctItem(eClass, "d-inline-block")
+		eClass = BANanoShared.ListAddDistinctItem(eClass, "text-truncate")
+	Case False
+		eClass = BANanoShared.ListRemoveItem(eClass, "d-inline-block")
+		eClass = BANanoShared.ListRemoveItem(eClass, "text-truncate")
+	End Select
+	SetData(xbindclass, eClass)
+End Sub
+
+'line through
+Sub UpdateFieldLineThrough(sitem As String, b As Boolean)
+	Select Case b
+	Case True
+		UpdateFieldAddClass( sitem, "text-decoration-line-through")
+	Case False
+		UpdateFieldRemoveClass( sitem, "text-decoration-line-through")
+	End Select
+End Sub
+
+'font thin
+Sub UpdateFieldFontThin(sitem As String, b As Boolean)
+	Select Case b
+	Case True
+		UpdateFieldAddClass( sitem, "font-weight-thin")
+	Case False
+		UpdateFieldRemoveClass( sitem, "font-weight-thin")
+	End Select
+End Sub
+
+'font light
+Sub UpdateFieldFontLight(sitem As String, b As Boolean)
+	Select Case b
+	Case True
+		UpdateFieldAddClass( sitem, "font-weight-light")
+	Case False
+		UpdateFieldRemoveClass( sitem, "font-weight-light")
+	End Select
+End Sub
+
+'underline
+Sub UpdateFieldUnderLine(sitem As String, b As Boolean)
+	Select Case b
+	Case True
+		UpdateFieldAddClass( sitem, "text-decoration-underline")
+	Case False
+		UpdateFieldRemoveClass( sitem, "text-decoration-underline")
+	End Select
+End Sub
+
+'overline
+Sub UpdateFieldOverline(sitem As String, b As Boolean)
+	Select Case b
+	Case True
+		UpdateFieldAddClass( sitem, "text-decoration-overline")
+	Case False
+		UpdateFieldRemoveClass( sitem, "text-decoration-overline")
+	End Select
+End Sub
+
+'bold
+Sub UpdateFieldBold(sitem As String, b As Boolean)
+	Select Case b
+	Case True
+		UpdateFieldAddClass( sitem, "font-weight-bold")
+	Case False
+		UpdateFieldRemoveClass( sitem, "font-weight-bold")
+	End Select
+End Sub
+
+'update font weight black
+Sub UpdateFieldFontWeightBlack(sitem As String, b As Boolean)
+	Select Case b
+	Case True
+		UpdateFieldAddClass( sitem, "font-weight-black")
+	Case False
+		UpdateFieldRemoveClass( sitem, "font-weight-black")
+	End Select
+End Sub
+
+'update italic for an element
+Sub UpdateFieldItalic(sitem As String, b As Boolean)
+	Select Case b
+	Case True
+		UpdateFieldAddClass( sitem, "font-italic")
+	Case False
+		UpdateFieldRemoveClass( sitem, "font-italic")
+	End Select
+End Sub
+
+'bind an attribute and set its default
+Sub FieldBindDefault(sitem As String, prop As String, varName As String, def As Object)
+	Dim el As BANanoElement
+	el.Initialize($"#${sitem.tolowercase}"$)
+	el.SetAttr($":${prop.tolowercase}"$, varName)
+	SetData(varName, def)
+End Sub
+
+'bind an attribute default is set as null
+Sub FieldBind(sitem As String, prop As String, varName As String)
+	Dim el As BANanoElement
+	el.Initialize($"#${sitem.tolowercase}"$)
+	el.SetAttr($":${prop.tolowercase}"$, varName)
+	SetData(varName, Null)
+End Sub
+
+'design
+Sub FieldHiddenXSOnly(sitem As String)
+	Dim el As BANanoElement
+	el.Initialize($"#${sitem.tolowercase}"$)
+	el.AddClass("hidden-xs-only")
+End Sub
+
+'design
+Sub FieldHiddenSMOnly(sitem As String)
+	Dim el As BANanoElement
+	el.Initialize($"#${sitem.tolowercase}"$)
+	el.AddClass("d-sm-none d-md-flex")
+End Sub
+
+'design	
+Sub FieldHiddenMDOnly(sitem As String)
+	Dim el As BANanoElement
+	el.Initialize($"#${sitem.tolowercase}"$)
+	el.AddClass("d-md-none d-lg-flex")
+End Sub
+	
+'design	
+Sub FieldHiddenLGOnly(sitem As String)
+	Dim el As BANanoElement
+	el.Initialize($"#${sitem.tolowercase}"$)
+	el.AddClass("d-lg-none d-xl-flex")
+End Sub
+
+'design	
+Sub FieldHiddenXLOnly(sitem As String)
+	Dim el As BANanoElement
+	el.Initialize($"#${sitem.tolowercase}"$)
+	el.AddClass("d-xl-none")
+End Sub
+
+'design
+Sub FieldHiddenSMAndDown(sitem As String)
+	Dim el As BANanoElement
+	el.Initialize($"#${sitem.tolowercase}"$)
+	el.AddClass("hidden-sm-and-down")
+End Sub
+	
+'design	
+Sub FieldHiddenMDAndDown(sitem As String)
+	Dim el As BANanoElement
+	el.Initialize($"#${sitem.tolowercase}"$)
+	el.AddClass("hidden-md-and-down")
+End Sub
+	
+'design	
+Sub FieldHiddenLGAndDown(sitem As String)
+	Dim el As BANanoElement
+	el.Initialize($"#${sitem.tolowercase}"$)
+	el.AddClass("hidden-lg-and-down")
+End Sub
+
+'design
+Sub FieldHiddenSMAndUp(sitem As String)
+	Dim el As BANanoElement
+	el.Initialize($"#${sitem.tolowercase}"$)
+	el.AddClass("hidden-sm-and-up")
+End Sub
+	
+'design	
+Sub FieldHiddenMDAndUp(sitem As String)
+	Dim el As BANanoElement
+	el.Initialize($"#${sitem.tolowercase}"$)
+	el.AddClass("hidden-md-and-up")
+End Sub
+	
+'design	
+Sub FieldHiddenLGAndUp(sitem As String)
+	Dim el As BANanoElement
+	el.Initialize($"#${sitem.tolowercase}"$)
+	el.AddClass("hidden-lg-and-up")
+End Sub
+
+'design
+Sub FieldHiddenOnAll(sitem As String)
+	Dim el As BANanoElement
+	el.Initialize($"#${sitem.tolowercase}"$)
+	el.AddClass("d-none")
+End Sub
+
+'design
+Sub FieldHideOnlyOnXS(sitem As String)
+	Dim el As BANanoElement
+	el.Initialize($"#${sitem.tolowercase}"$)
+	el.AddClass("hidden-xs-only")
+End Sub
+
+'design
+Sub FieldHideOnlyOnSM(sitem As String)
+	Dim el As BANanoElement
+	el.Initialize($"#${sitem.tolowercase}"$)
+	el.AddClass("d-sm-none d-md-flex")
+End Sub
+
+'design
+Sub FieldHideOnlyOnMD(sitem As String)
+	Dim el As BANanoElement
+	el.Initialize($"#${sitem.tolowercase}"$)
+	el.AddClass("d-md-none d-lg-flex")
+End Sub
+
+'design
+Sub FieldHideOnlyOnLG(sitem As String)
+	Dim el As BANanoElement
+	el.Initialize($"#${sitem.tolowercase}"$)
+	el.AddClass("d-lg-none d-xl-flex")
+End Sub
+
+'design
+Sub FieldHideOnlyOnXL(sitem As String)
+	Dim el As BANanoElement
+	el.Initialize($"#${sitem.tolowercase}"$)
+	el.AddClass("d-xl-none")
+End Sub
+
+'design
+Sub FieldVisibleOnAll(sitem As String)
+	Dim el As BANanoElement
+	el.Initialize($"#${sitem.tolowercase}"$)
+	el.AddClass("d-flex")
+End Sub
+
+'design
+Sub FieldVisibleOnlyOnXS(sitem As String)
+	Dim el As BANanoElement
+	el.Initialize($"#${sitem.tolowercase}"$)
+	el.AddClass("d-flex d-sm-none")
+End Sub
+
+'design
+Sub FieldVisibleOnlyOnSM(sitem As String)
+	Dim el As BANanoElement
+	el.Initialize($"#${sitem.tolowercase}"$)
+	el.AddClass("d-none d-sm-flex d-md-none")
+End Sub
+
+'design
+Sub FieldVisibleOnlyOnMD(sitem As String)
+	Dim el As BANanoElement
+	el.Initialize($"#${sitem.tolowercase}"$)
+	el.AddClass("d-none d-md-flex d-lg-none")
+End Sub
+
+'design
+Sub FieldVisibleOnlyOnLG(sitem As String)
+	Dim el As BANanoElement
+	el.Initialize($"#${sitem.tolowercase}"$)
+	el.AddClass("d-none d-lg-flex d-xl-none")
+End Sub
+
+'design
+Sub FieldVisibleOnlyOnXL(sitem As String)
+	Dim el As BANanoElement
+	el.Initialize($"#${sitem.tolowercase}"$)
+	el.AddClass("d-none d-xl-flex")
+End Sub
+
+Sub UpdateFieldToggleClass(sitem As String, sClass As String)
+	Dim xbindclass As String = $"${sitem}class"$
+	Dim items As List = GetData(xbindclass)
+	Dim idxpos As Int = items.IndexOf(sClass)
+	If idxpos = -1 Then
+		items = BANanoShared.ListAddDistinctItem(items, sClass)
+	Else
+		items = BANanoShared.ListRemoveItem(items, sClass)
+	End If	
+	SetData(xbindclass, items)
+End Sub
+
+'update classes at runtime
+Sub UpdateFieldAddClass(sItem As String, sClass As String)
+	Dim xbindclass As String = $"${sItem}class"$
+	Dim items As List = GetData(xbindclass)
+	items = BANanoShared.ListAddDistinctItem(items, sClass)
+	SetData(xbindclass, items)
+End Sub
+
+Sub UpdateFieldAddStyle(sitem As String, prop As String, value As String)
+	prop = BANanoShared.CamelCase(prop)
+	Dim xbindstyle As String = $"${sitem}style"$
+	Dim items As Map = GetData(xbindstyle)
+	items.Put(prop, value)
+	SetData(xbindstyle, items)
+End Sub
+
+Sub UpdateFieldRemoveStyle(sitem As String, prop As String)
+	prop = BANanoShared.CamelCase(prop)
+	Dim xbindstyle As String = $"${sitem}style"$
+	Dim items As Map = GetData(xbindstyle)
+	items.Remove(prop)
+	SetData(xbindstyle, items)
+End Sub
+
+Sub UpdateFieldLabel(sitem As String, s As String)
+	Dim xLabel As String = $"${sitem}label"$
+	SetData(xLabel, S)
+End Sub
+
+'update value of a field using v-model
+Sub UpdateFieldValue(sVModel As String, s As Object)
+	SetData(sVModel, S)
+End Sub
+
+Sub UpdateFieldElevation(sitem As String, iElev As Int)
+	Dim xbindclass As String = $"${sitem}class"$
+	Dim items As List = GetData(xbindclass)
+	'remove existing text colors
+	For Each tc As String In BANanoShared.Elevation
+		items = BANanoShared.ListRemoveItem(items, tc)
+	Next
+	items.add($"elevation-${iElev}"$)
+	SetData(xbindclass, items)
+End Sub
+
+Sub UpdateFieldRounded(sitem As String, sround As String)
+	Dim xbindclass As String = $"${sitem}class"$
+	Dim items As List = GetData(xbindclass)
+	'remove existing text colors
+	For Each tc As String In BANanoShared.Rounded
+		items = BANanoShared.ListRemoveItem(items, tc)
+	Next
+	items.add(sround)
+	SetData(xbindclass, items)
+End Sub
+
+'update size of avatar
+Sub UpdateFieldSize(sitem As String, s As String)
+	SetData($"${sitem}size"$, S)
+End Sub
+
+'set formmated date of field using vmodel
+Sub UpdateFieldFormatDate(xvmodel As String)
+	Dim sDate As String = GetData(xvmodel)
+	If sDate = "" Then Return
+	Dim xDate As String = NiceDate(sDate)
+	Dim res As String = $"${xvmodel}fmt"$
+	SetData(res, xDate)
+End Sub
+
+
+Sub UpdateFieldBadge(elIDName As String, items As Int)
+	Dim sKey As String = $"${elIDName}value"$
+	SetData(sKey, items)
+End Sub
+
+
+Sub UpdateFieldIncrement(elIDName As String)
+	Dim sKey As String = $"${elIDName}value"$
+	Increment(sKey)
+End Sub
+
+Sub UpdateFieldDecrement(elIDName As String)
+	Dim sKey As String = $"${elIDName}value"$
+	Decrement(sKey)
+End Sub
+
+Sub UpdateFieldBadgeColor(bID As String, color As String)
+	Dim skey As String = $"${bID}badgecolor"$
+	SetData(skey, color)
+End Sub
+
+Sub UpdateFieldBadgeIconColor(bID As String, color As String)
+	Dim skey As String = $"${bID}iconcolor"$
+	SetData(skey, color)
+End Sub
+
+'update progress linear / circle using the vmodel
+Sub UpdateFieldPercentage(bID As String, currentx As Long, totalx As Long)
+	Dim pd As Long = BANanoShared.ProgressDone(currentx, totalx)
+	SetData(bID, pd)
+End Sub
+
+
+Sub GetFieldVModel(sVModel As String) As Object
+	Dim obj As Object = GetData(sVModel)
+	Return obj
+End Sub
+
+Sub GetFieldBadgeColor(bID As String) As String
+	Dim skey As String = $"${bID}badgecolor"$
+	Dim s As String = GetData(skey)
+	Return s
+End Sub
+
+Sub GetFieldBadgeIconColor(bID As String) As String
+	Dim skey As String = $"${bID}iconcolor"$
+	Dim s As String = GetData(skey)
+	Return s
+End Sub
+
+Sub GetFieldBadge(elIDName As String) As Int
+	Dim sKey As String = $"${elIDName}value"$
+	Dim i As Int = GetData(sKey)
+	Return i
+End Sub
+
+Sub GetFieldSize(sitem As String) As Int
+	Dim i As Int = GetData($"${sitem}size"$)
+	Return i
+End Sub
+
+'update field visibility
+Sub GetFieldVisibile(cName As String) As Boolean
+	Dim fKey As String = $"${cName}show"$
+	Dim s As String = GetData(fKey)
+	Return s
+End Sub
+
+'update read only
+Sub GetFieldReadOnly(cName As String) As Boolean
+	Dim fKey As String = $"${cName}readonly"$
+	Dim b As Boolean = GetData(fKey)
+	Return b
+End Sub
+
+'update required
+Sub GetFieldRequired(cName As String) As Boolean
+	Dim fKey As String = $"${cName}required"$
+	Dim b As Boolean = GetData(fKey)
+	Return b
+End Sub
+
+'update disabled
+Sub GetFieldDisabled(cName As String) As Boolean
+	Dim fKey As String = $"${cName}disabled"$
+	Dim b As Boolean = GetData(fKey)
+	Return b
+End Sub
+
+'update loading
+Sub GetFieldLoading(cName As String) As Boolean
+	Dim fKey As String = $"${cName}loading"$
+	Dim b As Boolean = GetData(fKey)
+	Return b
+End Sub
+
+'updating caption
+Sub GetFieldCaption(cName As String) As String
+	Dim fKey As String = $"${cName}caption"$
+	Dim s As String = GetData(fKey)
+	Return s
+End Sub
+
+'update items using list of objects
+Sub GetFieldItems(cName As String) As List
+	Dim fKey As String = $"${cName}items"$
+	Dim lst As List = GetData(fKey)
+	Return lst
+End Sub
+
+'update an image source
+Sub GetFieldImage(cName As String) As String
+	Dim bsrc As String = GetData($"${cName}src"$)
+	Dim s As String = GetData(bsrc)
+	Return s
+End Sub
+
+'update the lazy image src
+Sub GetFieldLazyImage(cName As String) As String
+	Dim bsrc As String = GetData($"${cName}lazysrc"$)
+	Dim s As String = GetData(bsrc)
+	Return s
+End Sub
+
+'toggle the password eyes
+Sub GetFieldTogglePassword(elID As String) As Boolean
+	Dim sShowEyes As String = $"${elID}eyes"$
+	Dim s As String = GetData(sShowEyes)
+	Return s
+End Sub
+
+Sub GetFieldLabel(sitem As String) As String
+	Dim xLabel As String = $"${sitem}label"$
+	Dim s As String = GetData(xLabel)
+	Return s
+End Sub
+
+Sub UpdateFieldPercent(svmodel As String, num As Int)
+	SetData(svmodel, num)
+End Sub
+
+'update progress linear / circle using the vmodel
+Sub UpdateFieldProgress(svmodel As String, currentx As Long, totalx As Long)
+	Dim pd As Long = BANanoShared.ProgressDone(currentx, totalx)
+	SetData(svmodel, pd)
+End Sub
+
+'clear the vmodel
+Sub ClearVModel(svmodel As String)
+	SetData(svmodel, "")
+End Sub
+
+Sub UpdateFieldIndeterminate(sitem As String, b As Boolean)
+	Dim xIndeterminate As String = $"${sitem}indeterminate"$
+	SetData(xIndeterminate, b)
+End Sub
+
+
+Sub UpdateFieldCaptionVisible(sitem As String, b As Boolean)
+	Dim xIndeterminate As String = $"${sitem}captionshow"$
+	SetData(xIndeterminate, b)
+End Sub
+
+Sub PercentageOf(currentCount As Long, totalCount As Long) As Int
+	Dim pd As Int = (currentCount / totalCount) * 100
+	pd = NumberFormat2(pd, 0,0, 0, False)
+	pd = BANanoShared.CInt(pd)
+	Return pd
+End Sub
+
+
+'clear an existing list in state
+Sub CreateNewList(lstName As String)
+	Dim nl As List
+	nl.Initialize 
+	SetData(lstName, nl)
+End Sub
+
+Sub CreateNewObject(mapName As String)
+	Dim nl As Map
+	nl.Initialize
+	SetData(mapName, nl)
+End Sub
+
+
+'set the data to be in an animated state
+'you pass this the end value, it will read the existing value
+'VC - The name of the component
+'CBName - the name of the callback to receive the update calls
+'This returns a Map/Object and you can get the 'data' name you want to update
+'<code>
+'SetDataAnimated("progress", 2000, 100)
+'Sub progressupdated(res As Map)
+'Dim progress As Int = res.get("progress")
+'progress = banano.Parseint(progress)
+'</code>
+Sub SetDataAnimated(elID As String, duration As Int, endValue As Object) As BANanoAnimeJS
+	'read the current value
+	Dim startValue As Object = GetData(elID)
+	'create an object to manipulate
+	'using the data object we want to update
+	Dim objData As Map = CreateMap()
+	objData.Put(elID, startValue)
+	objData.Put("datakey", elID)
+	'pass it to animejs
+	Dim a1 As BANanoAnimeJS
+	a1.Initialize(Me, objData)
+	a1.anime.roundIT(1)
+	a1.anime.easing("linear")
+	a1.anime.duration(duration)
+	a1.anime.propertyEndValue(elID, endValue)
+	a1.anime.updateCallBack(Me, "dataanimated", elID, objData)
+	a1.play
+	Return a1
+End Sub
+
+private Sub dataanimated(objD As Map, elID As String)
+	elID = elID.tolowercase
+	'get the item we were updating And format it however we want
+	Dim updated As Int = objD.Get(elID)
+	updated = BANano.parseInt(updated)
+	SetData(elID, updated)
 End Sub

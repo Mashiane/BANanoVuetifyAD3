@@ -7,7 +7,8 @@ Version=8.95
 #IgnoreWarnings:12
 #DesignerProperty: Key: Template, DisplayName: Template, FieldType: String, DefaultValue: list, Description: Template, List: none|list|list-item-group|tree
 
-#DesignerProperty: Key: UsesVisible, DisplayName: UsesVisible, FieldType: Boolean, DefaultValue: False, Description: Use Visible Property
+#DesignerProperty: Key: UsesVisible, DisplayName: UsesVisible, FieldType: Boolean, DefaultValue: True, Description: Use Visible Property
+#DesignerProperty: Key: UseLeftImage, DisplayName: UseLeftImage, FieldType: Boolean, DefaultValue: True, Description: Use Left Image
 #DesignerProperty: Key: UseLeftAction, DisplayName: UseLeftAction, FieldType: Boolean, DefaultValue: True, Description: Use Left Action
 #DesignerProperty: Key: UseLeftActionButton, DisplayName: UseLeftActionButton, FieldType: Boolean, DefaultValue: True, Description: Use Left Action Button
 #DesignerProperty: Key: UseLeftActionCheckBox, DisplayName: UseLeftActionCheckBox, FieldType: Boolean, DefaultValue: True, Description: Use Left Action Check Box
@@ -31,15 +32,15 @@ Version=8.95
 #DesignerProperty: Key: UseRightAvatarImage, DisplayName: UseRightAvatarImage, FieldType: Boolean, DefaultValue: True, Description: Use Right Avatar Image
 #DesignerProperty: Key: UseRightAvatarText, DisplayName: UseRightAvatarText, FieldType: Boolean, DefaultValue: True, Description: Use Right Avatar Text
 
-#DesignerProperty: Key: UseRightChip, DisplayName: UseRightChip, FieldType: Boolean, DefaultValue: True, Description: Use Right Chip
-
 #DesignerProperty: Key: UseRightAction, DisplayName: UseRightAction, FieldType: Boolean, DefaultValue: True, Description: Use Right Action
 #DesignerProperty: Key: UseRightActionButton, DisplayName: UseRightActionButton, FieldType: Boolean, DefaultValue: True, Description: Use Right Action Button
 #DesignerProperty: Key: UseRightActionCheckBox, DisplayName: UseRightActionCheckBox, FieldType: Boolean, DefaultValue: True, Description: UseRight Action CheckBox
 #DesignerProperty: Key: UseRightActionRating, DisplayName: UseRightActionRating, FieldType: Boolean, DefaultValue: True, Description: Use Right Action Rating
 #DesignerProperty: Key: UseRightActionSwitch, DisplayName: UseRightActionSwitch, FieldType: Boolean, DefaultValue: True, Description: Use Right Action Switch
 #DesignerProperty: Key: UseRightActionText, DisplayName: UseRightActionText, FieldType: Boolean, DefaultValue: True, Description: Use Right Action Text
-
+#DesignerProperty: Key: UseRightChip, DisplayName: UseRightChip, FieldType: Boolean, DefaultValue: True, Description: Use Right Chip
+#DesignerProperty: Key: UseRightImage, DisplayName: UseRightImage, FieldType: Boolean, DefaultValue: True, Description: Use Right Image
+'
 #DesignerProperty: Key: Key, DisplayName: Key, FieldType: String, DefaultValue: id, Description: Key
 #DesignerProperty: Key: DataSource, DisplayName: Items, FieldType: String, DefaultValue: list1, Description: Items
 #DesignerProperty: Key: Title, DisplayName: Title, FieldType: String, DefaultValue: title, Description: Title
@@ -56,6 +57,7 @@ Version=8.95
 #DesignerProperty: Key: ShowRightRating, DisplayName: ShowRightRating, FieldType: Boolean, DefaultValue: false, Description: ShowRightRating
 #DesignerProperty: Key: ShowRightSwitches, DisplayName: ShowRightSwitches, FieldType: Boolean, DefaultValue: false, Description: ShowRightSwitches
 #DesignerProperty: Key: ActiveClass, DisplayName: ActiveClass, FieldType: String, DefaultValue: , Description: ActiveClass
+#DesignerProperty: Key: LeftImage, DisplayName: LeftImage, FieldType: String, DefaultValue: leftimage, Description: LeftImage
 #DesignerProperty: Key: Avatar, DisplayName: Avatar, FieldType: String, DefaultValue: avatar, Description: Avatar
 #DesignerProperty: Key: AvatarAttr, DisplayName: AvatarAttr, FieldType: String, DefaultValue: , Description: AvatarAttr
 #DesignerProperty: Key: AvatarClass, DisplayName: AvatarClass, FieldType: String, DefaultValue: , Description: AvatarClass
@@ -75,12 +77,14 @@ Version=8.95
 #DesignerProperty: Key: IconColor, DisplayName: IconColor, FieldType: String, DefaultValue: iconcolor, Description: IconColor
 #DesignerProperty: Key: LeftCheckBox, DisplayName: LeftCheckBox, FieldType: String, DefaultValue: leftcheckbox, Description: LeftCheckBox
 #DesignerProperty: Key: LeftCheckBoxAttr, DisplayName: LeftCheckBoxAttr, FieldType: String, DefaultValue: , Description: LeftCheckBoxAttr
+#DesignerProperty: Key: LeftCheckBoxColor, DisplayName: LeftCheckBoxColor, FieldType: String, DefaultValue: leftcheckboxcolor, Description: LeftCheckBoxColor
 #DesignerProperty: Key: LeftIcon, DisplayName: LeftIcon, FieldType: String, DefaultValue: lefticon, Description: LeftIcon
 #DesignerProperty: Key: LeftIconAttr, DisplayName: LeftIconAttr, FieldType: String, DefaultValue: , Description: LeftIconAttr
 #DesignerProperty: Key: LeftIconClass, DisplayName: LeftIconClass, FieldType: String, DefaultValue: , Description: LeftIconClass
 #DesignerProperty: Key: LeftIconColor, DisplayName: LeftIconColor, FieldType: String, DefaultValue: lefticoncolor, Description: LeftIconColor
 #DesignerProperty: Key: LeftSwitch, DisplayName: LeftSwitch, FieldType: String, DefaultValue: leftswitch, Description: LeftSwitch
 #DesignerProperty: Key: LeftSwitchAttr, DisplayName: LeftSwitchAttr, FieldType: String, DefaultValue: , Description: LeftSwitchAttr
+#DesignerProperty: Key: LeftSwitchColor, DisplayName: LeftSwitchColor, FieldType: String, DefaultValue: leftswitchcolor, Description: LeftSwitchColor
 #DesignerProperty: Key: RightAvatar, DisplayName: RightAvatar, FieldType: String, DefaultValue: rightavatar, Description: RightAvatar
 #DesignerProperty: Key: RightAvatarAttr, DisplayName: RightAvatarAttr, FieldType: String, DefaultValue: , Description: RightAvatarAttr
 #DesignerProperty: Key: RightAvatarClass, DisplayName: RightAvatarClass, FieldType: String, DefaultValue: , Description: RightAvatarClass
@@ -93,6 +97,7 @@ Version=8.95
 #DesignerProperty: Key: RightAvatarTextColor, DisplayName: RightAvatarTextColor, FieldType: String, DefaultValue: rightavatartextcolor, Description: RightAvatarTextColor
 #DesignerProperty: Key: RightCheckBox, DisplayName: RightCheckBox, FieldType: String, DefaultValue: rightcheckbox, Description: RightCheckBox
 #DesignerProperty: Key: RightCheckBoxAttr, DisplayName: RightCheckBoxAttr, FieldType: String, DefaultValue: , Description: RightCheckBoxAttr
+#DesignerProperty: Key: RightCheckBoxColor, DisplayName: RightCheckBoxColor, FieldType: String, DefaultValue: rightcheckboxcolor, Description: RightCheckBoxColor
 #DesignerProperty: Key: RightChip, DisplayName: RightChip, FieldType: String, DefaultValue: rightchip, Description: RightChip
 #DesignerProperty: Key: RightChipAttr, DisplayName: RightChipAttr, FieldType: String, DefaultValue: , Description: RightChipAttr
 #DesignerProperty: Key: RightChipColor, DisplayName: RightChipColor, FieldType: String, DefaultValue: rightchipcolor, Description: RightChipColor
@@ -106,9 +111,10 @@ Version=8.95
 #DesignerProperty: Key: RightRatingColor, DisplayName: RightRatingColor, FieldType: String, DefaultValue: rightratingcolor, Description: RightRatingColor
 #DesignerProperty: Key: RightSwitch, DisplayName: RightSwitch, FieldType: String, DefaultValue: rightswitch, Description: RightSwitch
 #DesignerProperty: Key: RightSwitchAttr, DisplayName: RightSwitchAttr, FieldType: String, DefaultValue: , Description: RightSwitchAttr
-#DesignerProperty: Key: RightSwitchColor, DisplayName: RightSwitchColor, FieldType: String, DefaultValue: , Description: RightSwitchColor
+#DesignerProperty: Key: RightSwitchColor, DisplayName: RightSwitchColor, FieldType: String, DefaultValue: rightswitchcolor, Description: RightSwitchColor
 #DesignerProperty: Key: RightText, DisplayName: RightText, FieldType: String, DefaultValue: righttext, Description: RightText
 #DesignerProperty: Key: RightTextAttr, DisplayName: RightTextAttr, FieldType: String, DefaultValue: , Description: RightTextAttr
+#DesignerProperty: Key: RightImage, DisplayName: RightImage, FieldType: String, DefaultValue: rightimage, Description: RightImage
 
 Sub Class_Globals
     Private BANano As BANano 'ignore
@@ -118,6 +124,9 @@ Sub Class_Globals
 	'Private mTarget As BANanoElement 'ignore
 	'Private mElement As BANanoElement 'ignore
 	'Public VElement As VueElement
+	Private sLeftCheckBoxColor As String
+	Private sLeftSwitchColor As String
+	Private sRightCheckBoxColor As String
 	Private sActiveClass As String
 Private sAvatar As String
 Private sAvatarAttr As String
@@ -216,6 +225,10 @@ Private bUseSubTitle2 As Boolean
 Private bUseSubTitle3 As Boolean
 Private bUseSubTitle4 As Boolean
 Private bUseTitle As Boolean
+Private bUseLeftImage As Boolean
+Private bUseRightImage As Boolean
+Private sLeftImage As String
+Private sRightImage As String
 End Sub
 	
 Sub Initialize (CallBack As Object, Name As String, EventName As String)
@@ -305,7 +318,6 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		sTitle = Props.Get("Title")
 		sTo = Props.Get("To")
 		sRightSwitch = Props.Get("RightSwitch")
-		sRightSwitchColor = Props.Get("RightSwitchColor")
 		bUseIcon = Props.GetDefault("UseIcon", True)
 		bUseIcon = BANanoShared.parseBool(bUseIcon)
 		bUsesVisible = Props.GetDefault("UsesVisible", False)
@@ -360,6 +372,16 @@ Sub DesignerCreateView (Target As BANanoElement, Props As Map)
 		bUseSubTitle4 = BANanoShared.parseBool(bUseSubTitle4)
 		bUseTitle = Props.GetDefault("UseTitle", True)
 		bUseTitle = BANanoShared.parseBool(bUseTitle)
+		bUseLeftImage = BANanoShared.GetProp(Props, "UseLeftImage", True)
+		bUseLeftImage = BANanoShared.parseBool(bUseLeftImage)
+		bUseRightImage = Props.GetDefault("UseRightImage", True)
+		bUseRightImage = BANanoShared.parseBool(bUseRightImage)
+		sLeftImage = BANanoShared.GetProp(Props,"LeftImage", "leftimage")
+		sRightImage = BANanoShared.GetProp(Props,"RightImage", "rightimage")
+		sLeftCheckBoxColor = BANanoShared.GetProp(Props,"LeftCheckBoxColor", "leftcheckboxcolor")
+		sLeftSwitchColor = BANanoShared.GetProp(Props,"LeftSwitchColor","leftswitchcolor")
+		sRightCheckBoxColor = BANanoShared.GetProp(Props,"RightCheckBoxColor", "rightcheckboxcolor")
+		sRightSwitchColor = BANanoShared.GetProp(Props,"RightSwitchColor", "rightswitchcolor")
 	End If
 	'
 	bHasDivider = BANanoShared.parseBool(bHasDivider)
@@ -480,6 +502,14 @@ Options.UseSubTitle2 = bUseSubTitle2
 Options.UseSubTitle3 = bUseSubTitle3
 Options.UseSubTitle4 = bUseSubTitle4
 Options.UseTitle = bUseTitle
+Options.UseLeftImage = bUseLeftImage
+Options.UseRightImage = bUseRightImage
+Options.LeftImage = sLeftImage
+Options.RightImage = sRightImage
+Options.LeftCheckBoxColor = sLeftCheckBoxColor
+Options.LeftSwitchColor = sLeftSwitchColor 
+Options.RightCheckBoxColor = sRightCheckBoxColor
+Options.RightSwitchColor = sRightSwitchColor
 End Sub
 
 'Sub AddToParent(targetID As String)
@@ -1191,4 +1221,44 @@ Sub setTo(vTo As String)
 If BANano.IsNull(vTo) Or BANano.IsUndefined(vTo) Then Return
 sTo  = vTo
 Options.url = vTo
+End Sub
+'set left image
+Sub setLeftImage(vLeftImage As String)
+If BANano.IsNull(vLeftImage) Or BANano.IsUndefined(vLeftImage) Then Return
+sLeftImage  = vLeftImage
+Options.leftimage = sLeftImage	
+End Sub
+'set right image
+Sub setRightImage(vRightImage As String)
+If BANano.IsNull(vRightImage) Or BANano.IsUndefined(vRightImage) Then Return
+sRightImage  = vRightImage
+Options.rightimage = sRightImage	
+End Sub
+
+'set right image
+Sub setLeftCheckBoxColor(value As String)
+If BANano.IsNull(value) Or BANano.IsUndefined(value) Then Return
+sLeftCheckBoxColor  = value
+Options.LeftCheckBoxColor = sLeftCheckBoxColor	
+End Sub
+
+'set right image
+Sub setLeftSwitchColor(value As String)
+If BANano.IsNull(value) Or BANano.IsUndefined(value) Then Return
+sLeftSwitchColor  = value
+Options.LeftSwitchColor = sLeftSwitchColor	
+End Sub
+
+'set right image
+Sub setRightCheckBoxColor(value As String)
+If BANano.IsNull(value) Or BANano.IsUndefined(value) Then Return
+sRightCheckBoxColor  = value
+Options.RightCheckBoxColor = sRightCheckBoxColor	
+End Sub
+
+'set right image
+Sub setRightSwitchColor(value As String)
+If BANano.IsNull(value) Or BANano.IsUndefined(value) Then Return
+sRightSwitchColor  = value
+Options.RightSwitchColor = sRightSwitchColor	
 End Sub

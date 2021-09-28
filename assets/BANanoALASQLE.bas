@@ -39,6 +39,101 @@ Sub Class_Globals
 End Sub
 
 
+'describe table
+'<code>
+'dbConnect.DescribeTable
+'dbConnect.result = db.ExecuteWait(dbConnect.query, dbConnect.args)
+'dbConnect.FromJSON
+'Select Case dbConnect.OK
+'Case False
+'Dim strError As String = dbConnect.Error
+'Log(strError)
+'End Select
+'for each rec As Map in dbConnect.Result
+'log(rec)
+'next
+'</code>
+'Sub DescribeTable
+'	query = $"PRAGMA table_info('${TableName}')"$
+'	command = "select"
+'End Sub
+
+
+'get table names
+'<code>
+'dbConnect.GetTableNames
+'dbConnect.result = db.ExecuteWait(dbConnect.query, dbConnect.args)
+'dbConnect.FromJSON
+'Select Case dbConnect.OK
+'Case False
+'Dim strError As String = dbConnect.Error
+'Log(strError)
+'End Select
+'for each rec As Map in dbConnect.Result
+'log(rec)
+'next
+'</code>
+Sub GetTableNames
+	query = $"SHOW TABLES FROM ${DBase}"$
+	command = "select"
+End Sub
+
+'get databases
+'<code>
+'dbConnect.GetDatabases
+'dbConnect.result = db.ExecuteWait(dbConnect.query, dbConnect.args)
+'dbConnect.FromJSON
+'Select Case dbConnect.OK
+'Case False
+'Dim strError As String = dbConnect.Error
+'Log(strError)
+'End Select
+'for each rec As Map in dbConnect.Result
+'log(rec)
+'next
+'</code>
+Sub GetDatabases
+	query = $"SHOW DATABASES"$
+	command = "databases"
+End Sub
+
+'create an index
+'<code>
+'dbConnect.CreateIndex("idxname")
+'dbConnect.result = db.ExecuteWait(dbConnect.query, dbConnect.args)
+'dbConnect.FromJSON
+'Select Case dbConnect.OK
+'Case False
+'Dim strError As String = dbConnect.Error
+'Log(strError)
+'End Select
+'for each rec As Map in dbConnect.Result
+'log(rec)
+'next
+'</code>
+Sub CreateIndex(idxFld As String)
+	query = $"CREATE INDEX ${TableName}${idxFld} ON ${TableName}(${idxFld})"$
+	command = "execute"
+End Sub
+
+'ShowCreateTable
+'<code>
+'dbConnect.Initialize("test", "users", "id", "id")
+'dbConnect.ShowCreateTable
+'dbConnect.result = db.ExecuteWait(dbConnect.query, dbConnect.args)
+'dbConnect.FromJSON
+'Select Case dbConnect.OK
+'Case False
+'Dim strError As String = dbConnect.Error
+'Log(strError)
+'End Select
+'</code>
+Sub ShowCreateTable
+	query = $"SHOW CREATE TABLE ${TableName}"$
+	command = "select"
+	bCount = True
+End Sub
+
 Sub GetCount As BANanoALASQLE
 	query = $"select count(*) as records from ${TableName}"$
 	command = "select"
@@ -61,6 +156,15 @@ End Sub
 'db.OpenWait("test", "test")
 'Dim dbConnect As BANanoALASQLE
 'dbConnect.Initialize("test", "users", "id", "id")
+'dbConnect.SchemaAddInt(Array("id"))
+'dbConnect.SchemaAddText(Array("name"))
+'dbConnect.result = db.ExecuteWait(dbConnect.query, dbConnect.args)
+'dbConnect.FromJSON
+'Select Case dbConnect.OK
+'Case False
+'Dim strError As String = dbConnect.Error
+'Log(strError)
+'End Select
 '</code>
 Sub Initialize(dbName As String, tblName As String, PK As String, AI As String) As BANanoALASQLE
 	DBase = dbName

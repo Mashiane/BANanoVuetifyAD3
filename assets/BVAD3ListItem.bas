@@ -13,6 +13,7 @@ End Sub
 Sub Initialize(id As String) As BVAD3ListItem
 	options.Initialize 
 	options.Put("id", id)
+	options.Put("visible", True)
 	Return Me
 End Sub
 
@@ -51,13 +52,13 @@ Sub SetName(v As String) As BVAD3ListItem
 	Return Me
 End Sub
 
-'set replace of the item
+'set replace of the item in router
 Sub SetReplace As BVAD3ListItem
 	options.Put("replace", True)
 	Return Me
 End Sub
 
-'set append of the item
+'set append of the item in router
 Sub SetAppend As BVAD3ListItem
 	options.Put("append", True)
 	Return Me
@@ -72,6 +73,18 @@ End Sub
 'set the left icon
 Sub SetLeftIcon(v As String) As BVAD3ListItem
 	options.put("lefticon", v)
+	Return Me
+End Sub
+
+'set the left image
+Sub SetLeftImage(v As String) As BVAD3ListItem
+	options.put("leftimage", v)
+	Return Me
+End Sub
+
+'set the right image
+Sub SetRightImage(v As String) As BVAD3ListItem
+	options.put("rightimage", v)
 	Return Me
 End Sub
 
@@ -207,9 +220,21 @@ Sub SetRightCheckBox(v As Boolean) As BVAD3ListItem
 	Return Me
 End Sub
 
+'set the right check box value
+Sub SetRightCheckBoxColor(v As String) As BVAD3ListItem
+	options.put("rightcheckboxcolor", v)
+	Return Me
+End Sub
+
 'set the left chechbox color
 Sub SetLeftCheckBox(v As Boolean) As BVAD3ListItem
 	options.put("leftcheckbox", v)
+	Return Me
+End Sub
+
+'set the left chechbox color
+Sub SetLeftCheckBoxColor(v As String) As BVAD3ListItem
+	options.put("leftcheckboxcolor", v)
 	Return Me
 End Sub
 
@@ -234,6 +259,12 @@ End Sub
 'set the right switch value	
 Sub SetRightSwitch(v As Boolean) As BVAD3ListItem
 	options.put("rightswitch", v)
+	Return Me
+End Sub
+
+'set the right switch value	
+Sub SetRightSwitchColor(v As String) As BVAD3ListItem
+	options.put("rightswitchcolor", v)
 	Return Me
 End Sub
 '
