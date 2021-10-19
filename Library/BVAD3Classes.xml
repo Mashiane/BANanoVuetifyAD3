@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<root>
+    <doclet-version-NOT-library-version>1.07</doclet-version-NOT-library-version>
+	<author>Mashiane</author>
+    <version>1.00</version>
+    <customClass>filenamewithoutextension:BVAD3Page, name:BVAD3 Page</customClass>
+</root>
