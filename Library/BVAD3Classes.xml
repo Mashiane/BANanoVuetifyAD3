@@ -4,4 +4,5 @@
 	<author>Mashiane</author>
     <version>1.00</version>
     <customClass>filenamewithoutextension:BVAD3Page, name:BVAD3 Page</customClass>
+    <customClass>filenamewithoutextension:BVAD3CRUDPage, name:BVAD3 CRUD Page</customClass>
 </root>
