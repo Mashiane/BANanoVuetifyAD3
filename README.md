@@ -9,6 +9,8 @@ Actually you don't have to know any JavaScript to start developing BANanoVuetify
 
 ## How to get started?
 
+You can watch this [video](https://youtu.be/jKG2HUO4YdA) to take you through the installation process:
+
 1. In your Windows PC, create a folder on your C drive, named *B4J*
 2. Create 3 sub-folders inside this *B4J* folder named *libraries*, *shared* and *workspace*.
 3. Download and install [B4J](https://www.b4x.com/b4j.html)
