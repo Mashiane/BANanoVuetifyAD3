@@ -9,6 +9,8 @@ Actually you don't have to know any JavaScript to start developing BANanoVuetify
 
 ## How to get started?
 
+You can watch this [video](https://youtu.be/jKG2HUO4YdA) to take you through the installation process:
+
 1. In your Windows PC, create a folder on your C drive, named *B4J*
 2. Create 3 sub-folders inside this *B4J* folder named *libraries*, *shared* and *workspace*.
 3. Download and install [B4J](https://www.b4x.com/b4j.html)
@@ -16,11 +18,10 @@ Actually you don't have to know any JavaScript to start developing BANanoVuetify
 5. Download and unzip [BANano](https://www.b4x.com/android/forum/threads/banano-website-app-pwa-library-with-abstract-designer-support.99740/#post-627764) 
 6. Copy the contents of the BANano *Library* folder to your *C:\b4j\libraries* Folder
 7. Copy the contents of the BANanoServer *Library* folder to your *C:\b4j\libraries* Folder
-8. Download [ByteConvertor](https://www.b4x.com/android/files/ByteConverter1.1.zip) and unzip this in the *C:\b4j\libraries* folder.
-9. Download and copy the contents of this [folder](https://github.com/Mashiane/BANanoVuetifyAD3/tree/main/External%20Libraries) to *C:\b4j\libraries* folder
-10. Download and unzip the contents of this [folder](https://github.com/Mashiane/BANanoVuetifyAD3/tree/main/Library) to your *C:\b4j\workspace* folder. 
-11. (Optional) Download and unzip the [Kitchen Sink Demo WebApp](https://github.com/Mashiane/BANanoVuetifyAD3/blob/main/BVAD3KitchenSink.zip) to your *C:\b4j\workspace* folder.
-12. (Optional) Download and unzip the [BANanoServer Kitchen Sink Demo WebApp](https://github.com/Mashiane/BANanoVuetifyAD3/blob/main/BVAD3Server.zip) to your *C:\b4j\workspace* folder.
+8. Download and copy the contents of this [folder](https://github.com/Mashiane/BANanoVuetifyAD3/tree/main/External%20Libraries) to *C:\b4j\libraries* folder
+9. Download and unzip the contents of this [folder](https://github.com/Mashiane/BANanoVuetifyAD3/tree/main/Library) to your *C:\b4j\workspace* folder. 
+10. (Optional) Download and unzip the [Kitchen Sink Demo WebApp](https://github.com/Mashiane/BANanoVuetifyAD3/blob/main/BVAD3KitchenSink.zip) to your *C:\b4j\workspace* folder.
+11. (Optional) Download and unzip the [BANanoServer Kitchen Sink Demo WebApp](https://github.com/Mashiane/BANanoVuetifyAD3/blob/main/BVAD3Server.zip) to your *C:\b4j\workspace* folder.
 
 
 ## Setting up the B4J IDE
@@ -38,7 +39,7 @@ We need to configure Paths on the B4J IDE.
 Before you can use the BANanoVuetifyAD3 toolset, you need to compile the BVAD3 library.
 From your *C:\b4j\workspace* folder locate and open the BANanoVuetifyAD3.b4j project folder. 
 
-Double click to open it and then press F5 to run the B4J Project. This will compile the b4xlib and put it under the C:\b4j\libraries folder.
+Double click to open it and then press F5 to run the B4J Project. This will compile the b4xlib and automatically put it under the C:\b4j\libraries folder.
 
 ## Running the Kitchen Sink Demo WebApps
 
