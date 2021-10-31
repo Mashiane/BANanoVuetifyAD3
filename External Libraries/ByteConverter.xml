@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <doclet-version-NOT-library-version>1.00</doclet-version-NOT-library-version>
+    <class>
+        <name>anywheresoftware.b4a.agraham.byteconverter.ByteConverter</name>
+        <shortname>ByteConverter</shortname>
+        <comment>This ByeConverter object can transform arrays of primitive types to and from arrays
+of Bytes with the "endian-ness" of the conversion specified. 
+
+Byte arrays can be transformed to and from a hexadecimal string representation.
+
+Strings can be transformed to and from arrays of Bytes using specified encodings and
+to and from arrays of Chars.
+
+An array copy method is thrown in for good measure.</comment>
+        <owner>process</owner>
+        <method>
+            <name>CharsFromBytes</name>
+            <comment>Takes an array of Bytes and returns an array of Chars converted from that array.</comment>
+            <returntype>char[]</returntype>
+            <parameter>
+                <name>bytes</name>
+                <type>byte[]</type>
+            </parameter>
+        </method>
+        <method>
+            <name>ShortsToBytes</name>
+            <comment>Takes an array of Shorts and returns an array of Bytes converted from that array.</comment>
+            <returntype>byte[]</returntype>
+            <parameter>
+                <name>vals</name>
+                <type>short[]</type>
+            </parameter>
+        </method>
+        <method>
+            <name>IntsToBytes</name>
+            <comment>Takes an array of Ints and returns an array of Bytes converted from that array.</comment>
+            <returntype>byte[]</returntype>
+            <parameter>
+                <name>vals</name>
+                <type>int[]</type>
+            </parameter>
+        </method>
+        <method>
+            <name>DoublesFromBytes</name>
+            <comment>Takes an array of Bytes and returns an array of Doubles converted from that array.</comment>
+            <returntype>double[]</returntype>
+            <parameter>
+                <name>bytes</name>
+                <type>byte[]</type>
+            </parameter>
+        </method>
+        <method>
+            <name>StringToBytes</name>
+            <comment>Returns an array of bytes containing the the characters in str converted to bytes according to encoding.</comment>
+            <returntype>byte[]</returntype>
+            <parameter>
+                <name>str</name>
+                <type>java.lang.String</type>
+            </parameter>
+            <parameter>
+                <name>encoding</name>
+                <type>java.lang.String</type>
+            </parameter>
+        </method>
+        <method>
+            <name>HexToBytes</name>
+            <comment>Returns an array of bytes containing the data represented by a hexadecimal string. The string can be upper or lower case.</comment>
+            <returntype>byte[]</returntype>
+            <parameter>
+                <name>hex</name>
+                <type>java.lang.String</type>
+            </parameter>
+        </method>
+        <method>
+            <name>FloatsToBytes</name>
+            <comment>Takes an array of Floats and returns an array of Bytes converted from that array.</comment>
+            <returntype>byte[]</returntype>
+            <parameter>
+                <name>vals</name>
+                <type>float[]</type>
+            </parameter>
+        </method>
+        <method>
+            <name>FromChars</name>
+            <comment>Returns a string converted from the specified array of characters.</comment>
+            <returntype>java.lang.String</returntype>
+            <parameter>
+                <name>chars</name>
+                <type>char[]</type>
+            </parameter>
+        </method>
+        <method>
+            <name>StringFromBytes</name>
+            <comment>Returns a string containing the bytes in the array interpreted as characters according to encoding.</comment>
+            <returntype>java.lang.String</returntype>
+            <parameter>
+                <name>bytes</name>
+                <type>byte[]</type>
+            </parameter>
+            <parameter>
+                <name>encoding</name>
+                <type>java.lang.String</type>
+            </parameter>
+        </method>
+        <method>
+            <name>ArrayCopy</name>
+            <comment>Copies count elements from the srcoffset in the src array to destoffset in the dest array.
+The arrays need to be of the same type otherwise an ArrayStoreException is thrown.</comment>
+            <returntype>void</returntype>
+            <parameter>
+                <name>src</name>
+                <type>java.lang.Object</type>
+            </parameter>
+            <parameter>
+                <name>srcOffset</name>
+                <type>int</type>
+            </parameter>
+            <parameter>
+                <name>dest</name>
+                <type>java.lang.Object</type>
+            </parameter>
+            <parameter>
+                <name>destOffset</name>
+                <type>int</type>
+            </parameter>
+            <parameter>
+                <name>count</name>
+                <type>int</type>
+            </parameter>
+        </method>
+        <method>
+            <name>ToChars</name>
+            <comment>Returns an array of chars comprising the characters of the specified string</comment>
+            <returntype>char[]</returntype>
+            <parameter>
+                <name>str</name>
+                <type>java.lang.String</type>
+            </parameter>
+        </method>
+        <method>
+            <name>DoublesToBytes</name>
+            <comment>Takes an array of Doubles and returns an array of Bytes converted from that array.</comment>
+            <returntype>byte[]</returntype>
+            <parameter>
+                <name>vals</name>
+                <type>double[]</type>
+            </parameter>
+        </method>
+        <method>
+            <name>SupportedEncodings</name>
+            <comment>Returns a string array containing all the values for encodings that are supported by this system.</comment>
+            <returntype>java.lang.String[]</returntype>
+        </method>
+        <method>
+            <name>ShortsFromBytes</name>
+            <comment>Takes an array of Bytes and returns an array of Shorts converted from that array.</comment>
+            <returntype>short[]</returntype>
+            <parameter>
+                <name>bytes</name>
+                <type>byte[]</type>
+            </parameter>
+        </method>
+        <method>
+            <name>IntsFromBytes</name>
+            <comment>Takes an array of Bytes and returns an array of Ints converted from that array.</comment>
+            <returntype>int[]</returntype>
+            <parameter>
+                <name>bytes</name>
+                <type>byte[]</type>
+            </parameter>
+        </method>
+        <method>
+            <name>CharsToBytes</name>
+            <comment>Takes an array of Chars and returns an array of Bytes converted from that array.</comment>
+            <returntype>byte[]</returntype>
+            <parameter>
+                <name>vals</name>
+                <type>char[]</type>
+            </parameter>
+        </method>
+        <method>
+            <name>FloatsFromBytes</name>
+            <comment>Takes an array of Bytes and returns an array of Floats converted from that  array.</comment>
+            <returntype>float[]</returntype>
+            <parameter>
+                <name>bytes</name>
+                <type>byte[]</type>
+            </parameter>
+        </method>
+        <method>
+            <name>LongsToBytes</name>
+            <comment>Takes an array of Longs and returns an array of Bytes converted from that array.</comment>
+            <returntype>byte[]</returntype>
+            <parameter>
+                <name>vals</name>
+                <type>long[]</type>
+            </parameter>
+        </method>
+        <method>
+            <name>LongsFromBytes</name>
+            <comment>Takes an array of Bytes and returns an array of Longs converted from that array.</comment>
+            <returntype>long[]</returntype>
+            <parameter>
+                <name>bytes</name>
+                <type>byte[]</type>
+            </parameter>
+        </method>
+        <method>
+            <name>HexFromBytes</name>
+            <comment>Returns a string containing the representation in hexadecimal of the bytes in a byte array.</comment>
+            <returntype>java.lang.String</returntype>
+            <parameter>
+                <name>bytes</name>
+                <type>byte[]</type>
+            </parameter>
+        </method>
+        <property>
+            <name>Version</name>
+            <returntype>double</returntype>
+            <comment>Returns the version number of this library.</comment>
+        </property>
+        <property>
+            <name>LittleEndian</name>
+            <returntype>boolean</returntype>
+            <parameter>
+                <name>littleEndian</name>
+                <type>boolean</type>
+            </parameter>
+            <comment>Gets or sets the endian-ness of byte conversions to and from other primitive values.
+The default for Android is Big_Endian, Windows PCs are Little_Endian.</comment>
+        </property>
+    </class>
+    <version>1.1</version>
+    <comment>This library contains a ByeConverter object that can transform arrays of primitive
+types to and from arrays of Bytes specifying the "endian-ness" of the conversion
+and also provides for the copying of part or all of the contents of one array to
+another array of the same type. 
+
+Byte arrays can be transformed to and from a hexadecimal string representation and
+Strings can be transformed to and from arrays of Bytes using specified encodings.</comment>
+</root>
