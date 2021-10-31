@@ -59,3 +59,5 @@ We have started a new series on teaching BANanoVuetifyAD3. You can check it out 
 #
 
 Have Fun!
+
+PS: Written with https://stackedit.io
