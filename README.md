@@ -39,7 +39,7 @@ We need to configure Paths on the B4J IDE.
 Before you can use the BANanoVuetifyAD3 toolset, you need to compile the BVAD3 library.
 From your *C:\b4j\workspace* folder locate and open the BANanoVuetifyAD3.b4j project folder. 
 
-Double click to open it and then press F5 to run the B4J Project. This will compile the b4xlib and automatically put it under the C:\b4j\libraries folder.
+Double click to open it and then press F5 to run the B4J Project. DO NOT COMPILE TO LIBRARY. This will compile the b4xlib and automatically put it under the C:\b4j\libraries folder.
 
 ## Running the Kitchen Sink Demo WebApps
 
