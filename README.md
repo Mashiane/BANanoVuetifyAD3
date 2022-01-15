@@ -47,11 +47,10 @@ You can watch this [video](https://youtu.be/gCs6pdtYxlQ) for a demonstration.
 5. (Optional) Click Windows > Reset
 6. (Optional) On the bottom right of the IDE, find the Libraries Manager and click on it
 7. (Optional) In the listed libraries, confirm that you have BANano, BANanoVuetifyAD3, BVAD3Classes checked
-8. This project template is configured so that your compiled project is published on the Laragon Development WebServer Path. This is in the Main module and is defined as 
-9. *Private Publish As String = "C:\laragon\www"*
-10. You can change this path to suit your needs.
-11. Press F5 to run the project, your web browser should open up
-12. You can also change the WebServer Address. This has been specified as https:\\localhost on the *config.propeties* file. You can find this file on the Files tab of the B4J IDE.
+8. This project template is configured so that your compiled project is published on the Laragon Development WebServer Path. This is in the Main module and is defined as *Private Publish As String = "C:\laragon\www"*
+9. You can change this path to suit your needs.
+10. Press F5 to run the project, your web browser should open up
+11. You can also change the WebServer Address. This has been specified as https:\\localhost on the *config.propeties* file. You can find this file on the Files tab of the B4J IDE.
 
 
 ## (Optional) Compiling the BANanoVuetifyAD3.b4xLib
