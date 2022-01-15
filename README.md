@@ -1,9 +1,10 @@
 # BANanoVuetifyAD3
+
 Welcome to BANanoVuetifyAD3.
 
 ## What is BANanoVuetifyAD3?
 
-BANanoVuetifyAD3 is a framework to create WebApps and Websites. It is powered by [B4X](https://www.b4x.com/) + [Vuetify](https://vuetifyjs.com/en/) + [BANano](https://www.b4x.com/android/forum/threads/banano-website-app-pwa-library-with-abstract-designer-support.99740/#content). B4X is a Rapid Application Development toolset to create Android, iOS and Desktop Applications, whilst Vuetify is the world’s most popular Vue.js framework for building feature rich, blazing fast applications. BANano is the glue that binds B4X and Vuetify so that one is able to create their WebApp / WebSites using Vuetify CDN approach. BANano transpiles your B4X code (vb like syntax) into pure HTML/JavaScript/CSS. 
+BANanoVuetifyAD3 is a framework to create WebApps and Websites. It is powered by [B4X](https://www.b4x.com/) + [Vuetify](https://vuetifyjs.com/en/) + [BANano](https://www.b4x.com/android/forum/threads/banano-website-app-pwa-library-with-abstract-designer-support.99740/#content). B4X is a Rapid Application Development toolset to create Android, iOS and Desktop Applications, whilst Vuetify is the world’s most popular Vue.js framework for building feature rich, blazing fast applications. BANano is the glue that binds B4X and Vuetify so that one is able to create their WebApp / WebSites using Vuetify CDN approach. BANano transpiles your B4X code (vb like syntax) into pure HTML/JavaScript/CSS.
 
 Actually you don't have to know any JavaScript to start developing BANanoVuetifyAD3 WebApps/Websites.
 
@@ -14,12 +15,12 @@ You can watch this [video](https://youtu.be/jKG2HUO4YdA) to take you through the
 1. In your Windows PC, create a folder on your C drive, named *B4J*
 2. Create 3 sub-folders inside this *B4J* folder named *libraries*, *shared* and *workspace*.
 3. Download and install [B4J](https://www.b4x.com/b4j.html)
-4. Download and install [Java JDK 8](https://www.oracle.com/java/technologies/downloads/#java8) 
-5. Download and unzip [BANano](https://www.b4x.com/android/forum/threads/banano-website-app-pwa-library-with-abstract-designer-support.99740/#post-627764) 
+4. Download and install [Java JDK 8](https://www.oracle.com/java/technologies/downloads/#java8)
+5. Download and unzip [BANano](https://www.b4x.com/android/forum/threads/banano-website-app-pwa-library-with-abstract-designer-support.99740/#post-627764)
 6. Copy the contents of the BANano *Library* folder to your *C:\b4j\libraries* Folder
 7. (Optional) Copy the contents of the BANanoServer *Library* folder to your *C:\b4j\libraries* Folder
 8. Download and copy the contents of this [folder](https://github.com/Mashiane/BANanoVuetifyAD3/tree/main/External%20Libraries) to *C:\b4j\libraries* folder
-9. Download and unzip the contents of this [folder](https://github.com/Mashiane/BANanoVuetifyAD3/tree/main/Library) to your *C:\b4j\workspace* folder. 
+9. Download and unzip the contents of this [folder](https://github.com/Mashiane/BANanoVuetifyAD3/tree/main/Library) to your *C:\b4j\workspace* folder.
 10. (Optional) Download and unzip the [Kitchen Sink Demo WebApp](https://github.com/Mashiane/BANanoVuetifyAD3/blob/main/BVAD3KitchenSink.zip) to your *C:\b4j\workspace* folder.
 11. (Optional) Download and unzip the [BANanoServer Kitchen Sink Demo WebApp](https://github.com/Mashiane/BANanoVuetifyAD3/blob/main/BVAD3Server.zip) to your *C:\b4j\workspace* folder.
 12. BANanoVuetifyAD3 projects are developed using the [Laragon](https://laragon.org/download/) Development Web Server, however you can use any webserver of your choice.
@@ -29,7 +30,7 @@ You can watch this [video](https://youtu.be/jKG2HUO4YdA) to take you through the
 We need to configure Paths on the B4J IDE.
 
 1. On the B4J IDE, click Tools
-2. Click Configure Paths, browse to the location of javac.exe and ensure its set, usually its C:\Program Files\Java\jdk1.8.0_281\bin\javac.exe
+2. Click [Configure Paths](https://github.com/Mashiane/BANanoVuetifyAD3/blob/main/PathsConfiguration.jpghttps://), browse to the location of javac.exe and ensure its set, usually its C:\Program Files\Java\jdk1.8.0_281\bin\javac.exe
 3. Click and browse to the location of your additional libraries, this would be *C:\b4j\libraries* (if you just set it up)
 4. Click and browse to the location of your shared modules, this would be *C:\bj4\shared* (if you just set it up)
 5. Close the IDE.
@@ -41,23 +42,22 @@ The Optional items below are to check if your installation was done successfully
 You can read this [Medium Article](https://mbanga-anele.medium.com/up-running-with-vuetify-in-5-minutes-using-bananovuetifyad3-badde1c6b79b) about this for more clarity.
 
 1. Open the B4J IDE
-2. Click File > New > BVAD3 Blank
-3. Type in the name of your project (usually without spaces)
+2. Click File > New > [BVAD3 Blank](https://github.com/Mashiane/BANanoVuetifyAD3/blob/main/BVAD3Blank.jpghttps://)
+3. Type in the [name of your project](https://github.com/Mashiane/BANanoVuetifyAD3/blob/main/EnterProjectName.jpghttps://) (usually without spaces)
 4. Click OK, this creates a new BVAD3 project for you.
 5. (Optional) Click Windows > Reset
 6. (Optional) On the bottom right of the IDE, find the Libraries Manager and click on it
-7. (Optional) In the listed libraries, confirm that you have BANano, BANanoVuetifyAD3, BVAD3Classes checked
-8. This project template is configured so that your compiled project is published on the Laragon Development WebServer Path. This is in the Main module and is defined as *Private Publish As String = "C:\laragon\www"*
+7. (Optional) In the listed libraries, confirm that you have BANano, BANanoVuetifyAD3, BVAD3Classes [checked](https://github.com/Mashiane/BANanoVuetifyAD3/blob/main/LibrariesManager.jpghttps://)
+8. This project template is configured so that your compiled project is [published](https://github.com/Mashiane/BANanoVuetifyAD3/blob/main/PublishPath.jpghttps://) on the Laragon Development WebServer Path. This is in the Main module and is defined as *Private Publish As String = "C:\laragon\www"*
 9. You can change this path to suit your needs.
 10. Press F5 to run the project, your web browser should open up
-11. You can also change the WebServer Address. This has been specified as https:\\localhost on the *config.propeties* file. You can find this file on the Files tab of the B4J IDE.
-
+11. You can also change the WebServer Address. This has been specified as https:\\localhost on the *[config.propeties](https://https://github.com/Mashiane/BANanoVuetifyAD3/blob/main/FilesManager.jpg)* file. You can find this file on the Files tab of the B4J IDE.
 
 ## (Optional) Compiling the BANanoVuetifyAD3.b4xLib
 
 You can also compile the BANanoVuetifyAD3.b4xlib from the source.
 
-From your *C:\b4j\workspace* folder locate and open the BANanoVuetifyAD3.b4j project. 
+From your *C:\b4j\workspace* folder locate and open the BANanoVuetifyAD3.b4j project.
 
 Double click to open it and then press F5 to run the B4J Project. DO NOT COMPILE TO LIBRARY. This will compile the b4xlib and automatically put it under the C:\b4j\libraries folder.
 
@@ -77,7 +77,7 @@ As a beginner, you can watch this [introductory video](https://youtu.be/QQzPrfX1
 
 We have started a new series on teaching BANanoVuetifyAD3. You can check it out [here](https://www.b4x.com/android/forum/threads/mashy-teaches-webapp-website-development-with-bananovuetifyad3-the-new-series.132305/#content).
 
-#
+# 
 
 Have Fun!
 
