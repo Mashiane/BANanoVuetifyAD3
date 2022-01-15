@@ -41,7 +41,7 @@ From your *C:\b4j\workspace* folder locate and open the BANanoVuetifyAD3.b4j pro
 
 Double click to open it and then press F5 to run the B4J Project. DO NOT COMPILE TO LIBRARY. This will compile the b4xlib and automatically put it under the C:\b4j\libraries folder.
 
-## Running the Kitchen Sink Demo WebApps
+## (Optional) Running the Kitchen Sink Demo WebApps
 
 The Demo WebApps above are configured to be published on the Laragon Development Server, however you can publish them on any web server by changing the source code.
 
