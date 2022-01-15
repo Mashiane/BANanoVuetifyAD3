@@ -22,7 +22,7 @@ You can watch this [video](https://youtu.be/jKG2HUO4YdA) to take you through the
 9. Download and unzip the contents of this [folder](https://github.com/Mashiane/BANanoVuetifyAD3/tree/main/Library) to your *C:\b4j\workspace* folder. 
 10. (Optional) Download and unzip the [Kitchen Sink Demo WebApp](https://github.com/Mashiane/BANanoVuetifyAD3/blob/main/BVAD3KitchenSink.zip) to your *C:\b4j\workspace* folder.
 11. (Optional) Download and unzip the [BANanoServer Kitchen Sink Demo WebApp](https://github.com/Mashiane/BANanoVuetifyAD3/blob/main/BVAD3Server.zip) to your *C:\b4j\workspace* folder.
-
+12. BANanoVuetifyAD3 projects are developed using the [Laragon](https://laragon.org/download/) Development Web Server, however you can use any webserver of your choice.
 
 ## Setting up the B4J IDE
 
@@ -34,10 +34,31 @@ We need to configure Paths on the B4J IDE.
 4. Click and browse to the location of your shared modules, this would be *C:\bj4\shared* (if you just set it up)
 5. Close the IDE.
 
-## Compiling the BANanoVuetifyAD3 B4xLib
+## Up & Running in 5 Minutes
 
-Before you can use the BANanoVuetifyAD3 toolset, you need to compile the BVAD3 library.
-From your *C:\b4j\workspace* folder locate and open the BANanoVuetifyAD3.b4j project folder. 
+The Optional items below are to check if your installation was done successfully.
+
+You can watch this [video](https://youtu.be/gCs6pdtYxlQ) for a demonstration.
+
+1. Open the B4J IDE
+2. Click File > New > BVAD3 Blank
+3. Type in the name of your project (usually without spaces)
+4. Click OK, this creates a new BVAD3 project for you.
+5. (Optional) Click Windows > Reset
+6. (Optional) On the bottom right of the IDE, find the Libraries Manager and click on it
+7. (Optional) In the listed libraries, confirm that you have BANano, BANanoVuetifyAD3, BVAD3Classes checked
+8. This project template is configured so that your compiled project is published on the Laragon Development WebServer Path. This is in the Main module and is defined as 
+9. *Private Publish As String = "C:\laragon\www"*
+10. You can change this path to suit your needs.
+11. Press F5 to run the project, your web browser should open up
+12. You can also change the WebServer Address. This has been specified as https:\\localhost on the *config.propeties* file. You can find this file on the Files tab of the B4J IDE.
+
+
+## (Optional) Compiling the BANanoVuetifyAD3.b4xLib
+
+You can also compile the BANanoVuetifyAD3.b4xlib from the source.
+
+From your *C:\b4j\workspace* folder locate and open the BANanoVuetifyAD3.b4j project. 
 
 Double click to open it and then press F5 to run the B4J Project. DO NOT COMPILE TO LIBRARY. This will compile the b4xlib and automatically put it under the C:\b4j\libraries folder.
 
