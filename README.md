@@ -38,7 +38,7 @@ We need to configure Paths on the B4J IDE.
 
 The Optional items below are to check if your installation was done successfully.
 
-You can watch this [video](https://youtu.be/gCs6pdtYxlQ) for a demonstration.
+You can read this [Medium Article](https://mbanga-anele.medium.com/up-running-with-vuetify-in-5-minutes-using-bananovuetifyad3-badde1c6b79b) about this for more clarity.
 
 1. Open the B4J IDE
 2. Click File > New > BVAD3 Blank
