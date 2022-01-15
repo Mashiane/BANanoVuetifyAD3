@@ -30,7 +30,7 @@ You can watch this [video](https://youtu.be/jKG2HUO4YdA) to take you through the
 We need to configure Paths on the B4J IDE.
 
 1. On the B4J IDE, click Tools
-2. Click [Configure Paths](https://github.com/Mashiane/BANanoVuetifyAD3/blob/main/PathsConfiguration.jpghttps://), browse to the location of javac.exe and ensure its set, usually its C:\Program Files\Java\jdk1.8.0_281\bin\javac.exe
+2. Click [Configure Paths](https://github.com/Mashiane/BANanoVuetifyAD3/blob/main/PathsConfiguration.jpg), browse to the location of javac.exe and ensure its set, usually its C:\Program Files\Java\jdk1.8.0_281\bin\javac.exe
 3. Click and browse to the location of your additional libraries, this would be *C:\b4j\libraries* (if you just set it up)
 4. Click and browse to the location of your shared modules, this would be *C:\bj4\shared* (if you just set it up)
 5. Close the IDE.
@@ -42,16 +42,16 @@ The Optional items below are to check if your installation was done successfully
 You can read this [Medium Article](https://mbanga-anele.medium.com/up-running-with-vuetify-in-5-minutes-using-bananovuetifyad3-badde1c6b79b) about this for more clarity.
 
 1. Open the B4J IDE
-2. Click File > New > [BVAD3 Blank](https://github.com/Mashiane/BANanoVuetifyAD3/blob/main/BVAD3Blank.jpghttps://)
-3. Type in the [name of your project](https://github.com/Mashiane/BANanoVuetifyAD3/blob/main/EnterProjectName.jpghttps://) (usually without spaces)
+2. Click File > New > [BVAD3 Blank](https://github.com/Mashiane/BANanoVuetifyAD3/blob/main/BVAD3Blank.jpg)
+3. Type in the [name of your project](https://github.com/Mashiane/BANanoVuetifyAD3/blob/main/EnterProjectName.jpg) (usually without spaces)
 4. Click OK, this creates a new BVAD3 project for you.
 5. (Optional) Click Windows > Reset
 6. (Optional) On the bottom right of the IDE, find the Libraries Manager and click on it
-7. (Optional) In the listed libraries, confirm that you have BANano, BANanoVuetifyAD3, BVAD3Classes [checked](https://github.com/Mashiane/BANanoVuetifyAD3/blob/main/LibrariesManager.jpghttps://)
-8. This project template is configured so that your compiled project is [published](https://github.com/Mashiane/BANanoVuetifyAD3/blob/main/PublishPath.jpghttps://) on the Laragon Development WebServer Path. This is in the Main module and is defined as *Private Publish As String = "C:\laragon\www"*
+7. (Optional) In the listed libraries, confirm that you have BANano, BANanoVuetifyAD3, BVAD3Classes [checked](https://github.com/Mashiane/BANanoVuetifyAD3/blob/main/LibrariesManager.jpg)
+8. This project template is configured so that your compiled project is [published](https://github.com/Mashiane/BANanoVuetifyAD3/blob/main/PublishPath.jpg) on the Laragon Development WebServer Path. This is in the Main module and is defined as *Private Publish As String = "C:\laragon\www"*
 9. You can change this path to suit your needs.
 10. Press F5 to run the project, your web browser should open up
-11. You can also change the WebServer Address. This has been specified as https:\\localhost on the *[config.propeties](https://https://github.com/Mashiane/BANanoVuetifyAD3/blob/main/FilesManager.jpg)* file. You can find this file on the Files tab of the B4J IDE.
+11. You can also change the WebServer Address. This has been specified as https:\\localhost on the *[config.propeties](https://github.com/Mashiane/BANanoVuetifyAD3/blob/main/FilesManager.jpg)* file. You can find this file on the Files tab of the B4J IDE.
 
 ## (Optional) Compiling the BANanoVuetifyAD3.b4xLib
 
