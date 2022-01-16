@@ -53,7 +53,7 @@ You can read this [Medium Article](https://mbanga-anele.medium.com/up-running-wi
 10. Press F5 to run the project, your web browser should open up
 11. You can also change the WebServer Address. This has been specified as https:\\localhost on the *[config.propeties](https://github.com/Mashiane/BANanoVuetifyAD3/blob/main/FilesManager.jpg)* file. You can find this file on the Files tab of the B4J IDE.
 
-## FileNotFound: manifest.txt
+## Known Issue [FileNotFound: manifest.txt]
 
 Please follow the steps below to Compile the BANanoVuetifyAD3.b4xlib on your PC.
 
