@@ -37,7 +37,7 @@ We need to configure Paths on the B4J IDE.
 
 ## Up & Running in 5 Minutes
 
-The Optional items below are to check if your installation was done successfully.
+The Optional items below are to check if your installation was done successfully. It is recommended that you have a development webserver running. If you don't have one, please see the section below for using LAMP Laragon.
 
 You can read this [Medium Article](https://mbanga-anele.medium.com/up-running-with-vuetify-in-5-minutes-using-bananovuetifyad3-badde1c6b79b) about this for more clarity.
 
@@ -62,8 +62,8 @@ If when running your example above you encounter the error as per subject, pleas
 
 If you are fairly new to web development, this development server will come very handy for you as its easy to set up and has been my preferred option of choice.
 
-1. After you [download](https://https://github.com/leokhoa/laragon/releases/download/5.0.0/laragon-wamp.exe) and install the webserver, you can configure it to run on any port, as depicted [here](https://https://github.com/Mashiane/BANanoVuetifyAD3/blob/main/laragon2.jpg). The setup here is on ports 80 and 443 (SSL). By default, web servers run on port 80.
-2. If you change the default port to be another value, e.g. 8080, you also need to update the ServerIP variable in the config.properties file, to be your new port number for example **ServerIP=http://localhost:8080**
+1. After you [download](https://https://github.com/leokhoa/laragon/releases/download/5.0.0/laragon-wamp.exe) and install the webserver, you can configure it to run on any port, as depicted [here](https://https://github.com/Mashiane/BANanoVuetifyAD3/blob/main/laragon2.jpg). The setup here is on ports 80 and 443 (SSL). By default, web servers run on port 80. I have also activated SSL, for example to use the camera, geo location, firebase messaging etc, SSL should be activated.
+2. If you change the default port to be another value, e.g. 8080, you also need to update the ServerIP variable in the config.properties file, to be your new port number, for example to be **ServerIP=http://localhost:8080**
 3. If you have not activated SSL on laragon, also update the ServerIP to be http and not https.
 
 ## (Optional) Compiling the BANanoVuetifyAD3.b4xLib
@@ -76,7 +76,9 @@ Double click to open it and then press F5 to run the B4J Project. DO NOT COMPILE
 
 ## (Optional) Running the Kitchen Sink Demo WebApps
 
-The Demo WebApps above are configured to be published on the Laragon Development Server, however you can publish them on any web server by changing the source code.
+A demo containing all the Vuetify components and some extras named 'The New Awesome Kitchen Sink' is available [online](https://https://mashiane.github.io/BANanoVuetifyAD3/).
+
+You can also download this kitchen sink and run it on your PC. Please note that all the WebApps showcases here are configured to be published on the Laragon Development Server, however you can publish them on any web server by changing the source code.
 
 To change the publish path, open the B4J project and in the Main Module change the path specified on the "Publish" string variable to suit your  needs.
 
