@@ -53,9 +53,18 @@ You can read this [Medium Article](https://mbanga-anele.medium.com/up-running-wi
 10. Press F5 to run the project, your web browser should open up
 11. You can also change the WebServer Address. This has been specified as https:\\localhost on the *[config.propeties](https://github.com/Mashiane/BANanoVuetifyAD3/blob/main/FilesManager.jpg)* file. You can find this file on the Files tab of the B4J IDE.
 
+
 ## Known Issue [FileNotFound: manifest.txt]
 
-Please follow the steps below to Compile the BANanoVuetifyAD3.b4xlib on your PC.
+If when running your example above you encounter the error as per subject, please follow the steps below titled '*Compiling the BANanoVuetifyAD3.b4xlib*' on your PC.
+
+## (Optional) Using WAMP Laragon as your Development WebServer
+
+If you are fairly new to web development, this development server will come very handy for you as its easy to set up and has been my preferred option of choice.
+
+1. After you [download](https://https://github.com/leokhoa/laragon/releases/download/5.0.0/laragon-wamp.exe) and install the webserver, you can configure it to run on any port, as depicted [here](https://https://github.com/Mashiane/BANanoVuetifyAD3/blob/main/laragon2.jpg). The setup here is on ports 80 and 443 (SSL). By default, web servers run on port 80.
+2. If you change the default port to be another value, e.g. 8080, you also need to update the ServerIP variable in the config.properties file, to be your new port number for example **ServerIP=http://localhost:8080**
+3. If you have not activated SSL on laragon, also update the ServerIP to be http and not https.
 
 ## (Optional) Compiling the BANanoVuetifyAD3.b4xLib
 
@@ -63,7 +72,7 @@ You can also compile the BANanoVuetifyAD3.b4xlib from the source.
 
 From your *C:\b4j\workspace* folder locate and open the BANanoVuetifyAD3.b4j project.
 
-Double click to open it and then press F5 to run the B4J Project. DO NOT COMPILE TO LIBRARY. This will compile the b4xlib and automatically put it under the C:\b4j\libraries folder. 
+Double click to open it and then press F5 to run the B4J Project. DO NOT COMPILE TO LIBRARY. This will compile the b4xlib and automatically put it under the C:\b4j\libraries folder.
 
 ## (Optional) Running the Kitchen Sink Demo WebApps
 
