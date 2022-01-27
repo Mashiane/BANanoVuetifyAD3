@@ -42,7 +42,7 @@ The Optional items below are to check if your installation was done successfully
 You can read this [Medium Article](https://mbanga-anele.medium.com/up-running-with-vuetify-in-5-minutes-using-bananovuetifyad3-badde1c6b79b) about this for more clarity.
 
 1. Open the B4J IDE
-2. Click File > New > [BVAD3 Blank](https://github.com/Mashiane/BANanoVuetifyAD3/blob/main/BVAD3Blank.jpg)
+2. Click File > New > [BVAD3 Blank](https://github.com/Mashiane/BANanoVuetifyAD3/blob/main/BVAD3Blank.jpg). You can also opt for the 3 Pages example by clicking [BVAD3](https://https://github.com/Mashiane/BANanoVuetifyAD3/blob/main/3pagesexample.jpg) on the menu.
 3. Type in the [name of your project](https://github.com/Mashiane/BANanoVuetifyAD3/blob/main/EnterProjectName.jpg) (usually without spaces)
 4. Click OK, this creates a new BVAD3 project for you.
 5. (Optional) Click Windows > Reset
@@ -52,7 +52,6 @@ You can read this [Medium Article](https://mbanga-anele.medium.com/up-running-wi
 9. You can change this path to suit your needs.
 10. Press F5 to run the project, your web browser should open up
 11. You can also change the WebServer Address. This has been specified as https:\\localhost on the *[config.propeties](https://github.com/Mashiane/BANanoVuetifyAD3/blob/main/FilesManager.jpg)* file. You can find this file on the Files tab of the B4J IDE.
-
 
 ## Known Issue [FileNotFound: manifest.txt]
 
