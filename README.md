@@ -60,7 +60,7 @@ If when running your example above you encounter the error as per subject, pleas
 
 ## (Optional) Using WAMP Laragon as your Development WebServer
 
-If you are fairly new to web development, this development server will come very handy for you as its easy to set up and has been my preferred option of choice.
+If you are fairly new to web development, this development server will come very handy for you as its easy to set up and has been my preferred option.
 
 1. After you [download](https://https://github.com/leokhoa/laragon/releases/download/5.0.0/laragon-wamp.exe) and install the webserver, you can configure it to run on any port, as depicted [here](https://https://github.com/Mashiane/BANanoVuetifyAD3/blob/main/laragon2.jpg). The setup here is on ports 80 and 443 (SSL). By default, web servers run on port 80. I have also activated SSL, for example to use the camera, geo location, firebase messaging etc, SSL should be activated.
 2. If you change the default port to be another value, e.g. 8080, you also need to update the ServerIP variable in the config.properties file, to be your new port number, for example to be **ServerIP=http://localhost:8080**
