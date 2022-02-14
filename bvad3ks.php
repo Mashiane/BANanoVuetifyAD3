@@ -513,7 +513,7 @@ class FlxZipArchive extends ZipArchive {
  
             // Rekursiv, If dir: FlxZipArchive::addDir(), else ::File(); 
             $do = (filetype( $location . $file) == 'dir') ? 'addDir' : 'addFile'; 
-            $this->$do($location . $file, $name . $file); 
+			$this->$do($location . $file, $name . $file); 
         } 
     } // EO addDirDo(); 
 } 
@@ -622,8 +622,48 @@ function DirectoryZip($path, $zipname) {
 	$res = $za->open($zipname, ZipArchive::CREATE); 
 	if($res === TRUE) { 
     	$za->addDir($path, basename($path)); 
-    	$za->close(); 
+		$za->close(); 
 	} 
+	//return directory existence 
+	$res = FileExists($zipname); 
+} 
+ 
+function FolderZip($path, $zipname) { 
+	$target_exists = is_dir($path); 
+	if (!$target_exists) { 
+		//source does not exist 
+		die("no"); 
+	} 
+	$zip = new ZipArchive(); 
+    if (!$zip->open($zipname, ZIPARCHIVE::CREATE)) { 
+       die("no"); 
+    } 
+    $source = str_replace('\\', '/', realpath($path)); 
+ 
+    if (is_dir($source) === true) { 
+        $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($source), RecursiveIteratorIterator::SELF_FIRST); 
+ 
+        foreach ($files as $file) { 
+            $file = str_replace('\\', '/', $file); 
+ 
+            // Ignore "." and ".." folders 
+            if (in_array(substr($file, strrpos($file, '/')+1), array('.', '..'))) { 
+                continue; 
+            }                
+ 
+            $file = realpath($file); 
+ 
+            if (is_dir($file) === true) { 
+                $zip->addEmptyDir(str_replace($source . '/', '', $file . '/')); 
+            } elseif (is_file($file) === true) { 
+                $zip->addFromString(str_replace($source . '/', '', $file), file_get_contents($file)); 
+            } 
+        } 
+    } elseif (is_file($source) === true) { 
+        $zip->addFromString(basename($source), file_get_contents($source)); 
+    } 
+ 
+    return $zip->close(); 
 	//return directory existence 
 	$res = FileExists($zipname); 
 } 
@@ -716,9 +756,6 @@ function FileCopy($source, $target) {
 	if (!file_exists($source)) { 
 		die("no"); 
 	} 
-	if (!file_exists($target)) { 
-		die("no"); 
-	} 
 	copy($source, $target); 
 	$res = FileExists($target); 
 	die($res); 
@@ -727,10 +764,6 @@ function FileCopy($source, $target) {
 function FileRename($source, $target) { 
 	// does the file / directory 
 	if (!file_exists($source)) { 
-		die("no"); 
-	} 
-	//if target exists, no 
-	if (file_exists($target)) { 
 		die("no"); 
 	} 
 	rename($source, $target); 
