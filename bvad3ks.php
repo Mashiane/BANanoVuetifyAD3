@@ -628,44 +628,38 @@ function DirectoryZip($path, $zipname) {
 	$res = FileExists($zipname); 
 } 
  
-function FolderZip($path, $zipname) { 
-	$target_exists = is_dir($path); 
-	if (!$target_exists) { 
-		//source does not exist 
-		die("no"); 
+function FolderZip($source, $destination) { 
+	if (extension_loaded('zip')) { 
+		if (file_exists($source)) { 
+			$zip = new ZipArchive(); 
+			if ($zip->open($destination, ZIPARCHIVE::CREATE)) { 
+				$source = realpath($source); 
+				if (is_dir($source)) { 
+					$iterator = new RecursiveDirectoryIterator($source); 
+					// skip dot files while iterating 
+					$iterator->setFlags(RecursiveDirectoryIterator::SKIP_DOTS); 
+					$files = new RecursiveIteratorIterator($iterator, RecursiveIteratorIterator::SELF_FIRST); 
+					foreach ($files as $file) { 
+						$file = realpath($file); 
+						if (is_dir($file)) { 
+							$zip->addEmptyDir(str_replace($source . DIRECTORY_SEPARATOR, '', $file)); 
+						} else if (is_file($file)) { 
+							//There is no concept of "folders" for ZIP files. If you need to store data into folders, use forward slashes 
+							 $newName = str_replace($source . DIRECTORY_SEPARATOR, '', $file); 
+						     $newName = str_replace(DIRECTORY_SEPARATOR, "/", $newName); 
+							 $zip->addFile($file, $newName); 
+						} 
+					} 
+				} else if (is_file($source)) { 
+					$zip->addFile($source, basename($source)); 
+				} 
+			} 
+			$zip->close(); 
+		} 
 	} 
-	$zip = new ZipArchive(); 
-    if (!$zip->open($zipname, ZIPARCHIVE::CREATE)) { 
-       die("no"); 
-    } 
-    $source = str_replace('\\', '/', realpath($path)); 
- 
-    if (is_dir($source) === true) { 
-        $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($source), RecursiveIteratorIterator::SELF_FIRST); 
- 
-        foreach ($files as $file) { 
-            $file = str_replace('\\', '/', $file); 
- 
-            // Ignore "." and ".." folders 
-            if (in_array(substr($file, strrpos($file, '/')+1), array('.', '..'))) { 
-                continue; 
-            }                
- 
-            $file = realpath($file); 
- 
-            if (is_dir($file) === true) { 
-                $zip->addEmptyDir(str_replace($source . '/', '', $file . '/')); 
-            } elseif (is_file($file) === true) { 
-                $zip->addFromString(str_replace($source . '/', '', $file), file_get_contents($file)); 
-            } 
-        } 
-    } elseif (is_file($source) === true) { 
-        $zip->addFromString(basename($source), file_get_contents($source)); 
-    } 
- 
-    return $zip->close(); 
 	//return directory existence 
-	$res = FileExists($zipname); 
+	$res = FileExists($destination); 
+	return $res; 
 } 
  
 function FileGetJSON($url) { 
