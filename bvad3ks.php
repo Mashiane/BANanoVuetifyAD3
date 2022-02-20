@@ -664,12 +664,14 @@ function FolderZip($source, $destination) {
  
 function FileGetJSON($url) { 
 	$f = file_get_contents($url); 
+	$f = mb_convert_encoding($f, "UTF-8"); 
 	echo $f; 
 } 
  
  
 function FileGetHTML($url) { 
 	$f = file_get_contents($url); 
+	$f = mb_convert_encoding($f, "UTF-8"); 
 	echo $f; 
 } 
  
@@ -724,12 +726,14 @@ function RollingCopyright($message,$year)
 } 
  
 function WriteFile($fileName, $fileContents) { 
+	$fileContents = mb_convert_encoding($fileContents, "UTF-8"); 
 	file_put_contents($fileName, $fileContents); 
 	$res = FileExists($fileName); 
 	die($res); 
 } 
  
 function LogFile($fileName, $fileContents) { 
+	$fileContents = mb_convert_encoding($fileContents, "UTF-8"); 
 	$msg = date("Y-m-d H:i:s ") . $fileContents . "\n"; 
 	file_put_contents($fileName, $msg, FILE_APPEND); 
 	$res = FileExists($fileName); 
@@ -740,6 +744,7 @@ function FileAppend($fileName, $fileContents) {
 	if (!file_exists($fileName)) { 
 		die("no"); 
 	} 
+	$fileContents = mb_convert_encoding($fileContents, "UTF-8"); 
 	file_put_contents($fileName, $fileContents, FILE_APPEND); 
 	$res = FileExists($fileName); 
 	die($res); 
@@ -771,6 +776,7 @@ function GetFile($fileName) {
 		die(""); 
 	} 
 	$f = file_get_contents($fileName); 
+	$f = mb_convert_encoding($f, "UTF-8"); 
 	die($f); 
 } 
  
