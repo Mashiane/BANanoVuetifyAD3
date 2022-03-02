@@ -1,4 +1,139 @@
 <?php $rest_json = file_get_contents("php://input");$_POST = json_decode($rest_json, true);$request='';if(isset($_POST['request'])){$request = $_POST['request'];$params = $_POST['params'];}if (!function_exists($request)) die("invalid request: '" . $request . "'"); 
+function MongoDynamic($record, $options) { 
+   //clean the record and options 
+   $cleanrecord = html_entity_decode($record); 
+   $cleanoptions = html_entity_decode($options); 
+   // convert to associative array 
+   $doc = json_decode($cleanrecord, true); 
+   //convert to object 
+   $config = json_decode($cleanoptions, true);    
+   //get the host and other things 
+   $host = $config["host"]; 
+   $port = $config["port"]; 
+   $dbname = $config["dbname"]; 
+   $tblname = $config["tblname"]; 
+   $command = $config["command"]; 
+   $fields = $config["fields"]; 
+   $order = $config["order"]; 
+   $where = $config["where"]; 
+   $indexes = $config["indexes"]; 
+   $skip = $config["skip"]; 
+   $limit = $config["limit"]; 
+   //how many items in order 
+   $orderSize = count($order); 
+   //how many fields 
+   $fieldsSize = count($fields); 
+            
+   // connect to mongodb 
+   $dsn = 'mongodb://'.$host.':'.$port; 
+   $credentials = ['username' => 'admin', 'password' => 'public']; 
+   $credentials = []; 
+   $manager = new MongoDB\Driver\Manager($dsn, $credentials); 
+   $col = $dbname . '.' . $tblname; 
+   switch ($command) { 
+   case "deleteall": 
+    $filter = []; 
+	$option = []; 
+	$bulk = new MongoDB\Driver\BulkWrite; 
+	$bulk->delete($filter, $option); 
+	$result = $manager->executeBulkWrite($col, $bulk); 
+    $response = $result->getDeletedCount(); 
+	echo $response; 
+   	break; 
+   case "deletewhere": 
+    $filter = $where; 
+	$option = []; 
+	$bulk = new MongoDB\Driver\BulkWrite; 
+	$bulk->delete($filter, $option); 
+	$result = $manager->executeBulkWrite($col, $bulk); 
+    $response = $result->getDeletedCount(); 
+	echo $response; 
+   	break; 
+   case "select": 
+    $filter = $where; 
+	$option = []; 
+	if ($orderSize > 0){ 
+		$option["sort"] = $order; 
+	} 
+	if ($fieldsSize > 0){ 
+		$option["projection"] = $fields; 
+	} 
+	if ($limit > 0){ 
+		$option["limit"] = $limit; 
+	} 
+	if ($skip > 0){ 
+		$option["skip"] = $skip; 
+	} 
+	$read = new MongoDB\Driver\Query($filter, $option); 
+	$allrows = $manager->executeQuery($col, $read); 
+	$rows = Array(); 
+	foreach ($allrows as $row) { 
+		$row->_id = (string)$row->_id; 
+		$rows[] = $row; 
+	} 
+	$output = json_encode($rows); 
+	echo $output; 
+    break; 
+   case "delete": 
+    //delete an element by id 
+	$id = $doc["_id"]; 
+	$bulk = new MongoDB\Driver\BulkWrite; 
+    $bulk->delete(['_id' =>new MongoDB\BSON\ObjectID($id)], ['limit' => 1]); 
+    $result = $manager->executeBulkWrite($col, $bulk); 
+    $response = $result->getDeletedCount(); 
+	echo $response; 
+    break; 
+   case "read": 
+    //read an element by id 
+    $id = $doc["_id"]; 
+    $filter = ['_id' => new MongoDB\BSON\ObjectID($id)]; 
+    $option = []; 
+   	$read = new MongoDB\Driver\Query($filter, $option); 
+	$allrows = $manager->executeQuery($col, $read); 
+	$rows = Array(); 
+	foreach ($allrows as $row) { 
+		$row->_id = (string)$row->_id; 
+		$rows[] = $row; 
+	} 
+	$output = json_encode($rows); 
+	echo $output; 
+    break; 
+   case "updatewhere": 
+    $filter = $where; 
+	$option = []; 
+    $bulk = new MongoDB\Driver\BulkWrite; 
+    $bulk->update($filter,['$set' =>$doc], ['multi' => true, 'upsert' => true]); 
+    $result = $manager->executeBulkWrite($col, $bulk); 
+    $response = $result->getModifiedCount(); 
+	echo $response; 
+    break; 
+   case "update": 
+    //update an element by id 
+    $id = $doc["_id"]; 
+	//remove the id from doc as we dont want it to be included 
+	//on the write 
+	unset($doc["_id"]); 
+	$bulk = new MongoDB\Driver\BulkWrite; 
+    $bulk->update(['_id'=>new MongoDB\BSON\ObjectID($id)],['$set' =>$doc], ['multi' => false, 'upsert' => false]); 
+    $result = $manager->executeBulkWrite($col, $bulk); 
+    $response = $result->getModifiedCount(); 
+	echo $response; 
+    break; 
+   case "insert": 
+    //insert a record to collection 
+   	//remove the id from doc as we dont want it to be included on the write 
+	unset($doc["_id"]); 
+	$bulk = new MongoDB\Driver\BulkWrite; 
+    $bulk->insert($doc); 
+    $result	= $manager->executeBulkWrite($col, $bulk); 
+    $response = $result->getInsertedCount(); 
+	echo $response; 
+	break; 
+   default: 
+	break;	 
+   }	 
+} 
+ 
 function BANanoMSSQL($command, $query, $args, $types){ 
 	$resp = array(); 
 	header('Access-Control-Allow-Origin: *'); 
