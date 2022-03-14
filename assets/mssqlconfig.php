@@ -1,6 +1,6 @@
 <?php
 const DB_HOST = '(local)\sqlexpress';
-const DB_NAME = 'test';
-const DB_USER = 'root';
-const DB_PASS = '';
+const DB_NAME = 'estore';
+const DB_USER = 'sa';
+const DB_PASS = 'usioloeso123';
 ?>
