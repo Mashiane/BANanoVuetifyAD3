@@ -964,6 +964,119 @@ case "no":
                 die(TRUE); 
                 } 
              
+function BANanoPOSTGRES($command, $query, $args, $types){ 
+	$resp = array(); 
+	header('Access-Control-Allow-Origin: *'); 
+	header('content-type: application/json; charset=utf-8'); 
+	header("Access-Control-Allow-Credentials: true"); 
+	header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS'); 
+	header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token , Authorization'); 
+	require_once './assets/postgresconfig.php'; 
+	$serverName = DB_HOST; 
+	$uid = DB_USER; 
+	$pwd = DB_PASS; 
+	$database = DB_NAME; 
+	$port = DB_PORT; 
+	try { 
+		$dsn = "pgsql:host=$serverName;port=$port;dbname=$database;"; 
+	    $conn = new PDO($dsn, $uid, $pwd); 
+	    $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false); 
+	    $conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC); 
+	    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION ); 
+	    $commands = array('delete', 'update', 'replace', 'insert', 'connection', 'createdb', 'dropdb', 'createtable', 'droptable'); 
+	    if (in_array($command, $commands)) { 
+	    	$command = 'changes'; 
+	    } 
+	    switch ($command) { 
+		case "changes": 
+		    $stmt = $conn->prepare($query); 
+		    $stmt->execute($args); 
+		    $affRows = $stmt->rowCount(); 
+		    $resp['response'] = "Success"; 
+		    $resp['error'] = ''; 
+		    $resp['result'] = array(); 
+		    $resp['affectedRows'] = $affRows; 
+		    $output = json_encode($resp); 
+		    break; 
+    	default: 
+		    $stmt = $conn->prepare($query); 
+		    $stmt->execute($args); 
+		    $rows = $stmt->fetchAll(); 
+		    $affRows = $stmt->rowCount(); 
+		    $resp['response'] = "Success"; 
+		    $resp['error'] = ''; 
+		    $resp['result'] = $rows; 
+		    $resp['affectedRows'] = $affRows; 
+		    $output = json_encode($resp); 
+		    break; 
+    	} 
+    	echo ($output); 
+    	// Free statement and connection resources. 
+    	$stmt = null; 
+    	$conn = null; 
+    } catch( PDOException $e ) { 
+    	$response = $e->getMessage(); 
+    	$resp['response'] = "Error"; 
+    	$resp['error'] = $response; 
+    	$resp['result'] = array(); 
+    	$output = json_encode($resp); 
+    	die($output); 
+    } 
+} 
+function BANanoPOSTGRESDynamic($command, $query, $args, $types, $host, $username, $password, $dbname, $port){ 
+	$resp = array(); 
+	header('Access-Control-Allow-Origin: *'); 
+	header('content-type: application/json; charset=utf-8'); 
+	header("Access-Control-Allow-Credentials: true"); 
+	header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS'); 
+	header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token , Authorization'); 
+	try { 
+		$dsn = "pgsql:host=$host;port=$port;dbname=$dbname;"; 
+	    $conn = new PDO($dsn, $username, $password); 
+	    $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false); 
+	    $conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC); 
+	    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION ); 
+	    $commands = array('delete', 'update', 'replace', 'insert', 'connection', 'createdb', 'dropdb', 'createtable', 'droptable'); 
+	    if (in_array($command, $commands)) { 
+	    	$command = 'changes'; 
+	    } 
+	    switch ($command) { 
+		case "changes": 
+		    $stmt = $conn->prepare($query); 
+		    $stmt->execute($args); 
+		    $affRows = $stmt->rowCount(); 
+		    $resp['response'] = "Success"; 
+		    $resp['error'] = ''; 
+		    $resp['result'] = array(); 
+		    $resp['affectedRows'] = $affRows; 
+		    $output = json_encode($resp); 
+		    break; 
+    	default: 
+		    $stmt = $conn->prepare($query); 
+		    $stmt->execute($args); 
+		    $rows = $stmt->fetchAll(); 
+		    $affRows = $stmt->rowCount(); 
+		    $resp['response'] = "Success"; 
+		    $resp['error'] = ''; 
+		    $resp['result'] = $rows; 
+		    $resp['affectedRows'] = $affRows; 
+		    $output = json_encode($resp); 
+		    break; 
+    	} 
+    	echo ($output); 
+    	// Free statement and connection resources. 
+    	$stmt = null; 
+    	$conn = null; 
+    } catch( PDOException $e ) { 
+    	$response = $e->getMessage(); 
+    	$resp['response'] = "Error"; 
+    	$resp['error'] = $response; 
+    	$resp['result'] = array(); 
+    	$output = json_encode($resp); 
+    	die($output); 
+    } 
+} 
+ 
 function EmailSend($from, $to, $cc, $subject, $msg) { 
 $hdr  = 'MIME-Version: 1.0' . "\r\n"; 
 $hdr .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n"; 
