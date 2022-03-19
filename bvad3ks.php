@@ -134,6 +134,63 @@ case "insert":
     } 
     } 
  
+function BANanoMSAccess($command, $query, $args, $types){ 
+	$resp = array(); 
+	header('Access-Control-Allow-Origin: *'); 
+	header('content-type: application/json; charset=utf-8'); 
+	header("Access-Control-Allow-Credentials: true"); 
+	header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS'); 
+	header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token , Authorization'); 
+	require_once './assets/msaccessconfig.php'; 
+	$uid = DB_USER; 
+	$pwd = DB_PASS; 
+	$database = DB_NAME; 
+	try { 
+		$conn = new PDO("odbc:DRIVER={Microsoft Access Driver (*.mdb, *.accdb)}; Dbq=$database; Uid=$uid; Pwd=$pwd;"); 
+	    $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false); 
+	    $conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC); 
+	    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION ); 
+	    $commands = array('delete', 'update', 'replace', 'insert', 'connection', 'createdb', 'dropdb', 'createtable', 'droptable'); 
+	    if (in_array($command, $commands)) { 
+	    	$command = 'changes'; 
+	    } 
+	    switch ($command) { 
+		case "changes": 
+		    $stmt = $conn->prepare($query); 
+		    $stmt->execute($args); 
+		    $affRows = $stmt->rowCount(); 
+		    $resp['response'] = "Success"; 
+		    $resp['error'] = ''; 
+		    $resp['result'] = array(); 
+		    $resp['affectedRows'] = $affRows; 
+		    $output = json_encode($resp); 
+		    break; 
+    	default: 
+		    $stmt = $conn->prepare($query); 
+		    $stmt->execute($args); 
+		    $rows = $stmt->fetchAll(); 
+		    $affRows = $stmt->rowCount(); 
+		    $resp['response'] = "Success"; 
+		    $resp['error'] = ''; 
+		    $resp['result'] = $rows; 
+		    $resp['affectedRows'] = $affRows; 
+		    $output = json_encode($resp); 
+		    break; 
+    	} 
+    	echo ($output); 
+    	// Free statement and connection resources. 
+    	$stmt = null; 
+    	$conn = null; 
+    } catch( PDOException $e ) { 
+    	$response = $e->getMessage(); 
+    	$resp['response'] = "Error"; 
+    	$resp['error'] = $response; 
+    	$resp['result'] = array(); 
+    	$output = json_encode($resp); 
+    	die($output); 
+    } 
+} 
+ 
 function BANanoMSSQL($command, $query, $args, $types){ 
 $resp = array(); 
 header('Access-Control-Allow-Origin: *'); 
