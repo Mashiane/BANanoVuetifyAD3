@@ -338,6 +338,7 @@ for ($i = 0; $i < $statement->num_rows; $i++)
         $a_params[] = & $param_type; 
         //values to execute 
         for($i = 0; $i < $n; $i++) { 
+		$args[$i] = mysqli_real_escape_string($conn, $args[$i]); 
         $a_params[] = & $args[$i]; 
         } 
         call_user_func_array(array($stmt, 'bind_param'), $a_params); 
@@ -1132,6 +1133,23 @@ function BANanoPOSTGRESDynamic($command, $query, $args, $types, $host, $username
     	$output = json_encode($resp); 
     	die($output); 
     } 
+} 
+ 
+$key = 'qkwjdiw239&&jdafweihbrhnan&^%$ggdnawhd4njshjwuuO'; 
+	 
+//ENCRYPT FUNCTION 
+function encryptthis($data, $key) { 
+	$encryption_key = base64_decode($key); 
+	$iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc')); 
+	$encrypted = openssl_encrypt($data, 'aes-256-cbc', $encryption_key, 0, $iv); 
+	return base64_encode($encrypted . '::' . $iv); 
+} 
+ 
+//DECRYPT FUNCTION 
+function decryptthis($data, $key) { 
+	$encryption_key = base64_decode($key); 
+	list($encrypted_data, $iv) = array_pad(explode('::', base64_decode($data), 2),2,null); 
+	return openssl_decrypt($encrypted_data, 'aes-256-cbc', $encryption_key, 0, $iv); 
 } 
  
 function EmailSend($from, $to, $cc, $subject, $msg) { 
