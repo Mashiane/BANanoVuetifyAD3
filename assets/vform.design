@@ -1,0 +1,30 @@
+#Event: Input (B As Boolean)
+#Event: Submit (e As BANanoEvent)
+#Event: SubmitPrevent (e As BANanoEvent)
+#DesignerProperty: Key: ParentID, DisplayName: ParentID, FieldType: String, DefaultValue: , Description: The id of the element to place this into. If inside a dialog, type in the dialog name and [cardtext]
+#DesignerProperty: Key: OwnTag, DisplayName: Tag, FieldType: String, DefaultValue: v-form, Description: Tag, you can also specify your own e.g v-container or div
+#DesignerProperty: Key: Hidden, DisplayName: Hidden, FieldType: Boolean, DefaultValue: False, Description: Form is Hidden
+#DesignerProperty: Key: PlaceAtBottom, DisplayName: Place At Bottom, FieldType: Boolean, DefaultValue: False, Description: Force Place At Bottom
+#DesignerProperty: Key: AutoComplete, DisplayName: Auto Complete, FieldType: Boolean, DefaultValue: False, Description: Form should be Auto Complete
+#DesignerProperty: Key: LazyValidation, DisplayName: LazyValidation, FieldType: Boolean, DefaultValue: True, Description: If enabled. value will always be _true_ unless there are visible validation errors
+#DesignerProperty: Key: SubmitPrevent, DisplayName: SubmitPrevent, FieldType: Boolean, DefaultValue: True, Description: Submit Prevent to prevent reload
+#DesignerProperty: Key: TableName, DisplayName: Table Name*, FieldType: String, DefaultValue: tb1, Description: The name of the database table for CRUD
+#DesignerProperty: Key: RecordSource, DisplayName: Record Source*, FieldType: String, DefaultValue: rs1, Description: The name of the Record Source. This is used for data binding e.g. category
+#DesignerProperty: Key: Singular, DisplayName: Singular*, FieldType: String, DefaultValue: , Description: Singular Name of single Record in the table e.g. category
+#DesignerProperty: Key: Plural, DisplayName: Plural*, FieldType: String, DefaultValue: , Description: Plural Name of many Records in the table e.g. categories
+#DesignerProperty: Key: PrimaryKey, DisplayName: Primary Key Field*, FieldType: String, DefaultValue: , Description: The name of the primary key field in the table
+#DesignerProperty: Key: AutoIncrement, DisplayName: Auto Increment Field, FieldType: String, DefaultValue: , Description: The name of the auto increment field in the table
+#DesignerProperty: Key: DisplayField, DisplayName: Delete Display Field*, FieldType: String, DefaultValue: , Description: The name of the field to display to confirm deletes
+#DesignerProperty: Key: FocusOn, DisplayName: FocusOn, FieldType: String, DefaultValue: , Description: The name of the component to focus on when the dialog is opened
+#DesignerProperty: Key: Clearable, DisplayName: Elements Clearable, FieldType: Boolean, DefaultValue: False, Description: Controls should be clearable
+#DesignerProperty: Key: Dense, DisplayName: Elements Dense, FieldType: Boolean, DefaultValue: False, Description: Controls should be dense
+#DesignerProperty: Key: HideDetails, DisplayName: Elements Hide Details, FieldType: Boolean, DefaultValue: False, Description: Controls should hide details
+#DesignerProperty: Key: Filled, DisplayName: Elements Filled, FieldType: Boolean, DefaultValue: False, Description: Controls should be filled
+#DesignerProperty: Key: Outlined, DisplayName: Elements Outlined, FieldType: Boolean, DefaultValue: False, Description: Controls should be outlined
+#DesignerProperty: Key: Rounded, DisplayName: Elements Rounded, FieldType: Boolean, DefaultValue: False, Description: Controls should be rounded
+#DesignerProperty: Key: Shaped, DisplayName: Elements Shaped, FieldType: Boolean, DefaultValue: False, Description: Controls should be shaped
+#DesignerProperty: Key: Disabled, DisplayName: Disabled Form, FieldType: Boolean, DefaultValue: False, Description: Puts all children inputs into a disabled state
+#DesignerProperty: Key: Readonly, DisplayName: Readonly Form, FieldType: Boolean, DefaultValue: False, Description: Puts all children inputs into a readonly state
+#DesignerProperty: Key: ShowGridDesign, DisplayName: Show Grid Design, FieldType: Boolean, DefaultValue: False, Description: Show Grid Design Border
+#DesignerProperty: Key: Align, DisplayName: Vertical Align, FieldType: String, DefaultValue: normal, Description: Vertical Align content, List: baseline|center|end|normal|start|stretch
+#DesignerProperty: Key: Justify, DisplayName: Horizontal Align/Justify, FieldType: String, DefaultValue: normal, Description: Justify content, List: center|end|normal|space-around|space-between|start
