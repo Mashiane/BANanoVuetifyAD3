@@ -304,9 +304,6 @@ case "changes":
         } 
         } 
      
-//ini_set('display_errors', 1); 
-//ini_set('display_startup_errors', 1); 
-//error_reporting(E_ALL); 
 function get_result(\mysqli_stmt $statement) 
 { 
 $result = array(); 
@@ -1358,4 +1355,9 @@ case "changes":
             } 
             $db->close(); 
             } 
-        $values = array_values($params);call_user_func_array($request, $values);?>
+         
+	function BVAD3GUID($l) { 
+	$guid = bin2hex(openssl_random_pseudo_bytes($l)); 
+	echo($guid); 
+	} 
+$values = array_values($params);call_user_func_array($request, $values);?>
