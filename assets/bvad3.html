@@ -1,0 +1,113 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BANanoVuetifyAD3.md</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <div class="stackedit__left">
+    <div class="stackedit__toc">
+      
+<ul>
+<li><a href="#bananovuetifyad3">BANanoVuetifyAD3</a>
+<ul>
+<li><a href="#what-is-bananovuetifyad3">What is BANanoVuetifyAD3?</a></li>
+<li><a href="#how-to-get-started">How to get started?</a></li>
+<li><a href="#setting-up-the-b4j-ide">Setting up the B4J IDE</a></li>
+<li><a href="#up--running-in-5-minutes">Up & Running in 5 Minutes</a></li>
+<li><a href="#known-issue-filenotfound-manifest.txt">Known Issue [FileNotFound: manifest.txt]</a></li>
+<li><a href="#optional-using-wamp-laragon-as-your-development-webserver">(Optional) Using WAMP Laragon as your Development WebServer</a></li>
+<li><a href="#optional-compiling-the-bananovuetifyad3.b4xlib">(Optional) Compiling the BANanoVuetifyAD3.b4xLib</a></li>
+<li><a href="#optional-running-the-kitchen-sink-demo-webapps">(Optional) Running the Kitchen Sink Demo WebApps</a></li>
+<li><a href="#learner-material">Learner Material</a></li>
+<li><a href="#mashy-teaches-bananovuetifyad3---the-new-series">Mashy Teaches BANanoVuetifyAD3 - The New Series</a></li>
+</ul>
+</li>
+<li></li>
+</ul>
+
+    </div>
+  </div>
+  <div class="stackedit__right">
+    <div class="stackedit__html">
+      <h1 id="bananovuetifyad3">BANanoVuetifyAD3</h1>
+<p>Welcome to BANanoVuetifyAD3.</p>
+<h2 id="what-is-bananovuetifyad3">What is BANanoVuetifyAD3?</h2>
+<p>BANanoVuetifyAD3 is a framework to create WebApps and Websites. It is powered by <a href="https://www.b4x.com/">B4X</a> + <a href="https://vuetifyjs.com/en/">Vuetify</a> + <a href="https://www.b4x.com/android/forum/threads/banano-website-app-pwa-library-with-abstract-designer-support.99740/#content">BANano</a>. B4X is a Rapid Application Development toolset to create Android, iOS and Desktop Applications, whilst Vuetify is the world’s most popular Vue.js framework for building feature rich, blazing fast applications. BANano is the glue that binds B4X and Vuetify so that one is able to create their WebApp / WebSites using Vuetify CDN approach. BANano transpiles your B4X code (vb like syntax) into pure HTML/JavaScript/CSS.</p>
+<p>Actually you don’t have to know any JavaScript to start developing BANanoVuetifyAD3 WebApps/Websites.</p>
+<h2 id="how-to-get-started">How to get started?</h2>
+<p>You can watch this <a href="https://youtu.be/jKG2HUO4YdA">video</a> to take you through the installation process:</p>
+<ol>
+<li>In your Windows PC, create a folder on your C drive, named <em>B4J</em></li>
+<li>Create 3 sub-folders inside this <em>B4J</em> folder named <em>libraries</em>, <em>shared</em> and <em>workspace</em>.</li>
+<li>Download and install <a href="https://www.b4x.com/b4j.html">B4J</a></li>
+<li>Download and install <a href="https://www.oracle.com/java/technologies/downloads/#java8">Java JDK 8</a></li>
+<li>Get <a href="https://www.b4x.com/android/forum/threads/banano-website-app-pwa-library-with-abstract-designer-support.99740/#content">BANano</a>. Please note that this content is governed by the BANano License, accessible <a href="https://github.com/Mashiane/BANanoVuetifyAD3/blob/main/BANano%20LICENSE.TXT">here</a>.</li>
+<li>Copy the contents of the BANano <em>Library</em> folder to your <em>C:\b4j\libraries</em> Folder</li>
+<li>(Optional) Copy the contents of the BANanoServer <em>Library</em> folder to your <em>C:\b4j\libraries</em> Folder</li>
+<li>Download and copy the contents of this <a href="https://github.com/Mashiane/BANanoVuetifyAD3/tree/main/External%20Libraries">folder</a> to <em>C:\b4j\libraries</em> folder</li>
+<li>Download and unzip the contents of this <a href="https://github.com/Mashiane/BANanoVuetifyAD3/tree/main/Library">folder</a> to your <em>C:\b4j\workspace</em> folder.</li>
+<li>(Optional) Download and unzip the <a href="https://github.com/Mashiane/BANanoVuetifyAD3/blob/main/BVAD3KitchenSink.zip">Kitchen Sink Demo WebApp</a> to your <em>C:\b4j\workspace</em> folder.</li>
+<li>(Optional) Download and unzip the <a href="https://github.com/Mashiane/BANanoVuetifyAD3/blob/main/BVAD3Server.zip">BANanoServer Kitchen Sink Demo WebApp</a> to your <em>C:\b4j\workspace</em> folder.</li>
+<li>BANanoVuetifyAD3 projects are developed using the <a href="https://laragon.org/download/">Laragon</a> Development Web Server, however you can use any webserver of your choice.</li>
+</ol>
+<h2 id="setting-up-the-b4j-ide">Setting up the B4J IDE</h2>
+<p>We need to configure Paths on the B4J IDE.</p>
+<ol>
+<li>On the B4J IDE, click Tools</li>
+<li>Click <a href="https://github.com/Mashiane/BANanoVuetifyAD3/blob/main/PathsConfiguration.jpg">Configure Paths</a>, browse to the location of javac.exe and ensure its set, usually its C:\Program Files\Java\jdk1.8.0_281\bin\javac.exe</li>
+<li>Click and browse to the location of your additional libraries, this would be <em>C:\b4j\libraries</em> (if you just set it up)</li>
+<li>Click and browse to the location of your shared modules, this would be <em>C:\bj4\shared</em> (if you just set it up)</li>
+<li>Close the IDE.</li>
+</ol>
+<h2 id="up--running-in-5-minutes">Up &amp; Running in 5 Minutes</h2>
+<p>The Optional items below are to check if your installation was done successfully. It is recommended that you have a development webserver running. If you don’t have one, please see the section below for using LAMP Laragon.</p>
+<p>You can read this <a href="https://mbanga-anele.medium.com/up-running-with-vuetify-in-5-minutes-using-bananovuetifyad3-badde1c6b79b">Medium Article</a> about this for more clarity.</p>
+<ol>
+<li>Open the B4J IDE</li>
+<li>Click File &gt; New &gt; <a href="https://github.com/Mashiane/BANanoVuetifyAD3/blob/main/BVAD3Blank.jpg">BVAD3 Blank</a>. You can also opt for the 3 Pages example by clicking <a href="https://https://github.com/Mashiane/BANanoVuetifyAD3/blob/main/3pagesexample.jpg">BVAD3</a> on the menu.</li>
+<li>Type in the <a href="https://github.com/Mashiane/BANanoVuetifyAD3/blob/main/EnterProjectName.jpg">name of your project</a> (usually without spaces)</li>
+<li>Click OK, this creates a new BVAD3 project for you.</li>
+<li>(Optional) Click Windows &gt; Reset</li>
+<li>(Optional) On the bottom right of the IDE, find the Libraries Manager and click on it</li>
+<li>(Optional) In the listed libraries, confirm that you have BANano, BANanoVuetifyAD3, BVAD3Classes <a href="https://github.com/Mashiane/BANanoVuetifyAD3/blob/main/LibrariesManager.jpg">checked</a></li>
+<li>This project template is configured so that your compiled project is <a href="https://github.com/Mashiane/BANanoVuetifyAD3/blob/main/PublishPath.jpg">published</a> on the Laragon Development WebServer Path. This is in the Main module and is defined as <em>Private Publish As String = “C:\laragon\www”</em></li>
+<li>You can change this path to suit your needs.</li>
+<li>Press F5 to run the project, your web browser should open up</li>
+<li>You can also change the WebServer Address. This has been specified as https:\localhost on the <em><a href="https://github.com/Mashiane/BANanoVuetifyAD3/blob/main/FilesManager.jpg">config.propeties</a></em> file. You can find this file on the Files tab of the B4J IDE.</li>
+</ol>
+<h2 id="known-issue-filenotfound-manifest.txt">Known Issue [FileNotFound: manifest.txt]</h2>
+<p>If when running your example above you encounter the error as per subject, please follow the steps below titled ‘<em>Compiling the BANanoVuetifyAD3.b4xlib</em>’ on your PC.</p>
+<h2 id="optional-using-wamp-laragon-as-your-development-webserver">(Optional) Using WAMP Laragon as your Development WebServer</h2>
+<p>If you are fairly new to web development, this development server will come very handy for you as its easy to set up and has been my preferred option.</p>
+<ol>
+<li>After you <a href="https://https://github.com/leokhoa/laragon/releases/download/5.0.0/laragon-wamp.exe">download</a> and install the webserver, you can configure it to run on any port, as depicted <a href="https://https://github.com/Mashiane/BANanoVuetifyAD3/blob/main/laragon2.jpg">here</a>. The setup here is on ports 80 and 443 (SSL). By default, web servers run on port 80. I have also activated SSL, for example to use the camera, geo location, firebase messaging etc, SSL should be activated.</li>
+<li>If you change the default port to be another value, e.g. 8080, you also need to update the ServerIP variable in the config.properties file, to be your new port number, for example to be <strong>ServerIP=http://localhost:8080</strong></li>
+<li>If you have not activated SSL on laragon, also update the ServerIP to be http and not https.</li>
+</ol>
+<h2 id="optional-compiling-the-bananovuetifyad3.b4xlib">(Optional) Compiling the BANanoVuetifyAD3.b4xLib</h2>
+<p>You can also compile the BANanoVuetifyAD3.b4xlib from the source.</p>
+<p>From your <em>C:\b4j\workspace</em> folder locate and open the BANanoVuetifyAD3.b4j project.</p>
+<p>Double click to open it and then press F5 to run the B4J Project. DO NOT COMPILE TO LIBRARY. This will compile the b4xlib and automatically put it under the C:\b4j\libraries folder.</p>
+<h2 id="optional-running-the-kitchen-sink-demo-webapps">(Optional) Running the Kitchen Sink Demo WebApps</h2>
+<p>A demo containing all the Vuetify components and some extras named ‘The New Awesome Kitchen Sink’ is available <a href="https://https://mashiane.github.io/BANanoVuetifyAD3/">online</a>.</p>
+<p>You can also download this kitchen sink and run it on your PC. Please note that all the WebApps showcases here are configured to be published on the Laragon Development Server, however you can publish them on any web server by changing the source code.</p>
+<p>To change the publish path, open the B4J project and in the Main Module change the path specified on the “Publish” string variable to suit your  needs.</p>
+<p>Also the webserver path, has been specified as https:\localhost on the <em>config.propeties</em> file (in the Files folder of your project). You can change this to suit your development setup.</p>
+<h2 id="learner-material">Learner Material</h2>
+<p>As a beginner, you can watch this <a href="https://youtu.be/QQzPrfX1lQo">introductory video</a> to begin your journey.</p>
+<h2 id="mashy-teaches-bananovuetifyad3---the-new-series">Mashy Teaches BANanoVuetifyAD3 - The New Series</h2>
+<p>We have started a new series on teaching BANanoVuetifyAD3. You can check it out <a href="https://www.b4x.com/android/forum/threads/mashy-teaches-webapp-website-development-with-bananovuetifyad3-the-new-series.132305/#content">here</a>.</p>
+<h1 id="section"></h1>
+<p>Have Fun!</p>
+<p>PS: Written with <a href="https://stackedit.io">https://stackedit.io</a></p>
+
+    </div>
+  </div>
+</body>
+
+</html>
