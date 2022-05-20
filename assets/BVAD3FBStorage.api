@@ -1,0 +1,1 @@
+{"filename":"BVAD3FBStorage","events":[],"subroutines":[{"signature":"Sub Class_Globals"},{"signature":"Sub Initialize(storage As BANanoObject, refName As String) As BVAD3FBStorage"},{"signature":"Sub put(fo As Map) As BANanoPromise"},{"signature":"Sub putWait(record As Map) As String"}],"properties":[]}

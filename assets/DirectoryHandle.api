@@ -1,0 +1,1 @@
+{"filename":"DirectoryHandle","events":[],"subroutines":[{"signature":"Sub Class_Globals"},{"signature":"Public Sub Initialize(handle As BANanoObject) As DirectoryHandle"},{"signature":"Sub GetFileListWait As List"}],"properties":[]}

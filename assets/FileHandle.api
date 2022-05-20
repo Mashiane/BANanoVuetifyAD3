@@ -1,0 +1,1 @@
+{"filename":"FileHandle","events":[],"subroutines":[{"signature":"Sub Class_Globals"},{"signature":"Public Sub Initialize(handles As List) As FileHandle"},{"signature":"Sub GetFileWait As BANanoObject"},{"signature":"Sub GetTextWait As String"},{"signature":"Sub WriteTextWait(txt As String)"}],"properties":[]}
