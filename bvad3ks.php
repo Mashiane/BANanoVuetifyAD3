@@ -1480,6 +1480,42 @@ case "changes":
             $db->close(); 
             } 
          
+function SQLiteImportBulk($dbname,$data) { 
+	$db; 
+    //set the header 
+    header('Access-Control-Allow-Origin: *'); 
+    header('content-type: application/json; charset=utf-8'); 
+    header("Access-Control-Allow-Credentials: true"); 
+    header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS'); 
+    header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token , Authorization'); 
+    $db = new SQLite3($dbname, SQLITE3_OPEN_CREATE | SQLITE3_OPEN_READWRITE); 
+    if(!$db) { 
+    	$response = $db->lastErrorMsg(); 
+    	$rows = Array(); 
+    	$rows[] = $response; 
+    	$output = json_encode($rows); 
+    	die($output); 
+    } 
+	//this should be json, convert to map - associative array 
+	$obj = json_decode($data); 
+	//lets start a transaction 
+	$db->exec('BEGIN'); 
+	//loop through each record 
+	foreach ($obj as $rec) { 
+		$nrec = (array) $rec; 
+		$command = $nrec['command']; 
+		$query = $nrec['query']; 
+		$args = $nrec['args']; 
+		$types = $nrec['types']; 
+        // 
+		$stmt = preparesqlite($db, $query, $types, $args); 
+    	$res = $stmt->execute(); 
+    	$res->finalize(); 
+	} 
+	$db->exec('COMMIT'); 
+	$db->close(); 
+} 
+ 
 	function BVAD3GUID($l) { 
 	$guid = bin2hex(openssl_random_pseudo_bytes($l)); 
 	echo($guid); 
