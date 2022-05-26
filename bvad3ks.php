@@ -1234,7 +1234,6 @@ function aes_decrypt($string, $pw)
     return $output; 
     } 
  
-			 
 function BANanoPOSTGRES($command, $query, $args, $types){ 
 	$resp = array(); 
 	header('Access-Control-Allow-Origin: *'); 
