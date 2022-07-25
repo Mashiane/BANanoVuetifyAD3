@@ -993,6 +993,47 @@ else {
     $f = mb_convert_encoding($f, "UTF-8"); 
     echo $f; 
     } 
+	function FileDetails($url) { 
+		if (file_exists($url)) { 
+    		$f = stat($url); 
+			$ft = filetype($url); 
+			$mtime = $f["mtime"]; 
+			$size = $f["size"]; 
+			$mtime = date("Y-m-d H:i:s", $mtime); 
+			$resp = array(); 
+			$resp['size'] = $size; 
+        	$resp['date'] = $mtime; 
+			$resp['type'] = $ft; 
+			$output = json_encode($resp); 
+			echo $output; 
+		}else { 
+			die(""); 
+		} 
+    } 
+	function FileRealPath($url) { 
+		if (file_exists($url)) { 
+    		$f = realpath($url); 
+    		echo $f; 
+		}else { 
+			die(""); 
+		} 
+    } 
+	function FileDirName($url) { 
+		if (file_exists($url)) { 
+    		$f = dirname($url); 
+    		echo $f; 
+		}else { 
+			die(""); 
+		} 
+    } 
+	function FileBaseName($url) { 
+		if (file_exists($url)) { 
+    		$f = basename($url); 
+    		echo $f; 
+		}else { 
+			die(""); 
+		} 
+    } 
     function FileGetHTML($url) { 
     $f = file_get_contents($url); 
     $f = mb_convert_encoding($f, "UTF-8"); 
