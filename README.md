@@ -14,11 +14,11 @@ You can watch this [video](https://youtu.be/jKG2HUO4YdA) to take you through the
 
 1. In your Windows PC, create a folder on your C drive, named *B4J*
 2. Create 3 sub-folders inside this *B4J* folder named *libraries*, *shared* and *workspace*.
-3. Download and install [B4J](https://www.b4x.com/b4j.html)
-4. Download and install [Java JDK 8](https://www.oracle.com/java/technologies/downloads/#java8)
+3. Download and install [B4J 64 Bit](https://www.b4x.com/b4j.html)
+4. Download and install [OpenJDK + OpenJFK 64 Bit](https://b4xfiles-4c17.kxcdn.com/jdk-11.0.1.zip) and unzip these to C:\Java
 5. Get [BANano](https://www.b4x.com/android/forum/threads/banano-website-app-pwa-library-with-abstract-designer-support.99740/#content). Please note that this content is governed by the BANano License, accessible [here](https://github.com/Mashiane/BANanoVuetifyAD3/blob/main/BANano%20LICENSE.TXT).
 6. Copy the contents of the BANano *Library* folder to your *C:\b4j\libraries* Folder
-7. (Optional) Copy the contents of the BANanoServer *Library* folder to your *C:\b4j\libraries* Folder
+7. It is recommended to download and [install GitHub Desktop](https://desktop.github.com/) and then clone this repo
 8. Download and copy the contents of this [folder](https://github.com/Mashiane/BANanoVuetifyAD3/tree/main/External%20Libraries) to *C:\b4j\libraries* folder
 9. Download and unzip the contents of this [folder](https://github.com/Mashiane/BANanoVuetifyAD3/tree/main/Library) to your *C:\b4j\workspace* folder.
 10. (Optional) Download and unzip the [Kitchen Sink Demo WebApp](https://github.com/Mashiane/BANanoVuetifyAD3/blob/main/BVAD3KitchenSink.zip) to your *C:\b4j\workspace* folder.
