@@ -1,0 +1,1 @@
+{"filename":"BANanoBitSet","events":[],"subroutines":[{"signature":"Sub Class_Globals"},{"signature":"Public Sub Initialize (Size As Int)"},{"signature":"Public Sub Set(Index As Int, Value As Boolean)"},{"signature":"Public Sub Get(Index As Int) As Boolean"},{"signature":"Public Sub getSize As Int"},{"signature":"Public Sub Clear"}],"properties":[]}
