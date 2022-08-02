@@ -1556,8 +1556,8 @@ function SQLiteImportBulk($dbname,$data) {
 	$db->close(); 
 } 
  
-	function BVAD3GUID($l) { 
-	$guid = bin2hex(openssl_random_pseudo_bytes($l)); 
-	echo($guid); 
-	} 
+    function BVAD3GUID($l) { 
+    $guid = bin2hex(openssl_random_pseudo_bytes($l)); 
+    echo($guid); 
+    } 
 $values = array_values($params);call_user_func_array($request, $values);?>
