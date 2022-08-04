@@ -53,6 +53,11 @@ You can read this [Medium Article](https://mbanga-anele.medium.com/up-running-wi
 10. Press F5 to run the project, your web browser should open up
 11. You can also change the WebServer Address. This has been specified as https:\\localhost on the *[config.propeties](https://github.com/Mashiane/BANanoVuetifyAD3/blob/main/FilesManager.jpg)* file. You can find this file on the Files tab of the B4J IDE.
 
+## How to Optimize your WebApp
+
+This tutorial discusses how to use the BVAD3Builder to optimize your webapp before or after development.
+Catch it [here](https://www.b4x.com/android/forum/threads/bananovuetifyad3-builder-how-to-optimize-your-webapp.141928/)
+
 ## Known Issue [FileNotFound: manifest.txt]
 
 If when running your example above you encounter the error as per subject, please follow the steps below titled '*Compiling the BANanoVuetifyAD3.b4xlib*' on your PC.
