@@ -380,8 +380,7 @@ for ($i = 0; $i < $statement->num_rows; $i++)
         	$resp['error'] = $response; 
         	$resp['result'] = array(); 
         	$output = json_encode($resp); 
-			$encrypted = $Encryption->encrypt($output, DB_KEY); 
-    	    die($encrypted); 
+			die($output); 
         } 
         $affRows = $conn->affected_rows; 
         $resp['response'] = "Success"; 
@@ -468,8 +467,7 @@ for ($i = 0; $i < $statement->num_rows; $i++)
         	$resp['error'] = $response; 
         	$resp['result'] = array(); 
         	$output = json_encode($resp); 
-			$encrypted = $Encryption->encrypt($output, DB_KEY); 
-    	    die($encrypted); 
+			die($output); 
         } 
         $affRows = $conn->affected_rows; 
         $resp['response'] = "Success"; 
@@ -567,8 +565,7 @@ for ($i = 0; $i < $statement->num_rows; $i++)
         	$resp['error'] = $response; 
         	$resp['result'] = array(); 
         	$output = json_encode($resp); 
-			$encrypted = $Encryption->encrypt($output, DB_KEY); 
-    	    die($encrypted); 
+			die($output); 
         } 
         $affRows = $conn->affected_rows; 
         $resp['response'] = "Success"; 
